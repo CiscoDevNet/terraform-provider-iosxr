@@ -263,12 +263,12 @@ func (data *CEFPBTSForwardClass) getDeletedItems(ctx context.Context, state CEFP
 func (data *CEFPBTSForwardClass) getEmptyLeafsDelete(ctx context.Context, state *CEFPBTSForwardClass, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.FallbackToDrop.IsNull() && !data.FallbackToDrop.ValueBool() {
-		if state != nil && !state.FallbackToDrop.IsNull() && state.FallbackToDrop.ValueBool() {
+		if state == nil || state.FallbackToDrop.IsNull() || state.FallbackToDrop.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fallback-to/drop"))
 		}
 	}
 	if !data.FallbackToAny.IsNull() && !data.FallbackToAny.ValueBool() {
-		if state != nil && !state.FallbackToAny.IsNull() && state.FallbackToAny.ValueBool() {
+		if state == nil || state.FallbackToAny.IsNull() || state.FallbackToAny.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fallback-to/any"))
 		}
 	}

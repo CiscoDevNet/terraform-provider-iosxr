@@ -8365,17 +8365,17 @@ func (data *InterfaceEthernetSubinterface) getDeletedItems(ctx context.Context, 
 func (data *InterfaceEthernetSubinterface) getEmptyLeafsDelete(ctx context.Context, state *InterfaceEthernetSubinterface, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if helpers.VersionAtLeast(version, "25.4") && !data.PtpMonitorReceiver.IsNull() && !data.PtpMonitorReceiver.ValueBool() {
-		if state != nil && !state.PtpMonitorReceiver.IsNull() && state.PtpMonitorReceiver.ValueBool() {
+		if state == nil || state.PtpMonitorReceiver.IsNull() || state.PtpMonitorReceiver.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-receiver"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.PtpMonitorSender.IsNull() && !data.PtpMonitorSender.ValueBool() {
-		if state != nil && !state.PtpMonitorSender.IsNull() && state.PtpMonitorSender.ValueBool() {
+		if state == nil || state.PtpMonitorSender.IsNull() || state.PtpMonitorSender.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-sender"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.Ipv6NdUnsolicitedRaDisable.IsNull() && !data.Ipv6NdUnsolicitedRaDisable.ValueBool() {
-		if state != nil && !state.Ipv6NdUnsolicitedRaDisable.IsNull() && state.Ipv6NdUnsolicitedRaDisable.ValueBool() {
+		if state == nil || state.Ipv6NdUnsolicitedRaDisable.IsNull() || state.Ipv6NdUnsolicitedRaDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/unsolicited-ra/disable"))
 		}
 	}
@@ -8396,22 +8396,22 @@ func (data *InterfaceEthernetSubinterface) getEmptyLeafsDelete(ctx context.Conte
 		}
 	}
 	if !data.PtpInteropProfileG82752.IsNull() && !data.PtpInteropProfileG82752.ValueBool() {
-		if state != nil && !state.PtpInteropProfileG82752.IsNull() && state.PtpInteropProfileG82752.ValueBool() {
+		if state == nil || state.PtpInteropProfileG82752.IsNull() || state.PtpInteropProfileG82752.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/interop/profile/g-8275-2"))
 		}
 	}
 	if !data.PtpInteropProfileG82751.IsNull() && !data.PtpInteropProfileG82751.ValueBool() {
-		if state != nil && !state.PtpInteropProfileG82751.IsNull() && state.PtpInteropProfileG82751.ValueBool() {
+		if state == nil || state.PtpInteropProfileG82751.IsNull() || state.PtpInteropProfileG82751.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/interop/profile/g-8275-1"))
 		}
 	}
 	if !data.PtpInteropProfileG82651.IsNull() && !data.PtpInteropProfileG82651.ValueBool() {
-		if state != nil && !state.PtpInteropProfileG82651.IsNull() && state.PtpInteropProfileG82651.ValueBool() {
+		if state == nil || state.PtpInteropProfileG82651.IsNull() || state.PtpInteropProfileG82651.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/interop/profile/g-8265-1"))
 		}
 	}
 	if !data.PtpInteropProfileDefault.IsNull() && !data.PtpInteropProfileDefault.ValueBool() {
-		if state != nil && !state.PtpInteropProfileDefault.IsNull() && state.PtpInteropProfileDefault.ValueBool() {
+		if state == nil || state.PtpInteropProfileDefault.IsNull() || state.PtpInteropProfileDefault.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/interop/profile/default"))
 		}
 	}
@@ -8423,32 +8423,32 @@ func (data *InterfaceEthernetSubinterface) getEmptyLeafsDelete(ctx context.Conte
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.PtpMasterEthernets[i].Milliseconds.IsNull() && !data.PtpMasterEthernets[i].Milliseconds.ValueBool() {
-			if state != nil && i < len(state.PtpMasterEthernets) && !state.PtpMasterEthernets[i].Milliseconds.IsNull() && state.PtpMasterEthernets[i].Milliseconds.ValueBool() {
+			if state == nil || i >= len(state.PtpMasterEthernets) || state.PtpMasterEthernets[i].Milliseconds.IsNull() || state.PtpMasterEthernets[i].Milliseconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ethernets/ethernet", keyString), "milliseconds"))
 			}
 		}
 		if !data.PtpMasterEthernets[i].Microseconds.IsNull() && !data.PtpMasterEthernets[i].Microseconds.ValueBool() {
-			if state != nil && i < len(state.PtpMasterEthernets) && !state.PtpMasterEthernets[i].Microseconds.IsNull() && state.PtpMasterEthernets[i].Microseconds.ValueBool() {
+			if state == nil || i >= len(state.PtpMasterEthernets) || state.PtpMasterEthernets[i].Microseconds.IsNull() || state.PtpMasterEthernets[i].Microseconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ethernets/ethernet", keyString), "microseconds"))
 			}
 		}
 		if !data.PtpMasterEthernets[i].Nanoseconds.IsNull() && !data.PtpMasterEthernets[i].Nanoseconds.ValueBool() {
-			if state != nil && i < len(state.PtpMasterEthernets) && !state.PtpMasterEthernets[i].Nanoseconds.IsNull() && state.PtpMasterEthernets[i].Nanoseconds.ValueBool() {
+			if state == nil || i >= len(state.PtpMasterEthernets) || state.PtpMasterEthernets[i].Nanoseconds.IsNull() || state.PtpMasterEthernets[i].Nanoseconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ethernets/ethernet", keyString), "nanoseconds"))
 			}
 		}
 		if !data.PtpMasterEthernets[i].NonNegotiated.IsNull() && !data.PtpMasterEthernets[i].NonNegotiated.ValueBool() {
-			if state != nil && i < len(state.PtpMasterEthernets) && !state.PtpMasterEthernets[i].NonNegotiated.IsNull() && state.PtpMasterEthernets[i].NonNegotiated.ValueBool() {
+			if state == nil || i >= len(state.PtpMasterEthernets) || state.PtpMasterEthernets[i].NonNegotiated.IsNull() || state.PtpMasterEthernets[i].NonNegotiated.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ethernets/ethernet", keyString), "non-negotiated"))
 			}
 		}
 		if !data.PtpMasterEthernets[i].MulticastMixed.IsNull() && !data.PtpMasterEthernets[i].MulticastMixed.ValueBool() {
-			if state != nil && i < len(state.PtpMasterEthernets) && !state.PtpMasterEthernets[i].MulticastMixed.IsNull() && state.PtpMasterEthernets[i].MulticastMixed.ValueBool() {
+			if state == nil || i >= len(state.PtpMasterEthernets) || state.PtpMasterEthernets[i].MulticastMixed.IsNull() || state.PtpMasterEthernets[i].MulticastMixed.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ethernets/ethernet", keyString), "multicast"))
 			}
 		}
 		if !data.PtpMasterEthernets[i].Multicast.IsNull() && !data.PtpMasterEthernets[i].Multicast.ValueBool() {
-			if state != nil && i < len(state.PtpMasterEthernets) && !state.PtpMasterEthernets[i].Multicast.IsNull() && state.PtpMasterEthernets[i].Multicast.ValueBool() {
+			if state == nil || i >= len(state.PtpMasterEthernets) || state.PtpMasterEthernets[i].Multicast.IsNull() || state.PtpMasterEthernets[i].Multicast.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ethernets/ethernet", keyString), "multicast"))
 			}
 		}
@@ -8461,32 +8461,32 @@ func (data *InterfaceEthernetSubinterface) getEmptyLeafsDelete(ctx context.Conte
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.PtpMasterIpv6s[i].Milliseconds.IsNull() && !data.PtpMasterIpv6s[i].Milliseconds.ValueBool() {
-			if state != nil && i < len(state.PtpMasterIpv6s) && !state.PtpMasterIpv6s[i].Milliseconds.IsNull() && state.PtpMasterIpv6s[i].Milliseconds.ValueBool() {
+			if state == nil || i >= len(state.PtpMasterIpv6s) || state.PtpMasterIpv6s[i].Milliseconds.IsNull() || state.PtpMasterIpv6s[i].Milliseconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ipv6s/ipv6", keyString), "milliseconds"))
 			}
 		}
 		if !data.PtpMasterIpv6s[i].Microseconds.IsNull() && !data.PtpMasterIpv6s[i].Microseconds.ValueBool() {
-			if state != nil && i < len(state.PtpMasterIpv6s) && !state.PtpMasterIpv6s[i].Microseconds.IsNull() && state.PtpMasterIpv6s[i].Microseconds.ValueBool() {
+			if state == nil || i >= len(state.PtpMasterIpv6s) || state.PtpMasterIpv6s[i].Microseconds.IsNull() || state.PtpMasterIpv6s[i].Microseconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ipv6s/ipv6", keyString), "microseconds"))
 			}
 		}
 		if !data.PtpMasterIpv6s[i].Nanoseconds.IsNull() && !data.PtpMasterIpv6s[i].Nanoseconds.ValueBool() {
-			if state != nil && i < len(state.PtpMasterIpv6s) && !state.PtpMasterIpv6s[i].Nanoseconds.IsNull() && state.PtpMasterIpv6s[i].Nanoseconds.ValueBool() {
+			if state == nil || i >= len(state.PtpMasterIpv6s) || state.PtpMasterIpv6s[i].Nanoseconds.IsNull() || state.PtpMasterIpv6s[i].Nanoseconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ipv6s/ipv6", keyString), "nanoseconds"))
 			}
 		}
 		if !data.PtpMasterIpv6s[i].NonNegotiated.IsNull() && !data.PtpMasterIpv6s[i].NonNegotiated.ValueBool() {
-			if state != nil && i < len(state.PtpMasterIpv6s) && !state.PtpMasterIpv6s[i].NonNegotiated.IsNull() && state.PtpMasterIpv6s[i].NonNegotiated.ValueBool() {
+			if state == nil || i >= len(state.PtpMasterIpv6s) || state.PtpMasterIpv6s[i].NonNegotiated.IsNull() || state.PtpMasterIpv6s[i].NonNegotiated.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ipv6s/ipv6", keyString), "non-negotiated"))
 			}
 		}
 		if !data.PtpMasterIpv6s[i].MulticastMixed.IsNull() && !data.PtpMasterIpv6s[i].MulticastMixed.ValueBool() {
-			if state != nil && i < len(state.PtpMasterIpv6s) && !state.PtpMasterIpv6s[i].MulticastMixed.IsNull() && state.PtpMasterIpv6s[i].MulticastMixed.ValueBool() {
+			if state == nil || i >= len(state.PtpMasterIpv6s) || state.PtpMasterIpv6s[i].MulticastMixed.IsNull() || state.PtpMasterIpv6s[i].MulticastMixed.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ipv6s/ipv6", keyString), "multicast"))
 			}
 		}
 		if !data.PtpMasterIpv6s[i].Multicast.IsNull() && !data.PtpMasterIpv6s[i].Multicast.ValueBool() {
-			if state != nil && i < len(state.PtpMasterIpv6s) && !state.PtpMasterIpv6s[i].Multicast.IsNull() && state.PtpMasterIpv6s[i].Multicast.ValueBool() {
+			if state == nil || i >= len(state.PtpMasterIpv6s) || state.PtpMasterIpv6s[i].Multicast.IsNull() || state.PtpMasterIpv6s[i].Multicast.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ipv6s/ipv6", keyString), "multicast"))
 			}
 		}
@@ -8499,32 +8499,32 @@ func (data *InterfaceEthernetSubinterface) getEmptyLeafsDelete(ctx context.Conte
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.PtpMasterIpv4s[i].Milliseconds.IsNull() && !data.PtpMasterIpv4s[i].Milliseconds.ValueBool() {
-			if state != nil && i < len(state.PtpMasterIpv4s) && !state.PtpMasterIpv4s[i].Milliseconds.IsNull() && state.PtpMasterIpv4s[i].Milliseconds.ValueBool() {
+			if state == nil || i >= len(state.PtpMasterIpv4s) || state.PtpMasterIpv4s[i].Milliseconds.IsNull() || state.PtpMasterIpv4s[i].Milliseconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ipv4s/ipv4", keyString), "milliseconds"))
 			}
 		}
 		if !data.PtpMasterIpv4s[i].Microseconds.IsNull() && !data.PtpMasterIpv4s[i].Microseconds.ValueBool() {
-			if state != nil && i < len(state.PtpMasterIpv4s) && !state.PtpMasterIpv4s[i].Microseconds.IsNull() && state.PtpMasterIpv4s[i].Microseconds.ValueBool() {
+			if state == nil || i >= len(state.PtpMasterIpv4s) || state.PtpMasterIpv4s[i].Microseconds.IsNull() || state.PtpMasterIpv4s[i].Microseconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ipv4s/ipv4", keyString), "microseconds"))
 			}
 		}
 		if !data.PtpMasterIpv4s[i].Nanoseconds.IsNull() && !data.PtpMasterIpv4s[i].Nanoseconds.ValueBool() {
-			if state != nil && i < len(state.PtpMasterIpv4s) && !state.PtpMasterIpv4s[i].Nanoseconds.IsNull() && state.PtpMasterIpv4s[i].Nanoseconds.ValueBool() {
+			if state == nil || i >= len(state.PtpMasterIpv4s) || state.PtpMasterIpv4s[i].Nanoseconds.IsNull() || state.PtpMasterIpv4s[i].Nanoseconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ipv4s/ipv4", keyString), "nanoseconds"))
 			}
 		}
 		if !data.PtpMasterIpv4s[i].NonNegotiated.IsNull() && !data.PtpMasterIpv4s[i].NonNegotiated.ValueBool() {
-			if state != nil && i < len(state.PtpMasterIpv4s) && !state.PtpMasterIpv4s[i].NonNegotiated.IsNull() && state.PtpMasterIpv4s[i].NonNegotiated.ValueBool() {
+			if state == nil || i >= len(state.PtpMasterIpv4s) || state.PtpMasterIpv4s[i].NonNegotiated.IsNull() || state.PtpMasterIpv4s[i].NonNegotiated.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ipv4s/ipv4", keyString), "non-negotiated"))
 			}
 		}
 		if !data.PtpMasterIpv4s[i].MulticastMixed.IsNull() && !data.PtpMasterIpv4s[i].MulticastMixed.ValueBool() {
-			if state != nil && i < len(state.PtpMasterIpv4s) && !state.PtpMasterIpv4s[i].MulticastMixed.IsNull() && state.PtpMasterIpv4s[i].MulticastMixed.ValueBool() {
+			if state == nil || i >= len(state.PtpMasterIpv4s) || state.PtpMasterIpv4s[i].MulticastMixed.IsNull() || state.PtpMasterIpv4s[i].MulticastMixed.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ipv4s/ipv4", keyString), "multicast"))
 			}
 		}
 		if !data.PtpMasterIpv4s[i].Multicast.IsNull() && !data.PtpMasterIpv4s[i].Multicast.ValueBool() {
-			if state != nil && i < len(state.PtpMasterIpv4s) && !state.PtpMasterIpv4s[i].Multicast.IsNull() && state.PtpMasterIpv4s[i].Multicast.ValueBool() {
+			if state == nil || i >= len(state.PtpMasterIpv4s) || state.PtpMasterIpv4s[i].Multicast.IsNull() || state.PtpMasterIpv4s[i].Multicast.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/primary/ipv4s/ipv4", keyString), "multicast"))
 			}
 		}
@@ -8537,7 +8537,7 @@ func (data *InterfaceEthernetSubinterface) getEmptyLeafsDelete(ctx context.Conte
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.PtpSlaveEthernets[i].NonNegotiated.IsNull() && !data.PtpSlaveEthernets[i].NonNegotiated.ValueBool() {
-			if state != nil && i < len(state.PtpSlaveEthernets) && !state.PtpSlaveEthernets[i].NonNegotiated.IsNull() && state.PtpSlaveEthernets[i].NonNegotiated.ValueBool() {
+			if state == nil || i >= len(state.PtpSlaveEthernets) || state.PtpSlaveEthernets[i].NonNegotiated.IsNull() || state.PtpSlaveEthernets[i].NonNegotiated.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/subordinate/ethernets/ethernet", keyString), "non-negotiated"))
 			}
 		}
@@ -8550,7 +8550,7 @@ func (data *InterfaceEthernetSubinterface) getEmptyLeafsDelete(ctx context.Conte
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.PtpSlaveIpv6s[i].NonNegotiated.IsNull() && !data.PtpSlaveIpv6s[i].NonNegotiated.ValueBool() {
-			if state != nil && i < len(state.PtpSlaveIpv6s) && !state.PtpSlaveIpv6s[i].NonNegotiated.IsNull() && state.PtpSlaveIpv6s[i].NonNegotiated.ValueBool() {
+			if state == nil || i >= len(state.PtpSlaveIpv6s) || state.PtpSlaveIpv6s[i].NonNegotiated.IsNull() || state.PtpSlaveIpv6s[i].NonNegotiated.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/subordinate/ipv6s/ipv6", keyString), "non-negotiated"))
 			}
 		}
@@ -8563,113 +8563,113 @@ func (data *InterfaceEthernetSubinterface) getEmptyLeafsDelete(ctx context.Conte
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.PtpSlaveIpv4s[i].NonNegotiated.IsNull() && !data.PtpSlaveIpv4s[i].NonNegotiated.ValueBool() {
-			if state != nil && i < len(state.PtpSlaveIpv4s) && !state.PtpSlaveIpv4s[i].NonNegotiated.IsNull() && state.PtpSlaveIpv4s[i].NonNegotiated.ValueBool() {
+			if state == nil || i >= len(state.PtpSlaveIpv4s) || state.PtpSlaveIpv4s[i].NonNegotiated.IsNull() || state.PtpSlaveIpv4s[i].NonNegotiated.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/subordinate/ipv4s/ipv4-non-negotiated", keyString), "non-negotiated"))
 			}
 		}
 	}
 	if !data.PtpSourceIpv6AddressDisable.IsNull() && !data.PtpSourceIpv6AddressDisable.ValueBool() {
-		if state != nil && !state.PtpSourceIpv6AddressDisable.IsNull() && state.PtpSourceIpv6AddressDisable.ValueBool() {
+		if state == nil || state.PtpSourceIpv6AddressDisable.IsNull() || state.PtpSourceIpv6AddressDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/source/ipv6/address/disable"))
 		}
 	}
 	if !data.PtpSourceIpv4AddressDisable.IsNull() && !data.PtpSourceIpv4AddressDisable.ValueBool() {
-		if state != nil && !state.PtpSourceIpv4AddressDisable.IsNull() && state.PtpSourceIpv4AddressDisable.ValueBool() {
+		if state == nil || state.PtpSourceIpv4AddressDisable.IsNull() || state.PtpSourceIpv4AddressDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/source/ipv4/address/disable"))
 		}
 	}
 	if !data.PtpPortStateAny.IsNull() && !data.PtpPortStateAny.ValueBool() {
-		if state != nil && !state.PtpPortStateAny.IsNull() && state.PtpPortStateAny.ValueBool() {
+		if state == nil || state.PtpPortStateAny.IsNull() || state.PtpPortStateAny.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/port/state/any"))
 		}
 	}
 	if !data.PtpPortStateMasterOnly.IsNull() && !data.PtpPortStateMasterOnly.ValueBool() {
-		if state != nil && !state.PtpPortStateMasterOnly.IsNull() && state.PtpPortStateMasterOnly.ValueBool() {
+		if state == nil || state.PtpPortStateMasterOnly.IsNull() || state.PtpPortStateMasterOnly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/port/state/primary-only"))
 		}
 	}
 	if !data.PtpPortStateSlaveOnly.IsNull() && !data.PtpPortStateSlaveOnly.ValueBool() {
-		if state != nil && !state.PtpPortStateSlaveOnly.IsNull() && state.PtpPortStateSlaveOnly.ValueBool() {
+		if state == nil || state.PtpPortStateSlaveOnly.IsNull() || state.PtpPortStateSlaveOnly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/port/state/subordinate-only"))
 		}
 	}
 	if !data.PtpMulticastTargetAddressMacNonForwardable.IsNull() && !data.PtpMulticastTargetAddressMacNonForwardable.ValueBool() {
-		if state != nil && !state.PtpMulticastTargetAddressMacNonForwardable.IsNull() && state.PtpMulticastTargetAddressMacNonForwardable.ValueBool() {
+		if state == nil || state.PtpMulticastTargetAddressMacNonForwardable.IsNull() || state.PtpMulticastTargetAddressMacNonForwardable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/multicast/target-address/ethernet"))
 		}
 	}
 	if !data.PtpMulticastTargetAddressMacForwardable.IsNull() && !data.PtpMulticastTargetAddressMacForwardable.ValueBool() {
-		if state != nil && !state.PtpMulticastTargetAddressMacForwardable.IsNull() && state.PtpMulticastTargetAddressMacForwardable.ValueBool() {
+		if state == nil || state.PtpMulticastTargetAddressMacForwardable.IsNull() || state.PtpMulticastTargetAddressMacForwardable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/multicast/target-address/ethernet"))
 		}
 	}
 	if !data.PtpMulticastDisable.IsNull() && !data.PtpMulticastDisable.ValueBool() {
-		if state != nil && !state.PtpMulticastDisable.IsNull() && state.PtpMulticastDisable.ValueBool() {
+		if state == nil || state.PtpMulticastDisable.IsNull() || state.PtpMulticastDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/multicast"))
 		}
 	}
 	if !data.PtpMulticastMixed.IsNull() && !data.PtpMulticastMixed.ValueBool() {
-		if state != nil && !state.PtpMulticastMixed.IsNull() && state.PtpMulticastMixed.ValueBool() {
+		if state == nil || state.PtpMulticastMixed.IsNull() || state.PtpMulticastMixed.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/multicast"))
 		}
 	}
 	if !data.PtpMulticast.IsNull() && !data.PtpMulticast.ValueBool() {
-		if state != nil && !state.PtpMulticast.IsNull() && state.PtpMulticast.ValueBool() {
+		if state == nil || state.PtpMulticast.IsNull() || state.PtpMulticast.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/multicast"))
 		}
 	}
 	if !data.PtpUnicastGrantInvalidRequestDeny.IsNull() && !data.PtpUnicastGrantInvalidRequestDeny.ValueBool() {
-		if state != nil && !state.PtpUnicastGrantInvalidRequestDeny.IsNull() && state.PtpUnicastGrantInvalidRequestDeny.ValueBool() {
+		if state == nil || state.PtpUnicastGrantInvalidRequestDeny.IsNull() || state.PtpUnicastGrantInvalidRequestDeny.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/unicast-grant/invalid-request/deny"))
 		}
 	}
 	if !data.PtpUnicastGrantInvalidRequestReduce.IsNull() && !data.PtpUnicastGrantInvalidRequestReduce.ValueBool() {
-		if state != nil && !state.PtpUnicastGrantInvalidRequestReduce.IsNull() && state.PtpUnicastGrantInvalidRequestReduce.ValueBool() {
+		if state == nil || state.PtpUnicastGrantInvalidRequestReduce.IsNull() || state.PtpUnicastGrantInvalidRequestReduce.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/unicast-grant/invalid-request/reduce"))
 		}
 	}
 	if !data.PtpDelayAsymmetryUnitMilliseconds.IsNull() && !data.PtpDelayAsymmetryUnitMilliseconds.ValueBool() {
-		if state != nil && !state.PtpDelayAsymmetryUnitMilliseconds.IsNull() && state.PtpDelayAsymmetryUnitMilliseconds.ValueBool() {
+		if state == nil || state.PtpDelayAsymmetryUnitMilliseconds.IsNull() || state.PtpDelayAsymmetryUnitMilliseconds.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/milliseconds"))
 		}
 	}
 	if !data.PtpDelayAsymmetryUnitMicroseconds.IsNull() && !data.PtpDelayAsymmetryUnitMicroseconds.ValueBool() {
-		if state != nil && !state.PtpDelayAsymmetryUnitMicroseconds.IsNull() && state.PtpDelayAsymmetryUnitMicroseconds.ValueBool() {
+		if state == nil || state.PtpDelayAsymmetryUnitMicroseconds.IsNull() || state.PtpDelayAsymmetryUnitMicroseconds.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/microseconds"))
 		}
 	}
 	if !data.PtpDelayAsymmetryUnitNanoseconds.IsNull() && !data.PtpDelayAsymmetryUnitNanoseconds.ValueBool() {
-		if state != nil && !state.PtpDelayAsymmetryUnitNanoseconds.IsNull() && state.PtpDelayAsymmetryUnitNanoseconds.ValueBool() {
+		if state == nil || state.PtpDelayAsymmetryUnitNanoseconds.IsNull() || state.PtpDelayAsymmetryUnitNanoseconds.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/nanoseconds"))
 		}
 	}
 	if !data.PtpClockOperationTwoStep.IsNull() && !data.PtpClockOperationTwoStep.ValueBool() {
-		if state != nil && !state.PtpClockOperationTwoStep.IsNull() && state.PtpClockOperationTwoStep.ValueBool() {
+		if state == nil || state.PtpClockOperationTwoStep.IsNull() || state.PtpClockOperationTwoStep.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/clock/operation/two-step"))
 		}
 	}
 	if !data.PtpClockOperationOneStep.IsNull() && !data.PtpClockOperationOneStep.ValueBool() {
-		if state != nil && !state.PtpClockOperationOneStep.IsNull() && state.PtpClockOperationOneStep.ValueBool() {
+		if state == nil || state.PtpClockOperationOneStep.IsNull() || state.PtpClockOperationOneStep.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/clock/operation/one-step"))
 		}
 	}
 	if !data.PtpTransportIpv6.IsNull() && !data.PtpTransportIpv6.ValueBool() {
-		if state != nil && !state.PtpTransportIpv6.IsNull() && state.PtpTransportIpv6.ValueBool() {
+		if state == nil || state.PtpTransportIpv6.IsNull() || state.PtpTransportIpv6.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/transport/ipv6"))
 		}
 	}
 	if !data.PtpTransportEthernet.IsNull() && !data.PtpTransportEthernet.ValueBool() {
-		if state != nil && !state.PtpTransportEthernet.IsNull() && state.PtpTransportEthernet.ValueBool() {
+		if state == nil || state.PtpTransportEthernet.IsNull() || state.PtpTransportEthernet.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/transport/ethernet"))
 		}
 	}
 	if !data.PtpTransportIpv4.IsNull() && !data.PtpTransportIpv4.ValueBool() {
-		if state != nil && !state.PtpTransportIpv4.IsNull() && state.PtpTransportIpv4.ValueBool() {
+		if state == nil || state.PtpTransportIpv4.IsNull() || state.PtpTransportIpv4.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp/transport/ipv4"))
 		}
 	}
 	if !data.Ptp.IsNull() && !data.Ptp.ValueBool() {
-		if state != nil && !state.Ptp.IsNull() && state.Ptp.ValueBool() {
+		if state == nil || state.Ptp.IsNull() || state.Ptp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ptp-cfg:ptp"))
 		}
 	}
@@ -8681,68 +8681,68 @@ func (data *InterfaceEthernetSubinterface) getEmptyLeafsDelete(ctx context.Conte
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.MonitorSessions[i].Acl.IsNull() && !data.MonitorSessions[i].Acl.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].Acl.IsNull() && state.MonitorSessions[i].Acl.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].Acl.IsNull() || state.MonitorSessions[i].Acl.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session", keyString), "acl"))
 			}
 		}
 		if !data.MonitorSessions[i].DirectionTxOnly.IsNull() && !data.MonitorSessions[i].DirectionTxOnly.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DirectionTxOnly.IsNull() && state.MonitorSessions[i].DirectionTxOnly.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DirectionTxOnly.IsNull() || state.MonitorSessions[i].DirectionTxOnly.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session", keyString), "direction/tx-only"))
 			}
 		}
 		if !data.MonitorSessions[i].DirectionRxOnly.IsNull() && !data.MonitorSessions[i].DirectionRxOnly.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DirectionRxOnly.IsNull() && state.MonitorSessions[i].DirectionRxOnly.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DirectionRxOnly.IsNull() || state.MonitorSessions[i].DirectionRxOnly.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session", keyString), "direction/rx-only"))
 			}
 		}
 		if !data.MonitorSessions[i].Ethernet.IsNull() && !data.MonitorSessions[i].Ethernet.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].Ethernet.IsNull() && state.MonitorSessions[i].Ethernet.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].Ethernet.IsNull() || state.MonitorSessions[i].Ethernet.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-monitor-session-cfg:monitor-sessions/monitor-session", keyString), "ethernet"))
 			}
 		}
 	}
 	if !data.LldpTagged.IsNull() && !data.LldpTagged.ValueBool() {
-		if state != nil && !state.LldpTagged.IsNull() && state.LldpTagged.ValueBool() {
+		if state == nil || state.LldpTagged.IsNull() || state.LldpTagged.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-lldp-cfg:lldp/tagged"))
 		}
 	}
 	if !data.LldpReceiveDisable.IsNull() && !data.LldpReceiveDisable.ValueBool() {
-		if state != nil && !state.LldpReceiveDisable.IsNull() && state.LldpReceiveDisable.ValueBool() {
+		if state == nil || state.LldpReceiveDisable.IsNull() || state.LldpReceiveDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-lldp-cfg:lldp/receive/disable"))
 		}
 	}
 	if !data.LldpTransmitDisable.IsNull() && !data.LldpTransmitDisable.ValueBool() {
-		if state != nil && !state.LldpTransmitDisable.IsNull() && state.LldpTransmitDisable.ValueBool() {
+		if state == nil || state.LldpTransmitDisable.IsNull() || state.LldpTransmitDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-lldp-cfg:lldp/transmit/disable"))
 		}
 	}
 	if !data.Lldp.IsNull() && !data.Lldp.ValueBool() {
-		if state != nil && !state.Lldp.IsNull() && state.Lldp.ValueBool() {
+		if state == nil || state.Lldp.IsNull() || state.Lldp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-lldp-cfg:lldp"))
 		}
 	}
 	if !data.Cdp.IsNull() && !data.Cdp.ValueBool() {
-		if state != nil && !state.Cdp.IsNull() && state.Cdp.ValueBool() {
+		if state == nil || state.Cdp.IsNull() || state.Cdp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-cdp-cfg:cdp"))
 		}
 	}
 	if !data.ProxyArp.IsNull() && !data.ProxyArp.ValueBool() {
-		if state != nil && !state.ProxyArp.IsNull() && state.ProxyArp.ValueBool() {
+		if state == nil || state.ProxyArp.IsNull() || state.ProxyArp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-if-arp-cfg:proxy-arp"))
 		}
 	}
 	if !data.ArpGratuitousIgnore.IsNull() && !data.ArpGratuitousIgnore.ValueBool() {
-		if state != nil && !state.ArpGratuitousIgnore.IsNull() && state.ArpGratuitousIgnore.ValueBool() {
+		if state == nil || state.ArpGratuitousIgnore.IsNull() || state.ArpGratuitousIgnore.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-if-arp-cfg:arp/gratuitous/ignore"))
 		}
 	}
 	if !data.ArpLearningLocal.IsNull() && !data.ArpLearningLocal.ValueBool() {
-		if state != nil && !state.ArpLearningLocal.IsNull() && state.ArpLearningLocal.ValueBool() {
+		if state == nil || state.ArpLearningLocal.IsNull() || state.ArpLearningLocal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-if-arp-cfg:arp/learning/local"))
 		}
 	}
 	if !data.ArpLearningDisable.IsNull() && !data.ArpLearningDisable.ValueBool() {
-		if state != nil && !state.ArpLearningDisable.IsNull() && state.ArpLearningDisable.ValueBool() {
+		if state == nil || state.ArpLearningDisable.IsNull() || state.ArpLearningDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-if-arp-cfg:arp/learning/disable"))
 		}
 	}
@@ -8811,7 +8811,7 @@ func (data *InterfaceEthernetSubinterface) getEmptyLeafsDelete(ctx context.Conte
 		}
 	}
 	if !data.EthernetCfmBandwidthNotificationsLogChanges.IsNull() && !data.EthernetCfmBandwidthNotificationsLogChanges.ValueBool() {
-		if state != nil && !state.EthernetCfmBandwidthNotificationsLogChanges.IsNull() && state.EthernetCfmBandwidthNotificationsLogChanges.ValueBool() {
+		if state == nil || state.EthernetCfmBandwidthNotificationsLogChanges.IsNull() || state.EthernetCfmBandwidthNotificationsLogChanges.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/bandwidth-notifications/log/changes"))
 		}
 	}
@@ -8839,63 +8839,63 @@ func (data *InterfaceEthernetSubinterface) getEmptyLeafsDelete(ctx context.Conte
 			}
 		}
 		if !data.EthernetCfmMepDomains[i].LossMeasurementCountersAggregate.IsNull() && !data.EthernetCfmMepDomains[i].LossMeasurementCountersAggregate.ValueBool() {
-			if state != nil && i < len(state.EthernetCfmMepDomains) && !state.EthernetCfmMepDomains[i].LossMeasurementCountersAggregate.IsNull() && state.EthernetCfmMepDomains[i].LossMeasurementCountersAggregate.ValueBool() {
+			if state == nil || i >= len(state.EthernetCfmMepDomains) || state.EthernetCfmMepDomains[i].LossMeasurementCountersAggregate.IsNull() || state.EthernetCfmMepDomains[i].LossMeasurementCountersAggregate.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-ethernet-cfm-cfg:ethernet/cfm/mep/domain", keyString), "loss-measurement/counters/aggregate"))
 			}
 		}
 	}
 	if !data.Ipv6NdPrefixDefaultNoAutoconfig.IsNull() && !data.Ipv6NdPrefixDefaultNoAutoconfig.ValueBool() {
-		if state != nil && !state.Ipv6NdPrefixDefaultNoAutoconfig.IsNull() && state.Ipv6NdPrefixDefaultNoAutoconfig.ValueBool() {
+		if state == nil || state.Ipv6NdPrefixDefaultNoAutoconfig.IsNull() || state.Ipv6NdPrefixDefaultNoAutoconfig.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/prefix/default/no-autoconfig"))
 		}
 	}
 	if !data.Ipv6NdPrefixDefaultNoAdv.IsNull() && !data.Ipv6NdPrefixDefaultNoAdv.ValueBool() {
-		if state != nil && !state.Ipv6NdPrefixDefaultNoAdv.IsNull() && state.Ipv6NdPrefixDefaultNoAdv.ValueBool() {
+		if state == nil || state.Ipv6NdPrefixDefaultNoAdv.IsNull() || state.Ipv6NdPrefixDefaultNoAdv.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/prefix/default/no-adv"))
 		}
 	}
 	if !data.Ipv6NdRedirects.IsNull() && !data.Ipv6NdRedirects.ValueBool() {
-		if state != nil && !state.Ipv6NdRedirects.IsNull() && state.Ipv6NdRedirects.ValueBool() {
+		if state == nil || state.Ipv6NdRedirects.IsNull() || state.Ipv6NdRedirects.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/redirects"))
 		}
 	}
 	if !data.Ipv6NdOtherConfigFlag.IsNull() && !data.Ipv6NdOtherConfigFlag.ValueBool() {
-		if state != nil && !state.Ipv6NdOtherConfigFlag.IsNull() && state.Ipv6NdOtherConfigFlag.ValueBool() {
+		if state == nil || state.Ipv6NdOtherConfigFlag.IsNull() || state.Ipv6NdOtherConfigFlag.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/other-config-flag"))
 		}
 	}
 	if !data.Ipv6NdManagedConfigFlag.IsNull() && !data.Ipv6NdManagedConfigFlag.ValueBool() {
-		if state != nil && !state.Ipv6NdManagedConfigFlag.IsNull() && state.Ipv6NdManagedConfigFlag.ValueBool() {
+		if state == nil || state.Ipv6NdManagedConfigFlag.IsNull() || state.Ipv6NdManagedConfigFlag.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/managed-config-flag"))
 		}
 	}
 	if !data.Ipv6NdSuppressRa.IsNull() && !data.Ipv6NdSuppressRa.ValueBool() {
-		if state != nil && !state.Ipv6NdSuppressRa.IsNull() && state.Ipv6NdSuppressRa.ValueBool() {
+		if state == nil || state.Ipv6NdSuppressRa.IsNull() || state.Ipv6NdSuppressRa.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/suppress-ra"))
 		}
 	}
 	if !data.Ipv6NdUnicastRa.IsNull() && !data.Ipv6NdUnicastRa.ValueBool() {
-		if state != nil && !state.Ipv6NdUnicastRa.IsNull() && state.Ipv6NdUnicastRa.ValueBool() {
+		if state == nil || state.Ipv6NdUnicastRa.IsNull() || state.Ipv6NdUnicastRa.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/unicast-ra"))
 		}
 	}
 	if !data.Ipv6TcpMssAdjust.IsNull() && !data.Ipv6TcpMssAdjust.ValueBool() {
-		if state != nil && !state.Ipv6TcpMssAdjust.IsNull() && state.Ipv6TcpMssAdjust.ValueBool() {
+		if state == nil || state.Ipv6TcpMssAdjust.IsNull() || state.Ipv6TcpMssAdjust.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:tcp-mss-adjust/enable"))
 		}
 	}
 	if !data.Ipv6UnreachablesDisable.IsNull() && !data.Ipv6UnreachablesDisable.ValueBool() {
-		if state != nil && !state.Ipv6UnreachablesDisable.IsNull() && state.Ipv6UnreachablesDisable.ValueBool() {
+		if state == nil || state.Ipv6UnreachablesDisable.IsNull() || state.Ipv6UnreachablesDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:unreachables/disable"))
 		}
 	}
 	if !data.Ipv6Dhcp.IsNull() && !data.Ipv6Dhcp.ValueBool() {
-		if state != nil && !state.Ipv6Dhcp.IsNull() && state.Ipv6Dhcp.ValueBool() {
+		if state == nil || state.Ipv6Dhcp.IsNull() || state.Ipv6Dhcp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/dhcp"))
 		}
 	}
 	if !data.Ipv6Autoconfig.IsNull() && !data.Ipv6Autoconfig.ValueBool() {
-		if state != nil && !state.Ipv6Autoconfig.IsNull() && state.Ipv6Autoconfig.ValueBool() {
+		if state == nil || state.Ipv6Autoconfig.IsNull() || state.Ipv6Autoconfig.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/autoconfig"))
 		}
 	}
@@ -8916,62 +8916,62 @@ func (data *InterfaceEthernetSubinterface) getEmptyLeafsDelete(ctx context.Conte
 		}
 	}
 	if !data.Ipv6TtlPropagateDisable.IsNull() && !data.Ipv6TtlPropagateDisable.ValueBool() {
-		if state != nil && !state.Ipv6TtlPropagateDisable.IsNull() && state.Ipv6TtlPropagateDisable.ValueBool() {
+		if state == nil || state.Ipv6TtlPropagateDisable.IsNull() || state.Ipv6TtlPropagateDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:ttl-propagate/disable"))
 		}
 	}
 	if !data.Ipv6Enable.IsNull() && !data.Ipv6Enable.ValueBool() {
-		if state != nil && !state.Ipv6Enable.IsNull() && state.Ipv6Enable.ValueBool() {
+		if state == nil || state.Ipv6Enable.IsNull() || state.Ipv6Enable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable"))
 		}
 	}
 	if !data.Ipv6AccessGroupEgressInterfaceStatistics.IsNull() && !data.Ipv6AccessGroupEgressInterfaceStatistics.ValueBool() {
-		if state != nil && !state.Ipv6AccessGroupEgressInterfaceStatistics.IsNull() && state.Ipv6AccessGroupEgressInterfaceStatistics.ValueBool() {
+		if state == nil || state.Ipv6AccessGroupEgressInterfaceStatistics.IsNull() || state.Ipv6AccessGroupEgressInterfaceStatistics.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics"))
 		}
 	}
 	if !data.Ipv6AccessGroupIngressInterfaceStatistics.IsNull() && !data.Ipv6AccessGroupIngressInterfaceStatistics.ValueBool() {
-		if state != nil && !state.Ipv6AccessGroupIngressInterfaceStatistics.IsNull() && state.Ipv6AccessGroupIngressInterfaceStatistics.ValueBool() {
+		if state == nil || state.Ipv6AccessGroupIngressInterfaceStatistics.IsNull() || state.Ipv6AccessGroupIngressInterfaceStatistics.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics"))
 		}
 	}
 	if !data.Ipv4AccessGroupEgressInterfaceStatistics.IsNull() && !data.Ipv4AccessGroupEgressInterfaceStatistics.ValueBool() {
-		if state != nil && !state.Ipv4AccessGroupEgressInterfaceStatistics.IsNull() && state.Ipv4AccessGroupEgressInterfaceStatistics.ValueBool() {
+		if state == nil || state.Ipv4AccessGroupEgressInterfaceStatistics.IsNull() || state.Ipv4AccessGroupEgressInterfaceStatistics.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress"))
 		}
 	}
 	if !data.Ipv4AccessGroupEgressHardwareCount.IsNull() && !data.Ipv4AccessGroupEgressHardwareCount.ValueBool() {
-		if state != nil && !state.Ipv4AccessGroupEgressHardwareCount.IsNull() && state.Ipv4AccessGroupEgressHardwareCount.ValueBool() {
+		if state == nil || state.Ipv4AccessGroupEgressHardwareCount.IsNull() || state.Ipv4AccessGroupEgressHardwareCount.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress"))
 		}
 	}
 	if !data.Ipv4AccessGroupIngressInterfaceStatistics.IsNull() && !data.Ipv4AccessGroupIngressInterfaceStatistics.ValueBool() {
-		if state != nil && !state.Ipv4AccessGroupIngressInterfaceStatistics.IsNull() && state.Ipv4AccessGroupIngressInterfaceStatistics.ValueBool() {
+		if state == nil || state.Ipv4AccessGroupIngressInterfaceStatistics.IsNull() || state.Ipv4AccessGroupIngressInterfaceStatistics.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress"))
 		}
 	}
 	if !data.Ipv4AccessGroupIngressHardwareCount.IsNull() && !data.Ipv4AccessGroupIngressHardwareCount.ValueBool() {
-		if state != nil && !state.Ipv4AccessGroupIngressHardwareCount.IsNull() && state.Ipv4AccessGroupIngressHardwareCount.ValueBool() {
+		if state == nil || state.Ipv4AccessGroupIngressHardwareCount.IsNull() || state.Ipv4AccessGroupIngressHardwareCount.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress"))
 		}
 	}
 	if !data.Ipv4TtlPropagateDisable.IsNull() && !data.Ipv4TtlPropagateDisable.ValueBool() {
-		if state != nil && !state.Ipv4TtlPropagateDisable.IsNull() && state.Ipv4TtlPropagateDisable.ValueBool() {
+		if state == nil || state.Ipv4TtlPropagateDisable.IsNull() || state.Ipv4TtlPropagateDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:ttl-propagate/disable"))
 		}
 	}
 	if !data.Ipv4ForwardingEnable.IsNull() && !data.Ipv4ForwardingEnable.ValueBool() {
-		if state != nil && !state.Ipv4ForwardingEnable.IsNull() && state.Ipv4ForwardingEnable.ValueBool() {
+		if state == nil || state.Ipv4ForwardingEnable.IsNull() || state.Ipv4ForwardingEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:forwarding-enable"))
 		}
 	}
 	if !data.Ipv4TcpMssAdjust.IsNull() && !data.Ipv4TcpMssAdjust.ValueBool() {
-		if state != nil && !state.Ipv4TcpMssAdjust.IsNull() && state.Ipv4TcpMssAdjust.ValueBool() {
+		if state == nil || state.Ipv4TcpMssAdjust.IsNull() || state.Ipv4TcpMssAdjust.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:tcp-mss-adjust/enable"))
 		}
 	}
 	if !data.Ipv4UnreachablesDisable.IsNull() && !data.Ipv4UnreachablesDisable.ValueBool() {
-		if state != nil && !state.Ipv4UnreachablesDisable.IsNull() && state.Ipv4UnreachablesDisable.ValueBool() {
+		if state == nil || state.Ipv4UnreachablesDisable.IsNull() || state.Ipv4UnreachablesDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:unreachables/disable"))
 		}
 	}
@@ -8984,17 +8984,17 @@ func (data *InterfaceEthernetSubinterface) getEmptyLeafsDelete(ctx context.Conte
 		}
 	}
 	if !data.Ipv4MaskReply.IsNull() && !data.Ipv4MaskReply.ValueBool() {
-		if state != nil && !state.Ipv4MaskReply.IsNull() && state.Ipv4MaskReply.ValueBool() {
+		if state == nil || state.Ipv4MaskReply.IsNull() || state.Ipv4MaskReply.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:mask-reply"))
 		}
 	}
 	if !data.Ipv4Redirects.IsNull() && !data.Ipv4Redirects.ValueBool() {
-		if state != nil && !state.Ipv4Redirects.IsNull() && state.Ipv4Redirects.ValueBool() {
+		if state == nil || state.Ipv4Redirects.IsNull() || state.Ipv4Redirects.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:redirects"))
 		}
 	}
 	if !data.Ipv4PointToPoint.IsNull() && !data.Ipv4PointToPoint.ValueBool() {
-		if state != nil && !state.Ipv4PointToPoint.IsNull() && state.Ipv4PointToPoint.ValueBool() {
+		if state == nil || state.Ipv4PointToPoint.IsNull() || state.Ipv4PointToPoint.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:point-to-point"))
 		}
 	}
@@ -9007,22 +9007,22 @@ func (data *InterfaceEthernetSubinterface) getEmptyLeafsDelete(ctx context.Conte
 		}
 	}
 	if !data.LoggingEventsLinkStatus.IsNull() && !data.LoggingEventsLinkStatus.ValueBool() {
-		if state != nil && !state.LoggingEventsLinkStatus.IsNull() && state.LoggingEventsLinkStatus.ValueBool() {
+		if state == nil || state.LoggingEventsLinkStatus.IsNull() || state.LoggingEventsLinkStatus.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/events/link-status"))
 		}
 	}
 	if !data.Shutdown.IsNull() && !data.Shutdown.ValueBool() {
-		if state != nil && !state.Shutdown.IsNull() && state.Shutdown.ValueBool() {
+		if state == nil || state.Shutdown.IsNull() || state.Shutdown.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "shutdown"))
 		}
 	}
 	if !data.RewriteIngressTagPopTwo.IsNull() && !data.RewriteIngressTagPopTwo.ValueBool() {
-		if state != nil && !state.RewriteIngressTagPopTwo.IsNull() && state.RewriteIngressTagPopTwo.ValueBool() {
+		if state == nil || state.RewriteIngressTagPopTwo.IsNull() || state.RewriteIngressTagPopTwo.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite/ingress/tag/pop/two"))
 		}
 	}
 	if !data.RewriteIngressTagPopOne.IsNull() && !data.RewriteIngressTagPopOne.ValueBool() {
-		if state != nil && !state.RewriteIngressTagPopOne.IsNull() && state.RewriteIngressTagPopOne.ValueBool() {
+		if state == nil || state.RewriteIngressTagPopOne.IsNull() || state.RewriteIngressTagPopOne.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite/ingress/tag/pop/one"))
 		}
 	}
@@ -9043,22 +9043,22 @@ func (data *InterfaceEthernetSubinterface) getEmptyLeafsDelete(ctx context.Conte
 		}
 	}
 	if !data.Dampening.IsNull() && !data.Dampening.ValueBool() {
-		if state != nil && !state.Dampening.IsNull() && state.Dampening.ValueBool() {
+		if state == nil || state.Dampening.IsNull() || state.Dampening.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "dampening"))
 		}
 	}
 	if !data.Multipoint.IsNull() && !data.Multipoint.ValueBool() {
-		if state != nil && !state.Multipoint.IsNull() && state.Multipoint.ValueBool() {
+		if state == nil || state.Multipoint.IsNull() || state.Multipoint.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sub-interface-type/multipoint"))
 		}
 	}
 	if !data.PointToPoint.IsNull() && !data.PointToPoint.ValueBool() {
-		if state != nil && !state.PointToPoint.IsNull() && state.PointToPoint.ValueBool() {
+		if state == nil || state.PointToPoint.IsNull() || state.PointToPoint.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sub-interface-type/point-to-point"))
 		}
 	}
 	if !data.L2transport.IsNull() && !data.L2transport.ValueBool() {
-		if state != nil && !state.L2transport.IsNull() && state.L2transport.ValueBool() {
+		if state == nil || state.L2transport.IsNull() || state.L2transport.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sub-interface-type/l2transport"))
 		}
 	}

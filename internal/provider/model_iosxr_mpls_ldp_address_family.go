@@ -1452,7 +1452,7 @@ func (data *MPLSLDPAddressFamily) getEmptyLeafsDelete(ctx context.Context, state
 		}
 	}
 	if !data.LabelLocalAdvertiseDisable.IsNull() && !data.LabelLocalAdvertiseDisable.ValueBool() {
-		if state != nil && !state.LabelLocalAdvertiseDisable.IsNull() && state.LabelLocalAdvertiseDisable.ValueBool() {
+		if state == nil || state.LabelLocalAdvertiseDisable.IsNull() || state.LabelLocalAdvertiseDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "label/local/advertise/disable"))
 		}
 	}
@@ -1473,22 +1473,22 @@ func (data *MPLSLDPAddressFamily) getEmptyLeafsDelete(ctx context.Context, state
 		}
 	}
 	if !data.LabelLocalAdvertiseExplicitNull.IsNull() && !data.LabelLocalAdvertiseExplicitNull.ValueBool() {
-		if state != nil && !state.LabelLocalAdvertiseExplicitNull.IsNull() && state.LabelLocalAdvertiseExplicitNull.ValueBool() {
+		if state == nil || state.LabelLocalAdvertiseExplicitNull.IsNull() || state.LabelLocalAdvertiseExplicitNull.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "label/local/advertise/explicit-null"))
 		}
 	}
 	if !data.LabelLocalDefaultRoute.IsNull() && !data.LabelLocalDefaultRoute.ValueBool() {
-		if state != nil && !state.LabelLocalDefaultRoute.IsNull() && state.LabelLocalDefaultRoute.ValueBool() {
+		if state == nil || state.LabelLocalDefaultRoute.IsNull() || state.LabelLocalDefaultRoute.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "label/local/default-route"))
 		}
 	}
 	if !data.LabelLocalAllocateForHostRoutes.IsNull() && !data.LabelLocalAllocateForHostRoutes.ValueBool() {
-		if state != nil && !state.LabelLocalAllocateForHostRoutes.IsNull() && state.LabelLocalAllocateForHostRoutes.ValueBool() {
+		if state == nil || state.LabelLocalAllocateForHostRoutes.IsNull() || state.LabelLocalAllocateForHostRoutes.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "label/local/allocate/for/host-routes"))
 		}
 	}
 	if !data.TrafficEngAutoTunnelMeshGroupsAll.IsNull() && !data.TrafficEngAutoTunnelMeshGroupsAll.ValueBool() {
-		if state != nil && !state.TrafficEngAutoTunnelMeshGroupsAll.IsNull() && state.TrafficEngAutoTunnelMeshGroupsAll.ValueBool() {
+		if state == nil || state.TrafficEngAutoTunnelMeshGroupsAll.IsNull() || state.TrafficEngAutoTunnelMeshGroupsAll.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "traffic-eng/auto-tunnel/mesh/groups/all"))
 		}
 	}
@@ -1508,7 +1508,7 @@ func (data *MPLSLDPAddressFamily) getEmptyLeafsDelete(ctx context.Context, state
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.NeighborSrPolicies[i].Targeted.IsNull() && !data.NeighborSrPolicies[i].Targeted.ValueBool() {
-			if state != nil && i < len(state.NeighborSrPolicies) && !state.NeighborSrPolicies[i].Targeted.IsNull() && state.NeighborSrPolicies[i].Targeted.ValueBool() {
+			if state == nil || i >= len(state.NeighborSrPolicies) || state.NeighborSrPolicies[i].Targeted.IsNull() || state.NeighborSrPolicies[i].Targeted.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "neighbor/sr-policies/sr-policy", keyString), "targeted"))
 			}
 		}
@@ -1530,7 +1530,7 @@ func (data *MPLSLDPAddressFamily) getEmptyLeafsDelete(ctx context.Context, state
 		}
 	}
 	if !data.DiscoveryTargetedHelloAccept.IsNull() && !data.DiscoveryTargetedHelloAccept.ValueBool() {
-		if state != nil && !state.DiscoveryTargetedHelloAccept.IsNull() && state.DiscoveryTargetedHelloAccept.ValueBool() {
+		if state == nil || state.DiscoveryTargetedHelloAccept.IsNull() || state.DiscoveryTargetedHelloAccept.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "discovery/targeted-hello/accept"))
 		}
 	}

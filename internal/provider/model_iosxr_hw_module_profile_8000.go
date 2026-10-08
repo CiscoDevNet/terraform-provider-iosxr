@@ -3986,77 +3986,77 @@ func (data *HWModuleProfile8000) getDeletedItems(ctx context.Context, state HWMo
 func (data *HWModuleProfile8000) getEmptyLeafsDelete(ctx context.Context, state *HWModuleProfile8000, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if helpers.VersionAtLeast(version, "26.2") && !data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() && !data.ProfileTcamFormatOgComprIdExtensionEgress.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() && state.ProfileTcamFormatOgComprIdExtensionEgress.ValueBool() {
+		if state == nil || state.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() || state.ProfileTcamFormatOgComprIdExtensionEgress.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/og-compr-id-extension/egress"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "26.2") && !data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() && !data.ProfileTcamFormatOgComprIdExtensionIngress.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() && state.ProfileTcamFormatOgComprIdExtensionIngress.ValueBool() {
+		if state == nil || state.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() || state.ProfileTcamFormatOgComprIdExtensionIngress.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/og-compr-id-extension/ingress"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileRouteScaleLpmFullScale.IsNull() && !data.ProfileRouteScaleLpmFullScale.ValueBool() {
-		if state != nil && !state.ProfileRouteScaleLpmFullScale.IsNull() && state.ProfileRouteScaleLpmFullScale.ValueBool() {
+		if state == nil || state.ProfileRouteScaleLpmFullScale.IsNull() || state.ProfileRouteScaleLpmFullScale.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/route/scale/lpm/full-scale"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileRouteScaleHostRoute.IsNull() && !data.ProfileRouteScaleHostRoute.ValueBool() {
-		if state != nil && !state.ProfileRouteScaleHostRoute.IsNull() && state.ProfileRouteScaleHostRoute.ValueBool() {
+		if state == nil || state.ProfileRouteScaleHostRoute.IsNull() || state.ProfileRouteScaleHostRoute.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/route/scale/host-route"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileL2fibEvpnAging.IsNull() && !data.ProfileL2fibEvpnAging.ValueBool() {
-		if state != nil && !state.ProfileL2fibEvpnAging.IsNull() && state.ProfileL2fibEvpnAging.ValueBool() {
+		if state == nil || state.ProfileL2fibEvpnAging.IsNull() || state.ProfileL2fibEvpnAging.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/l2fib/evpn-aging"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileCefHashIpFieldDuplication.IsNull() && !data.ProfileCefHashIpFieldDuplication.ValueBool() {
-		if state != nil && !state.ProfileCefHashIpFieldDuplication.IsNull() && state.ProfileCefHashIpFieldDuplication.ValueBool() {
+		if state == nil || state.ProfileCefHashIpFieldDuplication.IsNull() || state.ProfileCefHashIpFieldDuplication.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/hash/ip-field-duplication"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileCefIptunnelScale.IsNull() && !data.ProfileCefIptunnelScale.ValueBool() {
-		if state != nil && !state.ProfileCefIptunnelScale.IsNull() && state.ProfileCefIptunnelScale.ValueBool() {
+		if state == nil || state.ProfileCefIptunnelScale.IsNull() || state.ProfileCefIptunnelScale.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/iptunnel/scale"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) && !data.ProfileTcamFormatOgComprIdExtension.IsNull() && !data.ProfileTcamFormatOgComprIdExtension.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatOgComprIdExtension.IsNull() && state.ProfileTcamFormatOgComprIdExtension.ValueBool() {
+		if state == nil || state.ProfileTcamFormatOgComprIdExtension.IsNull() || state.ProfileTcamFormatOgComprIdExtension.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/og-compr-id-extension"))
 		}
 	}
 	if !data.ProfileIrbThroughputOptimized.IsNull() && !data.ProfileIrbThroughputOptimized.ValueBool() {
-		if state != nil && !state.ProfileIrbThroughputOptimized.IsNull() && state.ProfileIrbThroughputOptimized.ValueBool() {
+		if state == nil || state.ProfileIrbThroughputOptimized.IsNull() || state.ProfileIrbThroughputOptimized.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/irb/throughput-optimized"))
 		}
 	}
 	if !data.ProfileFlowspecIpv6PacketLenEnable.IsNull() && !data.ProfileFlowspecIpv6PacketLenEnable.ValueBool() {
-		if state != nil && !state.ProfileFlowspecIpv6PacketLenEnable.IsNull() && state.ProfileFlowspecIpv6PacketLenEnable.ValueBool() {
+		if state == nil || state.ProfileFlowspecIpv6PacketLenEnable.IsNull() || state.ProfileFlowspecIpv6PacketLenEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/flowspec/ipv6-packet-len-enable"))
 		}
 	}
 	if !data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() && !data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.ValueBool() {
-		if state != nil && !state.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() && state.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.ValueBool() {
+		if state == nil || state.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() || state.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/route/scale/ipv6-unicast/connected-prefix/high"))
 		}
 	}
 	if !data.ProfileL2fibVxlanDcLeaf.IsNull() && !data.ProfileL2fibVxlanDcLeaf.ValueBool() {
-		if state != nil && !state.ProfileL2fibVxlanDcLeaf.IsNull() && state.ProfileL2fibVxlanDcLeaf.ValueBool() {
+		if state == nil || state.ProfileL2fibVxlanDcLeaf.IsNull() || state.ProfileL2fibVxlanDcLeaf.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/l2fib/vxlan-dc-leaf"))
 		}
 	}
 	if !data.ProfileL2fibHigherScale.IsNull() && !data.ProfileL2fibHigherScale.ValueBool() {
-		if state != nil && !state.ProfileL2fibHigherScale.IsNull() && state.ProfileL2fibHigherScale.ValueBool() {
+		if state == nil || state.ProfileL2fibHigherScale.IsNull() || state.ProfileL2fibHigherScale.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/l2fib/L2-high-scale"))
 		}
 	}
 	if !data.ProfileL2fibBridgeFlushConvergence.IsNull() && !data.ProfileL2fibBridgeFlushConvergence.ValueBool() {
-		if state != nil && !state.ProfileL2fibBridgeFlushConvergence.IsNull() && state.ProfileL2fibBridgeFlushConvergence.ValueBool() {
+		if state == nil || state.ProfileL2fibBridgeFlushConvergence.IsNull() || state.ProfileL2fibBridgeFlushConvergence.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/l2fib/bridge-flush-convergence"))
 		}
 	}
 	if !data.ProfileL2fibPwStats.IsNull() && !data.ProfileL2fibPwStats.ValueBool() {
-		if state != nil && !state.ProfileL2fibPwStats.IsNull() && state.ProfileL2fibPwStats.ValueBool() {
+		if state == nil || state.ProfileL2fibPwStats.IsNull() || state.ProfileL2fibPwStats.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/l2fib/pw-stats"))
 		}
 	}
@@ -4068,12 +4068,12 @@ func (data *HWModuleProfile8000) getEmptyLeafsDelete(ctx context.Context, state 
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.IsNull() && !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.ValueBool() {
-			if state != nil && i < len(state.ProfileNpuBufferExtendedLocations) && !state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.IsNull() && state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.ValueBool() {
+			if state == nil || i >= len(state.ProfileNpuBufferExtendedLocations) || state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.IsNull() || state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profile/npu/buffer-extended/locations/location", keyString), "bandwidth-congestion-protect/enable"))
 			}
 		}
 		if !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.IsNull() && !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.ValueBool() {
-			if state != nil && i < len(state.ProfileNpuBufferExtendedLocations) && !state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.IsNull() && state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.ValueBool() {
+			if state == nil || i >= len(state.ProfileNpuBufferExtendedLocations) || state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.IsNull() || state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profile/npu/buffer-extended/locations/location", keyString), "bandwidth-congestion-detection/enable"))
 			}
 		}
@@ -4086,7 +4086,7 @@ func (data *HWModuleProfile8000) getEmptyLeafsDelete(ctx context.Context, state 
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if helpers.VersionAtLeast(version, "25.4") && !data.ProfilePriorityFlowControlLocations[i].NonPfcTcs.IsNull() && !data.ProfilePriorityFlowControlLocations[i].NonPfcTcs.ValueBool() {
-			if state != nil && i < len(state.ProfilePriorityFlowControlLocations) && !state.ProfilePriorityFlowControlLocations[i].NonPfcTcs.IsNull() && state.ProfilePriorityFlowControlLocations[i].NonPfcTcs.ValueBool() {
+			if state == nil || i >= len(state.ProfilePriorityFlowControlLocations) || state.ProfilePriorityFlowControlLocations[i].NonPfcTcs.IsNull() || state.ProfilePriorityFlowControlLocations[i].NonPfcTcs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profile/priority-flow-control/locations/location", keyString), "buffer-extended/non-pfc-tcs"))
 			}
 		}
@@ -4106,44 +4106,44 @@ func (data *HWModuleProfile8000) getEmptyLeafsDelete(ctx context.Context, state 
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.ValueBool() {
-				if state != nil && i < len(state.ProfilePriorityFlowControlLocations) && ci < len(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass) && !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.IsNull() && state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.ValueBool() {
+				if state == nil || i >= len(state.ProfilePriorityFlowControlLocations) || ci >= len(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass) || state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.IsNull() || state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString), "mbytes"))
 				}
 			}
 			if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.ValueBool() {
-				if state != nil && i < len(state.ProfilePriorityFlowControlLocations) && ci < len(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass) && !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.IsNull() && state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.ValueBool() {
+				if state == nil || i >= len(state.ProfilePriorityFlowControlLocations) || ci >= len(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass) || state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.IsNull() || state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString), "kbytes"))
 				}
 			}
 			if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.ValueBool() {
-				if state != nil && i < len(state.ProfilePriorityFlowControlLocations) && ci < len(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass) && !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.IsNull() && state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.ValueBool() {
+				if state == nil || i >= len(state.ProfilePriorityFlowControlLocations) || ci >= len(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass) || state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.IsNull() || state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString), "us"))
 				}
 			}
 			if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.ValueBool() {
-				if state != nil && i < len(state.ProfilePriorityFlowControlLocations) && ci < len(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass) && !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.IsNull() && state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.ValueBool() {
+				if state == nil || i >= len(state.ProfilePriorityFlowControlLocations) || ci >= len(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass) || state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.IsNull() || state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString), "ms"))
 				}
 			}
 		}
 	}
 	if !data.ProfileStatsAclPermit.IsNull() && !data.ProfileStatsAclPermit.ValueBool() {
-		if state != nil && !state.ProfileStatsAclPermit.IsNull() && state.ProfileStatsAclPermit.ValueBool() {
+		if state == nil || state.ProfileStatsAclPermit.IsNull() || state.ProfileStatsAclPermit.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/stats/acl-permit"))
 		}
 	}
 	if !data.ProfileStatsNoBviIngress.IsNull() && !data.ProfileStatsNoBviIngress.ValueBool() {
-		if state != nil && !state.ProfileStatsNoBviIngress.IsNull() && state.ProfileStatsNoBviIngress.ValueBool() {
+		if state == nil || state.ProfileStatsNoBviIngress.IsNull() || state.ProfileStatsNoBviIngress.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/stats/no-bvi-ingress"))
 		}
 	}
 	if !data.ProfileEncapExactLocationsAllVirtual.IsNull() && !data.ProfileEncapExactLocationsAllVirtual.ValueBool() {
-		if state != nil && !state.ProfileEncapExactLocationsAllVirtual.IsNull() && state.ProfileEncapExactLocationsAllVirtual.ValueBool() {
+		if state == nil || state.ProfileEncapExactLocationsAllVirtual.IsNull() || state.ProfileEncapExactLocationsAllVirtual.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/encap-exact/locations"))
 		}
 	}
 	if !data.ProfileEncapExactLocationsAll.IsNull() && !data.ProfileEncapExactLocationsAll.ValueBool() {
-		if state != nil && !state.ProfileEncapExactLocationsAll.IsNull() && state.ProfileEncapExactLocationsAll.ValueBool() {
+		if state == nil || state.ProfileEncapExactLocationsAll.IsNull() || state.ProfileEncapExactLocationsAll.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/encap-exact/locations"))
 		}
 	}
@@ -4164,192 +4164,192 @@ func (data *HWModuleProfile8000) getEmptyLeafsDelete(ctx context.Context, state 
 		}
 	}
 	if !data.ProfileCefSourceRtbhEnable.IsNull() && !data.ProfileCefSourceRtbhEnable.ValueBool() {
-		if state != nil && !state.ProfileCefSourceRtbhEnable.IsNull() && state.ProfileCefSourceRtbhEnable.ValueBool() {
+		if state == nil || state.ProfileCefSourceRtbhEnable.IsNull() || state.ProfileCefSourceRtbhEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/source-rtbh/enable"))
 		}
 	}
 	if !data.ProfileCefUnipathSurpfEnable.IsNull() && !data.ProfileCefUnipathSurpfEnable.ValueBool() {
-		if state != nil && !state.ProfileCefUnipathSurpfEnable.IsNull() && state.ProfileCefUnipathSurpfEnable.ValueBool() {
+		if state == nil || state.ProfileCefUnipathSurpfEnable.IsNull() || state.ProfileCefUnipathSurpfEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/unipath-surpf/enable"))
 		}
 	}
 	if !data.ProfileCefTeTunnelLabelOverTeCounters.IsNull() && !data.ProfileCefTeTunnelLabelOverTeCounters.ValueBool() {
-		if state != nil && !state.ProfileCefTeTunnelLabelOverTeCounters.IsNull() && state.ProfileCefTeTunnelLabelOverTeCounters.ValueBool() {
+		if state == nil || state.ProfileCefTeTunnelLabelOverTeCounters.IsNull() || state.ProfileCefTeTunnelLabelOverTeCounters.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/te-tunnel/label-over-te-counters"))
 		}
 	}
 	if !data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() && !data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.ValueBool() {
-		if state != nil && !state.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() && state.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.ValueBool() {
+		if state == nil || state.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() || state.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/te-tunnel/highscale-ldp-over-te-no-sr-over-srte"))
 		}
 	}
 	if !data.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() && !data.ProfileCefTeTunnelHighscaleNoLdpOverTe.ValueBool() {
-		if state != nil && !state.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() && state.ProfileCefTeTunnelHighscaleNoLdpOverTe.ValueBool() {
+		if state == nil || state.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() || state.ProfileCefTeTunnelHighscaleNoLdpOverTe.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/te-tunnel/highscale-no-ldp-over-te"))
 		}
 	}
 	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ProfileCefMplsoudpScale.IsNull() && !data.ProfileCefMplsoudpScale.ValueBool() {
-		if state != nil && !state.ProfileCefMplsoudpScale.IsNull() && state.ProfileCefMplsoudpScale.ValueBool() {
+		if state == nil || state.ProfileCefMplsoudpScale.IsNull() || state.ProfileCefMplsoudpScale.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/mplsoudp/scale"))
 		}
 	}
 	if !data.ProfileCefVxlanIpv6TnlScale.IsNull() && !data.ProfileCefVxlanIpv6TnlScale.ValueBool() {
-		if state != nil && !state.ProfileCefVxlanIpv6TnlScale.IsNull() && state.ProfileCefVxlanIpv6TnlScale.ValueBool() {
+		if state == nil || state.ProfileCefVxlanIpv6TnlScale.IsNull() || state.ProfileCefVxlanIpv6TnlScale.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/vxlan/ipv6-tnl-scale"))
 		}
 	}
 	if !data.ProfileCefLptsAcl.IsNull() && !data.ProfileCefLptsAcl.ValueBool() {
-		if state != nil && !state.ProfileCefLptsAcl.IsNull() && state.ProfileCefLptsAcl.ValueBool() {
+		if state == nil || state.ProfileCefLptsAcl.IsNull() || state.ProfileCefLptsAcl.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/lpts/acl"))
 		}
 	}
 	if !data.ProfileQosHighWaterMarks.IsNull() && !data.ProfileQosHighWaterMarks.ValueBool() {
-		if state != nil && !state.ProfileQosHighWaterMarks.IsNull() && state.ProfileQosHighWaterMarks.ValueBool() {
+		if state == nil || state.ProfileQosHighWaterMarks.IsNull() || state.ProfileQosHighWaterMarks.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/qos/high-water-marks"))
 		}
 	}
 	if !data.ProfileQosQosStatsPushCollection.IsNull() && !data.ProfileQosQosStatsPushCollection.ValueBool() {
-		if state != nil && !state.ProfileQosQosStatsPushCollection.IsNull() && state.ProfileQosQosStatsPushCollection.ValueBool() {
+		if state == nil || state.ProfileQosQosStatsPushCollection.IsNull() || state.ProfileQosQosStatsPushCollection.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/qos/qos-stats-push-collection"))
 		}
 	}
 	if !data.ProfileQosVoqModeFairEight.IsNull() && !data.ProfileQosVoqModeFairEight.ValueBool() {
-		if state != nil && !state.ProfileQosVoqModeFairEight.IsNull() && state.ProfileQosVoqModeFairEight.ValueBool() {
+		if state == nil || state.ProfileQosVoqModeFairEight.IsNull() || state.ProfileQosVoqModeFairEight.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/qos/voq-mode/fair-eight"))
 		}
 	}
 	if !data.ProfileQosVoqModeFairFour.IsNull() && !data.ProfileQosVoqModeFairFour.ValueBool() {
-		if state != nil && !state.ProfileQosVoqModeFairFour.IsNull() && state.ProfileQosVoqModeFairFour.ValueBool() {
+		if state == nil || state.ProfileQosVoqModeFairFour.IsNull() || state.ProfileQosVoqModeFairFour.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/qos/voq-mode/fair-four"))
 		}
 	}
 	if !data.ProfileQosVoqModeEight.IsNull() && !data.ProfileQosVoqModeEight.ValueBool() {
-		if state != nil && !state.ProfileQosVoqModeEight.IsNull() && state.ProfileQosVoqModeEight.ValueBool() {
+		if state == nil || state.ProfileQosVoqModeEight.IsNull() || state.ProfileQosVoqModeEight.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/qos/voq-mode/eight"))
 		}
 	}
 	if !data.ProfileQosVoqModeFour.IsNull() && !data.ProfileQosVoqModeFour.ValueBool() {
-		if state != nil && !state.ProfileQosVoqModeFour.IsNull() && state.ProfileQosVoqModeFour.ValueBool() {
+		if state == nil || state.ProfileQosVoqModeFour.IsNull() || state.ProfileQosVoqModeFour.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/qos/voq-mode/four"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() && !data.ProfileTcamFormatAccessListIpv6PacketLen.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() && state.ProfileTcamFormatAccessListIpv6PacketLen.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() || state.ProfileTcamFormatAccessListIpv6PacketLen.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() && !data.ProfileTcamFormatAccessListIpv6DstObjectGroup.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() && state.ProfileTcamFormatAccessListIpv6DstObjectGroup.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() || state.ProfileTcamFormatAccessListIpv6DstObjectGroup.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() && !data.ProfileTcamFormatAccessListIpv6SrcObjectGroup.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() && state.ProfileTcamFormatAccessListIpv6SrcObjectGroup.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() || state.ProfileTcamFormatAccessListIpv6SrcObjectGroup.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() && !data.ProfileTcamFormatAccessListIpv6TcpFlags.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() && state.ProfileTcamFormatAccessListIpv6TcpFlags.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() || state.ProfileTcamFormatAccessListIpv6TcpFlags.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv6FragBit.IsNull() && !data.ProfileTcamFormatAccessListIpv6FragBit.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6FragBit.IsNull() && state.ProfileTcamFormatAccessListIpv6FragBit.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6FragBit.IsNull() || state.ProfileTcamFormatAccessListIpv6FragBit.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() && !data.ProfileTcamFormatAccessListIpv6TrafficClass.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() && state.ProfileTcamFormatAccessListIpv6TrafficClass.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() || state.ProfileTcamFormatAccessListIpv6TrafficClass.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() && !data.ProfileTcamFormatAccessListIpv6NextHdr.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() && state.ProfileTcamFormatAccessListIpv6NextHdr.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() || state.ProfileTcamFormatAccessListIpv6NextHdr.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv6DstPort.IsNull() && !data.ProfileTcamFormatAccessListIpv6DstPort.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6DstPort.IsNull() && state.ProfileTcamFormatAccessListIpv6DstPort.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6DstPort.IsNull() || state.ProfileTcamFormatAccessListIpv6DstPort.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() && !data.ProfileTcamFormatAccessListIpv6DstAddr.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() && state.ProfileTcamFormatAccessListIpv6DstAddr.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() || state.ProfileTcamFormatAccessListIpv6DstAddr.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() && !data.ProfileTcamFormatAccessListIpv6SrcAddr.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() && state.ProfileTcamFormatAccessListIpv6SrcAddr.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() || state.ProfileTcamFormatAccessListIpv6SrcAddr.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() && !data.ProfileTcamFormatAccessListIpv4FragmentOffset.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() && state.ProfileTcamFormatAccessListIpv4FragmentOffset.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() || state.ProfileTcamFormatAccessListIpv4FragmentOffset.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() && !data.ProfileTcamFormatAccessListIpv4PacketLen.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() && state.ProfileTcamFormatAccessListIpv4PacketLen.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() || state.ProfileTcamFormatAccessListIpv4PacketLen.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() && !data.ProfileTcamFormatAccessListIpv4DstObjectGroup.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() && state.ProfileTcamFormatAccessListIpv4DstObjectGroup.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() || state.ProfileTcamFormatAccessListIpv4DstObjectGroup.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() && !data.ProfileTcamFormatAccessListIpv4SrcObjectGroup.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() && state.ProfileTcamFormatAccessListIpv4SrcObjectGroup.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() || state.ProfileTcamFormatAccessListIpv4SrcObjectGroup.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv4FragBit.IsNull() && !data.ProfileTcamFormatAccessListIpv4FragBit.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4FragBit.IsNull() && state.ProfileTcamFormatAccessListIpv4FragBit.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4FragBit.IsNull() || state.ProfileTcamFormatAccessListIpv4FragBit.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() && !data.ProfileTcamFormatAccessListIpv4TcpFlags.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() && state.ProfileTcamFormatAccessListIpv4TcpFlags.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() || state.ProfileTcamFormatAccessListIpv4TcpFlags.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() && !data.ProfileTcamFormatAccessListIpv4TtlMatch.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() && state.ProfileTcamFormatAccessListIpv4TtlMatch.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() || state.ProfileTcamFormatAccessListIpv4TtlMatch.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv4Precedence.IsNull() && !data.ProfileTcamFormatAccessListIpv4Precedence.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4Precedence.IsNull() && state.ProfileTcamFormatAccessListIpv4Precedence.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4Precedence.IsNull() || state.ProfileTcamFormatAccessListIpv4Precedence.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv4Proto.IsNull() && !data.ProfileTcamFormatAccessListIpv4Proto.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4Proto.IsNull() && state.ProfileTcamFormatAccessListIpv4Proto.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4Proto.IsNull() || state.ProfileTcamFormatAccessListIpv4Proto.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv4DstPort.IsNull() && !data.ProfileTcamFormatAccessListIpv4DstPort.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4DstPort.IsNull() && state.ProfileTcamFormatAccessListIpv4DstPort.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4DstPort.IsNull() || state.ProfileTcamFormatAccessListIpv4DstPort.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() && !data.ProfileTcamFormatAccessListIpv4SrcPort.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() && state.ProfileTcamFormatAccessListIpv4SrcPort.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() || state.ProfileTcamFormatAccessListIpv4SrcPort.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() && !data.ProfileTcamFormatAccessListIpv4DstAddr.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() && state.ProfileTcamFormatAccessListIpv4DstAddr.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() || state.ProfileTcamFormatAccessListIpv4DstAddr.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
 		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() && !data.ProfileTcamFormatAccessListIpv4SrcAddr.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() && state.ProfileTcamFormatAccessListIpv4SrcAddr.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() || state.ProfileTcamFormatAccessListIpv4SrcAddr.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
 		}
 	}
 	if !data.MulticastRouteScale.IsNull() && !data.MulticastRouteScale.ValueBool() {
-		if state != nil && !state.MulticastRouteScale.IsNull() && state.MulticastRouteScale.ValueBool() {
+		if state == nil || state.MulticastRouteScale.IsNull() || state.MulticastRouteScale.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multicast/route-scale"))
 		}
 	}

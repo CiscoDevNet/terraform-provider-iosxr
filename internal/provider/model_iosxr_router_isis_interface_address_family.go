@@ -4227,7 +4227,7 @@ func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Co
 		}
 	}
 	if !data.FastReroutePerPrefixTiLfa.IsNull() && !data.FastReroutePerPrefixTiLfa.ValueBool() {
-		if state != nil && !state.FastReroutePerPrefixTiLfa.IsNull() && state.FastReroutePerPrefixTiLfa.ValueBool() {
+		if state == nil || state.FastReroutePerPrefixTiLfa.IsNull() || state.FastReroutePerPrefixTiLfa.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fast-reroute/per-prefix/ti-lfa"))
 		}
 	}
@@ -4240,7 +4240,7 @@ func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Co
 		}
 	}
 	if !data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp.IsNull() && !data.FastReroutePerPrefixRemoteLfaTunnelMplsLdp.ValueBool() {
-		if state != nil && !state.FastReroutePerPrefixRemoteLfaTunnelMplsLdp.IsNull() && state.FastReroutePerPrefixRemoteLfaTunnelMplsLdp.ValueBool() {
+		if state == nil || state.FastReroutePerPrefixRemoteLfaTunnelMplsLdp.IsNull() || state.FastReroutePerPrefixRemoteLfaTunnelMplsLdp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fast-reroute/per-prefix/remote-lfa/tunnel/mpls-ldp"))
 		}
 	}
@@ -4285,7 +4285,7 @@ func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Co
 		}
 	}
 	if !data.FastReroutePerPrefixTiebreakerDefault.IsNull() && !data.FastReroutePerPrefixTiebreakerDefault.ValueBool() {
-		if state != nil && !state.FastReroutePerPrefixTiebreakerDefault.IsNull() && state.FastReroutePerPrefixTiebreakerDefault.ValueBool() {
+		if state == nil || state.FastReroutePerPrefixTiebreakerDefault.IsNull() || state.FastReroutePerPrefixTiebreakerDefault.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fast-reroute/per-prefix/tiebreaker/default-backup-path"))
 		}
 	}
@@ -4297,23 +4297,23 @@ func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Co
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.FastRerouteLevels[i].PerLink.IsNull() && !data.FastRerouteLevels[i].PerLink.ValueBool() {
-			if state != nil && i < len(state.FastRerouteLevels) && !state.FastRerouteLevels[i].PerLink.IsNull() && state.FastRerouteLevels[i].PerLink.ValueBool() {
+			if state == nil || i >= len(state.FastRerouteLevels) || state.FastRerouteLevels[i].PerLink.IsNull() || state.FastRerouteLevels[i].PerLink.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "fast-reroute/enable-levels/enable-level", keyString), "per-link"))
 			}
 		}
 		if !data.FastRerouteLevels[i].PerPrefix.IsNull() && !data.FastRerouteLevels[i].PerPrefix.ValueBool() {
-			if state != nil && i < len(state.FastRerouteLevels) && !state.FastRerouteLevels[i].PerPrefix.IsNull() && state.FastRerouteLevels[i].PerPrefix.ValueBool() {
+			if state == nil || i >= len(state.FastRerouteLevels) || state.FastRerouteLevels[i].PerPrefix.IsNull() || state.FastRerouteLevels[i].PerPrefix.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "fast-reroute/enable-levels/enable-level", keyString), "per-prefix"))
 			}
 		}
 	}
 	if !data.FastReroutePerLink.IsNull() && !data.FastReroutePerLink.ValueBool() {
-		if state != nil && !state.FastReroutePerLink.IsNull() && state.FastReroutePerLink.ValueBool() {
+		if state == nil || state.FastReroutePerLink.IsNull() || state.FastReroutePerLink.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fast-reroute/enable/per-link"))
 		}
 	}
 	if !data.FastReroutePerPrefix.IsNull() && !data.FastReroutePerPrefix.ValueBool() {
-		if state != nil && !state.FastReroutePerPrefix.IsNull() && state.FastReroutePerPrefix.ValueBool() {
+		if state == nil || state.FastReroutePerPrefix.IsNull() || state.FastReroutePerPrefix.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fast-reroute/enable/per-prefix"))
 		}
 	}
@@ -4325,7 +4325,7 @@ func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Co
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.AdjacencySidAbsolutes[i].Protected.IsNull() && !data.AdjacencySidAbsolutes[i].Protected.ValueBool() {
-			if state != nil && i < len(state.AdjacencySidAbsolutes) && !state.AdjacencySidAbsolutes[i].Protected.IsNull() && state.AdjacencySidAbsolutes[i].Protected.ValueBool() {
+			if state == nil || i >= len(state.AdjacencySidAbsolutes) || state.AdjacencySidAbsolutes[i].Protected.IsNull() || state.AdjacencySidAbsolutes[i].Protected.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "adjacency-sid/absolutes/absolute", keyString), "protected"))
 			}
 		}
@@ -4338,7 +4338,7 @@ func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Co
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.AdjacencySidIndices[i].Protected.IsNull() && !data.AdjacencySidIndices[i].Protected.ValueBool() {
-			if state != nil && i < len(state.AdjacencySidIndices) && !state.AdjacencySidIndices[i].Protected.IsNull() && state.AdjacencySidIndices[i].Protected.ValueBool() {
+			if state == nil || i >= len(state.AdjacencySidIndices) || state.AdjacencySidIndices[i].Protected.IsNull() || state.AdjacencySidIndices[i].Protected.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "adjacency-sid/indices/index", keyString), "protected"))
 			}
 		}
@@ -4351,93 +4351,93 @@ func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Co
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.PrefixSidAlgorithms[i].AbsoluteNFlagClear.IsNull() && !data.PrefixSidAlgorithms[i].AbsoluteNFlagClear.ValueBool() {
-			if state != nil && i < len(state.PrefixSidAlgorithms) && !state.PrefixSidAlgorithms[i].AbsoluteNFlagClear.IsNull() && state.PrefixSidAlgorithms[i].AbsoluteNFlagClear.ValueBool() {
+			if state == nil || i >= len(state.PrefixSidAlgorithms) || state.PrefixSidAlgorithms[i].AbsoluteNFlagClear.IsNull() || state.PrefixSidAlgorithms[i].AbsoluteNFlagClear.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "prefix-sid/algorithms/algorithm", keyString), "absolute/n-flag-clear"))
 			}
 		}
 		if !data.PrefixSidAlgorithms[i].AbsoluteExplicitNull.IsNull() && !data.PrefixSidAlgorithms[i].AbsoluteExplicitNull.ValueBool() {
-			if state != nil && i < len(state.PrefixSidAlgorithms) && !state.PrefixSidAlgorithms[i].AbsoluteExplicitNull.IsNull() && state.PrefixSidAlgorithms[i].AbsoluteExplicitNull.ValueBool() {
+			if state == nil || i >= len(state.PrefixSidAlgorithms) || state.PrefixSidAlgorithms[i].AbsoluteExplicitNull.IsNull() || state.PrefixSidAlgorithms[i].AbsoluteExplicitNull.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "prefix-sid/algorithms/algorithm", keyString), "absolute/explicit-null"))
 			}
 		}
 		if !data.PrefixSidAlgorithms[i].AbsolutePhpDisable.IsNull() && !data.PrefixSidAlgorithms[i].AbsolutePhpDisable.ValueBool() {
-			if state != nil && i < len(state.PrefixSidAlgorithms) && !state.PrefixSidAlgorithms[i].AbsolutePhpDisable.IsNull() && state.PrefixSidAlgorithms[i].AbsolutePhpDisable.ValueBool() {
+			if state == nil || i >= len(state.PrefixSidAlgorithms) || state.PrefixSidAlgorithms[i].AbsolutePhpDisable.IsNull() || state.PrefixSidAlgorithms[i].AbsolutePhpDisable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "prefix-sid/algorithms/algorithm", keyString), "absolute/php-disable"))
 			}
 		}
 		if !data.PrefixSidAlgorithms[i].IndexNFlagClear.IsNull() && !data.PrefixSidAlgorithms[i].IndexNFlagClear.ValueBool() {
-			if state != nil && i < len(state.PrefixSidAlgorithms) && !state.PrefixSidAlgorithms[i].IndexNFlagClear.IsNull() && state.PrefixSidAlgorithms[i].IndexNFlagClear.ValueBool() {
+			if state == nil || i >= len(state.PrefixSidAlgorithms) || state.PrefixSidAlgorithms[i].IndexNFlagClear.IsNull() || state.PrefixSidAlgorithms[i].IndexNFlagClear.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "prefix-sid/algorithms/algorithm", keyString), "index/n-flag-clear"))
 			}
 		}
 		if !data.PrefixSidAlgorithms[i].IndexExplicitNull.IsNull() && !data.PrefixSidAlgorithms[i].IndexExplicitNull.ValueBool() {
-			if state != nil && i < len(state.PrefixSidAlgorithms) && !state.PrefixSidAlgorithms[i].IndexExplicitNull.IsNull() && state.PrefixSidAlgorithms[i].IndexExplicitNull.ValueBool() {
+			if state == nil || i >= len(state.PrefixSidAlgorithms) || state.PrefixSidAlgorithms[i].IndexExplicitNull.IsNull() || state.PrefixSidAlgorithms[i].IndexExplicitNull.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "prefix-sid/algorithms/algorithm", keyString), "index/explicit-null"))
 			}
 		}
 		if !data.PrefixSidAlgorithms[i].IndexPhpDisable.IsNull() && !data.PrefixSidAlgorithms[i].IndexPhpDisable.ValueBool() {
-			if state != nil && i < len(state.PrefixSidAlgorithms) && !state.PrefixSidAlgorithms[i].IndexPhpDisable.IsNull() && state.PrefixSidAlgorithms[i].IndexPhpDisable.ValueBool() {
+			if state == nil || i >= len(state.PrefixSidAlgorithms) || state.PrefixSidAlgorithms[i].IndexPhpDisable.IsNull() || state.PrefixSidAlgorithms[i].IndexPhpDisable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "prefix-sid/algorithms/algorithm", keyString), "index/php-disable"))
 			}
 		}
 	}
 	if !data.PrefixSidAbsoluteNFlagClear.IsNull() && !data.PrefixSidAbsoluteNFlagClear.ValueBool() {
-		if state != nil && !state.PrefixSidAbsoluteNFlagClear.IsNull() && state.PrefixSidAbsoluteNFlagClear.ValueBool() {
+		if state == nil || state.PrefixSidAbsoluteNFlagClear.IsNull() || state.PrefixSidAbsoluteNFlagClear.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "prefix-sid/absolute"))
 		}
 	}
 	if !data.PrefixSidAbsoluteExplicitNull.IsNull() && !data.PrefixSidAbsoluteExplicitNull.ValueBool() {
-		if state != nil && !state.PrefixSidAbsoluteExplicitNull.IsNull() && state.PrefixSidAbsoluteExplicitNull.ValueBool() {
+		if state == nil || state.PrefixSidAbsoluteExplicitNull.IsNull() || state.PrefixSidAbsoluteExplicitNull.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "prefix-sid/absolute"))
 		}
 	}
 	if !data.PrefixSidAbsolutePhpDisable.IsNull() && !data.PrefixSidAbsolutePhpDisable.ValueBool() {
-		if state != nil && !state.PrefixSidAbsolutePhpDisable.IsNull() && state.PrefixSidAbsolutePhpDisable.ValueBool() {
+		if state == nil || state.PrefixSidAbsolutePhpDisable.IsNull() || state.PrefixSidAbsolutePhpDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "prefix-sid/absolute"))
 		}
 	}
 	if !data.PrefixSidIndexNFlagClear.IsNull() && !data.PrefixSidIndexNFlagClear.ValueBool() {
-		if state != nil && !state.PrefixSidIndexNFlagClear.IsNull() && state.PrefixSidIndexNFlagClear.ValueBool() {
+		if state == nil || state.PrefixSidIndexNFlagClear.IsNull() || state.PrefixSidIndexNFlagClear.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "prefix-sid/index"))
 		}
 	}
 	if !data.PrefixSidIndexExplicitNull.IsNull() && !data.PrefixSidIndexExplicitNull.ValueBool() {
-		if state != nil && !state.PrefixSidIndexExplicitNull.IsNull() && state.PrefixSidIndexExplicitNull.ValueBool() {
+		if state == nil || state.PrefixSidIndexExplicitNull.IsNull() || state.PrefixSidIndexExplicitNull.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "prefix-sid/index"))
 		}
 	}
 	if !data.PrefixSidIndexPhpDisable.IsNull() && !data.PrefixSidIndexPhpDisable.ValueBool() {
-		if state != nil && !state.PrefixSidIndexPhpDisable.IsNull() && state.PrefixSidIndexPhpDisable.ValueBool() {
+		if state == nil || state.PrefixSidIndexPhpDisable.IsNull() || state.PrefixSidIndexPhpDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "prefix-sid/index"))
 		}
 	}
 	if !data.PrefixSidStrictSpfAbsoluteNFlagClear.IsNull() && !data.PrefixSidStrictSpfAbsoluteNFlagClear.ValueBool() {
-		if state != nil && !state.PrefixSidStrictSpfAbsoluteNFlagClear.IsNull() && state.PrefixSidStrictSpfAbsoluteNFlagClear.ValueBool() {
+		if state == nil || state.PrefixSidStrictSpfAbsoluteNFlagClear.IsNull() || state.PrefixSidStrictSpfAbsoluteNFlagClear.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "prefix-sid/strict-spf/absolute"))
 		}
 	}
 	if !data.PrefixSidStrictSpfAbsoluteExplicitNull.IsNull() && !data.PrefixSidStrictSpfAbsoluteExplicitNull.ValueBool() {
-		if state != nil && !state.PrefixSidStrictSpfAbsoluteExplicitNull.IsNull() && state.PrefixSidStrictSpfAbsoluteExplicitNull.ValueBool() {
+		if state == nil || state.PrefixSidStrictSpfAbsoluteExplicitNull.IsNull() || state.PrefixSidStrictSpfAbsoluteExplicitNull.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "prefix-sid/strict-spf/absolute"))
 		}
 	}
 	if !data.PrefixSidStrictSpfAbsolutePhpDisable.IsNull() && !data.PrefixSidStrictSpfAbsolutePhpDisable.ValueBool() {
-		if state != nil && !state.PrefixSidStrictSpfAbsolutePhpDisable.IsNull() && state.PrefixSidStrictSpfAbsolutePhpDisable.ValueBool() {
+		if state == nil || state.PrefixSidStrictSpfAbsolutePhpDisable.IsNull() || state.PrefixSidStrictSpfAbsolutePhpDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "prefix-sid/strict-spf/absolute"))
 		}
 	}
 	if !data.PrefixSidStrictSpfIndexNFlagClear.IsNull() && !data.PrefixSidStrictSpfIndexNFlagClear.ValueBool() {
-		if state != nil && !state.PrefixSidStrictSpfIndexNFlagClear.IsNull() && state.PrefixSidStrictSpfIndexNFlagClear.ValueBool() {
+		if state == nil || state.PrefixSidStrictSpfIndexNFlagClear.IsNull() || state.PrefixSidStrictSpfIndexNFlagClear.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "prefix-sid/strict-spf/index"))
 		}
 	}
 	if !data.PrefixSidStrictSpfIndexExplicitNull.IsNull() && !data.PrefixSidStrictSpfIndexExplicitNull.ValueBool() {
-		if state != nil && !state.PrefixSidStrictSpfIndexExplicitNull.IsNull() && state.PrefixSidStrictSpfIndexExplicitNull.ValueBool() {
+		if state == nil || state.PrefixSidStrictSpfIndexExplicitNull.IsNull() || state.PrefixSidStrictSpfIndexExplicitNull.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "prefix-sid/strict-spf/index"))
 		}
 	}
 	if !data.PrefixSidStrictSpfIndexPhpDisable.IsNull() && !data.PrefixSidStrictSpfIndexPhpDisable.ValueBool() {
-		if state != nil && !state.PrefixSidStrictSpfIndexPhpDisable.IsNull() && state.PrefixSidStrictSpfIndexPhpDisable.ValueBool() {
+		if state == nil || state.PrefixSidStrictSpfIndexPhpDisable.IsNull() || state.PrefixSidStrictSpfIndexPhpDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "prefix-sid/strict-spf/index"))
 		}
 	}
@@ -4450,7 +4450,7 @@ func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Co
 		}
 	}
 	if !data.MplsLdpSync.IsNull() && !data.MplsLdpSync.ValueBool() {
-		if state != nil && !state.MplsLdpSync.IsNull() && state.MplsLdpSync.ValueBool() {
+		if state == nil || state.MplsLdpSync.IsNull() || state.MplsLdpSync.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "mpls/ldp/sync"))
 		}
 	}
@@ -4502,13 +4502,13 @@ func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Co
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.MetricLevels[i].MetricMaximum.IsNull() && !data.MetricLevels[i].MetricMaximum.ValueBool() {
-			if state != nil && i < len(state.MetricLevels) && !state.MetricLevels[i].MetricMaximum.IsNull() && state.MetricLevels[i].MetricMaximum.ValueBool() {
+			if state == nil || i >= len(state.MetricLevels) || state.MetricLevels[i].MetricMaximum.IsNull() || state.MetricLevels[i].MetricMaximum.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "metric-levels/metric-level", keyString), "maximum"))
 			}
 		}
 	}
 	if !data.MetricMaximum.IsNull() && !data.MetricMaximum.ValueBool() {
-		if state != nil && !state.MetricMaximum.IsNull() && state.MetricMaximum.ValueBool() {
+		if state == nil || state.MetricMaximum.IsNull() || state.MetricMaximum.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "metric/maximum"))
 		}
 	}

@@ -179,12 +179,12 @@ func (data *LoggingEventsLinkStatus) getDeletedItems(ctx context.Context, state 
 func (data *LoggingEventsLinkStatus) getEmptyLeafsDelete(ctx context.Context, state *LoggingEventsLinkStatus, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.Disable.IsNull() && !data.Disable.ValueBool() {
-		if state != nil && !state.Disable.IsNull() && state.Disable.ValueBool() {
+		if state == nil || state.Disable.IsNull() || state.Disable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "disable"))
 		}
 	}
 	if !data.SoftwareInterfaces.IsNull() && !data.SoftwareInterfaces.ValueBool() {
-		if state != nil && !state.SoftwareInterfaces.IsNull() && state.SoftwareInterfaces.ValueBool() {
+		if state == nil || state.SoftwareInterfaces.IsNull() || state.SoftwareInterfaces.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "software-interfaces"))
 		}
 	}

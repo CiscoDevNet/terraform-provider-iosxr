@@ -1150,122 +1150,122 @@ func (data *L2VPNPWClass) getDeletedItems(ctx context.Context, state L2VPNPWClas
 func (data *L2VPNPWClass) getEmptyLeafsDelete(ctx context.Context, state *L2VPNPWClass, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.MacWithdraw.IsNull() && !data.MacWithdraw.ValueBool() {
-		if state != nil && !state.MacWithdraw.IsNull() && state.MacWithdraw.ValueBool() {
+		if state == nil || state.MacWithdraw.IsNull() || state.MacWithdraw.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "mac-withdraw"))
 		}
 	}
 	if !data.BackupDisableNever.IsNull() && !data.BackupDisableNever.ValueBool() {
-		if state != nil && !state.BackupDisableNever.IsNull() && state.BackupDisableNever.ValueBool() {
+		if state == nil || state.BackupDisableNever.IsNull() || state.BackupDisableNever.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "backup/disable/never"))
 		}
 	}
 	if !data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.ValueBool() {
-		if state != nil && !state.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.IsNull() && state.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.ValueBool() {
+		if state == nil || state.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.IsNull() || state.EncapsulationMplsLoadBalancingFlowLabelCode17Disable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/load-balancing/flow-label/code/one7/disable"))
 		}
 	}
 	if !data.EncapsulationMplsLoadBalancingFlowLabelCode17.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelCode17.ValueBool() {
-		if state != nil && !state.EncapsulationMplsLoadBalancingFlowLabelCode17.IsNull() && state.EncapsulationMplsLoadBalancingFlowLabelCode17.ValueBool() {
+		if state == nil || state.EncapsulationMplsLoadBalancingFlowLabelCode17.IsNull() || state.EncapsulationMplsLoadBalancingFlowLabelCode17.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/load-balancing/flow-label/code/one7"))
 		}
 	}
 	if !data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.ValueBool() {
-		if state != nil && !state.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() && state.EncapsulationMplsLoadBalancingFlowLabelBothStatic.ValueBool() {
+		if state == nil || state.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() || state.EncapsulationMplsLoadBalancingFlowLabelBothStatic.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/load-balancing/flow-label/both/static"))
 		}
 	}
 	if !data.EncapsulationMplsLoadBalancingFlowLabelBoth.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelBoth.ValueBool() {
-		if state != nil && !state.EncapsulationMplsLoadBalancingFlowLabelBoth.IsNull() && state.EncapsulationMplsLoadBalancingFlowLabelBoth.ValueBool() {
+		if state == nil || state.EncapsulationMplsLoadBalancingFlowLabelBoth.IsNull() || state.EncapsulationMplsLoadBalancingFlowLabelBoth.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/load-balancing/flow-label/both"))
 		}
 	}
 	if !data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.ValueBool() {
-		if state != nil && !state.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.IsNull() && state.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.ValueBool() {
+		if state == nil || state.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.IsNull() || state.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/load-balancing/flow-label/receive/static"))
 		}
 	}
 	if !data.EncapsulationMplsLoadBalancingFlowLabelReceive.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelReceive.ValueBool() {
-		if state != nil && !state.EncapsulationMplsLoadBalancingFlowLabelReceive.IsNull() && state.EncapsulationMplsLoadBalancingFlowLabelReceive.ValueBool() {
+		if state == nil || state.EncapsulationMplsLoadBalancingFlowLabelReceive.IsNull() || state.EncapsulationMplsLoadBalancingFlowLabelReceive.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/load-balancing/flow-label/receive"))
 		}
 	}
 	if !data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.ValueBool() {
-		if state != nil && !state.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.IsNull() && state.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.ValueBool() {
+		if state == nil || state.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.IsNull() || state.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/load-balancing/flow-label/transmit/static"))
 		}
 	}
 	if !data.EncapsulationMplsLoadBalancingFlowLabelTransmit.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelTransmit.ValueBool() {
-		if state != nil && !state.EncapsulationMplsLoadBalancingFlowLabelTransmit.IsNull() && state.EncapsulationMplsLoadBalancingFlowLabelTransmit.ValueBool() {
+		if state == nil || state.EncapsulationMplsLoadBalancingFlowLabelTransmit.IsNull() || state.EncapsulationMplsLoadBalancingFlowLabelTransmit.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/load-balancing/flow-label/transmit"))
 		}
 	}
 	if !data.EncapsulationMplsLoadBalancingPwLabel.IsNull() && !data.EncapsulationMplsLoadBalancingPwLabel.ValueBool() {
-		if state != nil && !state.EncapsulationMplsLoadBalancingPwLabel.IsNull() && state.EncapsulationMplsLoadBalancingPwLabel.ValueBool() {
+		if state == nil || state.EncapsulationMplsLoadBalancingPwLabel.IsNull() || state.EncapsulationMplsLoadBalancingPwLabel.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/load-balancing/pw-label"))
 		}
 	}
 	if !data.EncapsulationMplsRedundancyOneWay.IsNull() && !data.EncapsulationMplsRedundancyOneWay.ValueBool() {
-		if state != nil && !state.EncapsulationMplsRedundancyOneWay.IsNull() && state.EncapsulationMplsRedundancyOneWay.ValueBool() {
+		if state == nil || state.EncapsulationMplsRedundancyOneWay.IsNull() || state.EncapsulationMplsRedundancyOneWay.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/redundancy/one-way"))
 		}
 	}
 	if !data.EncapsulationMplsSwitchingTlvHide.IsNull() && !data.EncapsulationMplsSwitchingTlvHide.ValueBool() {
-		if state != nil && !state.EncapsulationMplsSwitchingTlvHide.IsNull() && state.EncapsulationMplsSwitchingTlvHide.ValueBool() {
+		if state == nil || state.EncapsulationMplsSwitchingTlvHide.IsNull() || state.EncapsulationMplsSwitchingTlvHide.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/switching-tlv/hide"))
 		}
 	}
 	if !data.EncapsulationMplsPreferredPathFallbackDisable.IsNull() && !data.EncapsulationMplsPreferredPathFallbackDisable.ValueBool() {
-		if state != nil && !state.EncapsulationMplsPreferredPathFallbackDisable.IsNull() && state.EncapsulationMplsPreferredPathFallbackDisable.ValueBool() {
+		if state == nil || state.EncapsulationMplsPreferredPathFallbackDisable.IsNull() || state.EncapsulationMplsPreferredPathFallbackDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/preferred-path/fallback/disable"))
 		}
 	}
 	if !data.EncapsulationMplsSequencingBoth.IsNull() && !data.EncapsulationMplsSequencingBoth.ValueBool() {
-		if state != nil && !state.EncapsulationMplsSequencingBoth.IsNull() && state.EncapsulationMplsSequencingBoth.ValueBool() {
+		if state == nil || state.EncapsulationMplsSequencingBoth.IsNull() || state.EncapsulationMplsSequencingBoth.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/sequencing/both"))
 		}
 	}
 	if !data.EncapsulationMplsSequencingReceive.IsNull() && !data.EncapsulationMplsSequencingReceive.ValueBool() {
-		if state != nil && !state.EncapsulationMplsSequencingReceive.IsNull() && state.EncapsulationMplsSequencingReceive.ValueBool() {
+		if state == nil || state.EncapsulationMplsSequencingReceive.IsNull() || state.EncapsulationMplsSequencingReceive.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/sequencing/receive"))
 		}
 	}
 	if !data.EncapsulationMplsSequencingTransmit.IsNull() && !data.EncapsulationMplsSequencingTransmit.ValueBool() {
-		if state != nil && !state.EncapsulationMplsSequencingTransmit.IsNull() && state.EncapsulationMplsSequencingTransmit.ValueBool() {
+		if state == nil || state.EncapsulationMplsSequencingTransmit.IsNull() || state.EncapsulationMplsSequencingTransmit.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/sequencing/transmit"))
 		}
 	}
 	if !data.EncapsulationMplsVccvVerificationTypeNone.IsNull() && !data.EncapsulationMplsVccvVerificationTypeNone.ValueBool() {
-		if state != nil && !state.EncapsulationMplsVccvVerificationTypeNone.IsNull() && state.EncapsulationMplsVccvVerificationTypeNone.ValueBool() {
+		if state == nil || state.EncapsulationMplsVccvVerificationTypeNone.IsNull() || state.EncapsulationMplsVccvVerificationTypeNone.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/vccv/verification-type/none"))
 		}
 	}
 	if !data.EncapsulationMplsTransportModeVlanPassthrough.IsNull() && !data.EncapsulationMplsTransportModeVlanPassthrough.ValueBool() {
-		if state != nil && !state.EncapsulationMplsTransportModeVlanPassthrough.IsNull() && state.EncapsulationMplsTransportModeVlanPassthrough.ValueBool() {
+		if state == nil || state.EncapsulationMplsTransportModeVlanPassthrough.IsNull() || state.EncapsulationMplsTransportModeVlanPassthrough.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/transport-mode/passthrough"))
 		}
 	}
 	if !data.EncapsulationMplsTransportModeVlan.IsNull() && !data.EncapsulationMplsTransportModeVlan.ValueBool() {
-		if state != nil && !state.EncapsulationMplsTransportModeVlan.IsNull() && state.EncapsulationMplsTransportModeVlan.ValueBool() {
+		if state == nil || state.EncapsulationMplsTransportModeVlan.IsNull() || state.EncapsulationMplsTransportModeVlan.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/transport-mode/vlan"))
 		}
 	}
 	if !data.EncapsulationMplsTransportModeEthernet.IsNull() && !data.EncapsulationMplsTransportModeEthernet.ValueBool() {
-		if state != nil && !state.EncapsulationMplsTransportModeEthernet.IsNull() && state.EncapsulationMplsTransportModeEthernet.ValueBool() {
+		if state == nil || state.EncapsulationMplsTransportModeEthernet.IsNull() || state.EncapsulationMplsTransportModeEthernet.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/transport-mode/ethernet"))
 		}
 	}
 	if !data.EncapsulationMplsControlWord.IsNull() && !data.EncapsulationMplsControlWord.ValueBool() {
-		if state != nil && !state.EncapsulationMplsControlWord.IsNull() && state.EncapsulationMplsControlWord.ValueBool() {
+		if state == nil || state.EncapsulationMplsControlWord.IsNull() || state.EncapsulationMplsControlWord.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/control-word"))
 		}
 	}
 	if !data.EncapsulationMplsProtocolLdp.IsNull() && !data.EncapsulationMplsProtocolLdp.ValueBool() {
-		if state != nil && !state.EncapsulationMplsProtocolLdp.IsNull() && state.EncapsulationMplsProtocolLdp.ValueBool() {
+		if state == nil || state.EncapsulationMplsProtocolLdp.IsNull() || state.EncapsulationMplsProtocolLdp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls/protocol/ldp"))
 		}
 	}
 	if !data.EncapsulationMpls.IsNull() && !data.EncapsulationMpls.ValueBool() {
-		if state != nil && !state.EncapsulationMpls.IsNull() && state.EncapsulationMpls.ValueBool() {
+		if state == nil || state.EncapsulationMpls.IsNull() || state.EncapsulationMpls.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encapsulation/mpls"))
 		}
 	}

@@ -5431,7 +5431,7 @@ func (data *VRF) getDeletedItems(ctx context.Context, state VRF, version string)
 func (data *VRF) getEmptyLeafsDelete(ctx context.Context, state *VRF, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.RemoteRouteFilteringDisable.IsNull() && !data.RemoteRouteFilteringDisable.ValueBool() {
-		if state != nil && !state.RemoteRouteFilteringDisable.IsNull() && state.RemoteRouteFilteringDisable.ValueBool() {
+		if state == nil || state.RemoteRouteFilteringDisable.IsNull() || state.RemoteRouteFilteringDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "remote-route-filtering/disable"))
 		}
 	}
@@ -5628,212 +5628,212 @@ func (data *VRF) getEmptyLeafsDelete(ctx context.Context, state *VRF, version st
 		}
 	}
 	if !data.Ipv6Flowspec.IsNull() && !data.Ipv6Flowspec.ValueBool() {
-		if state != nil && !state.Ipv6Flowspec.IsNull() && state.Ipv6Flowspec.ValueBool() {
+		if state == nil || state.Ipv6Flowspec.IsNull() || state.Ipv6Flowspec.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/flowspec"))
 		}
 	}
 	if !data.Ipv6MulticastExportToDefaultVrfAllowImportedVpn.IsNull() && !data.Ipv6MulticastExportToDefaultVrfAllowImportedVpn.ValueBool() {
-		if state != nil && !state.Ipv6MulticastExportToDefaultVrfAllowImportedVpn.IsNull() && state.Ipv6MulticastExportToDefaultVrfAllowImportedVpn.ValueBool() {
+		if state == nil || state.Ipv6MulticastExportToDefaultVrfAllowImportedVpn.IsNull() || state.Ipv6MulticastExportToDefaultVrfAllowImportedVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn"))
 		}
 	}
 	if !data.Ipv6MulticastExportToVrfAllowBestExternal.IsNull() && !data.Ipv6MulticastExportToVrfAllowBestExternal.ValueBool() {
-		if state != nil && !state.Ipv6MulticastExportToVrfAllowBestExternal.IsNull() && state.Ipv6MulticastExportToVrfAllowBestExternal.ValueBool() {
+		if state == nil || state.Ipv6MulticastExportToVrfAllowBestExternal.IsNull() || state.Ipv6MulticastExportToVrfAllowBestExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external"))
 		}
 	}
 	if !data.Ipv6MulticastExportToVrfAllowBackup.IsNull() && !data.Ipv6MulticastExportToVrfAllowBackup.ValueBool() {
-		if state != nil && !state.Ipv6MulticastExportToVrfAllowBackup.IsNull() && state.Ipv6MulticastExportToVrfAllowBackup.ValueBool() {
+		if state == nil || state.Ipv6MulticastExportToVrfAllowBackup.IsNull() || state.Ipv6MulticastExportToVrfAllowBackup.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup"))
 		}
 	}
 	if !data.Ipv6MulticastExportToVrfAllowImportedVpn.IsNull() && !data.Ipv6MulticastExportToVrfAllowImportedVpn.ValueBool() {
-		if state != nil && !state.Ipv6MulticastExportToVrfAllowImportedVpn.IsNull() && state.Ipv6MulticastExportToVrfAllowImportedVpn.ValueBool() {
+		if state == nil || state.Ipv6MulticastExportToVrfAllowImportedVpn.IsNull() || state.Ipv6MulticastExportToVrfAllowImportedVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn"))
 		}
 	}
 	if !data.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && !data.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
-		if state != nil && !state.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && state.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
+		if state == nil || state.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn.IsNull() || state.Ipv6MulticastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn"))
 		}
 	}
 	if !data.Ipv6MulticastImportFromVrfAllowBestExternal.IsNull() && !data.Ipv6MulticastImportFromVrfAllowBestExternal.ValueBool() {
-		if state != nil && !state.Ipv6MulticastImportFromVrfAllowBestExternal.IsNull() && state.Ipv6MulticastImportFromVrfAllowBestExternal.ValueBool() {
+		if state == nil || state.Ipv6MulticastImportFromVrfAllowBestExternal.IsNull() || state.Ipv6MulticastImportFromVrfAllowBestExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external"))
 		}
 	}
 	if !data.Ipv6MulticastImportFromVrfAllowBackup.IsNull() && !data.Ipv6MulticastImportFromVrfAllowBackup.ValueBool() {
-		if state != nil && !state.Ipv6MulticastImportFromVrfAllowBackup.IsNull() && state.Ipv6MulticastImportFromVrfAllowBackup.ValueBool() {
+		if state == nil || state.Ipv6MulticastImportFromVrfAllowBackup.IsNull() || state.Ipv6MulticastImportFromVrfAllowBackup.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup"))
 		}
 	}
 	if !data.Ipv6MulticastImportFromVrfAdvertiseAsVpn.IsNull() && !data.Ipv6MulticastImportFromVrfAdvertiseAsVpn.ValueBool() {
-		if state != nil && !state.Ipv6MulticastImportFromVrfAdvertiseAsVpn.IsNull() && state.Ipv6MulticastImportFromVrfAdvertiseAsVpn.ValueBool() {
+		if state == nil || state.Ipv6MulticastImportFromVrfAdvertiseAsVpn.IsNull() || state.Ipv6MulticastImportFromVrfAdvertiseAsVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn"))
 		}
 	}
 	if !data.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && !data.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
-		if state != nil && !state.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && state.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
+		if state == nil || state.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn.IsNull() || state.Ipv6MulticastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn"))
 		}
 	}
 	if !data.Ipv6Multicast.IsNull() && !data.Ipv6Multicast.ValueBool() {
-		if state != nil && !state.Ipv6Multicast.IsNull() && state.Ipv6Multicast.ValueBool() {
+		if state == nil || state.Ipv6Multicast.IsNull() || state.Ipv6Multicast.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/multicast"))
 		}
 	}
 	if !data.Ipv6UnicastExportToDefaultVrfAllowImportedVpn.IsNull() && !data.Ipv6UnicastExportToDefaultVrfAllowImportedVpn.ValueBool() {
-		if state != nil && !state.Ipv6UnicastExportToDefaultVrfAllowImportedVpn.IsNull() && state.Ipv6UnicastExportToDefaultVrfAllowImportedVpn.ValueBool() {
+		if state == nil || state.Ipv6UnicastExportToDefaultVrfAllowImportedVpn.IsNull() || state.Ipv6UnicastExportToDefaultVrfAllowImportedVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn"))
 		}
 	}
 	if !data.Ipv6UnicastExportToVrfAllowBestExternal.IsNull() && !data.Ipv6UnicastExportToVrfAllowBestExternal.ValueBool() {
-		if state != nil && !state.Ipv6UnicastExportToVrfAllowBestExternal.IsNull() && state.Ipv6UnicastExportToVrfAllowBestExternal.ValueBool() {
+		if state == nil || state.Ipv6UnicastExportToVrfAllowBestExternal.IsNull() || state.Ipv6UnicastExportToVrfAllowBestExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external"))
 		}
 	}
 	if !data.Ipv6UnicastExportToVrfAllowBackup.IsNull() && !data.Ipv6UnicastExportToVrfAllowBackup.ValueBool() {
-		if state != nil && !state.Ipv6UnicastExportToVrfAllowBackup.IsNull() && state.Ipv6UnicastExportToVrfAllowBackup.ValueBool() {
+		if state == nil || state.Ipv6UnicastExportToVrfAllowBackup.IsNull() || state.Ipv6UnicastExportToVrfAllowBackup.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup"))
 		}
 	}
 	if !data.Ipv6UnicastExportToVrfAllowImportedVpn.IsNull() && !data.Ipv6UnicastExportToVrfAllowImportedVpn.ValueBool() {
-		if state != nil && !state.Ipv6UnicastExportToVrfAllowImportedVpn.IsNull() && state.Ipv6UnicastExportToVrfAllowImportedVpn.ValueBool() {
+		if state == nil || state.Ipv6UnicastExportToVrfAllowImportedVpn.IsNull() || state.Ipv6UnicastExportToVrfAllowImportedVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn"))
 		}
 	}
 	if !data.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && !data.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
-		if state != nil && !state.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && state.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
+		if state == nil || state.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn.IsNull() || state.Ipv6UnicastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn"))
 		}
 	}
 	if !data.Ipv6UnicastImportFromVrfAllowBestExternal.IsNull() && !data.Ipv6UnicastImportFromVrfAllowBestExternal.ValueBool() {
-		if state != nil && !state.Ipv6UnicastImportFromVrfAllowBestExternal.IsNull() && state.Ipv6UnicastImportFromVrfAllowBestExternal.ValueBool() {
+		if state == nil || state.Ipv6UnicastImportFromVrfAllowBestExternal.IsNull() || state.Ipv6UnicastImportFromVrfAllowBestExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external"))
 		}
 	}
 	if !data.Ipv6UnicastImportFromVrfAllowBackup.IsNull() && !data.Ipv6UnicastImportFromVrfAllowBackup.ValueBool() {
-		if state != nil && !state.Ipv6UnicastImportFromVrfAllowBackup.IsNull() && state.Ipv6UnicastImportFromVrfAllowBackup.ValueBool() {
+		if state == nil || state.Ipv6UnicastImportFromVrfAllowBackup.IsNull() || state.Ipv6UnicastImportFromVrfAllowBackup.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup"))
 		}
 	}
 	if !data.Ipv6UnicastImportFromVrfAdvertiseAsVpn.IsNull() && !data.Ipv6UnicastImportFromVrfAdvertiseAsVpn.ValueBool() {
-		if state != nil && !state.Ipv6UnicastImportFromVrfAdvertiseAsVpn.IsNull() && state.Ipv6UnicastImportFromVrfAdvertiseAsVpn.ValueBool() {
+		if state == nil || state.Ipv6UnicastImportFromVrfAdvertiseAsVpn.IsNull() || state.Ipv6UnicastImportFromVrfAdvertiseAsVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn"))
 		}
 	}
 	if !data.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && !data.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
-		if state != nil && !state.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && state.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
+		if state == nil || state.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn.IsNull() || state.Ipv6UnicastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn"))
 		}
 	}
 	if !data.Ipv6Unicast.IsNull() && !data.Ipv6Unicast.ValueBool() {
-		if state != nil && !state.Ipv6Unicast.IsNull() && state.Ipv6Unicast.ValueBool() {
+		if state == nil || state.Ipv6Unicast.IsNull() || state.Ipv6Unicast.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/unicast"))
 		}
 	}
 	if !data.Ipv4Flowspec.IsNull() && !data.Ipv4Flowspec.ValueBool() {
-		if state != nil && !state.Ipv4Flowspec.IsNull() && state.Ipv4Flowspec.ValueBool() {
+		if state == nil || state.Ipv4Flowspec.IsNull() || state.Ipv4Flowspec.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/flowspec"))
 		}
 	}
 	if !data.Ipv4MulticastExportToDefaultVrfAllowImportedVpn.IsNull() && !data.Ipv4MulticastExportToDefaultVrfAllowImportedVpn.ValueBool() {
-		if state != nil && !state.Ipv4MulticastExportToDefaultVrfAllowImportedVpn.IsNull() && state.Ipv4MulticastExportToDefaultVrfAllowImportedVpn.ValueBool() {
+		if state == nil || state.Ipv4MulticastExportToDefaultVrfAllowImportedVpn.IsNull() || state.Ipv4MulticastExportToDefaultVrfAllowImportedVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn"))
 		}
 	}
 	if !data.Ipv4MulticastExportToVrfAllowBestExternal.IsNull() && !data.Ipv4MulticastExportToVrfAllowBestExternal.ValueBool() {
-		if state != nil && !state.Ipv4MulticastExportToVrfAllowBestExternal.IsNull() && state.Ipv4MulticastExportToVrfAllowBestExternal.ValueBool() {
+		if state == nil || state.Ipv4MulticastExportToVrfAllowBestExternal.IsNull() || state.Ipv4MulticastExportToVrfAllowBestExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external"))
 		}
 	}
 	if !data.Ipv4MulticastExportToVrfAllowBackup.IsNull() && !data.Ipv4MulticastExportToVrfAllowBackup.ValueBool() {
-		if state != nil && !state.Ipv4MulticastExportToVrfAllowBackup.IsNull() && state.Ipv4MulticastExportToVrfAllowBackup.ValueBool() {
+		if state == nil || state.Ipv4MulticastExportToVrfAllowBackup.IsNull() || state.Ipv4MulticastExportToVrfAllowBackup.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup"))
 		}
 	}
 	if !data.Ipv4MulticastExportToVrfAllowImportedVpn.IsNull() && !data.Ipv4MulticastExportToVrfAllowImportedVpn.ValueBool() {
-		if state != nil && !state.Ipv4MulticastExportToVrfAllowImportedVpn.IsNull() && state.Ipv4MulticastExportToVrfAllowImportedVpn.ValueBool() {
+		if state == nil || state.Ipv4MulticastExportToVrfAllowImportedVpn.IsNull() || state.Ipv4MulticastExportToVrfAllowImportedVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn"))
 		}
 	}
 	if !data.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && !data.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
-		if state != nil && !state.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && state.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
+		if state == nil || state.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn.IsNull() || state.Ipv4MulticastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn"))
 		}
 	}
 	if !data.Ipv4MulticastImportFromVrfAllowBestExternal.IsNull() && !data.Ipv4MulticastImportFromVrfAllowBestExternal.ValueBool() {
-		if state != nil && !state.Ipv4MulticastImportFromVrfAllowBestExternal.IsNull() && state.Ipv4MulticastImportFromVrfAllowBestExternal.ValueBool() {
+		if state == nil || state.Ipv4MulticastImportFromVrfAllowBestExternal.IsNull() || state.Ipv4MulticastImportFromVrfAllowBestExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external"))
 		}
 	}
 	if !data.Ipv4MulticastImportFromVrfAllowBackup.IsNull() && !data.Ipv4MulticastImportFromVrfAllowBackup.ValueBool() {
-		if state != nil && !state.Ipv4MulticastImportFromVrfAllowBackup.IsNull() && state.Ipv4MulticastImportFromVrfAllowBackup.ValueBool() {
+		if state == nil || state.Ipv4MulticastImportFromVrfAllowBackup.IsNull() || state.Ipv4MulticastImportFromVrfAllowBackup.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup"))
 		}
 	}
 	if !data.Ipv4MulticastImportFromVrfAdvertiseAsVpn.IsNull() && !data.Ipv4MulticastImportFromVrfAdvertiseAsVpn.ValueBool() {
-		if state != nil && !state.Ipv4MulticastImportFromVrfAdvertiseAsVpn.IsNull() && state.Ipv4MulticastImportFromVrfAdvertiseAsVpn.ValueBool() {
+		if state == nil || state.Ipv4MulticastImportFromVrfAdvertiseAsVpn.IsNull() || state.Ipv4MulticastImportFromVrfAdvertiseAsVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn"))
 		}
 	}
 	if !data.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && !data.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
-		if state != nil && !state.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && state.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
+		if state == nil || state.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn.IsNull() || state.Ipv4MulticastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn"))
 		}
 	}
 	if !data.Ipv4Multicast.IsNull() && !data.Ipv4Multicast.ValueBool() {
-		if state != nil && !state.Ipv4Multicast.IsNull() && state.Ipv4Multicast.ValueBool() {
+		if state == nil || state.Ipv4Multicast.IsNull() || state.Ipv4Multicast.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/multicast"))
 		}
 	}
 	if !data.Ipv4UnicastExportToDefaultVrfAllowImportedVpn.IsNull() && !data.Ipv4UnicastExportToDefaultVrfAllowImportedVpn.ValueBool() {
-		if state != nil && !state.Ipv4UnicastExportToDefaultVrfAllowImportedVpn.IsNull() && state.Ipv4UnicastExportToDefaultVrfAllowImportedVpn.ValueBool() {
+		if state == nil || state.Ipv4UnicastExportToDefaultVrfAllowImportedVpn.IsNull() || state.Ipv4UnicastExportToDefaultVrfAllowImportedVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn"))
 		}
 	}
 	if !data.Ipv4UnicastExportToVrfAllowBestExternal.IsNull() && !data.Ipv4UnicastExportToVrfAllowBestExternal.ValueBool() {
-		if state != nil && !state.Ipv4UnicastExportToVrfAllowBestExternal.IsNull() && state.Ipv4UnicastExportToVrfAllowBestExternal.ValueBool() {
+		if state == nil || state.Ipv4UnicastExportToVrfAllowBestExternal.IsNull() || state.Ipv4UnicastExportToVrfAllowBestExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external"))
 		}
 	}
 	if !data.Ipv4UnicastExportToVrfAllowBackup.IsNull() && !data.Ipv4UnicastExportToVrfAllowBackup.ValueBool() {
-		if state != nil && !state.Ipv4UnicastExportToVrfAllowBackup.IsNull() && state.Ipv4UnicastExportToVrfAllowBackup.ValueBool() {
+		if state == nil || state.Ipv4UnicastExportToVrfAllowBackup.IsNull() || state.Ipv4UnicastExportToVrfAllowBackup.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup"))
 		}
 	}
 	if !data.Ipv4UnicastExportToVrfAllowImportedVpn.IsNull() && !data.Ipv4UnicastExportToVrfAllowImportedVpn.ValueBool() {
-		if state != nil && !state.Ipv4UnicastExportToVrfAllowImportedVpn.IsNull() && state.Ipv4UnicastExportToVrfAllowImportedVpn.ValueBool() {
+		if state == nil || state.Ipv4UnicastExportToVrfAllowImportedVpn.IsNull() || state.Ipv4UnicastExportToVrfAllowImportedVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn"))
 		}
 	}
 	if !data.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && !data.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
-		if state != nil && !state.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn.IsNull() && state.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
+		if state == nil || state.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn.IsNull() || state.Ipv4UnicastImportFromDefaultVrfAdvertiseAsVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn"))
 		}
 	}
 	if !data.Ipv4UnicastImportFromVrfAllowBestExternal.IsNull() && !data.Ipv4UnicastImportFromVrfAllowBestExternal.ValueBool() {
-		if state != nil && !state.Ipv4UnicastImportFromVrfAllowBestExternal.IsNull() && state.Ipv4UnicastImportFromVrfAllowBestExternal.ValueBool() {
+		if state == nil || state.Ipv4UnicastImportFromVrfAllowBestExternal.IsNull() || state.Ipv4UnicastImportFromVrfAllowBestExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external"))
 		}
 	}
 	if !data.Ipv4UnicastImportFromVrfAllowBackup.IsNull() && !data.Ipv4UnicastImportFromVrfAllowBackup.ValueBool() {
-		if state != nil && !state.Ipv4UnicastImportFromVrfAllowBackup.IsNull() && state.Ipv4UnicastImportFromVrfAllowBackup.ValueBool() {
+		if state == nil || state.Ipv4UnicastImportFromVrfAllowBackup.IsNull() || state.Ipv4UnicastImportFromVrfAllowBackup.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup"))
 		}
 	}
 	if !data.Ipv4UnicastImportFromVrfAdvertiseAsVpn.IsNull() && !data.Ipv4UnicastImportFromVrfAdvertiseAsVpn.ValueBool() {
-		if state != nil && !state.Ipv4UnicastImportFromVrfAdvertiseAsVpn.IsNull() && state.Ipv4UnicastImportFromVrfAdvertiseAsVpn.ValueBool() {
+		if state == nil || state.Ipv4UnicastImportFromVrfAdvertiseAsVpn.IsNull() || state.Ipv4UnicastImportFromVrfAdvertiseAsVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn"))
 		}
 	}
 	if !data.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && !data.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
-		if state != nil && !state.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn.IsNull() && state.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
+		if state == nil || state.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn.IsNull() || state.Ipv4UnicastImportFromBridgeDomainAdvertiseAsVpn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn"))
 		}
 	}
 	if !data.Ipv4Unicast.IsNull() && !data.Ipv4Unicast.ValueBool() {
-		if state != nil && !state.Ipv4Unicast.IsNull() && state.Ipv4Unicast.ValueBool() {
+		if state == nil || state.Ipv4Unicast.IsNull() || state.Ipv4Unicast.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/unicast"))
 		}
 	}

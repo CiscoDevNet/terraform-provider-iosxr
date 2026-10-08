@@ -743,82 +743,82 @@ func (data *ServiceTimestamps) getDeletedItems(ctx context.Context, state Servic
 func (data *ServiceTimestamps) getEmptyLeafsDelete(ctx context.Context, state *ServiceTimestamps, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if helpers.VersionAtLeast(version, "25.4") && !data.LogDatetimeUsec.IsNull() && !data.LogDatetimeUsec.ValueBool() {
-		if state != nil && !state.LogDatetimeUsec.IsNull() && state.LogDatetimeUsec.ValueBool() {
+		if state == nil || state.LogDatetimeUsec.IsNull() || state.LogDatetimeUsec.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/datetime/usec"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.DebugDatetimeUsec.IsNull() && !data.DebugDatetimeUsec.ValueBool() {
-		if state != nil && !state.DebugDatetimeUsec.IsNull() && state.DebugDatetimeUsec.ValueBool() {
+		if state == nil || state.DebugDatetimeUsec.IsNull() || state.DebugDatetimeUsec.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/datetime/usec"))
 		}
 	}
 	if !data.LogDisable.IsNull() && !data.LogDisable.ValueBool() {
-		if state != nil && !state.LogDisable.IsNull() && state.LogDisable.ValueBool() {
+		if state == nil || state.LogDisable.IsNull() || state.LogDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/disable"))
 		}
 	}
 	if !data.LogUptime.IsNull() && !data.LogUptime.ValueBool() {
-		if state != nil && !state.LogUptime.IsNull() && state.LogUptime.ValueBool() {
+		if state == nil || state.LogUptime.IsNull() || state.LogUptime.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/uptime"))
 		}
 	}
 	if !data.LogDatetimeYear.IsNull() && !data.LogDatetimeYear.ValueBool() {
-		if state != nil && !state.LogDatetimeYear.IsNull() && state.LogDatetimeYear.ValueBool() {
+		if state == nil || state.LogDatetimeYear.IsNull() || state.LogDatetimeYear.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/datetime/year"))
 		}
 	}
 	if !data.LogDatetimeShowTimezone.IsNull() && !data.LogDatetimeShowTimezone.ValueBool() {
-		if state != nil && !state.LogDatetimeShowTimezone.IsNull() && state.LogDatetimeShowTimezone.ValueBool() {
+		if state == nil || state.LogDatetimeShowTimezone.IsNull() || state.LogDatetimeShowTimezone.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/datetime/show-timezone"))
 		}
 	}
 	if !data.LogDatetimeMsec.IsNull() && !data.LogDatetimeMsec.ValueBool() {
-		if state != nil && !state.LogDatetimeMsec.IsNull() && state.LogDatetimeMsec.ValueBool() {
+		if state == nil || state.LogDatetimeMsec.IsNull() || state.LogDatetimeMsec.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/datetime/msec"))
 		}
 	}
 	if !data.LogDatetimeLocaltime.IsNull() && !data.LogDatetimeLocaltime.ValueBool() {
-		if state != nil && !state.LogDatetimeLocaltime.IsNull() && state.LogDatetimeLocaltime.ValueBool() {
+		if state == nil || state.LogDatetimeLocaltime.IsNull() || state.LogDatetimeLocaltime.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/datetime/localtime"))
 		}
 	}
 	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.LogDatetimeLocaltimeOnly.IsNull() && !data.LogDatetimeLocaltimeOnly.ValueBool() {
-		if state != nil && !state.LogDatetimeLocaltimeOnly.IsNull() && state.LogDatetimeLocaltimeOnly.ValueBool() {
+		if state == nil || state.LogDatetimeLocaltimeOnly.IsNull() || state.LogDatetimeLocaltimeOnly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "log/datetime/localtime-only"))
 		}
 	}
 	if !data.DebugDisable.IsNull() && !data.DebugDisable.ValueBool() {
-		if state != nil && !state.DebugDisable.IsNull() && state.DebugDisable.ValueBool() {
+		if state == nil || state.DebugDisable.IsNull() || state.DebugDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/disable"))
 		}
 	}
 	if !data.DebugUptime.IsNull() && !data.DebugUptime.ValueBool() {
-		if state != nil && !state.DebugUptime.IsNull() && state.DebugUptime.ValueBool() {
+		if state == nil || state.DebugUptime.IsNull() || state.DebugUptime.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/uptime"))
 		}
 	}
 	if !data.DebugDatetimeYear.IsNull() && !data.DebugDatetimeYear.ValueBool() {
-		if state != nil && !state.DebugDatetimeYear.IsNull() && state.DebugDatetimeYear.ValueBool() {
+		if state == nil || state.DebugDatetimeYear.IsNull() || state.DebugDatetimeYear.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/datetime/year"))
 		}
 	}
 	if !data.DebugDatetimeShowTimezone.IsNull() && !data.DebugDatetimeShowTimezone.ValueBool() {
-		if state != nil && !state.DebugDatetimeShowTimezone.IsNull() && state.DebugDatetimeShowTimezone.ValueBool() {
+		if state == nil || state.DebugDatetimeShowTimezone.IsNull() || state.DebugDatetimeShowTimezone.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/datetime/show-timezone"))
 		}
 	}
 	if !data.DebugDatetimeMsec.IsNull() && !data.DebugDatetimeMsec.ValueBool() {
-		if state != nil && !state.DebugDatetimeMsec.IsNull() && state.DebugDatetimeMsec.ValueBool() {
+		if state == nil || state.DebugDatetimeMsec.IsNull() || state.DebugDatetimeMsec.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/datetime/msec"))
 		}
 	}
 	if !data.DebugDatetimeLocaltime.IsNull() && !data.DebugDatetimeLocaltime.ValueBool() {
-		if state != nil && !state.DebugDatetimeLocaltime.IsNull() && state.DebugDatetimeLocaltime.ValueBool() {
+		if state == nil || state.DebugDatetimeLocaltime.IsNull() || state.DebugDatetimeLocaltime.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/datetime/localtime"))
 		}
 	}
 	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.DebugDatetimeLocaltimeOnly.IsNull() && !data.DebugDatetimeLocaltimeOnly.ValueBool() {
-		if state != nil && !state.DebugDatetimeLocaltimeOnly.IsNull() && state.DebugDatetimeLocaltimeOnly.ValueBool() {
+		if state == nil || state.DebugDatetimeLocaltimeOnly.IsNull() || state.DebugDatetimeLocaltimeOnly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPathForVersion(version), "debug/datetime/localtime-only"))
 		}
 	}

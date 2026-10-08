@@ -4321,17 +4321,17 @@ func (data *NTP) getDeletedItems(ctx context.Context, state NTP, version string)
 func (data *NTP) getEmptyLeafsDelete(ctx context.Context, state *NTP, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.AdminPlaneIburst.IsNull() && !data.AdminPlaneIburst.ValueBool() {
-		if state != nil && !state.AdminPlaneIburst.IsNull() && state.AdminPlaneIburst.ValueBool() {
+		if state == nil || state.AdminPlaneIburst.IsNull() || state.AdminPlaneIburst.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "admin-plane/iburst"))
 		}
 	}
 	if !data.AdminPlaneBurst.IsNull() && !data.AdminPlaneBurst.ValueBool() {
-		if state != nil && !state.AdminPlaneBurst.IsNull() && state.AdminPlaneBurst.ValueBool() {
+		if state == nil || state.AdminPlaneBurst.IsNull() || state.AdminPlaneBurst.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "admin-plane/burst"))
 		}
 	}
 	if !data.AdminPlanePrefer.IsNull() && !data.AdminPlanePrefer.ValueBool() {
-		if state != nil && !state.AdminPlanePrefer.IsNull() && state.AdminPlanePrefer.ValueBool() {
+		if state == nil || state.AdminPlanePrefer.IsNull() || state.AdminPlanePrefer.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "admin-plane/prefer"))
 		}
 	}
@@ -4344,17 +4344,17 @@ func (data *NTP) getEmptyLeafsDelete(ctx context.Context, state *NTP, version st
 		}
 	}
 	if !data.Passive.IsNull() && !data.Passive.ValueBool() {
-		if state != nil && !state.Passive.IsNull() && state.Passive.ValueBool() {
+		if state == nil || state.Passive.IsNull() || state.Passive.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "passive"))
 		}
 	}
 	if !data.LogInternalSync.IsNull() && !data.LogInternalSync.ValueBool() {
-		if state != nil && !state.LogInternalSync.IsNull() && state.LogInternalSync.ValueBool() {
+		if state == nil || state.LogInternalSync.IsNull() || state.LogInternalSync.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "log-internal-sync"))
 		}
 	}
 	if !data.UpdateCalendar.IsNull() && !data.UpdateCalendar.ValueBool() {
-		if state != nil && !state.UpdateCalendar.IsNull() && state.UpdateCalendar.ValueBool() {
+		if state == nil || state.UpdateCalendar.IsNull() || state.UpdateCalendar.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "update-calendar"))
 		}
 	}
@@ -4381,17 +4381,17 @@ func (data *NTP) getEmptyLeafsDelete(ctx context.Context, state *NTP, version st
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.IsNull() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.ValueBool() {
-				if state != nil && i < len(state.PeersServersVrfs) && ci < len(state.PeersServersVrfs[i].HostnamePeersServers) && !state.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.IsNull() && state.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.ValueBool() {
+				if state == nil || i >= len(state.PeersServersVrfs) || ci >= len(state.PeersServersVrfs[i].HostnamePeersServers) || state.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.IsNull() || state.PeersServersVrfs[i].HostnamePeersServers[ci].Iburst.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "peer-server/vrfs/vrf", keyString, "hostname/hostname-peer-server", ckeyString), "iburst"))
 				}
 			}
 			if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.IsNull() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.ValueBool() {
-				if state != nil && i < len(state.PeersServersVrfs) && ci < len(state.PeersServersVrfs[i].HostnamePeersServers) && !state.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.IsNull() && state.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.ValueBool() {
+				if state == nil || i >= len(state.PeersServersVrfs) || ci >= len(state.PeersServersVrfs[i].HostnamePeersServers) || state.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.IsNull() || state.PeersServersVrfs[i].HostnamePeersServers[ci].Burst.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "peer-server/vrfs/vrf", keyString, "hostname/hostname-peer-server", ckeyString), "burst"))
 				}
 			}
 			if !data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.IsNull() && !data.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.ValueBool() {
-				if state != nil && i < len(state.PeersServersVrfs) && ci < len(state.PeersServersVrfs[i].HostnamePeersServers) && !state.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.IsNull() && state.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.ValueBool() {
+				if state == nil || i >= len(state.PeersServersVrfs) || ci >= len(state.PeersServersVrfs[i].HostnamePeersServers) || state.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.IsNull() || state.PeersServersVrfs[i].HostnamePeersServers[ci].Prefer.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "peer-server/vrfs/vrf", keyString, "hostname/hostname-peer-server", ckeyString), "prefer"))
 				}
 			}
@@ -4404,17 +4404,17 @@ func (data *NTP) getEmptyLeafsDelete(ctx context.Context, state *NTP, version st
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst.IsNull() && !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst.ValueBool() {
-				if state != nil && i < len(state.PeersServersVrfs) && ci < len(state.PeersServersVrfs[i].Ipv6PeersServers) && !state.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst.IsNull() && state.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst.ValueBool() {
+				if state == nil || i >= len(state.PeersServersVrfs) || ci >= len(state.PeersServersVrfs[i].Ipv6PeersServers) || state.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst.IsNull() || state.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "peer-server/vrfs/vrf", keyString, "ipv6/ipv6-peer-server", ckeyString), "iburst"))
 				}
 			}
 			if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst.IsNull() && !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst.ValueBool() {
-				if state != nil && i < len(state.PeersServersVrfs) && ci < len(state.PeersServersVrfs[i].Ipv6PeersServers) && !state.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst.IsNull() && state.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst.ValueBool() {
+				if state == nil || i >= len(state.PeersServersVrfs) || ci >= len(state.PeersServersVrfs[i].Ipv6PeersServers) || state.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst.IsNull() || state.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "peer-server/vrfs/vrf", keyString, "ipv6/ipv6-peer-server", ckeyString), "burst"))
 				}
 			}
 			if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer.IsNull() && !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer.ValueBool() {
-				if state != nil && i < len(state.PeersServersVrfs) && ci < len(state.PeersServersVrfs[i].Ipv6PeersServers) && !state.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer.IsNull() && state.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer.ValueBool() {
+				if state == nil || i >= len(state.PeersServersVrfs) || ci >= len(state.PeersServersVrfs[i].Ipv6PeersServers) || state.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer.IsNull() || state.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "peer-server/vrfs/vrf", keyString, "ipv6/ipv6-peer-server", ckeyString), "prefer"))
 				}
 			}
@@ -4427,17 +4427,17 @@ func (data *NTP) getEmptyLeafsDelete(ctx context.Context, state *NTP, version st
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst.IsNull() && !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst.ValueBool() {
-				if state != nil && i < len(state.PeersServersVrfs) && ci < len(state.PeersServersVrfs[i].Ipv4PeersServers) && !state.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst.IsNull() && state.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst.ValueBool() {
+				if state == nil || i >= len(state.PeersServersVrfs) || ci >= len(state.PeersServersVrfs[i].Ipv4PeersServers) || state.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst.IsNull() || state.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "peer-server/vrfs/vrf", keyString, "ipv4/ipv4-peer-server", ckeyString), "iburst"))
 				}
 			}
 			if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst.IsNull() && !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst.ValueBool() {
-				if state != nil && i < len(state.PeersServersVrfs) && ci < len(state.PeersServersVrfs[i].Ipv4PeersServers) && !state.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst.IsNull() && state.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst.ValueBool() {
+				if state == nil || i >= len(state.PeersServersVrfs) || ci >= len(state.PeersServersVrfs[i].Ipv4PeersServers) || state.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst.IsNull() || state.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "peer-server/vrfs/vrf", keyString, "ipv4/ipv4-peer-server", ckeyString), "burst"))
 				}
 			}
 			if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.IsNull() && !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.ValueBool() {
-				if state != nil && i < len(state.PeersServersVrfs) && ci < len(state.PeersServersVrfs[i].Ipv4PeersServers) && !state.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.IsNull() && state.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.ValueBool() {
+				if state == nil || i >= len(state.PeersServersVrfs) || ci >= len(state.PeersServersVrfs[i].Ipv4PeersServers) || state.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.IsNull() || state.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "peer-server/vrfs/vrf", keyString, "ipv4/ipv4-peer-server", ckeyString), "prefer"))
 				}
 			}
@@ -4451,17 +4451,17 @@ func (data *NTP) getEmptyLeafsDelete(ctx context.Context, state *NTP, version st
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.HostnamePeersServers[i].Iburst.IsNull() && !data.HostnamePeersServers[i].Iburst.ValueBool() {
-			if state != nil && i < len(state.HostnamePeersServers) && !state.HostnamePeersServers[i].Iburst.IsNull() && state.HostnamePeersServers[i].Iburst.ValueBool() {
+			if state == nil || i >= len(state.HostnamePeersServers) || state.HostnamePeersServers[i].Iburst.IsNull() || state.HostnamePeersServers[i].Iburst.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "peer-server/hostname/hostname-peer-server", keyString), "iburst"))
 			}
 		}
 		if !data.HostnamePeersServers[i].Burst.IsNull() && !data.HostnamePeersServers[i].Burst.ValueBool() {
-			if state != nil && i < len(state.HostnamePeersServers) && !state.HostnamePeersServers[i].Burst.IsNull() && state.HostnamePeersServers[i].Burst.ValueBool() {
+			if state == nil || i >= len(state.HostnamePeersServers) || state.HostnamePeersServers[i].Burst.IsNull() || state.HostnamePeersServers[i].Burst.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "peer-server/hostname/hostname-peer-server", keyString), "burst"))
 			}
 		}
 		if !data.HostnamePeersServers[i].Prefer.IsNull() && !data.HostnamePeersServers[i].Prefer.ValueBool() {
-			if state != nil && i < len(state.HostnamePeersServers) && !state.HostnamePeersServers[i].Prefer.IsNull() && state.HostnamePeersServers[i].Prefer.ValueBool() {
+			if state == nil || i >= len(state.HostnamePeersServers) || state.HostnamePeersServers[i].Prefer.IsNull() || state.HostnamePeersServers[i].Prefer.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "peer-server/hostname/hostname-peer-server", keyString), "prefer"))
 			}
 		}
@@ -4474,17 +4474,17 @@ func (data *NTP) getEmptyLeafsDelete(ctx context.Context, state *NTP, version st
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Ipv6PeersServers[i].Iburst.IsNull() && !data.Ipv6PeersServers[i].Iburst.ValueBool() {
-			if state != nil && i < len(state.Ipv6PeersServers) && !state.Ipv6PeersServers[i].Iburst.IsNull() && state.Ipv6PeersServers[i].Iburst.ValueBool() {
+			if state == nil || i >= len(state.Ipv6PeersServers) || state.Ipv6PeersServers[i].Iburst.IsNull() || state.Ipv6PeersServers[i].Iburst.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "peer-server/ipv6/ipv6-peer-server", keyString), "iburst"))
 			}
 		}
 		if !data.Ipv6PeersServers[i].Burst.IsNull() && !data.Ipv6PeersServers[i].Burst.ValueBool() {
-			if state != nil && i < len(state.Ipv6PeersServers) && !state.Ipv6PeersServers[i].Burst.IsNull() && state.Ipv6PeersServers[i].Burst.ValueBool() {
+			if state == nil || i >= len(state.Ipv6PeersServers) || state.Ipv6PeersServers[i].Burst.IsNull() || state.Ipv6PeersServers[i].Burst.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "peer-server/ipv6/ipv6-peer-server", keyString), "burst"))
 			}
 		}
 		if !data.Ipv6PeersServers[i].Prefer.IsNull() && !data.Ipv6PeersServers[i].Prefer.ValueBool() {
-			if state != nil && i < len(state.Ipv6PeersServers) && !state.Ipv6PeersServers[i].Prefer.IsNull() && state.Ipv6PeersServers[i].Prefer.ValueBool() {
+			if state == nil || i >= len(state.Ipv6PeersServers) || state.Ipv6PeersServers[i].Prefer.IsNull() || state.Ipv6PeersServers[i].Prefer.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "peer-server/ipv6/ipv6-peer-server", keyString), "prefer"))
 			}
 		}
@@ -4497,23 +4497,23 @@ func (data *NTP) getEmptyLeafsDelete(ctx context.Context, state *NTP, version st
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Ipv4PeersServers[i].Iburst.IsNull() && !data.Ipv4PeersServers[i].Iburst.ValueBool() {
-			if state != nil && i < len(state.Ipv4PeersServers) && !state.Ipv4PeersServers[i].Iburst.IsNull() && state.Ipv4PeersServers[i].Iburst.ValueBool() {
+			if state == nil || i >= len(state.Ipv4PeersServers) || state.Ipv4PeersServers[i].Iburst.IsNull() || state.Ipv4PeersServers[i].Iburst.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "peer-server/ipv4/ipv4-peer-server", keyString), "iburst"))
 			}
 		}
 		if !data.Ipv4PeersServers[i].Burst.IsNull() && !data.Ipv4PeersServers[i].Burst.ValueBool() {
-			if state != nil && i < len(state.Ipv4PeersServers) && !state.Ipv4PeersServers[i].Burst.IsNull() && state.Ipv4PeersServers[i].Burst.ValueBool() {
+			if state == nil || i >= len(state.Ipv4PeersServers) || state.Ipv4PeersServers[i].Burst.IsNull() || state.Ipv4PeersServers[i].Burst.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "peer-server/ipv4/ipv4-peer-server", keyString), "burst"))
 			}
 		}
 		if !data.Ipv4PeersServers[i].Prefer.IsNull() && !data.Ipv4PeersServers[i].Prefer.ValueBool() {
-			if state != nil && i < len(state.Ipv4PeersServers) && !state.Ipv4PeersServers[i].Prefer.IsNull() && state.Ipv4PeersServers[i].Prefer.ValueBool() {
+			if state == nil || i >= len(state.Ipv4PeersServers) || state.Ipv4PeersServers[i].Prefer.IsNull() || state.Ipv4PeersServers[i].Prefer.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "peer-server/ipv4/ipv4-peer-server", keyString), "prefer"))
 			}
 		}
 	}
 	if !data.PrimaryReferenceClock.IsNull() && !data.PrimaryReferenceClock.ValueBool() {
-		if state != nil && !state.PrimaryReferenceClock.IsNull() && state.PrimaryReferenceClock.ValueBool() {
+		if state == nil || state.PrimaryReferenceClock.IsNull() || state.PrimaryReferenceClock.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "primary/primary-reference-clock"))
 		}
 	}
@@ -4532,12 +4532,12 @@ func (data *NTP) getEmptyLeafsDelete(ctx context.Context, state *NTP, version st
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.InterfaceVrfs[i].Interfaces[ci].Disable.IsNull() && !data.InterfaceVrfs[i].Interfaces[ci].Disable.ValueBool() {
-				if state != nil && i < len(state.InterfaceVrfs) && ci < len(state.InterfaceVrfs[i].Interfaces) && !state.InterfaceVrfs[i].Interfaces[ci].Disable.IsNull() && state.InterfaceVrfs[i].Interfaces[ci].Disable.ValueBool() {
+				if state == nil || i >= len(state.InterfaceVrfs) || ci >= len(state.InterfaceVrfs[i].Interfaces) || state.InterfaceVrfs[i].Interfaces[ci].Disable.IsNull() || state.InterfaceVrfs[i].Interfaces[ci].Disable.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "interfaces/vrfs/vrf", keyString, "interface", ckeyString), "disable"))
 				}
 			}
 			if !data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient.IsNull() && !data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient.ValueBool() {
-				if state != nil && i < len(state.InterfaceVrfs) && ci < len(state.InterfaceVrfs[i].Interfaces) && !state.InterfaceVrfs[i].Interfaces[ci].BroadcastClient.IsNull() && state.InterfaceVrfs[i].Interfaces[ci].BroadcastClient.ValueBool() {
+				if state == nil || i >= len(state.InterfaceVrfs) || ci >= len(state.InterfaceVrfs[i].Interfaces) || state.InterfaceVrfs[i].Interfaces[ci].BroadcastClient.IsNull() || state.InterfaceVrfs[i].Interfaces[ci].BroadcastClient.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "interfaces/vrfs/vrf", keyString, "interface", ckeyString), "broadcast-client"))
 				}
 			}
@@ -4551,48 +4551,48 @@ func (data *NTP) getEmptyLeafsDelete(ctx context.Context, state *NTP, version st
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Interfaces[i].Disable.IsNull() && !data.Interfaces[i].Disable.ValueBool() {
-			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].Disable.IsNull() && state.Interfaces[i].Disable.ValueBool() {
+			if state == nil || i >= len(state.Interfaces) || state.Interfaces[i].Disable.IsNull() || state.Interfaces[i].Disable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "interfaces/interface", keyString), "disable"))
 			}
 		}
 		if !data.Interfaces[i].BroadcastClient.IsNull() && !data.Interfaces[i].BroadcastClient.ValueBool() {
-			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].BroadcastClient.IsNull() && state.Interfaces[i].BroadcastClient.ValueBool() {
+			if state == nil || i >= len(state.Interfaces) || state.Interfaces[i].BroadcastClient.IsNull() || state.Interfaces[i].BroadcastClient.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "interfaces/interface", keyString), "broadcast-client"))
 			}
 		}
 	}
 	if !data.DriftFileHarddisk.IsNull() && !data.DriftFileHarddisk.ValueBool() {
-		if state != nil && !state.DriftFileHarddisk.IsNull() && state.DriftFileHarddisk.ValueBool() {
+		if state == nil || state.DriftFileHarddisk.IsNull() || state.DriftFileHarddisk.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "drift/file/harddisk"))
 		}
 	}
 	if !data.DriftFileDisk2.IsNull() && !data.DriftFileDisk2.ValueBool() {
-		if state != nil && !state.DriftFileDisk2.IsNull() && state.DriftFileDisk2.ValueBool() {
+		if state == nil || state.DriftFileDisk2.IsNull() || state.DriftFileDisk2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "drift/file/disk2"))
 		}
 	}
 	if !data.DriftFileDisk1.IsNull() && !data.DriftFileDisk1.ValueBool() {
-		if state != nil && !state.DriftFileDisk1.IsNull() && state.DriftFileDisk1.ValueBool() {
+		if state == nil || state.DriftFileDisk1.IsNull() || state.DriftFileDisk1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "drift/file/disk1"))
 		}
 	}
 	if !data.DriftFileDisk0.IsNull() && !data.DriftFileDisk0.ValueBool() {
-		if state != nil && !state.DriftFileDisk0.IsNull() && state.DriftFileDisk0.ValueBool() {
+		if state == nil || state.DriftFileDisk0.IsNull() || state.DriftFileDisk0.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "drift/file"))
 		}
 	}
 	if !data.DriftFileUsb.IsNull() && !data.DriftFileUsb.ValueBool() {
-		if state != nil && !state.DriftFileUsb.IsNull() && state.DriftFileUsb.ValueBool() {
+		if state == nil || state.DriftFileUsb.IsNull() || state.DriftFileUsb.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "drift/file/usb"))
 		}
 	}
 	if !data.DriftFileCompactflash.IsNull() && !data.DriftFileCompactflash.ValueBool() {
-		if state != nil && !state.DriftFileCompactflash.IsNull() && state.DriftFileCompactflash.ValueBool() {
+		if state == nil || state.DriftFileCompactflash.IsNull() || state.DriftFileCompactflash.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "drift/file/compactflash"))
 		}
 	}
 	if !data.DriftFileBootflash.IsNull() && !data.DriftFileBootflash.ValueBool() {
-		if state != nil && !state.DriftFileBootflash.IsNull() && state.DriftFileBootflash.ValueBool() {
+		if state == nil || state.DriftFileBootflash.IsNull() || state.DriftFileBootflash.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "drift/file/bootflash"))
 		}
 	}
@@ -4629,7 +4629,7 @@ func (data *NTP) getEmptyLeafsDelete(ctx context.Context, state *NTP, version st
 		}
 	}
 	if !data.Authenticate.IsNull() && !data.Authenticate.ValueBool() {
-		if state != nil && !state.Authenticate.IsNull() && state.Authenticate.ValueBool() {
+		if state == nil || state.Authenticate.IsNull() || state.Authenticate.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "authenticate"))
 		}
 	}

@@ -1888,77 +1888,77 @@ func (data *EthernetCFM) getEmptyLeafsDelete(ctx context.Context, state *Etherne
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.Domains[i].Services[ci].ReportDefectsRdi.IsNull() && !data.Domains[i].Services[ci].ReportDefectsRdi.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsRdi.IsNull() && state.Domains[i].Services[ci].ReportDefectsRdi.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsRdi.IsNull() || state.Domains[i].Services[ci].ReportDefectsRdi.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/rdi"))
 				}
 			}
 			if !data.Domains[i].Services[ci].ReportDefectsPeerPortDown.IsNull() && !data.Domains[i].Services[ci].ReportDefectsPeerPortDown.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsPeerPortDown.IsNull() && state.Domains[i].Services[ci].ReportDefectsPeerPortDown.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsPeerPortDown.IsNull() || state.Domains[i].Services[ci].ReportDefectsPeerPortDown.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/peer-port-down"))
 				}
 			}
 			if !data.Domains[i].Services[ci].ReportDefectsMissing.IsNull() && !data.Domains[i].Services[ci].ReportDefectsMissing.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsMissing.IsNull() && state.Domains[i].Services[ci].ReportDefectsMissing.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsMissing.IsNull() || state.Domains[i].Services[ci].ReportDefectsMissing.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/missing"))
 				}
 			}
 			if !data.Domains[i].Services[ci].ReportDefectsWrongInterval.IsNull() && !data.Domains[i].Services[ci].ReportDefectsWrongInterval.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsWrongInterval.IsNull() && state.Domains[i].Services[ci].ReportDefectsWrongInterval.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsWrongInterval.IsNull() || state.Domains[i].Services[ci].ReportDefectsWrongInterval.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/wrong-interval"))
 				}
 			}
 			if !data.Domains[i].Services[ci].ReportDefectsOurMepid.IsNull() && !data.Domains[i].Services[ci].ReportDefectsOurMepid.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsOurMepid.IsNull() && state.Domains[i].Services[ci].ReportDefectsOurMepid.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsOurMepid.IsNull() || state.Domains[i].Services[ci].ReportDefectsOurMepid.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/our-mepid"))
 				}
 			}
 			if !data.Domains[i].Services[ci].ReportDefectsOurMac.IsNull() && !data.Domains[i].Services[ci].ReportDefectsOurMac.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsOurMac.IsNull() && state.Domains[i].Services[ci].ReportDefectsOurMac.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsOurMac.IsNull() || state.Domains[i].Services[ci].ReportDefectsOurMac.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/our-mac"))
 				}
 			}
 			if !data.Domains[i].Services[ci].ReportDefectsWrongLevel.IsNull() && !data.Domains[i].Services[ci].ReportDefectsWrongLevel.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsWrongLevel.IsNull() && state.Domains[i].Services[ci].ReportDefectsWrongLevel.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsWrongLevel.IsNull() || state.Domains[i].Services[ci].ReportDefectsWrongLevel.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/wrong-level"))
 				}
 			}
 			if !data.Domains[i].Services[ci].ReportDefectsWrongMaid.IsNull() && !data.Domains[i].Services[ci].ReportDefectsWrongMaid.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsWrongMaid.IsNull() && state.Domains[i].Services[ci].ReportDefectsWrongMaid.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsWrongMaid.IsNull() || state.Domains[i].Services[ci].ReportDefectsWrongMaid.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/wrong-maid"))
 				}
 			}
 			if !data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() && !data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() && state.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() || state.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/ieee/mac-remote-error-xcon"))
 				}
 			}
 			if !data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.IsNull() && !data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.IsNull() && state.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.IsNull() || state.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/ieee/remote-error-xcon"))
 				}
 			}
 			if !data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.IsNull() && !data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.IsNull() && state.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.IsNull() || state.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/ieee/error-xcon"))
 				}
 			}
 			if !data.Domains[i].Services[ci].ReportDefectsIeeeXcon.IsNull() && !data.Domains[i].Services[ci].ReportDefectsIeeeXcon.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsIeeeXcon.IsNull() && state.Domains[i].Services[ci].ReportDefectsIeeeXcon.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsIeeeXcon.IsNull() || state.Domains[i].Services[ci].ReportDefectsIeeeXcon.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/ieee/xcon"))
 				}
 			}
 			if !data.Domains[i].Services[ci].ReportDefectsAll.IsNull() && !data.Domains[i].Services[ci].ReportDefectsAll.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsAll.IsNull() && state.Domains[i].Services[ci].ReportDefectsAll.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsAll.IsNull() || state.Domains[i].Services[ci].ReportDefectsAll.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/all"))
 				}
 			}
 			if !data.Domains[i].Services[ci].ReportDefectsNone.IsNull() && !data.Domains[i].Services[ci].ReportDefectsNone.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsNone.IsNull() && state.Domains[i].Services[ci].ReportDefectsNone.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsNone.IsNull() || state.Domains[i].Services[ci].ReportDefectsNone.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/none"))
 				}
 			}
 			if !data.Domains[i].Services[ci].MepCrosscheckAuto.IsNull() && !data.Domains[i].Services[ci].MepCrosscheckAuto.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].MepCrosscheckAuto.IsNull() && state.Domains[i].Services[ci].MepCrosscheckAuto.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].MepCrosscheckAuto.IsNull() || state.Domains[i].Services[ci].MepCrosscheckAuto.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "mep/crosscheck/auto"))
 				}
 			}
@@ -1971,73 +1971,73 @@ func (data *EthernetCFM) getEmptyLeafsDelete(ctx context.Context, state *Etherne
 				}
 			}
 			if !data.Domains[i].Services[ci].LogEfd.IsNull() && !data.Domains[i].Services[ci].LogEfd.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].LogEfd.IsNull() && state.Domains[i].Services[ci].LogEfd.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].LogEfd.IsNull() || state.Domains[i].Services[ci].LogEfd.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "log/efd"))
 				}
 			}
 			if !data.Domains[i].Services[ci].LogCsf.IsNull() && !data.Domains[i].Services[ci].LogCsf.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].LogCsf.IsNull() && state.Domains[i].Services[ci].LogCsf.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].LogCsf.IsNull() || state.Domains[i].Services[ci].LogCsf.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "log/csf"))
 				}
 			}
 			if !data.Domains[i].Services[ci].LogAis.IsNull() && !data.Domains[i].Services[ci].LogAis.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].LogAis.IsNull() && state.Domains[i].Services[ci].LogAis.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].LogAis.IsNull() || state.Domains[i].Services[ci].LogAis.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "log/ais"))
 				}
 			}
 			if !data.Domains[i].Services[ci].LogCrosscheckErrors.IsNull() && !data.Domains[i].Services[ci].LogCrosscheckErrors.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].LogCrosscheckErrors.IsNull() && state.Domains[i].Services[ci].LogCrosscheckErrors.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].LogCrosscheckErrors.IsNull() || state.Domains[i].Services[ci].LogCrosscheckErrors.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "log/crosscheck/errors"))
 				}
 			}
 			if !data.Domains[i].Services[ci].LogContinuityCheckErrors.IsNull() && !data.Domains[i].Services[ci].LogContinuityCheckErrors.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].LogContinuityCheckErrors.IsNull() && state.Domains[i].Services[ci].LogContinuityCheckErrors.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].LogContinuityCheckErrors.IsNull() || state.Domains[i].Services[ci].LogContinuityCheckErrors.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "log/continuity-check/errors"))
 				}
 			}
 			if !data.Domains[i].Services[ci].LogContinuityCheckMepChanges.IsNull() && !data.Domains[i].Services[ci].LogContinuityCheckMepChanges.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].LogContinuityCheckMepChanges.IsNull() && state.Domains[i].Services[ci].LogContinuityCheckMepChanges.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].LogContinuityCheckMepChanges.IsNull() || state.Domains[i].Services[ci].LogContinuityCheckMepChanges.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "log/continuity-check/mep/changes"))
 				}
 			}
 			if !data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.IsNull() && !data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.IsNull() && state.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.IsNull() || state.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "continuity-check/loss/auto-traceroute"))
 				}
 			}
 			if !data.Domains[i].Services[ci].EfdProtectionSwitching.IsNull() && !data.Domains[i].Services[ci].EfdProtectionSwitching.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].EfdProtectionSwitching.IsNull() && state.Domains[i].Services[ci].EfdProtectionSwitching.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].EfdProtectionSwitching.IsNull() || state.Domains[i].Services[ci].EfdProtectionSwitching.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "efd/protection-switching"))
 				}
 			}
 			if !data.Domains[i].Services[ci].Efd.IsNull() && !data.Domains[i].Services[ci].Efd.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].Efd.IsNull() && state.Domains[i].Services[ci].Efd.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].Efd.IsNull() || state.Domains[i].Services[ci].Efd.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "efd"))
 				}
 			}
 			if !data.Domains[i].Services[ci].MipAutoCreateCcmLearning.IsNull() && !data.Domains[i].Services[ci].MipAutoCreateCcmLearning.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].MipAutoCreateCcmLearning.IsNull() && state.Domains[i].Services[ci].MipAutoCreateCcmLearning.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].MipAutoCreateCcmLearning.IsNull() || state.Domains[i].Services[ci].MipAutoCreateCcmLearning.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "mip/auto-create/ccm-learning"))
 				}
 			}
 			if !data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.IsNull() && !data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.IsNull() && state.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.IsNull() || state.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "mip/auto-create/lower-mep-only"))
 				}
 			}
 			if !data.Domains[i].Services[ci].MipAutoCreateAll.IsNull() && !data.Domains[i].Services[ci].MipAutoCreateAll.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].MipAutoCreateAll.IsNull() && state.Domains[i].Services[ci].MipAutoCreateAll.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].MipAutoCreateAll.IsNull() || state.Domains[i].Services[ci].MipAutoCreateAll.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "mip/auto-create/all"))
 				}
 			}
 			if !data.Domains[i].Services[ci].DownMeps.IsNull() && !data.Domains[i].Services[ci].DownMeps.ValueBool() {
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].DownMeps.IsNull() && state.Domains[i].Services[ci].DownMeps.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].DownMeps.IsNull() || state.Domains[i].Services[ci].DownMeps.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "down-meps"))
 				}
 			}
 		}
 		if !data.Domains[i].IdNull.IsNull() && !data.Domains[i].IdNull.ValueBool() {
-			if state != nil && i < len(state.Domains) && !state.Domains[i].IdNull.IsNull() && state.Domains[i].IdNull.ValueBool() {
+			if state == nil || i >= len(state.Domains) || state.Domains[i].IdNull.IsNull() || state.Domains[i].IdNull.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "domains/domain", keyString), "id/null"))
 			}
 		}

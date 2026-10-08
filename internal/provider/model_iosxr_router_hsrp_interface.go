@@ -335,12 +335,12 @@ func (data *RouterHSRPInterface) getDeletedItems(ctx context.Context, state Rout
 func (data *RouterHSRPInterface) getEmptyLeafsDelete(ctx context.Context, state *RouterHSRPInterface, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.HsrpRedirectsDisable.IsNull() && !data.HsrpRedirectsDisable.ValueBool() {
-		if state != nil && !state.HsrpRedirectsDisable.IsNull() && state.HsrpRedirectsDisable.ValueBool() {
+		if state == nil || state.HsrpRedirectsDisable.IsNull() || state.HsrpRedirectsDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "hsrp/redirects/disable"))
 		}
 	}
 	if !data.HsrpUseBia.IsNull() && !data.HsrpUseBia.ValueBool() {
-		if state != nil && !state.HsrpUseBia.IsNull() && state.HsrpUseBia.ValueBool() {
+		if state == nil || state.HsrpUseBia.IsNull() || state.HsrpUseBia.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "hsrp/use-bia"))
 		}
 	}

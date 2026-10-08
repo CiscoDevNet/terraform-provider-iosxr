@@ -517,27 +517,27 @@ func (data *CEF) getDeletedItems(ctx context.Context, state CEF, version string)
 func (data *CEF) getEmptyLeafsDelete(ctx context.Context, state *CEF, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.LoadBalancingRecursiveOorModeDampeningAndDlb.IsNull() && !data.LoadBalancingRecursiveOorModeDampeningAndDlb.ValueBool() {
-		if state != nil && !state.LoadBalancingRecursiveOorModeDampeningAndDlb.IsNull() && state.LoadBalancingRecursiveOorModeDampeningAndDlb.ValueBool() {
+		if state == nil || state.LoadBalancingRecursiveOorModeDampeningAndDlb.IsNull() || state.LoadBalancingRecursiveOorModeDampeningAndDlb.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "load-balancing/recursive/oor/mode/dampening-and-dlb"))
 		}
 	}
 	if !data.ProactiveArpNdEnable.IsNull() && !data.ProactiveArpNdEnable.ValueBool() {
-		if state != nil && !state.ProactiveArpNdEnable.IsNull() && state.ProactiveArpNdEnable.ValueBool() {
+		if state == nil || state.ProactiveArpNdEnable.IsNull() || state.ProactiveArpNdEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "proactive-arp-nd/enable"))
 		}
 	}
 	if !data.ConsistentHashingAutoRecovery.IsNull() && !data.ConsistentHashingAutoRecovery.ValueBool() {
-		if state != nil && !state.ConsistentHashingAutoRecovery.IsNull() && state.ConsistentHashingAutoRecovery.ValueBool() {
+		if state == nil || state.ConsistentHashingAutoRecovery.IsNull() || state.ConsistentHashingAutoRecovery.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "consistent-hashing/auto-recovery"))
 		}
 	}
 	if !data.EncapSharingDisable.IsNull() && !data.EncapSharingDisable.ValueBool() {
-		if state != nil && !state.EncapSharingDisable.IsNull() && state.EncapSharingDisable.ValueBool() {
+		if state == nil || state.EncapSharingDisable.IsNull() || state.EncapSharingDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "encap-sharing/disable"))
 		}
 	}
 	if !data.AdjacencyRouteOverrideRib.IsNull() && !data.AdjacencyRouteOverrideRib.ValueBool() {
-		if state != nil && !state.AdjacencyRouteOverrideRib.IsNull() && state.AdjacencyRouteOverrideRib.ValueBool() {
+		if state == nil || state.AdjacencyRouteOverrideRib.IsNull() || state.AdjacencyRouteOverrideRib.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "adjacency/route/override/rib"))
 		}
 	}

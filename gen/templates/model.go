@@ -2594,7 +2594,7 @@ func (data *{{camelCase .Name}}{{$versionSuffix}}) getEmptyLeafsDelete(ctx conte
 	{{- range reverseAttributes .Attributes}}
 	{{- if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
 	if {{if .AddedInVersion}}helpers.VersionAtLeast(version, "{{.AddedInVersion}}") && {{end}}{{if .RemovedInVersion}}(version == "" || !helpers.VersionAtLeast(version, "{{.RemovedInVersion}}")) && {{end}}!data.{{toGoName .TfName}}.IsNull() && !data.{{toGoName .TfName}}.ValueBool() {
-		if state != nil && !state.{{toGoName .TfName}}.IsNull() && state.{{toGoName .TfName}}.ValueBool() {
+		if state == nil || state.{{toGoName .TfName}}.IsNull() || state.{{toGoName .TfName}}.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join({{if $.HasPathVersion}}data.getPathForVersion(version){{else}}data.getPath(){{end}}, {{getDeletePathExpr . "version"}}))
 		}
 	}
@@ -2638,7 +2638,7 @@ func (data *{{camelCase .Name}}{{$versionSuffix}}) getEmptyLeafsDelete(ctx conte
 		{{- range reverseAttributes .Attributes}}
 		{{- if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
 		if {{if .AddedInVersion}}helpers.VersionAtLeast(version, "{{.AddedInVersion}}") && {{end}}{{if .RemovedInVersion}}(version == "" || !helpers.VersionAtLeast(version, "{{.RemovedInVersion}}")) && {{end}}!data.{{$list}}[i].{{toGoName .TfName}}.IsNull() && !data.{{$list}}[i].{{toGoName .TfName}}.ValueBool() {
-			if state != nil && i < len(state.{{$list}}) && !state.{{$list}}[i].{{toGoName .TfName}}.IsNull() && state.{{$list}}[i].{{toGoName .TfName}}.ValueBool() {
+			if state == nil || i >= len(state.{{$list}}) || state.{{$list}}[i].{{toGoName .TfName}}.IsNull() || state.{{$list}}[i].{{toGoName .TfName}}.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", {{if $.HasPathVersion}}data.getPathForVersion(version){{else}}data.getPath(){{end}}, {{$xpathExpr}}, keyString), {{getDeletePathExpr . "version"}}))
 			}
 		}
@@ -2682,7 +2682,7 @@ func (data *{{camelCase .Name}}{{$versionSuffix}}) getEmptyLeafsDelete(ctx conte
 			{{- range reverseAttributes .Attributes}}
 			{{- if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
 			if {{if .AddedInVersion}}helpers.VersionAtLeast(version, "{{.AddedInVersion}}") && {{end}}{{if .RemovedInVersion}}(version == "" || !helpers.VersionAtLeast(version, "{{.RemovedInVersion}}")) && {{end}}!data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() && !data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueBool() {
-				if state != nil && i < len(state.{{$list}}) && ci < len(state.{{$list}}[i].{{$clist}}) && !state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() && state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueBool() {
+				if state == nil || i >= len(state.{{$list}}) || ci >= len(state.{{$list}}[i].{{$clist}}) || state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() || state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", {{if $.HasPathVersion}}data.getPathForVersion(version){{else}}data.getPath(){{end}}, {{$xpathExpr}}, keyString, {{$cxpathExpr}}, ckeyString), {{getDeletePathExpr . "version"}}))
 				}
 			}
@@ -2726,7 +2726,9 @@ func (data *{{camelCase .Name}}{{$versionSuffix}}) getEmptyLeafsDelete(ctx conte
 			{{- range reverseAttributes .Attributes}}
 			{{- if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
 			if {{if .AddedInVersion}}helpers.VersionAtLeast(version, "{{.AddedInVersion}}") && {{end}}{{if .RemovedInVersion}}(version == "" || !helpers.VersionAtLeast(version, "{{.RemovedInVersion}}")) && {{end}}!data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.IsNull() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", {{if $.HasPathVersion}}data.getPathForVersion(version){{else}}data.getPath(){{end}}, {{$xpathExpr}}, keyString, {{$cxpathExpr}}, ckeyString, {{$ccxpathExpr}}, cckeyString), {{getDeletePathExpr . "version"}}))
+				if state == nil || i >= len(state.{{$list}}) || ci >= len(state.{{$list}}[i].{{$clist}}) || cci >= len(state.{{$list}}[i].{{$clist}}[ci].{{$cclist}}) || state.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.IsNull() || state.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{toGoName .TfName}}.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", {{if $.HasPathVersion}}data.getPathForVersion(version){{else}}data.getPath(){{end}}, {{$xpathExpr}}, keyString, {{$cxpathExpr}}, ckeyString, {{$ccxpathExpr}}, cckeyString), {{getDeletePathExpr . "version"}}))
+				}
 			}
 			{{- end}}
 			{{- if or (eq .Type "List") (eq .Type "Set")}}
@@ -2768,7 +2770,7 @@ func (data *{{camelCase .Name}}{{$versionSuffix}}) getEmptyLeafsDelete(ctx conte
 				{{- range reverseAttributes .Attributes}}
 				{{- if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
 				if {{if .AddedInVersion}}helpers.VersionAtLeast(version, "{{.AddedInVersion}}") && {{end}}{{if .RemovedInVersion}}(version == "" || !helpers.VersionAtLeast(version, "{{.RemovedInVersion}}")) && {{end}}!data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}}.IsNull() && !data.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}}.ValueBool() {
-					if state != nil && i < len(state.{{$list}}) && ci < len(state.{{$list}}[i].{{$clist}}) && cci < len(state.{{$list}}[i].{{$clist}}[ci].{{$cclist}}) && ccci < len(state.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}) && !state.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}}.IsNull() && state.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}}.ValueBool() {
+					if state == nil || i >= len(state.{{$list}}) || ci >= len(state.{{$list}}[i].{{$clist}}) || cci >= len(state.{{$list}}[i].{{$clist}}[ci].{{$cclist}}) || ccci >= len(state.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}) || state.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}}.IsNull() || state.{{$list}}[i].{{$clist}}[ci].{{$cclist}}[cci].{{$ccclist}}[ccci].{{toGoName .TfName}}.ValueBool() {
 						emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v/%v%v", {{if $.HasPathVersion}}data.getPathForVersion(version){{else}}data.getPath(){{end}}, {{$xpathExpr}}, keyString, {{$cxpathExpr}}, ckeyString, {{$ccxpathExpr}}, cckeyString, {{$cccxpathExpr}}, ccckeyString), {{getDeletePathExpr . "version"}}))
 					}
 				}

@@ -303,17 +303,17 @@ func (data *CDP) getDeletedItems(ctx context.Context, state CDP, version string)
 func (data *CDP) getEmptyLeafsDelete(ctx context.Context, state *CDP, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.LogAdjacencyChanges.IsNull() && !data.LogAdjacencyChanges.ValueBool() {
-		if state != nil && !state.LogAdjacencyChanges.IsNull() && state.LogAdjacencyChanges.ValueBool() {
+		if state == nil || state.LogAdjacencyChanges.IsNull() || state.LogAdjacencyChanges.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "log/adjacency/changes"))
 		}
 	}
 	if !data.AdvertiseV1.IsNull() && !data.AdvertiseV1.ValueBool() {
-		if state != nil && !state.AdvertiseV1.IsNull() && state.AdvertiseV1.ValueBool() {
+		if state == nil || state.AdvertiseV1.IsNull() || state.AdvertiseV1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "advertise"))
 		}
 	}
 	if !data.Enable.IsNull() && !data.Enable.ValueBool() {
-		if state != nil && !state.Enable.IsNull() && state.Enable.ValueBool() {
+		if state == nil || state.Enable.IsNull() || state.Enable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "enable"))
 		}
 	}

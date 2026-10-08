@@ -753,22 +753,22 @@ func (data *PolicyMapPBR) getEmptyLeafsDelete(ctx context.Context, state *Policy
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Classes[i].DecapsulateGre.IsNull() && !data.Classes[i].DecapsulateGre.ValueBool() {
-			if state != nil && i < len(state.Classes) && !state.Classes[i].DecapsulateGre.IsNull() && state.Classes[i].DecapsulateGre.ValueBool() {
+			if state == nil || i >= len(state.Classes) || state.Classes[i].DecapsulateGre.IsNull() || state.Classes[i].DecapsulateGre.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "class", keyString), "decapsulate/gre"))
 			}
 		}
 		if !data.Classes[i].RedirectIpv6DefaultRoute.IsNull() && !data.Classes[i].RedirectIpv6DefaultRoute.ValueBool() {
-			if state != nil && i < len(state.Classes) && !state.Classes[i].RedirectIpv6DefaultRoute.IsNull() && state.Classes[i].RedirectIpv6DefaultRoute.ValueBool() {
+			if state == nil || i >= len(state.Classes) || state.Classes[i].RedirectIpv6DefaultRoute.IsNull() || state.Classes[i].RedirectIpv6DefaultRoute.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "class", keyString), "redirect-ipv6/default-route"))
 			}
 		}
 		if !data.Classes[i].RedirectIpv4DefaultRoute.IsNull() && !data.Classes[i].RedirectIpv4DefaultRoute.ValueBool() {
-			if state != nil && i < len(state.Classes) && !state.Classes[i].RedirectIpv4DefaultRoute.IsNull() && state.Classes[i].RedirectIpv4DefaultRoute.ValueBool() {
+			if state == nil || i >= len(state.Classes) || state.Classes[i].RedirectIpv4DefaultRoute.IsNull() || state.Classes[i].RedirectIpv4DefaultRoute.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "class", keyString), "redirect-ipv4/default-route"))
 			}
 		}
 		if !data.Classes[i].Drop.IsNull() && !data.Classes[i].Drop.ValueBool() {
-			if state != nil && i < len(state.Classes) && !state.Classes[i].Drop.IsNull() && state.Classes[i].Drop.ValueBool() {
+			if state == nil || i >= len(state.Classes) || state.Classes[i].Drop.IsNull() || state.Classes[i].Drop.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "class", keyString), "drop"))
 			}
 		}

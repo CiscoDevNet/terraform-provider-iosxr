@@ -3580,82 +3580,82 @@ func (data *IPv4AccessList) getEmptyLeafsDelete(ctx context.Context, state *IPv4
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Sequences[i].DenyIcmpOn.IsNull() && !data.Sequences[i].DenyIcmpOn.ValueBool() {
-			if state != nil && i < len(state.Sequences) && !state.Sequences[i].DenyIcmpOn.IsNull() && state.Sequences[i].DenyIcmpOn.ValueBool() {
+			if state == nil || i >= len(state.Sequences) || state.Sequences[i].DenyIcmpOn.IsNull() || state.Sequences[i].DenyIcmpOn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "sequences/sequence", keyString), "deny/icmp-on"))
 			}
 		}
 		if !data.Sequences[i].DenyIcmpOff.IsNull() && !data.Sequences[i].DenyIcmpOff.ValueBool() {
-			if state != nil && i < len(state.Sequences) && !state.Sequences[i].DenyIcmpOff.IsNull() && state.Sequences[i].DenyIcmpOff.ValueBool() {
+			if state == nil || i >= len(state.Sequences) || state.Sequences[i].DenyIcmpOff.IsNull() || state.Sequences[i].DenyIcmpOff.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "sequences/sequence", keyString), "deny/icmp-off"))
 			}
 		}
 		if !data.Sequences[i].DenyLogInput.IsNull() && !data.Sequences[i].DenyLogInput.ValueBool() {
-			if state != nil && i < len(state.Sequences) && !state.Sequences[i].DenyLogInput.IsNull() && state.Sequences[i].DenyLogInput.ValueBool() {
+			if state == nil || i >= len(state.Sequences) || state.Sequences[i].DenyLogInput.IsNull() || state.Sequences[i].DenyLogInput.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "sequences/sequence", keyString), "deny/log-input"))
 			}
 		}
 		if !data.Sequences[i].DenyLog.IsNull() && !data.Sequences[i].DenyLog.ValueBool() {
-			if state != nil && i < len(state.Sequences) && !state.Sequences[i].DenyLog.IsNull() && state.Sequences[i].DenyLog.ValueBool() {
+			if state == nil || i >= len(state.Sequences) || state.Sequences[i].DenyLog.IsNull() || state.Sequences[i].DenyLog.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "sequences/sequence", keyString), "deny/log"))
 			}
 		}
 		if !data.Sequences[i].DenyCapture.IsNull() && !data.Sequences[i].DenyCapture.ValueBool() {
-			if state != nil && i < len(state.Sequences) && !state.Sequences[i].DenyCapture.IsNull() && state.Sequences[i].DenyCapture.ValueBool() {
+			if state == nil || i >= len(state.Sequences) || state.Sequences[i].DenyCapture.IsNull() || state.Sequences[i].DenyCapture.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "sequences/sequence", keyString), "deny/capture"))
 			}
 		}
 		if !data.Sequences[i].DenyDefault.IsNull() && !data.Sequences[i].DenyDefault.ValueBool() {
-			if state != nil && i < len(state.Sequences) && !state.Sequences[i].DenyDefault.IsNull() && state.Sequences[i].DenyDefault.ValueBool() {
+			if state == nil || i >= len(state.Sequences) || state.Sequences[i].DenyDefault.IsNull() || state.Sequences[i].DenyDefault.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "sequences/sequence", keyString), "deny/default"))
 			}
 		}
 		if !data.Sequences[i].DenyFragments.IsNull() && !data.Sequences[i].DenyFragments.ValueBool() {
-			if state != nil && i < len(state.Sequences) && !state.Sequences[i].DenyFragments.IsNull() && state.Sequences[i].DenyFragments.ValueBool() {
+			if state == nil || i >= len(state.Sequences) || state.Sequences[i].DenyFragments.IsNull() || state.Sequences[i].DenyFragments.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "sequences/sequence", keyString), "deny/fragments"))
 			}
 		}
 		if !data.Sequences[i].DenyDestinationAny.IsNull() && !data.Sequences[i].DenyDestinationAny.ValueBool() {
-			if state != nil && i < len(state.Sequences) && !state.Sequences[i].DenyDestinationAny.IsNull() && state.Sequences[i].DenyDestinationAny.ValueBool() {
+			if state == nil || i >= len(state.Sequences) || state.Sequences[i].DenyDestinationAny.IsNull() || state.Sequences[i].DenyDestinationAny.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "sequences/sequence", keyString), "deny/destination/any"))
 			}
 		}
 		if !data.Sequences[i].DenySourceAny.IsNull() && !data.Sequences[i].DenySourceAny.ValueBool() {
-			if state != nil && i < len(state.Sequences) && !state.Sequences[i].DenySourceAny.IsNull() && state.Sequences[i].DenySourceAny.ValueBool() {
+			if state == nil || i >= len(state.Sequences) || state.Sequences[i].DenySourceAny.IsNull() || state.Sequences[i].DenySourceAny.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "sequences/sequence", keyString), "deny/source/any"))
 			}
 		}
 		if !data.Sequences[i].PermitLogInput.IsNull() && !data.Sequences[i].PermitLogInput.ValueBool() {
-			if state != nil && i < len(state.Sequences) && !state.Sequences[i].PermitLogInput.IsNull() && state.Sequences[i].PermitLogInput.ValueBool() {
+			if state == nil || i >= len(state.Sequences) || state.Sequences[i].PermitLogInput.IsNull() || state.Sequences[i].PermitLogInput.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "sequences/sequence", keyString), "permit/log-input"))
 			}
 		}
 		if !data.Sequences[i].PermitLog.IsNull() && !data.Sequences[i].PermitLog.ValueBool() {
-			if state != nil && i < len(state.Sequences) && !state.Sequences[i].PermitLog.IsNull() && state.Sequences[i].PermitLog.ValueBool() {
+			if state == nil || i >= len(state.Sequences) || state.Sequences[i].PermitLog.IsNull() || state.Sequences[i].PermitLog.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "sequences/sequence", keyString), "permit/log"))
 			}
 		}
 		if !data.Sequences[i].PermitCapture.IsNull() && !data.Sequences[i].PermitCapture.ValueBool() {
-			if state != nil && i < len(state.Sequences) && !state.Sequences[i].PermitCapture.IsNull() && state.Sequences[i].PermitCapture.ValueBool() {
+			if state == nil || i >= len(state.Sequences) || state.Sequences[i].PermitCapture.IsNull() || state.Sequences[i].PermitCapture.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "sequences/sequence", keyString), "permit/capture"))
 			}
 		}
 		if !data.Sequences[i].PermitDefault.IsNull() && !data.Sequences[i].PermitDefault.ValueBool() {
-			if state != nil && i < len(state.Sequences) && !state.Sequences[i].PermitDefault.IsNull() && state.Sequences[i].PermitDefault.ValueBool() {
+			if state == nil || i >= len(state.Sequences) || state.Sequences[i].PermitDefault.IsNull() || state.Sequences[i].PermitDefault.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "sequences/sequence", keyString), "permit/default"))
 			}
 		}
 		if !data.Sequences[i].PermitFragments.IsNull() && !data.Sequences[i].PermitFragments.ValueBool() {
-			if state != nil && i < len(state.Sequences) && !state.Sequences[i].PermitFragments.IsNull() && state.Sequences[i].PermitFragments.ValueBool() {
+			if state == nil || i >= len(state.Sequences) || state.Sequences[i].PermitFragments.IsNull() || state.Sequences[i].PermitFragments.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "sequences/sequence", keyString), "permit/fragments"))
 			}
 		}
 		if !data.Sequences[i].PermitDestinationAny.IsNull() && !data.Sequences[i].PermitDestinationAny.ValueBool() {
-			if state != nil && i < len(state.Sequences) && !state.Sequences[i].PermitDestinationAny.IsNull() && state.Sequences[i].PermitDestinationAny.ValueBool() {
+			if state == nil || i >= len(state.Sequences) || state.Sequences[i].PermitDestinationAny.IsNull() || state.Sequences[i].PermitDestinationAny.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "sequences/sequence", keyString), "permit/destination/any"))
 			}
 		}
 		if !data.Sequences[i].PermitSourceAny.IsNull() && !data.Sequences[i].PermitSourceAny.ValueBool() {
-			if state != nil && i < len(state.Sequences) && !state.Sequences[i].PermitSourceAny.IsNull() && state.Sequences[i].PermitSourceAny.ValueBool() {
+			if state == nil || i >= len(state.Sequences) || state.Sequences[i].PermitSourceAny.IsNull() || state.Sequences[i].PermitSourceAny.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "sequences/sequence", keyString), "permit/source/any"))
 			}
 		}

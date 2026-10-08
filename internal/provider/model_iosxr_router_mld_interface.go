@@ -1364,7 +1364,7 @@ func (data *RouterMLDInterface) getDeletedItems(ctx context.Context, state Route
 func (data *RouterMLDInterface) getEmptyLeafsDelete(ctx context.Context, state *RouterMLDInterface, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.DvmrpEnable.IsNull() && !data.DvmrpEnable.ValueBool() {
-		if state != nil && !state.DvmrpEnable.IsNull() && state.DvmrpEnable.ValueBool() {
+		if state == nil || state.DvmrpEnable.IsNull() || state.DvmrpEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "dvmrp-enable"))
 		}
 	}
@@ -1383,18 +1383,18 @@ func (data *RouterMLDInterface) getEmptyLeafsDelete(ctx context.Context, state *
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.JoinGroups[i].SourceAddresses[ci].Exclude.IsNull() && !data.JoinGroups[i].SourceAddresses[ci].Exclude.ValueBool() {
-				if state != nil && i < len(state.JoinGroups) && ci < len(state.JoinGroups[i].SourceAddresses) && !state.JoinGroups[i].SourceAddresses[ci].Exclude.IsNull() && state.JoinGroups[i].SourceAddresses[ci].Exclude.ValueBool() {
+				if state == nil || i >= len(state.JoinGroups) || ci >= len(state.JoinGroups[i].SourceAddresses) || state.JoinGroups[i].SourceAddresses[ci].Exclude.IsNull() || state.JoinGroups[i].SourceAddresses[ci].Exclude.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "join-groups/join-group", keyString, "source-addresses", ckeyString), "exclude"))
 				}
 			}
 			if !data.JoinGroups[i].SourceAddresses[ci].Include.IsNull() && !data.JoinGroups[i].SourceAddresses[ci].Include.ValueBool() {
-				if state != nil && i < len(state.JoinGroups) && ci < len(state.JoinGroups[i].SourceAddresses) && !state.JoinGroups[i].SourceAddresses[ci].Include.IsNull() && state.JoinGroups[i].SourceAddresses[ci].Include.ValueBool() {
+				if state == nil || i >= len(state.JoinGroups) || ci >= len(state.JoinGroups[i].SourceAddresses) || state.JoinGroups[i].SourceAddresses[ci].Include.IsNull() || state.JoinGroups[i].SourceAddresses[ci].Include.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "join-groups/join-group", keyString, "source-addresses", ckeyString), "include"))
 				}
 			}
 		}
 		if !data.JoinGroups[i].GroupAddressOnly.IsNull() && !data.JoinGroups[i].GroupAddressOnly.ValueBool() {
-			if state != nil && i < len(state.JoinGroups) && !state.JoinGroups[i].GroupAddressOnly.IsNull() && state.JoinGroups[i].GroupAddressOnly.ValueBool() {
+			if state == nil || i >= len(state.JoinGroups) || state.JoinGroups[i].GroupAddressOnly.IsNull() || state.JoinGroups[i].GroupAddressOnly.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "join-groups/join-group", keyString), "group-address-only"))
 			}
 		}
@@ -1414,7 +1414,7 @@ func (data *RouterMLDInterface) getEmptyLeafsDelete(ctx context.Context, state *
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.IsNull() && !data.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.ValueBool() {
-				if state != nil && i < len(state.StaticGroups) && ci < len(state.StaticGroups[i].GroupMasksSourceAddresses) && !state.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.IsNull() && state.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.ValueBool() {
+				if state == nil || i >= len(state.StaticGroups) || ci >= len(state.StaticGroups[i].GroupMasksSourceAddresses) || state.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.IsNull() || state.StaticGroups[i].GroupMasksSourceAddresses[ci].SuppressReports.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "static-group/group-address", keyString, "group-address-inc-mask-source-address/inc-mask", ckeyString), "suppress-reports"))
 				}
 			}
@@ -1427,7 +1427,7 @@ func (data *RouterMLDInterface) getEmptyLeafsDelete(ctx context.Context, state *
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.StaticGroups[i].SourceAddresses[ci].SuppressReports.IsNull() && !data.StaticGroups[i].SourceAddresses[ci].SuppressReports.ValueBool() {
-				if state != nil && i < len(state.StaticGroups) && ci < len(state.StaticGroups[i].SourceAddresses) && !state.StaticGroups[i].SourceAddresses[ci].SuppressReports.IsNull() && state.StaticGroups[i].SourceAddresses[ci].SuppressReports.ValueBool() {
+				if state == nil || i >= len(state.StaticGroups) || ci >= len(state.StaticGroups[i].SourceAddresses) || state.StaticGroups[i].SourceAddresses[ci].SuppressReports.IsNull() || state.StaticGroups[i].SourceAddresses[ci].SuppressReports.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "static-group/group-address", keyString, "group-address-source-address/source-address", ckeyString), "suppress-reports"))
 				}
 			}
@@ -1440,39 +1440,39 @@ func (data *RouterMLDInterface) getEmptyLeafsDelete(ctx context.Context, state *
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.StaticGroups[i].GroupMasks[ci].SuppressReports.IsNull() && !data.StaticGroups[i].GroupMasks[ci].SuppressReports.ValueBool() {
-				if state != nil && i < len(state.StaticGroups) && ci < len(state.StaticGroups[i].GroupMasks) && !state.StaticGroups[i].GroupMasks[ci].SuppressReports.IsNull() && state.StaticGroups[i].GroupMasks[ci].SuppressReports.ValueBool() {
+				if state == nil || i >= len(state.StaticGroups) || ci >= len(state.StaticGroups[i].GroupMasks) || state.StaticGroups[i].GroupMasks[ci].SuppressReports.IsNull() || state.StaticGroups[i].GroupMasks[ci].SuppressReports.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "static-group/group-address", keyString, "group-address-inc-mask/inc-mask", ckeyString), "suppress-reports"))
 				}
 			}
 		}
 		if !data.StaticGroups[i].SuppressReports.IsNull() && !data.StaticGroups[i].SuppressReports.ValueBool() {
-			if state != nil && i < len(state.StaticGroups) && !state.StaticGroups[i].SuppressReports.IsNull() && state.StaticGroups[i].SuppressReports.ValueBool() {
+			if state == nil || i >= len(state.StaticGroups) || state.StaticGroups[i].SuppressReports.IsNull() || state.StaticGroups[i].SuppressReports.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "static-group/group-address", keyString), "group-address-only/suppress-reports"))
 			}
 		}
 		if !data.StaticGroups[i].GroupAddressOnly.IsNull() && !data.StaticGroups[i].GroupAddressOnly.ValueBool() {
-			if state != nil && i < len(state.StaticGroups) && !state.StaticGroups[i].GroupAddressOnly.IsNull() && state.StaticGroups[i].GroupAddressOnly.ValueBool() {
+			if state == nil || i >= len(state.StaticGroups) || state.StaticGroups[i].GroupAddressOnly.IsNull() || state.StaticGroups[i].GroupAddressOnly.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "static-group/group-address", keyString), "group-address-only"))
 			}
 		}
 	}
 	if !data.ExplicitTrackingDisable.IsNull() && !data.ExplicitTrackingDisable.ValueBool() {
-		if state != nil && !state.ExplicitTrackingDisable.IsNull() && state.ExplicitTrackingDisable.ValueBool() {
+		if state == nil || state.ExplicitTrackingDisable.IsNull() || state.ExplicitTrackingDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "explicit-tracking/disable"))
 		}
 	}
 	if !data.ExplicitTrackingEnable.IsNull() && !data.ExplicitTrackingEnable.ValueBool() {
-		if state != nil && !state.ExplicitTrackingEnable.IsNull() && state.ExplicitTrackingEnable.ValueBool() {
+		if state == nil || state.ExplicitTrackingEnable.IsNull() || state.ExplicitTrackingEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "explicit-tracking/enable"))
 		}
 	}
 	if !data.RouterDisable.IsNull() && !data.RouterDisable.ValueBool() {
-		if state != nil && !state.RouterDisable.IsNull() && state.RouterDisable.ValueBool() {
+		if state == nil || state.RouterDisable.IsNull() || state.RouterDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "router/disable"))
 		}
 	}
 	if !data.RouterEnable.IsNull() && !data.RouterEnable.ValueBool() {
-		if state != nil && !state.RouterEnable.IsNull() && state.RouterEnable.ValueBool() {
+		if state == nil || state.RouterEnable.IsNull() || state.RouterEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "router/enable"))
 		}
 	}

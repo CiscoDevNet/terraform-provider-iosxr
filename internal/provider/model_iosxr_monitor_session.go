@@ -1535,22 +1535,22 @@ func (data *MonitorSession) getDeletedItems(ctx context.Context, state MonitorSe
 func (data *MonitorSession) getEmptyLeafsDelete(ctx context.Context, state *MonitorSession, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.LocalCaptureUnitGb.IsNull() && !data.LocalCaptureUnitGb.ValueBool() {
-		if state != nil && !state.LocalCaptureUnitGb.IsNull() && state.LocalCaptureUnitGb.ValueBool() {
+		if state == nil || state.LocalCaptureUnitGb.IsNull() || state.LocalCaptureUnitGb.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "gb"))
 		}
 	}
 	if !data.LocalCaptureUnitMb.IsNull() && !data.LocalCaptureUnitMb.ValueBool() {
-		if state != nil && !state.LocalCaptureUnitMb.IsNull() && state.LocalCaptureUnitMb.ValueBool() {
+		if state == nil || state.LocalCaptureUnitMb.IsNull() || state.LocalCaptureUnitMb.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "mb"))
 		}
 	}
 	if !data.LocalCaptureUnitKb.IsNull() && !data.LocalCaptureUnitKb.ValueBool() {
-		if state != nil && !state.LocalCaptureUnitKb.IsNull() && state.LocalCaptureUnitKb.ValueBool() {
+		if state == nil || state.LocalCaptureUnitKb.IsNull() || state.LocalCaptureUnitKb.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "kb"))
 		}
 	}
 	if !data.DefaultCaptureDisable.IsNull() && !data.DefaultCaptureDisable.ValueBool() {
-		if state != nil && !state.DefaultCaptureDisable.IsNull() && state.DefaultCaptureDisable.ValueBool() {
+		if state == nil || state.DefaultCaptureDisable.IsNull() || state.DefaultCaptureDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "default-capture-disable"))
 		}
 	}
@@ -1562,87 +1562,87 @@ func (data *MonitorSession) getEmptyLeafsDelete(ctx context.Context, state *Moni
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSessions[i].DropsUniquePort.IsNull() && !data.MonitorSessions[i].DropsUniquePort.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DropsUniquePort.IsNull() && state.MonitorSessions[i].DropsUniquePort.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DropsUniquePort.IsNull() || state.MonitorSessions[i].DropsUniquePort.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "drops/unique-port"))
 			}
 		}
 		if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSessions[i].DropsUniquePunt.IsNull() && !data.MonitorSessions[i].DropsUniquePunt.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DropsUniquePunt.IsNull() && state.MonitorSessions[i].DropsUniquePunt.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DropsUniquePunt.IsNull() || state.MonitorSessions[i].DropsUniquePunt.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "drops/unique-punt"))
 			}
 		}
 		if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSessions[i].TxApplication.IsNull() && !data.MonitorSessions[i].TxApplication.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].TxApplication.IsNull() && state.MonitorSessions[i].TxApplication.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].TxApplication.IsNull() || state.MonitorSessions[i].TxApplication.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "tx/application"))
 			}
 		}
 		if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSessions[i].RxApplication.IsNull() && !data.MonitorSessions[i].RxApplication.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].RxApplication.IsNull() && state.MonitorSessions[i].RxApplication.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].RxApplication.IsNull() || state.MonitorSessions[i].RxApplication.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "rx/application"))
 			}
 		}
 		if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSessions[i].DestinationApplication.IsNull() && !data.MonitorSessions[i].DestinationApplication.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DestinationApplication.IsNull() && state.MonitorSessions[i].DestinationApplication.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DestinationApplication.IsNull() || state.MonitorSessions[i].DestinationApplication.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "destination/application"))
 			}
 		}
 		if !data.MonitorSessions[i].ProtocolCaptureTx.IsNull() && !data.MonitorSessions[i].ProtocolCaptureTx.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].ProtocolCaptureTx.IsNull() && state.MonitorSessions[i].ProtocolCaptureTx.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].ProtocolCaptureTx.IsNull() || state.MonitorSessions[i].ProtocolCaptureTx.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "protocol-capture/tx"))
 			}
 		}
 		if !data.MonitorSessions[i].ProtocolCaptureRx.IsNull() && !data.MonitorSessions[i].ProtocolCaptureRx.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].ProtocolCaptureRx.IsNull() && state.MonitorSessions[i].ProtocolCaptureRx.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].ProtocolCaptureRx.IsNull() || state.MonitorSessions[i].ProtocolCaptureRx.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "protocol-capture/rx"))
 			}
 		}
 		if !data.MonitorSessions[i].TxPseudowire.IsNull() && !data.MonitorSessions[i].TxPseudowire.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].TxPseudowire.IsNull() && state.MonitorSessions[i].TxPseudowire.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].TxPseudowire.IsNull() || state.MonitorSessions[i].TxPseudowire.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "tx/pseudowire"))
 			}
 		}
 		if !data.MonitorSessions[i].RxPseudowire.IsNull() && !data.MonitorSessions[i].RxPseudowire.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].RxPseudowire.IsNull() && state.MonitorSessions[i].RxPseudowire.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].RxPseudowire.IsNull() || state.MonitorSessions[i].RxPseudowire.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "rx/pseudowire"))
 			}
 		}
 		if !data.MonitorSessions[i].DropsTx.IsNull() && !data.MonitorSessions[i].DropsTx.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DropsTx.IsNull() && state.MonitorSessions[i].DropsTx.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DropsTx.IsNull() || state.MonitorSessions[i].DropsTx.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "drops/tx"))
 			}
 		}
 		if !data.MonitorSessions[i].DropsRx.IsNull() && !data.MonitorSessions[i].DropsRx.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DropsRx.IsNull() && state.MonitorSessions[i].DropsRx.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DropsRx.IsNull() || state.MonitorSessions[i].DropsRx.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "drops/rx"))
 			}
 		}
 		if !data.MonitorSessions[i].DropsTrafficManagement.IsNull() && !data.MonitorSessions[i].DropsTrafficManagement.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DropsTrafficManagement.IsNull() && state.MonitorSessions[i].DropsTrafficManagement.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DropsTrafficManagement.IsNull() || state.MonitorSessions[i].DropsTrafficManagement.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "drops/traffic-management"))
 			}
 		}
 		if !data.MonitorSessions[i].DropsPacketProcessing.IsNull() && !data.MonitorSessions[i].DropsPacketProcessing.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DropsPacketProcessing.IsNull() && state.MonitorSessions[i].DropsPacketProcessing.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DropsPacketProcessing.IsNull() || state.MonitorSessions[i].DropsPacketProcessing.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "drops/packet-processing"))
 			}
 		}
 		if !data.MonitorSessions[i].DestinationFileAlwaysOn.IsNull() && !data.MonitorSessions[i].DestinationFileAlwaysOn.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DestinationFileAlwaysOn.IsNull() && state.MonitorSessions[i].DestinationFileAlwaysOn.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DestinationFileAlwaysOn.IsNull() || state.MonitorSessions[i].DestinationFileAlwaysOn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "destination/file/always-on"))
 			}
 		}
 		if !data.MonitorSessions[i].DestinationFileFormatPcapng.IsNull() && !data.MonitorSessions[i].DestinationFileFormatPcapng.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DestinationFileFormatPcapng.IsNull() && state.MonitorSessions[i].DestinationFileFormatPcapng.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DestinationFileFormatPcapng.IsNull() || state.MonitorSessions[i].DestinationFileFormatPcapng.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "destination/file/format/pcapng"))
 			}
 		}
 		if !data.MonitorSessions[i].DestinationFileBufferTypeLinear.IsNull() && !data.MonitorSessions[i].DestinationFileBufferTypeLinear.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DestinationFileBufferTypeLinear.IsNull() && state.MonitorSessions[i].DestinationFileBufferTypeLinear.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DestinationFileBufferTypeLinear.IsNull() || state.MonitorSessions[i].DestinationFileBufferTypeLinear.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "destination/file/buffer-type/linear"))
 			}
 		}
 		if !data.MonitorSessions[i].DestinationPseudowire.IsNull() && !data.MonitorSessions[i].DestinationPseudowire.ValueBool() {
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DestinationPseudowire.IsNull() && state.MonitorSessions[i].DestinationPseudowire.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DestinationPseudowire.IsNull() || state.MonitorSessions[i].DestinationPseudowire.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "destination/pseudowire"))
 			}
 		}

@@ -363,17 +363,17 @@ func (data *ControllerOptics) getDeletedItems(ctx context.Context, state Control
 func (data *ControllerOptics) getEmptyLeafsDelete(ctx context.Context, state *ControllerOptics, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.TransceiverDisable.IsNull() && !data.TransceiverDisable.ValueBool() {
-		if state != nil && !state.TransceiverDisable.IsNull() && state.TransceiverDisable.ValueBool() {
+		if state == nil || state.TransceiverDisable.IsNull() || state.TransceiverDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-controller-optics-cfg:optics/transceiver/disable"))
 		}
 	}
 	if !data.LinkStatus.IsNull() && !data.LinkStatus.ValueBool() {
-		if state != nil && !state.LinkStatus.IsNull() && state.LinkStatus.ValueBool() {
+		if state == nil || state.LinkStatus.IsNull() || state.LinkStatus.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "link-status"))
 		}
 	}
 	if !data.Shutdown.IsNull() && !data.Shutdown.ValueBool() {
-		if state != nil && !state.Shutdown.IsNull() && state.Shutdown.ValueBool() {
+		if state == nil || state.Shutdown.IsNull() || state.Shutdown.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "shutdown"))
 		}
 	}

@@ -763,12 +763,12 @@ func (data *LPTSPuntPolice) getEmptyLeafsDelete(ctx context.Context, state *LPTS
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Interfaces[i].BcastDisabled.IsNull() && !data.Interfaces[i].BcastDisabled.ValueBool() {
-			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].BcastDisabled.IsNull() && state.Interfaces[i].BcastDisabled.ValueBool() {
+			if state == nil || i >= len(state.Interfaces) || state.Interfaces[i].BcastDisabled.IsNull() || state.Interfaces[i].BcastDisabled.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "interfaces/interface", keyString), "bcast/disabled"))
 			}
 		}
 		if !data.Interfaces[i].McastDisabled.IsNull() && !data.Interfaces[i].McastDisabled.ValueBool() {
-			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].McastDisabled.IsNull() && state.Interfaces[i].McastDisabled.ValueBool() {
+			if state == nil || i >= len(state.Interfaces) || state.Interfaces[i].McastDisabled.IsNull() || state.Interfaces[i].McastDisabled.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "interfaces/interface", keyString), "mcast/disabled"))
 			}
 		}

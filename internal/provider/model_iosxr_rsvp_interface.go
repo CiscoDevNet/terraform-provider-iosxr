@@ -1398,27 +1398,27 @@ func (data *RSVPInterface) getDeletedItems(ctx context.Context, state RSVPInterf
 func (data *RSVPInterface) getEmptyLeafsDelete(ctx context.Context, state *RSVPInterface, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.SignallingHelloGracefulRestartInterfaceBased.IsNull() && !data.SignallingHelloGracefulRestartInterfaceBased.ValueBool() {
-		if state != nil && !state.SignallingHelloGracefulRestartInterfaceBased.IsNull() && state.SignallingHelloGracefulRestartInterfaceBased.ValueBool() {
+		if state == nil || state.SignallingHelloGracefulRestartInterfaceBased.IsNull() || state.SignallingHelloGracefulRestartInterfaceBased.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "signalling/hello/graceful-restart/interface-based"))
 		}
 	}
 	if !data.SignallingRefreshReductionReliableSummaryRefresh.IsNull() && !data.SignallingRefreshReductionReliableSummaryRefresh.ValueBool() {
-		if state != nil && !state.SignallingRefreshReductionReliableSummaryRefresh.IsNull() && state.SignallingRefreshReductionReliableSummaryRefresh.ValueBool() {
+		if state == nil || state.SignallingRefreshReductionReliableSummaryRefresh.IsNull() || state.SignallingRefreshReductionReliableSummaryRefresh.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "signalling/refresh/reduction/reliable/summary-refresh"))
 		}
 	}
 	if !data.SignallingRefreshReductionDisable.IsNull() && !data.SignallingRefreshReductionDisable.ValueBool() {
-		if state != nil && !state.SignallingRefreshReductionDisable.IsNull() && state.SignallingRefreshReductionDisable.ValueBool() {
+		if state == nil || state.SignallingRefreshReductionDisable.IsNull() || state.SignallingRefreshReductionDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "signalling/refresh/reduction/disable"))
 		}
 	}
 	if !data.SignallingRateLimitEnable.IsNull() && !data.SignallingRateLimitEnable.ValueBool() {
-		if state != nil && !state.SignallingRateLimitEnable.IsNull() && state.SignallingRateLimitEnable.ValueBool() {
+		if state == nil || state.SignallingRateLimitEnable.IsNull() || state.SignallingRateLimitEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "signalling/rate-limit/enable"))
 		}
 	}
 	if !data.BandwidthDefault.IsNull() && !data.BandwidthDefault.ValueBool() {
-		if state != nil && !state.BandwidthDefault.IsNull() && state.BandwidthDefault.ValueBool() {
+		if state == nil || state.BandwidthDefault.IsNull() || state.BandwidthDefault.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "bandwidth/default"))
 		}
 	}

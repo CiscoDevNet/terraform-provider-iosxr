@@ -1125,42 +1125,42 @@ func (data *ICMP) getEmptyLeafsDelete(ctx context.Context, state *ICMP, version 
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.Ipv6MplsExtendedDiagnostics.IsNull() && !data.Ipv6MplsExtendedDiagnostics.ValueBool() {
-		if state != nil && !state.Ipv6MplsExtendedDiagnostics.IsNull() && state.Ipv6MplsExtendedDiagnostics.ValueBool() {
+		if state == nil || state.Ipv6MplsExtendedDiagnostics.IsNull() || state.Ipv6MplsExtendedDiagnostics.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/mpls/extended-diagnostics"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.Ipv4MplsExtendedDiagnostics.IsNull() && !data.Ipv4MplsExtendedDiagnostics.ValueBool() {
-		if state != nil && !state.Ipv4MplsExtendedDiagnostics.IsNull() && state.Ipv4MplsExtendedDiagnostics.ValueBool() {
+		if state == nil || state.Ipv4MplsExtendedDiagnostics.IsNull() || state.Ipv4MplsExtendedDiagnostics.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/mpls/extended-diagnostics"))
 		}
 	}
 	if !data.Ipv6SourceRfc.IsNull() && !data.Ipv6SourceRfc.ValueBool() {
-		if state != nil && !state.Ipv6SourceRfc.IsNull() && state.Ipv6SourceRfc.ValueBool() {
+		if state == nil || state.Ipv6SourceRfc.IsNull() || state.Ipv6SourceRfc.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/source"))
 		}
 	}
 	if !data.Ipv6SourceVrf.IsNull() && !data.Ipv6SourceVrf.ValueBool() {
-		if state != nil && !state.Ipv6SourceVrf.IsNull() && state.Ipv6SourceVrf.ValueBool() {
+		if state == nil || state.Ipv6SourceVrf.IsNull() || state.Ipv6SourceVrf.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/source"))
 		}
 	}
 	if !data.Ipv4RateLimitUnreachableDfDisable.IsNull() && !data.Ipv4RateLimitUnreachableDfDisable.ValueBool() {
-		if state != nil && !state.Ipv4RateLimitUnreachableDfDisable.IsNull() && state.Ipv4RateLimitUnreachableDfDisable.ValueBool() {
+		if state == nil || state.Ipv4RateLimitUnreachableDfDisable.IsNull() || state.Ipv4RateLimitUnreachableDfDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/rate-limit/unreachable/df"))
 		}
 	}
 	if !data.Ipv4RateLimitUnreachableDisable.IsNull() && !data.Ipv4RateLimitUnreachableDisable.ValueBool() {
-		if state != nil && !state.Ipv4RateLimitUnreachableDisable.IsNull() && state.Ipv4RateLimitUnreachableDisable.ValueBool() {
+		if state == nil || state.Ipv4RateLimitUnreachableDisable.IsNull() || state.Ipv4RateLimitUnreachableDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/rate-limit/unreachable/disable"))
 		}
 	}
 	if !data.Ipv4SourceRfc.IsNull() && !data.Ipv4SourceRfc.ValueBool() {
-		if state != nil && !state.Ipv4SourceRfc.IsNull() && state.Ipv4SourceRfc.ValueBool() {
+		if state == nil || state.Ipv4SourceRfc.IsNull() || state.Ipv4SourceRfc.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/source"))
 		}
 	}
 	if !data.Ipv4SourceVrf.IsNull() && !data.Ipv4SourceVrf.ValueBool() {
-		if state != nil && !state.Ipv4SourceVrf.IsNull() && state.Ipv4SourceVrf.ValueBool() {
+		if state == nil || state.Ipv4SourceVrf.IsNull() || state.Ipv4SourceVrf.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/source"))
 		}
 	}

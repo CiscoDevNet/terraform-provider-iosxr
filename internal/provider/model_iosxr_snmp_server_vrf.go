@@ -1270,7 +1270,7 @@ func (data *SNMPServerVRF) getEmptyLeafsDelete(ctx context.Context, state *SNMPS
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.Hosts[i].InformsEncryptedAes[ci].VersionV2c.IsNull() && !data.Hosts[i].InformsEncryptedAes[ci].VersionV2c.ValueBool() {
-				if state != nil && i < len(state.Hosts) && ci < len(state.Hosts[i].InformsEncryptedAes) && !state.Hosts[i].InformsEncryptedAes[ci].VersionV2c.IsNull() && state.Hosts[i].InformsEncryptedAes[ci].VersionV2c.ValueBool() {
+				if state == nil || i >= len(state.Hosts) || ci >= len(state.Hosts[i].InformsEncryptedAes) || state.Hosts[i].InformsEncryptedAes[ci].VersionV2c.IsNull() || state.Hosts[i].InformsEncryptedAes[ci].VersionV2c.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "hosts/host", keyString, "informs/encrypted/encryption-aeses/encryption-aes", ckeyString), "version/v2c"))
 				}
 			}
@@ -1283,7 +1283,7 @@ func (data *SNMPServerVRF) getEmptyLeafsDelete(ctx context.Context, state *SNMPS
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.Hosts[i].InformsEncryptedDefault[ci].VersionV2c.IsNull() && !data.Hosts[i].InformsEncryptedDefault[ci].VersionV2c.ValueBool() {
-				if state != nil && i < len(state.Hosts) && ci < len(state.Hosts[i].InformsEncryptedDefault) && !state.Hosts[i].InformsEncryptedDefault[ci].VersionV2c.IsNull() && state.Hosts[i].InformsEncryptedDefault[ci].VersionV2c.ValueBool() {
+				if state == nil || i >= len(state.Hosts) || ci >= len(state.Hosts[i].InformsEncryptedDefault) || state.Hosts[i].InformsEncryptedDefault[ci].VersionV2c.IsNull() || state.Hosts[i].InformsEncryptedDefault[ci].VersionV2c.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "hosts/host", keyString, "informs/encrypted/encryption-defaults/encryption-default", ckeyString), "version/v2c"))
 				}
 			}
@@ -1296,7 +1296,7 @@ func (data *SNMPServerVRF) getEmptyLeafsDelete(ctx context.Context, state *SNMPS
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.IsNull() && !data.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.ValueBool() {
-				if state != nil && i < len(state.Hosts) && ci < len(state.Hosts[i].InformsUnencryptedStrings) && !state.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.IsNull() && state.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.ValueBool() {
+				if state == nil || i >= len(state.Hosts) || ci >= len(state.Hosts[i].InformsUnencryptedStrings) || state.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.IsNull() || state.Hosts[i].InformsUnencryptedStrings[ci].VersionV2c.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "hosts/host", keyString, "informs/unencrypted/unencrypted-string", ckeyString), "version/v2c"))
 				}
 			}
@@ -1309,7 +1309,7 @@ func (data *SNMPServerVRF) getEmptyLeafsDelete(ctx context.Context, state *SNMPS
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.Hosts[i].TrapsEncryptedAes[ci].VersionV2c.IsNull() && !data.Hosts[i].TrapsEncryptedAes[ci].VersionV2c.ValueBool() {
-				if state != nil && i < len(state.Hosts) && ci < len(state.Hosts[i].TrapsEncryptedAes) && !state.Hosts[i].TrapsEncryptedAes[ci].VersionV2c.IsNull() && state.Hosts[i].TrapsEncryptedAes[ci].VersionV2c.ValueBool() {
+				if state == nil || i >= len(state.Hosts) || ci >= len(state.Hosts[i].TrapsEncryptedAes) || state.Hosts[i].TrapsEncryptedAes[ci].VersionV2c.IsNull() || state.Hosts[i].TrapsEncryptedAes[ci].VersionV2c.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "hosts/host", keyString, "traps/encrypted/encryption-aeses/encryption-aes", ckeyString), "version/v2c"))
 				}
 			}
@@ -1322,7 +1322,7 @@ func (data *SNMPServerVRF) getEmptyLeafsDelete(ctx context.Context, state *SNMPS
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c.IsNull() && !data.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c.ValueBool() {
-				if state != nil && i < len(state.Hosts) && ci < len(state.Hosts[i].TrapsEncryptedDefault) && !state.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c.IsNull() && state.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c.ValueBool() {
+				if state == nil || i >= len(state.Hosts) || ci >= len(state.Hosts[i].TrapsEncryptedDefault) || state.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c.IsNull() || state.Hosts[i].TrapsEncryptedDefault[ci].VersionV2c.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "hosts/host", keyString, "traps/encrypted/encryption-defaults/encryption-default", ckeyString), "version/v2c"))
 				}
 			}
@@ -1335,7 +1335,7 @@ func (data *SNMPServerVRF) getEmptyLeafsDelete(ctx context.Context, state *SNMPS
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.IsNull() && !data.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.ValueBool() {
-				if state != nil && i < len(state.Hosts) && ci < len(state.Hosts[i].TrapsUnencryptedStrings) && !state.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.IsNull() && state.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.ValueBool() {
+				if state == nil || i >= len(state.Hosts) || ci >= len(state.Hosts[i].TrapsUnencryptedStrings) || state.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.IsNull() || state.Hosts[i].TrapsUnencryptedStrings[ci].VersionV2c.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "hosts/host", keyString, "traps/unencrypted/unencrypted-string", ckeyString), "version/v2c"))
 				}
 			}

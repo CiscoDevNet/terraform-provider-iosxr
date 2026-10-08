@@ -763,7 +763,7 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) getEmptyLeafsDelete(ctx context.Cont
 		}
 	}
 	if !data.AddressLearn.IsNull() && !data.AddressLearn.ValueBool() {
-		if state != nil && !state.AddressLearn.IsNull() && state.AddressLearn.ValueBool() {
+		if state == nil || state.AddressLearn.IsNull() || state.AddressLearn.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address/learn"))
 		}
 	}

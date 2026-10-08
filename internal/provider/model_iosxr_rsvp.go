@@ -1159,47 +1159,47 @@ func (data *RSVP) getDeletedItems(ctx context.Context, state RSVP, version strin
 func (data *RSVP) getEmptyLeafsDelete(ctx context.Context, state *RSVP, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.LtraceBufferMultiplierSync.IsNull() && !data.LtraceBufferMultiplierSync.ValueBool() {
-		if state != nil && !state.LtraceBufferMultiplierSync.IsNull() && state.LtraceBufferMultiplierSync.ValueBool() {
+		if state == nil || state.LtraceBufferMultiplierSync.IsNull() || state.LtraceBufferMultiplierSync.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
 		}
 	}
 	if !data.LtraceBufferMultiplierDbgErr.IsNull() && !data.LtraceBufferMultiplierDbgErr.ValueBool() {
-		if state != nil && !state.LtraceBufferMultiplierDbgErr.IsNull() && state.LtraceBufferMultiplierDbgErr.ValueBool() {
+		if state == nil || state.LtraceBufferMultiplierDbgErr.IsNull() || state.LtraceBufferMultiplierDbgErr.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
 		}
 	}
 	if !data.LtraceBufferMultiplierIntf.IsNull() && !data.LtraceBufferMultiplierIntf.ValueBool() {
-		if state != nil && !state.LtraceBufferMultiplierIntf.IsNull() && state.LtraceBufferMultiplierIntf.ValueBool() {
+		if state == nil || state.LtraceBufferMultiplierIntf.IsNull() || state.LtraceBufferMultiplierIntf.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
 		}
 	}
 	if !data.LtraceBufferMultiplierSigErr.IsNull() && !data.LtraceBufferMultiplierSigErr.ValueBool() {
-		if state != nil && !state.LtraceBufferMultiplierSigErr.IsNull() && state.LtraceBufferMultiplierSigErr.ValueBool() {
+		if state == nil || state.LtraceBufferMultiplierSigErr.IsNull() || state.LtraceBufferMultiplierSigErr.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
 		}
 	}
 	if !data.LtraceBufferMultiplierSig.IsNull() && !data.LtraceBufferMultiplierSig.ValueBool() {
-		if state != nil && !state.LtraceBufferMultiplierSig.IsNull() && state.LtraceBufferMultiplierSig.ValueBool() {
+		if state == nil || state.LtraceBufferMultiplierSig.IsNull() || state.LtraceBufferMultiplierSig.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
 		}
 	}
 	if !data.LtraceBufferMultiplierCommon.IsNull() && !data.LtraceBufferMultiplierCommon.ValueBool() {
-		if state != nil && !state.LtraceBufferMultiplierCommon.IsNull() && state.LtraceBufferMultiplierCommon.ValueBool() {
+		if state == nil || state.LtraceBufferMultiplierCommon.IsNull() || state.LtraceBufferMultiplierCommon.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
 		}
 	}
 	if !data.LtraceBufferMultiplierRare.IsNull() && !data.LtraceBufferMultiplierRare.ValueBool() {
-		if state != nil && !state.LtraceBufferMultiplierRare.IsNull() && state.LtraceBufferMultiplierRare.ValueBool() {
+		if state == nil || state.LtraceBufferMultiplierRare.IsNull() || state.LtraceBufferMultiplierRare.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
 		}
 	}
 	if !data.LoggingEventsIssu.IsNull() && !data.LoggingEventsIssu.ValueBool() {
-		if state != nil && !state.LoggingEventsIssu.IsNull() && state.LoggingEventsIssu.ValueBool() {
+		if state == nil || state.LoggingEventsIssu.IsNull() || state.LoggingEventsIssu.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/events/issu"))
 		}
 	}
 	if !data.LoggingEventsNsr.IsNull() && !data.LoggingEventsNsr.ValueBool() {
-		if state != nil && !state.LoggingEventsNsr.IsNull() && state.LoggingEventsNsr.ValueBool() {
+		if state == nil || state.LoggingEventsNsr.IsNull() || state.LoggingEventsNsr.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/events/nsr"))
 		}
 	}
@@ -1212,37 +1212,37 @@ func (data *RSVP) getEmptyLeafsDelete(ctx context.Context, state *RSVP, version 
 		}
 	}
 	if !data.SignallingChecksumDisable.IsNull() && !data.SignallingChecksumDisable.ValueBool() {
-		if state != nil && !state.SignallingChecksumDisable.IsNull() && state.SignallingChecksumDisable.ValueBool() {
+		if state == nil || state.SignallingChecksumDisable.IsNull() || state.SignallingChecksumDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "signalling/checksum/disable"))
 		}
 	}
 	if !data.SignallingPatherrStateRemovalDisable.IsNull() && !data.SignallingPatherrStateRemovalDisable.ValueBool() {
-		if state != nil && !state.SignallingPatherrStateRemovalDisable.IsNull() && state.SignallingPatherrStateRemovalDisable.ValueBool() {
+		if state == nil || state.SignallingPatherrStateRemovalDisable.IsNull() || state.SignallingPatherrStateRemovalDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "signalling/patherr/state-removal/disable"))
 		}
 	}
 	if !data.SignallingNodeidSubobjectDisable.IsNull() && !data.SignallingNodeidSubobjectDisable.ValueBool() {
-		if state != nil && !state.SignallingNodeidSubobjectDisable.IsNull() && state.SignallingNodeidSubobjectDisable.ValueBool() {
+		if state == nil || state.SignallingNodeidSubobjectDisable.IsNull() || state.SignallingNodeidSubobjectDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "signalling/nodeid-subobject/disable"))
 		}
 	}
 	if !data.SignallingMessageBundleDisable.IsNull() && !data.SignallingMessageBundleDisable.ValueBool() {
-		if state != nil && !state.SignallingMessageBundleDisable.IsNull() && state.SignallingMessageBundleDisable.ValueBool() {
+		if state == nil || state.SignallingMessageBundleDisable.IsNull() || state.SignallingMessageBundleDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "signalling/message-bundle/disable"))
 		}
 	}
 	if !data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() && !data.SignallingPrefixFilteringDefaultDenyActionDrop.ValueBool() {
-		if state != nil && !state.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() && state.SignallingPrefixFilteringDefaultDenyActionDrop.ValueBool() {
+		if state == nil || state.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() || state.SignallingPrefixFilteringDefaultDenyActionDrop.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "signalling/prefix-filtering/default-deny-action/drop"))
 		}
 	}
 	if !data.SignallingGracefulRestartLspCtype.IsNull() && !data.SignallingGracefulRestartLspCtype.ValueBool() {
-		if state != nil && !state.SignallingGracefulRestartLspCtype.IsNull() && state.SignallingGracefulRestartLspCtype.ValueBool() {
+		if state == nil || state.SignallingGracefulRestartLspCtype.IsNull() || state.SignallingGracefulRestartLspCtype.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "signalling/graceful-restart-lsp-type"))
 		}
 	}
 	if !data.SignallingGracefulRestart.IsNull() && !data.SignallingGracefulRestart.ValueBool() {
-		if state != nil && !state.SignallingGracefulRestart.IsNull() && state.SignallingGracefulRestart.ValueBool() {
+		if state == nil || state.SignallingGracefulRestart.IsNull() || state.SignallingGracefulRestart.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "signalling/graceful-restart"))
 		}
 	}

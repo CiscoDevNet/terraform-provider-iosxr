@@ -1340,12 +1340,12 @@ func (data *KeyChain) getDeletedItems(ctx context.Context, state KeyChain, versi
 func (data *KeyChain) getEmptyLeafsDelete(ctx context.Context, state *KeyChain, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.TimezoneGmt.IsNull() && !data.TimezoneGmt.ValueBool() {
-		if state != nil && !state.TimezoneGmt.IsNull() && state.TimezoneGmt.ValueBool() {
+		if state == nil || state.TimezoneGmt.IsNull() || state.TimezoneGmt.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "timezone/gmt"))
 		}
 	}
 	if !data.TimezoneLocal.IsNull() && !data.TimezoneLocal.ValueBool() {
-		if state != nil && !state.TimezoneLocal.IsNull() && state.TimezoneLocal.ValueBool() {
+		if state == nil || state.TimezoneLocal.IsNull() || state.TimezoneLocal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "timezone/local"))
 		}
 	}
@@ -1357,12 +1357,12 @@ func (data *KeyChain) getEmptyLeafsDelete(ctx context.Context, state *KeyChain, 
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Keys[i].SendLifetimeInfinite.IsNull() && !data.Keys[i].SendLifetimeInfinite.ValueBool() {
-			if state != nil && i < len(state.Keys) && !state.Keys[i].SendLifetimeInfinite.IsNull() && state.Keys[i].SendLifetimeInfinite.ValueBool() {
+			if state == nil || i >= len(state.Keys) || state.Keys[i].SendLifetimeInfinite.IsNull() || state.Keys[i].SendLifetimeInfinite.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "keys/key", keyString), "send-lifetime/infinite"))
 			}
 		}
 		if !data.Keys[i].AcceptLifetimeInfinite.IsNull() && !data.Keys[i].AcceptLifetimeInfinite.ValueBool() {
-			if state != nil && i < len(state.Keys) && !state.Keys[i].AcceptLifetimeInfinite.IsNull() && state.Keys[i].AcceptLifetimeInfinite.ValueBool() {
+			if state == nil || i >= len(state.Keys) || state.Keys[i].AcceptLifetimeInfinite.IsNull() || state.Keys[i].AcceptLifetimeInfinite.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "keys/key", keyString), "accept-lifetime/infinite"))
 			}
 		}
@@ -1375,13 +1375,13 @@ func (data *KeyChain) getEmptyLeafsDelete(ctx context.Context, state *KeyChain, 
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.MacsecKeys[i].LifetimeInfinite.IsNull() && !data.MacsecKeys[i].LifetimeInfinite.ValueBool() {
-			if state != nil && i < len(state.MacsecKeys) && !state.MacsecKeys[i].LifetimeInfinite.IsNull() && state.MacsecKeys[i].LifetimeInfinite.ValueBool() {
+			if state == nil || i >= len(state.MacsecKeys) || state.MacsecKeys[i].LifetimeInfinite.IsNull() || state.MacsecKeys[i].LifetimeInfinite.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "macsec/keys/key", keyString), "lifetime/infinite"))
 			}
 		}
 	}
 	if !data.AcceptToleranceInfinite.IsNull() && !data.AcceptToleranceInfinite.ValueBool() {
-		if state != nil && !state.AcceptToleranceInfinite.IsNull() && state.AcceptToleranceInfinite.ValueBool() {
+		if state == nil || state.AcceptToleranceInfinite.IsNull() || state.AcceptToleranceInfinite.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "accept-tolerance/infinite"))
 		}
 	}

@@ -2126,22 +2126,22 @@ func (data *Crypto) getDeletedItems(ctx context.Context, state Crypto, version s
 func (data *Crypto) getEmptyLeafsDelete(ctx context.Context, state *Crypto, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if helpers.VersionAtLeast(version, "25.4") && !data.CaTrustpointSystemEnrollmentLocal.IsNull() && !data.CaTrustpointSystemEnrollmentLocal.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemEnrollmentLocal.IsNull() && state.CaTrustpointSystemEnrollmentLocal.ValueBool() {
+		if state == nil || state.CaTrustpointSystemEnrollmentLocal.IsNull() || state.CaTrustpointSystemEnrollmentLocal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/enrollment/local"))
 		}
 	}
 	if !data.FipsMode.IsNull() && !data.FipsMode.ValueBool() {
-		if state != nil && !state.FipsMode.IsNull() && state.FipsMode.ValueBool() {
+		if state == nil || state.FipsMode.IsNull() || state.FipsMode.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fips-mode"))
 		}
 	}
 	if !data.CaFqdnCheckIpAddressAllow.IsNull() && !data.CaFqdnCheckIpAddressAllow.ValueBool() {
-		if state != nil && !state.CaFqdnCheckIpAddressAllow.IsNull() && state.CaFqdnCheckIpAddressAllow.ValueBool() {
+		if state == nil || state.CaFqdnCheckIpAddressAllow.IsNull() || state.CaFqdnCheckIpAddressAllow.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/fqdn-check/ip-address/allow"))
 		}
 	}
 	if !data.CaRsa1024Disable.IsNull() && !data.CaRsa1024Disable.ValueBool() {
-		if state != nil && !state.CaRsa1024Disable.IsNull() && state.CaRsa1024Disable.ValueBool() {
+		if state == nil || state.CaRsa1024Disable.IsNull() || state.CaRsa1024Disable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/rsa/one-thousand-twenty-four/disable"))
 		}
 	}
@@ -2161,93 +2161,93 @@ func (data *Crypto) getEmptyLeafsDelete(ctx context.Context, state *Crypto, vers
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if helpers.VersionAtLeast(version, "25.4") && !data.CaTrustpoints[i].EnrollmentLocal.IsNull() && !data.CaTrustpoints[i].EnrollmentLocal.ValueBool() {
-			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].EnrollmentLocal.IsNull() && state.CaTrustpoints[i].EnrollmentLocal.ValueBool() {
+			if state == nil || i >= len(state.CaTrustpoints) || state.CaTrustpoints[i].EnrollmentLocal.IsNull() || state.CaTrustpoints[i].EnrollmentLocal.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "enrollment/local"))
 			}
 		}
 		if !data.CaTrustpoints[i].SerialNumberNone.IsNull() && !data.CaTrustpoints[i].SerialNumberNone.ValueBool() {
-			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].SerialNumberNone.IsNull() && state.CaTrustpoints[i].SerialNumberNone.ValueBool() {
+			if state == nil || i >= len(state.CaTrustpoints) || state.CaTrustpoints[i].SerialNumberNone.IsNull() || state.CaTrustpoints[i].SerialNumberNone.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "serial-number/none"))
 			}
 		}
 		if !data.CaTrustpoints[i].SerialNumber.IsNull() && !data.CaTrustpoints[i].SerialNumber.ValueBool() {
-			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].SerialNumber.IsNull() && state.CaTrustpoints[i].SerialNumber.ValueBool() {
+			if state == nil || i >= len(state.CaTrustpoints) || state.CaTrustpoints[i].SerialNumber.IsNull() || state.CaTrustpoints[i].SerialNumber.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "serial-number"))
 			}
 		}
 		if !data.CaTrustpoints[i].IpAddressNone.IsNull() && !data.CaTrustpoints[i].IpAddressNone.ValueBool() {
-			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].IpAddressNone.IsNull() && state.CaTrustpoints[i].IpAddressNone.ValueBool() {
+			if state == nil || i >= len(state.CaTrustpoints) || state.CaTrustpoints[i].IpAddressNone.IsNull() || state.CaTrustpoints[i].IpAddressNone.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "ip-address/none"))
 			}
 		}
 		if !data.CaTrustpoints[i].CrlOptional.IsNull() && !data.CaTrustpoints[i].CrlOptional.ValueBool() {
-			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].CrlOptional.IsNull() && state.CaTrustpoints[i].CrlOptional.ValueBool() {
+			if state == nil || i >= len(state.CaTrustpoints) || state.CaTrustpoints[i].CrlOptional.IsNull() || state.CaTrustpoints[i].CrlOptional.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "crl/optional"))
 			}
 		}
 		if !data.CaTrustpoints[i].SkipChallengePassword.IsNull() && !data.CaTrustpoints[i].SkipChallengePassword.ValueBool() {
-			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].SkipChallengePassword.IsNull() && state.CaTrustpoints[i].SkipChallengePassword.ValueBool() {
+			if state == nil || i >= len(state.CaTrustpoints) || state.CaTrustpoints[i].SkipChallengePassword.IsNull() || state.CaTrustpoints[i].SkipChallengePassword.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "skip-challenge-password"))
 			}
 		}
 		if !data.CaTrustpoints[i].RenewalMessageTypeRenewalreq.IsNull() && !data.CaTrustpoints[i].RenewalMessageTypeRenewalreq.ValueBool() {
-			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].RenewalMessageTypeRenewalreq.IsNull() && state.CaTrustpoints[i].RenewalMessageTypeRenewalreq.ValueBool() {
+			if state == nil || i >= len(state.CaTrustpoints) || state.CaTrustpoints[i].RenewalMessageTypeRenewalreq.IsNull() || state.CaTrustpoints[i].RenewalMessageTypeRenewalreq.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "renewal-message-type/renewalreq"))
 			}
 		}
 		if !data.CaTrustpoints[i].RenewalMessageTypePkcsreq.IsNull() && !data.CaTrustpoints[i].RenewalMessageTypePkcsreq.ValueBool() {
-			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].RenewalMessageTypePkcsreq.IsNull() && state.CaTrustpoints[i].RenewalMessageTypePkcsreq.ValueBool() {
+			if state == nil || i >= len(state.CaTrustpoints) || state.CaTrustpoints[i].RenewalMessageTypePkcsreq.IsNull() || state.CaTrustpoints[i].RenewalMessageTypePkcsreq.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "renewal-message-type/pkcsreq"))
 			}
 		}
 		if !data.CaTrustpoints[i].EnrollmentTerminal.IsNull() && !data.CaTrustpoints[i].EnrollmentTerminal.ValueBool() {
-			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].EnrollmentTerminal.IsNull() && state.CaTrustpoints[i].EnrollmentTerminal.ValueBool() {
+			if state == nil || i >= len(state.CaTrustpoints) || state.CaTrustpoints[i].EnrollmentTerminal.IsNull() || state.CaTrustpoints[i].EnrollmentTerminal.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "enrollment/terminal"))
 			}
 		}
 	}
 	if !data.CaTrustpointSystemSerialNumberNone.IsNull() && !data.CaTrustpointSystemSerialNumberNone.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemSerialNumberNone.IsNull() && state.CaTrustpointSystemSerialNumberNone.ValueBool() {
+		if state == nil || state.CaTrustpointSystemSerialNumberNone.IsNull() || state.CaTrustpointSystemSerialNumberNone.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/serial-number/none"))
 		}
 	}
 	if !data.CaTrustpointSystemSerialNumber.IsNull() && !data.CaTrustpointSystemSerialNumber.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemSerialNumber.IsNull() && state.CaTrustpointSystemSerialNumber.ValueBool() {
+		if state == nil || state.CaTrustpointSystemSerialNumber.IsNull() || state.CaTrustpointSystemSerialNumber.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/serial-number"))
 		}
 	}
 	if !data.CaTrustpointSystemIpAddressNone.IsNull() && !data.CaTrustpointSystemIpAddressNone.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemIpAddressNone.IsNull() && state.CaTrustpointSystemIpAddressNone.ValueBool() {
+		if state == nil || state.CaTrustpointSystemIpAddressNone.IsNull() || state.CaTrustpointSystemIpAddressNone.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/ip-address/none"))
 		}
 	}
 	if !data.CaTrustpointSystemCrlOptional.IsNull() && !data.CaTrustpointSystemCrlOptional.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemCrlOptional.IsNull() && state.CaTrustpointSystemCrlOptional.ValueBool() {
+		if state == nil || state.CaTrustpointSystemCrlOptional.IsNull() || state.CaTrustpointSystemCrlOptional.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/crl/optional"))
 		}
 	}
 	if !data.CaTrustpointSystemSkipChallengePassword.IsNull() && !data.CaTrustpointSystemSkipChallengePassword.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemSkipChallengePassword.IsNull() && state.CaTrustpointSystemSkipChallengePassword.ValueBool() {
+		if state == nil || state.CaTrustpointSystemSkipChallengePassword.IsNull() || state.CaTrustpointSystemSkipChallengePassword.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/skip-challenge-password"))
 		}
 	}
 	if !data.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() && !data.CaTrustpointSystemRenewalMessageTypeRenewalreq.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() && state.CaTrustpointSystemRenewalMessageTypeRenewalreq.ValueBool() {
+		if state == nil || state.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() || state.CaTrustpointSystemRenewalMessageTypeRenewalreq.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/renewal-message-type/renewalreq"))
 		}
 	}
 	if !data.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() && !data.CaTrustpointSystemRenewalMessageTypePkcsreq.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() && state.CaTrustpointSystemRenewalMessageTypePkcsreq.ValueBool() {
+		if state == nil || state.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() || state.CaTrustpointSystemRenewalMessageTypePkcsreq.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/renewal-message-type/pkcsreq"))
 		}
 	}
 	if !data.CaTrustpointSystemEnrollmentSelf.IsNull() && !data.CaTrustpointSystemEnrollmentSelf.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemEnrollmentSelf.IsNull() && state.CaTrustpointSystemEnrollmentSelf.ValueBool() {
+		if state == nil || state.CaTrustpointSystemEnrollmentSelf.IsNull() || state.CaTrustpointSystemEnrollmentSelf.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/enrollment/self"))
 		}
 	}
 	if !data.CaTrustpointSystemEnrollmentTerminal.IsNull() && !data.CaTrustpointSystemEnrollmentTerminal.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemEnrollmentTerminal.IsNull() && state.CaTrustpointSystemEnrollmentTerminal.ValueBool() {
+		if state == nil || state.CaTrustpointSystemEnrollmentTerminal.IsNull() || state.CaTrustpointSystemEnrollmentTerminal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/enrollment/terminal"))
 		}
 	}

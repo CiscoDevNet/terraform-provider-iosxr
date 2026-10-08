@@ -687,22 +687,22 @@ func (data *TCP) getEmptyLeafsDelete(ctx context.Context, state *TCP, version st
 		}
 	}
 	if !data.Ao.IsNull() && !data.Ao.ValueBool() {
-		if state != nil && !state.Ao.IsNull() && state.Ao.ValueBool() {
+		if state == nil || state.Ao.IsNull() || state.Ao.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ao"))
 		}
 	}
 	if !data.SelectiveAck.IsNull() && !data.SelectiveAck.ValueBool() {
-		if state != nil && !state.SelectiveAck.IsNull() && state.SelectiveAck.ValueBool() {
+		if state == nil || state.SelectiveAck.IsNull() || state.SelectiveAck.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "selective-ack"))
 		}
 	}
 	if !data.Timestamp.IsNull() && !data.Timestamp.ValueBool() {
-		if state != nil && !state.Timestamp.IsNull() && state.Timestamp.ValueBool() {
+		if state == nil || state.Timestamp.IsNull() || state.Timestamp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "timestamp"))
 		}
 	}
 	if !data.PathMtuDiscovery.IsNull() && !data.PathMtuDiscovery.ValueBool() {
-		if state != nil && !state.PathMtuDiscovery.IsNull() && state.PathMtuDiscovery.ValueBool() {
+		if state == nil || state.PathMtuDiscovery.IsNull() || state.PathMtuDiscovery.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "path-mtu-discovery"))
 		}
 	}

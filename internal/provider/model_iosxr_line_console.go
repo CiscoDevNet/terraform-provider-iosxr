@@ -1171,12 +1171,12 @@ func (data *LineConsole) getDeletedItems(ctx context.Context, state LineConsole,
 func (data *LineConsole) getEmptyLeafsDelete(ctx context.Context, state *LineConsole, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.TelnetTransparent.IsNull() && !data.TelnetTransparent.ValueBool() {
-		if state != nil && !state.TelnetTransparent.IsNull() && state.TelnetTransparent.ValueBool() {
+		if state == nil || state.TelnetTransparent.IsNull() || state.TelnetTransparent.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-telnet-cfg:telnet/transparent"))
 		}
 	}
 	if !data.TimestampDisable.IsNull() && !data.TimestampDisable.ValueBool() {
-		if state != nil && !state.TimestampDisable.IsNull() && state.TimestampDisable.ValueBool() {
+		if state == nil || state.TimestampDisable.IsNull() || state.TimestampDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp"))
 		}
 	}
@@ -1189,77 +1189,77 @@ func (data *LineConsole) getEmptyLeafsDelete(ctx context.Context, state *LineCon
 		}
 	}
 	if !data.CliWhitespaceCompletion.IsNull() && !data.CliWhitespaceCompletion.ValueBool() {
-		if state != nil && !state.CliWhitespaceCompletion.IsNull() && state.CliWhitespaceCompletion.ValueBool() {
+		if state == nil || state.CliWhitespaceCompletion.IsNull() || state.CliWhitespaceCompletion.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "cli/whitespace/completion"))
 		}
 	}
 	if !data.TransportPreferredSsh.IsNull() && !data.TransportPreferredSsh.ValueBool() {
-		if state != nil && !state.TransportPreferredSsh.IsNull() && state.TransportPreferredSsh.ValueBool() {
+		if state == nil || state.TransportPreferredSsh.IsNull() || state.TransportPreferredSsh.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/preferred/ssh"))
 		}
 	}
 	if !data.TransportPreferredTelnet.IsNull() && !data.TransportPreferredTelnet.ValueBool() {
-		if state != nil && !state.TransportPreferredTelnet.IsNull() && state.TransportPreferredTelnet.ValueBool() {
+		if state == nil || state.TransportPreferredTelnet.IsNull() || state.TransportPreferredTelnet.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/preferred/telnet"))
 		}
 	}
 	if !data.TransportPreferredNone.IsNull() && !data.TransportPreferredNone.ValueBool() {
-		if state != nil && !state.TransportPreferredNone.IsNull() && state.TransportPreferredNone.ValueBool() {
+		if state == nil || state.TransportPreferredNone.IsNull() || state.TransportPreferredNone.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/preferred/none"))
 		}
 	}
 	if !data.TransportOutputTelnet.IsNull() && !data.TransportOutputTelnet.ValueBool() {
-		if state != nil && !state.TransportOutputTelnet.IsNull() && state.TransportOutputTelnet.ValueBool() {
+		if state == nil || state.TransportOutputTelnet.IsNull() || state.TransportOutputTelnet.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/output/telnet"))
 		}
 	}
 	if !data.TransportOutputSshTelnet.IsNull() && !data.TransportOutputSshTelnet.ValueBool() {
-		if state != nil && !state.TransportOutputSshTelnet.IsNull() && state.TransportOutputSshTelnet.ValueBool() {
+		if state == nil || state.TransportOutputSshTelnet.IsNull() || state.TransportOutputSshTelnet.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/output/ssh"))
 		}
 	}
 	if !data.TransportOutputSsh.IsNull() && !data.TransportOutputSsh.ValueBool() {
-		if state != nil && !state.TransportOutputSsh.IsNull() && state.TransportOutputSsh.ValueBool() {
+		if state == nil || state.TransportOutputSsh.IsNull() || state.TransportOutputSsh.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/output/ssh"))
 		}
 	}
 	if !data.TransportOutputNone.IsNull() && !data.TransportOutputNone.ValueBool() {
-		if state != nil && !state.TransportOutputNone.IsNull() && state.TransportOutputNone.ValueBool() {
+		if state == nil || state.TransportOutputNone.IsNull() || state.TransportOutputNone.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/output/none"))
 		}
 	}
 	if !data.TransportOutputAll.IsNull() && !data.TransportOutputAll.ValueBool() {
-		if state != nil && !state.TransportOutputAll.IsNull() && state.TransportOutputAll.ValueBool() {
+		if state == nil || state.TransportOutputAll.IsNull() || state.TransportOutputAll.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/output/all"))
 		}
 	}
 	if !data.TransportInputAll.IsNull() && !data.TransportInputAll.ValueBool() {
-		if state != nil && !state.TransportInputAll.IsNull() && state.TransportInputAll.ValueBool() {
+		if state == nil || state.TransportInputAll.IsNull() || state.TransportInputAll.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/input/all"))
 		}
 	}
 	if !data.TransportInputTelnet.IsNull() && !data.TransportInputTelnet.ValueBool() {
-		if state != nil && !state.TransportInputTelnet.IsNull() && state.TransportInputTelnet.ValueBool() {
+		if state == nil || state.TransportInputTelnet.IsNull() || state.TransportInputTelnet.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/input/telnet"))
 		}
 	}
 	if !data.TransportInputSshTelnet.IsNull() && !data.TransportInputSshTelnet.ValueBool() {
-		if state != nil && !state.TransportInputSshTelnet.IsNull() && state.TransportInputSshTelnet.ValueBool() {
+		if state == nil || state.TransportInputSshTelnet.IsNull() || state.TransportInputSshTelnet.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/input/ssh"))
 		}
 	}
 	if !data.TransportInputSsh.IsNull() && !data.TransportInputSsh.ValueBool() {
-		if state != nil && !state.TransportInputSsh.IsNull() && state.TransportInputSsh.ValueBool() {
+		if state == nil || state.TransportInputSsh.IsNull() || state.TransportInputSsh.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/input/ssh"))
 		}
 	}
 	if !data.TransportInputNone.IsNull() && !data.TransportInputNone.ValueBool() {
-		if state != nil && !state.TransportInputNone.IsNull() && state.TransportInputNone.ValueBool() {
+		if state == nil || state.TransportInputNone.IsNull() || state.TransportInputNone.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/input/none"))
 		}
 	}
 	if !data.SessionTimeoutOutput.IsNull() && !data.SessionTimeoutOutput.ValueBool() {
-		if state != nil && !state.SessionTimeoutOutput.IsNull() && state.SessionTimeoutOutput.ValueBool() {
+		if state == nil || state.SessionTimeoutOutput.IsNull() || state.SessionTimeoutOutput.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "session-timeout"))
 		}
 	}

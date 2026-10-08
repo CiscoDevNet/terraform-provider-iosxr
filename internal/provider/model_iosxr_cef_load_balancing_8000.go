@@ -1049,12 +1049,12 @@ func (data *CEFLoadBalancing8000) getDeletedItems(ctx context.Context, state CEF
 func (data *CEFLoadBalancing8000) getEmptyLeafsDelete(ctx context.Context, state *CEFLoadBalancing8000, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if helpers.VersionAtLeast(version, "26.2") && !data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() && !data.PlatformLoadBalanceNvgrePayloadExclude.ValueBool() {
-		if state != nil && !state.PlatformLoadBalanceNvgrePayloadExclude.IsNull() && state.PlatformLoadBalanceNvgrePayloadExclude.ValueBool() {
+		if state == nil || state.PlatformLoadBalanceNvgrePayloadExclude.IsNull() || state.PlatformLoadBalanceNvgrePayloadExclude.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "platform-load-balance/nvgre-payload-exclude"))
 		}
 	}
 	if !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() && !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.ValueBool() {
-		if state != nil && !state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() && state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.ValueBool() {
+		if state == nil || state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() || state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "platform-load-balance/mpls-hash-non-ip-lbl-only"))
 		}
 	}

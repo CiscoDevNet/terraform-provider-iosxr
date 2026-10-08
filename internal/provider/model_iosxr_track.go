@@ -2064,7 +2064,7 @@ func (data *Track) getEmptyLeafsDelete(ctx context.Context, state *Track, versio
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() && !data.TrackUpErrorDisableInterfaces[i].AutoRecover.ValueBool() {
-			if state != nil && i < len(state.TrackUpErrorDisableInterfaces) && !state.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() && state.TrackUpErrorDisableInterfaces[i].AutoRecover.ValueBool() {
+			if state == nil || i >= len(state.TrackUpErrorDisableInterfaces) || state.TrackUpErrorDisableInterfaces[i].AutoRecover.IsNull() || state.TrackUpErrorDisableInterfaces[i].AutoRecover.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "action/track-up/error-disable/interfaces/interface", keyString), "auto-recover"))
 			}
 		}
@@ -2077,38 +2077,38 @@ func (data *Track) getEmptyLeafsDelete(ctx context.Context, state *Track, versio
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() && !data.TrackDownErrorDisableInterfaces[i].AutoRecover.ValueBool() {
-			if state != nil && i < len(state.TrackDownErrorDisableInterfaces) && !state.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() && state.TrackDownErrorDisableInterfaces[i].AutoRecover.ValueBool() {
+			if state == nil || i >= len(state.TrackDownErrorDisableInterfaces) || state.TrackDownErrorDisableInterfaces[i].AutoRecover.IsNull() || state.TrackDownErrorDisableInterfaces[i].AutoRecover.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "action/track-down/error-disable/interfaces/interface", keyString), "auto-recover"))
 			}
 		}
 	}
 	if !data.BgpNeighborVpnv6UnicastDisableFibCheck.IsNull() && !data.BgpNeighborVpnv6UnicastDisableFibCheck.ValueBool() {
-		if state != nil && !state.BgpNeighborVpnv6UnicastDisableFibCheck.IsNull() && state.BgpNeighborVpnv6UnicastDisableFibCheck.ValueBool() {
+		if state == nil || state.BgpNeighborVpnv6UnicastDisableFibCheck.IsNull() || state.BgpNeighborVpnv6UnicastDisableFibCheck.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "type/bgp/neighbor/address-family/state/address-family/vpnv6/unicast/disable/fib-check"))
 		}
 	}
 	if !data.BgpNeighborVpnv4UnicastDisableFibCheck.IsNull() && !data.BgpNeighborVpnv4UnicastDisableFibCheck.ValueBool() {
-		if state != nil && !state.BgpNeighborVpnv4UnicastDisableFibCheck.IsNull() && state.BgpNeighborVpnv4UnicastDisableFibCheck.ValueBool() {
+		if state == nil || state.BgpNeighborVpnv4UnicastDisableFibCheck.IsNull() || state.BgpNeighborVpnv4UnicastDisableFibCheck.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "type/bgp/neighbor/address-family/state/address-family/vpnv4/unicast/disable/fib-check"))
 		}
 	}
 	if !data.BgpNeighborIpv6LabeledUnicastDisableFibCheck.IsNull() && !data.BgpNeighborIpv6LabeledUnicastDisableFibCheck.ValueBool() {
-		if state != nil && !state.BgpNeighborIpv6LabeledUnicastDisableFibCheck.IsNull() && state.BgpNeighborIpv6LabeledUnicastDisableFibCheck.ValueBool() {
+		if state == nil || state.BgpNeighborIpv6LabeledUnicastDisableFibCheck.IsNull() || state.BgpNeighborIpv6LabeledUnicastDisableFibCheck.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "type/bgp/neighbor/address-family/state/address-family/ipv6/labeled-unicast/disable/fib-check"))
 		}
 	}
 	if !data.BgpNeighborIpv6UnicastDisableFibCheck.IsNull() && !data.BgpNeighborIpv6UnicastDisableFibCheck.ValueBool() {
-		if state != nil && !state.BgpNeighborIpv6UnicastDisableFibCheck.IsNull() && state.BgpNeighborIpv6UnicastDisableFibCheck.ValueBool() {
+		if state == nil || state.BgpNeighborIpv6UnicastDisableFibCheck.IsNull() || state.BgpNeighborIpv6UnicastDisableFibCheck.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "type/bgp/neighbor/address-family/state/address-family/ipv6/unicast/disable/fib-check"))
 		}
 	}
 	if !data.BgpNeighborIpv4LabeledUnicastDisableFibCheck.IsNull() && !data.BgpNeighborIpv4LabeledUnicastDisableFibCheck.ValueBool() {
-		if state != nil && !state.BgpNeighborIpv4LabeledUnicastDisableFibCheck.IsNull() && state.BgpNeighborIpv4LabeledUnicastDisableFibCheck.ValueBool() {
+		if state == nil || state.BgpNeighborIpv4LabeledUnicastDisableFibCheck.IsNull() || state.BgpNeighborIpv4LabeledUnicastDisableFibCheck.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "type/bgp/neighbor/address-family/state/address-family/ipv4/labeled-unicast/disable/fib-check"))
 		}
 	}
 	if !data.BgpNeighborIpv4UnicastDisableFibCheck.IsNull() && !data.BgpNeighborIpv4UnicastDisableFibCheck.ValueBool() {
-		if state != nil && !state.BgpNeighborIpv4UnicastDisableFibCheck.IsNull() && state.BgpNeighborIpv4UnicastDisableFibCheck.ValueBool() {
+		if state == nil || state.BgpNeighborIpv4UnicastDisableFibCheck.IsNull() || state.BgpNeighborIpv4UnicastDisableFibCheck.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "type/bgp/neighbor/address-family/state/address-family/ipv4/unicast/disable/fib-check"))
 		}
 	}
@@ -2168,7 +2168,7 @@ func (data *Track) getEmptyLeafsDelete(ctx context.Context, state *Track, versio
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.BooleanOrList[i].Not.IsNull() && !data.BooleanOrList[i].Not.ValueBool() {
-			if state != nil && i < len(state.BooleanOrList) && !state.BooleanOrList[i].Not.IsNull() && state.BooleanOrList[i].Not.ValueBool() {
+			if state == nil || i >= len(state.BooleanOrList) || state.BooleanOrList[i].Not.IsNull() || state.BooleanOrList[i].Not.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "type/list/boolean/or/objects/object", keyString), "not"))
 			}
 		}
@@ -2181,7 +2181,7 @@ func (data *Track) getEmptyLeafsDelete(ctx context.Context, state *Track, versio
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.BooleanAndList[i].Not.IsNull() && !data.BooleanAndList[i].Not.ValueBool() {
-			if state != nil && i < len(state.BooleanAndList) && !state.BooleanAndList[i].Not.IsNull() && state.BooleanAndList[i].Not.ValueBool() {
+			if state == nil || i >= len(state.BooleanAndList) || state.BooleanAndList[i].Not.IsNull() || state.BooleanAndList[i].Not.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "type/list/boolean/and/objects/object", keyString), "not"))
 			}
 		}

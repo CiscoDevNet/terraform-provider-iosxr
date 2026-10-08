@@ -2554,27 +2554,27 @@ func (data *SegmentRoutingTEPolicy) getDeletedItems(ctx context.Context, state S
 func (data *SegmentRoutingTEPolicy) getEmptyLeafsDelete(ctx context.Context, state *SegmentRoutingTEPolicy, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.BfdLoggingSessionStateChange.IsNull() && !data.BfdLoggingSessionStateChange.ValueBool() {
-		if state != nil && !state.BfdLoggingSessionStateChange.IsNull() && state.BfdLoggingSessionStateChange.ValueBool() {
+		if state == nil || state.BfdLoggingSessionStateChange.IsNull() || state.BfdLoggingSessionStateChange.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "bfd/bfd-logging/session-state-change"))
 		}
 	}
 	if !data.BfdDisable.IsNull() && !data.BfdDisable.ValueBool() {
-		if state != nil && !state.BfdDisable.IsNull() && state.BfdDisable.ValueBool() {
+		if state == nil || state.BfdDisable.IsNull() || state.BfdDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "bfd/disable"))
 		}
 	}
 	if !data.BfdEnable.IsNull() && !data.BfdEnable.ValueBool() {
-		if state != nil && !state.BfdEnable.IsNull() && state.BfdEnable.ValueBool() {
+		if state == nil || state.BfdEnable.IsNull() || state.BfdEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "bfd"))
 		}
 	}
 	if !data.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() && !data.PerformanceMeasurementLivenessLoggingSessionStateChange.ValueBool() {
-		if state != nil && !state.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() && state.PerformanceMeasurementLivenessLoggingSessionStateChange.ValueBool() {
+		if state == nil || state.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() || state.PerformanceMeasurementLivenessLoggingSessionStateChange.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "performance-measurement/pm-liveness-detection/pm-liveness-detection-logging/pm-liveness-session-state-change"))
 		}
 	}
 	if !data.PerformanceMeasurementDelayLoggingDelayExceeded.IsNull() && !data.PerformanceMeasurementDelayLoggingDelayExceeded.ValueBool() {
-		if state != nil && !state.PerformanceMeasurementDelayLoggingDelayExceeded.IsNull() && state.PerformanceMeasurementDelayLoggingDelayExceeded.ValueBool() {
+		if state == nil || state.PerformanceMeasurementDelayLoggingDelayExceeded.IsNull() || state.PerformanceMeasurementDelayLoggingDelayExceeded.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "performance-measurement/delay-measurement/delay-measurement-logging/delay-exceeded"))
 		}
 	}
@@ -2594,12 +2594,12 @@ func (data *SegmentRoutingTEPolicy) getEmptyLeafsDelete(ctx context.Context, sta
 			}
 		}
 		if !data.CandidatePathsPreferences[i].PerFlow.IsNull() && !data.CandidatePathsPreferences[i].PerFlow.ValueBool() {
-			if state != nil && i < len(state.CandidatePathsPreferences) && !state.CandidatePathsPreferences[i].PerFlow.IsNull() && state.CandidatePathsPreferences[i].PerFlow.ValueBool() {
+			if state == nil || i >= len(state.CandidatePathsPreferences) || state.CandidatePathsPreferences[i].PerFlow.IsNull() || state.CandidatePathsPreferences[i].PerFlow.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "candidate-paths/preferences/preference", keyString), "per-flow"))
 			}
 		}
 		if !data.CandidatePathsPreferences[i].BackupIneligible.IsNull() && !data.CandidatePathsPreferences[i].BackupIneligible.ValueBool() {
-			if state != nil && i < len(state.CandidatePathsPreferences) && !state.CandidatePathsPreferences[i].BackupIneligible.IsNull() && state.CandidatePathsPreferences[i].BackupIneligible.ValueBool() {
+			if state == nil || i >= len(state.CandidatePathsPreferences) || state.CandidatePathsPreferences[i].BackupIneligible.IsNull() || state.CandidatePathsPreferences[i].BackupIneligible.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "candidate-paths/preferences/preference", keyString), "backup-ineligible"))
 			}
 		}
@@ -2611,23 +2611,23 @@ func (data *SegmentRoutingTEPolicy) getEmptyLeafsDelete(ctx context.Context, sta
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.CandidatePathsPreferences[i].Paths[ci].Pcep.IsNull() && !data.CandidatePathsPreferences[i].Paths[ci].Pcep.ValueBool() {
-				if state != nil && i < len(state.CandidatePathsPreferences) && ci < len(state.CandidatePathsPreferences[i].Paths) && !state.CandidatePathsPreferences[i].Paths[ci].Pcep.IsNull() && state.CandidatePathsPreferences[i].Paths[ci].Pcep.ValueBool() {
+				if state == nil || i >= len(state.CandidatePathsPreferences) || ci >= len(state.CandidatePathsPreferences[i].Paths) || state.CandidatePathsPreferences[i].Paths[ci].Pcep.IsNull() || state.CandidatePathsPreferences[i].Paths[ci].Pcep.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "candidate-paths/preferences/preference", keyString, "path-infos/path-info", ckeyString), "pcep"))
 				}
 			}
 			if !data.CandidatePathsPreferences[i].Paths[ci].Anycast.IsNull() && !data.CandidatePathsPreferences[i].Paths[ci].Anycast.ValueBool() {
-				if state != nil && i < len(state.CandidatePathsPreferences) && ci < len(state.CandidatePathsPreferences[i].Paths) && !state.CandidatePathsPreferences[i].Paths[ci].Anycast.IsNull() && state.CandidatePathsPreferences[i].Paths[ci].Anycast.ValueBool() {
+				if state == nil || i >= len(state.CandidatePathsPreferences) || ci >= len(state.CandidatePathsPreferences[i].Paths) || state.CandidatePathsPreferences[i].Paths[ci].Anycast.IsNull() || state.CandidatePathsPreferences[i].Paths[ci].Anycast.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "candidate-paths/preferences/preference", keyString, "path-infos/path-info", ckeyString), "anycast"))
 				}
 			}
 			if !data.CandidatePathsPreferences[i].Paths[ci].Sticky.IsNull() && !data.CandidatePathsPreferences[i].Paths[ci].Sticky.ValueBool() {
-				if state != nil && i < len(state.CandidatePathsPreferences) && ci < len(state.CandidatePathsPreferences[i].Paths) && !state.CandidatePathsPreferences[i].Paths[ci].Sticky.IsNull() && state.CandidatePathsPreferences[i].Paths[ci].Sticky.ValueBool() {
+				if state == nil || i >= len(state.CandidatePathsPreferences) || ci >= len(state.CandidatePathsPreferences[i].Paths) || state.CandidatePathsPreferences[i].Paths[ci].Sticky.IsNull() || state.CandidatePathsPreferences[i].Paths[ci].Sticky.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "candidate-paths/preferences/preference", keyString, "path-infos/path-info", ckeyString), "disable-auto-reroute"))
 				}
 			}
 		}
 		if !data.CandidatePathsPreferences[i].BidirectionalCorouted.IsNull() && !data.CandidatePathsPreferences[i].BidirectionalCorouted.ValueBool() {
-			if state != nil && i < len(state.CandidatePathsPreferences) && !state.CandidatePathsPreferences[i].BidirectionalCorouted.IsNull() && state.CandidatePathsPreferences[i].BidirectionalCorouted.ValueBool() {
+			if state == nil || i >= len(state.CandidatePathsPreferences) || state.CandidatePathsPreferences[i].BidirectionalCorouted.IsNull() || state.CandidatePathsPreferences[i].BidirectionalCorouted.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "candidate-paths/preferences/preference", keyString), "bidirectional/corouted"))
 			}
 		}
@@ -2656,7 +2656,7 @@ func (data *SegmentRoutingTEPolicy) getEmptyLeafsDelete(ctx context.Context, sta
 			}
 		}
 		if !data.CandidatePathsPreferences[i].ConstraintsSegmentRulesAdjacencySidOnly.IsNull() && !data.CandidatePathsPreferences[i].ConstraintsSegmentRulesAdjacencySidOnly.ValueBool() {
-			if state != nil && i < len(state.CandidatePathsPreferences) && !state.CandidatePathsPreferences[i].ConstraintsSegmentRulesAdjacencySidOnly.IsNull() && state.CandidatePathsPreferences[i].ConstraintsSegmentRulesAdjacencySidOnly.ValueBool() {
+			if state == nil || i >= len(state.CandidatePathsPreferences) || state.CandidatePathsPreferences[i].ConstraintsSegmentRulesAdjacencySidOnly.IsNull() || state.CandidatePathsPreferences[i].ConstraintsSegmentRulesAdjacencySidOnly.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "candidate-paths/preferences/preference", keyString), "constraints/segment-rules/adjacency-sid-only"))
 			}
 		}
@@ -2670,47 +2670,47 @@ func (data *SegmentRoutingTEPolicy) getEmptyLeafsDelete(ctx context.Context, sta
 		}
 	}
 	if !data.AutoRouteForceSrInclude.IsNull() && !data.AutoRouteForceSrInclude.ValueBool() {
-		if state != nil && !state.AutoRouteForceSrInclude.IsNull() && state.AutoRouteForceSrInclude.ValueBool() {
+		if state == nil || state.AutoRouteForceSrInclude.IsNull() || state.AutoRouteForceSrInclude.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "auto-route/force-sr-include"))
 		}
 	}
 	if !data.AutoRouteIncludeAllIpv6.IsNull() && !data.AutoRouteIncludeAllIpv6.ValueBool() {
-		if state != nil && !state.AutoRouteIncludeAllIpv6.IsNull() && state.AutoRouteIncludeAllIpv6.ValueBool() {
+		if state == nil || state.AutoRouteIncludeAllIpv6.IsNull() || state.AutoRouteIncludeAllIpv6.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "auto-route/include-ipv6-all"))
 		}
 	}
 	if !data.AutoRouteIncludeAllIpv4.IsNull() && !data.AutoRouteIncludeAllIpv4.ValueBool() {
-		if state != nil && !state.AutoRouteIncludeAllIpv4.IsNull() && state.AutoRouteIncludeAllIpv4.ValueBool() {
+		if state == nil || state.AutoRouteIncludeAllIpv4.IsNull() || state.AutoRouteIncludeAllIpv4.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "auto-route/include-ipv4-all"))
 		}
 	}
 	if !data.PathProtection.IsNull() && !data.PathProtection.ValueBool() {
-		if state != nil && !state.PathProtection.IsNull() && state.PathProtection.ValueBool() {
+		if state == nil || state.PathProtection.IsNull() || state.PathProtection.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "protection"))
 		}
 	}
 	if !data.SteeringInvalidationDrop.IsNull() && !data.SteeringInvalidationDrop.ValueBool() {
-		if state != nil && !state.SteeringInvalidationDrop.IsNull() && state.SteeringInvalidationDrop.ValueBool() {
+		if state == nil || state.SteeringInvalidationDrop.IsNull() || state.SteeringInvalidationDrop.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "steering/invalidation-drop"))
 		}
 	}
 	if !data.SteeringLabeledServicesDisable.IsNull() && !data.SteeringLabeledServicesDisable.ValueBool() {
-		if state != nil && !state.SteeringLabeledServicesDisable.IsNull() && state.SteeringLabeledServicesDisable.ValueBool() {
+		if state == nil || state.SteeringLabeledServicesDisable.IsNull() || state.SteeringLabeledServicesDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "steering/labeled-services/disable"))
 		}
 	}
 	if !data.Shutdown.IsNull() && !data.Shutdown.ValueBool() {
-		if state != nil && !state.Shutdown.IsNull() && state.Shutdown.ValueBool() {
+		if state == nil || state.Shutdown.IsNull() || state.Shutdown.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "shutdown"))
 		}
 	}
 	if !data.TransitEligible.IsNull() && !data.TransitEligible.ValueBool() {
-		if state != nil && !state.TransitEligible.IsNull() && state.TransitEligible.ValueBool() {
+		if state == nil || state.TransitEligible.IsNull() || state.TransitEligible.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transit-eligible"))
 		}
 	}
 	if !data.Ipv6Disable.IsNull() && !data.Ipv6Disable.ValueBool() {
-		if state != nil && !state.Ipv6Disable.IsNull() && state.Ipv6Disable.ValueBool() {
+		if state == nil || state.Ipv6Disable.IsNull() || state.Ipv6Disable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6-disable"))
 		}
 	}

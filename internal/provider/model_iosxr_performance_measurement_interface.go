@@ -510,37 +510,37 @@ func (data *PerformanceMeasurementInterface) getDeletedItems(ctx context.Context
 func (data *PerformanceMeasurementInterface) getEmptyLeafsDelete(ctx context.Context, state *PerformanceMeasurementInterface, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.PathTracingTimestampTemplateSt3.IsNull() && !data.PathTracingTimestampTemplateSt3.ValueBool() {
-		if state != nil && !state.PathTracingTimestampTemplateSt3.IsNull() && state.PathTracingTimestampTemplateSt3.ValueBool() {
+		if state == nil || state.PathTracingTimestampTemplateSt3.IsNull() || state.PathTracingTimestampTemplateSt3.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "path-tracing/timestamp/template/st3"))
 		}
 	}
 	if !data.PathTracingTimestampTemplateSt2.IsNull() && !data.PathTracingTimestampTemplateSt2.ValueBool() {
-		if state != nil && !state.PathTracingTimestampTemplateSt2.IsNull() && state.PathTracingTimestampTemplateSt2.ValueBool() {
+		if state == nil || state.PathTracingTimestampTemplateSt2.IsNull() || state.PathTracingTimestampTemplateSt2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "path-tracing/timestamp/template/st2"))
 		}
 	}
 	if !data.PathTracingTimestampTemplateSt1.IsNull() && !data.PathTracingTimestampTemplateSt1.ValueBool() {
-		if state != nil && !state.PathTracingTimestampTemplateSt1.IsNull() && state.PathTracingTimestampTemplateSt1.ValueBool() {
+		if state == nil || state.PathTracingTimestampTemplateSt1.IsNull() || state.PathTracingTimestampTemplateSt1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "path-tracing/timestamp/template/st1"))
 		}
 	}
 	if !data.PathTracingTimestampTemplateSt0.IsNull() && !data.PathTracingTimestampTemplateSt0.ValueBool() {
-		if state != nil && !state.PathTracingTimestampTemplateSt0.IsNull() && state.PathTracingTimestampTemplateSt0.ValueBool() {
+		if state == nil || state.PathTracingTimestampTemplateSt0.IsNull() || state.PathTracingTimestampTemplateSt0.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "path-tracing/timestamp/template/st0"))
 		}
 	}
 	if !data.PathTracing.IsNull() && !data.PathTracing.ValueBool() {
-		if state != nil && !state.PathTracing.IsNull() && state.PathTracing.ValueBool() {
+		if state == nil || state.PathTracing.IsNull() || state.PathTracing.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "path-tracing"))
 		}
 	}
 	if !data.DelayMeasurementFallback.IsNull() && !data.DelayMeasurementFallback.ValueBool() {
-		if state != nil && !state.DelayMeasurementFallback.IsNull() && state.DelayMeasurementFallback.ValueBool() {
+		if state == nil || state.DelayMeasurementFallback.IsNull() || state.DelayMeasurementFallback.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "delay-measurement"))
 		}
 	}
 	if !data.DelayMeasurement.IsNull() && !data.DelayMeasurement.ValueBool() {
-		if state != nil && !state.DelayMeasurement.IsNull() && state.DelayMeasurement.ValueBool() {
+		if state == nil || state.DelayMeasurement.IsNull() || state.DelayMeasurement.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "delay-measurement"))
 		}
 	}

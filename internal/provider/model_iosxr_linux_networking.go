@@ -1207,22 +1207,22 @@ func (data *LinuxNetworking) getEmptyLeafsDelete(ctx context.Context, state *Lin
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.IsNull() && !data.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.ValueBool() {
-			if state != nil && i < len(state.Vrfs) && !state.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.IsNull() && state.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.ValueBool() {
+			if state == nil || i >= len(state.Vrfs) || state.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.IsNull() || state.Vrfs[i].Ipv6DefaultRouteSoftwareForwarding.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "vrfs/vrf", keyString), "address-family/ipv6/default-route/software-forwarding"))
 			}
 		}
 		if !data.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.IsNull() && !data.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.ValueBool() {
-			if state != nil && i < len(state.Vrfs) && !state.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.IsNull() && state.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.ValueBool() {
+			if state == nil || i >= len(state.Vrfs) || state.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.IsNull() || state.Vrfs[i].Ipv6SourceDefaultRouteActiveManagement.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "vrfs/vrf", keyString), "address-family/ipv6/source-hint/default-route/active-management"))
 			}
 		}
 		if !data.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.IsNull() && !data.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.ValueBool() {
-			if state != nil && i < len(state.Vrfs) && !state.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.IsNull() && state.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.ValueBool() {
+			if state == nil || i >= len(state.Vrfs) || state.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.IsNull() || state.Vrfs[i].Ipv4DefaultRouteSoftwareForwarding.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "vrfs/vrf", keyString), "address-family/ipv4/default-route/software-forwarding"))
 			}
 		}
 		if !data.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.IsNull() && !data.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.ValueBool() {
-			if state != nil && i < len(state.Vrfs) && !state.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.IsNull() && state.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.ValueBool() {
+			if state == nil || i >= len(state.Vrfs) || state.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.IsNull() || state.Vrfs[i].Ipv4SourceDefaultRouteActiveManagement.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "vrfs/vrf", keyString), "address-family/ipv4/source-hint/default-route/active-management"))
 			}
 		}
@@ -1235,7 +1235,7 @@ func (data *LinuxNetworking) getEmptyLeafsDelete(ctx context.Context, state *Lin
 			}
 		}
 		if !data.Vrfs[i].Disable.IsNull() && !data.Vrfs[i].Disable.ValueBool() {
-			if state != nil && i < len(state.Vrfs) && !state.Vrfs[i].Disable.IsNull() && state.Vrfs[i].Disable.ValueBool() {
+			if state == nil || i >= len(state.Vrfs) || state.Vrfs[i].Disable.IsNull() || state.Vrfs[i].Disable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "vrfs/vrf", keyString), "disable"))
 			}
 		}
@@ -1248,78 +1248,78 @@ func (data *LinuxNetworking) getEmptyLeafsDelete(ctx context.Context, state *Lin
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.IsNull() && !data.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.ValueBool() {
-			if state != nil && i < len(state.ExposedInterfaces) && !state.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.IsNull() && state.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.ValueBool() {
+			if state == nil || i >= len(state.ExposedInterfaces) || state.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.IsNull() || state.ExposedInterfaces[i].StatisticsSynchronizationSixtySeconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exposed-interfaces/interfaces/interface", keyString), "statistics-synchronization/from-xr"))
 			}
 		}
 		if !data.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.IsNull() && !data.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.ValueBool() {
-			if state != nil && i < len(state.ExposedInterfaces) && !state.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.IsNull() && state.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.ValueBool() {
+			if state == nil || i >= len(state.ExposedInterfaces) || state.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.IsNull() || state.ExposedInterfaces[i].StatisticsSynchronizationThirtySeconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exposed-interfaces/interfaces/interface", keyString), "statistics-synchronization/from-xr"))
 			}
 		}
 		if !data.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.IsNull() && !data.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.ValueBool() {
-			if state != nil && i < len(state.ExposedInterfaces) && !state.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.IsNull() && state.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.ValueBool() {
+			if state == nil || i >= len(state.ExposedInterfaces) || state.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.IsNull() || state.ExposedInterfaces[i].StatisticsSynchronizationTenSeconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exposed-interfaces/interfaces/interface", keyString), "statistics-synchronization/from-xr"))
 			}
 		}
 		if !data.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.IsNull() && !data.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.ValueBool() {
-			if state != nil && i < len(state.ExposedInterfaces) && !state.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.IsNull() && state.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.ValueBool() {
+			if state == nil || i >= len(state.ExposedInterfaces) || state.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.IsNull() || state.ExposedInterfaces[i].StatisticsSynchronizationFiveSeconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exposed-interfaces/interfaces/interface", keyString), "statistics-synchronization/from-xr"))
 			}
 		}
 	}
 	if !data.StatisticsSynchronizationTenMinutes.IsNull() && !data.StatisticsSynchronizationTenMinutes.ValueBool() {
-		if state != nil && !state.StatisticsSynchronizationTenMinutes.IsNull() && state.StatisticsSynchronizationTenMinutes.ValueBool() {
+		if state == nil || state.StatisticsSynchronizationTenMinutes.IsNull() || state.StatisticsSynchronizationTenMinutes.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "statistics-synchronization/from-xr"))
 		}
 	}
 	if !data.StatisticsSynchronizationNineMinutes.IsNull() && !data.StatisticsSynchronizationNineMinutes.ValueBool() {
-		if state != nil && !state.StatisticsSynchronizationNineMinutes.IsNull() && state.StatisticsSynchronizationNineMinutes.ValueBool() {
+		if state == nil || state.StatisticsSynchronizationNineMinutes.IsNull() || state.StatisticsSynchronizationNineMinutes.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "statistics-synchronization/from-xr"))
 		}
 	}
 	if !data.StatisticsSynchronizationEightMinutes.IsNull() && !data.StatisticsSynchronizationEightMinutes.ValueBool() {
-		if state != nil && !state.StatisticsSynchronizationEightMinutes.IsNull() && state.StatisticsSynchronizationEightMinutes.ValueBool() {
+		if state == nil || state.StatisticsSynchronizationEightMinutes.IsNull() || state.StatisticsSynchronizationEightMinutes.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "statistics-synchronization/from-xr"))
 		}
 	}
 	if !data.StatisticsSynchronizationSevenMinutes.IsNull() && !data.StatisticsSynchronizationSevenMinutes.ValueBool() {
-		if state != nil && !state.StatisticsSynchronizationSevenMinutes.IsNull() && state.StatisticsSynchronizationSevenMinutes.ValueBool() {
+		if state == nil || state.StatisticsSynchronizationSevenMinutes.IsNull() || state.StatisticsSynchronizationSevenMinutes.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "statistics-synchronization/from-xr"))
 		}
 	}
 	if !data.StatisticsSynchronizationSixMinutes.IsNull() && !data.StatisticsSynchronizationSixMinutes.ValueBool() {
-		if state != nil && !state.StatisticsSynchronizationSixMinutes.IsNull() && state.StatisticsSynchronizationSixMinutes.ValueBool() {
+		if state == nil || state.StatisticsSynchronizationSixMinutes.IsNull() || state.StatisticsSynchronizationSixMinutes.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "statistics-synchronization/from-xr"))
 		}
 	}
 	if !data.StatisticsSynchronizationFiveMinutes.IsNull() && !data.StatisticsSynchronizationFiveMinutes.ValueBool() {
-		if state != nil && !state.StatisticsSynchronizationFiveMinutes.IsNull() && state.StatisticsSynchronizationFiveMinutes.ValueBool() {
+		if state == nil || state.StatisticsSynchronizationFiveMinutes.IsNull() || state.StatisticsSynchronizationFiveMinutes.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "statistics-synchronization/from-xr"))
 		}
 	}
 	if !data.StatisticsSynchronizationFourMinutes.IsNull() && !data.StatisticsSynchronizationFourMinutes.ValueBool() {
-		if state != nil && !state.StatisticsSynchronizationFourMinutes.IsNull() && state.StatisticsSynchronizationFourMinutes.ValueBool() {
+		if state == nil || state.StatisticsSynchronizationFourMinutes.IsNull() || state.StatisticsSynchronizationFourMinutes.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "statistics-synchronization/from-xr"))
 		}
 	}
 	if !data.StatisticsSynchronizationThreeMinutes.IsNull() && !data.StatisticsSynchronizationThreeMinutes.ValueBool() {
-		if state != nil && !state.StatisticsSynchronizationThreeMinutes.IsNull() && state.StatisticsSynchronizationThreeMinutes.ValueBool() {
+		if state == nil || state.StatisticsSynchronizationThreeMinutes.IsNull() || state.StatisticsSynchronizationThreeMinutes.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "statistics-synchronization/from-xr"))
 		}
 	}
 	if !data.StatisticsSynchronizationTwoMinutes.IsNull() && !data.StatisticsSynchronizationTwoMinutes.ValueBool() {
-		if state != nil && !state.StatisticsSynchronizationTwoMinutes.IsNull() && state.StatisticsSynchronizationTwoMinutes.ValueBool() {
+		if state == nil || state.StatisticsSynchronizationTwoMinutes.IsNull() || state.StatisticsSynchronizationTwoMinutes.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "statistics-synchronization/from-xr"))
 		}
 	}
 	if !data.StatisticsSynchronizationSixtySeconds.IsNull() && !data.StatisticsSynchronizationSixtySeconds.ValueBool() {
-		if state != nil && !state.StatisticsSynchronizationSixtySeconds.IsNull() && state.StatisticsSynchronizationSixtySeconds.ValueBool() {
+		if state == nil || state.StatisticsSynchronizationSixtySeconds.IsNull() || state.StatisticsSynchronizationSixtySeconds.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "statistics-synchronization/from-xr"))
 		}
 	}
 	if !data.StatisticsSynchronizationThirtySeconds.IsNull() && !data.StatisticsSynchronizationThirtySeconds.ValueBool() {
-		if state != nil && !state.StatisticsSynchronizationThirtySeconds.IsNull() && state.StatisticsSynchronizationThirtySeconds.ValueBool() {
+		if state == nil || state.StatisticsSynchronizationThirtySeconds.IsNull() || state.StatisticsSynchronizationThirtySeconds.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "statistics-synchronization/from-xr"))
 		}
 	}

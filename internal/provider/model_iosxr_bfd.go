@@ -1302,33 +1302,33 @@ func (data *BFD) getEmptyLeafsDelete(ctx context.Context, state *BFD, version st
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Interfaces[i].Disable.IsNull() && !data.Interfaces[i].Disable.ValueBool() {
-			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].Disable.IsNull() && state.Interfaces[i].Disable.ValueBool() {
+			if state == nil || i >= len(state.Interfaces) || state.Interfaces[i].Disable.IsNull() || state.Interfaces[i].Disable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "interfaces/interface", keyString), "disable"))
 			}
 		}
 		if !data.Interfaces[i].Ipv6ChecksumDisable.IsNull() && !data.Interfaces[i].Ipv6ChecksumDisable.ValueBool() {
-			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].Ipv6ChecksumDisable.IsNull() && state.Interfaces[i].Ipv6ChecksumDisable.ValueBool() {
+			if state == nil || i >= len(state.Interfaces) || state.Interfaces[i].Ipv6ChecksumDisable.IsNull() || state.Interfaces[i].Ipv6ChecksumDisable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "interfaces/interface", keyString), "ipv6/checksum"))
 			}
 		}
 	}
 	if !data.Ipv6ChecksumDisable.IsNull() && !data.Ipv6ChecksumDisable.ValueBool() {
-		if state != nil && !state.Ipv6ChecksumDisable.IsNull() && state.Ipv6ChecksumDisable.ValueBool() {
+		if state == nil || state.Ipv6ChecksumDisable.IsNull() || state.Ipv6ChecksumDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/checksum/disable"))
 		}
 	}
 	if !data.DampeningBundleMemberL3OnlyMode.IsNull() && !data.DampeningBundleMemberL3OnlyMode.ValueBool() {
-		if state != nil && !state.DampeningBundleMemberL3OnlyMode.IsNull() && state.DampeningBundleMemberL3OnlyMode.ValueBool() {
+		if state == nil || state.DampeningBundleMemberL3OnlyMode.IsNull() || state.DampeningBundleMemberL3OnlyMode.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "dampening/bundle-member/l3-only-mode"))
 		}
 	}
 	if !data.DampeningDisable.IsNull() && !data.DampeningDisable.ValueBool() {
-		if state != nil && !state.DampeningDisable.IsNull() && state.DampeningDisable.ValueBool() {
+		if state == nil || state.DampeningDisable.IsNull() || state.DampeningDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "dampening/disable"))
 		}
 	}
 	if !data.DampeningExtensionsDownMonitoring.IsNull() && !data.DampeningExtensionsDownMonitoring.ValueBool() {
-		if state != nil && !state.DampeningExtensionsDownMonitoring.IsNull() && state.DampeningExtensionsDownMonitoring.ValueBool() {
+		if state == nil || state.DampeningExtensionsDownMonitoring.IsNull() || state.DampeningExtensionsDownMonitoring.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "dampening/extensions/down-monitoring"))
 		}
 	}
@@ -1363,22 +1363,22 @@ func (data *BFD) getEmptyLeafsDelete(ctx context.Context, state *BFD, version st
 		}
 	}
 	if !data.TrapSinglehopPreMapped.IsNull() && !data.TrapSinglehopPreMapped.ValueBool() {
-		if state != nil && !state.TrapSinglehopPreMapped.IsNull() && state.TrapSinglehopPreMapped.ValueBool() {
+		if state == nil || state.TrapSinglehopPreMapped.IsNull() || state.TrapSinglehopPreMapped.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "trap/singlehop/pre-mapped"))
 		}
 	}
 	if !data.EchoStartupValidateForce.IsNull() && !data.EchoStartupValidateForce.ValueBool() {
-		if state != nil && !state.EchoStartupValidateForce.IsNull() && state.EchoStartupValidateForce.ValueBool() {
+		if state == nil || state.EchoStartupValidateForce.IsNull() || state.EchoStartupValidateForce.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "echo/startup/validate"))
 		}
 	}
 	if !data.EchoLatencyDetect.IsNull() && !data.EchoLatencyDetect.ValueBool() {
-		if state != nil && !state.EchoLatencyDetect.IsNull() && state.EchoLatencyDetect.ValueBool() {
+		if state == nil || state.EchoLatencyDetect.IsNull() || state.EchoLatencyDetect.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "echo/latency/detect"))
 		}
 	}
 	if !data.EchoDisable.IsNull() && !data.EchoDisable.ValueBool() {
-		if state != nil && !state.EchoDisable.IsNull() && state.EchoDisable.ValueBool() {
+		if state == nil || state.EchoDisable.IsNull() || state.EchoDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "echo/disable"))
 		}
 	}

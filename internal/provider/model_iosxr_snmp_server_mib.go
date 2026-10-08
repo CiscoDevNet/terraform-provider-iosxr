@@ -1024,52 +1024,52 @@ func (data *SNMPServerMIB) getDeletedItems(ctx context.Context, state SNMPServer
 func (data *SNMPServerMIB) getEmptyLeafsDelete(ctx context.Context, state *SNMPServerMIB, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.EntityindexPersist.IsNull() && !data.EntityindexPersist.ValueBool() {
-		if state != nil && !state.EntityindexPersist.IsNull() && state.EntityindexPersist.ValueBool() {
+		if state == nil || state.EntityindexPersist.IsNull() || state.EntityindexPersist.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-traps-entity-cfg:entityindex/persist"))
 		}
 	}
 	if !data.NotificationLogMibDisable.IsNull() && !data.NotificationLogMibDisable.ValueBool() {
-		if state != nil && !state.NotificationLogMibDisable.IsNull() && state.NotificationLogMibDisable.ValueBool() {
+		if state == nil || state.NotificationLogMibDisable.IsNull() || state.NotificationLogMibDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/disable"))
 		}
 	}
 	if !data.NotificationLogMibDefault.IsNull() && !data.NotificationLogMibDefault.ValueBool() {
-		if state != nil && !state.NotificationLogMibDefault.IsNull() && state.NotificationLogMibDefault.ValueBool() {
+		if state == nil || state.NotificationLogMibDefault.IsNull() || state.NotificationLogMibDefault.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/default"))
 		}
 	}
 	if !data.MroutemibSendAllVrf.IsNull() && !data.MroutemibSendAllVrf.ValueBool() {
-		if state != nil && !state.MroutemibSendAllVrf.IsNull() && state.MroutemibSendAllVrf.ValueBool() {
+		if state == nil || state.MroutemibSendAllVrf.IsNull() || state.MroutemibSendAllVrf.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-snmp-server-mroutemib-cfg:mroutemib/send-all-vrf"))
 		}
 	}
 	if !data.SensormibCache.IsNull() && !data.SensormibCache.ValueBool() {
-		if state != nil && !state.SensormibCache.IsNull() && state.SensormibCache.ValueBool() {
+		if state == nil || state.SensormibCache.IsNull() || state.SensormibCache.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-sensormib-cfg:sensormib/cache"))
 		}
 	}
 	if !data.RfmibEntphyindex.IsNull() && !data.RfmibEntphyindex.ValueBool() {
-		if state != nil && !state.RfmibEntphyindex.IsNull() && state.RfmibEntphyindex.ValueBool() {
+		if state == nil || state.RfmibEntphyindex.IsNull() || state.RfmibEntphyindex.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-rfmib-cfg:rfmib/entphyindex"))
 		}
 	}
 	if !data.IfmibIpsubscriber.IsNull() && !data.IfmibIpsubscriber.ValueBool() {
-		if state != nil && !state.IfmibIpsubscriber.IsNull() && state.IfmibIpsubscriber.ValueBool() {
+		if state == nil || state.IfmibIpsubscriber.IsNull() || state.IfmibIpsubscriber.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ipsubscriber"))
 		}
 	}
 	if !data.IfmibStatsCache.IsNull() && !data.IfmibStatsCache.ValueBool() {
-		if state != nil && !state.IfmibStatsCache.IsNull() && state.IfmibStatsCache.ValueBool() {
+		if state == nil || state.IfmibStatsCache.IsNull() || state.IfmibStatsCache.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/stats/cache"))
 		}
 	}
 	if !data.IfmibIfaliasLong.IsNull() && !data.IfmibIfaliasLong.ValueBool() {
-		if state != nil && !state.IfmibIfaliasLong.IsNull() && state.IfmibIfaliasLong.ValueBool() {
+		if state == nil || state.IfmibIfaliasLong.IsNull() || state.IfmibIfaliasLong.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long"))
 		}
 	}
 	if !data.TrapLinkIetf.IsNull() && !data.TrapLinkIetf.ValueBool() {
-		if state != nil && !state.TrapLinkIetf.IsNull() && state.TrapLinkIetf.ValueBool() {
+		if state == nil || state.TrapLinkIetf.IsNull() || state.TrapLinkIetf.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:trap/link/ietf"))
 		}
 	}
@@ -1081,38 +1081,38 @@ func (data *SNMPServerMIB) getEmptyLeafsDelete(ctx context.Context, state *SNMPS
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Interfaces[i].IndexPersistence.IsNull() && !data.Interfaces[i].IndexPersistence.ValueBool() {
-			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].IndexPersistence.IsNull() && state.Interfaces[i].IndexPersistence.ValueBool() {
+			if state == nil || i >= len(state.Interfaces) || state.Interfaces[i].IndexPersistence.IsNull() || state.Interfaces[i].IndexPersistence.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface", keyString), "index/persistence"))
 			}
 		}
 		if !data.Interfaces[i].NotificationLinkupdownDisable.IsNull() && !data.Interfaces[i].NotificationLinkupdownDisable.ValueBool() {
-			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].NotificationLinkupdownDisable.IsNull() && state.Interfaces[i].NotificationLinkupdownDisable.ValueBool() {
+			if state == nil || i >= len(state.Interfaces) || state.Interfaces[i].NotificationLinkupdownDisable.IsNull() || state.Interfaces[i].NotificationLinkupdownDisable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface", keyString), "notification/linkupdown/disable"))
 			}
 		}
 		if !data.Interfaces[i].NotificationLinkupdownEnable.IsNull() && !data.Interfaces[i].NotificationLinkupdownEnable.ValueBool() {
-			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].NotificationLinkupdownEnable.IsNull() && state.Interfaces[i].NotificationLinkupdownEnable.ValueBool() {
+			if state == nil || i >= len(state.Interfaces) || state.Interfaces[i].NotificationLinkupdownEnable.IsNull() || state.Interfaces[i].NotificationLinkupdownEnable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface", keyString), "notification/linkupdown/enable"))
 			}
 		}
 	}
 	if !data.IfindexPersist.IsNull() && !data.IfindexPersist.ValueBool() {
-		if state != nil && !state.IfindexPersist.IsNull() && state.IfindexPersist.ValueBool() {
+		if state == nil || state.IfindexPersist.IsNull() || state.IfindexPersist.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist"))
 		}
 	}
 	if !data.CbqosmibMemberStats.IsNull() && !data.CbqosmibMemberStats.ValueBool() {
-		if state != nil && !state.CbqosmibMemberStats.IsNull() && state.CbqosmibMemberStats.ValueBool() {
+		if state == nil || state.CbqosmibMemberStats.IsNull() || state.CbqosmibMemberStats.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/member-stats"))
 		}
 	}
 	if !data.CbqosmibPersist.IsNull() && !data.CbqosmibPersist.ValueBool() {
-		if state != nil && !state.CbqosmibPersist.IsNull() && state.CbqosmibPersist.ValueBool() {
+		if state == nil || state.CbqosmibPersist.IsNull() || state.CbqosmibPersist.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/persist"))
 		}
 	}
 	if !data.CbqosmibCache.IsNull() && !data.CbqosmibCache.ValueBool() {
-		if state != nil && !state.CbqosmibCache.IsNull() && state.CbqosmibCache.ValueBool() {
+		if state == nil || state.CbqosmibCache.IsNull() || state.CbqosmibCache.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/cache"))
 		}
 	}

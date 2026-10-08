@@ -751,7 +751,7 @@ func (data *RouterIGMP) getDeletedItems(ctx context.Context, state RouterIGMP, v
 func (data *RouterIGMP) getEmptyLeafsDelete(ctx context.Context, state *RouterIGMP, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.SsmMapQueryDns.IsNull() && !data.SsmMapQueryDns.ValueBool() {
-		if state != nil && !state.SsmMapQueryDns.IsNull() && state.SsmMapQueryDns.ValueBool() {
+		if state == nil || state.SsmMapQueryDns.IsNull() || state.SsmMapQueryDns.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ssm/map/query/dns"))
 		}
 	}
@@ -764,17 +764,17 @@ func (data *RouterIGMP) getEmptyLeafsDelete(ctx context.Context, state *RouterIG
 		}
 	}
 	if !data.ExplicitTrackingDisable.IsNull() && !data.ExplicitTrackingDisable.ValueBool() {
-		if state != nil && !state.ExplicitTrackingDisable.IsNull() && state.ExplicitTrackingDisable.ValueBool() {
+		if state == nil || state.ExplicitTrackingDisable.IsNull() || state.ExplicitTrackingDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "explicit-tracking/disable"))
 		}
 	}
 	if !data.ExplicitTracking.IsNull() && !data.ExplicitTracking.ValueBool() {
-		if state != nil && !state.ExplicitTracking.IsNull() && state.ExplicitTracking.ValueBool() {
+		if state == nil || state.ExplicitTracking.IsNull() || state.ExplicitTracking.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "explicit-tracking"))
 		}
 	}
 	if !data.DvmrpEnable.IsNull() && !data.DvmrpEnable.ValueBool() {
-		if state != nil && !state.DvmrpEnable.IsNull() && state.DvmrpEnable.ValueBool() {
+		if state == nil || state.DvmrpEnable.IsNull() || state.DvmrpEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "dvmrp-enable"))
 		}
 	}

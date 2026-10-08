@@ -1571,17 +1571,17 @@ func (data *SegmentRoutingTEOnDemandColor) getDeletedItems(ctx context.Context, 
 func (data *SegmentRoutingTEOnDemandColor) getEmptyLeafsDelete(ctx context.Context, state *SegmentRoutingTEOnDemandColor, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.BfdLoggingSessionStateChange.IsNull() && !data.BfdLoggingSessionStateChange.ValueBool() {
-		if state != nil && !state.BfdLoggingSessionStateChange.IsNull() && state.BfdLoggingSessionStateChange.ValueBool() {
+		if state == nil || state.BfdLoggingSessionStateChange.IsNull() || state.BfdLoggingSessionStateChange.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "bfd/bfd-logging/session-state-change"))
 		}
 	}
 	if !data.BfdDisable.IsNull() && !data.BfdDisable.ValueBool() {
-		if state != nil && !state.BfdDisable.IsNull() && state.BfdDisable.ValueBool() {
+		if state == nil || state.BfdDisable.IsNull() || state.BfdDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "bfd/disable"))
 		}
 	}
 	if !data.BfdEnable.IsNull() && !data.BfdEnable.ValueBool() {
-		if state != nil && !state.BfdEnable.IsNull() && state.BfdEnable.ValueBool() {
+		if state == nil || state.BfdEnable.IsNull() || state.BfdEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "bfd"))
 		}
 	}
@@ -1594,27 +1594,27 @@ func (data *SegmentRoutingTEOnDemandColor) getEmptyLeafsDelete(ctx context.Conte
 		}
 	}
 	if !data.PerFlow.IsNull() && !data.PerFlow.ValueBool() {
-		if state != nil && !state.PerFlow.IsNull() && state.PerFlow.ValueBool() {
+		if state == nil || state.PerFlow.IsNull() || state.PerFlow.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "per-flow"))
 		}
 	}
 	if !data.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() && !data.PerformanceMeasurementLivenessLoggingSessionStateChange.ValueBool() {
-		if state != nil && !state.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() && state.PerformanceMeasurementLivenessLoggingSessionStateChange.ValueBool() {
+		if state == nil || state.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() || state.PerformanceMeasurementLivenessLoggingSessionStateChange.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "performance-measurement/pm-liveness-detection/pm-liveness-detection-logging/pm-liveness-session-state-change"))
 		}
 	}
 	if !data.PerformanceMeasurementDelayLoggingDelayExceeded.IsNull() && !data.PerformanceMeasurementDelayLoggingDelayExceeded.ValueBool() {
-		if state != nil && !state.PerformanceMeasurementDelayLoggingDelayExceeded.IsNull() && state.PerformanceMeasurementDelayLoggingDelayExceeded.ValueBool() {
+		if state == nil || state.PerformanceMeasurementDelayLoggingDelayExceeded.IsNull() || state.PerformanceMeasurementDelayLoggingDelayExceeded.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "performance-measurement/delay-measurement/delay-measurement-logging/delay-exceeded"))
 		}
 	}
 	if !data.SteeringInvalidationDrop.IsNull() && !data.SteeringInvalidationDrop.ValueBool() {
-		if state != nil && !state.SteeringInvalidationDrop.IsNull() && state.SteeringInvalidationDrop.ValueBool() {
+		if state == nil || state.SteeringInvalidationDrop.IsNull() || state.SteeringInvalidationDrop.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "steering/invalidation-drop"))
 		}
 	}
 	if !data.SteeringLabeledServicesDisable.IsNull() && !data.SteeringLabeledServicesDisable.ValueBool() {
-		if state != nil && !state.SteeringLabeledServicesDisable.IsNull() && state.SteeringLabeledServicesDisable.ValueBool() {
+		if state == nil || state.SteeringLabeledServicesDisable.IsNull() || state.SteeringLabeledServicesDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "steering/labeled-services/disable"))
 		}
 	}
@@ -1643,12 +1643,12 @@ func (data *SegmentRoutingTEOnDemandColor) getEmptyLeafsDelete(ctx context.Conte
 		}
 	}
 	if !data.DynamicPcep.IsNull() && !data.DynamicPcep.ValueBool() {
-		if state != nil && !state.DynamicPcep.IsNull() && state.DynamicPcep.ValueBool() {
+		if state == nil || state.DynamicPcep.IsNull() || state.DynamicPcep.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-pce"))
 		}
 	}
 	if !data.DynamicAnycastSidInclusion.IsNull() && !data.DynamicAnycastSidInclusion.ValueBool() {
-		if state != nil && !state.DynamicAnycastSidInclusion.IsNull() && state.DynamicAnycastSidInclusion.ValueBool() {
+		if state == nil || state.DynamicAnycastSidInclusion.IsNull() || state.DynamicAnycastSidInclusion.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-anycast"))
 		}
 	}

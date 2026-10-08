@@ -772,67 +772,67 @@ func (data *EVPNInterface) getDeletedItems(ctx context.Context, state EVPNInterf
 func (data *EVPNInterface) getEmptyLeafsDelete(ctx context.Context, state *EVPNInterface, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.AccessSignalBundleDown.IsNull() && !data.AccessSignalBundleDown.ValueBool() {
-		if state != nil && !state.AccessSignalBundleDown.IsNull() && state.AccessSignalBundleDown.ValueBool() {
+		if state == nil || state.AccessSignalBundleDown.IsNull() || state.AccessSignalBundleDown.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "access-signal/bundle-down"))
 		}
 	}
 	if !data.EthernetSegmentConvergenceNexthopTracking.IsNull() && !data.EthernetSegmentConvergenceNexthopTracking.ValueBool() {
-		if state != nil && !state.EthernetSegmentConvergenceNexthopTracking.IsNull() && state.EthernetSegmentConvergenceNexthopTracking.ValueBool() {
+		if state == nil || state.EthernetSegmentConvergenceNexthopTracking.IsNull() || state.EthernetSegmentConvergenceNexthopTracking.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ethernet-segment/convergence/nexthop-tracking"))
 		}
 	}
 	if !data.EthernetSegmentConvergenceMacMobility.IsNull() && !data.EthernetSegmentConvergenceMacMobility.ValueBool() {
-		if state != nil && !state.EthernetSegmentConvergenceMacMobility.IsNull() && state.EthernetSegmentConvergenceMacMobility.ValueBool() {
+		if state == nil || state.EthernetSegmentConvergenceMacMobility.IsNull() || state.EthernetSegmentConvergenceMacMobility.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ethernet-segment/convergence/mac-mobility"))
 		}
 	}
 	if !data.EthernetSegmentConvergenceReroute.IsNull() && !data.EthernetSegmentConvergenceReroute.ValueBool() {
-		if state != nil && !state.EthernetSegmentConvergenceReroute.IsNull() && state.EthernetSegmentConvergenceReroute.ValueBool() {
+		if state == nil || state.EthernetSegmentConvergenceReroute.IsNull() || state.EthernetSegmentConvergenceReroute.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ethernet-segment/convergence/reroute"))
 		}
 	}
 	if !data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() && !data.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.ValueBool() {
-		if state != nil && !state.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() && state.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.ValueBool() {
+		if state == nil || state.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() || state.EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ethernet-segment/service-carving/preference-based"))
 		}
 	}
 	if !data.EthernetSegmentServiceCarvingMulticastHrwG.IsNull() && !data.EthernetSegmentServiceCarvingMulticastHrwG.ValueBool() {
-		if state != nil && !state.EthernetSegmentServiceCarvingMulticastHrwG.IsNull() && state.EthernetSegmentServiceCarvingMulticastHrwG.ValueBool() {
+		if state == nil || state.EthernetSegmentServiceCarvingMulticastHrwG.IsNull() || state.EthernetSegmentServiceCarvingMulticastHrwG.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ethernet-segment/service-carving/multicast"))
 		}
 	}
 	if !data.EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() && !data.EthernetSegmentServiceCarvingMulticastHrwSG.ValueBool() {
-		if state != nil && !state.EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() && state.EthernetSegmentServiceCarvingMulticastHrwSG.ValueBool() {
+		if state == nil || state.EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() || state.EthernetSegmentServiceCarvingMulticastHrwSG.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ethernet-segment/service-carving/multicast"))
 		}
 	}
 	if !data.EthernetSegmentServiceCarvingHrw.IsNull() && !data.EthernetSegmentServiceCarvingHrw.ValueBool() {
-		if state != nil && !state.EthernetSegmentServiceCarvingHrw.IsNull() && state.EthernetSegmentServiceCarvingHrw.ValueBool() {
+		if state == nil || state.EthernetSegmentServiceCarvingHrw.IsNull() || state.EthernetSegmentServiceCarvingHrw.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ethernet-segment/service-carving/hrw"))
 		}
 	}
 	if !data.EthernetSegmentForceSingleHomed.IsNull() && !data.EthernetSegmentForceSingleHomed.ValueBool() {
-		if state != nil && !state.EthernetSegmentForceSingleHomed.IsNull() && state.EthernetSegmentForceSingleHomed.ValueBool() {
+		if state == nil || state.EthernetSegmentForceSingleHomed.IsNull() || state.EthernetSegmentForceSingleHomed.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ethernet-segment/force/single-homed"))
 		}
 	}
 	if !data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() && !data.EthernetSegmentLoadBalancingModeSingleFlowActive.ValueBool() {
-		if state != nil && !state.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() && state.EthernetSegmentLoadBalancingModeSingleFlowActive.ValueBool() {
+		if state == nil || state.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() || state.EthernetSegmentLoadBalancingModeSingleFlowActive.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ethernet-segment/load-balancing-mode/single-flow-active"))
 		}
 	}
 	if !data.EthernetSegmentLoadBalancingModeSingleActive.IsNull() && !data.EthernetSegmentLoadBalancingModeSingleActive.ValueBool() {
-		if state != nil && !state.EthernetSegmentLoadBalancingModeSingleActive.IsNull() && state.EthernetSegmentLoadBalancingModeSingleActive.ValueBool() {
+		if state == nil || state.EthernetSegmentLoadBalancingModeSingleActive.IsNull() || state.EthernetSegmentLoadBalancingModeSingleActive.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ethernet-segment/load-balancing-mode/single-active"))
 		}
 	}
 	if !data.EthernetSegmentLoadBalancingModePortActive.IsNull() && !data.EthernetSegmentLoadBalancingModePortActive.ValueBool() {
-		if state != nil && !state.EthernetSegmentLoadBalancingModePortActive.IsNull() && state.EthernetSegmentLoadBalancingModePortActive.ValueBool() {
+		if state == nil || state.EthernetSegmentLoadBalancingModePortActive.IsNull() || state.EthernetSegmentLoadBalancingModePortActive.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ethernet-segment/load-balancing-mode/port-active"))
 		}
 	}
 	if !data.EthernetSegmentLoadBalancingModeAllActive.IsNull() && !data.EthernetSegmentLoadBalancingModeAllActive.ValueBool() {
-		if state != nil && !state.EthernetSegmentLoadBalancingModeAllActive.IsNull() && state.EthernetSegmentLoadBalancingModeAllActive.ValueBool() {
+		if state == nil || state.EthernetSegmentLoadBalancingModeAllActive.IsNull() || state.EthernetSegmentLoadBalancingModeAllActive.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ethernet-segment/load-balancing-mode/all-active"))
 		}
 	}

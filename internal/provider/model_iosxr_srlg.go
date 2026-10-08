@@ -1287,7 +1287,7 @@ func (data *SRLG) getEmptyLeafsDelete(ctx context.Context, state *SRLG, version 
 			}
 		}
 		if !data.Interfaces[i].IncludeOptical.IsNull() && !data.Interfaces[i].IncludeOptical.ValueBool() {
-			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].IncludeOptical.IsNull() && state.Interfaces[i].IncludeOptical.ValueBool() {
+			if state == nil || i >= len(state.Interfaces) || state.Interfaces[i].IncludeOptical.IsNull() || state.Interfaces[i].IncludeOptical.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "interfaces/interface", keyString), "include-optical"))
 			}
 		}

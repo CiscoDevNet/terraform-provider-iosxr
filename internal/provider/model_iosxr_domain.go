@@ -757,7 +757,7 @@ func (data *Domain) getDeletedItems(ctx context.Context, state Domain, version s
 func (data *Domain) getEmptyLeafsDelete(ctx context.Context, state *Domain, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.DefaultFlowsDisable.IsNull() && !data.DefaultFlowsDisable.ValueBool() {
-		if state != nil && !state.DefaultFlowsDisable.IsNull() && state.DefaultFlowsDisable.ValueBool() {
+		if state == nil || state.DefaultFlowsDisable.IsNull() || state.DefaultFlowsDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "default-flows/disable"))
 		}
 	}
@@ -786,7 +786,7 @@ func (data *Domain) getEmptyLeafsDelete(ctx context.Context, state *Domain, vers
 		}
 	}
 	if !data.LookupDisable.IsNull() && !data.LookupDisable.ValueBool() {
-		if state != nil && !state.LookupDisable.IsNull() && state.LookupDisable.ValueBool() {
+		if state == nil || state.LookupDisable.IsNull() || state.LookupDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "lookup/disable"))
 		}
 	}

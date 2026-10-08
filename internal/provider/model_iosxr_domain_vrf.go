@@ -757,7 +757,7 @@ func (data *DomainVRF) getEmptyLeafsDelete(ctx context.Context, state *DomainVRF
 		}
 	}
 	if !data.LookupDisable.IsNull() && !data.LookupDisable.ValueBool() {
-		if state != nil && !state.LookupDisable.IsNull() && state.LookupDisable.ValueBool() {
+		if state == nil || state.LookupDisable.IsNull() || state.LookupDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "lookup/disable"))
 		}
 	}

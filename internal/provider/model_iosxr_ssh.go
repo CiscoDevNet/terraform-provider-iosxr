@@ -1951,47 +1951,47 @@ func (data *SSH) getDeletedItems(ctx context.Context, state SSH, version string)
 func (data *SSH) getEmptyLeafsDelete(ctx context.Context, state *SSH, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if helpers.VersionAtLeast(version, "25.4") && !data.ServerPacketFlowNetioIngress.IsNull() && !data.ServerPacketFlowNetioIngress.ValueBool() {
-		if state != nil && !state.ServerPacketFlowNetioIngress.IsNull() && state.ServerPacketFlowNetioIngress.ValueBool() {
+		if state == nil || state.ServerPacketFlowNetioIngress.IsNull() || state.ServerPacketFlowNetioIngress.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/packet-flow-netio/ingress"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.ServerNetconfDisableSshPort.IsNull() && !data.ServerNetconfDisableSshPort.ValueBool() {
-		if state != nil && !state.ServerNetconfDisableSshPort.IsNull() && state.ServerNetconfDisableSshPort.ValueBool() {
+		if state == nil || state.ServerNetconfDisableSshPort.IsNull() || state.ServerNetconfDisableSshPort.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/netconf/disable/ssh-port"))
 		}
 	}
 	if !data.ClientV1.IsNull() && !data.ClientV1.ValueBool() {
-		if state != nil && !state.ClientV1.IsNull() && state.ClientV1.ValueBool() {
+		if state == nil || state.ClientV1.IsNull() || state.ClientV1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "client/v1"))
 		}
 	}
 	if !data.ClientV2.IsNull() && !data.ClientV2.ValueBool() {
-		if state != nil && !state.ClientV2.IsNull() && state.ClientV2.ValueBool() {
+		if state == nil || state.ClientV2.IsNull() || state.ClientV2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "client/v2"))
 		}
 	}
 	if !data.ClientEnableCipher3desCbc.IsNull() && !data.ClientEnableCipher3desCbc.ValueBool() {
-		if state != nil && !state.ClientEnableCipher3desCbc.IsNull() && state.ClientEnableCipher3desCbc.ValueBool() {
+		if state == nil || state.ClientEnableCipher3desCbc.IsNull() || state.ClientEnableCipher3desCbc.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "client/enable/cipher/threedes-cbc"))
 		}
 	}
 	if !data.ClientEnableCipherAesCbc.IsNull() && !data.ClientEnableCipherAesCbc.ValueBool() {
-		if state != nil && !state.ClientEnableCipherAesCbc.IsNull() && state.ClientEnableCipherAesCbc.ValueBool() {
+		if state == nil || state.ClientEnableCipherAesCbc.IsNull() || state.ClientEnableCipherAesCbc.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "client/enable/cipher/aes-cbc"))
 		}
 	}
 	if !data.ClientDisableHmacSha2256.IsNull() && !data.ClientDisableHmacSha2256.ValueBool() {
-		if state != nil && !state.ClientDisableHmacSha2256.IsNull() && state.ClientDisableHmacSha2256.ValueBool() {
+		if state == nil || state.ClientDisableHmacSha2256.IsNull() || state.ClientDisableHmacSha2256.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "client/disable/hmac/hmac-sha2-256"))
 		}
 	}
 	if !data.ClientDisableHmacSha2512.IsNull() && !data.ClientDisableHmacSha2512.ValueBool() {
-		if state != nil && !state.ClientDisableHmacSha2512.IsNull() && state.ClientDisableHmacSha2512.ValueBool() {
+		if state == nil || state.ClientDisableHmacSha2512.IsNull() || state.ClientDisableHmacSha2512.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "client/disable/hmac/hmac-sha2-512"))
 		}
 	}
 	if !data.ClientDisableHmacSha1.IsNull() && !data.ClientDisableHmacSha1.ValueBool() {
-		if state != nil && !state.ClientDisableHmacSha1.IsNull() && state.ClientDisableHmacSha1.ValueBool() {
+		if state == nil || state.ClientDisableHmacSha1.IsNull() || state.ClientDisableHmacSha1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "client/disable/hmac/hmac-sha1"))
 		}
 	}
@@ -2004,62 +2004,62 @@ func (data *SSH) getEmptyLeafsDelete(ctx context.Context, state *SSH, version st
 		}
 	}
 	if !data.ServerPortForwardingLocal.IsNull() && !data.ServerPortForwardingLocal.ValueBool() {
-		if state != nil && !state.ServerPortForwardingLocal.IsNull() && state.ServerPortForwardingLocal.ValueBool() {
+		if state == nil || state.ServerPortForwardingLocal.IsNull() || state.ServerPortForwardingLocal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/port-forwarding/local"))
 		}
 	}
 	if !data.ServerAlgorithmsHostKeySshRsa.IsNull() && !data.ServerAlgorithmsHostKeySshRsa.ValueBool() {
-		if state != nil && !state.ServerAlgorithmsHostKeySshRsa.IsNull() && state.ServerAlgorithmsHostKeySshRsa.ValueBool() {
+		if state == nil || state.ServerAlgorithmsHostKeySshRsa.IsNull() || state.ServerAlgorithmsHostKeySshRsa.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/algorithms/host-key/ssh-rsa"))
 		}
 	}
 	if !data.ServerAlgorithmsHostKeyRsaSha256.IsNull() && !data.ServerAlgorithmsHostKeyRsaSha256.ValueBool() {
-		if state != nil && !state.ServerAlgorithmsHostKeyRsaSha256.IsNull() && state.ServerAlgorithmsHostKeyRsaSha256.ValueBool() {
+		if state == nil || state.ServerAlgorithmsHostKeyRsaSha256.IsNull() || state.ServerAlgorithmsHostKeyRsaSha256.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/algorithms/host-key/rsa-sha256"))
 		}
 	}
 	if !data.ServerAlgorithmsHostKeyRsaSha512.IsNull() && !data.ServerAlgorithmsHostKeyRsaSha512.ValueBool() {
-		if state != nil && !state.ServerAlgorithmsHostKeyRsaSha512.IsNull() && state.ServerAlgorithmsHostKeyRsaSha512.ValueBool() {
+		if state == nil || state.ServerAlgorithmsHostKeyRsaSha512.IsNull() || state.ServerAlgorithmsHostKeyRsaSha512.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/algorithms/host-key/rsa-sha512"))
 		}
 	}
 	if !data.ServerAlgorithmsHostKeyEd25519.IsNull() && !data.ServerAlgorithmsHostKeyEd25519.ValueBool() {
-		if state != nil && !state.ServerAlgorithmsHostKeyEd25519.IsNull() && state.ServerAlgorithmsHostKeyEd25519.ValueBool() {
+		if state == nil || state.ServerAlgorithmsHostKeyEd25519.IsNull() || state.ServerAlgorithmsHostKeyEd25519.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/algorithms/host-key/ed25519"))
 		}
 	}
 	if !data.ServerAlgorithmsHostKeyX509v3SshRsa.IsNull() && !data.ServerAlgorithmsHostKeyX509v3SshRsa.ValueBool() {
-		if state != nil && !state.ServerAlgorithmsHostKeyX509v3SshRsa.IsNull() && state.ServerAlgorithmsHostKeyX509v3SshRsa.ValueBool() {
+		if state == nil || state.ServerAlgorithmsHostKeyX509v3SshRsa.IsNull() || state.ServerAlgorithmsHostKeyX509v3SshRsa.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/algorithms/host-key/x509v3-ssh-rsa"))
 		}
 	}
 	if !data.ServerAlgorithmsHostKeyDsa.IsNull() && !data.ServerAlgorithmsHostKeyDsa.ValueBool() {
-		if state != nil && !state.ServerAlgorithmsHostKeyDsa.IsNull() && state.ServerAlgorithmsHostKeyDsa.ValueBool() {
+		if state == nil || state.ServerAlgorithmsHostKeyDsa.IsNull() || state.ServerAlgorithmsHostKeyDsa.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/algorithms/host-key/dsa"))
 		}
 	}
 	if !data.ServerAlgorithmsHostKeyRsa.IsNull() && !data.ServerAlgorithmsHostKeyRsa.ValueBool() {
-		if state != nil && !state.ServerAlgorithmsHostKeyRsa.IsNull() && state.ServerAlgorithmsHostKeyRsa.ValueBool() {
+		if state == nil || state.ServerAlgorithmsHostKeyRsa.IsNull() || state.ServerAlgorithmsHostKeyRsa.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/algorithms/host-key/rsa"))
 		}
 	}
 	if !data.ServerAlgorithmsHostKeyEcdsaNistp521.IsNull() && !data.ServerAlgorithmsHostKeyEcdsaNistp521.ValueBool() {
-		if state != nil && !state.ServerAlgorithmsHostKeyEcdsaNistp521.IsNull() && state.ServerAlgorithmsHostKeyEcdsaNistp521.ValueBool() {
+		if state == nil || state.ServerAlgorithmsHostKeyEcdsaNistp521.IsNull() || state.ServerAlgorithmsHostKeyEcdsaNistp521.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/algorithms/host-key/ecdsa-nistp521"))
 		}
 	}
 	if !data.ServerAlgorithmsHostKeyEcdsaNistp384.IsNull() && !data.ServerAlgorithmsHostKeyEcdsaNistp384.ValueBool() {
-		if state != nil && !state.ServerAlgorithmsHostKeyEcdsaNistp384.IsNull() && state.ServerAlgorithmsHostKeyEcdsaNistp384.ValueBool() {
+		if state == nil || state.ServerAlgorithmsHostKeyEcdsaNistp384.IsNull() || state.ServerAlgorithmsHostKeyEcdsaNistp384.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/algorithms/host-key/ecdsa-nistp384"))
 		}
 	}
 	if !data.ServerAlgorithmsHostKeyEcdsaNistp256.IsNull() && !data.ServerAlgorithmsHostKeyEcdsaNistp256.ValueBool() {
-		if state != nil && !state.ServerAlgorithmsHostKeyEcdsaNistp256.IsNull() && state.ServerAlgorithmsHostKeyEcdsaNistp256.ValueBool() {
+		if state == nil || state.ServerAlgorithmsHostKeyEcdsaNistp256.IsNull() || state.ServerAlgorithmsHostKeyEcdsaNistp256.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/algorithms/host-key/ecdsa-nistp256"))
 		}
 	}
 	if !data.ServerNetconfXml.IsNull() && !data.ServerNetconfXml.ValueBool() {
-		if state != nil && !state.ServerNetconfXml.IsNull() && state.ServerNetconfXml.ValueBool() {
+		if state == nil || state.ServerNetconfXml.IsNull() || state.ServerNetconfXml.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/capability/netconf-xml"))
 		}
 	}
@@ -2072,42 +2072,42 @@ func (data *SSH) getEmptyLeafsDelete(ctx context.Context, state *SSH, version st
 		}
 	}
 	if !data.ServerLogging.IsNull() && !data.ServerLogging.ValueBool() {
-		if state != nil && !state.ServerLogging.IsNull() && state.ServerLogging.ValueBool() {
+		if state == nil || state.ServerLogging.IsNull() || state.ServerLogging.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/logging"))
 		}
 	}
 	if !data.ServerEnableCipher3desCbc.IsNull() && !data.ServerEnableCipher3desCbc.ValueBool() {
-		if state != nil && !state.ServerEnableCipher3desCbc.IsNull() && state.ServerEnableCipher3desCbc.ValueBool() {
+		if state == nil || state.ServerEnableCipher3desCbc.IsNull() || state.ServerEnableCipher3desCbc.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/enable/cipher/threedes-cbc"))
 		}
 	}
 	if !data.ServerEnableCipherAesCbc.IsNull() && !data.ServerEnableCipherAesCbc.ValueBool() {
-		if state != nil && !state.ServerEnableCipherAesCbc.IsNull() && state.ServerEnableCipherAesCbc.ValueBool() {
+		if state == nil || state.ServerEnableCipherAesCbc.IsNull() || state.ServerEnableCipherAesCbc.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/enable/cipher/aes-cbc"))
 		}
 	}
 	if !data.ServerDisableHmacSha2256.IsNull() && !data.ServerDisableHmacSha2256.ValueBool() {
-		if state != nil && !state.ServerDisableHmacSha2256.IsNull() && state.ServerDisableHmacSha2256.ValueBool() {
+		if state == nil || state.ServerDisableHmacSha2256.IsNull() || state.ServerDisableHmacSha2256.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/disable/hmac/hmac-sha2-256"))
 		}
 	}
 	if !data.ServerDisableHmacSha1.IsNull() && !data.ServerDisableHmacSha1.ValueBool() {
-		if state != nil && !state.ServerDisableHmacSha1.IsNull() && state.ServerDisableHmacSha1.ValueBool() {
+		if state == nil || state.ServerDisableHmacSha1.IsNull() || state.ServerDisableHmacSha1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/disable/hmac/hmac-sha1"))
 		}
 	}
 	if !data.ServerDisableHmacSha2512.IsNull() && !data.ServerDisableHmacSha2512.ValueBool() {
-		if state != nil && !state.ServerDisableHmacSha2512.IsNull() && state.ServerDisableHmacSha2512.ValueBool() {
+		if state == nil || state.ServerDisableHmacSha2512.IsNull() || state.ServerDisableHmacSha2512.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/disable/hmac/hmac-sha2-512"))
 		}
 	}
 	if !data.ServerV2.IsNull() && !data.ServerV2.ValueBool() {
-		if state != nil && !state.ServerV2.IsNull() && state.ServerV2.ValueBool() {
+		if state == nil || state.ServerV2.IsNull() || state.ServerV2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/v2"))
 		}
 	}
 	if !data.ServerV1.IsNull() && !data.ServerV1.ValueBool() {
-		if state != nil && !state.ServerV1.IsNull() && state.ServerV1.ValueBool() {
+		if state == nil || state.ServerV1.IsNull() || state.ServerV1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/v1"))
 		}
 	}

@@ -532,28 +532,28 @@ func (data *MPLSLDPInterface) getEmptyLeafsDelete(ctx context.Context, state *MP
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.AddressFamily[i].MldpDisable.IsNull() && !data.AddressFamily[i].MldpDisable.ValueBool() {
-			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].MldpDisable.IsNull() && state.AddressFamily[i].MldpDisable.ValueBool() {
+			if state == nil || i >= len(state.AddressFamily) || state.AddressFamily[i].MldpDisable.IsNull() || state.AddressFamily[i].MldpDisable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "mldp/disable"))
 			}
 		}
 		if !data.AddressFamily[i].IgpAutoConfigDisable.IsNull() && !data.AddressFamily[i].IgpAutoConfigDisable.ValueBool() {
-			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].IgpAutoConfigDisable.IsNull() && state.AddressFamily[i].IgpAutoConfigDisable.ValueBool() {
+			if state == nil || i >= len(state.AddressFamily) || state.AddressFamily[i].IgpAutoConfigDisable.IsNull() || state.AddressFamily[i].IgpAutoConfigDisable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "igp/auto-config/disable"))
 			}
 		}
 		if !data.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() && !data.AddressFamily[i].DiscoveryTransportAddressInterface.ValueBool() {
-			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() && state.AddressFamily[i].DiscoveryTransportAddressInterface.ValueBool() {
+			if state == nil || i >= len(state.AddressFamily) || state.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() || state.AddressFamily[i].DiscoveryTransportAddressInterface.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "discovery/transport-address/interface"))
 			}
 		}
 	}
 	if !data.IgpSyncDelayOnSessionUpDisable.IsNull() && !data.IgpSyncDelayOnSessionUpDisable.ValueBool() {
-		if state != nil && !state.IgpSyncDelayOnSessionUpDisable.IsNull() && state.IgpSyncDelayOnSessionUpDisable.ValueBool() {
+		if state == nil || state.IgpSyncDelayOnSessionUpDisable.IsNull() || state.IgpSyncDelayOnSessionUpDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "igp/sync/delay/on-session-up/disable"))
 		}
 	}
 	if !data.DiscoveryQuickStartDisable.IsNull() && !data.DiscoveryQuickStartDisable.ValueBool() {
-		if state != nil && !state.DiscoveryQuickStartDisable.IsNull() && state.DiscoveryQuickStartDisable.ValueBool() {
+		if state == nil || state.DiscoveryQuickStartDisable.IsNull() || state.DiscoveryQuickStartDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "discovery/quick-start/disable"))
 		}
 	}

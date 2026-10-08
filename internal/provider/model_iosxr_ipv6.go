@@ -441,27 +441,27 @@ func (data *IPv6) getDeletedItems(ctx context.Context, state IPv6, version strin
 func (data *IPv6) getEmptyLeafsDelete(ctx context.Context, state *IPv6, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.PathMtuEnable.IsNull() && !data.PathMtuEnable.ValueBool() {
-		if state != nil && !state.PathMtuEnable.IsNull() && state.PathMtuEnable.ValueBool() {
+		if state == nil || state.PathMtuEnable.IsNull() || state.PathMtuEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "path-mtu/enable"))
 		}
 	}
 	if !data.AssemblerOverlapFragDropEnable.IsNull() && !data.AssemblerOverlapFragDropEnable.ValueBool() {
-		if state != nil && !state.AssemblerOverlapFragDropEnable.IsNull() && state.AssemblerOverlapFragDropEnable.ValueBool() {
+		if state == nil || state.AssemblerOverlapFragDropEnable.IsNull() || state.AssemblerOverlapFragDropEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "assembler/overlap-frag-drop/enable"))
 		}
 	}
 	if !data.AssemblerFragHdrIncompleteEnable.IsNull() && !data.AssemblerFragHdrIncompleteEnable.ValueBool() {
-		if state != nil && !state.AssemblerFragHdrIncompleteEnable.IsNull() && state.AssemblerFragHdrIncompleteEnable.ValueBool() {
+		if state == nil || state.AssemblerFragHdrIncompleteEnable.IsNull() || state.AssemblerFragHdrIncompleteEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "assembler/frag-hdr-incomplete/enable"))
 		}
 	}
 	if !data.AssemblerReassemblerDropEnable.IsNull() && !data.AssemblerReassemblerDropEnable.ValueBool() {
-		if state != nil && !state.AssemblerReassemblerDropEnable.IsNull() && state.AssemblerReassemblerDropEnable.ValueBool() {
+		if state == nil || state.AssemblerReassemblerDropEnable.IsNull() || state.AssemblerReassemblerDropEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "assembler/reassembler-drop/enable"))
 		}
 	}
 	if !data.SourceRoute.IsNull() && !data.SourceRoute.ValueBool() {
-		if state != nil && !state.SourceRoute.IsNull() && state.SourceRoute.ValueBool() {
+		if state == nil || state.SourceRoute.IsNull() || state.SourceRoute.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "source-route"))
 		}
 	}

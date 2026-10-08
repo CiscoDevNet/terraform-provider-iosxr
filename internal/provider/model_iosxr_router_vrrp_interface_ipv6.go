@@ -791,22 +791,22 @@ func (data *RouterVRRPInterfaceIPv6) getEmptyLeafsDelete(ctx context.Context, st
 		}
 	}
 	if !data.AcceptModeDisable.IsNull() && !data.AcceptModeDisable.ValueBool() {
-		if state != nil && !state.AcceptModeDisable.IsNull() && state.AcceptModeDisable.ValueBool() {
+		if state == nil || state.AcceptModeDisable.IsNull() || state.AcceptModeDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "accept-mode/disable"))
 		}
 	}
 	if !data.PreemptDisable.IsNull() && !data.PreemptDisable.ValueBool() {
-		if state != nil && !state.PreemptDisable.IsNull() && state.PreemptDisable.ValueBool() {
+		if state == nil || state.PreemptDisable.IsNull() || state.PreemptDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "preempt/disable"))
 		}
 	}
 	if !data.TimerForce.IsNull() && !data.TimerForce.ValueBool() {
-		if state != nil && !state.TimerForce.IsNull() && state.TimerForce.ValueBool() {
+		if state == nil || state.TimerForce.IsNull() || state.TimerForce.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "timer/force"))
 		}
 	}
 	if !data.AddressLinklocalAutoconfig.IsNull() && !data.AddressLinklocalAutoconfig.ValueBool() {
-		if state != nil && !state.AddressLinklocalAutoconfig.IsNull() && state.AddressLinklocalAutoconfig.ValueBool() {
+		if state == nil || state.AddressLinklocalAutoconfig.IsNull() || state.AddressLinklocalAutoconfig.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address/linklocal/autoconfig"))
 		}
 	}

@@ -232,12 +232,12 @@ func (data *MACSec) getDeletedItems(ctx context.Context, state MACSec, version s
 func (data *MACSec) getEmptyLeafsDelete(ctx context.Context, state *MACSec, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.Fips.IsNull() && !data.Fips.ValueBool() {
-		if state != nil && !state.Fips.IsNull() && state.Fips.ValueBool() {
+		if state == nil || state.Fips.IsNull() || state.Fips.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fips"))
 		}
 	}
 	if !data.Shutdown.IsNull() && !data.Shutdown.ValueBool() {
-		if state != nil && !state.Shutdown.IsNull() && state.Shutdown.ValueBool() {
+		if state == nil || state.Shutdown.IsNull() || state.Shutdown.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "shutdown"))
 		}
 	}

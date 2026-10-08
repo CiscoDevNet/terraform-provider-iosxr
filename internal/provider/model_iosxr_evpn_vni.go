@@ -1533,32 +1533,32 @@ func (data *EVPNVNI) getDeletedItems(ctx context.Context, state EVPNVNI, version
 func (data *EVPNVNI) getEmptyLeafsDelete(ctx context.Context, state *EVPNVNI, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.ReOriginationDisable.IsNull() && !data.ReOriginationDisable.ValueBool() {
-		if state != nil && !state.ReOriginationDisable.IsNull() && state.ReOriginationDisable.ValueBool() {
+		if state == nil || state.ReOriginationDisable.IsNull() || state.ReOriginationDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "re-origination-disable"))
 		}
 	}
 	if !data.UnknownUnicastSuppression.IsNull() && !data.UnknownUnicastSuppression.ValueBool() {
-		if state != nil && !state.UnknownUnicastSuppression.IsNull() && state.UnknownUnicastSuppression.ValueBool() {
+		if state == nil || state.UnknownUnicastSuppression.IsNull() || state.UnknownUnicastSuppression.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "unknown-unicast-suppression"))
 		}
 	}
 	if !data.AdvertiseMac.IsNull() && !data.AdvertiseMac.ValueBool() {
-		if state != nil && !state.AdvertiseMac.IsNull() && state.AdvertiseMac.ValueBool() {
+		if state == nil || state.AdvertiseMac.IsNull() || state.AdvertiseMac.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "advertise-mac"))
 		}
 	}
 	if !data.PreferredNexthopModulo.IsNull() && !data.PreferredNexthopModulo.ValueBool() {
-		if state != nil && !state.PreferredNexthopModulo.IsNull() && state.PreferredNexthopModulo.ValueBool() {
+		if state == nil || state.PreferredNexthopModulo.IsNull() || state.PreferredNexthopModulo.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "preferred-nexthop/modulo"))
 		}
 	}
 	if !data.PreferredNexthopHighestIp.IsNull() && !data.PreferredNexthopHighestIp.ValueBool() {
-		if state != nil && !state.PreferredNexthopHighestIp.IsNull() && state.PreferredNexthopHighestIp.ValueBool() {
+		if state == nil || state.PreferredNexthopHighestIp.IsNull() || state.PreferredNexthopHighestIp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "preferred-nexthop/highest-ip"))
 		}
 	}
 	if !data.PreferredNexthopLowestIp.IsNull() && !data.PreferredNexthopLowestIp.ValueBool() {
-		if state != nil && !state.PreferredNexthopLowestIp.IsNull() && state.PreferredNexthopLowestIp.ValueBool() {
+		if state == nil || state.PreferredNexthopLowestIp.IsNull() || state.PreferredNexthopLowestIp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "preferred-nexthop/lowest-ip"))
 		}
 	}

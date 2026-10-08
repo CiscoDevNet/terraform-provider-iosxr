@@ -1131,92 +1131,92 @@ func (data *LLDP) getDeletedItems(ctx context.Context, state LLDP, version strin
 func (data *LLDP) getEmptyLeafsDelete(ctx context.Context, state *LLDP, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if helpers.VersionAtLeast(version, "25.4") && !data.InterfaceOnly.IsNull() && !data.InterfaceOnly.ValueBool() {
-		if state != nil && !state.InterfaceOnly.IsNull() && state.InterfaceOnly.ValueBool() {
+		if state == nil || state.InterfaceOnly.IsNull() || state.InterfaceOnly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interface-only"))
 		}
 	}
 	if !data.TlvSelectSystemNameDisable.IsNull() && !data.TlvSelectSystemNameDisable.ValueBool() {
-		if state != nil && !state.TlvSelectSystemNameDisable.IsNull() && state.TlvSelectSystemNameDisable.ValueBool() {
+		if state == nil || state.TlvSelectSystemNameDisable.IsNull() || state.TlvSelectSystemNameDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "tlv-select/system-name/disable"))
 		}
 	}
 	if !data.TlvSelectSystemDescriptionDisable.IsNull() && !data.TlvSelectSystemDescriptionDisable.ValueBool() {
-		if state != nil && !state.TlvSelectSystemDescriptionDisable.IsNull() && state.TlvSelectSystemDescriptionDisable.ValueBool() {
+		if state == nil || state.TlvSelectSystemDescriptionDisable.IsNull() || state.TlvSelectSystemDescriptionDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "tlv-select/system-description/disable"))
 		}
 	}
 	if !data.TlvSelectSystemCapabilitiesDisable.IsNull() && !data.TlvSelectSystemCapabilitiesDisable.ValueBool() {
-		if state != nil && !state.TlvSelectSystemCapabilitiesDisable.IsNull() && state.TlvSelectSystemCapabilitiesDisable.ValueBool() {
+		if state == nil || state.TlvSelectSystemCapabilitiesDisable.IsNull() || state.TlvSelectSystemCapabilitiesDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "tlv-select/system-capabilities/disable"))
 		}
 	}
 	if !data.TlvSelectPortDescriptionDisable.IsNull() && !data.TlvSelectPortDescriptionDisable.ValueBool() {
-		if state != nil && !state.TlvSelectPortDescriptionDisable.IsNull() && state.TlvSelectPortDescriptionDisable.ValueBool() {
+		if state == nil || state.TlvSelectPortDescriptionDisable.IsNull() || state.TlvSelectPortDescriptionDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "tlv-select/port-description/disable"))
 		}
 	}
 	if !data.TlvSelectManagementAddressDisable.IsNull() && !data.TlvSelectManagementAddressDisable.ValueBool() {
-		if state != nil && !state.TlvSelectManagementAddressDisable.IsNull() && state.TlvSelectManagementAddressDisable.ValueBool() {
+		if state == nil || state.TlvSelectManagementAddressDisable.IsNull() || state.TlvSelectManagementAddressDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "tlv-select/management-address/disable"))
 		}
 	}
 	if !data.ExtendedShowWidthEnable.IsNull() && !data.ExtendedShowWidthEnable.ValueBool() {
-		if state != nil && !state.ExtendedShowWidthEnable.IsNull() && state.ExtendedShowWidthEnable.ValueBool() {
+		if state == nil || state.ExtendedShowWidthEnable.IsNull() || state.ExtendedShowWidthEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "extended-show-width/enable"))
 		}
 	}
 	if !data.PriorityaddrEnable.IsNull() && !data.PriorityaddrEnable.ValueBool() {
-		if state != nil && !state.PriorityaddrEnable.IsNull() && state.PriorityaddrEnable.ValueBool() {
+		if state == nil || state.PriorityaddrEnable.IsNull() || state.PriorityaddrEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "priorityaddr/enable"))
 		}
 	}
 	if !data.ManagementEnable.IsNull() && !data.ManagementEnable.ValueBool() {
-		if state != nil && !state.ManagementEnable.IsNull() && state.ManagementEnable.ValueBool() {
+		if state == nil || state.ManagementEnable.IsNull() || state.ManagementEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "management/enable"))
 		}
 	}
 	if !data.SubinterfacesTagged.IsNull() && !data.SubinterfacesTagged.ValueBool() {
-		if state != nil && !state.SubinterfacesTagged.IsNull() && state.SubinterfacesTagged.ValueBool() {
+		if state == nil || state.SubinterfacesTagged.IsNull() || state.SubinterfacesTagged.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "subinterfaces-tagged"))
 		}
 	}
 	if !data.SubinterfacesEnable.IsNull() && !data.SubinterfacesEnable.ValueBool() {
-		if state != nil && !state.SubinterfacesEnable.IsNull() && state.SubinterfacesEnable.ValueBool() {
+		if state == nil || state.SubinterfacesEnable.IsNull() || state.SubinterfacesEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "subinterfaces/enable"))
 		}
 	}
 	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ChassisIdTypeLocal.IsNull() && !data.ChassisIdTypeLocal.ValueBool() {
-		if state != nil && !state.ChassisIdTypeLocal.IsNull() && state.ChassisIdTypeLocal.ValueBool() {
+		if state == nil || state.ChassisIdTypeLocal.IsNull() || state.ChassisIdTypeLocal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "chassis-id-type/local"))
 		}
 	}
 	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ChassisIdTypeInterfaceName.IsNull() && !data.ChassisIdTypeInterfaceName.ValueBool() {
-		if state != nil && !state.ChassisIdTypeInterfaceName.IsNull() && state.ChassisIdTypeInterfaceName.ValueBool() {
+		if state == nil || state.ChassisIdTypeInterfaceName.IsNull() || state.ChassisIdTypeInterfaceName.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "chassis-id-type/interface-name"))
 		}
 	}
 	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ChassisIdTypeNetworkAddress.IsNull() && !data.ChassisIdTypeNetworkAddress.ValueBool() {
-		if state != nil && !state.ChassisIdTypeNetworkAddress.IsNull() && state.ChassisIdTypeNetworkAddress.ValueBool() {
+		if state == nil || state.ChassisIdTypeNetworkAddress.IsNull() || state.ChassisIdTypeNetworkAddress.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "chassis-id-type/network-address"))
 		}
 	}
 	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ChassisIdTypeMacAddress.IsNull() && !data.ChassisIdTypeMacAddress.ValueBool() {
-		if state != nil && !state.ChassisIdTypeMacAddress.IsNull() && state.ChassisIdTypeMacAddress.ValueBool() {
+		if state == nil || state.ChassisIdTypeMacAddress.IsNull() || state.ChassisIdTypeMacAddress.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "chassis-id-type/mac-address"))
 		}
 	}
 	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ChassisIdTypePortComponent.IsNull() && !data.ChassisIdTypePortComponent.ValueBool() {
-		if state != nil && !state.ChassisIdTypePortComponent.IsNull() && state.ChassisIdTypePortComponent.ValueBool() {
+		if state == nil || state.ChassisIdTypePortComponent.IsNull() || state.ChassisIdTypePortComponent.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "chassis-id-type/port-component"))
 		}
 	}
 	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ChassisIdTypeInterfaceAlias.IsNull() && !data.ChassisIdTypeInterfaceAlias.ValueBool() {
-		if state != nil && !state.ChassisIdTypeInterfaceAlias.IsNull() && state.ChassisIdTypeInterfaceAlias.ValueBool() {
+		if state == nil || state.ChassisIdTypeInterfaceAlias.IsNull() || state.ChassisIdTypeInterfaceAlias.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "chassis-id-type/interface-alias"))
 		}
 	}
 	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ChassisIdTypeChassisComponent.IsNull() && !data.ChassisIdTypeChassisComponent.ValueBool() {
-		if state != nil && !state.ChassisIdTypeChassisComponent.IsNull() && state.ChassisIdTypeChassisComponent.ValueBool() {
+		if state == nil || state.ChassisIdTypeChassisComponent.IsNull() || state.ChassisIdTypeChassisComponent.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "chassis-id-type/chassis-component"))
 		}
 	}

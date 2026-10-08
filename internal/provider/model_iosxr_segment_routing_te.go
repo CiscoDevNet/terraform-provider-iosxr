@@ -3613,7 +3613,7 @@ func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context, state *Se
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.CandidatePaths[i].SourceAddressSelection.IsNull() && !data.CandidatePaths[i].SourceAddressSelection.ValueBool() {
-			if state != nil && i < len(state.CandidatePaths) && !state.CandidatePaths[i].SourceAddressSelection.IsNull() && state.CandidatePaths[i].SourceAddressSelection.ValueBool() {
+			if state == nil || i >= len(state.CandidatePaths) || state.CandidatePaths[i].SourceAddressSelection.IsNull() || state.CandidatePaths[i].SourceAddressSelection.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "candidate-path-types/candidate-path-type", keyString), "candidate-path-type-all-or-candidate-path-type-local-or-candidate-path-type-bgp-odn-or-candidate-path-type-bgp-srte-or-candidate-path-type-pcep/enable"))
 			}
 		}
@@ -3627,7 +3627,7 @@ func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context, state *Se
 		}
 	}
 	if !data.PathDisableAlgoChecksStrictSpfAllAreas.IsNull() && !data.PathDisableAlgoChecksStrictSpfAllAreas.ValueBool() {
-		if state != nil && !state.PathDisableAlgoChecksStrictSpfAllAreas.IsNull() && state.PathDisableAlgoChecksStrictSpfAllAreas.ValueBool() {
+		if state == nil || state.PathDisableAlgoChecksStrictSpfAllAreas.IsNull() || state.PathDisableAlgoChecksStrictSpfAllAreas.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "path/disable-algorithm-check/strict-spf/all"))
 		}
 	}
@@ -3648,17 +3648,17 @@ func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context, state *Se
 		}
 	}
 	if !data.PccReportAll.IsNull() && !data.PccReportAll.ValueBool() {
-		if state != nil && !state.PccReportAll.IsNull() && state.PccReportAll.ValueBool() {
+		if state == nil || state.PccReportAll.IsNull() || state.PccReportAll.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "pcc/report-all"))
 		}
 	}
 	if !data.PccRedundancyPceCentric.IsNull() && !data.PccRedundancyPceCentric.ValueBool() {
-		if state != nil && !state.PccRedundancyPceCentric.IsNull() && state.PccRedundancyPceCentric.ValueBool() {
+		if state == nil || state.PccRedundancyPceCentric.IsNull() || state.PccRedundancyPceCentric.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "pcc/pce-centric"))
 		}
 	}
 	if !data.PccRedundancyPccCentric.IsNull() && !data.PccRedundancyPccCentric.ValueBool() {
-		if state != nil && !state.PccRedundancyPccCentric.IsNull() && state.PccRedundancyPccCentric.ValueBool() {
+		if state == nil || state.PccRedundancyPccCentric.IsNull() || state.PccRedundancyPccCentric.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "pcc/pcc-centric"))
 		}
 	}
@@ -3670,22 +3670,22 @@ func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context, state *Se
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.PccProfiles[i].AutoRouteForceSrInclude.IsNull() && !data.PccProfiles[i].AutoRouteForceSrInclude.ValueBool() {
-			if state != nil && i < len(state.PccProfiles) && !state.PccProfiles[i].AutoRouteForceSrInclude.IsNull() && state.PccProfiles[i].AutoRouteForceSrInclude.ValueBool() {
+			if state == nil || i >= len(state.PccProfiles) || state.PccProfiles[i].AutoRouteForceSrInclude.IsNull() || state.PccProfiles[i].AutoRouteForceSrInclude.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "pcc/profiles/profile", "25.4": "profiles/profile"}, "pcc/profiles/profile"), keyString), "profile-auto-route/force-sr-include"))
 			}
 		}
 		if !data.PccProfiles[i].AutoRouteIncludeAllIpv6.IsNull() && !data.PccProfiles[i].AutoRouteIncludeAllIpv6.ValueBool() {
-			if state != nil && i < len(state.PccProfiles) && !state.PccProfiles[i].AutoRouteIncludeAllIpv6.IsNull() && state.PccProfiles[i].AutoRouteIncludeAllIpv6.ValueBool() {
+			if state == nil || i >= len(state.PccProfiles) || state.PccProfiles[i].AutoRouteIncludeAllIpv6.IsNull() || state.PccProfiles[i].AutoRouteIncludeAllIpv6.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "pcc/profiles/profile", "25.4": "profiles/profile"}, "pcc/profiles/profile"), keyString), "profile-auto-route/include-ipv6-all"))
 			}
 		}
 		if !data.PccProfiles[i].AutoRouteIncludeAllIpv4.IsNull() && !data.PccProfiles[i].AutoRouteIncludeAllIpv4.ValueBool() {
-			if state != nil && i < len(state.PccProfiles) && !state.PccProfiles[i].AutoRouteIncludeAllIpv4.IsNull() && state.PccProfiles[i].AutoRouteIncludeAllIpv4.ValueBool() {
+			if state == nil || i >= len(state.PccProfiles) || state.PccProfiles[i].AutoRouteIncludeAllIpv4.IsNull() || state.PccProfiles[i].AutoRouteIncludeAllIpv4.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "pcc/profiles/profile", "25.4": "profiles/profile"}, "pcc/profiles/profile"), keyString), "profile-auto-route/include-all"))
 			}
 		}
 		if !data.PccProfiles[i].SteeringInvalidationDrop.IsNull() && !data.PccProfiles[i].SteeringInvalidationDrop.ValueBool() {
-			if state != nil && i < len(state.PccProfiles) && !state.PccProfiles[i].SteeringInvalidationDrop.IsNull() && state.PccProfiles[i].SteeringInvalidationDrop.ValueBool() {
+			if state == nil || i >= len(state.PccProfiles) || state.PccProfiles[i].SteeringInvalidationDrop.IsNull() || state.PccProfiles[i].SteeringInvalidationDrop.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "pcc/profiles/profile", "25.4": "profiles/profile"}, "pcc/profiles/profile"), keyString), "steering/invalidation-drop"))
 			}
 		}
@@ -3723,12 +3723,12 @@ func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context, state *Se
 		}
 	}
 	if !data.DistributeLinkStateReportCandidatePathInactive.IsNull() && !data.DistributeLinkStateReportCandidatePathInactive.ValueBool() {
-		if state != nil && !state.DistributeLinkStateReportCandidatePathInactive.IsNull() && state.DistributeLinkStateReportCandidatePathInactive.ValueBool() {
+		if state == nil || state.DistributeLinkStateReportCandidatePathInactive.IsNull() || state.DistributeLinkStateReportCandidatePathInactive.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "distribute-link-state/report-candidate-path-inactive"))
 		}
 	}
 	if !data.DistributeLinkState.IsNull() && !data.DistributeLinkState.ValueBool() {
-		if state != nil && !state.DistributeLinkState.IsNull() && state.DistributeLinkState.ValueBool() {
+		if state == nil || state.DistributeLinkState.IsNull() || state.DistributeLinkState.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "distribute-link-state"))
 		}
 	}
@@ -3749,12 +3749,12 @@ func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context, state *Se
 		}
 	}
 	if !data.LoggingPolicyStatus.IsNull() && !data.LoggingPolicyStatus.ValueBool() {
-		if state != nil && !state.LoggingPolicyStatus.IsNull() && state.LoggingPolicyStatus.ValueBool() {
+		if state == nil || state.LoggingPolicyStatus.IsNull() || state.LoggingPolicyStatus.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/policy-status"))
 		}
 	}
 	if !data.LoggingPcepPeerStatus.IsNull() && !data.LoggingPcepPeerStatus.ValueBool() {
-		if state != nil && !state.LoggingPcepPeerStatus.IsNull() && state.LoggingPcepPeerStatus.ValueBool() {
+		if state == nil || state.LoggingPcepPeerStatus.IsNull() || state.LoggingPcepPeerStatus.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/pcep-peer-status"))
 		}
 	}
@@ -3782,7 +3782,7 @@ func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context, state *Se
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.SegmentListsSrv6ExplicitSegments[i].Srv6TopologyCheck.IsNull() && !data.SegmentListsSrv6ExplicitSegments[i].Srv6TopologyCheck.ValueBool() {
-			if state != nil && i < len(state.SegmentListsSrv6ExplicitSegments) && !state.SegmentListsSrv6ExplicitSegments[i].Srv6TopologyCheck.IsNull() && state.SegmentListsSrv6ExplicitSegments[i].Srv6TopologyCheck.ValueBool() {
+			if state == nil || i >= len(state.SegmentListsSrv6ExplicitSegments) || state.SegmentListsSrv6ExplicitSegments[i].Srv6TopologyCheck.IsNull() || state.SegmentListsSrv6ExplicitSegments[i].Srv6TopologyCheck.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-lists/explicit-segments/explicit-segment", keyString), "segment-list-srv6/segment-list-srv6-topology-check"))
 			}
 		}
@@ -3796,32 +3796,32 @@ func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context, state *Se
 		}
 	}
 	if !data.SegmentListsSrv6TopologyCheck.IsNull() && !data.SegmentListsSrv6TopologyCheck.ValueBool() {
-		if state != nil && !state.SegmentListsSrv6TopologyCheck.IsNull() && state.SegmentListsSrv6TopologyCheck.ValueBool() {
+		if state == nil || state.SegmentListsSrv6TopologyCheck.IsNull() || state.SegmentListsSrv6TopologyCheck.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-lists/segment-lists-srv6/segment-lists-srv6-topology-check"))
 		}
 	}
 	if !data.SteeringLabeledServicesDisableBgpSrTePolicies.IsNull() && !data.SteeringLabeledServicesDisableBgpSrTePolicies.ValueBool() {
-		if state != nil && !state.SteeringLabeledServicesDisableBgpSrTePolicies.IsNull() && state.SteeringLabeledServicesDisableBgpSrTePolicies.ValueBool() {
+		if state == nil || state.SteeringLabeledServicesDisableBgpSrTePolicies.IsNull() || state.SteeringLabeledServicesDisableBgpSrTePolicies.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "steering/labeled-services/disable-bgp-sr-te-policies"))
 		}
 	}
 	if !data.SteeringLabeledServicesDisableLocalPolicies.IsNull() && !data.SteeringLabeledServicesDisableLocalPolicies.ValueBool() {
-		if state != nil && !state.SteeringLabeledServicesDisableLocalPolicies.IsNull() && state.SteeringLabeledServicesDisableLocalPolicies.ValueBool() {
+		if state == nil || state.SteeringLabeledServicesDisableLocalPolicies.IsNull() || state.SteeringLabeledServicesDisableLocalPolicies.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "steering/labeled-services/disable-local-policies"))
 		}
 	}
 	if !data.SteeringLabeledServicesDisablePcepPolicies.IsNull() && !data.SteeringLabeledServicesDisablePcepPolicies.ValueBool() {
-		if state != nil && !state.SteeringLabeledServicesDisablePcepPolicies.IsNull() && state.SteeringLabeledServicesDisablePcepPolicies.ValueBool() {
+		if state == nil || state.SteeringLabeledServicesDisablePcepPolicies.IsNull() || state.SteeringLabeledServicesDisablePcepPolicies.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "steering/labeled-services/disable-pcep-policies"))
 		}
 	}
 	if !data.SteeringLabeledServicesDisableAllPolicies.IsNull() && !data.SteeringLabeledServicesDisableAllPolicies.ValueBool() {
-		if state != nil && !state.SteeringLabeledServicesDisableAllPolicies.IsNull() && state.SteeringLabeledServicesDisableAllPolicies.ValueBool() {
+		if state == nil || state.SteeringLabeledServicesDisableAllPolicies.IsNull() || state.SteeringLabeledServicesDisableAllPolicies.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "steering/labeled-services/disable-all-policies"))
 		}
 	}
 	if !data.SteeringLabeledServicesDisableOnDemandPolicies.IsNull() && !data.SteeringLabeledServicesDisableOnDemandPolicies.ValueBool() {
-		if state != nil && !state.SteeringLabeledServicesDisableOnDemandPolicies.IsNull() && state.SteeringLabeledServicesDisableOnDemandPolicies.ValueBool() {
+		if state == nil || state.SteeringLabeledServicesDisableOnDemandPolicies.IsNull() || state.SteeringLabeledServicesDisableOnDemandPolicies.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "steering/labeled-services/disable-on-demand-policies"))
 		}
 	}
@@ -3842,12 +3842,12 @@ func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context, state *Se
 		}
 	}
 	if !data.SeparateNextHop.IsNull() && !data.SeparateNextHop.ValueBool() {
-		if state != nil && !state.SeparateNextHop.IsNull() && state.SeparateNextHop.ValueBool() {
+		if state == nil || state.SeparateNextHop.IsNull() || state.SeparateNextHop.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "separate-next-hop"))
 		}
 	}
 	if !data.TeLatency.IsNull() && !data.TeLatency.ValueBool() {
-		if state != nil && !state.TeLatency.IsNull() && state.TeLatency.ValueBool() {
+		if state == nil || state.TeLatency.IsNull() || state.TeLatency.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "te-latency"))
 		}
 	}

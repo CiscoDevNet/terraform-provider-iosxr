@@ -573,7 +573,7 @@ func (data *TACACSServer) getEmptyLeafsDelete(ctx context.Context, state *TACACS
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Hosts[i].SingleConnection.IsNull() && !data.Hosts[i].SingleConnection.ValueBool() {
-			if state != nil && i < len(state.Hosts) && !state.Hosts[i].SingleConnection.IsNull() && state.Hosts[i].SingleConnection.ValueBool() {
+			if state == nil || i >= len(state.Hosts) || state.Hosts[i].SingleConnection.IsNull() || state.Hosts[i].SingleConnection.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "hosts/host", keyString), "single-connection"))
 			}
 		}

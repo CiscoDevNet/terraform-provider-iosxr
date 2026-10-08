@@ -1090,12 +1090,12 @@ func (data *IPSLAResponder) getEmptyLeafsDelete(ctx context.Context, state *IPSL
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.TwampLightSessions[i].Encryption.IsNull() && !data.TwampLightSessions[i].Encryption.ValueBool() {
-			if state != nil && i < len(state.TwampLightSessions) && !state.TwampLightSessions[i].Encryption.IsNull() && state.TwampLightSessions[i].Encryption.ValueBool() {
+			if state == nil || i >= len(state.TwampLightSessions) || state.TwampLightSessions[i].Encryption.IsNull() || state.TwampLightSessions[i].Encryption.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "twamp-light/test-session/session", keyString), "encryption"))
 			}
 		}
 		if !data.TwampLightSessions[i].Authentication.IsNull() && !data.TwampLightSessions[i].Authentication.ValueBool() {
-			if state != nil && i < len(state.TwampLightSessions) && !state.TwampLightSessions[i].Authentication.IsNull() && state.TwampLightSessions[i].Authentication.ValueBool() {
+			if state == nil || i >= len(state.TwampLightSessions) || state.TwampLightSessions[i].Authentication.IsNull() || state.TwampLightSessions[i].Authentication.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "twamp-light/test-session/session", keyString), "authentication"))
 			}
 		}
@@ -1133,7 +1133,7 @@ func (data *IPSLAResponder) getEmptyLeafsDelete(ctx context.Context, state *IPSL
 		}
 	}
 	if !data.Twamp.IsNull() && !data.Twamp.ValueBool() {
-		if state != nil && !state.Twamp.IsNull() && state.Twamp.ValueBool() {
+		if state == nil || state.Twamp.IsNull() || state.Twamp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "twamp"))
 		}
 	}

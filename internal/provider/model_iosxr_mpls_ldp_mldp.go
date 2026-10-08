@@ -897,12 +897,12 @@ func (data *MPLSLDPMLDP) getEmptyLeafsDelete(ctx context.Context, state *MPLSLDP
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.AddressFamily[i].RibUnicastAlways.IsNull() && !data.AddressFamily[i].RibUnicastAlways.ValueBool() {
-			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].RibUnicastAlways.IsNull() && state.AddressFamily[i].RibUnicastAlways.ValueBool() {
+			if state == nil || i >= len(state.AddressFamily) || state.AddressFamily[i].RibUnicastAlways.IsNull() || state.AddressFamily[i].RibUnicastAlways.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "rib/unicast-always"))
 			}
 		}
 		if !data.AddressFamily[i].ForwardingRecursive.IsNull() && !data.AddressFamily[i].ForwardingRecursive.ValueBool() {
-			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].ForwardingRecursive.IsNull() && state.AddressFamily[i].ForwardingRecursive.ValueBool() {
+			if state == nil || i >= len(state.AddressFamily) || state.AddressFamily[i].ForwardingRecursive.IsNull() || state.AddressFamily[i].ForwardingRecursive.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "forwarding/recursive"))
 			}
 		}
@@ -915,17 +915,17 @@ func (data *MPLSLDPMLDP) getEmptyLeafsDelete(ctx context.Context, state *MPLSLDP
 			}
 		}
 		if !data.AddressFamily[i].RecursiveFecEnable.IsNull() && !data.AddressFamily[i].RecursiveFecEnable.ValueBool() {
-			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].RecursiveFecEnable.IsNull() && state.AddressFamily[i].RecursiveFecEnable.ValueBool() {
+			if state == nil || i >= len(state.AddressFamily) || state.AddressFamily[i].RecursiveFecEnable.IsNull() || state.AddressFamily[i].RecursiveFecEnable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "recursive-fec/enable"))
 			}
 		}
 		if !data.AddressFamily[i].MofrrEnable.IsNull() && !data.AddressFamily[i].MofrrEnable.ValueBool() {
-			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].MofrrEnable.IsNull() && state.AddressFamily[i].MofrrEnable.ValueBool() {
+			if state == nil || i >= len(state.AddressFamily) || state.AddressFamily[i].MofrrEnable.IsNull() || state.AddressFamily[i].MofrrEnable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "mofrr"))
 			}
 		}
 		if !data.AddressFamily[i].CarrierSupportingCarrier.IsNull() && !data.AddressFamily[i].CarrierSupportingCarrier.ValueBool() {
-			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].CarrierSupportingCarrier.IsNull() && state.AddressFamily[i].CarrierSupportingCarrier.ValueBool() {
+			if state == nil || i >= len(state.AddressFamily) || state.AddressFamily[i].CarrierSupportingCarrier.IsNull() || state.AddressFamily[i].CarrierSupportingCarrier.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "carrier-supporting-carrier"))
 			}
 		}
@@ -939,12 +939,12 @@ func (data *MPLSLDPMLDP) getEmptyLeafsDelete(ctx context.Context, state *MPLSLDP
 		}
 	}
 	if !data.LoggingInternal.IsNull() && !data.LoggingInternal.ValueBool() {
-		if state != nil && !state.LoggingInternal.IsNull() && state.LoggingInternal.ValueBool() {
+		if state == nil || state.LoggingInternal.IsNull() || state.LoggingInternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/internal"))
 		}
 	}
 	if !data.LoggingNotifications.IsNull() && !data.LoggingNotifications.ValueBool() {
-		if state != nil && !state.LoggingNotifications.IsNull() && state.LoggingNotifications.ValueBool() {
+		if state == nil || state.LoggingNotifications.IsNull() || state.LoggingNotifications.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/notifications"))
 		}
 	}

@@ -3224,32 +3224,32 @@ func (data *PerformanceMeasurementDelayProfile) getDeletedItems(ctx context.Cont
 func (data *PerformanceMeasurementDelayProfile) getEmptyLeafsDelete(ctx context.Context, state *PerformanceMeasurementDelayProfile, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if helpers.VersionAtLeast(version, "25.4") && !data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() && !data.SrPolicyDefaultProbeTimestampFormatNtp.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() && state.SrPolicyDefaultProbeTimestampFormatNtp.ValueBool() {
+		if state == nil || state.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() || state.SrPolicyDefaultProbeTimestampFormatNtp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/timestamp-format/ntp"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() && !data.RsvpTeDefaultProbeTimestampFormatNtp.ValueBool() {
-		if state != nil && !state.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() && state.RsvpTeDefaultProbeTimestampFormatNtp.ValueBool() {
+		if state == nil || state.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() || state.RsvpTeDefaultProbeTimestampFormatNtp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "rsvp-te/default/probe/timestamp-format/ntp"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.InterfacesDefaultProbeTimestampFormatNtp.IsNull() && !data.InterfacesDefaultProbeTimestampFormatNtp.ValueBool() {
-		if state != nil && !state.InterfacesDefaultProbeTimestampFormatNtp.IsNull() && state.InterfacesDefaultProbeTimestampFormatNtp.ValueBool() {
+		if state == nil || state.InterfacesDefaultProbeTimestampFormatNtp.IsNull() || state.InterfacesDefaultProbeTimestampFormatNtp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default/probe/timestamp-format/ntp"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultProbeTimestampFormatNtp.IsNull() && !data.EndpointDefaultProbeTimestampFormatNtp.ValueBool() {
-		if state != nil && !state.EndpointDefaultProbeTimestampFormatNtp.IsNull() && state.EndpointDefaultProbeTimestampFormatNtp.ValueBool() {
+		if state == nil || state.EndpointDefaultProbeTimestampFormatNtp.IsNull() || state.EndpointDefaultProbeTimestampFormatNtp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/probe/measurement-mode/timestamp-format/ntp"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.SrPolicyDefaultProbeCollectHbh.IsNull() && !data.SrPolicyDefaultProbeCollectHbh.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultProbeCollectHbh.IsNull() && state.SrPolicyDefaultProbeCollectHbh.ValueBool() {
+		if state == nil || state.SrPolicyDefaultProbeCollectHbh.IsNull() || state.SrPolicyDefaultProbeCollectHbh.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/collect-hbh"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultProbeCollectHbh.IsNull() && !data.EndpointDefaultProbeCollectHbh.ValueBool() {
-		if state != nil && !state.EndpointDefaultProbeCollectHbh.IsNull() && state.EndpointDefaultProbeCollectHbh.ValueBool() {
+		if state == nil || state.EndpointDefaultProbeCollectHbh.IsNull() || state.EndpointDefaultProbeCollectHbh.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/probe/collect-hbh"))
 		}
 	}
@@ -3261,228 +3261,228 @@ func (data *PerformanceMeasurementDelayProfile) getEmptyLeafsDelete(ctx context.
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if helpers.VersionAtLeast(version, "25.4") && !data.Profiles[i].ProbeTimestampFormatNtp.IsNull() && !data.Profiles[i].ProbeTimestampFormatNtp.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ProbeTimestampFormatNtp.IsNull() && state.Profiles[i].ProbeTimestampFormatNtp.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ProbeTimestampFormatNtp.IsNull() || state.Profiles[i].ProbeTimestampFormatNtp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "probe/timestamp-format/ntp"))
 			}
 		}
 		if helpers.VersionAtLeast(version, "25.4") && !data.Profiles[i].ProbeCollectHbh.IsNull() && !data.Profiles[i].ProbeCollectHbh.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ProbeCollectHbh.IsNull() && state.Profiles[i].ProbeCollectHbh.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ProbeCollectHbh.IsNull() || state.Profiles[i].ProbeCollectHbh.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "probe/collect-hbh"))
 			}
 		}
 		if !data.Profiles[i].AdvertiseAccelerated.IsNull() && !data.Profiles[i].AdvertiseAccelerated.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].AdvertiseAccelerated.IsNull() && state.Profiles[i].AdvertiseAccelerated.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].AdvertiseAccelerated.IsNull() || state.Profiles[i].AdvertiseAccelerated.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "advertisement/accelerated"))
 			}
 		}
 		if !data.Profiles[i].AdvertisePeriodicDisabled.IsNull() && !data.Profiles[i].AdvertisePeriodicDisabled.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].AdvertisePeriodicDisabled.IsNull() && state.Profiles[i].AdvertisePeriodicDisabled.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].AdvertisePeriodicDisabled.IsNull() || state.Profiles[i].AdvertisePeriodicDisabled.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "advertisement/periodic/disabled"))
 			}
 		}
 		if !data.Profiles[i].AdvertiseThresholdCheckMaximumDelay.IsNull() && !data.Profiles[i].AdvertiseThresholdCheckMaximumDelay.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].AdvertiseThresholdCheckMaximumDelay.IsNull() && state.Profiles[i].AdvertiseThresholdCheckMaximumDelay.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].AdvertiseThresholdCheckMaximumDelay.IsNull() || state.Profiles[i].AdvertiseThresholdCheckMaximumDelay.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "advertisement/threshold-check/maximum-delay"))
 			}
 		}
 		if !data.Profiles[i].AdvertiseThresholdCheckMinimumDelay.IsNull() && !data.Profiles[i].AdvertiseThresholdCheckMinimumDelay.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].AdvertiseThresholdCheckMinimumDelay.IsNull() && state.Profiles[i].AdvertiseThresholdCheckMinimumDelay.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].AdvertiseThresholdCheckMinimumDelay.IsNull() || state.Profiles[i].AdvertiseThresholdCheckMinimumDelay.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "advertisement/threshold-check/minimum-delay"))
 			}
 		}
 		if !data.Profiles[i].AdvertiseThresholdCheckAverageDelay.IsNull() && !data.Profiles[i].AdvertiseThresholdCheckAverageDelay.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].AdvertiseThresholdCheckAverageDelay.IsNull() && state.Profiles[i].AdvertiseThresholdCheckAverageDelay.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].AdvertiseThresholdCheckAverageDelay.IsNull() || state.Profiles[i].AdvertiseThresholdCheckAverageDelay.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "advertisement/threshold-check/average-delay"))
 			}
 		}
 		if !data.Profiles[i].AdvertiseLoggingDelayExceeded.IsNull() && !data.Profiles[i].AdvertiseLoggingDelayExceeded.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].AdvertiseLoggingDelayExceeded.IsNull() && state.Profiles[i].AdvertiseLoggingDelayExceeded.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].AdvertiseLoggingDelayExceeded.IsNull() || state.Profiles[i].AdvertiseLoggingDelayExceeded.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "advertisement/logging/delay-exceeded"))
 			}
 		}
 		if !data.Profiles[i].ProbeMeasurementModeLoopback.IsNull() && !data.Profiles[i].ProbeMeasurementModeLoopback.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ProbeMeasurementModeLoopback.IsNull() && state.Profiles[i].ProbeMeasurementModeLoopback.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ProbeMeasurementModeLoopback.IsNull() || state.Profiles[i].ProbeMeasurementModeLoopback.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "probe/measurement-mode/loopback"))
 			}
 		}
 		if !data.Profiles[i].ProbeMeasurementModeTwoWay.IsNull() && !data.Profiles[i].ProbeMeasurementModeTwoWay.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ProbeMeasurementModeTwoWay.IsNull() && state.Profiles[i].ProbeMeasurementModeTwoWay.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ProbeMeasurementModeTwoWay.IsNull() || state.Profiles[i].ProbeMeasurementModeTwoWay.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "probe/measurement-mode/two-way"))
 			}
 		}
 		if !data.Profiles[i].ProbeMeasurementModeOneWay.IsNull() && !data.Profiles[i].ProbeMeasurementModeOneWay.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ProbeMeasurementModeOneWay.IsNull() && state.Profiles[i].ProbeMeasurementModeOneWay.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ProbeMeasurementModeOneWay.IsNull() || state.Profiles[i].ProbeMeasurementModeOneWay.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "probe/measurement-mode/one-way"))
 			}
 		}
 		if !data.Profiles[i].ProbeProtocolTwampLight.IsNull() && !data.Profiles[i].ProbeProtocolTwampLight.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ProbeProtocolTwampLight.IsNull() && state.Profiles[i].ProbeProtocolTwampLight.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ProbeProtocolTwampLight.IsNull() || state.Profiles[i].ProbeProtocolTwampLight.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "probe/protocol/twamp-light"))
 			}
 		}
 		if !data.Profiles[i].ProbeProtocolPmMpls.IsNull() && !data.Profiles[i].ProbeProtocolPmMpls.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ProbeProtocolPmMpls.IsNull() && state.Profiles[i].ProbeProtocolPmMpls.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ProbeProtocolPmMpls.IsNull() || state.Profiles[i].ProbeProtocolPmMpls.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "probe/protocol/pm-mpls"))
 			}
 		}
 		if !data.Profiles[i].ProbeFlowLabelExplicit.IsNull() && !data.Profiles[i].ProbeFlowLabelExplicit.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ProbeFlowLabelExplicit.IsNull() && state.Profiles[i].ProbeFlowLabelExplicit.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ProbeFlowLabelExplicit.IsNull() || state.Profiles[i].ProbeFlowLabelExplicit.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "probe/flow-label/explicits"))
 			}
 		}
 	}
 	if !data.EndpointDefaultAdvertisementAccelerated.IsNull() && !data.EndpointDefaultAdvertisementAccelerated.ValueBool() {
-		if state != nil && !state.EndpointDefaultAdvertisementAccelerated.IsNull() && state.EndpointDefaultAdvertisementAccelerated.ValueBool() {
+		if state == nil || state.EndpointDefaultAdvertisementAccelerated.IsNull() || state.EndpointDefaultAdvertisementAccelerated.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/advertisement/accelerated"))
 		}
 	}
 	if !data.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() && !data.EndpointDefaultAdvertisementPeriodicDisabled.ValueBool() {
-		if state != nil && !state.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() && state.EndpointDefaultAdvertisementPeriodicDisabled.ValueBool() {
+		if state == nil || state.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() || state.EndpointDefaultAdvertisementPeriodicDisabled.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/advertisement/periodic/disabled"))
 		}
 	}
 	if !data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() && !data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.ValueBool() {
-		if state != nil && !state.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() && state.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.ValueBool() {
+		if state == nil || state.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() || state.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/advertisement/threshold-check/maximum-delay"))
 		}
 	}
 	if !data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() && !data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.ValueBool() {
-		if state != nil && !state.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() && state.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.ValueBool() {
+		if state == nil || state.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() || state.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/advertisement/threshold-check/minimum-delay"))
 		}
 	}
 	if !data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() && !data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.ValueBool() {
-		if state != nil && !state.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() && state.EndpointDefaultAdvertisementThresholdCheckAverageDelay.ValueBool() {
+		if state == nil || state.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() || state.EndpointDefaultAdvertisementThresholdCheckAverageDelay.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/advertisement/threshold-check/average-delay"))
 		}
 	}
 	if !data.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() && !data.EndpointDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
-		if state != nil && !state.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() && state.EndpointDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
+		if state == nil || state.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() || state.EndpointDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/advertisement/logging/delay-exceeded"))
 		}
 	}
 	if !data.EndpointDefaultProbeMeasurementModeLoopback.IsNull() && !data.EndpointDefaultProbeMeasurementModeLoopback.ValueBool() {
-		if state != nil && !state.EndpointDefaultProbeMeasurementModeLoopback.IsNull() && state.EndpointDefaultProbeMeasurementModeLoopback.ValueBool() {
+		if state == nil || state.EndpointDefaultProbeMeasurementModeLoopback.IsNull() || state.EndpointDefaultProbeMeasurementModeLoopback.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/probe/measurement-mode/loopback"))
 		}
 	}
 	if !data.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() && !data.EndpointDefaultProbeMeasurementModeTwoWay.ValueBool() {
-		if state != nil && !state.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() && state.EndpointDefaultProbeMeasurementModeTwoWay.ValueBool() {
+		if state == nil || state.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() || state.EndpointDefaultProbeMeasurementModeTwoWay.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/probe/measurement-mode/two-way"))
 		}
 	}
 	if !data.EndpointDefaultProbeMeasurementModeOneWay.IsNull() && !data.EndpointDefaultProbeMeasurementModeOneWay.ValueBool() {
-		if state != nil && !state.EndpointDefaultProbeMeasurementModeOneWay.IsNull() && state.EndpointDefaultProbeMeasurementModeOneWay.ValueBool() {
+		if state == nil || state.EndpointDefaultProbeMeasurementModeOneWay.IsNull() || state.EndpointDefaultProbeMeasurementModeOneWay.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/probe/measurement-mode/one-way"))
 		}
 	}
 	if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() && !data.EndpointDefaultProbeFlowLabelExplicit.ValueBool() {
-		if state != nil && !state.EndpointDefaultProbeFlowLabelExplicit.IsNull() && state.EndpointDefaultProbeFlowLabelExplicit.ValueBool() {
+		if state == nil || state.EndpointDefaultProbeFlowLabelExplicit.IsNull() || state.EndpointDefaultProbeFlowLabelExplicit.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/probe/flow-label/explicits"))
 		}
 	}
 	if !data.EndpointDefault.IsNull() && !data.EndpointDefault.ValueBool() {
-		if state != nil && !state.EndpointDefault.IsNull() && state.EndpointDefault.ValueBool() {
+		if state == nil || state.EndpointDefault.IsNull() || state.EndpointDefault.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default"))
 		}
 	}
 	if !data.SrPolicyDefaultAdvertisementAccelerated.IsNull() && !data.SrPolicyDefaultAdvertisementAccelerated.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultAdvertisementAccelerated.IsNull() && state.SrPolicyDefaultAdvertisementAccelerated.ValueBool() {
+		if state == nil || state.SrPolicyDefaultAdvertisementAccelerated.IsNull() || state.SrPolicyDefaultAdvertisementAccelerated.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/advertisement/accelerated"))
 		}
 	}
 	if !data.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() && !data.SrPolicyDefaultAdvertisementPeriodicDisabled.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() && state.SrPolicyDefaultAdvertisementPeriodicDisabled.ValueBool() {
+		if state == nil || state.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() || state.SrPolicyDefaultAdvertisementPeriodicDisabled.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/advertisement/periodic/disabled"))
 		}
 	}
 	if !data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() && !data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() && state.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.ValueBool() {
+		if state == nil || state.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() || state.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/advertisement/threshold-check/maximum-delay"))
 		}
 	}
 	if !data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() && !data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() && state.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.ValueBool() {
+		if state == nil || state.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() || state.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/advertisement/threshold-check/minimum-delay"))
 		}
 	}
 	if !data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() && !data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() && state.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.ValueBool() {
+		if state == nil || state.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() || state.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/advertisement/threshold-check/average-delay"))
 		}
 	}
 	if !data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() && !data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() && state.SrPolicyDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
+		if state == nil || state.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() || state.SrPolicyDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/advertisement/logging/delay-exceeded"))
 		}
 	}
 	if !data.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() && !data.SrPolicyDefaultProbeMeasurementModeLoopback.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() && state.SrPolicyDefaultProbeMeasurementModeLoopback.ValueBool() {
+		if state == nil || state.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() || state.SrPolicyDefaultProbeMeasurementModeLoopback.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/measurement-mode/loopback"))
 		}
 	}
 	if !data.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() && !data.SrPolicyDefaultProbeMeasurementModeTwoWay.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() && state.SrPolicyDefaultProbeMeasurementModeTwoWay.ValueBool() {
+		if state == nil || state.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() || state.SrPolicyDefaultProbeMeasurementModeTwoWay.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/measurement-mode/two-way"))
 		}
 	}
 	if !data.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() && !data.SrPolicyDefaultProbeMeasurementModeOneWay.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() && state.SrPolicyDefaultProbeMeasurementModeOneWay.ValueBool() {
+		if state == nil || state.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() || state.SrPolicyDefaultProbeMeasurementModeOneWay.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/measurement-mode/one-way"))
 		}
 	}
 	if !data.SrPolicyDefaultProbeProtocolTwampLight.IsNull() && !data.SrPolicyDefaultProbeProtocolTwampLight.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultProbeProtocolTwampLight.IsNull() && state.SrPolicyDefaultProbeProtocolTwampLight.ValueBool() {
+		if state == nil || state.SrPolicyDefaultProbeProtocolTwampLight.IsNull() || state.SrPolicyDefaultProbeProtocolTwampLight.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/protocol/twamp-light"))
 		}
 	}
 	if !data.SrPolicyDefaultProbeProtocolPmMpls.IsNull() && !data.SrPolicyDefaultProbeProtocolPmMpls.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultProbeProtocolPmMpls.IsNull() && state.SrPolicyDefaultProbeProtocolPmMpls.ValueBool() {
+		if state == nil || state.SrPolicyDefaultProbeProtocolPmMpls.IsNull() || state.SrPolicyDefaultProbeProtocolPmMpls.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/protocol/pm-mpls"))
 		}
 	}
 	if !data.SrPolicyDefault.IsNull() && !data.SrPolicyDefault.ValueBool() {
-		if state != nil && !state.SrPolicyDefault.IsNull() && state.SrPolicyDefault.ValueBool() {
+		if state == nil || state.SrPolicyDefault.IsNull() || state.SrPolicyDefault.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default"))
 		}
 	}
 	if !data.InterfacesDefaultAdvertisementAccelerated.IsNull() && !data.InterfacesDefaultAdvertisementAccelerated.ValueBool() {
-		if state != nil && !state.InterfacesDefaultAdvertisementAccelerated.IsNull() && state.InterfacesDefaultAdvertisementAccelerated.ValueBool() {
+		if state == nil || state.InterfacesDefaultAdvertisementAccelerated.IsNull() || state.InterfacesDefaultAdvertisementAccelerated.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default/advertisement/accelerated"))
 		}
 	}
 	if !data.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() && !data.InterfacesDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
-		if state != nil && !state.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() && state.InterfacesDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
+		if state == nil || state.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() || state.InterfacesDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default/advertisement/logging/delay-exceeded"))
 		}
 	}
 	if !data.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() && !data.InterfacesDefaultAdvertisementPeriodicDisabled.ValueBool() {
-		if state != nil && !state.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() && state.InterfacesDefaultAdvertisementPeriodicDisabled.ValueBool() {
+		if state == nil || state.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() || state.InterfacesDefaultAdvertisementPeriodicDisabled.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default/advertisement/periodic/disabled"))
 		}
 	}
 	if !data.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() && !data.InterfacesDefaultProbeMeasurementModeTwoWay.ValueBool() {
-		if state != nil && !state.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() && state.InterfacesDefaultProbeMeasurementModeTwoWay.ValueBool() {
+		if state == nil || state.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() || state.InterfacesDefaultProbeMeasurementModeTwoWay.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default/probe/measurement-mode/two-way"))
 		}
 	}
 	if !data.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() && !data.InterfacesDefaultProbeMeasurementModeOneWay.ValueBool() {
-		if state != nil && !state.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() && state.InterfacesDefaultProbeMeasurementModeOneWay.ValueBool() {
+		if state == nil || state.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() || state.InterfacesDefaultProbeMeasurementModeOneWay.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default/probe/measurement-mode/one-way"))
 		}
 	}
 	if !data.InterfacesDefaultProbeProtocolTwampLight.IsNull() && !data.InterfacesDefaultProbeProtocolTwampLight.ValueBool() {
-		if state != nil && !state.InterfacesDefaultProbeProtocolTwampLight.IsNull() && state.InterfacesDefaultProbeProtocolTwampLight.ValueBool() {
+		if state == nil || state.InterfacesDefaultProbeProtocolTwampLight.IsNull() || state.InterfacesDefaultProbeProtocolTwampLight.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default/probe/protocol/twamp-light"))
 		}
 	}
 	if !data.InterfacesDefaultProbeProtocolPmMpls.IsNull() && !data.InterfacesDefaultProbeProtocolPmMpls.ValueBool() {
-		if state != nil && !state.InterfacesDefaultProbeProtocolPmMpls.IsNull() && state.InterfacesDefaultProbeProtocolPmMpls.ValueBool() {
+		if state == nil || state.InterfacesDefaultProbeProtocolPmMpls.IsNull() || state.InterfacesDefaultProbeProtocolPmMpls.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default/probe/protocol/pm-mpls"))
 		}
 	}
 	if !data.InterfacesDefault.IsNull() && !data.InterfacesDefault.ValueBool() {
-		if state != nil && !state.InterfacesDefault.IsNull() && state.InterfacesDefault.ValueBool() {
+		if state == nil || state.InterfacesDefault.IsNull() || state.InterfacesDefault.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default"))
 		}
 	}

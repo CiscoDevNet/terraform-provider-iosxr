@@ -2404,7 +2404,7 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) getEmptyLeafsDelete(ctx context.Con
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Neighbors[i].DhcpIpv4None.IsNull() && !data.Neighbors[i].DhcpIpv4None.ValueBool() {
-			if state != nil && i < len(state.Neighbors) && !state.Neighbors[i].DhcpIpv4None.IsNull() && state.Neighbors[i].DhcpIpv4None.ValueBool() {
+			if state == nil || i >= len(state.Neighbors) || state.Neighbors[i].DhcpIpv4None.IsNull() || state.Neighbors[i].DhcpIpv4None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "neighbors/neighbor", keyString), "dhcp/ipv4/none"))
 			}
 		}
@@ -2418,72 +2418,72 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) getEmptyLeafsDelete(ctx context.Con
 		}
 	}
 	if !data.MulticastP2mpSignalingProtocolBgp.IsNull() && !data.MulticastP2mpSignalingProtocolBgp.ValueBool() {
-		if state != nil && !state.MulticastP2mpSignalingProtocolBgp.IsNull() && state.MulticastP2mpSignalingProtocolBgp.ValueBool() {
+		if state == nil || state.MulticastP2mpSignalingProtocolBgp.IsNull() || state.MulticastP2mpSignalingProtocolBgp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multicast/p2mp/signaling-protocol/bgp"))
 		}
 	}
 	if !data.MulticastP2mpTransportRsvpTe.IsNull() && !data.MulticastP2mpTransportRsvpTe.ValueBool() {
-		if state != nil && !state.MulticastP2mpTransportRsvpTe.IsNull() && state.MulticastP2mpTransportRsvpTe.ValueBool() {
+		if state == nil || state.MulticastP2mpTransportRsvpTe.IsNull() || state.MulticastP2mpTransportRsvpTe.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multicast/p2mp/transport/rsvp-te"))
 		}
 	}
 	if !data.MulticastP2mp.IsNull() && !data.MulticastP2mp.ValueBool() {
-		if state != nil && !state.MulticastP2mp.IsNull() && state.MulticastP2mp.ValueBool() {
+		if state == nil || state.MulticastP2mp.IsNull() || state.MulticastP2mp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multicast/p2mp"))
 		}
 	}
 	if !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic.IsNull() && !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic.ValueBool() {
-		if state != nil && !state.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic.IsNull() && state.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic.ValueBool() {
+		if state == nil || state.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic.IsNull() || state.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelStatic.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/static"))
 		}
 	}
 	if !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth.IsNull() && !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth.ValueBool() {
-		if state != nil && !state.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth.IsNull() && state.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth.ValueBool() {
+		if state == nil || state.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth.IsNull() || state.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelBoth.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/both"))
 		}
 	}
 	if !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive.IsNull() && !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive.ValueBool() {
-		if state != nil && !state.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive.IsNull() && state.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive.ValueBool() {
+		if state == nil || state.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive.IsNull() || state.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelReceive.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/receive"))
 		}
 	}
 	if !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit.IsNull() && !data.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit.ValueBool() {
-		if state != nil && !state.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit.IsNull() && state.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit.ValueBool() {
+		if state == nil || state.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit.IsNull() || state.AutodiscoveryBgpSignalingProtocolLdpVplsIdLoadBalancingFlowLabelTransmit.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/transmit"))
 		}
 	}
 	if !data.AutodiscoveryBgpSignalingProtocolLdp.IsNull() && !data.AutodiscoveryBgpSignalingProtocolLdp.ValueBool() {
-		if state != nil && !state.AutodiscoveryBgpSignalingProtocolLdp.IsNull() && state.AutodiscoveryBgpSignalingProtocolLdp.ValueBool() {
+		if state == nil || state.AutodiscoveryBgpSignalingProtocolLdp.IsNull() || state.AutodiscoveryBgpSignalingProtocolLdp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "autodiscovery/bgp/signaling-protocol/ldp"))
 		}
 	}
 	if !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic.IsNull() && !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic.ValueBool() {
-		if state != nil && !state.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic.IsNull() && state.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic.ValueBool() {
+		if state == nil || state.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic.IsNull() || state.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelStatic.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/static"))
 		}
 	}
 	if !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() && !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.ValueBool() {
-		if state != nil && !state.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() && state.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.ValueBool() {
+		if state == nil || state.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() || state.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/both"))
 		}
 	}
 	if !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() && !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.ValueBool() {
-		if state != nil && !state.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() && state.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.ValueBool() {
+		if state == nil || state.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() || state.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/receive"))
 		}
 	}
 	if !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() && !data.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.ValueBool() {
-		if state != nil && !state.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() && state.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.ValueBool() {
+		if state == nil || state.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() || state.AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/transmit"))
 		}
 	}
 	if !data.AutodiscoveryBgpSignalingProtocolBgp.IsNull() && !data.AutodiscoveryBgpSignalingProtocolBgp.ValueBool() {
-		if state != nil && !state.AutodiscoveryBgpSignalingProtocolBgp.IsNull() && state.AutodiscoveryBgpSignalingProtocolBgp.ValueBool() {
+		if state == nil || state.AutodiscoveryBgpSignalingProtocolBgp.IsNull() || state.AutodiscoveryBgpSignalingProtocolBgp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "autodiscovery/bgp/signaling-protocol/bgp"))
 		}
 	}
 	if !data.AutodiscoveryBgpControlWord.IsNull() && !data.AutodiscoveryBgpControlWord.ValueBool() {
-		if state != nil && !state.AutodiscoveryBgpControlWord.IsNull() && state.AutodiscoveryBgpControlWord.ValueBool() {
+		if state == nil || state.AutodiscoveryBgpControlWord.IsNull() || state.AutodiscoveryBgpControlWord.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "autodiscovery/bgp/control-word"))
 		}
 	}
@@ -2560,17 +2560,17 @@ func (data *L2VPNBridgeGroupBridgeDomainVFI) getEmptyLeafsDelete(ctx context.Con
 		}
 	}
 	if !data.AutodiscoveryBgpRdAuto.IsNull() && !data.AutodiscoveryBgpRdAuto.ValueBool() {
-		if state != nil && !state.AutodiscoveryBgpRdAuto.IsNull() && state.AutodiscoveryBgpRdAuto.ValueBool() {
+		if state == nil || state.AutodiscoveryBgpRdAuto.IsNull() || state.AutodiscoveryBgpRdAuto.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "autodiscovery/bgp/rd/auto"))
 		}
 	}
 	if !data.AutodiscoveryBgp.IsNull() && !data.AutodiscoveryBgp.ValueBool() {
-		if state != nil && !state.AutodiscoveryBgp.IsNull() && state.AutodiscoveryBgp.ValueBool() {
+		if state == nil || state.AutodiscoveryBgp.IsNull() || state.AutodiscoveryBgp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "autodiscovery/bgp"))
 		}
 	}
 	if !data.Shutdown.IsNull() && !data.Shutdown.ValueBool() {
-		if state != nil && !state.Shutdown.IsNull() && state.Shutdown.ValueBool() {
+		if state == nil || state.Shutdown.IsNull() || state.Shutdown.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "shutdown"))
 		}
 	}

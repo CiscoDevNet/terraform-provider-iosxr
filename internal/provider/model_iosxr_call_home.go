@@ -1385,57 +1385,57 @@ func (data *CallHome) getEmptyLeafsDelete(ctx context.Context, state *CallHome, 
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Profiles[i].AnonymousReportingOnly.IsNull() && !data.Profiles[i].AnonymousReportingOnly.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].AnonymousReportingOnly.IsNull() && state.Profiles[i].AnonymousReportingOnly.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].AnonymousReportingOnly.IsNull() || state.Profiles[i].AnonymousReportingOnly.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString), "anonymous-reporting-only"))
 			}
 		}
 		if !data.Profiles[i].ReportingSmartLicensingDataDisable.IsNull() && !data.Profiles[i].ReportingSmartLicensingDataDisable.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ReportingSmartLicensingDataDisable.IsNull() && state.Profiles[i].ReportingSmartLicensingDataDisable.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ReportingSmartLicensingDataDisable.IsNull() || state.Profiles[i].ReportingSmartLicensingDataDisable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString), "reporting/smart-licensing-data/disable"))
 			}
 		}
 		if !data.Profiles[i].ReportingSmartLicensingData.IsNull() && !data.Profiles[i].ReportingSmartLicensingData.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ReportingSmartLicensingData.IsNull() && state.Profiles[i].ReportingSmartLicensingData.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ReportingSmartLicensingData.IsNull() || state.Profiles[i].ReportingSmartLicensingData.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString), "reporting/smart-licensing-data"))
 			}
 		}
 		if !data.Profiles[i].ReportingSmartCallHomeDataDisable.IsNull() && !data.Profiles[i].ReportingSmartCallHomeDataDisable.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ReportingSmartCallHomeDataDisable.IsNull() && state.Profiles[i].ReportingSmartCallHomeDataDisable.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ReportingSmartCallHomeDataDisable.IsNull() || state.Profiles[i].ReportingSmartCallHomeDataDisable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString), "reporting/smart-call-home-data/disable"))
 			}
 		}
 		if !data.Profiles[i].ReportingSmartCallHomeData.IsNull() && !data.Profiles[i].ReportingSmartCallHomeData.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ReportingSmartCallHomeData.IsNull() && state.Profiles[i].ReportingSmartCallHomeData.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ReportingSmartCallHomeData.IsNull() || state.Profiles[i].ReportingSmartCallHomeData.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString), "reporting/smart-call-home-data"))
 			}
 		}
 		if !data.Profiles[i].DestinationTransportMethodHttpDisable.IsNull() && !data.Profiles[i].DestinationTransportMethodHttpDisable.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].DestinationTransportMethodHttpDisable.IsNull() && state.Profiles[i].DestinationTransportMethodHttpDisable.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].DestinationTransportMethodHttpDisable.IsNull() || state.Profiles[i].DestinationTransportMethodHttpDisable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString), "destination/transport-method/http/disable"))
 			}
 		}
 		if !data.Profiles[i].DestinationTransportMethodHttp.IsNull() && !data.Profiles[i].DestinationTransportMethodHttp.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].DestinationTransportMethodHttp.IsNull() && state.Profiles[i].DestinationTransportMethodHttp.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].DestinationTransportMethodHttp.IsNull() || state.Profiles[i].DestinationTransportMethodHttp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString), "destination/transport-method/http"))
 			}
 		}
 		if !data.Profiles[i].DestinationTransportMethodEmailDisable.IsNull() && !data.Profiles[i].DestinationTransportMethodEmailDisable.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].DestinationTransportMethodEmailDisable.IsNull() && state.Profiles[i].DestinationTransportMethodEmailDisable.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].DestinationTransportMethodEmailDisable.IsNull() || state.Profiles[i].DestinationTransportMethodEmailDisable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString), "destination/transport-method/email/disable"))
 			}
 		}
 		if !data.Profiles[i].DestinationTransportMethodEmail.IsNull() && !data.Profiles[i].DestinationTransportMethodEmail.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].DestinationTransportMethodEmail.IsNull() && state.Profiles[i].DestinationTransportMethodEmail.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].DestinationTransportMethodEmail.IsNull() || state.Profiles[i].DestinationTransportMethodEmail.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString), "destination/transport-method/email"))
 			}
 		}
 		if !data.Profiles[i].DestinationMsgFormatLong.IsNull() && !data.Profiles[i].DestinationMsgFormatLong.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].DestinationMsgFormatLong.IsNull() && state.Profiles[i].DestinationMsgFormatLong.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].DestinationMsgFormatLong.IsNull() || state.Profiles[i].DestinationMsgFormatLong.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString), "destination/preferred-msg-format/long-text"))
 			}
 		}
 		if !data.Profiles[i].DestinationMsgFormatShort.IsNull() && !data.Profiles[i].DestinationMsgFormatShort.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].DestinationMsgFormatShort.IsNull() && state.Profiles[i].DestinationMsgFormatShort.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].DestinationMsgFormatShort.IsNull() || state.Profiles[i].DestinationMsgFormatShort.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString), "destination/preferred-msg-format/short-text"))
 			}
 		}
@@ -1448,38 +1448,38 @@ func (data *CallHome) getEmptyLeafsDelete(ctx context.Context, state *CallHome, 
 			}
 		}
 		if !data.Profiles[i].Active.IsNull() && !data.Profiles[i].Active.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].Active.IsNull() && state.Profiles[i].Active.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].Active.IsNull() || state.Profiles[i].Active.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profiles/profile", keyString), "active"))
 			}
 		}
 	}
 	if !data.AaaAuthorization.IsNull() && !data.AaaAuthorization.ValueBool() {
-		if state != nil && !state.AaaAuthorization.IsNull() && state.AaaAuthorization.ValueBool() {
+		if state == nil || state.AaaAuthorization.IsNull() || state.AaaAuthorization.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "aaa-authorization/active"))
 		}
 	}
 	if !data.SyslogThrottling.IsNull() && !data.SyslogThrottling.ValueBool() {
-		if state != nil && !state.SyslogThrottling.IsNull() && state.SyslogThrottling.ValueBool() {
+		if state == nil || state.SyslogThrottling.IsNull() || state.SyslogThrottling.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "syslog-throttling"))
 		}
 	}
 	if !data.DataPrivacyLevelHigh.IsNull() && !data.DataPrivacyLevelHigh.ValueBool() {
-		if state != nil && !state.DataPrivacyLevelHigh.IsNull() && state.DataPrivacyLevelHigh.ValueBool() {
+		if state == nil || state.DataPrivacyLevelHigh.IsNull() || state.DataPrivacyLevelHigh.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "data-privacy/level/high"))
 		}
 	}
 	if !data.DataPrivacyLevelNormal.IsNull() && !data.DataPrivacyLevelNormal.ValueBool() {
-		if state != nil && !state.DataPrivacyLevelNormal.IsNull() && state.DataPrivacyLevelNormal.ValueBool() {
+		if state == nil || state.DataPrivacyLevelNormal.IsNull() || state.DataPrivacyLevelNormal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "data-privacy/level/normal"))
 		}
 	}
 	if !data.DataPrivacyHostname.IsNull() && !data.DataPrivacyHostname.ValueBool() {
-		if state != nil && !state.DataPrivacyHostname.IsNull() && state.DataPrivacyHostname.ValueBool() {
+		if state == nil || state.DataPrivacyHostname.IsNull() || state.DataPrivacyHostname.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "data-privacy/hostname"))
 		}
 	}
 	if !data.ContactSmartLicensing.IsNull() && !data.ContactSmartLicensing.ValueBool() {
-		if state != nil && !state.ContactSmartLicensing.IsNull() && state.ContactSmartLicensing.ValueBool() {
+		if state == nil || state.ContactSmartLicensing.IsNull() || state.ContactSmartLicensing.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "contact/smart-licensing"))
 		}
 	}
@@ -1492,7 +1492,7 @@ func (data *CallHome) getEmptyLeafsDelete(ctx context.Context, state *CallHome, 
 		}
 	}
 	if !data.ServiceActive.IsNull() && !data.ServiceActive.ValueBool() {
-		if state != nil && !state.ServiceActive.IsNull() && state.ServiceActive.ValueBool() {
+		if state == nil || state.ServiceActive.IsNull() || state.ServiceActive.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "service/active"))
 		}
 	}

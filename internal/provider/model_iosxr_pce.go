@@ -6591,7 +6591,7 @@ func (data *PCE) getDeletedItems(ctx context.Context, state PCE, version string)
 func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.HierarchicalUnderlayEnableAll.IsNull() && !data.HierarchicalUnderlayEnableAll.ValueBool() {
-		if state != nil && !state.HierarchicalUnderlayEnableAll.IsNull() && state.HierarchicalUnderlayEnableAll.ValueBool() {
+		if state == nil || state.HierarchicalUnderlayEnableAll.IsNull() || state.HierarchicalUnderlayEnableAll.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "hierarchical/underlay/enable-all"))
 		}
 	}
@@ -6612,12 +6612,12 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE, version st
 		}
 	}
 	if !data.SrteP2mpFastRerouteLfa.IsNull() && !data.SrteP2mpFastRerouteLfa.ValueBool() {
-		if state != nil && !state.SrteP2mpFastRerouteLfa.IsNull() && state.SrteP2mpFastRerouteLfa.ValueBool() {
+		if state == nil || state.SrteP2mpFastRerouteLfa.IsNull() || state.SrteP2mpFastRerouteLfa.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/traffic-eng/p2mp/fast-reroute/lfa"))
 		}
 	}
 	if !data.SrteP2mpMultipathDisable.IsNull() && !data.SrteP2mpMultipathDisable.ValueBool() {
-		if state != nil && !state.SrteP2mpMultipathDisable.IsNull() && state.SrteP2mpMultipathDisable.ValueBool() {
+		if state == nil || state.SrteP2mpMultipathDisable.IsNull() || state.SrteP2mpMultipathDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/traffic-eng/p2mp/multipath-disable"))
 		}
 	}
@@ -6636,27 +6636,27 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE, version st
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeHopcount.IsNull() && !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeHopcount.ValueBool() {
-				if state != nil && i < len(state.SrteP2mpPolicies) && ci < len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) && !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeHopcount.IsNull() && state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeHopcount.ValueBool() {
+				if state == nil || i >= len(state.SrteP2mpPolicies) || ci >= len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) || state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeHopcount.IsNull() || state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeHopcount.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/p2mp/policies/policy", keyString, "candidate-paths/preferences/preference", ckeyString), "dynamic/metric/type/hopcount"))
 				}
 			}
 			if !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeLatency.IsNull() && !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeLatency.ValueBool() {
-				if state != nil && i < len(state.SrteP2mpPolicies) && ci < len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) && !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeLatency.IsNull() && state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeLatency.ValueBool() {
+				if state == nil || i >= len(state.SrteP2mpPolicies) || ci >= len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) || state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeLatency.IsNull() || state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeLatency.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/p2mp/policies/policy", keyString, "candidate-paths/preferences/preference", ckeyString), "dynamic/metric/type/latency"))
 				}
 			}
 			if !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeIgp.IsNull() && !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeIgp.ValueBool() {
-				if state != nil && i < len(state.SrteP2mpPolicies) && ci < len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) && !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeIgp.IsNull() && state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeIgp.ValueBool() {
+				if state == nil || i >= len(state.SrteP2mpPolicies) || ci >= len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) || state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeIgp.IsNull() || state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeIgp.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/p2mp/policies/policy", keyString, "candidate-paths/preferences/preference", ckeyString), "dynamic/metric/type/igp"))
 				}
 			}
 			if !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeTe.IsNull() && !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeTe.ValueBool() {
-				if state != nil && i < len(state.SrteP2mpPolicies) && ci < len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) && !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeTe.IsNull() && state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeTe.ValueBool() {
+				if state == nil || i >= len(state.SrteP2mpPolicies) || ci >= len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) || state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeTe.IsNull() || state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].DynamicMetricTypeTe.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/p2mp/policies/policy", keyString, "candidate-paths/preferences/preference", ckeyString), "dynamic/metric/type/te"))
 				}
 			}
 			if !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].Dynamic.IsNull() && !data.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].Dynamic.ValueBool() {
-				if state != nil && i < len(state.SrteP2mpPolicies) && ci < len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) && !state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].Dynamic.IsNull() && state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].Dynamic.ValueBool() {
+				if state == nil || i >= len(state.SrteP2mpPolicies) || ci >= len(state.SrteP2mpPolicies[i].CandidatePathsPreferences) || state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].Dynamic.IsNull() || state.SrteP2mpPolicies[i].CandidatePathsPreferences[ci].Dynamic.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/p2mp/policies/policy", keyString, "candidate-paths/preferences/preference", ckeyString), "dynamic"))
 				}
 			}
@@ -6686,12 +6686,12 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE, version st
 			}
 		}
 		if !data.SrteP2mpPolicies[i].FastRerouteLfa.IsNull() && !data.SrteP2mpPolicies[i].FastRerouteLfa.ValueBool() {
-			if state != nil && i < len(state.SrteP2mpPolicies) && !state.SrteP2mpPolicies[i].FastRerouteLfa.IsNull() && state.SrteP2mpPolicies[i].FastRerouteLfa.ValueBool() {
+			if state == nil || i >= len(state.SrteP2mpPolicies) || state.SrteP2mpPolicies[i].FastRerouteLfa.IsNull() || state.SrteP2mpPolicies[i].FastRerouteLfa.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/traffic-eng/p2mp/policies/policy", keyString), "fast-reroute/lfa"))
 			}
 		}
 		if !data.SrteP2mpPolicies[i].Shutdown.IsNull() && !data.SrteP2mpPolicies[i].Shutdown.ValueBool() {
-			if state != nil && i < len(state.SrteP2mpPolicies) && !state.SrteP2mpPolicies[i].Shutdown.IsNull() && state.SrteP2mpPolicies[i].Shutdown.ValueBool() {
+			if state == nil || i >= len(state.SrteP2mpPolicies) || state.SrteP2mpPolicies[i].Shutdown.IsNull() || state.SrteP2mpPolicies[i].Shutdown.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/traffic-eng/p2mp/policies/policy", keyString), "shutdown"))
 			}
 		}
@@ -6713,17 +6713,17 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE, version st
 		}
 	}
 	if !data.SrteCspfSrNativeForce.IsNull() && !data.SrteCspfSrNativeForce.ValueBool() {
-		if state != nil && !state.SrteCspfSrNativeForce.IsNull() && state.SrteCspfSrNativeForce.ValueBool() {
+		if state == nil || state.SrteCspfSrNativeForce.IsNull() || state.SrteCspfSrNativeForce.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/traffic-eng/cspf/sr-native/force"))
 		}
 	}
 	if !data.SrteCspfSrNative.IsNull() && !data.SrteCspfSrNative.ValueBool() {
-		if state != nil && !state.SrteCspfSrNative.IsNull() && state.SrteCspfSrNative.ValueBool() {
+		if state == nil || state.SrteCspfSrNative.IsNull() || state.SrteCspfSrNative.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/traffic-eng/cspf/sr-native"))
 		}
 	}
 	if !data.SrteCspfAnycastSidInclusion.IsNull() && !data.SrteCspfAnycastSidInclusion.ValueBool() {
-		if state != nil && !state.SrteCspfAnycastSidInclusion.IsNull() && state.SrteCspfAnycastSidInclusion.ValueBool() {
+		if state == nil || state.SrteCspfAnycastSidInclusion.IsNull() || state.SrteCspfAnycastSidInclusion.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/traffic-eng/cspf/anycast-sid-inclusion"))
 		}
 	}
@@ -6742,17 +6742,17 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE, version st
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.ValueBool() {
-				if state != nil && i < len(state.SrteIpv4Peers) && ci < len(state.SrteIpv4Peers[i].Policies) && !state.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.IsNull() && state.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.ValueBool() {
+				if state == nil || i >= len(state.SrteIpv4Peers) || ci >= len(state.SrteIpv4Peers[i].Policies) || state.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.IsNull() || state.SrteIpv4Peers[i].Policies[ci].PathSelectionUnprotected.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString), "path-selection/unprotected"))
 				}
 			}
 			if !data.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.ValueBool() {
-				if state != nil && i < len(state.SrteIpv4Peers) && ci < len(state.SrteIpv4Peers[i].Policies) && !state.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.IsNull() && state.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.ValueBool() {
+				if state == nil || i >= len(state.SrteIpv4Peers) || ci >= len(state.SrteIpv4Peers[i].Policies) || state.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.IsNull() || state.SrteIpv4Peers[i].Policies[ci].PathSelectionProtected.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString), "path-selection/protected"))
 				}
 			}
 			if !data.SrteIpv4Peers[i].Policies[ci].Shutdown.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].Shutdown.ValueBool() {
-				if state != nil && i < len(state.SrteIpv4Peers) && ci < len(state.SrteIpv4Peers[i].Policies) && !state.SrteIpv4Peers[i].Policies[ci].Shutdown.IsNull() && state.SrteIpv4Peers[i].Policies[ci].Shutdown.ValueBool() {
+				if state == nil || i >= len(state.SrteIpv4Peers) || ci >= len(state.SrteIpv4Peers[i].Policies) || state.SrteIpv4Peers[i].Policies[ci].Shutdown.IsNull() || state.SrteIpv4Peers[i].Policies[ci].Shutdown.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString), "shutdown"))
 				}
 			}
@@ -6788,16 +6788,24 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE, version st
 					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
 				}
 				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedPreferred.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedPreferred.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString, "candidate-paths/preferences/preference", cckeyString), "constraints/segments/protection/unprotected-preferred"))
+					if state == nil || i >= len(state.SrteIpv4Peers) || ci >= len(state.SrteIpv4Peers[i].Policies) || cci >= len(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences) || state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedPreferred.IsNull() || state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedPreferred.ValueBool() {
+						emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString, "candidate-paths/preferences/preference", cckeyString), "constraints/segments/protection/unprotected-preferred"))
+					}
 				}
 				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedOnly.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedOnly.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString, "candidate-paths/preferences/preference", cckeyString), "constraints/segments/protection/unprotected-only"))
+					if state == nil || i >= len(state.SrteIpv4Peers) || ci >= len(state.SrteIpv4Peers[i].Policies) || cci >= len(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences) || state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedOnly.IsNull() || state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionUnprotectedOnly.ValueBool() {
+						emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString, "candidate-paths/preferences/preference", cckeyString), "constraints/segments/protection/unprotected-only"))
+					}
 				}
 				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedOnly.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedOnly.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString, "candidate-paths/preferences/preference", cckeyString), "constraints/segments/protection/protected-only"))
+					if state == nil || i >= len(state.SrteIpv4Peers) || ci >= len(state.SrteIpv4Peers[i].Policies) || cci >= len(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences) || state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedOnly.IsNull() || state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedOnly.ValueBool() {
+						emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString, "candidate-paths/preferences/preference", cckeyString), "constraints/segments/protection/protected-only"))
+					}
 				}
 				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedPreferred.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedPreferred.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString, "candidate-paths/preferences/preference", cckeyString), "constraints/segments/protection/protected-preferred"))
+					if state == nil || i >= len(state.SrteIpv4Peers) || ci >= len(state.SrteIpv4Peers[i].Policies) || cci >= len(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences) || state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedPreferred.IsNull() || state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ConstraintsSegmentsProtectionProtectedPreferred.ValueBool() {
+						emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString, "candidate-paths/preferences/preference", cckeyString), "constraints/segments/protection/protected-preferred"))
+					}
 				}
 				for ccci := range data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].ExplicitSegmentListNames {
 					ccckeys := [...]string{"segment-list-name"}
@@ -6808,19 +6816,29 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE, version st
 					}
 				}
 				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeHopcount.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeHopcount.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString, "candidate-paths/preferences/preference", cckeyString), "dynamic/mpls/metric/type/hopcount"))
+					if state == nil || i >= len(state.SrteIpv4Peers) || ci >= len(state.SrteIpv4Peers[i].Policies) || cci >= len(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences) || state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeHopcount.IsNull() || state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeHopcount.ValueBool() {
+						emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString, "candidate-paths/preferences/preference", cckeyString), "dynamic/mpls/metric/type/hopcount"))
+					}
 				}
 				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeLatency.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeLatency.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString, "candidate-paths/preferences/preference", cckeyString), "dynamic/mpls/metric/type/latency"))
+					if state == nil || i >= len(state.SrteIpv4Peers) || ci >= len(state.SrteIpv4Peers[i].Policies) || cci >= len(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences) || state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeLatency.IsNull() || state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeLatency.ValueBool() {
+						emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString, "candidate-paths/preferences/preference", cckeyString), "dynamic/mpls/metric/type/latency"))
+					}
 				}
 				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeIgp.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeIgp.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString, "candidate-paths/preferences/preference", cckeyString), "dynamic/mpls/metric/type/igp"))
+					if state == nil || i >= len(state.SrteIpv4Peers) || ci >= len(state.SrteIpv4Peers[i].Policies) || cci >= len(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences) || state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeIgp.IsNull() || state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeIgp.ValueBool() {
+						emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString, "candidate-paths/preferences/preference", cckeyString), "dynamic/mpls/metric/type/igp"))
+					}
 				}
 				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeTe.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeTe.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString, "candidate-paths/preferences/preference", cckeyString), "dynamic/mpls/metric/type/te"))
+					if state == nil || i >= len(state.SrteIpv4Peers) || ci >= len(state.SrteIpv4Peers[i].Policies) || cci >= len(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences) || state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeTe.IsNull() || state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMetricTypeTe.ValueBool() {
+						emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString, "candidate-paths/preferences/preference", cckeyString), "dynamic/mpls/metric/type/te"))
+					}
 				}
 				if !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMpls.IsNull() && !data.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMpls.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString, "candidate-paths/preferences/preference", cckeyString), "dynamic/mpls"))
+					if state == nil || i >= len(state.SrteIpv4Peers) || ci >= len(state.SrteIpv4Peers[i].Policies) || cci >= len(state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences) || state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMpls.IsNull() || state.SrteIpv4Peers[i].Policies[ci].CandidatePathsPreferences[cci].DynamicMpls.ValueBool() {
+						emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/peer/ipv4s/ipv4", keyString, "policies/policy", ckeyString, "candidate-paths/preferences/preference", cckeyString), "dynamic/mpls"))
+					}
 				}
 			}
 		}
@@ -6850,32 +6868,32 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE, version st
 		}
 	}
 	if !data.SegmentRoutingStrictSidOnly.IsNull() && !data.SegmentRoutingStrictSidOnly.ValueBool() {
-		if state != nil && !state.SegmentRoutingStrictSidOnly.IsNull() && state.SegmentRoutingStrictSidOnly.ValueBool() {
+		if state == nil || state.SegmentRoutingStrictSidOnly.IsNull() || state.SegmentRoutingStrictSidOnly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/strict-sid-only"))
 		}
 	}
 	if !data.LoggingPcepDisjointnessStatus.IsNull() && !data.LoggingPcepDisjointnessStatus.ValueBool() {
-		if state != nil && !state.LoggingPcepDisjointnessStatus.IsNull() && state.LoggingPcepDisjointnessStatus.ValueBool() {
+		if state == nil || state.LoggingPcepDisjointnessStatus.IsNull() || state.LoggingPcepDisjointnessStatus.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/pcep/disjointness-status"))
 		}
 	}
 	if !data.LoggingPcepApiSendQueueCongestionDisable.IsNull() && !data.LoggingPcepApiSendQueueCongestionDisable.ValueBool() {
-		if state != nil && !state.LoggingPcepApiSendQueueCongestionDisable.IsNull() && state.LoggingPcepApiSendQueueCongestionDisable.ValueBool() {
+		if state == nil || state.LoggingPcepApiSendQueueCongestionDisable.IsNull() || state.LoggingPcepApiSendQueueCongestionDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/pcep/api/send-queue-congestion/disable"))
 		}
 	}
 	if !data.LoggingPcepPcerrReceived.IsNull() && !data.LoggingPcepPcerrReceived.ValueBool() {
-		if state != nil && !state.LoggingPcepPcerrReceived.IsNull() && state.LoggingPcepPcerrReceived.ValueBool() {
+		if state == nil || state.LoggingPcepPcerrReceived.IsNull() || state.LoggingPcepPcerrReceived.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/pcep/pcerr-received"))
 		}
 	}
 	if !data.LoggingFallback.IsNull() && !data.LoggingFallback.ValueBool() {
-		if state != nil && !state.LoggingFallback.IsNull() && state.LoggingFallback.ValueBool() {
+		if state == nil || state.LoggingFallback.IsNull() || state.LoggingFallback.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/fallback"))
 		}
 	}
 	if !data.LoggingNoPath.IsNull() && !data.LoggingNoPath.ValueBool() {
-		if state != nil && !state.LoggingNoPath.IsNull() && state.LoggingNoPath.ValueBool() {
+		if state == nil || state.LoggingNoPath.IsNull() || state.LoggingNoPath.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/no-path"))
 		}
 	}
@@ -6888,7 +6906,7 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE, version st
 		}
 	}
 	if !data.ApiAuthenticationDigest.IsNull() && !data.ApiAuthenticationDigest.ValueBool() {
-		if state != nil && !state.ApiAuthenticationDigest.IsNull() && state.ApiAuthenticationDigest.ValueBool() {
+		if state == nil || state.ApiAuthenticationDigest.IsNull() || state.ApiAuthenticationDigest.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "api/authentication/digest"))
 		}
 	}
@@ -6900,12 +6918,12 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE, version st
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.PeerIpv6s[i].TcpAoAcceptAoMismatchConnection.IsNull() && !data.PeerIpv6s[i].TcpAoAcceptAoMismatchConnection.ValueBool() {
-			if state != nil && i < len(state.PeerIpv6s) && !state.PeerIpv6s[i].TcpAoAcceptAoMismatchConnection.IsNull() && state.PeerIpv6s[i].TcpAoAcceptAoMismatchConnection.ValueBool() {
+			if state == nil || i >= len(state.PeerIpv6s) || state.PeerIpv6s[i].TcpAoAcceptAoMismatchConnection.IsNull() || state.PeerIpv6s[i].TcpAoAcceptAoMismatchConnection.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "peer/ipv6s/ipv6", keyString), "tcp-ao"))
 			}
 		}
 		if !data.PeerIpv6s[i].TcpAoIncludeTcpOptions.IsNull() && !data.PeerIpv6s[i].TcpAoIncludeTcpOptions.ValueBool() {
-			if state != nil && i < len(state.PeerIpv6s) && !state.PeerIpv6s[i].TcpAoIncludeTcpOptions.IsNull() && state.PeerIpv6s[i].TcpAoIncludeTcpOptions.ValueBool() {
+			if state == nil || i >= len(state.PeerIpv6s) || state.PeerIpv6s[i].TcpAoIncludeTcpOptions.IsNull() || state.PeerIpv6s[i].TcpAoIncludeTcpOptions.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "peer/ipv6s/ipv6", keyString), "tcp-ao"))
 			}
 		}
@@ -6918,12 +6936,12 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE, version st
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.PeerIpv4s[i].TcpAoAcceptAoMismatchConnection.IsNull() && !data.PeerIpv4s[i].TcpAoAcceptAoMismatchConnection.ValueBool() {
-			if state != nil && i < len(state.PeerIpv4s) && !state.PeerIpv4s[i].TcpAoAcceptAoMismatchConnection.IsNull() && state.PeerIpv4s[i].TcpAoAcceptAoMismatchConnection.ValueBool() {
+			if state == nil || i >= len(state.PeerIpv4s) || state.PeerIpv4s[i].TcpAoAcceptAoMismatchConnection.IsNull() || state.PeerIpv4s[i].TcpAoAcceptAoMismatchConnection.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "peer/ipv4s/ipv4", keyString), "tcp-ao"))
 			}
 		}
 		if !data.PeerIpv4s[i].TcpAoIncludeTcpOptions.IsNull() && !data.PeerIpv4s[i].TcpAoIncludeTcpOptions.ValueBool() {
-			if state != nil && i < len(state.PeerIpv4s) && !state.PeerIpv4s[i].TcpAoIncludeTcpOptions.IsNull() && state.PeerIpv4s[i].TcpAoIncludeTcpOptions.ValueBool() {
+			if state == nil || i >= len(state.PeerIpv4s) || state.PeerIpv4s[i].TcpAoIncludeTcpOptions.IsNull() || state.PeerIpv4s[i].TcpAoIncludeTcpOptions.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "peer/ipv4s/ipv4", keyString), "tcp-ao"))
 			}
 		}
@@ -6943,28 +6961,28 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE, version st
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
-				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds) && !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
+				if state == nil || i >= len(state.DisjointPathGroupIds) || ci >= len(state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds) || state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccShortestPath.IsNull() || state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString, "type/srlg-node/sub-ids/sub-id", ckeyString), "lsp/one/pcc/shortest-path"))
 				}
 			}
 			if !data.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].Strict.IsNull() && !data.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].Strict.ValueBool() {
-				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds) && !state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].Strict.IsNull() && state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].Strict.ValueBool() {
+				if state == nil || i >= len(state.DisjointPathGroupIds) || ci >= len(state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds) || state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].Strict.IsNull() || state.DisjointPathGroupIds[i].SrlgNodeDisjointSubIds[ci].Strict.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString, "type/srlg-node/sub-ids/sub-id", ckeyString), "strict"))
 				}
 			}
 		}
 		if !data.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccShortestPath.ValueBool() {
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccShortestPath.ValueBool() {
+			if state == nil || i >= len(state.DisjointPathGroupIds) || state.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccShortestPath.IsNull() || state.DisjointPathGroupIds[i].SrlgNodeDisjointLspOnePccShortestPath.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString), "type/srlg-node/lsp/one/pcc/shortest-path"))
 			}
 		}
 		if !data.DisjointPathGroupIds[i].SrlgNodeDisjointStrict.IsNull() && !data.DisjointPathGroupIds[i].SrlgNodeDisjointStrict.ValueBool() {
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].SrlgNodeDisjointStrict.IsNull() && state.DisjointPathGroupIds[i].SrlgNodeDisjointStrict.ValueBool() {
+			if state == nil || i >= len(state.DisjointPathGroupIds) || state.DisjointPathGroupIds[i].SrlgNodeDisjointStrict.IsNull() || state.DisjointPathGroupIds[i].SrlgNodeDisjointStrict.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString), "type/srlg-node/strict"))
 			}
 		}
 		if !data.DisjointPathGroupIds[i].SrlgNodeDisjoint.IsNull() && !data.DisjointPathGroupIds[i].SrlgNodeDisjoint.ValueBool() {
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].SrlgNodeDisjoint.IsNull() && state.DisjointPathGroupIds[i].SrlgNodeDisjoint.ValueBool() {
+			if state == nil || i >= len(state.DisjointPathGroupIds) || state.DisjointPathGroupIds[i].SrlgNodeDisjoint.IsNull() || state.DisjointPathGroupIds[i].SrlgNodeDisjoint.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString), "type/srlg-node/enable"))
 			}
 		}
@@ -6976,28 +6994,28 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE, version st
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
-				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].SrlgDisjointSubIds) && !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
+				if state == nil || i >= len(state.DisjointPathGroupIds) || ci >= len(state.DisjointPathGroupIds[i].SrlgDisjointSubIds) || state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccShortestPath.IsNull() || state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString, "type/srlg/sub-ids/sub-id", ckeyString), "lsp/one/pcc/shortest-path"))
 				}
 			}
 			if !data.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].Strict.IsNull() && !data.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].Strict.ValueBool() {
-				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].SrlgDisjointSubIds) && !state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].Strict.IsNull() && state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].Strict.ValueBool() {
+				if state == nil || i >= len(state.DisjointPathGroupIds) || ci >= len(state.DisjointPathGroupIds[i].SrlgDisjointSubIds) || state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].Strict.IsNull() || state.DisjointPathGroupIds[i].SrlgDisjointSubIds[ci].Strict.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString, "type/srlg/sub-ids/sub-id", ckeyString), "strict"))
 				}
 			}
 		}
 		if !data.DisjointPathGroupIds[i].SrlgDisjointLspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].SrlgDisjointLspOnePccShortestPath.ValueBool() {
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].SrlgDisjointLspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].SrlgDisjointLspOnePccShortestPath.ValueBool() {
+			if state == nil || i >= len(state.DisjointPathGroupIds) || state.DisjointPathGroupIds[i].SrlgDisjointLspOnePccShortestPath.IsNull() || state.DisjointPathGroupIds[i].SrlgDisjointLspOnePccShortestPath.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString), "type/srlg/lsp/one/pcc/shortest-path"))
 			}
 		}
 		if !data.DisjointPathGroupIds[i].SrlgDisjointStrict.IsNull() && !data.DisjointPathGroupIds[i].SrlgDisjointStrict.ValueBool() {
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].SrlgDisjointStrict.IsNull() && state.DisjointPathGroupIds[i].SrlgDisjointStrict.ValueBool() {
+			if state == nil || i >= len(state.DisjointPathGroupIds) || state.DisjointPathGroupIds[i].SrlgDisjointStrict.IsNull() || state.DisjointPathGroupIds[i].SrlgDisjointStrict.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString), "type/srlg/strict"))
 			}
 		}
 		if !data.DisjointPathGroupIds[i].SrlgDisjoint.IsNull() && !data.DisjointPathGroupIds[i].SrlgDisjoint.ValueBool() {
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].SrlgDisjoint.IsNull() && state.DisjointPathGroupIds[i].SrlgDisjoint.ValueBool() {
+			if state == nil || i >= len(state.DisjointPathGroupIds) || state.DisjointPathGroupIds[i].SrlgDisjoint.IsNull() || state.DisjointPathGroupIds[i].SrlgDisjoint.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString), "type/srlg/enable"))
 			}
 		}
@@ -7009,28 +7027,28 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE, version st
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
-				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].NodeDisjointSubIds) && !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
+				if state == nil || i >= len(state.DisjointPathGroupIds) || ci >= len(state.DisjointPathGroupIds[i].NodeDisjointSubIds) || state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccShortestPath.IsNull() || state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString, "type/node/sub-ids/sub-id", ckeyString), "lsp/one/pcc/shortest-path"))
 				}
 			}
 			if !data.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].Strict.IsNull() && !data.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].Strict.ValueBool() {
-				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].NodeDisjointSubIds) && !state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].Strict.IsNull() && state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].Strict.ValueBool() {
+				if state == nil || i >= len(state.DisjointPathGroupIds) || ci >= len(state.DisjointPathGroupIds[i].NodeDisjointSubIds) || state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].Strict.IsNull() || state.DisjointPathGroupIds[i].NodeDisjointSubIds[ci].Strict.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString, "type/node/sub-ids/sub-id", ckeyString), "strict"))
 				}
 			}
 		}
 		if !data.DisjointPathGroupIds[i].NodeDisjointLspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].NodeDisjointLspOnePccShortestPath.ValueBool() {
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].NodeDisjointLspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].NodeDisjointLspOnePccShortestPath.ValueBool() {
+			if state == nil || i >= len(state.DisjointPathGroupIds) || state.DisjointPathGroupIds[i].NodeDisjointLspOnePccShortestPath.IsNull() || state.DisjointPathGroupIds[i].NodeDisjointLspOnePccShortestPath.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString), "type/node/lsp/one/pcc/shortest-path"))
 			}
 		}
 		if !data.DisjointPathGroupIds[i].NodeDisjointStrict.IsNull() && !data.DisjointPathGroupIds[i].NodeDisjointStrict.ValueBool() {
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].NodeDisjointStrict.IsNull() && state.DisjointPathGroupIds[i].NodeDisjointStrict.ValueBool() {
+			if state == nil || i >= len(state.DisjointPathGroupIds) || state.DisjointPathGroupIds[i].NodeDisjointStrict.IsNull() || state.DisjointPathGroupIds[i].NodeDisjointStrict.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString), "type/node/strict"))
 			}
 		}
 		if !data.DisjointPathGroupIds[i].NodeDisjoint.IsNull() && !data.DisjointPathGroupIds[i].NodeDisjoint.ValueBool() {
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].NodeDisjoint.IsNull() && state.DisjointPathGroupIds[i].NodeDisjoint.ValueBool() {
+			if state == nil || i >= len(state.DisjointPathGroupIds) || state.DisjointPathGroupIds[i].NodeDisjoint.IsNull() || state.DisjointPathGroupIds[i].NodeDisjoint.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString), "type/node/enable"))
 			}
 		}
@@ -7042,39 +7060,39 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context, state *PCE, version st
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
-				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].LinkDisjointSubIds) && !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
+				if state == nil || i >= len(state.DisjointPathGroupIds) || ci >= len(state.DisjointPathGroupIds[i].LinkDisjointSubIds) || state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccShortestPath.IsNull() || state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].LspOnePccShortestPath.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString, "type/link/sub-ids/sub-id", ckeyString), "lsp/one/pcc/shortest-path"))
 				}
 			}
 			if !data.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].Strict.IsNull() && !data.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].Strict.ValueBool() {
-				if state != nil && i < len(state.DisjointPathGroupIds) && ci < len(state.DisjointPathGroupIds[i].LinkDisjointSubIds) && !state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].Strict.IsNull() && state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].Strict.ValueBool() {
+				if state == nil || i >= len(state.DisjointPathGroupIds) || ci >= len(state.DisjointPathGroupIds[i].LinkDisjointSubIds) || state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].Strict.IsNull() || state.DisjointPathGroupIds[i].LinkDisjointSubIds[ci].Strict.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString, "type/link/sub-ids/sub-id", ckeyString), "strict"))
 				}
 			}
 		}
 		if !data.DisjointPathGroupIds[i].LinkDisjointLspOnePccShortestPath.IsNull() && !data.DisjointPathGroupIds[i].LinkDisjointLspOnePccShortestPath.ValueBool() {
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].LinkDisjointLspOnePccShortestPath.IsNull() && state.DisjointPathGroupIds[i].LinkDisjointLspOnePccShortestPath.ValueBool() {
+			if state == nil || i >= len(state.DisjointPathGroupIds) || state.DisjointPathGroupIds[i].LinkDisjointLspOnePccShortestPath.IsNull() || state.DisjointPathGroupIds[i].LinkDisjointLspOnePccShortestPath.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString), "type/link/lsp/one/pcc/shortest-path"))
 			}
 		}
 		if !data.DisjointPathGroupIds[i].LinkDisjointStrict.IsNull() && !data.DisjointPathGroupIds[i].LinkDisjointStrict.ValueBool() {
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].LinkDisjointStrict.IsNull() && state.DisjointPathGroupIds[i].LinkDisjointStrict.ValueBool() {
+			if state == nil || i >= len(state.DisjointPathGroupIds) || state.DisjointPathGroupIds[i].LinkDisjointStrict.IsNull() || state.DisjointPathGroupIds[i].LinkDisjointStrict.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString), "type/link/strict"))
 			}
 		}
 		if !data.DisjointPathGroupIds[i].LinkDisjoint.IsNull() && !data.DisjointPathGroupIds[i].LinkDisjoint.ValueBool() {
-			if state != nil && i < len(state.DisjointPathGroupIds) && !state.DisjointPathGroupIds[i].LinkDisjoint.IsNull() && state.DisjointPathGroupIds[i].LinkDisjoint.ValueBool() {
+			if state == nil || i >= len(state.DisjointPathGroupIds) || state.DisjointPathGroupIds[i].LinkDisjoint.IsNull() || state.DisjointPathGroupIds[i].LinkDisjoint.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "disjoint-path/group-ids/group-id", keyString), "type/link/enable"))
 			}
 		}
 	}
 	if !data.TcpAoAcceptAoMismatchConnection.IsNull() && !data.TcpAoAcceptAoMismatchConnection.ValueBool() {
-		if state != nil && !state.TcpAoAcceptAoMismatchConnection.IsNull() && state.TcpAoAcceptAoMismatchConnection.ValueBool() {
+		if state == nil || state.TcpAoAcceptAoMismatchConnection.IsNull() || state.TcpAoAcceptAoMismatchConnection.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "tcp-ao"))
 		}
 	}
 	if !data.TcpAoIncludeTcpOptions.IsNull() && !data.TcpAoIncludeTcpOptions.ValueBool() {
-		if state != nil && !state.TcpAoIncludeTcpOptions.IsNull() && state.TcpAoIncludeTcpOptions.ValueBool() {
+		if state == nil || state.TcpAoIncludeTcpOptions.IsNull() || state.TcpAoIncludeTcpOptions.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "tcp-ao"))
 		}
 	}

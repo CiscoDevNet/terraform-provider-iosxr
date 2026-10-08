@@ -1922,22 +1922,22 @@ func (data *MPLSLDPVRF) getEmptyLeafsDelete(ctx context.Context, state *MPLSLDPV
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Interfaces[i].AddressFamilyIpv6DiscoveryTransportAddressInterface.IsNull() && !data.Interfaces[i].AddressFamilyIpv6DiscoveryTransportAddressInterface.ValueBool() {
-			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].AddressFamilyIpv6DiscoveryTransportAddressInterface.IsNull() && state.Interfaces[i].AddressFamilyIpv6DiscoveryTransportAddressInterface.ValueBool() {
+			if state == nil || i >= len(state.Interfaces) || state.Interfaces[i].AddressFamilyIpv6DiscoveryTransportAddressInterface.IsNull() || state.Interfaces[i].AddressFamilyIpv6DiscoveryTransportAddressInterface.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "interfaces/interface", keyString), "address-family/ipv6/discovery/transport-address/interface"))
 			}
 		}
 		if !data.Interfaces[i].AddressFamilyIpv6.IsNull() && !data.Interfaces[i].AddressFamilyIpv6.ValueBool() {
-			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].AddressFamilyIpv6.IsNull() && state.Interfaces[i].AddressFamilyIpv6.ValueBool() {
+			if state == nil || i >= len(state.Interfaces) || state.Interfaces[i].AddressFamilyIpv6.IsNull() || state.Interfaces[i].AddressFamilyIpv6.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "interfaces/interface", keyString), "address-family/ipv6"))
 			}
 		}
 		if !data.Interfaces[i].AddressFamilyIpv4DiscoveryTransportAddressInterface.IsNull() && !data.Interfaces[i].AddressFamilyIpv4DiscoveryTransportAddressInterface.ValueBool() {
-			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].AddressFamilyIpv4DiscoveryTransportAddressInterface.IsNull() && state.Interfaces[i].AddressFamilyIpv4DiscoveryTransportAddressInterface.ValueBool() {
+			if state == nil || i >= len(state.Interfaces) || state.Interfaces[i].AddressFamilyIpv4DiscoveryTransportAddressInterface.IsNull() || state.Interfaces[i].AddressFamilyIpv4DiscoveryTransportAddressInterface.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "interfaces/interface", keyString), "address-family/ipv4/discovery/transport-address/interface"))
 			}
 		}
 		if !data.Interfaces[i].AddressFamilyIpv4.IsNull() && !data.Interfaces[i].AddressFamilyIpv4.ValueBool() {
-			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].AddressFamilyIpv4.IsNull() && state.Interfaces[i].AddressFamilyIpv4.ValueBool() {
+			if state == nil || i >= len(state.Interfaces) || state.Interfaces[i].AddressFamilyIpv4.IsNull() || state.Interfaces[i].AddressFamilyIpv4.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "interfaces/interface", keyString), "address-family/ipv4"))
 			}
 		}
@@ -1951,7 +1951,7 @@ func (data *MPLSLDPVRF) getEmptyLeafsDelete(ctx context.Context, state *MPLSLDPV
 		}
 	}
 	if !data.AddressFamilyIpv6LabelLocalAdvertiseDisable.IsNull() && !data.AddressFamilyIpv6LabelLocalAdvertiseDisable.ValueBool() {
-		if state != nil && !state.AddressFamilyIpv6LabelLocalAdvertiseDisable.IsNull() && state.AddressFamilyIpv6LabelLocalAdvertiseDisable.ValueBool() {
+		if state == nil || state.AddressFamilyIpv6LabelLocalAdvertiseDisable.IsNull() || state.AddressFamilyIpv6LabelLocalAdvertiseDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/label/local/advertise/disable"))
 		}
 	}
@@ -1972,22 +1972,22 @@ func (data *MPLSLDPVRF) getEmptyLeafsDelete(ctx context.Context, state *MPLSLDPV
 		}
 	}
 	if !data.AddressFamilyIpv6LabelLocalAdvertiseExplicitNull.IsNull() && !data.AddressFamilyIpv6LabelLocalAdvertiseExplicitNull.ValueBool() {
-		if state != nil && !state.AddressFamilyIpv6LabelLocalAdvertiseExplicitNull.IsNull() && state.AddressFamilyIpv6LabelLocalAdvertiseExplicitNull.ValueBool() {
+		if state == nil || state.AddressFamilyIpv6LabelLocalAdvertiseExplicitNull.IsNull() || state.AddressFamilyIpv6LabelLocalAdvertiseExplicitNull.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/label/local/advertise/explicit-null"))
 		}
 	}
 	if !data.AddressFamilyIpv6LabelLocalDefaultRoute.IsNull() && !data.AddressFamilyIpv6LabelLocalDefaultRoute.ValueBool() {
-		if state != nil && !state.AddressFamilyIpv6LabelLocalDefaultRoute.IsNull() && state.AddressFamilyIpv6LabelLocalDefaultRoute.ValueBool() {
+		if state == nil || state.AddressFamilyIpv6LabelLocalDefaultRoute.IsNull() || state.AddressFamilyIpv6LabelLocalDefaultRoute.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/label/local/default-route"))
 		}
 	}
 	if !data.AddressFamilyIpv6LabelLocalAllocateForHostRoutes.IsNull() && !data.AddressFamilyIpv6LabelLocalAllocateForHostRoutes.ValueBool() {
-		if state != nil && !state.AddressFamilyIpv6LabelLocalAllocateForHostRoutes.IsNull() && state.AddressFamilyIpv6LabelLocalAllocateForHostRoutes.ValueBool() {
+		if state == nil || state.AddressFamilyIpv6LabelLocalAllocateForHostRoutes.IsNull() || state.AddressFamilyIpv6LabelLocalAllocateForHostRoutes.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6/label/local/allocate/for/host-routes"))
 		}
 	}
 	if !data.AddressFamilyIpv6.IsNull() && !data.AddressFamilyIpv6.ValueBool() {
-		if state != nil && !state.AddressFamilyIpv6.IsNull() && state.AddressFamilyIpv6.ValueBool() {
+		if state == nil || state.AddressFamilyIpv6.IsNull() || state.AddressFamilyIpv6.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6"))
 		}
 	}
@@ -2000,7 +2000,7 @@ func (data *MPLSLDPVRF) getEmptyLeafsDelete(ctx context.Context, state *MPLSLDPV
 		}
 	}
 	if !data.AddressFamilyIpv4LabelLocalAdvertiseDisable.IsNull() && !data.AddressFamilyIpv4LabelLocalAdvertiseDisable.ValueBool() {
-		if state != nil && !state.AddressFamilyIpv4LabelLocalAdvertiseDisable.IsNull() && state.AddressFamilyIpv4LabelLocalAdvertiseDisable.ValueBool() {
+		if state == nil || state.AddressFamilyIpv4LabelLocalAdvertiseDisable.IsNull() || state.AddressFamilyIpv4LabelLocalAdvertiseDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/label/local/advertise/disable"))
 		}
 	}
@@ -2021,22 +2021,22 @@ func (data *MPLSLDPVRF) getEmptyLeafsDelete(ctx context.Context, state *MPLSLDPV
 		}
 	}
 	if !data.AddressFamilyIpv4LabelLocalAdvertiseExplicitNull.IsNull() && !data.AddressFamilyIpv4LabelLocalAdvertiseExplicitNull.ValueBool() {
-		if state != nil && !state.AddressFamilyIpv4LabelLocalAdvertiseExplicitNull.IsNull() && state.AddressFamilyIpv4LabelLocalAdvertiseExplicitNull.ValueBool() {
+		if state == nil || state.AddressFamilyIpv4LabelLocalAdvertiseExplicitNull.IsNull() || state.AddressFamilyIpv4LabelLocalAdvertiseExplicitNull.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/label/local/advertise/explicit-null"))
 		}
 	}
 	if !data.AddressFamilyIpv4LabelLocalDefaultRoute.IsNull() && !data.AddressFamilyIpv4LabelLocalDefaultRoute.ValueBool() {
-		if state != nil && !state.AddressFamilyIpv4LabelLocalDefaultRoute.IsNull() && state.AddressFamilyIpv4LabelLocalDefaultRoute.ValueBool() {
+		if state == nil || state.AddressFamilyIpv4LabelLocalDefaultRoute.IsNull() || state.AddressFamilyIpv4LabelLocalDefaultRoute.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/label/local/default-route"))
 		}
 	}
 	if !data.AddressFamilyIpv4LabelLocalAllocateForHostRoutes.IsNull() && !data.AddressFamilyIpv4LabelLocalAllocateForHostRoutes.ValueBool() {
-		if state != nil && !state.AddressFamilyIpv4LabelLocalAllocateForHostRoutes.IsNull() && state.AddressFamilyIpv4LabelLocalAllocateForHostRoutes.ValueBool() {
+		if state == nil || state.AddressFamilyIpv4LabelLocalAllocateForHostRoutes.IsNull() || state.AddressFamilyIpv4LabelLocalAllocateForHostRoutes.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4/label/local/allocate/for/host-routes"))
 		}
 	}
 	if !data.AddressFamilyIpv4.IsNull() && !data.AddressFamilyIpv4.ValueBool() {
-		if state != nil && !state.AddressFamilyIpv4.IsNull() && state.AddressFamilyIpv4.ValueBool() {
+		if state == nil || state.AddressFamilyIpv4.IsNull() || state.AddressFamilyIpv4.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4"))
 		}
 	}
@@ -2048,7 +2048,7 @@ func (data *MPLSLDPVRF) getEmptyLeafsDelete(ctx context.Context, state *MPLSLDPV
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Neighbors[i].PasswordDisable.IsNull() && !data.Neighbors[i].PasswordDisable.ValueBool() {
-			if state != nil && i < len(state.Neighbors) && !state.Neighbors[i].PasswordDisable.IsNull() && state.Neighbors[i].PasswordDisable.ValueBool() {
+			if state == nil || i >= len(state.Neighbors) || state.Neighbors[i].PasswordDisable.IsNull() || state.Neighbors[i].PasswordDisable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "neighbors/neighbor", keyString), "password/disable"))
 			}
 		}

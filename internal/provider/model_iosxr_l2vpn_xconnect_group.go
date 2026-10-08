@@ -3729,17 +3729,17 @@ func (data *L2VPNXconnectGroup) getEmptyLeafsDelete(ctx context.Context, state *
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.ValueBool() {
-			if state != nil && i < len(state.Mp2mps) && !state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() && state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.ValueBool() {
+			if state == nil || i >= len(state.Mp2mps) || state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.IsNull() || state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelBoth.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "mp2mps/mp2mp", keyString), "autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/both"))
 			}
 		}
 		if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.ValueBool() {
-			if state != nil && i < len(state.Mp2mps) && !state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() && state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.ValueBool() {
+			if state == nil || i >= len(state.Mp2mps) || state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.IsNull() || state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelReceive.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "mp2mps/mp2mp", keyString), "autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/receive"))
 			}
 		}
 		if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.ValueBool() {
-			if state != nil && i < len(state.Mp2mps) && !state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() && state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.ValueBool() {
+			if state == nil || i >= len(state.Mp2mps) || state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.IsNull() || state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpLoadBalancingFlowLabelTransmit.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "mp2mps/mp2mp", keyString), "autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/transmit"))
 			}
 		}
@@ -3751,7 +3751,7 @@ func (data *L2VPNXconnectGroup) getEmptyLeafsDelete(ctx context.Context, state *
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.IsNull() && !data.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.ValueBool() {
-				if state != nil && i < len(state.Mp2mps) && ci < len(state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds) && !state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.IsNull() && state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.ValueBool() {
+				if state == nil || i >= len(state.Mp2mps) || ci >= len(state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds) || state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.IsNull() || state.Mp2mps[i].AutodiscoveryBgpSignalingProtocolBgpCeIds[ci].VpwsSeamlessIntegration.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "mp2mps/mp2mp", keyString, "autodiscovery/bgp/signaling-protocol/bgp/ce-id", ckeyString), "vpws-seamless-integration"))
 				}
 			}
@@ -3845,22 +3845,22 @@ func (data *L2VPNXconnectGroup) getEmptyLeafsDelete(ctx context.Context, state *
 			}
 		}
 		if !data.Mp2mps[i].AutodiscoveryBgpRdAuto.IsNull() && !data.Mp2mps[i].AutodiscoveryBgpRdAuto.ValueBool() {
-			if state != nil && i < len(state.Mp2mps) && !state.Mp2mps[i].AutodiscoveryBgpRdAuto.IsNull() && state.Mp2mps[i].AutodiscoveryBgpRdAuto.ValueBool() {
+			if state == nil || i >= len(state.Mp2mps) || state.Mp2mps[i].AutodiscoveryBgpRdAuto.IsNull() || state.Mp2mps[i].AutodiscoveryBgpRdAuto.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "mp2mps/mp2mp", keyString), "autodiscovery/bgp/rd/auto"))
 			}
 		}
 		if !data.Mp2mps[i].AutodiscoveryBgp.IsNull() && !data.Mp2mps[i].AutodiscoveryBgp.ValueBool() {
-			if state != nil && i < len(state.Mp2mps) && !state.Mp2mps[i].AutodiscoveryBgp.IsNull() && state.Mp2mps[i].AutodiscoveryBgp.ValueBool() {
+			if state == nil || i >= len(state.Mp2mps) || state.Mp2mps[i].AutodiscoveryBgp.IsNull() || state.Mp2mps[i].AutodiscoveryBgp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "mp2mps/mp2mp", keyString), "autodiscovery/bgp"))
 			}
 		}
 		if !data.Mp2mps[i].ControlWordDisable.IsNull() && !data.Mp2mps[i].ControlWordDisable.ValueBool() {
-			if state != nil && i < len(state.Mp2mps) && !state.Mp2mps[i].ControlWordDisable.IsNull() && state.Mp2mps[i].ControlWordDisable.ValueBool() {
+			if state == nil || i >= len(state.Mp2mps) || state.Mp2mps[i].ControlWordDisable.IsNull() || state.Mp2mps[i].ControlWordDisable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "mp2mps/mp2mp", keyString), "control-word/disable"))
 			}
 		}
 		if !data.Mp2mps[i].Shutdown.IsNull() && !data.Mp2mps[i].Shutdown.ValueBool() {
-			if state != nil && i < len(state.Mp2mps) && !state.Mp2mps[i].Shutdown.IsNull() && state.Mp2mps[i].Shutdown.ValueBool() {
+			if state == nil || i >= len(state.Mp2mps) || state.Mp2mps[i].Shutdown.IsNull() || state.Mp2mps[i].Shutdown.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "mp2mps/mp2mp", keyString), "shutdown"))
 			}
 		}
@@ -3945,12 +3945,12 @@ func (data *L2VPNXconnectGroup) getEmptyLeafsDelete(ctx context.Context, state *
 			}
 		}
 		if !data.P2ps[i].InterworkingEthernet.IsNull() && !data.P2ps[i].InterworkingEthernet.ValueBool() {
-			if state != nil && i < len(state.P2ps) && !state.P2ps[i].InterworkingEthernet.IsNull() && state.P2ps[i].InterworkingEthernet.ValueBool() {
+			if state == nil || i >= len(state.P2ps) || state.P2ps[i].InterworkingEthernet.IsNull() || state.P2ps[i].InterworkingEthernet.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "p2ps/p2p", keyString), "interworking/ethernet"))
 			}
 		}
 		if !data.P2ps[i].InterworkingIpv4.IsNull() && !data.P2ps[i].InterworkingIpv4.ValueBool() {
-			if state != nil && i < len(state.P2ps) && !state.P2ps[i].InterworkingIpv4.IsNull() && state.P2ps[i].InterworkingIpv4.ValueBool() {
+			if state == nil || i >= len(state.P2ps) || state.P2ps[i].InterworkingIpv4.IsNull() || state.P2ps[i].InterworkingIpv4.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "p2ps/p2p", keyString), "interworking/ipv4"))
 			}
 		}

@@ -2342,82 +2342,82 @@ func (data *AAAAuthorization) getEmptyLeafsDelete(ctx context.Context, state *AA
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Network[i].A4Radius.IsNull() && !data.Network[i].A4Radius.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A4Radius.IsNull() && state.Network[i].A4Radius.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A4Radius.IsNull() || state.Network[i].A4Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/authorization-list", keyString), "groups/group-4/radius"))
 			}
 		}
 		if !data.Network[i].A4Tacacs.IsNull() && !data.Network[i].A4Tacacs.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A4Tacacs.IsNull() && state.Network[i].A4Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A4Tacacs.IsNull() || state.Network[i].A4Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/authorization-list", keyString), "groups/group-4/tacacs"))
 			}
 		}
 		if !data.Network[i].A4None.IsNull() && !data.Network[i].A4None.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A4None.IsNull() && state.Network[i].A4None.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A4None.IsNull() || state.Network[i].A4None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/authorization-list", keyString), "groups/group-4/none"))
 			}
 		}
 		if !data.Network[i].A4Local.IsNull() && !data.Network[i].A4Local.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A4Local.IsNull() && state.Network[i].A4Local.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A4Local.IsNull() || state.Network[i].A4Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/authorization-list", keyString), "groups/group-4/local"))
 			}
 		}
 		if !data.Network[i].A3Radius.IsNull() && !data.Network[i].A3Radius.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A3Radius.IsNull() && state.Network[i].A3Radius.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A3Radius.IsNull() || state.Network[i].A3Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/authorization-list", keyString), "groups/group-3/radius"))
 			}
 		}
 		if !data.Network[i].A3Tacacs.IsNull() && !data.Network[i].A3Tacacs.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A3Tacacs.IsNull() && state.Network[i].A3Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A3Tacacs.IsNull() || state.Network[i].A3Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/authorization-list", keyString), "groups/group-3/tacacs"))
 			}
 		}
 		if !data.Network[i].A3None.IsNull() && !data.Network[i].A3None.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A3None.IsNull() && state.Network[i].A3None.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A3None.IsNull() || state.Network[i].A3None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/authorization-list", keyString), "groups/group-3/none"))
 			}
 		}
 		if !data.Network[i].A3Local.IsNull() && !data.Network[i].A3Local.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A3Local.IsNull() && state.Network[i].A3Local.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A3Local.IsNull() || state.Network[i].A3Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/authorization-list", keyString), "groups/group-3/local"))
 			}
 		}
 		if !data.Network[i].A2Radius.IsNull() && !data.Network[i].A2Radius.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A2Radius.IsNull() && state.Network[i].A2Radius.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A2Radius.IsNull() || state.Network[i].A2Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/authorization-list", keyString), "groups/group-2/radius"))
 			}
 		}
 		if !data.Network[i].A2Tacacs.IsNull() && !data.Network[i].A2Tacacs.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A2Tacacs.IsNull() && state.Network[i].A2Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A2Tacacs.IsNull() || state.Network[i].A2Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/authorization-list", keyString), "groups/group-2/tacacs"))
 			}
 		}
 		if !data.Network[i].A2None.IsNull() && !data.Network[i].A2None.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A2None.IsNull() && state.Network[i].A2None.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A2None.IsNull() || state.Network[i].A2None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/authorization-list", keyString), "groups/group-2/none"))
 			}
 		}
 		if !data.Network[i].A2Local.IsNull() && !data.Network[i].A2Local.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A2Local.IsNull() && state.Network[i].A2Local.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A2Local.IsNull() || state.Network[i].A2Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/authorization-list", keyString), "groups/group-2/local"))
 			}
 		}
 		if !data.Network[i].A1Radius.IsNull() && !data.Network[i].A1Radius.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A1Radius.IsNull() && state.Network[i].A1Radius.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A1Radius.IsNull() || state.Network[i].A1Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/authorization-list", keyString), "groups/group-1/radius"))
 			}
 		}
 		if !data.Network[i].A1Tacacs.IsNull() && !data.Network[i].A1Tacacs.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A1Tacacs.IsNull() && state.Network[i].A1Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A1Tacacs.IsNull() || state.Network[i].A1Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/authorization-list", keyString), "groups/group-1/tacacs"))
 			}
 		}
 		if !data.Network[i].A1None.IsNull() && !data.Network[i].A1None.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A1None.IsNull() && state.Network[i].A1None.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A1None.IsNull() || state.Network[i].A1None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/authorization-list", keyString), "none"))
 			}
 		}
 		if !data.Network[i].A1Local.IsNull() && !data.Network[i].A1Local.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A1Local.IsNull() && state.Network[i].A1Local.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A1Local.IsNull() || state.Network[i].A1Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/authorization-list", keyString), "local"))
 			}
 		}
@@ -2430,62 +2430,62 @@ func (data *AAAAuthorization) getEmptyLeafsDelete(ctx context.Context, state *AA
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Commands[i].A4Tacacs.IsNull() && !data.Commands[i].A4Tacacs.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A4Tacacs.IsNull() && state.Commands[i].A4Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A4Tacacs.IsNull() || state.Commands[i].A4Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/authorization-list", keyString), "groups/group-4/tacacs"))
 			}
 		}
 		if !data.Commands[i].A4None.IsNull() && !data.Commands[i].A4None.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A4None.IsNull() && state.Commands[i].A4None.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A4None.IsNull() || state.Commands[i].A4None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/authorization-list", keyString), "groups/group-4/none"))
 			}
 		}
 		if !data.Commands[i].A4Local.IsNull() && !data.Commands[i].A4Local.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A4Local.IsNull() && state.Commands[i].A4Local.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A4Local.IsNull() || state.Commands[i].A4Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/authorization-list", keyString), "groups/group-4/local"))
 			}
 		}
 		if !data.Commands[i].A3Tacacs.IsNull() && !data.Commands[i].A3Tacacs.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A3Tacacs.IsNull() && state.Commands[i].A3Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A3Tacacs.IsNull() || state.Commands[i].A3Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/authorization-list", keyString), "groups/group-3/tacacs"))
 			}
 		}
 		if !data.Commands[i].A3None.IsNull() && !data.Commands[i].A3None.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A3None.IsNull() && state.Commands[i].A3None.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A3None.IsNull() || state.Commands[i].A3None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/authorization-list", keyString), "groups/group-3/none"))
 			}
 		}
 		if !data.Commands[i].A3Local.IsNull() && !data.Commands[i].A3Local.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A3Local.IsNull() && state.Commands[i].A3Local.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A3Local.IsNull() || state.Commands[i].A3Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/authorization-list", keyString), "groups/group-3/local"))
 			}
 		}
 		if !data.Commands[i].A2Tacacs.IsNull() && !data.Commands[i].A2Tacacs.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A2Tacacs.IsNull() && state.Commands[i].A2Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A2Tacacs.IsNull() || state.Commands[i].A2Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/authorization-list", keyString), "groups/group-2/tacacs"))
 			}
 		}
 		if !data.Commands[i].A2None.IsNull() && !data.Commands[i].A2None.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A2None.IsNull() && state.Commands[i].A2None.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A2None.IsNull() || state.Commands[i].A2None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/authorization-list", keyString), "groups/group-2/none"))
 			}
 		}
 		if !data.Commands[i].A2Local.IsNull() && !data.Commands[i].A2Local.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A2Local.IsNull() && state.Commands[i].A2Local.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A2Local.IsNull() || state.Commands[i].A2Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/authorization-list", keyString), "groups/group-2/local"))
 			}
 		}
 		if !data.Commands[i].A1Tacacs.IsNull() && !data.Commands[i].A1Tacacs.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A1Tacacs.IsNull() && state.Commands[i].A1Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A1Tacacs.IsNull() || state.Commands[i].A1Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/authorization-list", keyString), "groups/group-1/tacacs"))
 			}
 		}
 		if !data.Commands[i].A1None.IsNull() && !data.Commands[i].A1None.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A1None.IsNull() && state.Commands[i].A1None.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A1None.IsNull() || state.Commands[i].A1None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/authorization-list", keyString), "none"))
 			}
 		}
 		if !data.Commands[i].A1Local.IsNull() && !data.Commands[i].A1Local.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A1Local.IsNull() && state.Commands[i].A1Local.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A1Local.IsNull() || state.Commands[i].A1Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/authorization-list", keyString), "local"))
 			}
 		}
@@ -2498,22 +2498,22 @@ func (data *AAAAuthorization) getEmptyLeafsDelete(ctx context.Context, state *AA
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Eventmanager[i].A2Tacacs.IsNull() && !data.Eventmanager[i].A2Tacacs.ValueBool() {
-			if state != nil && i < len(state.Eventmanager) && !state.Eventmanager[i].A2Tacacs.IsNull() && state.Eventmanager[i].A2Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Eventmanager) || state.Eventmanager[i].A2Tacacs.IsNull() || state.Eventmanager[i].A2Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "eventmanager/authorization-list", keyString), "groups/group-2/tacacs"))
 			}
 		}
 		if !data.Eventmanager[i].A2Local.IsNull() && !data.Eventmanager[i].A2Local.ValueBool() {
-			if state != nil && i < len(state.Eventmanager) && !state.Eventmanager[i].A2Local.IsNull() && state.Eventmanager[i].A2Local.ValueBool() {
+			if state == nil || i >= len(state.Eventmanager) || state.Eventmanager[i].A2Local.IsNull() || state.Eventmanager[i].A2Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "eventmanager/authorization-list", keyString), "groups/group-2/local"))
 			}
 		}
 		if !data.Eventmanager[i].A1Tacacs.IsNull() && !data.Eventmanager[i].A1Tacacs.ValueBool() {
-			if state != nil && i < len(state.Eventmanager) && !state.Eventmanager[i].A1Tacacs.IsNull() && state.Eventmanager[i].A1Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Eventmanager) || state.Eventmanager[i].A1Tacacs.IsNull() || state.Eventmanager[i].A1Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "eventmanager/authorization-list", keyString), "groups/group-1/tacacs"))
 			}
 		}
 		if !data.Eventmanager[i].A1Local.IsNull() && !data.Eventmanager[i].A1Local.ValueBool() {
-			if state != nil && i < len(state.Eventmanager) && !state.Eventmanager[i].A1Local.IsNull() && state.Eventmanager[i].A1Local.ValueBool() {
+			if state == nil || i >= len(state.Eventmanager) || state.Eventmanager[i].A1Local.IsNull() || state.Eventmanager[i].A1Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "eventmanager/authorization-list", keyString), "local"))
 			}
 		}
@@ -2526,82 +2526,82 @@ func (data *AAAAuthorization) getEmptyLeafsDelete(ctx context.Context, state *AA
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Exec[i].A4Radius.IsNull() && !data.Exec[i].A4Radius.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A4Radius.IsNull() && state.Exec[i].A4Radius.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A4Radius.IsNull() || state.Exec[i].A4Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/authorization-list", keyString), "groups/group-4/radius"))
 			}
 		}
 		if !data.Exec[i].A4Tacacs.IsNull() && !data.Exec[i].A4Tacacs.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A4Tacacs.IsNull() && state.Exec[i].A4Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A4Tacacs.IsNull() || state.Exec[i].A4Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/authorization-list", keyString), "groups/group-4/tacacs"))
 			}
 		}
 		if !data.Exec[i].A4None.IsNull() && !data.Exec[i].A4None.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A4None.IsNull() && state.Exec[i].A4None.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A4None.IsNull() || state.Exec[i].A4None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/authorization-list", keyString), "groups/group-4/none"))
 			}
 		}
 		if !data.Exec[i].A4Local.IsNull() && !data.Exec[i].A4Local.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A4Local.IsNull() && state.Exec[i].A4Local.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A4Local.IsNull() || state.Exec[i].A4Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/authorization-list", keyString), "groups/group-4/local"))
 			}
 		}
 		if !data.Exec[i].A3Radius.IsNull() && !data.Exec[i].A3Radius.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A3Radius.IsNull() && state.Exec[i].A3Radius.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A3Radius.IsNull() || state.Exec[i].A3Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/authorization-list", keyString), "groups/group-3/radius"))
 			}
 		}
 		if !data.Exec[i].A3Tacacs.IsNull() && !data.Exec[i].A3Tacacs.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A3Tacacs.IsNull() && state.Exec[i].A3Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A3Tacacs.IsNull() || state.Exec[i].A3Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/authorization-list", keyString), "groups/group-3/tacacs"))
 			}
 		}
 		if !data.Exec[i].A3None.IsNull() && !data.Exec[i].A3None.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A3None.IsNull() && state.Exec[i].A3None.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A3None.IsNull() || state.Exec[i].A3None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/authorization-list", keyString), "groups/group-3/none"))
 			}
 		}
 		if !data.Exec[i].A3Local.IsNull() && !data.Exec[i].A3Local.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A3Local.IsNull() && state.Exec[i].A3Local.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A3Local.IsNull() || state.Exec[i].A3Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/authorization-list", keyString), "groups/group-3/local"))
 			}
 		}
 		if !data.Exec[i].A2Radius.IsNull() && !data.Exec[i].A2Radius.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A2Radius.IsNull() && state.Exec[i].A2Radius.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A2Radius.IsNull() || state.Exec[i].A2Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/authorization-list", keyString), "groups/group-2/radius"))
 			}
 		}
 		if !data.Exec[i].A2Tacacs.IsNull() && !data.Exec[i].A2Tacacs.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A2Tacacs.IsNull() && state.Exec[i].A2Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A2Tacacs.IsNull() || state.Exec[i].A2Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/authorization-list", keyString), "groups/group-2/tacacs"))
 			}
 		}
 		if !data.Exec[i].A2None.IsNull() && !data.Exec[i].A2None.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A2None.IsNull() && state.Exec[i].A2None.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A2None.IsNull() || state.Exec[i].A2None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/authorization-list", keyString), "groups/group-2/none"))
 			}
 		}
 		if !data.Exec[i].A2Local.IsNull() && !data.Exec[i].A2Local.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A2Local.IsNull() && state.Exec[i].A2Local.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A2Local.IsNull() || state.Exec[i].A2Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/authorization-list", keyString), "groups/group-2/local"))
 			}
 		}
 		if !data.Exec[i].A1Radius.IsNull() && !data.Exec[i].A1Radius.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A1Radius.IsNull() && state.Exec[i].A1Radius.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A1Radius.IsNull() || state.Exec[i].A1Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/authorization-list", keyString), "groups/group-1/radius"))
 			}
 		}
 		if !data.Exec[i].A1Tacacs.IsNull() && !data.Exec[i].A1Tacacs.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A1Tacacs.IsNull() && state.Exec[i].A1Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A1Tacacs.IsNull() || state.Exec[i].A1Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/authorization-list", keyString), "groups/group-1/tacacs"))
 			}
 		}
 		if !data.Exec[i].A1None.IsNull() && !data.Exec[i].A1None.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A1None.IsNull() && state.Exec[i].A1None.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A1None.IsNull() || state.Exec[i].A1None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/authorization-list", keyString), "none"))
 			}
 		}
 		if !data.Exec[i].A1Local.IsNull() && !data.Exec[i].A1Local.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A1Local.IsNull() && state.Exec[i].A1Local.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A1Local.IsNull() || state.Exec[i].A1Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/authorization-list", keyString), "local"))
 			}
 		}

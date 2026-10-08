@@ -791,67 +791,67 @@ func (data *MACSecPolicy) getDeletedItems(ctx context.Context, state MACSecPolic
 func (data *MACSecPolicy) getEmptyLeafsDelete(ctx context.Context, state *MACSecPolicy, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.LoggingSakRekeyDisable.IsNull() && !data.LoggingSakRekeyDisable.ValueBool() {
-		if state != nil && !state.LoggingSakRekeyDisable.IsNull() && state.LoggingSakRekeyDisable.ValueBool() {
+		if state == nil || state.LoggingSakRekeyDisable.IsNull() || state.LoggingSakRekeyDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/sak-rekey"))
 		}
 	}
 	if !data.Ppk.IsNull() && !data.Ppk.ValueBool() {
-		if state != nil && !state.Ppk.IsNull() && state.Ppk.ValueBool() {
+		if state == nil || state.Ppk.IsNull() || state.Ppk.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ppk"))
 		}
 	}
 	if !data.AllowLldpInClear.IsNull() && !data.AllowLldpInClear.ValueBool() {
-		if state != nil && !state.AllowLldpInClear.IsNull() && state.AllowLldpInClear.ValueBool() {
+		if state == nil || state.AllowLldpInClear.IsNull() || state.AllowLldpInClear.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "allow/lldp-in-clear"))
 		}
 	}
 	if !data.AllowPauseFrameInClear.IsNull() && !data.AllowPauseFrameInClear.ValueBool() {
-		if state != nil && !state.AllowPauseFrameInClear.IsNull() && state.AllowPauseFrameInClear.ValueBool() {
+		if state == nil || state.AllowPauseFrameInClear.IsNull() || state.AllowPauseFrameInClear.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "allow/pause-frame-in-clear"))
 		}
 	}
 	if !data.AllowLacpInClear.IsNull() && !data.AllowLacpInClear.ValueBool() {
-		if state != nil && !state.AllowLacpInClear.IsNull() && state.AllowLacpInClear.ValueBool() {
+		if state == nil || state.AllowLacpInClear.IsNull() || state.AllowLacpInClear.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "allow/lacp-in-clear"))
 		}
 	}
 	if !data.ImposeOverheadOnBundle.IsNull() && !data.ImposeOverheadOnBundle.ValueBool() {
-		if state != nil && !state.ImposeOverheadOnBundle.IsNull() && state.ImposeOverheadOnBundle.ValueBool() {
+		if state == nil || state.ImposeOverheadOnBundle.IsNull() || state.ImposeOverheadOnBundle.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "impose-overhead-on-bundle"))
 		}
 	}
 	if !data.EnableLegacySakWrite.IsNull() && !data.EnableLegacySakWrite.ValueBool() {
-		if state != nil && !state.EnableLegacySakWrite.IsNull() && state.EnableLegacySakWrite.ValueBool() {
+		if state == nil || state.EnableLegacySakWrite.IsNull() || state.EnableLegacySakWrite.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "enable-legacy-sak-write"))
 		}
 	}
 	if !data.EnableLegacyFallback.IsNull() && !data.EnableLegacyFallback.ValueBool() {
-		if state != nil && !state.EnableLegacyFallback.IsNull() && state.EnableLegacyFallback.ValueBool() {
+		if state == nil || state.EnableLegacyFallback.IsNull() || state.EnableLegacyFallback.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "enable-legacy-fallback"))
 		}
 	}
 	if !data.SuspendForDisable.IsNull() && !data.SuspendForDisable.ValueBool() {
-		if state != nil && !state.SuspendForDisable.IsNull() && state.SuspendForDisable.ValueBool() {
+		if state == nil || state.SuspendForDisable.IsNull() || state.SuspendForDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "suspend-for"))
 		}
 	}
 	if !data.SuspendOnRequestDisable.IsNull() && !data.SuspendOnRequestDisable.ValueBool() {
-		if state != nil && !state.SuspendOnRequestDisable.IsNull() && state.SuspendOnRequestDisable.ValueBool() {
+		if state == nil || state.SuspendOnRequestDisable.IsNull() || state.SuspendOnRequestDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "suspend-on-request"))
 		}
 	}
 	if !data.UseEapolPaeInIcv.IsNull() && !data.UseEapolPaeInIcv.ValueBool() {
-		if state != nil && !state.UseEapolPaeInIcv.IsNull() && state.UseEapolPaeInIcv.ValueBool() {
+		if state == nil || state.UseEapolPaeInIcv.IsNull() || state.UseEapolPaeInIcv.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "use-eapol-pae-in-icv"))
 		}
 	}
 	if !data.DelayProtection.IsNull() && !data.DelayProtection.ValueBool() {
-		if state != nil && !state.DelayProtection.IsNull() && state.DelayProtection.ValueBool() {
+		if state == nil || state.DelayProtection.IsNull() || state.DelayProtection.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "delay-protection"))
 		}
 	}
 	if !data.IncludeIcvIndicator.IsNull() && !data.IncludeIcvIndicator.ValueBool() {
-		if state != nil && !state.IncludeIcvIndicator.IsNull() && state.IncludeIcvIndicator.ValueBool() {
+		if state == nil || state.IncludeIcvIndicator.IsNull() || state.IncludeIcvIndicator.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "include-icv-indicator"))
 		}
 	}

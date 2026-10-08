@@ -530,47 +530,47 @@ func (data *HTTPClient) getDeletedItems(ctx context.Context, state HTTPClient, v
 func (data *HTTPClient) getEmptyLeafsDelete(ctx context.Context, state *HTTPClient, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.SslVersionTls13.IsNull() && !data.SslVersionTls13.ValueBool() {
-		if state != nil && !state.SslVersionTls13.IsNull() && state.SslVersionTls13.ValueBool() {
+		if state == nil || state.SslVersionTls13.IsNull() || state.SslVersionTls13.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ssl/version/tls1.3"))
 		}
 	}
 	if !data.SslVersionTls12.IsNull() && !data.SslVersionTls12.ValueBool() {
-		if state != nil && !state.SslVersionTls12.IsNull() && state.SslVersionTls12.ValueBool() {
+		if state == nil || state.SslVersionTls12.IsNull() || state.SslVersionTls12.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ssl/version/tls1.2"))
 		}
 	}
 	if !data.SslVersionTls11.IsNull() && !data.SslVersionTls11.ValueBool() {
-		if state != nil && !state.SslVersionTls11.IsNull() && state.SslVersionTls11.ValueBool() {
+		if state == nil || state.SslVersionTls11.IsNull() || state.SslVersionTls11.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ssl/version/tls1.1"))
 		}
 	}
 	if !data.SslVersionTls10.IsNull() && !data.SslVersionTls10.ValueBool() {
-		if state != nil && !state.SslVersionTls10.IsNull() && state.SslVersionTls10.ValueBool() {
+		if state == nil || state.SslVersionTls10.IsNull() || state.SslVersionTls10.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ssl/version/tls1.0"))
 		}
 	}
 	if !data.Version11.IsNull() && !data.Version11.ValueBool() {
-		if state != nil && !state.Version11.IsNull() && state.Version11.ValueBool() {
+		if state == nil || state.Version11.IsNull() || state.Version11.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "version/http1.1"))
 		}
 	}
 	if !data.Version10.IsNull() && !data.Version10.ValueBool() {
-		if state != nil && !state.Version10.IsNull() && state.Version10.ValueBool() {
+		if state == nil || state.Version10.IsNull() || state.Version10.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "version/http1.0"))
 		}
 	}
 	if !data.VersionDefault.IsNull() && !data.VersionDefault.ValueBool() {
-		if state != nil && !state.VersionDefault.IsNull() && state.VersionDefault.ValueBool() {
+		if state == nil || state.VersionDefault.IsNull() || state.VersionDefault.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "version/default"))
 		}
 	}
 	if !data.SecureVerifyHostDisable.IsNull() && !data.SecureVerifyHostDisable.ValueBool() {
-		if state != nil && !state.SecureVerifyHostDisable.IsNull() && state.SecureVerifyHostDisable.ValueBool() {
+		if state == nil || state.SecureVerifyHostDisable.IsNull() || state.SecureVerifyHostDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "secure-verify-host/disable"))
 		}
 	}
 	if !data.SecureVerifyPeerDisable.IsNull() && !data.SecureVerifyPeerDisable.ValueBool() {
-		if state != nil && !state.SecureVerifyPeerDisable.IsNull() && state.SecureVerifyPeerDisable.ValueBool() {
+		if state == nil || state.SecureVerifyPeerDisable.IsNull() || state.SecureVerifyPeerDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "secure-verify-peer/disable"))
 		}
 	}

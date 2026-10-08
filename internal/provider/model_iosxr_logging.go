@@ -3206,7 +3206,7 @@ func (data *Logging) getEmptyLeafsDelete(ctx context.Context, state *Logging, ve
 		}
 	}
 	if !data.EventsDisplayLocation.IsNull() && !data.EventsDisplayLocation.ValueBool() {
-		if state != nil && !state.EventsDisplayLocation.IsNull() && state.EventsDisplayLocation.ValueBool() {
+		if state == nil || state.EventsDisplayLocation.IsNull() || state.EventsDisplayLocation.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-logging-events-cfg:events/display-location"))
 		}
 	}
@@ -3234,12 +3234,12 @@ func (data *Logging) getEmptyLeafsDelete(ctx context.Context, state *Logging, ve
 			}
 		}
 		if !data.SuppressRules[i].ApplyAllOfRouter.IsNull() && !data.SuppressRules[i].ApplyAllOfRouter.ValueBool() {
-			if state != nil && i < len(state.SuppressRules) && !state.SuppressRules[i].ApplyAllOfRouter.IsNull() && state.SuppressRules[i].ApplyAllOfRouter.ValueBool() {
+			if state == nil || i >= len(state.SuppressRules) || state.SuppressRules[i].ApplyAllOfRouter.IsNull() || state.SuppressRules[i].ApplyAllOfRouter.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule", keyString), "apply/all-of-router"))
 			}
 		}
 		if !data.SuppressRules[i].AllAlarms.IsNull() && !data.SuppressRules[i].AllAlarms.ValueBool() {
-			if state != nil && i < len(state.SuppressRules) && !state.SuppressRules[i].AllAlarms.IsNull() && state.SuppressRules[i].AllAlarms.ValueBool() {
+			if state == nil || i >= len(state.SuppressRules) || state.SuppressRules[i].AllAlarms.IsNull() || state.SuppressRules[i].AllAlarms.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule", keyString), "all-alarms"))
 			}
 		}
@@ -3253,17 +3253,17 @@ func (data *Logging) getEmptyLeafsDelete(ctx context.Context, state *Logging, ve
 		}
 	}
 	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.FormatBsd.IsNull() && !data.FormatBsd.ValueBool() {
-		if state != nil && !state.FormatBsd.IsNull() && state.FormatBsd.ValueBool() {
+		if state == nil || state.FormatBsd.IsNull() || state.FormatBsd.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "format/bsd"))
 		}
 	}
 	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.FormatRfc5424.IsNull() && !data.FormatRfc5424.ValueBool() {
-		if state != nil && !state.FormatRfc5424.IsNull() && state.FormatRfc5424.ValueBool() {
+		if state == nil || state.FormatRfc5424.IsNull() || state.FormatRfc5424.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "format/rfc5424"))
 		}
 	}
 	if !data.SuppressDuplicates.IsNull() && !data.SuppressDuplicates.ValueBool() {
-		if state != nil && !state.SuppressDuplicates.IsNull() && state.SuppressDuplicates.ValueBool() {
+		if state == nil || state.SuppressDuplicates.IsNull() || state.SuppressDuplicates.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "suppress/duplicates"))
 		}
 	}
@@ -3299,48 +3299,48 @@ func (data *Logging) getEmptyLeafsDelete(ctx context.Context, state *Logging, ve
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.File[i].LocalAccountingSendToRemote.IsNull() && !data.File[i].LocalAccountingSendToRemote.ValueBool() {
-			if state != nil && i < len(state.File) && !state.File[i].LocalAccountingSendToRemote.IsNull() && state.File[i].LocalAccountingSendToRemote.ValueBool() {
+			if state == nil || i >= len(state.File) || state.File[i].LocalAccountingSendToRemote.IsNull() || state.File[i].LocalAccountingSendToRemote.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "files/file", keyString), helpers.SelectYangPath(version, map[string]string{"24.4": "local-accounting/send-to-remote", "25.4": "path/local-accounting/send-to-remote"}, "local-accounting/send-to-remote")))
 			}
 		}
 		if !data.File[i].LocalAccounting.IsNull() && !data.File[i].LocalAccounting.ValueBool() {
-			if state != nil && i < len(state.File) && !state.File[i].LocalAccounting.IsNull() && state.File[i].LocalAccounting.ValueBool() {
+			if state == nil || i >= len(state.File) || state.File[i].LocalAccounting.IsNull() || state.File[i].LocalAccounting.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "files/file", keyString), helpers.SelectYangPath(version, map[string]string{"24.4": "local-accounting", "25.4": "path/local-accounting"}, "local-accounting")))
 			}
 		}
 	}
 	if !data.ContainerFetchTimestamp.IsNull() && !data.ContainerFetchTimestamp.ValueBool() {
-		if state != nil && !state.ContainerFetchTimestamp.IsNull() && state.ContainerFetchTimestamp.ValueBool() {
+		if state == nil || state.ContainerFetchTimestamp.IsNull() || state.ContainerFetchTimestamp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "container/fetch-timestamp"))
 		}
 	}
 	if !data.ContainerAll.IsNull() && !data.ContainerAll.ValueBool() {
-		if state != nil && !state.ContainerAll.IsNull() && state.ContainerAll.ValueBool() {
+		if state == nil || state.ContainerAll.IsNull() || state.ContainerAll.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "container/all"))
 		}
 	}
 	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ArchiveFrequencyWeekly.IsNull() && !data.ArchiveFrequencyWeekly.ValueBool() {
-		if state != nil && !state.ArchiveFrequencyWeekly.IsNull() && state.ArchiveFrequencyWeekly.ValueBool() {
+		if state == nil || state.ArchiveFrequencyWeekly.IsNull() || state.ArchiveFrequencyWeekly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "archive/frequency/weekly"))
 		}
 	}
 	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ArchiveFrequencyDaily.IsNull() && !data.ArchiveFrequencyDaily.ValueBool() {
-		if state != nil && !state.ArchiveFrequencyDaily.IsNull() && state.ArchiveFrequencyDaily.ValueBool() {
+		if state == nil || state.ArchiveFrequencyDaily.IsNull() || state.ArchiveFrequencyDaily.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "archive/frequency/daily"))
 		}
 	}
 	if !data.ArchiveHarddisk.IsNull() && !data.ArchiveHarddisk.ValueBool() {
-		if state != nil && !state.ArchiveHarddisk.IsNull() && state.ArchiveHarddisk.ValueBool() {
+		if state == nil || state.ArchiveHarddisk.IsNull() || state.ArchiveHarddisk.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "archive/device/harddisk", "25.4": "archive/device/harddisk"}, "archive/device/harddisk")))
 		}
 	}
 	if !data.ArchiveDisk1.IsNull() && !data.ArchiveDisk1.ValueBool() {
-		if state != nil && !state.ArchiveDisk1.IsNull() && state.ArchiveDisk1.ValueBool() {
+		if state == nil || state.ArchiveDisk1.IsNull() || state.ArchiveDisk1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "archive/device/disk1", "25.4": "archive/device/disk1"}, "archive/device/disk1")))
 		}
 	}
 	if !data.ArchiveDisk0.IsNull() && !data.ArchiveDisk0.ValueBool() {
-		if state != nil && !state.ArchiveDisk0.IsNull() && state.ArchiveDisk0.ValueBool() {
+		if state == nil || state.ArchiveDisk0.IsNull() || state.ArchiveDisk0.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "archive/device/disk0", "25.4": "archive/device/disk0"}, "archive/device/disk0")))
 		}
 	}

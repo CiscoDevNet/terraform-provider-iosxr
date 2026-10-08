@@ -2115,22 +2115,22 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 func (data *RouterISISInterface) getEmptyLeafsDelete(ctx context.Context, state *RouterISISInterface, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.BfdFastDetectIpv6.IsNull() && !data.BfdFastDetectIpv6.ValueBool() {
-		if state != nil && !state.BfdFastDetectIpv6.IsNull() && state.BfdFastDetectIpv6.ValueBool() {
+		if state == nil || state.BfdFastDetectIpv6.IsNull() || state.BfdFastDetectIpv6.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "bfd/fast-detect/ipv6"))
 		}
 	}
 	if !data.BfdFastDetectIpv4.IsNull() && !data.BfdFastDetectIpv4.ValueBool() {
-		if state != nil && !state.BfdFastDetectIpv4.IsNull() && state.BfdFastDetectIpv4.ValueBool() {
+		if state == nil || state.BfdFastDetectIpv4.IsNull() || state.BfdFastDetectIpv4.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "bfd/fast-detect/ipv4"))
 		}
 	}
 	if !data.MplsLdpSync.IsNull() && !data.MplsLdpSync.ValueBool() {
-		if state != nil && !state.MplsLdpSync.IsNull() && state.MplsLdpSync.ValueBool() {
+		if state == nil || state.MplsLdpSync.IsNull() || state.MplsLdpSync.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "mpls/ldp/sync"))
 		}
 	}
 	if !data.LinkDownFastDetect.IsNull() && !data.LinkDownFastDetect.ValueBool() {
-		if state != nil && !state.LinkDownFastDetect.IsNull() && state.LinkDownFastDetect.ValueBool() {
+		if state == nil || state.LinkDownFastDetect.IsNull() || state.LinkDownFastDetect.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "link-down/fast-detect"))
 		}
 	}
@@ -2151,7 +2151,7 @@ func (data *RouterISISInterface) getEmptyLeafsDelete(ctx context.Context, state 
 		}
 	}
 	if !data.PointToPoint.IsNull() && !data.PointToPoint.ValueBool() {
-		if state != nil && !state.PointToPoint.IsNull() && state.PointToPoint.ValueBool() {
+		if state == nil || state.PointToPoint.IsNull() || state.PointToPoint.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "point-to-point"))
 		}
 	}
@@ -2171,33 +2171,33 @@ func (data *RouterISISInterface) getEmptyLeafsDelete(ctx context.Context, state 
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.HelloPasswordLevels[i].KeychainSendOnly.IsNull() && !data.HelloPasswordLevels[i].KeychainSendOnly.ValueBool() {
-			if state != nil && i < len(state.HelloPasswordLevels) && !state.HelloPasswordLevels[i].KeychainSendOnly.IsNull() && state.HelloPasswordLevels[i].KeychainSendOnly.ValueBool() {
+			if state == nil || i >= len(state.HelloPasswordLevels) || state.HelloPasswordLevels[i].KeychainSendOnly.IsNull() || state.HelloPasswordLevels[i].KeychainSendOnly.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "hello-password-levels/hello-password-level", keyString), "keychain"))
 			}
 		}
 		if !data.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() && !data.HelloPasswordLevels[i].HmacMd5SendOnly.ValueBool() {
-			if state != nil && i < len(state.HelloPasswordLevels) && !state.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() && state.HelloPasswordLevels[i].HmacMd5SendOnly.ValueBool() {
+			if state == nil || i >= len(state.HelloPasswordLevels) || state.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() || state.HelloPasswordLevels[i].HmacMd5SendOnly.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "hello-password-levels/hello-password-level", keyString), "hmac-md5/hello-password-options"))
 			}
 		}
 		if !data.HelloPasswordLevels[i].TextSendOnly.IsNull() && !data.HelloPasswordLevels[i].TextSendOnly.ValueBool() {
-			if state != nil && i < len(state.HelloPasswordLevels) && !state.HelloPasswordLevels[i].TextSendOnly.IsNull() && state.HelloPasswordLevels[i].TextSendOnly.ValueBool() {
+			if state == nil || i >= len(state.HelloPasswordLevels) || state.HelloPasswordLevels[i].TextSendOnly.IsNull() || state.HelloPasswordLevels[i].TextSendOnly.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "hello-password-levels/hello-password-level", keyString), "text/hello-password-options"))
 			}
 		}
 	}
 	if !data.HelloPasswordKeychainSendOnly.IsNull() && !data.HelloPasswordKeychainSendOnly.ValueBool() {
-		if state != nil && !state.HelloPasswordKeychainSendOnly.IsNull() && state.HelloPasswordKeychainSendOnly.ValueBool() {
+		if state == nil || state.HelloPasswordKeychainSendOnly.IsNull() || state.HelloPasswordKeychainSendOnly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "hello-password/hello-password-options/keychain"))
 		}
 	}
 	if !data.HelloPasswordHmacMd5SendOnly.IsNull() && !data.HelloPasswordHmacMd5SendOnly.ValueBool() {
-		if state != nil && !state.HelloPasswordHmacMd5SendOnly.IsNull() && state.HelloPasswordHmacMd5SendOnly.ValueBool() {
+		if state == nil || state.HelloPasswordHmacMd5SendOnly.IsNull() || state.HelloPasswordHmacMd5SendOnly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "hello-password/hello-password-options/hmac-md5/hello-password-options"))
 		}
 	}
 	if !data.HelloPasswordTextSendOnly.IsNull() && !data.HelloPasswordTextSendOnly.ValueBool() {
-		if state != nil && !state.HelloPasswordTextSendOnly.IsNull() && state.HelloPasswordTextSendOnly.ValueBool() {
+		if state == nil || state.HelloPasswordTextSendOnly.IsNull() || state.HelloPasswordTextSendOnly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "hello-password/hello-password-options/text/hello-password-options"))
 		}
 	}
@@ -2250,7 +2250,7 @@ func (data *RouterISISInterface) getEmptyLeafsDelete(ctx context.Context, state 
 		}
 	}
 	if !data.MeshGroupBlocked.IsNull() && !data.MeshGroupBlocked.ValueBool() {
-		if state != nil && !state.MeshGroupBlocked.IsNull() && state.MeshGroupBlocked.ValueBool() {
+		if state == nil || state.MeshGroupBlocked.IsNull() || state.MeshGroupBlocked.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "mesh-group/blocked"))
 		}
 	}

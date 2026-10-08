@@ -2813,72 +2813,72 @@ func (data *AAAAccounting) getEmptyLeafsDelete(ctx context.Context, state *AAAAc
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Network[i].A4Radius.IsNull() && !data.Network[i].A4Radius.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A4Radius.IsNull() && state.Network[i].A4Radius.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A4Radius.IsNull() || state.Network[i].A4Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/accounting-list", keyString), "groups/group-4/radius"))
 			}
 		}
 		if !data.Network[i].A4Tacacs.IsNull() && !data.Network[i].A4Tacacs.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A4Tacacs.IsNull() && state.Network[i].A4Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A4Tacacs.IsNull() || state.Network[i].A4Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/accounting-list", keyString), "groups/group-4/tacacs"))
 			}
 		}
 		if !data.Network[i].A4None.IsNull() && !data.Network[i].A4None.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A4None.IsNull() && state.Network[i].A4None.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A4None.IsNull() || state.Network[i].A4None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/accounting-list", keyString), "groups/group-4/none"))
 			}
 		}
 		if !data.Network[i].A3Radius.IsNull() && !data.Network[i].A3Radius.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A3Radius.IsNull() && state.Network[i].A3Radius.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A3Radius.IsNull() || state.Network[i].A3Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/accounting-list", keyString), "groups/group-3/radius"))
 			}
 		}
 		if !data.Network[i].A3Tacacs.IsNull() && !data.Network[i].A3Tacacs.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A3Tacacs.IsNull() && state.Network[i].A3Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A3Tacacs.IsNull() || state.Network[i].A3Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/accounting-list", keyString), "groups/group-3/tacacs"))
 			}
 		}
 		if !data.Network[i].A3None.IsNull() && !data.Network[i].A3None.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A3None.IsNull() && state.Network[i].A3None.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A3None.IsNull() || state.Network[i].A3None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/accounting-list", keyString), "groups/group-3/none"))
 			}
 		}
 		if !data.Network[i].A2Radius.IsNull() && !data.Network[i].A2Radius.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A2Radius.IsNull() && state.Network[i].A2Radius.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A2Radius.IsNull() || state.Network[i].A2Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/accounting-list", keyString), "groups/group-2/radius"))
 			}
 		}
 		if !data.Network[i].A2Tacacs.IsNull() && !data.Network[i].A2Tacacs.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A2Tacacs.IsNull() && state.Network[i].A2Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A2Tacacs.IsNull() || state.Network[i].A2Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/accounting-list", keyString), "groups/group-2/tacacs"))
 			}
 		}
 		if !data.Network[i].A2None.IsNull() && !data.Network[i].A2None.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A2None.IsNull() && state.Network[i].A2None.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A2None.IsNull() || state.Network[i].A2None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/accounting-list", keyString), "groups/group-2/none"))
 			}
 		}
 		if !data.Network[i].A1Radius.IsNull() && !data.Network[i].A1Radius.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A1Radius.IsNull() && state.Network[i].A1Radius.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A1Radius.IsNull() || state.Network[i].A1Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/accounting-list", keyString), "groups/group-1/radius"))
 			}
 		}
 		if !data.Network[i].A1Tacacs.IsNull() && !data.Network[i].A1Tacacs.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A1Tacacs.IsNull() && state.Network[i].A1Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A1Tacacs.IsNull() || state.Network[i].A1Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/accounting-list", keyString), "groups/group-1/tacacs"))
 			}
 		}
 		if !data.Network[i].A1None.IsNull() && !data.Network[i].A1None.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].A1None.IsNull() && state.Network[i].A1None.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].A1None.IsNull() || state.Network[i].A1None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/accounting-list", keyString), "none"))
 			}
 		}
 		if !data.Network[i].StopOnly.IsNull() && !data.Network[i].StopOnly.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].StopOnly.IsNull() && state.Network[i].StopOnly.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].StopOnly.IsNull() || state.Network[i].StopOnly.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/accounting-list", keyString), "stop-only"))
 			}
 		}
 		if !data.Network[i].StartStop.IsNull() && !data.Network[i].StartStop.ValueBool() {
-			if state != nil && i < len(state.Network) && !state.Network[i].StartStop.IsNull() && state.Network[i].StartStop.ValueBool() {
+			if state == nil || i >= len(state.Network) || state.Network[i].StartStop.IsNull() || state.Network[i].StartStop.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "network/accounting-list", keyString), "start-stop"))
 			}
 		}
@@ -2891,72 +2891,72 @@ func (data *AAAAccounting) getEmptyLeafsDelete(ctx context.Context, state *AAAAc
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.System[i].A4Radius.IsNull() && !data.System[i].A4Radius.ValueBool() {
-			if state != nil && i < len(state.System) && !state.System[i].A4Radius.IsNull() && state.System[i].A4Radius.ValueBool() {
+			if state == nil || i >= len(state.System) || state.System[i].A4Radius.IsNull() || state.System[i].A4Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "system/accounting-list", keyString), "groups/group-4/radius"))
 			}
 		}
 		if !data.System[i].A4Tacacs.IsNull() && !data.System[i].A4Tacacs.ValueBool() {
-			if state != nil && i < len(state.System) && !state.System[i].A4Tacacs.IsNull() && state.System[i].A4Tacacs.ValueBool() {
+			if state == nil || i >= len(state.System) || state.System[i].A4Tacacs.IsNull() || state.System[i].A4Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "system/accounting-list", keyString), "groups/group-4/tacacs"))
 			}
 		}
 		if !data.System[i].A4None.IsNull() && !data.System[i].A4None.ValueBool() {
-			if state != nil && i < len(state.System) && !state.System[i].A4None.IsNull() && state.System[i].A4None.ValueBool() {
+			if state == nil || i >= len(state.System) || state.System[i].A4None.IsNull() || state.System[i].A4None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "system/accounting-list", keyString), "groups/group-4/none"))
 			}
 		}
 		if !data.System[i].A3Radius.IsNull() && !data.System[i].A3Radius.ValueBool() {
-			if state != nil && i < len(state.System) && !state.System[i].A3Radius.IsNull() && state.System[i].A3Radius.ValueBool() {
+			if state == nil || i >= len(state.System) || state.System[i].A3Radius.IsNull() || state.System[i].A3Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "system/accounting-list", keyString), "groups/group-3/radius"))
 			}
 		}
 		if !data.System[i].A3Tacacs.IsNull() && !data.System[i].A3Tacacs.ValueBool() {
-			if state != nil && i < len(state.System) && !state.System[i].A3Tacacs.IsNull() && state.System[i].A3Tacacs.ValueBool() {
+			if state == nil || i >= len(state.System) || state.System[i].A3Tacacs.IsNull() || state.System[i].A3Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "system/accounting-list", keyString), "groups/group-3/tacacs"))
 			}
 		}
 		if !data.System[i].A3None.IsNull() && !data.System[i].A3None.ValueBool() {
-			if state != nil && i < len(state.System) && !state.System[i].A3None.IsNull() && state.System[i].A3None.ValueBool() {
+			if state == nil || i >= len(state.System) || state.System[i].A3None.IsNull() || state.System[i].A3None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "system/accounting-list", keyString), "groups/group-3/none"))
 			}
 		}
 		if !data.System[i].A2Radius.IsNull() && !data.System[i].A2Radius.ValueBool() {
-			if state != nil && i < len(state.System) && !state.System[i].A2Radius.IsNull() && state.System[i].A2Radius.ValueBool() {
+			if state == nil || i >= len(state.System) || state.System[i].A2Radius.IsNull() || state.System[i].A2Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "system/accounting-list", keyString), "groups/group-2/radius"))
 			}
 		}
 		if !data.System[i].A2Tacacs.IsNull() && !data.System[i].A2Tacacs.ValueBool() {
-			if state != nil && i < len(state.System) && !state.System[i].A2Tacacs.IsNull() && state.System[i].A2Tacacs.ValueBool() {
+			if state == nil || i >= len(state.System) || state.System[i].A2Tacacs.IsNull() || state.System[i].A2Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "system/accounting-list", keyString), "groups/group-2/tacacs"))
 			}
 		}
 		if !data.System[i].A2None.IsNull() && !data.System[i].A2None.ValueBool() {
-			if state != nil && i < len(state.System) && !state.System[i].A2None.IsNull() && state.System[i].A2None.ValueBool() {
+			if state == nil || i >= len(state.System) || state.System[i].A2None.IsNull() || state.System[i].A2None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "system/accounting-list", keyString), "groups/group-2/none"))
 			}
 		}
 		if !data.System[i].A1Radius.IsNull() && !data.System[i].A1Radius.ValueBool() {
-			if state != nil && i < len(state.System) && !state.System[i].A1Radius.IsNull() && state.System[i].A1Radius.ValueBool() {
+			if state == nil || i >= len(state.System) || state.System[i].A1Radius.IsNull() || state.System[i].A1Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "system/accounting-list", keyString), "groups/group-1/radius"))
 			}
 		}
 		if !data.System[i].A1Tacacs.IsNull() && !data.System[i].A1Tacacs.ValueBool() {
-			if state != nil && i < len(state.System) && !state.System[i].A1Tacacs.IsNull() && state.System[i].A1Tacacs.ValueBool() {
+			if state == nil || i >= len(state.System) || state.System[i].A1Tacacs.IsNull() || state.System[i].A1Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "system/accounting-list", keyString), "groups/group-1/tacacs"))
 			}
 		}
 		if !data.System[i].A1None.IsNull() && !data.System[i].A1None.ValueBool() {
-			if state != nil && i < len(state.System) && !state.System[i].A1None.IsNull() && state.System[i].A1None.ValueBool() {
+			if state == nil || i >= len(state.System) || state.System[i].A1None.IsNull() || state.System[i].A1None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "system/accounting-list", keyString), "none"))
 			}
 		}
 		if !data.System[i].Broadcast.IsNull() && !data.System[i].Broadcast.ValueBool() {
-			if state != nil && i < len(state.System) && !state.System[i].Broadcast.IsNull() && state.System[i].Broadcast.ValueBool() {
+			if state == nil || i >= len(state.System) || state.System[i].Broadcast.IsNull() || state.System[i].Broadcast.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "system/accounting-list", keyString), "broadcast"))
 			}
 		}
 		if !data.System[i].StartStop.IsNull() && !data.System[i].StartStop.ValueBool() {
-			if state != nil && i < len(state.System) && !state.System[i].StartStop.IsNull() && state.System[i].StartStop.ValueBool() {
+			if state == nil || i >= len(state.System) || state.System[i].StartStop.IsNull() || state.System[i].StartStop.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "system/accounting-list", keyString), "start-stop"))
 			}
 		}
@@ -2969,92 +2969,92 @@ func (data *AAAAccounting) getEmptyLeafsDelete(ctx context.Context, state *AAAAc
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Commands[i].A4Radius.IsNull() && !data.Commands[i].A4Radius.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A4Radius.IsNull() && state.Commands[i].A4Radius.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A4Radius.IsNull() || state.Commands[i].A4Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/accounting-list", keyString), "groups/group-4/radius"))
 			}
 		}
 		if !data.Commands[i].A4Tacacs.IsNull() && !data.Commands[i].A4Tacacs.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A4Tacacs.IsNull() && state.Commands[i].A4Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A4Tacacs.IsNull() || state.Commands[i].A4Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/accounting-list", keyString), "groups/group-4/tacacs"))
 			}
 		}
 		if !data.Commands[i].A4None.IsNull() && !data.Commands[i].A4None.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A4None.IsNull() && state.Commands[i].A4None.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A4None.IsNull() || state.Commands[i].A4None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/accounting-list", keyString), "groups/group-4/none"))
 			}
 		}
 		if !data.Commands[i].A4Local.IsNull() && !data.Commands[i].A4Local.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A4Local.IsNull() && state.Commands[i].A4Local.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A4Local.IsNull() || state.Commands[i].A4Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/accounting-list", keyString), "groups/group-4/local"))
 			}
 		}
 		if !data.Commands[i].A3Radius.IsNull() && !data.Commands[i].A3Radius.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A3Radius.IsNull() && state.Commands[i].A3Radius.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A3Radius.IsNull() || state.Commands[i].A3Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/accounting-list", keyString), "groups/group-3/radius"))
 			}
 		}
 		if !data.Commands[i].A3Tacacs.IsNull() && !data.Commands[i].A3Tacacs.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A3Tacacs.IsNull() && state.Commands[i].A3Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A3Tacacs.IsNull() || state.Commands[i].A3Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/accounting-list", keyString), "groups/group-3/tacacs"))
 			}
 		}
 		if !data.Commands[i].A3None.IsNull() && !data.Commands[i].A3None.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A3None.IsNull() && state.Commands[i].A3None.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A3None.IsNull() || state.Commands[i].A3None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/accounting-list", keyString), "groups/group-3/none"))
 			}
 		}
 		if !data.Commands[i].A3Local.IsNull() && !data.Commands[i].A3Local.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A3Local.IsNull() && state.Commands[i].A3Local.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A3Local.IsNull() || state.Commands[i].A3Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/accounting-list", keyString), "groups/group-3/local"))
 			}
 		}
 		if !data.Commands[i].A2Radius.IsNull() && !data.Commands[i].A2Radius.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A2Radius.IsNull() && state.Commands[i].A2Radius.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A2Radius.IsNull() || state.Commands[i].A2Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/accounting-list", keyString), "groups/group-2/radius"))
 			}
 		}
 		if !data.Commands[i].A2Tacacs.IsNull() && !data.Commands[i].A2Tacacs.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A2Tacacs.IsNull() && state.Commands[i].A2Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A2Tacacs.IsNull() || state.Commands[i].A2Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/accounting-list", keyString), "groups/group-2/tacacs"))
 			}
 		}
 		if !data.Commands[i].A2None.IsNull() && !data.Commands[i].A2None.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A2None.IsNull() && state.Commands[i].A2None.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A2None.IsNull() || state.Commands[i].A2None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/accounting-list", keyString), "groups/group-2/none"))
 			}
 		}
 		if !data.Commands[i].A2Local.IsNull() && !data.Commands[i].A2Local.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A2Local.IsNull() && state.Commands[i].A2Local.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A2Local.IsNull() || state.Commands[i].A2Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/accounting-list", keyString), "groups/group-2/local"))
 			}
 		}
 		if !data.Commands[i].A1Radius.IsNull() && !data.Commands[i].A1Radius.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A1Radius.IsNull() && state.Commands[i].A1Radius.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A1Radius.IsNull() || state.Commands[i].A1Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/accounting-list", keyString), "groups/group-1/radius"))
 			}
 		}
 		if !data.Commands[i].A1Tacacs.IsNull() && !data.Commands[i].A1Tacacs.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A1Tacacs.IsNull() && state.Commands[i].A1Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A1Tacacs.IsNull() || state.Commands[i].A1Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/accounting-list", keyString), "groups/group-1/tacacs"))
 			}
 		}
 		if !data.Commands[i].A1Local.IsNull() && !data.Commands[i].A1Local.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A1Local.IsNull() && state.Commands[i].A1Local.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A1Local.IsNull() || state.Commands[i].A1Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/accounting-list", keyString), "local"))
 			}
 		}
 		if !data.Commands[i].A1None.IsNull() && !data.Commands[i].A1None.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].A1None.IsNull() && state.Commands[i].A1None.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].A1None.IsNull() || state.Commands[i].A1None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/accounting-list", keyString), "none"))
 			}
 		}
 		if !data.Commands[i].StopOnly.IsNull() && !data.Commands[i].StopOnly.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].StopOnly.IsNull() && state.Commands[i].StopOnly.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].StopOnly.IsNull() || state.Commands[i].StopOnly.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/accounting-list", keyString), "stop-only"))
 			}
 		}
 		if !data.Commands[i].StartStop.IsNull() && !data.Commands[i].StartStop.ValueBool() {
-			if state != nil && i < len(state.Commands) && !state.Commands[i].StartStop.IsNull() && state.Commands[i].StartStop.ValueBool() {
+			if state == nil || i >= len(state.Commands) || state.Commands[i].StartStop.IsNull() || state.Commands[i].StartStop.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "commands/accounting-list", keyString), "start-stop"))
 			}
 		}
@@ -3067,78 +3067,78 @@ func (data *AAAAccounting) getEmptyLeafsDelete(ctx context.Context, state *AAAAc
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Exec[i].A4Radius.IsNull() && !data.Exec[i].A4Radius.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A4Radius.IsNull() && state.Exec[i].A4Radius.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A4Radius.IsNull() || state.Exec[i].A4Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/accounting-list", keyString), "groups/group-4/radius"))
 			}
 		}
 		if !data.Exec[i].A4Tacacs.IsNull() && !data.Exec[i].A4Tacacs.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A4Tacacs.IsNull() && state.Exec[i].A4Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A4Tacacs.IsNull() || state.Exec[i].A4Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/accounting-list", keyString), "groups/group-4/tacacs"))
 			}
 		}
 		if !data.Exec[i].A4None.IsNull() && !data.Exec[i].A4None.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A4None.IsNull() && state.Exec[i].A4None.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A4None.IsNull() || state.Exec[i].A4None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/accounting-list", keyString), "groups/group-4/none"))
 			}
 		}
 		if !data.Exec[i].A3Radius.IsNull() && !data.Exec[i].A3Radius.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A3Radius.IsNull() && state.Exec[i].A3Radius.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A3Radius.IsNull() || state.Exec[i].A3Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/accounting-list", keyString), "groups/group-3/radius"))
 			}
 		}
 		if !data.Exec[i].A3Tacacs.IsNull() && !data.Exec[i].A3Tacacs.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A3Tacacs.IsNull() && state.Exec[i].A3Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A3Tacacs.IsNull() || state.Exec[i].A3Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/accounting-list", keyString), "groups/group-3/tacacs"))
 			}
 		}
 		if !data.Exec[i].A3None.IsNull() && !data.Exec[i].A3None.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A3None.IsNull() && state.Exec[i].A3None.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A3None.IsNull() || state.Exec[i].A3None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/accounting-list", keyString), "groups/group-3/none"))
 			}
 		}
 		if !data.Exec[i].A2Radius.IsNull() && !data.Exec[i].A2Radius.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A2Radius.IsNull() && state.Exec[i].A2Radius.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A2Radius.IsNull() || state.Exec[i].A2Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/accounting-list", keyString), "groups/group-2/radius"))
 			}
 		}
 		if !data.Exec[i].A2Tacacs.IsNull() && !data.Exec[i].A2Tacacs.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A2Tacacs.IsNull() && state.Exec[i].A2Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A2Tacacs.IsNull() || state.Exec[i].A2Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/accounting-list", keyString), "groups/group-2/tacacs"))
 			}
 		}
 		if !data.Exec[i].A2None.IsNull() && !data.Exec[i].A2None.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A2None.IsNull() && state.Exec[i].A2None.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A2None.IsNull() || state.Exec[i].A2None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/accounting-list", keyString), "groups/group-2/none"))
 			}
 		}
 		if !data.Exec[i].A1Radius.IsNull() && !data.Exec[i].A1Radius.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A1Radius.IsNull() && state.Exec[i].A1Radius.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A1Radius.IsNull() || state.Exec[i].A1Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/accounting-list", keyString), "groups/group-1/radius"))
 			}
 		}
 		if !data.Exec[i].A1Tacacs.IsNull() && !data.Exec[i].A1Tacacs.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A1Tacacs.IsNull() && state.Exec[i].A1Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A1Tacacs.IsNull() || state.Exec[i].A1Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/accounting-list", keyString), "groups/group-1/tacacs"))
 			}
 		}
 		if !data.Exec[i].A1None.IsNull() && !data.Exec[i].A1None.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].A1None.IsNull() && state.Exec[i].A1None.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].A1None.IsNull() || state.Exec[i].A1None.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/accounting-list", keyString), "none"))
 			}
 		}
 		if !data.Exec[i].StopOnly.IsNull() && !data.Exec[i].StopOnly.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].StopOnly.IsNull() && state.Exec[i].StopOnly.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].StopOnly.IsNull() || state.Exec[i].StopOnly.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/accounting-list", keyString), "stop-only"))
 			}
 		}
 		if !data.Exec[i].StartStop.IsNull() && !data.Exec[i].StartStop.ValueBool() {
-			if state != nil && i < len(state.Exec) && !state.Exec[i].StartStop.IsNull() && state.Exec[i].StartStop.ValueBool() {
+			if state == nil || i >= len(state.Exec) || state.Exec[i].StartStop.IsNull() || state.Exec[i].StartStop.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "exec/accounting-list", keyString), "start-stop"))
 			}
 		}
 	}
 	if !data.UpdateNewinfo.IsNull() && !data.UpdateNewinfo.ValueBool() {
-		if state != nil && !state.UpdateNewinfo.IsNull() && state.UpdateNewinfo.ValueBool() {
+		if state == nil || state.UpdateNewinfo.IsNull() || state.UpdateNewinfo.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "update/newinfo"))
 		}
 	}

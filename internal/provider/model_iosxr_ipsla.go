@@ -3504,7 +3504,7 @@ func (data *IPSLA) getDeletedItems(ctx context.Context, state IPSLA, version str
 func (data *IPSLA) getEmptyLeafsDelete(ctx context.Context, state *IPSLA, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.ServerTwamp.IsNull() && !data.ServerTwamp.ValueBool() {
-		if state != nil && !state.ServerTwamp.IsNull() && state.ServerTwamp.ValueBool() {
+		if state == nil || state.ServerTwamp.IsNull() || state.ServerTwamp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "server/twamp"))
 		}
 	}
@@ -3516,22 +3516,22 @@ func (data *IPSLA) getEmptyLeafsDelete(ctx context.Context, state *IPSLA, versio
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Schedules[i].Recurring.IsNull() && !data.Schedules[i].Recurring.ValueBool() {
-			if state != nil && i < len(state.Schedules) && !state.Schedules[i].Recurring.IsNull() && state.Schedules[i].Recurring.ValueBool() {
+			if state == nil || i >= len(state.Schedules) || state.Schedules[i].Recurring.IsNull() || state.Schedules[i].Recurring.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "schedule/operations/operation", keyString), "recurring"))
 			}
 		}
 		if !data.Schedules[i].StartNow.IsNull() && !data.Schedules[i].StartNow.ValueBool() {
-			if state != nil && i < len(state.Schedules) && !state.Schedules[i].StartNow.IsNull() && state.Schedules[i].StartNow.ValueBool() {
+			if state == nil || i >= len(state.Schedules) || state.Schedules[i].StartNow.IsNull() || state.Schedules[i].StartNow.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "schedule/operations/operation", keyString), "start-time/now"))
 			}
 		}
 		if !data.Schedules[i].StartPending.IsNull() && !data.Schedules[i].StartPending.ValueBool() {
-			if state != nil && i < len(state.Schedules) && !state.Schedules[i].StartPending.IsNull() && state.Schedules[i].StartPending.ValueBool() {
+			if state == nil || i >= len(state.Schedules) || state.Schedules[i].StartPending.IsNull() || state.Schedules[i].StartPending.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "schedule/operations/operation", keyString), "start-time/pending"))
 			}
 		}
 		if !data.Schedules[i].LifeForever.IsNull() && !data.Schedules[i].LifeForever.ValueBool() {
-			if state != nil && i < len(state.Schedules) && !state.Schedules[i].LifeForever.IsNull() && state.Schedules[i].LifeForever.ValueBool() {
+			if state == nil || i >= len(state.Schedules) || state.Schedules[i].LifeForever.IsNull() || state.Schedules[i].LifeForever.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "schedule/operations/operation", keyString), "life/forever"))
 			}
 		}
@@ -3544,7 +3544,7 @@ func (data *IPSLA) getEmptyLeafsDelete(ctx context.Context, state *IPSLA, versio
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Operations[i].MplsLspTrace.IsNull() && !data.Operations[i].MplsLspTrace.ValueBool() {
-			if state != nil && i < len(state.Operations) && !state.Operations[i].MplsLspTrace.IsNull() && state.Operations[i].MplsLspTrace.ValueBool() {
+			if state == nil || i >= len(state.Operations) || state.Operations[i].MplsLspTrace.IsNull() || state.Operations[i].MplsLspTrace.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "operations/operation", keyString), "type/mpls/lsp/trace"))
 			}
 		}
@@ -3557,7 +3557,7 @@ func (data *IPSLA) getEmptyLeafsDelete(ctx context.Context, state *IPSLA, versio
 			}
 		}
 		if !data.Operations[i].MplsLspPing.IsNull() && !data.Operations[i].MplsLspPing.ValueBool() {
-			if state != nil && i < len(state.Operations) && !state.Operations[i].MplsLspPing.IsNull() && state.Operations[i].MplsLspPing.ValueBool() {
+			if state == nil || i >= len(state.Operations) || state.Operations[i].MplsLspPing.IsNull() || state.Operations[i].MplsLspPing.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "operations/operation", keyString), "type/mpls/lsp/ping"))
 			}
 		}
@@ -3570,27 +3570,27 @@ func (data *IPSLA) getEmptyLeafsDelete(ctx context.Context, state *IPSLA, versio
 			}
 		}
 		if !data.Operations[i].UdpJitterVerifyData.IsNull() && !data.Operations[i].UdpJitterVerifyData.ValueBool() {
-			if state != nil && i < len(state.Operations) && !state.Operations[i].UdpJitterVerifyData.IsNull() && state.Operations[i].UdpJitterVerifyData.ValueBool() {
+			if state == nil || i >= len(state.Operations) || state.Operations[i].UdpJitterVerifyData.IsNull() || state.Operations[i].UdpJitterVerifyData.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "operations/operation", keyString), "type/udp/jitter/verify-data"))
 			}
 		}
 		if !data.Operations[i].UdpJitterControlDisable.IsNull() && !data.Operations[i].UdpJitterControlDisable.ValueBool() {
-			if state != nil && i < len(state.Operations) && !state.Operations[i].UdpJitterControlDisable.IsNull() && state.Operations[i].UdpJitterControlDisable.ValueBool() {
+			if state == nil || i >= len(state.Operations) || state.Operations[i].UdpJitterControlDisable.IsNull() || state.Operations[i].UdpJitterControlDisable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "operations/operation", keyString), "type/udp/jitter/control/disable"))
 			}
 		}
 		if !data.Operations[i].UdpJitter.IsNull() && !data.Operations[i].UdpJitter.ValueBool() {
-			if state != nil && i < len(state.Operations) && !state.Operations[i].UdpJitter.IsNull() && state.Operations[i].UdpJitter.ValueBool() {
+			if state == nil || i >= len(state.Operations) || state.Operations[i].UdpJitter.IsNull() || state.Operations[i].UdpJitter.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "operations/operation", keyString), "type/udp/jitter"))
 			}
 		}
 		if !data.Operations[i].UdpEchoHistoryFilterFailures.IsNull() && !data.Operations[i].UdpEchoHistoryFilterFailures.ValueBool() {
-			if state != nil && i < len(state.Operations) && !state.Operations[i].UdpEchoHistoryFilterFailures.IsNull() && state.Operations[i].UdpEchoHistoryFilterFailures.ValueBool() {
+			if state == nil || i >= len(state.Operations) || state.Operations[i].UdpEchoHistoryFilterFailures.IsNull() || state.Operations[i].UdpEchoHistoryFilterFailures.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "operations/operation", keyString), "type/udp/echo/history/filter/failures"))
 			}
 		}
 		if !data.Operations[i].UdpEchoHistoryFilterAll.IsNull() && !data.Operations[i].UdpEchoHistoryFilterAll.ValueBool() {
-			if state != nil && i < len(state.Operations) && !state.Operations[i].UdpEchoHistoryFilterAll.IsNull() && state.Operations[i].UdpEchoHistoryFilterAll.ValueBool() {
+			if state == nil || i >= len(state.Operations) || state.Operations[i].UdpEchoHistoryFilterAll.IsNull() || state.Operations[i].UdpEchoHistoryFilterAll.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "operations/operation", keyString), "type/udp/echo/history/filter/all"))
 			}
 		}
@@ -3603,37 +3603,37 @@ func (data *IPSLA) getEmptyLeafsDelete(ctx context.Context, state *IPSLA, versio
 			}
 		}
 		if !data.Operations[i].UdpEchoVerifyData.IsNull() && !data.Operations[i].UdpEchoVerifyData.ValueBool() {
-			if state != nil && i < len(state.Operations) && !state.Operations[i].UdpEchoVerifyData.IsNull() && state.Operations[i].UdpEchoVerifyData.ValueBool() {
+			if state == nil || i >= len(state.Operations) || state.Operations[i].UdpEchoVerifyData.IsNull() || state.Operations[i].UdpEchoVerifyData.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "operations/operation", keyString), "type/udp/echo/verify-data"))
 			}
 		}
 		if !data.Operations[i].UdpEchoControlDisable.IsNull() && !data.Operations[i].UdpEchoControlDisable.ValueBool() {
-			if state != nil && i < len(state.Operations) && !state.Operations[i].UdpEchoControlDisable.IsNull() && state.Operations[i].UdpEchoControlDisable.ValueBool() {
+			if state == nil || i >= len(state.Operations) || state.Operations[i].UdpEchoControlDisable.IsNull() || state.Operations[i].UdpEchoControlDisable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "operations/operation", keyString), "type/udp/echo/control/disable"))
 			}
 		}
 		if !data.Operations[i].UdpEcho.IsNull() && !data.Operations[i].UdpEcho.ValueBool() {
-			if state != nil && i < len(state.Operations) && !state.Operations[i].UdpEcho.IsNull() && state.Operations[i].UdpEcho.ValueBool() {
+			if state == nil || i >= len(state.Operations) || state.Operations[i].UdpEcho.IsNull() || state.Operations[i].UdpEcho.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "operations/operation", keyString), "type/udp/echo"))
 			}
 		}
 		if !data.Operations[i].IcmpPathJitter.IsNull() && !data.Operations[i].IcmpPathJitter.ValueBool() {
-			if state != nil && i < len(state.Operations) && !state.Operations[i].IcmpPathJitter.IsNull() && state.Operations[i].IcmpPathJitter.ValueBool() {
+			if state == nil || i >= len(state.Operations) || state.Operations[i].IcmpPathJitter.IsNull() || state.Operations[i].IcmpPathJitter.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "operations/operation", keyString), "type/icmp/path-jitter"))
 			}
 		}
 		if !data.Operations[i].IcmpPathEchoHistoryFilterFailures.IsNull() && !data.Operations[i].IcmpPathEchoHistoryFilterFailures.ValueBool() {
-			if state != nil && i < len(state.Operations) && !state.Operations[i].IcmpPathEchoHistoryFilterFailures.IsNull() && state.Operations[i].IcmpPathEchoHistoryFilterFailures.ValueBool() {
+			if state == nil || i >= len(state.Operations) || state.Operations[i].IcmpPathEchoHistoryFilterFailures.IsNull() || state.Operations[i].IcmpPathEchoHistoryFilterFailures.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "operations/operation", keyString), "type/icmp/path-echo/history/filter/failures"))
 			}
 		}
 		if !data.Operations[i].IcmpPathEchoHistoryFilterAll.IsNull() && !data.Operations[i].IcmpPathEchoHistoryFilterAll.ValueBool() {
-			if state != nil && i < len(state.Operations) && !state.Operations[i].IcmpPathEchoHistoryFilterAll.IsNull() && state.Operations[i].IcmpPathEchoHistoryFilterAll.ValueBool() {
+			if state == nil || i >= len(state.Operations) || state.Operations[i].IcmpPathEchoHistoryFilterAll.IsNull() || state.Operations[i].IcmpPathEchoHistoryFilterAll.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "operations/operation", keyString), "type/icmp/path-echo/history/filter/all"))
 			}
 		}
 		if !data.Operations[i].IcmpPathEcho.IsNull() && !data.Operations[i].IcmpPathEcho.ValueBool() {
-			if state != nil && i < len(state.Operations) && !state.Operations[i].IcmpPathEcho.IsNull() && state.Operations[i].IcmpPathEcho.ValueBool() {
+			if state == nil || i >= len(state.Operations) || state.Operations[i].IcmpPathEcho.IsNull() || state.Operations[i].IcmpPathEcho.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "operations/operation", keyString), "type/icmp/path-echo"))
 			}
 		}
@@ -3646,23 +3646,23 @@ func (data *IPSLA) getEmptyLeafsDelete(ctx context.Context, state *IPSLA, versio
 			}
 		}
 		if !data.Operations[i].IcmpEchoHistoryFilterFailures.IsNull() && !data.Operations[i].IcmpEchoHistoryFilterFailures.ValueBool() {
-			if state != nil && i < len(state.Operations) && !state.Operations[i].IcmpEchoHistoryFilterFailures.IsNull() && state.Operations[i].IcmpEchoHistoryFilterFailures.ValueBool() {
+			if state == nil || i >= len(state.Operations) || state.Operations[i].IcmpEchoHistoryFilterFailures.IsNull() || state.Operations[i].IcmpEchoHistoryFilterFailures.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "operations/operation", keyString), "type/icmp/echo/history/filter/failures"))
 			}
 		}
 		if !data.Operations[i].IcmpEchoHistoryFilterAll.IsNull() && !data.Operations[i].IcmpEchoHistoryFilterAll.ValueBool() {
-			if state != nil && i < len(state.Operations) && !state.Operations[i].IcmpEchoHistoryFilterAll.IsNull() && state.Operations[i].IcmpEchoHistoryFilterAll.ValueBool() {
+			if state == nil || i >= len(state.Operations) || state.Operations[i].IcmpEchoHistoryFilterAll.IsNull() || state.Operations[i].IcmpEchoHistoryFilterAll.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "operations/operation", keyString), "type/icmp/echo/history/filter/all"))
 			}
 		}
 		if !data.Operations[i].IcmpEcho.IsNull() && !data.Operations[i].IcmpEcho.ValueBool() {
-			if state != nil && i < len(state.Operations) && !state.Operations[i].IcmpEcho.IsNull() && state.Operations[i].IcmpEcho.ValueBool() {
+			if state == nil || i >= len(state.Operations) || state.Operations[i].IcmpEcho.IsNull() || state.Operations[i].IcmpEcho.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "operations/operation", keyString), "type/icmp/echo"))
 			}
 		}
 	}
 	if !data.HwTimestampDisable.IsNull() && !data.HwTimestampDisable.ValueBool() {
-		if state != nil && !state.HwTimestampDisable.IsNull() && state.HwTimestampDisable.ValueBool() {
+		if state == nil || state.HwTimestampDisable.IsNull() || state.HwTimestampDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "hw-timestamp/disable"))
 		}
 	}

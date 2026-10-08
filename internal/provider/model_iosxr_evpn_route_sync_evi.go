@@ -1386,7 +1386,7 @@ func (data *EVPNRouteSyncEVI) getDeletedItems(ctx context.Context, state EVPNRou
 func (data *EVPNRouteSyncEVI) getEmptyLeafsDelete(ctx context.Context, state *EVPNRouteSyncEVI, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.VrfDefault.IsNull() && !data.VrfDefault.ValueBool() {
-		if state != nil && !state.VrfDefault.IsNull() && state.VrfDefault.ValueBool() {
+		if state == nil || state.VrfDefault.IsNull() || state.VrfDefault.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "vrf/default"))
 		}
 	}

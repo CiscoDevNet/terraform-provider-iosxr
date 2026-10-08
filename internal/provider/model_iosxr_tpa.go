@@ -943,28 +943,28 @@ func (data *TPA) getEmptyLeafsDelete(ctx context.Context, state *TPA, version st
 			}
 		}
 		if !data.Vrfs[i].Ipv6DefaultRouteMgmt.IsNull() && !data.Vrfs[i].Ipv6DefaultRouteMgmt.ValueBool() {
-			if state != nil && i < len(state.Vrfs) && !state.Vrfs[i].Ipv6DefaultRouteMgmt.IsNull() && state.Vrfs[i].Ipv6DefaultRouteMgmt.ValueBool() {
+			if state == nil || i >= len(state.Vrfs) || state.Vrfs[i].Ipv6DefaultRouteMgmt.IsNull() || state.Vrfs[i].Ipv6DefaultRouteMgmt.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "vrfs/vrf", keyString), "address-family/ipv6/default-route/mgmt"))
 			}
 		}
 		if !data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.IsNull() && !data.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.ValueBool() {
-			if state != nil && i < len(state.Vrfs) && !state.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.IsNull() && state.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.ValueBool() {
+			if state == nil || i >= len(state.Vrfs) || state.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.IsNull() || state.Vrfs[i].Ipv6UpdateSourceDataportsActiveManagement.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "vrfs/vrf", keyString), "address-family/ipv6/update-source/dataports/active-management"))
 			}
 		}
 		if !data.Vrfs[i].Ipv4DefaultRouteMgmt.IsNull() && !data.Vrfs[i].Ipv4DefaultRouteMgmt.ValueBool() {
-			if state != nil && i < len(state.Vrfs) && !state.Vrfs[i].Ipv4DefaultRouteMgmt.IsNull() && state.Vrfs[i].Ipv4DefaultRouteMgmt.ValueBool() {
+			if state == nil || i >= len(state.Vrfs) || state.Vrfs[i].Ipv4DefaultRouteMgmt.IsNull() || state.Vrfs[i].Ipv4DefaultRouteMgmt.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "vrfs/vrf", keyString), "address-family/ipv4/default-route/mgmt"))
 			}
 		}
 		if !data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.IsNull() && !data.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.ValueBool() {
-			if state != nil && i < len(state.Vrfs) && !state.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.IsNull() && state.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.ValueBool() {
+			if state == nil || i >= len(state.Vrfs) || state.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.IsNull() || state.Vrfs[i].Ipv4UpdateSourceDataportsActiveManagement.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "vrfs/vrf", keyString), "address-family/ipv4/update-source/dataports/active-management"))
 			}
 		}
 	}
 	if !data.StatisticsDisable.IsNull() && !data.StatisticsDisable.ValueBool() {
-		if state != nil && !state.StatisticsDisable.IsNull() && state.StatisticsDisable.ValueBool() {
+		if state == nil || state.StatisticsDisable.IsNull() || state.StatisticsDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "statistics/disable"))
 		}
 	}

@@ -1506,7 +1506,7 @@ func (data *ClassMapTraffic) getDeletedItems(ctx context.Context, state ClassMap
 func (data *ClassMapTraffic) getEmptyLeafsDelete(ctx context.Context, state *ClassMapTraffic, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.MatchTcpFlagAny.IsNull() && !data.MatchTcpFlagAny.ValueBool() {
-		if state != nil && !state.MatchTcpFlagAny.IsNull() && state.MatchTcpFlagAny.ValueBool() {
+		if state == nil || state.MatchTcpFlagAny.IsNull() || state.MatchTcpFlagAny.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "match/tcp-flag/any"))
 		}
 	}
@@ -1527,22 +1527,22 @@ func (data *ClassMapTraffic) getEmptyLeafsDelete(ctx context.Context, state *Cla
 		}
 	}
 	if !data.MatchFragmentTypeLastFragment.IsNull() && !data.MatchFragmentTypeLastFragment.ValueBool() {
-		if state != nil && !state.MatchFragmentTypeLastFragment.IsNull() && state.MatchFragmentTypeLastFragment.ValueBool() {
+		if state == nil || state.MatchFragmentTypeLastFragment.IsNull() || state.MatchFragmentTypeLastFragment.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "match/fragment-type/last-fragment"))
 		}
 	}
 	if !data.MatchFragmentTypeIsFragment.IsNull() && !data.MatchFragmentTypeIsFragment.ValueBool() {
-		if state != nil && !state.MatchFragmentTypeIsFragment.IsNull() && state.MatchFragmentTypeIsFragment.ValueBool() {
+		if state == nil || state.MatchFragmentTypeIsFragment.IsNull() || state.MatchFragmentTypeIsFragment.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "match/fragment-type/is-fragment"))
 		}
 	}
 	if !data.MatchFragmentTypeFirstFragment.IsNull() && !data.MatchFragmentTypeFirstFragment.ValueBool() {
-		if state != nil && !state.MatchFragmentTypeFirstFragment.IsNull() && state.MatchFragmentTypeFirstFragment.ValueBool() {
+		if state == nil || state.MatchFragmentTypeFirstFragment.IsNull() || state.MatchFragmentTypeFirstFragment.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "match/fragment-type/first-fragment"))
 		}
 	}
 	if !data.MatchFragmentTypeDontFragment.IsNull() && !data.MatchFragmentTypeDontFragment.ValueBool() {
-		if state != nil && !state.MatchFragmentTypeDontFragment.IsNull() && state.MatchFragmentTypeDontFragment.ValueBool() {
+		if state == nil || state.MatchFragmentTypeDontFragment.IsNull() || state.MatchFragmentTypeDontFragment.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "match/fragment-type/dont-fragment"))
 		}
 	}
@@ -1563,12 +1563,12 @@ func (data *ClassMapTraffic) getEmptyLeafsDelete(ctx context.Context, state *Cla
 		}
 	}
 	if !data.MatchAny.IsNull() && !data.MatchAny.ValueBool() {
-		if state != nil && !state.MatchAny.IsNull() && state.MatchAny.ValueBool() {
+		if state == nil || state.MatchAny.IsNull() || state.MatchAny.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "match-any"))
 		}
 	}
 	if !data.MatchAll.IsNull() && !data.MatchAll.ValueBool() {
-		if state != nil && !state.MatchAll.IsNull() && state.MatchAll.ValueBool() {
+		if state == nil || state.MatchAll.IsNull() || state.MatchAll.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "match-all"))
 		}
 	}

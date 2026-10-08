@@ -3222,12 +3222,12 @@ func (data *PTPProfile) getDeletedItems(ctx context.Context, state PTPProfile, v
 func (data *PTPProfile) getEmptyLeafsDelete(ctx context.Context, state *PTPProfile, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if helpers.VersionAtLeast(version, "25.4") && !data.MonitorReceiver.IsNull() && !data.MonitorReceiver.ValueBool() {
-		if state != nil && !state.MonitorReceiver.IsNull() && state.MonitorReceiver.ValueBool() {
+		if state == nil || state.MonitorReceiver.IsNull() || state.MonitorReceiver.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "monitor-receiver"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSender.IsNull() && !data.MonitorSender.ValueBool() {
-		if state != nil && !state.MonitorSender.IsNull() && state.MonitorSender.ValueBool() {
+		if state == nil || state.MonitorSender.IsNull() || state.MonitorSender.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "monitor-sender"))
 		}
 	}
@@ -3248,22 +3248,22 @@ func (data *PTPProfile) getEmptyLeafsDelete(ctx context.Context, state *PTPProfi
 		}
 	}
 	if !data.InteropProfileG82752.IsNull() && !data.InteropProfileG82752.ValueBool() {
-		if state != nil && !state.InteropProfileG82752.IsNull() && state.InteropProfileG82752.ValueBool() {
+		if state == nil || state.InteropProfileG82752.IsNull() || state.InteropProfileG82752.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interop/profile/g-8275-2"))
 		}
 	}
 	if !data.InteropProfileG82751.IsNull() && !data.InteropProfileG82751.ValueBool() {
-		if state != nil && !state.InteropProfileG82751.IsNull() && state.InteropProfileG82751.ValueBool() {
+		if state == nil || state.InteropProfileG82751.IsNull() || state.InteropProfileG82751.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interop/profile/g-8275-1"))
 		}
 	}
 	if !data.InteropProfileG82651.IsNull() && !data.InteropProfileG82651.ValueBool() {
-		if state != nil && !state.InteropProfileG82651.IsNull() && state.InteropProfileG82651.ValueBool() {
+		if state == nil || state.InteropProfileG82651.IsNull() || state.InteropProfileG82651.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interop/profile/g-8265-1"))
 		}
 	}
 	if !data.InteropProfileDefault.IsNull() && !data.InteropProfileDefault.ValueBool() {
-		if state != nil && !state.InteropProfileDefault.IsNull() && state.InteropProfileDefault.ValueBool() {
+		if state == nil || state.InteropProfileDefault.IsNull() || state.InteropProfileDefault.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interop/profile/default"))
 		}
 	}
@@ -3275,32 +3275,32 @@ func (data *PTPProfile) getEmptyLeafsDelete(ctx context.Context, state *PTPProfi
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.MasterEthernets[i].Milliseconds.IsNull() && !data.MasterEthernets[i].Milliseconds.ValueBool() {
-			if state != nil && i < len(state.MasterEthernets) && !state.MasterEthernets[i].Milliseconds.IsNull() && state.MasterEthernets[i].Milliseconds.ValueBool() {
+			if state == nil || i >= len(state.MasterEthernets) || state.MasterEthernets[i].Milliseconds.IsNull() || state.MasterEthernets[i].Milliseconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ethernets/ethernet", keyString), "milliseconds"))
 			}
 		}
 		if !data.MasterEthernets[i].Microseconds.IsNull() && !data.MasterEthernets[i].Microseconds.ValueBool() {
-			if state != nil && i < len(state.MasterEthernets) && !state.MasterEthernets[i].Microseconds.IsNull() && state.MasterEthernets[i].Microseconds.ValueBool() {
+			if state == nil || i >= len(state.MasterEthernets) || state.MasterEthernets[i].Microseconds.IsNull() || state.MasterEthernets[i].Microseconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ethernets/ethernet", keyString), "microseconds"))
 			}
 		}
 		if !data.MasterEthernets[i].Nanoseconds.IsNull() && !data.MasterEthernets[i].Nanoseconds.ValueBool() {
-			if state != nil && i < len(state.MasterEthernets) && !state.MasterEthernets[i].Nanoseconds.IsNull() && state.MasterEthernets[i].Nanoseconds.ValueBool() {
+			if state == nil || i >= len(state.MasterEthernets) || state.MasterEthernets[i].Nanoseconds.IsNull() || state.MasterEthernets[i].Nanoseconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ethernets/ethernet", keyString), "nanoseconds"))
 			}
 		}
 		if !data.MasterEthernets[i].NonNegotiated.IsNull() && !data.MasterEthernets[i].NonNegotiated.ValueBool() {
-			if state != nil && i < len(state.MasterEthernets) && !state.MasterEthernets[i].NonNegotiated.IsNull() && state.MasterEthernets[i].NonNegotiated.ValueBool() {
+			if state == nil || i >= len(state.MasterEthernets) || state.MasterEthernets[i].NonNegotiated.IsNull() || state.MasterEthernets[i].NonNegotiated.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ethernets/ethernet", keyString), "non-negotiated"))
 			}
 		}
 		if !data.MasterEthernets[i].MulticastMixed.IsNull() && !data.MasterEthernets[i].MulticastMixed.ValueBool() {
-			if state != nil && i < len(state.MasterEthernets) && !state.MasterEthernets[i].MulticastMixed.IsNull() && state.MasterEthernets[i].MulticastMixed.ValueBool() {
+			if state == nil || i >= len(state.MasterEthernets) || state.MasterEthernets[i].MulticastMixed.IsNull() || state.MasterEthernets[i].MulticastMixed.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ethernets/ethernet", keyString), "multicast"))
 			}
 		}
 		if !data.MasterEthernets[i].Multicast.IsNull() && !data.MasterEthernets[i].Multicast.ValueBool() {
-			if state != nil && i < len(state.MasterEthernets) && !state.MasterEthernets[i].Multicast.IsNull() && state.MasterEthernets[i].Multicast.ValueBool() {
+			if state == nil || i >= len(state.MasterEthernets) || state.MasterEthernets[i].Multicast.IsNull() || state.MasterEthernets[i].Multicast.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ethernets/ethernet", keyString), "multicast"))
 			}
 		}
@@ -3313,32 +3313,32 @@ func (data *PTPProfile) getEmptyLeafsDelete(ctx context.Context, state *PTPProfi
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.MasterIpv6s[i].Milliseconds.IsNull() && !data.MasterIpv6s[i].Milliseconds.ValueBool() {
-			if state != nil && i < len(state.MasterIpv6s) && !state.MasterIpv6s[i].Milliseconds.IsNull() && state.MasterIpv6s[i].Milliseconds.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv6s) || state.MasterIpv6s[i].Milliseconds.IsNull() || state.MasterIpv6s[i].Milliseconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv6s/ipv6", keyString), "milliseconds"))
 			}
 		}
 		if !data.MasterIpv6s[i].Microseconds.IsNull() && !data.MasterIpv6s[i].Microseconds.ValueBool() {
-			if state != nil && i < len(state.MasterIpv6s) && !state.MasterIpv6s[i].Microseconds.IsNull() && state.MasterIpv6s[i].Microseconds.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv6s) || state.MasterIpv6s[i].Microseconds.IsNull() || state.MasterIpv6s[i].Microseconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv6s/ipv6", keyString), "microseconds"))
 			}
 		}
 		if !data.MasterIpv6s[i].Nanoseconds.IsNull() && !data.MasterIpv6s[i].Nanoseconds.ValueBool() {
-			if state != nil && i < len(state.MasterIpv6s) && !state.MasterIpv6s[i].Nanoseconds.IsNull() && state.MasterIpv6s[i].Nanoseconds.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv6s) || state.MasterIpv6s[i].Nanoseconds.IsNull() || state.MasterIpv6s[i].Nanoseconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv6s/ipv6", keyString), "nanoseconds"))
 			}
 		}
 		if !data.MasterIpv6s[i].NonNegotiated.IsNull() && !data.MasterIpv6s[i].NonNegotiated.ValueBool() {
-			if state != nil && i < len(state.MasterIpv6s) && !state.MasterIpv6s[i].NonNegotiated.IsNull() && state.MasterIpv6s[i].NonNegotiated.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv6s) || state.MasterIpv6s[i].NonNegotiated.IsNull() || state.MasterIpv6s[i].NonNegotiated.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv6s/ipv6", keyString), "non-negotiated"))
 			}
 		}
 		if !data.MasterIpv6s[i].MulticastMixed.IsNull() && !data.MasterIpv6s[i].MulticastMixed.ValueBool() {
-			if state != nil && i < len(state.MasterIpv6s) && !state.MasterIpv6s[i].MulticastMixed.IsNull() && state.MasterIpv6s[i].MulticastMixed.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv6s) || state.MasterIpv6s[i].MulticastMixed.IsNull() || state.MasterIpv6s[i].MulticastMixed.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv6s/ipv6", keyString), "multicast"))
 			}
 		}
 		if !data.MasterIpv6s[i].Multicast.IsNull() && !data.MasterIpv6s[i].Multicast.ValueBool() {
-			if state != nil && i < len(state.MasterIpv6s) && !state.MasterIpv6s[i].Multicast.IsNull() && state.MasterIpv6s[i].Multicast.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv6s) || state.MasterIpv6s[i].Multicast.IsNull() || state.MasterIpv6s[i].Multicast.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv6s/ipv6", keyString), "multicast"))
 			}
 		}
@@ -3351,32 +3351,32 @@ func (data *PTPProfile) getEmptyLeafsDelete(ctx context.Context, state *PTPProfi
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.MasterIpv4s[i].Milliseconds.IsNull() && !data.MasterIpv4s[i].Milliseconds.ValueBool() {
-			if state != nil && i < len(state.MasterIpv4s) && !state.MasterIpv4s[i].Milliseconds.IsNull() && state.MasterIpv4s[i].Milliseconds.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv4s) || state.MasterIpv4s[i].Milliseconds.IsNull() || state.MasterIpv4s[i].Milliseconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv4s/ipv4", keyString), "milliseconds"))
 			}
 		}
 		if !data.MasterIpv4s[i].Microseconds.IsNull() && !data.MasterIpv4s[i].Microseconds.ValueBool() {
-			if state != nil && i < len(state.MasterIpv4s) && !state.MasterIpv4s[i].Microseconds.IsNull() && state.MasterIpv4s[i].Microseconds.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv4s) || state.MasterIpv4s[i].Microseconds.IsNull() || state.MasterIpv4s[i].Microseconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv4s/ipv4", keyString), "microseconds"))
 			}
 		}
 		if !data.MasterIpv4s[i].Nanoseconds.IsNull() && !data.MasterIpv4s[i].Nanoseconds.ValueBool() {
-			if state != nil && i < len(state.MasterIpv4s) && !state.MasterIpv4s[i].Nanoseconds.IsNull() && state.MasterIpv4s[i].Nanoseconds.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv4s) || state.MasterIpv4s[i].Nanoseconds.IsNull() || state.MasterIpv4s[i].Nanoseconds.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv4s/ipv4", keyString), "nanoseconds"))
 			}
 		}
 		if !data.MasterIpv4s[i].NonNegotiated.IsNull() && !data.MasterIpv4s[i].NonNegotiated.ValueBool() {
-			if state != nil && i < len(state.MasterIpv4s) && !state.MasterIpv4s[i].NonNegotiated.IsNull() && state.MasterIpv4s[i].NonNegotiated.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv4s) || state.MasterIpv4s[i].NonNegotiated.IsNull() || state.MasterIpv4s[i].NonNegotiated.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv4s/ipv4", keyString), "non-negotiated"))
 			}
 		}
 		if !data.MasterIpv4s[i].MulticastMixed.IsNull() && !data.MasterIpv4s[i].MulticastMixed.ValueBool() {
-			if state != nil && i < len(state.MasterIpv4s) && !state.MasterIpv4s[i].MulticastMixed.IsNull() && state.MasterIpv4s[i].MulticastMixed.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv4s) || state.MasterIpv4s[i].MulticastMixed.IsNull() || state.MasterIpv4s[i].MulticastMixed.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv4s/ipv4", keyString), "multicast"))
 			}
 		}
 		if !data.MasterIpv4s[i].Multicast.IsNull() && !data.MasterIpv4s[i].Multicast.ValueBool() {
-			if state != nil && i < len(state.MasterIpv4s) && !state.MasterIpv4s[i].Multicast.IsNull() && state.MasterIpv4s[i].Multicast.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv4s) || state.MasterIpv4s[i].Multicast.IsNull() || state.MasterIpv4s[i].Multicast.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv4s/ipv4", keyString), "multicast"))
 			}
 		}
@@ -3389,7 +3389,7 @@ func (data *PTPProfile) getEmptyLeafsDelete(ctx context.Context, state *PTPProfi
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.SlaveEthernets[i].NonNegotiated.IsNull() && !data.SlaveEthernets[i].NonNegotiated.ValueBool() {
-			if state != nil && i < len(state.SlaveEthernets) && !state.SlaveEthernets[i].NonNegotiated.IsNull() && state.SlaveEthernets[i].NonNegotiated.ValueBool() {
+			if state == nil || i >= len(state.SlaveEthernets) || state.SlaveEthernets[i].NonNegotiated.IsNull() || state.SlaveEthernets[i].NonNegotiated.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "subordinate/ethernets/ethernet", keyString), "non-negotiated"))
 			}
 		}
@@ -3402,7 +3402,7 @@ func (data *PTPProfile) getEmptyLeafsDelete(ctx context.Context, state *PTPProfi
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.SlaveIpv6s[i].NonNegotiated.IsNull() && !data.SlaveIpv6s[i].NonNegotiated.ValueBool() {
-			if state != nil && i < len(state.SlaveIpv6s) && !state.SlaveIpv6s[i].NonNegotiated.IsNull() && state.SlaveIpv6s[i].NonNegotiated.ValueBool() {
+			if state == nil || i >= len(state.SlaveIpv6s) || state.SlaveIpv6s[i].NonNegotiated.IsNull() || state.SlaveIpv6s[i].NonNegotiated.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "subordinate/ipv6s/ipv6", keyString), "non-negotiated"))
 			}
 		}
@@ -3415,98 +3415,98 @@ func (data *PTPProfile) getEmptyLeafsDelete(ctx context.Context, state *PTPProfi
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.SlaveIpv4s[i].NonNegotiated.IsNull() && !data.SlaveIpv4s[i].NonNegotiated.ValueBool() {
-			if state != nil && i < len(state.SlaveIpv4s) && !state.SlaveIpv4s[i].NonNegotiated.IsNull() && state.SlaveIpv4s[i].NonNegotiated.ValueBool() {
+			if state == nil || i >= len(state.SlaveIpv4s) || state.SlaveIpv4s[i].NonNegotiated.IsNull() || state.SlaveIpv4s[i].NonNegotiated.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "subordinate/ipv4s/ipv4-non-negotiated", keyString), "non-negotiated"))
 			}
 		}
 	}
 	if !data.UnicastGrantInvalidRequestDeny.IsNull() && !data.UnicastGrantInvalidRequestDeny.ValueBool() {
-		if state != nil && !state.UnicastGrantInvalidRequestDeny.IsNull() && state.UnicastGrantInvalidRequestDeny.ValueBool() {
+		if state == nil || state.UnicastGrantInvalidRequestDeny.IsNull() || state.UnicastGrantInvalidRequestDeny.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "unicast-grant/invalid-request/deny"))
 		}
 	}
 	if !data.UnicastGrantInvalidRequestReduce.IsNull() && !data.UnicastGrantInvalidRequestReduce.ValueBool() {
-		if state != nil && !state.UnicastGrantInvalidRequestReduce.IsNull() && state.UnicastGrantInvalidRequestReduce.ValueBool() {
+		if state == nil || state.UnicastGrantInvalidRequestReduce.IsNull() || state.UnicastGrantInvalidRequestReduce.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "unicast-grant/invalid-request/reduce"))
 		}
 	}
 	if !data.DelayAsymmetryUnitMilliseconds.IsNull() && !data.DelayAsymmetryUnitMilliseconds.ValueBool() {
-		if state != nil && !state.DelayAsymmetryUnitMilliseconds.IsNull() && state.DelayAsymmetryUnitMilliseconds.ValueBool() {
+		if state == nil || state.DelayAsymmetryUnitMilliseconds.IsNull() || state.DelayAsymmetryUnitMilliseconds.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "milliseconds"))
 		}
 	}
 	if !data.DelayAsymmetryUnitMicroseconds.IsNull() && !data.DelayAsymmetryUnitMicroseconds.ValueBool() {
-		if state != nil && !state.DelayAsymmetryUnitMicroseconds.IsNull() && state.DelayAsymmetryUnitMicroseconds.ValueBool() {
+		if state == nil || state.DelayAsymmetryUnitMicroseconds.IsNull() || state.DelayAsymmetryUnitMicroseconds.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "microseconds"))
 		}
 	}
 	if !data.DelayAsymmetryUnitNanoseconds.IsNull() && !data.DelayAsymmetryUnitNanoseconds.ValueBool() {
-		if state != nil && !state.DelayAsymmetryUnitNanoseconds.IsNull() && state.DelayAsymmetryUnitNanoseconds.ValueBool() {
+		if state == nil || state.DelayAsymmetryUnitNanoseconds.IsNull() || state.DelayAsymmetryUnitNanoseconds.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "nanoseconds"))
 		}
 	}
 	if !data.ClockOperationTwoStep.IsNull() && !data.ClockOperationTwoStep.ValueBool() {
-		if state != nil && !state.ClockOperationTwoStep.IsNull() && state.ClockOperationTwoStep.ValueBool() {
+		if state == nil || state.ClockOperationTwoStep.IsNull() || state.ClockOperationTwoStep.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/operation/two-step"))
 		}
 	}
 	if !data.ClockOperationOneStep.IsNull() && !data.ClockOperationOneStep.ValueBool() {
-		if state != nil && !state.ClockOperationOneStep.IsNull() && state.ClockOperationOneStep.ValueBool() {
+		if state == nil || state.ClockOperationOneStep.IsNull() || state.ClockOperationOneStep.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/operation/one-step"))
 		}
 	}
 	if !data.TransportEthernet.IsNull() && !data.TransportEthernet.ValueBool() {
-		if state != nil && !state.TransportEthernet.IsNull() && state.TransportEthernet.ValueBool() {
+		if state == nil || state.TransportEthernet.IsNull() || state.TransportEthernet.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/ethernet"))
 		}
 	}
 	if !data.TransportIpv6.IsNull() && !data.TransportIpv6.ValueBool() {
-		if state != nil && !state.TransportIpv6.IsNull() && state.TransportIpv6.ValueBool() {
+		if state == nil || state.TransportIpv6.IsNull() || state.TransportIpv6.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/ipv6"))
 		}
 	}
 	if !data.TransportIpv4.IsNull() && !data.TransportIpv4.ValueBool() {
-		if state != nil && !state.TransportIpv4.IsNull() && state.TransportIpv4.ValueBool() {
+		if state == nil || state.TransportIpv4.IsNull() || state.TransportIpv4.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/ipv4"))
 		}
 	}
 	if !data.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() && !data.MulticastTargetAddressEthernetMacAddress0180C200000e.ValueBool() {
-		if state != nil && !state.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() && state.MulticastTargetAddressEthernetMacAddress0180C200000e.ValueBool() {
+		if state == nil || state.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() || state.MulticastTargetAddressEthernetMacAddress0180C200000e.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multicast/target-address/ethernet"))
 		}
 	}
 	if !data.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() && !data.MulticastTargetAddressEthernetMacAddress011b19000000.ValueBool() {
-		if state != nil && !state.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() && state.MulticastTargetAddressEthernetMacAddress011b19000000.ValueBool() {
+		if state == nil || state.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() || state.MulticastTargetAddressEthernetMacAddress011b19000000.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multicast/target-address/ethernet"))
 		}
 	}
 	if !data.MulticastDisable.IsNull() && !data.MulticastDisable.ValueBool() {
-		if state != nil && !state.MulticastDisable.IsNull() && state.MulticastDisable.ValueBool() {
+		if state == nil || state.MulticastDisable.IsNull() || state.MulticastDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multicast"))
 		}
 	}
 	if !data.MulticastMixed.IsNull() && !data.MulticastMixed.ValueBool() {
-		if state != nil && !state.MulticastMixed.IsNull() && state.MulticastMixed.ValueBool() {
+		if state == nil || state.MulticastMixed.IsNull() || state.MulticastMixed.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multicast"))
 		}
 	}
 	if !data.Multicast.IsNull() && !data.Multicast.ValueBool() {
-		if state != nil && !state.Multicast.IsNull() && state.Multicast.ValueBool() {
+		if state == nil || state.Multicast.IsNull() || state.Multicast.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multicast"))
 		}
 	}
 	if !data.PortStateAny.IsNull() && !data.PortStateAny.ValueBool() {
-		if state != nil && !state.PortStateAny.IsNull() && state.PortStateAny.ValueBool() {
+		if state == nil || state.PortStateAny.IsNull() || state.PortStateAny.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "port/state/any"))
 		}
 	}
 	if !data.PortStateMasterOnly.IsNull() && !data.PortStateMasterOnly.ValueBool() {
-		if state != nil && !state.PortStateMasterOnly.IsNull() && state.PortStateMasterOnly.ValueBool() {
+		if state == nil || state.PortStateMasterOnly.IsNull() || state.PortStateMasterOnly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "port/state/primary-only"))
 		}
 	}
 	if !data.PortStateSlaveOnly.IsNull() && !data.PortStateSlaveOnly.ValueBool() {
-		if state != nil && !state.PortStateSlaveOnly.IsNull() && state.PortStateSlaveOnly.ValueBool() {
+		if state == nil || state.PortStateSlaveOnly.IsNull() || state.PortStateSlaveOnly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "port/state/subordinate-only"))
 		}
 	}

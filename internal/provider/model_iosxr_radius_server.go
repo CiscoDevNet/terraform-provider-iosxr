@@ -1742,17 +1742,17 @@ func (data *RadiusServer) getDeletedItems(ctx context.Context, state RadiusServe
 func (data *RadiusServer) getEmptyLeafsDelete(ctx context.Context, state *RadiusServer, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if helpers.VersionAtLeast(version, "25.4") && !data.AttributeMessageAuthenticator.IsNull() && !data.AttributeMessageAuthenticator.ValueBool() {
-		if state != nil && !state.AttributeMessageAuthenticator.IsNull() && state.AttributeMessageAuthenticator.ValueBool() {
+		if state == nil || state.AttributeMessageAuthenticator.IsNull() || state.AttributeMessageAuthenticator.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "attribute/message-authenticator"))
 		}
 	}
 	if !data.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() && !data.AttributeAcctMultiSessionIdIncludeParentSessionId.ValueBool() {
-		if state != nil && !state.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() && state.AttributeAcctMultiSessionIdIncludeParentSessionId.ValueBool() {
+		if state == nil || state.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() || state.AttributeAcctMultiSessionIdIncludeParentSessionId.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "attribute/acct-multi-session-id/include-parent-session-id"))
 		}
 	}
 	if !data.AttributeAcctSessionIdPrependNasPortId.IsNull() && !data.AttributeAcctSessionIdPrependNasPortId.ValueBool() {
-		if state != nil && !state.AttributeAcctSessionIdPrependNasPortId.IsNull() && state.AttributeAcctSessionIdPrependNasPortId.ValueBool() {
+		if state == nil || state.AttributeAcctSessionIdPrependNasPortId.IsNull() || state.AttributeAcctSessionIdPrependNasPortId.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "attribute/acct-session-id/prepend-nas-port-id"))
 		}
 	}
@@ -1790,12 +1790,12 @@ func (data *RadiusServer) getEmptyLeafsDelete(ctx context.Context, state *Radius
 					}
 				}
 				if helpers.VersionAtLeast(version, "26.2") && !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() && !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.ValueBool() {
-					if state != nil && i < len(state.AttributeLists) && ci < len(state.AttributeLists[i].AttributeVendorCiscoVendorTypes) && !state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() && state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.ValueBool() {
+					if state == nil || i >= len(state.AttributeLists) || ci >= len(state.AttributeLists[i].AttributeVendorCiscoVendorTypes) || state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() || state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.ValueBool() {
 						emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "attribute/list", keyString, "attribute/vendor-cisco/vendor-type", ckeyString), "all-attributes"))
 					}
 				}
 				if helpers.VersionAtLeast(version, "26.2") && !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() && !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.ValueBool() {
-					if state != nil && i < len(state.AttributeLists) && ci < len(state.AttributeLists[i].AttributeVendorCiscoVendorTypes) && !state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() && state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.ValueBool() {
+					if state == nil || i >= len(state.AttributeLists) || ci >= len(state.AttributeLists[i].AttributeVendorCiscoVendorTypes) || state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() || state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.ValueBool() {
 						emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "attribute/list", keyString, "attribute/vendor-cisco/vendor-type", ckeyString), "all-avpairs"))
 					}
 				}
@@ -1819,27 +1819,27 @@ func (data *RadiusServer) getEmptyLeafsDelete(ctx context.Context, state *Radius
 		}
 	}
 	if !data.DisallowNullUsername.IsNull() && !data.DisallowNullUsername.ValueBool() {
-		if state != nil && !state.DisallowNullUsername.IsNull() && state.DisallowNullUsername.ValueBool() {
+		if state == nil || state.DisallowNullUsername.IsNull() || state.DisallowNullUsername.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "disallow/null-username"))
 		}
 	}
 	if !data.VsaAttributeIgnoreUnknown.IsNull() && !data.VsaAttributeIgnoreUnknown.ValueBool() {
-		if state != nil && !state.VsaAttributeIgnoreUnknown.IsNull() && state.VsaAttributeIgnoreUnknown.ValueBool() {
+		if state == nil || state.VsaAttributeIgnoreUnknown.IsNull() || state.VsaAttributeIgnoreUnknown.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "vsa/attribute/ignore/unknown"))
 		}
 	}
 	if !data.SourcePortExtended.IsNull() && !data.SourcePortExtended.ValueBool() {
-		if state != nil && !state.SourcePortExtended.IsNull() && state.SourcePortExtended.ValueBool() {
+		if state == nil || state.SourcePortExtended.IsNull() || state.SourcePortExtended.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "source-port/extended"))
 		}
 	}
 	if !data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() && !data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.ValueBool() {
-		if state != nil && !state.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() && state.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.ValueBool() {
+		if state == nil || state.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() || state.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "load-balance/method/least-outstanding/ignore-preferred-server"))
 		}
 	}
 	if !data.RetransmitDisable.IsNull() && !data.RetransmitDisable.ValueBool() {
-		if state != nil && !state.RetransmitDisable.IsNull() && state.RetransmitDisable.ValueBool() {
+		if state == nil || state.RetransmitDisable.IsNull() || state.RetransmitDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "retransmit"))
 		}
 	}
@@ -1851,22 +1851,22 @@ func (data *RadiusServer) getEmptyLeafsDelete(ctx context.Context, state *Radius
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if helpers.VersionAtLeast(version, "25.4") && !data.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() && !data.Hosts[i].AttributeMessageAuthenticatorOptional.ValueBool() {
-			if state != nil && i < len(state.Hosts) && !state.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() && state.Hosts[i].AttributeMessageAuthenticatorOptional.ValueBool() {
+			if state == nil || i >= len(state.Hosts) || state.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() || state.Hosts[i].AttributeMessageAuthenticatorOptional.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "hosts/host", keyString), "attribute/message-authenticator/optional"))
 			}
 		}
 		if helpers.VersionAtLeast(version, "25.4") && !data.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() && !data.Hosts[i].AttributeMessageAuthenticatorMandate.ValueBool() {
-			if state != nil && i < len(state.Hosts) && !state.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() && state.Hosts[i].AttributeMessageAuthenticatorMandate.ValueBool() {
+			if state == nil || i >= len(state.Hosts) || state.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() || state.Hosts[i].AttributeMessageAuthenticatorMandate.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "hosts/host", keyString), "attribute/message-authenticator/mandate"))
 			}
 		}
 		if !data.Hosts[i].IgnoreAcctPort.IsNull() && !data.Hosts[i].IgnoreAcctPort.ValueBool() {
-			if state != nil && i < len(state.Hosts) && !state.Hosts[i].IgnoreAcctPort.IsNull() && state.Hosts[i].IgnoreAcctPort.ValueBool() {
+			if state == nil || i >= len(state.Hosts) || state.Hosts[i].IgnoreAcctPort.IsNull() || state.Hosts[i].IgnoreAcctPort.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "hosts/host", keyString), "ignore-acct-port"))
 			}
 		}
 		if !data.Hosts[i].IgnoreAuthPort.IsNull() && !data.Hosts[i].IgnoreAuthPort.ValueBool() {
-			if state != nil && i < len(state.Hosts) && !state.Hosts[i].IgnoreAuthPort.IsNull() && state.Hosts[i].IgnoreAuthPort.ValueBool() {
+			if state == nil || i >= len(state.Hosts) || state.Hosts[i].IgnoreAuthPort.IsNull() || state.Hosts[i].IgnoreAuthPort.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "hosts/host", keyString), "ignore-auth-port"))
 			}
 		}

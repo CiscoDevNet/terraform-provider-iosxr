@@ -663,23 +663,23 @@ func (data *PerformanceMeasurementEndpointIPv4) getEmptyLeafsDelete(ctx context.
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.IsNull() && !data.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.ValueBool() {
-			if state != nil && i < len(state.SegmentRoutingTeExplicitSegmentLists) && !state.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.IsNull() && state.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.ValueBool() {
+			if state == nil || i >= len(state.SegmentRoutingTeExplicitSegmentLists) || state.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.IsNull() || state.SegmentRoutingTeExplicitSegmentLists[i].InsertSrhSlZero.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/traffic-eng/explicit/segment-list/names/name", keyString), "insert-srh/sl-zero"))
 			}
 		}
 	}
 	if !data.SegmentRouting.IsNull() && !data.SegmentRouting.ValueBool() {
-		if state != nil && !state.SegmentRouting.IsNull() && state.SegmentRouting.ValueBool() {
+		if state == nil || state.SegmentRouting.IsNull() || state.SegmentRouting.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing"))
 		}
 	}
 	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.LivenessDetectionCollectHbh.IsNull() && !data.LivenessDetectionCollectHbh.ValueBool() {
-		if state != nil && !state.LivenessDetectionCollectHbh.IsNull() && state.LivenessDetectionCollectHbh.ValueBool() {
+		if state == nil || state.LivenessDetectionCollectHbh.IsNull() || state.LivenessDetectionCollectHbh.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "liveness-detection/collect-hbh"))
 		}
 	}
 	if !data.LivenessDetection.IsNull() && !data.LivenessDetection.ValueBool() {
-		if state != nil && !state.LivenessDetection.IsNull() && state.LivenessDetection.ValueBool() {
+		if state == nil || state.LivenessDetection.IsNull() || state.LivenessDetection.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "liveness-detection"))
 		}
 	}
@@ -692,7 +692,7 @@ func (data *PerformanceMeasurementEndpointIPv4) getEmptyLeafsDelete(ctx context.
 		}
 	}
 	if !data.DelayMeasurement.IsNull() && !data.DelayMeasurement.ValueBool() {
-		if state != nil && !state.DelayMeasurement.IsNull() && state.DelayMeasurement.ValueBool() {
+		if state == nil || state.DelayMeasurement.IsNull() || state.DelayMeasurement.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "delay-measurement"))
 		}
 	}

@@ -2152,7 +2152,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedItems(ctx context.Context, stat
 func (data *EVPNSegmentRoutingSRv6EVI) getEmptyLeafsDelete(ctx context.Context, state *EVPNSegmentRoutingSRv6EVI, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if helpers.VersionAtLeast(version, "25.4") && !data.LocatorUsidAllocationWideLocalIdBlock.IsNull() && !data.LocatorUsidAllocationWideLocalIdBlock.ValueBool() {
-		if state != nil && !state.LocatorUsidAllocationWideLocalIdBlock.IsNull() && state.LocatorUsidAllocationWideLocalIdBlock.ValueBool() {
+		if state == nil || state.LocatorUsidAllocationWideLocalIdBlock.IsNull() || state.LocatorUsidAllocationWideLocalIdBlock.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "locator/usid/allocation/wide-local-id-block"))
 		}
 	}
@@ -2165,94 +2165,94 @@ func (data *EVPNSegmentRoutingSRv6EVI) getEmptyLeafsDelete(ctx context.Context, 
 				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 			}
 			if !data.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && !data.Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
-				if state != nil && i < len(state.Locators) && !state.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && state.Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
+				if state == nil || i >= len(state.Locators) || state.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() || state.Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "locators/locator", keyString), "usid/allocation/wide-local-id-block"))
 				}
 			}
 		}
 	}
 	if !data.BviCoupledMode.IsNull() && !data.BviCoupledMode.ValueBool() {
-		if state != nil && !state.BviCoupledMode.IsNull() && state.BviCoupledMode.ValueBool() {
+		if state == nil || state.BviCoupledMode.IsNull() || state.BviCoupledMode.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "bvi-coupled-mode"))
 		}
 	}
 	if !data.EtreeRtLeaf.IsNull() && !data.EtreeRtLeaf.ValueBool() {
-		if state != nil && !state.EtreeRtLeaf.IsNull() && state.EtreeRtLeaf.ValueBool() {
+		if state == nil || state.EtreeRtLeaf.IsNull() || state.EtreeRtLeaf.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "etree/rt-leaf"))
 		}
 	}
 	if !data.Etree.IsNull() && !data.Etree.ValueBool() {
-		if state != nil && !state.Etree.IsNull() && state.Etree.ValueBool() {
+		if state == nil || state.Etree.IsNull() || state.Etree.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "etree"))
 		}
 	}
 	if !data.ReOriginationDisable.IsNull() && !data.ReOriginationDisable.ValueBool() {
-		if state != nil && !state.ReOriginationDisable.IsNull() && state.ReOriginationDisable.ValueBool() {
+		if state == nil || state.ReOriginationDisable.IsNull() || state.ReOriginationDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "re-origination-disable"))
 		}
 	}
 	if !data.TransmitL2Mtu.IsNull() && !data.TransmitL2Mtu.ValueBool() {
-		if state != nil && !state.TransmitL2Mtu.IsNull() && state.TransmitL2Mtu.ValueBool() {
+		if state == nil || state.TransmitL2Mtu.IsNull() || state.TransmitL2Mtu.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transmit-l2-mtu"))
 		}
 	}
 	if !data.TransmitMtuZeroDisableDeprecated.IsNull() && !data.TransmitMtuZeroDisableDeprecated.ValueBool() {
-		if state != nil && !state.TransmitMtuZeroDisableDeprecated.IsNull() && state.TransmitMtuZeroDisableDeprecated.ValueBool() {
+		if state == nil || state.TransmitMtuZeroDisableDeprecated.IsNull() || state.TransmitMtuZeroDisableDeprecated.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transmit-mtu-zero/disable-deprecated"))
 		}
 	}
 	if !data.TransmitMtuZero.IsNull() && !data.TransmitMtuZero.ValueBool() {
-		if state != nil && !state.TransmitMtuZero.IsNull() && state.TransmitMtuZero.ValueBool() {
+		if state == nil || state.TransmitMtuZero.IsNull() || state.TransmitMtuZero.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transmit-mtu-zero"))
 		}
 	}
 	if !data.EnforceMtuMatch.IsNull() && !data.EnforceMtuMatch.ValueBool() {
-		if state != nil && !state.EnforceMtuMatch.IsNull() && state.EnforceMtuMatch.ValueBool() {
+		if state == nil || state.EnforceMtuMatch.IsNull() || state.EnforceMtuMatch.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "enforce-mtu-match"))
 		}
 	}
 	if !data.IgnoreMtuMismatchDisableDeprecated.IsNull() && !data.IgnoreMtuMismatchDisableDeprecated.ValueBool() {
-		if state != nil && !state.IgnoreMtuMismatchDisableDeprecated.IsNull() && state.IgnoreMtuMismatchDisableDeprecated.ValueBool() {
+		if state == nil || state.IgnoreMtuMismatchDisableDeprecated.IsNull() || state.IgnoreMtuMismatchDisableDeprecated.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ignore-mtu-mismatch/disable-deprecated"))
 		}
 	}
 	if !data.IgnoreMtuMismatch.IsNull() && !data.IgnoreMtuMismatch.ValueBool() {
-		if state != nil && !state.IgnoreMtuMismatch.IsNull() && state.IgnoreMtuMismatch.ValueBool() {
+		if state == nil || state.IgnoreMtuMismatch.IsNull() || state.IgnoreMtuMismatch.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ignore-mtu-mismatch"))
 		}
 	}
 	if !data.UnknownUnicastSuppression.IsNull() && !data.UnknownUnicastSuppression.ValueBool() {
-		if state != nil && !state.UnknownUnicastSuppression.IsNull() && state.UnknownUnicastSuppression.ValueBool() {
+		if state == nil || state.UnknownUnicastSuppression.IsNull() || state.UnknownUnicastSuppression.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "unknown-unicast-suppression"))
 		}
 	}
 	if !data.AdvertiseMacBviMac.IsNull() && !data.AdvertiseMacBviMac.ValueBool() {
-		if state != nil && !state.AdvertiseMacBviMac.IsNull() && state.AdvertiseMacBviMac.ValueBool() {
+		if state == nil || state.AdvertiseMacBviMac.IsNull() || state.AdvertiseMacBviMac.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "advertise-mac/bvi-mac"))
 		}
 	}
 	if !data.AdvertiseMac.IsNull() && !data.AdvertiseMac.ValueBool() {
-		if state != nil && !state.AdvertiseMac.IsNull() && state.AdvertiseMac.ValueBool() {
+		if state == nil || state.AdvertiseMac.IsNull() || state.AdvertiseMac.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "advertise-mac"))
 		}
 	}
 	if !data.PreferredNexthopModulo.IsNull() && !data.PreferredNexthopModulo.ValueBool() {
-		if state != nil && !state.PreferredNexthopModulo.IsNull() && state.PreferredNexthopModulo.ValueBool() {
+		if state == nil || state.PreferredNexthopModulo.IsNull() || state.PreferredNexthopModulo.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "preferred-nexthop/modulo"))
 		}
 	}
 	if !data.PreferredNexthopHighestIp.IsNull() && !data.PreferredNexthopHighestIp.ValueBool() {
-		if state != nil && !state.PreferredNexthopHighestIp.IsNull() && state.PreferredNexthopHighestIp.ValueBool() {
+		if state == nil || state.PreferredNexthopHighestIp.IsNull() || state.PreferredNexthopHighestIp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "preferred-nexthop/highest-ip"))
 		}
 	}
 	if !data.PreferredNexthopLowestIp.IsNull() && !data.PreferredNexthopLowestIp.ValueBool() {
-		if state != nil && !state.PreferredNexthopLowestIp.IsNull() && state.PreferredNexthopLowestIp.ValueBool() {
+		if state == nil || state.PreferredNexthopLowestIp.IsNull() || state.PreferredNexthopLowestIp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "preferred-nexthop/lowest-ip"))
 		}
 	}
 	if !data.BgpImplicitImportDisable.IsNull() && !data.BgpImplicitImportDisable.ValueBool() {
-		if state != nil && !state.BgpImplicitImportDisable.IsNull() && state.BgpImplicitImportDisable.ValueBool() {
+		if state == nil || state.BgpImplicitImportDisable.IsNull() || state.BgpImplicitImportDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "bgp/implicit-import-disable"))
 		}
 	}

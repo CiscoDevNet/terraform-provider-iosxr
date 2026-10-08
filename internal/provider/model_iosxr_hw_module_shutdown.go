@@ -238,12 +238,12 @@ func (data *HWModuleShutdown) getDeletedItems(ctx context.Context, state HWModul
 func (data *HWModuleShutdown) getEmptyLeafsDelete(ctx context.Context, state *HWModuleShutdown, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.Unshut.IsNull() && !data.Unshut.ValueBool() {
-		if state != nil && !state.Unshut.IsNull() && state.Unshut.ValueBool() {
+		if state == nil || state.Unshut.IsNull() || state.Unshut.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "unshut"))
 		}
 	}
 	if !data.Shut.IsNull() && !data.Shut.ValueBool() {
-		if state != nil && !state.Shut.IsNull() && state.Shut.ValueBool() {
+		if state == nil || state.Shut.IsNull() || state.Shut.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "shut"))
 		}
 	}

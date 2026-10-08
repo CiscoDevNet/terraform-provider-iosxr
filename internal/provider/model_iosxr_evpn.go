@@ -2565,29 +2565,29 @@ func (data *EVPN) getEmptyLeafsDelete(ctx context.Context, state *EVPN, version 
 				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 			}
 			if helpers.VersionAtLeast(version, "25.4") && !data.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking.IsNull() && !data.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking.ValueBool() {
-				if state != nil && i < len(state.VirtualInterfaces) && !state.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking.IsNull() && state.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking.ValueBool() {
+				if state == nil || i >= len(state.VirtualInterfaces) || state.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking.IsNull() || state.VirtualInterfaces[i].EthernetSegmentConvergenceNexthopTracking.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "virtual/interface/interface", keyString), "ethernet-segment/convergence/nexthop-tracking"))
 				}
 			}
 			if helpers.VersionAtLeast(version, "25.4") && !data.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility.IsNull() && !data.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility.ValueBool() {
-				if state != nil && i < len(state.VirtualInterfaces) && !state.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility.IsNull() && state.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility.ValueBool() {
+				if state == nil || i >= len(state.VirtualInterfaces) || state.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility.IsNull() || state.VirtualInterfaces[i].EthernetSegmentConvergenceMacMobility.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "virtual/interface/interface", keyString), "ethernet-segment/convergence/mac-mobility"))
 				}
 			}
 			if helpers.VersionAtLeast(version, "25.4") && !data.VirtualInterfaces[i].EthernetSegmentConvergenceReroute.IsNull() && !data.VirtualInterfaces[i].EthernetSegmentConvergenceReroute.ValueBool() {
-				if state != nil && i < len(state.VirtualInterfaces) && !state.VirtualInterfaces[i].EthernetSegmentConvergenceReroute.IsNull() && state.VirtualInterfaces[i].EthernetSegmentConvergenceReroute.ValueBool() {
+				if state == nil || i >= len(state.VirtualInterfaces) || state.VirtualInterfaces[i].EthernetSegmentConvergenceReroute.IsNull() || state.VirtualInterfaces[i].EthernetSegmentConvergenceReroute.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "virtual/interface/interface", keyString), "ethernet-segment/convergence/reroute"))
 				}
 			}
 			if helpers.VersionAtLeast(version, "25.4") && !data.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw.IsNull() && !data.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw.ValueBool() {
-				if state != nil && i < len(state.VirtualInterfaces) && !state.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw.IsNull() && state.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw.ValueBool() {
+				if state == nil || i >= len(state.VirtualInterfaces) || state.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw.IsNull() || state.VirtualInterfaces[i].EthernetSegmentServiceCarvingHrw.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "virtual/interface/interface", keyString), "ethernet-segment/service-carving/hrw"))
 				}
 			}
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.Srv6LocatorUsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6LocatorUsidAllocationWideLocalIdBlock.ValueBool() {
-		if state != nil && !state.Srv6LocatorUsidAllocationWideLocalIdBlock.IsNull() && state.Srv6LocatorUsidAllocationWideLocalIdBlock.ValueBool() {
+		if state == nil || state.Srv6LocatorUsidAllocationWideLocalIdBlock.IsNull() || state.Srv6LocatorUsidAllocationWideLocalIdBlock.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/srv6/locator/usid/allocation/wide-local-id-block"))
 		}
 	}
@@ -2599,12 +2599,12 @@ func (data *EVPN) getEmptyLeafsDelete(ctx context.Context, state *EVPN, version 
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.VirtualVfis[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() && !data.VirtualVfis[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.ValueBool() {
-			if state != nil && i < len(state.VirtualVfis) && !state.VirtualVfis[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() && state.VirtualVfis[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.ValueBool() {
+			if state == nil || i >= len(state.VirtualVfis) || state.VirtualVfis[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() || state.VirtualVfis[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "virtual/vfis/vfi", keyString), "ethernet-segment/service-carving/preference-based"))
 			}
 		}
 		if !data.VirtualVfis[i].EthernetSegmentServiceCarvingHrw.IsNull() && !data.VirtualVfis[i].EthernetSegmentServiceCarvingHrw.ValueBool() {
-			if state != nil && i < len(state.VirtualVfis) && !state.VirtualVfis[i].EthernetSegmentServiceCarvingHrw.IsNull() && state.VirtualVfis[i].EthernetSegmentServiceCarvingHrw.ValueBool() {
+			if state == nil || i >= len(state.VirtualVfis) || state.VirtualVfis[i].EthernetSegmentServiceCarvingHrw.IsNull() || state.VirtualVfis[i].EthernetSegmentServiceCarvingHrw.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "virtual/vfis/vfi", keyString), "ethernet-segment/service-carving/hrw"))
 			}
 		}
@@ -2617,58 +2617,58 @@ func (data *EVPN) getEmptyLeafsDelete(ctx context.Context, state *EVPN, version 
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwG.IsNull() && !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwG.ValueBool() {
-			if state != nil && i < len(state.VirtualNeighbors) && !state.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwG.IsNull() && state.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwG.ValueBool() {
+			if state == nil || i >= len(state.VirtualNeighbors) || state.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwG.IsNull() || state.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwG.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "virtual/neighbor/neighbor", keyString), "ethernet-segment/service-carving/multicast"))
 			}
 		}
 		if !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() && !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwSG.ValueBool() {
-			if state != nil && i < len(state.VirtualNeighbors) && !state.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() && state.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwSG.ValueBool() {
+			if state == nil || i >= len(state.VirtualNeighbors) || state.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwSG.IsNull() || state.VirtualNeighbors[i].EthernetSegmentServiceCarvingMulticastHrwSG.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "virtual/neighbor/neighbor", keyString), "ethernet-segment/service-carving/multicast"))
 			}
 		}
 		if !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() && !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.ValueBool() {
-			if state != nil && i < len(state.VirtualNeighbors) && !state.VirtualNeighbors[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() && state.VirtualNeighbors[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.ValueBool() {
+			if state == nil || i >= len(state.VirtualNeighbors) || state.VirtualNeighbors[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.IsNull() || state.VirtualNeighbors[i].EthernetSegmentServiceCarvingPreferenceBasedAccessDriven.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "virtual/neighbor/neighbor", keyString), "ethernet-segment/service-carving/preference-based"))
 			}
 		}
 		if !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingHrw.IsNull() && !data.VirtualNeighbors[i].EthernetSegmentServiceCarvingHrw.ValueBool() {
-			if state != nil && i < len(state.VirtualNeighbors) && !state.VirtualNeighbors[i].EthernetSegmentServiceCarvingHrw.IsNull() && state.VirtualNeighbors[i].EthernetSegmentServiceCarvingHrw.ValueBool() {
+			if state == nil || i >= len(state.VirtualNeighbors) || state.VirtualNeighbors[i].EthernetSegmentServiceCarvingHrw.IsNull() || state.VirtualNeighbors[i].EthernetSegmentServiceCarvingHrw.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "virtual/neighbor/neighbor", keyString), "ethernet-segment/service-carving/hrw"))
 			}
 		}
 	}
 	if !data.HostIpv6DuplicateDetectionDisable.IsNull() && !data.HostIpv6DuplicateDetectionDisable.ValueBool() {
-		if state != nil && !state.HostIpv6DuplicateDetectionDisable.IsNull() && state.HostIpv6DuplicateDetectionDisable.ValueBool() {
+		if state == nil || state.HostIpv6DuplicateDetectionDisable.IsNull() || state.HostIpv6DuplicateDetectionDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-evpn-host-cfg:host/ipv6-address/duplicate-detection/disable"))
 		}
 	}
 	if !data.HostIpv4DuplicateDetectionDisable.IsNull() && !data.HostIpv4DuplicateDetectionDisable.ValueBool() {
-		if state != nil && !state.HostIpv4DuplicateDetectionDisable.IsNull() && state.HostIpv4DuplicateDetectionDisable.ValueBool() {
+		if state == nil || state.HostIpv4DuplicateDetectionDisable.IsNull() || state.HostIpv4DuplicateDetectionDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-evpn-host-cfg:host/ipv4-address/duplicate-detection/disable"))
 		}
 	}
 	if !data.TransmitL2Mtu.IsNull() && !data.TransmitL2Mtu.ValueBool() {
-		if state != nil && !state.TransmitL2Mtu.IsNull() && state.TransmitL2Mtu.ValueBool() {
+		if state == nil || state.TransmitL2Mtu.IsNull() || state.TransmitL2Mtu.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transmit-l2-mtu"))
 		}
 	}
 	if !data.TransmitMtuZero.IsNull() && !data.TransmitMtuZero.ValueBool() {
-		if state != nil && !state.TransmitMtuZero.IsNull() && state.TransmitMtuZero.ValueBool() {
+		if state == nil || state.TransmitMtuZero.IsNull() || state.TransmitMtuZero.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transmit-mtu-zero"))
 		}
 	}
 	if !data.EnforceMtuMatch.IsNull() && !data.EnforceMtuMatch.ValueBool() {
-		if state != nil && !state.EnforceMtuMatch.IsNull() && state.EnforceMtuMatch.ValueBool() {
+		if state == nil || state.EnforceMtuMatch.IsNull() || state.EnforceMtuMatch.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "enforce-mtu-match"))
 		}
 	}
 	if !data.IgnoreMtuMismatch.IsNull() && !data.IgnoreMtuMismatch.ValueBool() {
-		if state != nil && !state.IgnoreMtuMismatch.IsNull() && state.IgnoreMtuMismatch.ValueBool() {
+		if state == nil || state.IgnoreMtuMismatch.IsNull() || state.IgnoreMtuMismatch.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ignore-mtu-mismatch"))
 		}
 	}
 	if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6UsidAllocationWideLocalIdBlock.ValueBool() {
-		if state != nil && !state.Srv6UsidAllocationWideLocalIdBlock.IsNull() && state.Srv6UsidAllocationWideLocalIdBlock.ValueBool() {
+		if state == nil || state.Srv6UsidAllocationWideLocalIdBlock.IsNull() || state.Srv6UsidAllocationWideLocalIdBlock.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/srv6/usid/allocation/wide-local-id-block"))
 		}
 	}
@@ -2681,14 +2681,14 @@ func (data *EVPN) getEmptyLeafsDelete(ctx context.Context, state *EVPN, version 
 				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 			}
 			if !data.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
-				if state != nil && i < len(state.Srv6Locators) && !state.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && state.Srv6Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
+				if state == nil || i >= len(state.Srv6Locators) || state.Srv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() || state.Srv6Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/srv6/locators/locator", keyString), "usid/allocation/wide-local-id-block"))
 				}
 			}
 		}
 	}
 	if !data.Srv6.IsNull() && !data.Srv6.ValueBool() {
-		if state != nil && !state.Srv6.IsNull() && state.Srv6.ValueBool() {
+		if state == nil || state.Srv6.IsNull() || state.Srv6.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/srv6"))
 		}
 	}
@@ -2709,22 +2709,22 @@ func (data *EVPN) getEmptyLeafsDelete(ctx context.Context, state *EVPN, version 
 		}
 	}
 	if !data.EthernetSegmentTypeOneAutoGenerationDisable.IsNull() && !data.EthernetSegmentTypeOneAutoGenerationDisable.ValueBool() {
-		if state != nil && !state.EthernetSegmentTypeOneAutoGenerationDisable.IsNull() && state.EthernetSegmentTypeOneAutoGenerationDisable.ValueBool() {
+		if state == nil || state.EthernetSegmentTypeOneAutoGenerationDisable.IsNull() || state.EthernetSegmentTypeOneAutoGenerationDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ethernet-segment/type/one/auto-generation-disable"))
 		}
 	}
 	if !data.LoggingDfElection.IsNull() && !data.LoggingDfElection.ValueBool() {
-		if state != nil && !state.LoggingDfElection.IsNull() && state.LoggingDfElection.ValueBool() {
+		if state == nil || state.LoggingDfElection.IsNull() || state.LoggingDfElection.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/df-election"))
 		}
 	}
 	if !data.CostOut.IsNull() && !data.CostOut.ValueBool() {
-		if state != nil && !state.CostOut.IsNull() && state.CostOut.ValueBool() {
+		if state == nil || state.CostOut.IsNull() || state.CostOut.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "cost-out"))
 		}
 	}
 	if !data.LoadBalancingFlowLabelStatic.IsNull() && !data.LoadBalancingFlowLabelStatic.ValueBool() {
-		if state != nil && !state.LoadBalancingFlowLabelStatic.IsNull() && state.LoadBalancingFlowLabelStatic.ValueBool() {
+		if state == nil || state.LoadBalancingFlowLabelStatic.IsNull() || state.LoadBalancingFlowLabelStatic.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "load-balancing/flow-label/static"))
 		}
 	}

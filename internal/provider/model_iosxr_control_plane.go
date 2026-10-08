@@ -13930,7 +13930,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 		}
 	}
 	if !data.MgmtOobAllAllowAll.IsNull() && !data.MgmtOobAllAllowAll.ValueBool() {
-		if state != nil && !state.MgmtOobAllAllowAll.IsNull() && state.MgmtOobAllAllowAll.ValueBool() {
+		if state == nil || state.MgmtOobAllAllowAll.IsNull() || state.MgmtOobAllAllowAll.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "management-plane/out-of-band/interfaces/all/allow/all"))
 		}
 	}
@@ -13967,7 +13967,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 		}
 	}
 	if !data.MgmtOobAllNetconf.IsNull() && !data.MgmtOobAllNetconf.ValueBool() {
-		if state != nil && !state.MgmtOobAllNetconf.IsNull() && state.MgmtOobAllNetconf.ValueBool() {
+		if state == nil || state.MgmtOobAllNetconf.IsNull() || state.MgmtOobAllNetconf.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "management-plane/out-of-band/interfaces/all/allow/netconf"))
 		}
 	}
@@ -14004,7 +14004,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 		}
 	}
 	if !data.MgmtOobAllXml.IsNull() && !data.MgmtOobAllXml.ValueBool() {
-		if state != nil && !state.MgmtOobAllXml.IsNull() && state.MgmtOobAllXml.ValueBool() {
+		if state == nil || state.MgmtOobAllXml.IsNull() || state.MgmtOobAllXml.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "management-plane/out-of-band/interfaces/all/allow/xr-xml"))
 		}
 	}
@@ -14025,7 +14025,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 		}
 	}
 	if !data.MgmtOobAllHttp.IsNull() && !data.MgmtOobAllHttp.ValueBool() {
-		if state != nil && !state.MgmtOobAllHttp.IsNull() && state.MgmtOobAllHttp.ValueBool() {
+		if state == nil || state.MgmtOobAllHttp.IsNull() || state.MgmtOobAllHttp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "management-plane/out-of-band/interfaces/all/allow/http"))
 		}
 	}
@@ -14062,7 +14062,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 		}
 	}
 	if !data.MgmtOobAllTftp.IsNull() && !data.MgmtOobAllTftp.ValueBool() {
-		if state != nil && !state.MgmtOobAllTftp.IsNull() && state.MgmtOobAllTftp.ValueBool() {
+		if state == nil || state.MgmtOobAllTftp.IsNull() || state.MgmtOobAllTftp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "management-plane/out-of-band/interfaces/all/allow/tftp"))
 		}
 	}
@@ -14099,7 +14099,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 		}
 	}
 	if !data.MgmtOobAllSnmp.IsNull() && !data.MgmtOobAllSnmp.ValueBool() {
-		if state != nil && !state.MgmtOobAllSnmp.IsNull() && state.MgmtOobAllSnmp.ValueBool() {
+		if state == nil || state.MgmtOobAllSnmp.IsNull() || state.MgmtOobAllSnmp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "management-plane/out-of-band/interfaces/all/allow/snmp"))
 		}
 	}
@@ -14136,7 +14136,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 		}
 	}
 	if !data.MgmtOobAllTelnet.IsNull() && !data.MgmtOobAllTelnet.ValueBool() {
-		if state != nil && !state.MgmtOobAllTelnet.IsNull() && state.MgmtOobAllTelnet.ValueBool() {
+		if state == nil || state.MgmtOobAllTelnet.IsNull() || state.MgmtOobAllTelnet.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "management-plane/out-of-band/interfaces/all/allow/telnet"))
 		}
 	}
@@ -14173,12 +14173,12 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 		}
 	}
 	if !data.MgmtOobAllSsh.IsNull() && !data.MgmtOobAllSsh.ValueBool() {
-		if state != nil && !state.MgmtOobAllSsh.IsNull() && state.MgmtOobAllSsh.ValueBool() {
+		if state == nil || state.MgmtOobAllSsh.IsNull() || state.MgmtOobAllSsh.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "management-plane/out-of-band/interfaces/all/allow/ssh"))
 		}
 	}
 	if !data.MgmtOobInbandBehavior.IsNull() && !data.MgmtOobInbandBehavior.ValueBool() {
-		if state != nil && !state.MgmtOobInbandBehavior.IsNull() && state.MgmtOobInbandBehavior.ValueBool() {
+		if state == nil || state.MgmtOobInbandBehavior.IsNull() || state.MgmtOobInbandBehavior.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "management-plane/out-of-band/enable-inband-behavior"))
 		}
 	}
@@ -14222,7 +14222,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 			}
 		}
 		if !data.MgmtOobInterfaces[i].AllowAll.IsNull() && !data.MgmtOobInterfaces[i].AllowAll.ValueBool() {
-			if state != nil && i < len(state.MgmtOobInterfaces) && !state.MgmtOobInterfaces[i].AllowAll.IsNull() && state.MgmtOobInterfaces[i].AllowAll.ValueBool() {
+			if state == nil || i >= len(state.MgmtOobInterfaces) || state.MgmtOobInterfaces[i].AllowAll.IsNull() || state.MgmtOobInterfaces[i].AllowAll.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "management-plane/out-of-band/interfaces/interface", keyString), "allow/all"))
 			}
 		}
@@ -14259,7 +14259,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 			}
 		}
 		if !data.MgmtOobInterfaces[i].Netconf.IsNull() && !data.MgmtOobInterfaces[i].Netconf.ValueBool() {
-			if state != nil && i < len(state.MgmtOobInterfaces) && !state.MgmtOobInterfaces[i].Netconf.IsNull() && state.MgmtOobInterfaces[i].Netconf.ValueBool() {
+			if state == nil || i >= len(state.MgmtOobInterfaces) || state.MgmtOobInterfaces[i].Netconf.IsNull() || state.MgmtOobInterfaces[i].Netconf.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "management-plane/out-of-band/interfaces/interface", keyString), "allow/netconf"))
 			}
 		}
@@ -14296,7 +14296,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 			}
 		}
 		if !data.MgmtOobInterfaces[i].Xml.IsNull() && !data.MgmtOobInterfaces[i].Xml.ValueBool() {
-			if state != nil && i < len(state.MgmtOobInterfaces) && !state.MgmtOobInterfaces[i].Xml.IsNull() && state.MgmtOobInterfaces[i].Xml.ValueBool() {
+			if state == nil || i >= len(state.MgmtOobInterfaces) || state.MgmtOobInterfaces[i].Xml.IsNull() || state.MgmtOobInterfaces[i].Xml.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "management-plane/out-of-band/interfaces/interface", keyString), "allow/xr-xml"))
 			}
 		}
@@ -14317,7 +14317,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 			}
 		}
 		if !data.MgmtOobInterfaces[i].Http.IsNull() && !data.MgmtOobInterfaces[i].Http.ValueBool() {
-			if state != nil && i < len(state.MgmtOobInterfaces) && !state.MgmtOobInterfaces[i].Http.IsNull() && state.MgmtOobInterfaces[i].Http.ValueBool() {
+			if state == nil || i >= len(state.MgmtOobInterfaces) || state.MgmtOobInterfaces[i].Http.IsNull() || state.MgmtOobInterfaces[i].Http.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "management-plane/out-of-band/interfaces/interface", keyString), "allow/http"))
 			}
 		}
@@ -14354,7 +14354,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 			}
 		}
 		if !data.MgmtOobInterfaces[i].Tftp.IsNull() && !data.MgmtOobInterfaces[i].Tftp.ValueBool() {
-			if state != nil && i < len(state.MgmtOobInterfaces) && !state.MgmtOobInterfaces[i].Tftp.IsNull() && state.MgmtOobInterfaces[i].Tftp.ValueBool() {
+			if state == nil || i >= len(state.MgmtOobInterfaces) || state.MgmtOobInterfaces[i].Tftp.IsNull() || state.MgmtOobInterfaces[i].Tftp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "management-plane/out-of-band/interfaces/interface", keyString), "allow/tftp"))
 			}
 		}
@@ -14391,7 +14391,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 			}
 		}
 		if !data.MgmtOobInterfaces[i].Snmp.IsNull() && !data.MgmtOobInterfaces[i].Snmp.ValueBool() {
-			if state != nil && i < len(state.MgmtOobInterfaces) && !state.MgmtOobInterfaces[i].Snmp.IsNull() && state.MgmtOobInterfaces[i].Snmp.ValueBool() {
+			if state == nil || i >= len(state.MgmtOobInterfaces) || state.MgmtOobInterfaces[i].Snmp.IsNull() || state.MgmtOobInterfaces[i].Snmp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "management-plane/out-of-band/interfaces/interface", keyString), "allow/snmp"))
 			}
 		}
@@ -14428,7 +14428,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 			}
 		}
 		if !data.MgmtOobInterfaces[i].Telnet.IsNull() && !data.MgmtOobInterfaces[i].Telnet.ValueBool() {
-			if state != nil && i < len(state.MgmtOobInterfaces) && !state.MgmtOobInterfaces[i].Telnet.IsNull() && state.MgmtOobInterfaces[i].Telnet.ValueBool() {
+			if state == nil || i >= len(state.MgmtOobInterfaces) || state.MgmtOobInterfaces[i].Telnet.IsNull() || state.MgmtOobInterfaces[i].Telnet.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "management-plane/out-of-band/interfaces/interface", keyString), "allow/telnet"))
 			}
 		}
@@ -14465,7 +14465,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 			}
 		}
 		if !data.MgmtOobInterfaces[i].Ssh.IsNull() && !data.MgmtOobInterfaces[i].Ssh.ValueBool() {
-			if state != nil && i < len(state.MgmtOobInterfaces) && !state.MgmtOobInterfaces[i].Ssh.IsNull() && state.MgmtOobInterfaces[i].Ssh.ValueBool() {
+			if state == nil || i >= len(state.MgmtOobInterfaces) || state.MgmtOobInterfaces[i].Ssh.IsNull() || state.MgmtOobInterfaces[i].Ssh.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "management-plane/out-of-band/interfaces/interface", keyString), "allow/ssh"))
 			}
 		}
@@ -14503,7 +14503,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 		}
 	}
 	if !data.MgmtInbandAllAllowAll.IsNull() && !data.MgmtInbandAllAllowAll.ValueBool() {
-		if state != nil && !state.MgmtInbandAllAllowAll.IsNull() && state.MgmtInbandAllAllowAll.ValueBool() {
+		if state == nil || state.MgmtInbandAllAllowAll.IsNull() || state.MgmtInbandAllAllowAll.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "management-plane/inband/interfaces/all/allow/all"))
 		}
 	}
@@ -14540,7 +14540,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 		}
 	}
 	if !data.MgmtInbandAllNetconf.IsNull() && !data.MgmtInbandAllNetconf.ValueBool() {
-		if state != nil && !state.MgmtInbandAllNetconf.IsNull() && state.MgmtInbandAllNetconf.ValueBool() {
+		if state == nil || state.MgmtInbandAllNetconf.IsNull() || state.MgmtInbandAllNetconf.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "management-plane/inband/interfaces/all/allow/netconf"))
 		}
 	}
@@ -14577,7 +14577,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 		}
 	}
 	if !data.MgmtInbandAllXml.IsNull() && !data.MgmtInbandAllXml.ValueBool() {
-		if state != nil && !state.MgmtInbandAllXml.IsNull() && state.MgmtInbandAllXml.ValueBool() {
+		if state == nil || state.MgmtInbandAllXml.IsNull() || state.MgmtInbandAllXml.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "management-plane/inband/interfaces/all/allow/xr-xml"))
 		}
 	}
@@ -14598,7 +14598,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 		}
 	}
 	if !data.MgmtInbandAllHttp.IsNull() && !data.MgmtInbandAllHttp.ValueBool() {
-		if state != nil && !state.MgmtInbandAllHttp.IsNull() && state.MgmtInbandAllHttp.ValueBool() {
+		if state == nil || state.MgmtInbandAllHttp.IsNull() || state.MgmtInbandAllHttp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "management-plane/inband/interfaces/all/allow/http"))
 		}
 	}
@@ -14635,7 +14635,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 		}
 	}
 	if !data.MgmtInbandAllTftp.IsNull() && !data.MgmtInbandAllTftp.ValueBool() {
-		if state != nil && !state.MgmtInbandAllTftp.IsNull() && state.MgmtInbandAllTftp.ValueBool() {
+		if state == nil || state.MgmtInbandAllTftp.IsNull() || state.MgmtInbandAllTftp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "management-plane/inband/interfaces/all/allow/tftp"))
 		}
 	}
@@ -14672,7 +14672,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 		}
 	}
 	if !data.MgmtInbandAllSnmp.IsNull() && !data.MgmtInbandAllSnmp.ValueBool() {
-		if state != nil && !state.MgmtInbandAllSnmp.IsNull() && state.MgmtInbandAllSnmp.ValueBool() {
+		if state == nil || state.MgmtInbandAllSnmp.IsNull() || state.MgmtInbandAllSnmp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "management-plane/inband/interfaces/all/allow/snmp"))
 		}
 	}
@@ -14709,7 +14709,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 		}
 	}
 	if !data.MgmtInbandAllTelnet.IsNull() && !data.MgmtInbandAllTelnet.ValueBool() {
-		if state != nil && !state.MgmtInbandAllTelnet.IsNull() && state.MgmtInbandAllTelnet.ValueBool() {
+		if state == nil || state.MgmtInbandAllTelnet.IsNull() || state.MgmtInbandAllTelnet.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "management-plane/inband/interfaces/all/allow/telnet"))
 		}
 	}
@@ -14746,7 +14746,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 		}
 	}
 	if !data.MgmtInbandAllSsh.IsNull() && !data.MgmtInbandAllSsh.ValueBool() {
-		if state != nil && !state.MgmtInbandAllSsh.IsNull() && state.MgmtInbandAllSsh.ValueBool() {
+		if state == nil || state.MgmtInbandAllSsh.IsNull() || state.MgmtInbandAllSsh.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "management-plane/inband/interfaces/all/allow/ssh"))
 		}
 	}
@@ -14790,7 +14790,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 			}
 		}
 		if !data.MgmtInbandInterfaces[i].AllowAll.IsNull() && !data.MgmtInbandInterfaces[i].AllowAll.ValueBool() {
-			if state != nil && i < len(state.MgmtInbandInterfaces) && !state.MgmtInbandInterfaces[i].AllowAll.IsNull() && state.MgmtInbandInterfaces[i].AllowAll.ValueBool() {
+			if state == nil || i >= len(state.MgmtInbandInterfaces) || state.MgmtInbandInterfaces[i].AllowAll.IsNull() || state.MgmtInbandInterfaces[i].AllowAll.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "management-plane/inband/interfaces/interface", keyString), "allow/all"))
 			}
 		}
@@ -14827,7 +14827,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 			}
 		}
 		if !data.MgmtInbandInterfaces[i].Netconf.IsNull() && !data.MgmtInbandInterfaces[i].Netconf.ValueBool() {
-			if state != nil && i < len(state.MgmtInbandInterfaces) && !state.MgmtInbandInterfaces[i].Netconf.IsNull() && state.MgmtInbandInterfaces[i].Netconf.ValueBool() {
+			if state == nil || i >= len(state.MgmtInbandInterfaces) || state.MgmtInbandInterfaces[i].Netconf.IsNull() || state.MgmtInbandInterfaces[i].Netconf.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "management-plane/inband/interfaces/interface", keyString), "allow/netconf"))
 			}
 		}
@@ -14864,7 +14864,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 			}
 		}
 		if !data.MgmtInbandInterfaces[i].Xml.IsNull() && !data.MgmtInbandInterfaces[i].Xml.ValueBool() {
-			if state != nil && i < len(state.MgmtInbandInterfaces) && !state.MgmtInbandInterfaces[i].Xml.IsNull() && state.MgmtInbandInterfaces[i].Xml.ValueBool() {
+			if state == nil || i >= len(state.MgmtInbandInterfaces) || state.MgmtInbandInterfaces[i].Xml.IsNull() || state.MgmtInbandInterfaces[i].Xml.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "management-plane/inband/interfaces/interface", keyString), "allow/xr-xml"))
 			}
 		}
@@ -14885,7 +14885,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 			}
 		}
 		if !data.MgmtInbandInterfaces[i].Http.IsNull() && !data.MgmtInbandInterfaces[i].Http.ValueBool() {
-			if state != nil && i < len(state.MgmtInbandInterfaces) && !state.MgmtInbandInterfaces[i].Http.IsNull() && state.MgmtInbandInterfaces[i].Http.ValueBool() {
+			if state == nil || i >= len(state.MgmtInbandInterfaces) || state.MgmtInbandInterfaces[i].Http.IsNull() || state.MgmtInbandInterfaces[i].Http.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "management-plane/inband/interfaces/interface", keyString), "allow/http"))
 			}
 		}
@@ -14922,7 +14922,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 			}
 		}
 		if !data.MgmtInbandInterfaces[i].Tftp.IsNull() && !data.MgmtInbandInterfaces[i].Tftp.ValueBool() {
-			if state != nil && i < len(state.MgmtInbandInterfaces) && !state.MgmtInbandInterfaces[i].Tftp.IsNull() && state.MgmtInbandInterfaces[i].Tftp.ValueBool() {
+			if state == nil || i >= len(state.MgmtInbandInterfaces) || state.MgmtInbandInterfaces[i].Tftp.IsNull() || state.MgmtInbandInterfaces[i].Tftp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "management-plane/inband/interfaces/interface", keyString), "allow/tftp"))
 			}
 		}
@@ -14959,7 +14959,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 			}
 		}
 		if !data.MgmtInbandInterfaces[i].Snmp.IsNull() && !data.MgmtInbandInterfaces[i].Snmp.ValueBool() {
-			if state != nil && i < len(state.MgmtInbandInterfaces) && !state.MgmtInbandInterfaces[i].Snmp.IsNull() && state.MgmtInbandInterfaces[i].Snmp.ValueBool() {
+			if state == nil || i >= len(state.MgmtInbandInterfaces) || state.MgmtInbandInterfaces[i].Snmp.IsNull() || state.MgmtInbandInterfaces[i].Snmp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "management-plane/inband/interfaces/interface", keyString), "allow/snmp"))
 			}
 		}
@@ -14996,7 +14996,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 			}
 		}
 		if !data.MgmtInbandInterfaces[i].Telnet.IsNull() && !data.MgmtInbandInterfaces[i].Telnet.ValueBool() {
-			if state != nil && i < len(state.MgmtInbandInterfaces) && !state.MgmtInbandInterfaces[i].Telnet.IsNull() && state.MgmtInbandInterfaces[i].Telnet.ValueBool() {
+			if state == nil || i >= len(state.MgmtInbandInterfaces) || state.MgmtInbandInterfaces[i].Telnet.IsNull() || state.MgmtInbandInterfaces[i].Telnet.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "management-plane/inband/interfaces/interface", keyString), "allow/telnet"))
 			}
 		}
@@ -15033,7 +15033,7 @@ func (data *ControlPlane) getEmptyLeafsDelete(ctx context.Context, state *Contro
 			}
 		}
 		if !data.MgmtInbandInterfaces[i].Ssh.IsNull() && !data.MgmtInbandInterfaces[i].Ssh.ValueBool() {
-			if state != nil && i < len(state.MgmtInbandInterfaces) && !state.MgmtInbandInterfaces[i].Ssh.IsNull() && state.MgmtInbandInterfaces[i].Ssh.ValueBool() {
+			if state == nil || i >= len(state.MgmtInbandInterfaces) || state.MgmtInbandInterfaces[i].Ssh.IsNull() || state.MgmtInbandInterfaces[i].Ssh.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "management-plane/inband/interfaces/interface", keyString), "allow/ssh"))
 			}
 		}

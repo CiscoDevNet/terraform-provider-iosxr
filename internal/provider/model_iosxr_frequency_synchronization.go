@@ -468,47 +468,47 @@ func (data *FrequencySynchronization) getDeletedItems(ctx context.Context, state
 func (data *FrequencySynchronization) getEmptyLeafsDelete(ctx context.Context, state *FrequencySynchronization, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.LogSelectionErrors.IsNull() && !data.LogSelectionErrors.ValueBool() {
-		if state != nil && !state.LogSelectionErrors.IsNull() && state.LogSelectionErrors.ValueBool() {
+		if state == nil || state.LogSelectionErrors.IsNull() || state.LogSelectionErrors.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "log/selection/errors"))
 		}
 	}
 	if !data.LogSelectionChanges.IsNull() && !data.LogSelectionChanges.ValueBool() {
-		if state != nil && !state.LogSelectionChanges.IsNull() && state.LogSelectionChanges.ValueBool() {
+		if state == nil || state.LogSelectionChanges.IsNull() || state.LogSelectionChanges.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "log/selection/changes"))
 		}
 	}
 	if !data.SystemTimingModeClockOnly.IsNull() && !data.SystemTimingModeClockOnly.ValueBool() {
-		if state != nil && !state.SystemTimingModeClockOnly.IsNull() && state.SystemTimingModeClockOnly.ValueBool() {
+		if state == nil || state.SystemTimingModeClockOnly.IsNull() || state.SystemTimingModeClockOnly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "system/timing-mode/clock-only"))
 		}
 	}
 	if !data.SystemTimingModeLineOnly.IsNull() && !data.SystemTimingModeLineOnly.ValueBool() {
-		if state != nil && !state.SystemTimingModeLineOnly.IsNull() && state.SystemTimingModeLineOnly.ValueBool() {
+		if state == nil || state.SystemTimingModeLineOnly.IsNull() || state.SystemTimingModeLineOnly.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "system/timing-mode/line-only"))
 		}
 	}
 	if !data.ClockInterfaceTimingModeIndependent.IsNull() && !data.ClockInterfaceTimingModeIndependent.ValueBool() {
-		if state != nil && !state.ClockInterfaceTimingModeIndependent.IsNull() && state.ClockInterfaceTimingModeIndependent.ValueBool() {
+		if state == nil || state.ClockInterfaceTimingModeIndependent.IsNull() || state.ClockInterfaceTimingModeIndependent.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock-interface/timing-mode/independent"))
 		}
 	}
 	if !data.ClockInterfaceTimingModeSystem.IsNull() && !data.ClockInterfaceTimingModeSystem.ValueBool() {
-		if state != nil && !state.ClockInterfaceTimingModeSystem.IsNull() && state.ClockInterfaceTimingModeSystem.ValueBool() {
+		if state == nil || state.ClockInterfaceTimingModeSystem.IsNull() || state.ClockInterfaceTimingModeSystem.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock-interface/timing-mode/system"))
 		}
 	}
 	if !data.QualityItuTOptionTwoGenerationTwo.IsNull() && !data.QualityItuTOptionTwoGenerationTwo.ValueBool() {
-		if state != nil && !state.QualityItuTOptionTwoGenerationTwo.IsNull() && state.QualityItuTOptionTwoGenerationTwo.ValueBool() {
+		if state == nil || state.QualityItuTOptionTwoGenerationTwo.IsNull() || state.QualityItuTOptionTwoGenerationTwo.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "quality/itu-t/option/two/generation/two"))
 		}
 	}
 	if !data.QualityItuTOptionTwoGenerationOne.IsNull() && !data.QualityItuTOptionTwoGenerationOne.ValueBool() {
-		if state != nil && !state.QualityItuTOptionTwoGenerationOne.IsNull() && state.QualityItuTOptionTwoGenerationOne.ValueBool() {
+		if state == nil || state.QualityItuTOptionTwoGenerationOne.IsNull() || state.QualityItuTOptionTwoGenerationOne.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "quality/itu-t/option/two/generation/one"))
 		}
 	}
 	if !data.QualityItuTOptionOne.IsNull() && !data.QualityItuTOptionOne.ValueBool() {
-		if state != nil && !state.QualityItuTOptionOne.IsNull() && state.QualityItuTOptionOne.ValueBool() {
+		if state == nil || state.QualityItuTOptionOne.IsNull() || state.QualityItuTOptionOne.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "quality/itu-t/option/one"))
 		}
 	}

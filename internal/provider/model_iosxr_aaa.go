@@ -14778,52 +14778,52 @@ func (data *AAA) getEmptyLeafsDelete(ctx context.Context, state *AAA, version st
 			}
 		}
 		if !data.Usergroups[i].TaskgroupReadOnly.IsNull() && !data.Usergroups[i].TaskgroupReadOnly.ValueBool() {
-			if state != nil && i < len(state.Usergroups) && !state.Usergroups[i].TaskgroupReadOnly.IsNull() && state.Usergroups[i].TaskgroupReadOnly.ValueBool() {
+			if state == nil || i >= len(state.Usergroups) || state.Usergroups[i].TaskgroupReadOnly.IsNull() || state.Usergroups[i].TaskgroupReadOnly.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups/usergroup", keyString), "taskgroup/read-only-tg"))
 			}
 		}
 		if !data.Usergroups[i].TaskgroupRetrieve.IsNull() && !data.Usergroups[i].TaskgroupRetrieve.ValueBool() {
-			if state != nil && i < len(state.Usergroups) && !state.Usergroups[i].TaskgroupRetrieve.IsNull() && state.Usergroups[i].TaskgroupRetrieve.ValueBool() {
+			if state == nil || i >= len(state.Usergroups) || state.Usergroups[i].TaskgroupRetrieve.IsNull() || state.Usergroups[i].TaskgroupRetrieve.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups/usergroup", keyString), "taskgroup/retrieve"))
 			}
 		}
 		if !data.Usergroups[i].TaskgroupProvisioning.IsNull() && !data.Usergroups[i].TaskgroupProvisioning.ValueBool() {
-			if state != nil && i < len(state.Usergroups) && !state.Usergroups[i].TaskgroupProvisioning.IsNull() && state.Usergroups[i].TaskgroupProvisioning.ValueBool() {
+			if state == nil || i >= len(state.Usergroups) || state.Usergroups[i].TaskgroupProvisioning.IsNull() || state.Usergroups[i].TaskgroupProvisioning.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups/usergroup", keyString), "taskgroup/provisioning"))
 			}
 		}
 		if !data.Usergroups[i].TaskgroupMaintenance.IsNull() && !data.Usergroups[i].TaskgroupMaintenance.ValueBool() {
-			if state != nil && i < len(state.Usergroups) && !state.Usergroups[i].TaskgroupMaintenance.IsNull() && state.Usergroups[i].TaskgroupMaintenance.ValueBool() {
+			if state == nil || i >= len(state.Usergroups) || state.Usergroups[i].TaskgroupMaintenance.IsNull() || state.Usergroups[i].TaskgroupMaintenance.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups/usergroup", keyString), "taskgroup/maintenance"))
 			}
 		}
 		if !data.Usergroups[i].TaskgroupCiscoSupport.IsNull() && !data.Usergroups[i].TaskgroupCiscoSupport.ValueBool() {
-			if state != nil && i < len(state.Usergroups) && !state.Usergroups[i].TaskgroupCiscoSupport.IsNull() && state.Usergroups[i].TaskgroupCiscoSupport.ValueBool() {
+			if state == nil || i >= len(state.Usergroups) || state.Usergroups[i].TaskgroupCiscoSupport.IsNull() || state.Usergroups[i].TaskgroupCiscoSupport.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups/usergroup", keyString), "taskgroup/cisco-support"))
 			}
 		}
 		if !data.Usergroups[i].TaskgroupOperator.IsNull() && !data.Usergroups[i].TaskgroupOperator.ValueBool() {
-			if state != nil && i < len(state.Usergroups) && !state.Usergroups[i].TaskgroupOperator.IsNull() && state.Usergroups[i].TaskgroupOperator.ValueBool() {
+			if state == nil || i >= len(state.Usergroups) || state.Usergroups[i].TaskgroupOperator.IsNull() || state.Usergroups[i].TaskgroupOperator.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups/usergroup", keyString), "taskgroup/operator"))
 			}
 		}
 		if !data.Usergroups[i].TaskgroupServiceadmin.IsNull() && !data.Usergroups[i].TaskgroupServiceadmin.ValueBool() {
-			if state != nil && i < len(state.Usergroups) && !state.Usergroups[i].TaskgroupServiceadmin.IsNull() && state.Usergroups[i].TaskgroupServiceadmin.ValueBool() {
+			if state == nil || i >= len(state.Usergroups) || state.Usergroups[i].TaskgroupServiceadmin.IsNull() || state.Usergroups[i].TaskgroupServiceadmin.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups/usergroup", keyString), "taskgroup/serviceadmin"))
 			}
 		}
 		if !data.Usergroups[i].TaskgroupSysadmin.IsNull() && !data.Usergroups[i].TaskgroupSysadmin.ValueBool() {
-			if state != nil && i < len(state.Usergroups) && !state.Usergroups[i].TaskgroupSysadmin.IsNull() && state.Usergroups[i].TaskgroupSysadmin.ValueBool() {
+			if state == nil || i >= len(state.Usergroups) || state.Usergroups[i].TaskgroupSysadmin.IsNull() || state.Usergroups[i].TaskgroupSysadmin.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups/usergroup", keyString), "taskgroup/sysadmin"))
 			}
 		}
 		if !data.Usergroups[i].TaskgroupNetadmin.IsNull() && !data.Usergroups[i].TaskgroupNetadmin.ValueBool() {
-			if state != nil && i < len(state.Usergroups) && !state.Usergroups[i].TaskgroupNetadmin.IsNull() && state.Usergroups[i].TaskgroupNetadmin.ValueBool() {
+			if state == nil || i >= len(state.Usergroups) || state.Usergroups[i].TaskgroupNetadmin.IsNull() || state.Usergroups[i].TaskgroupNetadmin.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups/usergroup", keyString), "taskgroup/netadmin"))
 			}
 		}
 		if !data.Usergroups[i].TaskgroupRootLr.IsNull() && !data.Usergroups[i].TaskgroupRootLr.ValueBool() {
-			if state != nil && i < len(state.Usergroups) && !state.Usergroups[i].TaskgroupRootLr.IsNull() && state.Usergroups[i].TaskgroupRootLr.ValueBool() {
+			if state == nil || i >= len(state.Usergroups) || state.Usergroups[i].TaskgroupRootLr.IsNull() || state.Usergroups[i].TaskgroupRootLr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usergroups/usergroup", keyString), "taskgroup/root-lr"))
 			}
 		}
@@ -14844,1732 +14844,1732 @@ func (data *AAA) getEmptyLeafsDelete(ctx context.Context, state *AAA, version st
 			}
 		}
 		if !data.Taskgroups[i].InheritTaskgroupCiscoSupport.IsNull() && !data.Taskgroups[i].InheritTaskgroupCiscoSupport.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].InheritTaskgroupCiscoSupport.IsNull() && state.Taskgroups[i].InheritTaskgroupCiscoSupport.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].InheritTaskgroupCiscoSupport.IsNull() || state.Taskgroups[i].InheritTaskgroupCiscoSupport.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "inherit/taskgroup/cisco-support"))
 			}
 		}
 		if !data.Taskgroups[i].InheritTaskgroupOperator.IsNull() && !data.Taskgroups[i].InheritTaskgroupOperator.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].InheritTaskgroupOperator.IsNull() && state.Taskgroups[i].InheritTaskgroupOperator.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].InheritTaskgroupOperator.IsNull() || state.Taskgroups[i].InheritTaskgroupOperator.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "inherit/taskgroup/operator"))
 			}
 		}
 		if !data.Taskgroups[i].InheritTaskgroupServiceadmin.IsNull() && !data.Taskgroups[i].InheritTaskgroupServiceadmin.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].InheritTaskgroupServiceadmin.IsNull() && state.Taskgroups[i].InheritTaskgroupServiceadmin.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].InheritTaskgroupServiceadmin.IsNull() || state.Taskgroups[i].InheritTaskgroupServiceadmin.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "inherit/taskgroup/serviceadmin"))
 			}
 		}
 		if !data.Taskgroups[i].InheritTaskgroupSysadmin.IsNull() && !data.Taskgroups[i].InheritTaskgroupSysadmin.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].InheritTaskgroupSysadmin.IsNull() && state.Taskgroups[i].InheritTaskgroupSysadmin.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].InheritTaskgroupSysadmin.IsNull() || state.Taskgroups[i].InheritTaskgroupSysadmin.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "inherit/taskgroup/sysadmin"))
 			}
 		}
 		if !data.Taskgroups[i].InheritTaskgroupNetadmin.IsNull() && !data.Taskgroups[i].InheritTaskgroupNetadmin.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].InheritTaskgroupNetadmin.IsNull() && state.Taskgroups[i].InheritTaskgroupNetadmin.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].InheritTaskgroupNetadmin.IsNull() || state.Taskgroups[i].InheritTaskgroupNetadmin.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "inherit/taskgroup/netadmin"))
 			}
 		}
 		if !data.Taskgroups[i].InheritTaskgroupRootLr.IsNull() && !data.Taskgroups[i].InheritTaskgroupRootLr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].InheritTaskgroupRootLr.IsNull() && state.Taskgroups[i].InheritTaskgroupRootLr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].InheritTaskgroupRootLr.IsNull() || state.Taskgroups[i].InheritTaskgroupRootLr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "inherit/taskgroup/root-lr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugFc.IsNull() && !data.Taskgroups[i].TaskDebugFc.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugFc.IsNull() && state.Taskgroups[i].TaskDebugFc.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugFc.IsNull() || state.Taskgroups[i].TaskDebugFc.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/fc"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugFti.IsNull() && !data.Taskgroups[i].TaskDebugFti.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugFti.IsNull() && state.Taskgroups[i].TaskDebugFti.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugFti.IsNull() || state.Taskgroups[i].TaskDebugFti.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/fti"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugDossier.IsNull() && !data.Taskgroups[i].TaskDebugDossier.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugDossier.IsNull() && state.Taskgroups[i].TaskDebugDossier.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugDossier.IsNull() || state.Taskgroups[i].TaskDebugDossier.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/dossier"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugL2rib.IsNull() && !data.Taskgroups[i].TaskDebugL2rib.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugL2rib.IsNull() && state.Taskgroups[i].TaskDebugL2rib.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugL2rib.IsNull() || state.Taskgroups[i].TaskDebugL2rib.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/l2rib"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugLldp.IsNull() && !data.Taskgroups[i].TaskDebugLldp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugLldp.IsNull() && state.Taskgroups[i].TaskDebugLldp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugLldp.IsNull() || state.Taskgroups[i].TaskDebugLldp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/lldp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugCpri.IsNull() && !data.Taskgroups[i].TaskDebugCpri.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugCpri.IsNull() && state.Taskgroups[i].TaskDebugCpri.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugCpri.IsNull() || state.Taskgroups[i].TaskDebugCpri.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/cpri"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugPlatMgr.IsNull() && !data.Taskgroups[i].TaskDebugPlatMgr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugPlatMgr.IsNull() && state.Taskgroups[i].TaskDebugPlatMgr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugPlatMgr.IsNull() || state.Taskgroups[i].TaskDebugPlatMgr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/plat-mgr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugNacm.IsNull() && !data.Taskgroups[i].TaskDebugNacm.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugNacm.IsNull() && state.Taskgroups[i].TaskDebugNacm.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugNacm.IsNull() || state.Taskgroups[i].TaskDebugNacm.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/nacm"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugOtn.IsNull() && !data.Taskgroups[i].TaskDebugOtn.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugOtn.IsNull() && state.Taskgroups[i].TaskDebugOtn.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugOtn.IsNull() || state.Taskgroups[i].TaskDebugOtn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/otn"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugPbr.IsNull() && !data.Taskgroups[i].TaskDebugPbr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugPbr.IsNull() && state.Taskgroups[i].TaskDebugPbr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugPbr.IsNull() || state.Taskgroups[i].TaskDebugPbr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/pbr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugLisp.IsNull() && !data.Taskgroups[i].TaskDebugLisp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugLisp.IsNull() && state.Taskgroups[i].TaskDebugLisp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugLisp.IsNull() || state.Taskgroups[i].TaskDebugLisp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/lisp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugNps.IsNull() && !data.Taskgroups[i].TaskDebugNps.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugNps.IsNull() && state.Taskgroups[i].TaskDebugNps.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugNps.IsNull() || state.Taskgroups[i].TaskDebugNps.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/nps"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugVpdn.IsNull() && !data.Taskgroups[i].TaskDebugVpdn.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugVpdn.IsNull() && state.Taskgroups[i].TaskDebugVpdn.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugVpdn.IsNull() || state.Taskgroups[i].TaskDebugVpdn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/vpdn"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugRcmd.IsNull() && !data.Taskgroups[i].TaskDebugRcmd.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugRcmd.IsNull() && state.Taskgroups[i].TaskDebugRcmd.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugRcmd.IsNull() || state.Taskgroups[i].TaskDebugRcmd.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/rcmd"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugCallHome.IsNull() && !data.Taskgroups[i].TaskDebugCallHome.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugCallHome.IsNull() && state.Taskgroups[i].TaskDebugCallHome.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugCallHome.IsNull() || state.Taskgroups[i].TaskDebugCallHome.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/call-home"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugCgn.IsNull() && !data.Taskgroups[i].TaskDebugCgn.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugCgn.IsNull() && state.Taskgroups[i].TaskDebugCgn.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugCgn.IsNull() || state.Taskgroups[i].TaskDebugCgn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/cgn"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugAncp.IsNull() && !data.Taskgroups[i].TaskDebugAncp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugAncp.IsNull() && state.Taskgroups[i].TaskDebugAncp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugAncp.IsNull() || state.Taskgroups[i].TaskDebugAncp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/ancp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugLi.IsNull() && !data.Taskgroups[i].TaskDebugLi.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugLi.IsNull() && state.Taskgroups[i].TaskDebugLi.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugLi.IsNull() || state.Taskgroups[i].TaskDebugLi.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/li"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugEem.IsNull() && !data.Taskgroups[i].TaskDebugEem.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugEem.IsNull() && state.Taskgroups[i].TaskDebugEem.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugEem.IsNull() || state.Taskgroups[i].TaskDebugEem.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/eem"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugEthernetServices.IsNull() && !data.Taskgroups[i].TaskDebugEthernetServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugEthernetServices.IsNull() && state.Taskgroups[i].TaskDebugEthernetServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugEthernetServices.IsNull() || state.Taskgroups[i].TaskDebugEthernetServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/ethernet-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugL2vpn.IsNull() && !data.Taskgroups[i].TaskDebugL2vpn.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugL2vpn.IsNull() && state.Taskgroups[i].TaskDebugL2vpn.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugL2vpn.IsNull() || state.Taskgroups[i].TaskDebugL2vpn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/l2vpn"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugFirewall.IsNull() && !data.Taskgroups[i].TaskDebugFirewall.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugFirewall.IsNull() && state.Taskgroups[i].TaskDebugFirewall.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugFirewall.IsNull() || state.Taskgroups[i].TaskDebugFirewall.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/firewall"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugSbc.IsNull() && !data.Taskgroups[i].TaskDebugSbc.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugSbc.IsNull() && state.Taskgroups[i].TaskDebugSbc.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugSbc.IsNull() || state.Taskgroups[i].TaskDebugSbc.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/sbc"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugEigrp.IsNull() && !data.Taskgroups[i].TaskDebugEigrp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugEigrp.IsNull() && state.Taskgroups[i].TaskDebugEigrp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugEigrp.IsNull() || state.Taskgroups[i].TaskDebugEigrp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/eigrp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugRip.IsNull() && !data.Taskgroups[i].TaskDebugRip.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugRip.IsNull() && state.Taskgroups[i].TaskDebugRip.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugRip.IsNull() || state.Taskgroups[i].TaskDebugRip.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/rip"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugBfd.IsNull() && !data.Taskgroups[i].TaskDebugBfd.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugBfd.IsNull() && state.Taskgroups[i].TaskDebugBfd.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugBfd.IsNull() || state.Taskgroups[i].TaskDebugBfd.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/bfd"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugAtm.IsNull() && !data.Taskgroups[i].TaskDebugAtm.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugAtm.IsNull() && state.Taskgroups[i].TaskDebugAtm.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugAtm.IsNull() || state.Taskgroups[i].TaskDebugAtm.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/atm"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugAdmin.IsNull() && !data.Taskgroups[i].TaskDebugAdmin.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugAdmin.IsNull() && state.Taskgroups[i].TaskDebugAdmin.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugAdmin.IsNull() || state.Taskgroups[i].TaskDebugAdmin.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/admin"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugIpv6.IsNull() && !data.Taskgroups[i].TaskDebugIpv6.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugIpv6.IsNull() && state.Taskgroups[i].TaskDebugIpv6.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugIpv6.IsNull() || state.Taskgroups[i].TaskDebugIpv6.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/ipv6"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugInventory.IsNull() && !data.Taskgroups[i].TaskDebugInventory.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugInventory.IsNull() && state.Taskgroups[i].TaskDebugInventory.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugInventory.IsNull() || state.Taskgroups[i].TaskDebugInventory.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/inventory"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugMonitor.IsNull() && !data.Taskgroups[i].TaskDebugMonitor.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugMonitor.IsNull() && state.Taskgroups[i].TaskDebugMonitor.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugMonitor.IsNull() || state.Taskgroups[i].TaskDebugMonitor.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/monitor"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugFr.IsNull() && !data.Taskgroups[i].TaskDebugFr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugFr.IsNull() && state.Taskgroups[i].TaskDebugFr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugFr.IsNull() || state.Taskgroups[i].TaskDebugFr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/fr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugDrivers.IsNull() && !data.Taskgroups[i].TaskDebugDrivers.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugDrivers.IsNull() && state.Taskgroups[i].TaskDebugDrivers.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugDrivers.IsNull() || state.Taskgroups[i].TaskDebugDrivers.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/drivers"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugNetflow.IsNull() && !data.Taskgroups[i].TaskDebugNetflow.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugNetflow.IsNull() && state.Taskgroups[i].TaskDebugNetflow.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugNetflow.IsNull() || state.Taskgroups[i].TaskDebugNetflow.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/netflow"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugLogging.IsNull() && !data.Taskgroups[i].TaskDebugLogging.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugLogging.IsNull() && state.Taskgroups[i].TaskDebugLogging.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugLogging.IsNull() || state.Taskgroups[i].TaskDebugLogging.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/logging"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugSysmgr.IsNull() && !data.Taskgroups[i].TaskDebugSysmgr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugSysmgr.IsNull() && state.Taskgroups[i].TaskDebugSysmgr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugSysmgr.IsNull() || state.Taskgroups[i].TaskDebugSysmgr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/sysmgr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugBcdl.IsNull() && !data.Taskgroups[i].TaskDebugBcdl.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugBcdl.IsNull() && state.Taskgroups[i].TaskDebugBcdl.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugBcdl.IsNull() || state.Taskgroups[i].TaskDebugBcdl.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/bcdl"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugExtAccess.IsNull() && !data.Taskgroups[i].TaskDebugExtAccess.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugExtAccess.IsNull() && state.Taskgroups[i].TaskDebugExtAccess.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugExtAccess.IsNull() || state.Taskgroups[i].TaskDebugExtAccess.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/ext-access"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugDiag.IsNull() && !data.Taskgroups[i].TaskDebugDiag.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugDiag.IsNull() && state.Taskgroups[i].TaskDebugDiag.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugDiag.IsNull() || state.Taskgroups[i].TaskDebugDiag.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/diag"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugCdp.IsNull() && !data.Taskgroups[i].TaskDebugCdp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugCdp.IsNull() && state.Taskgroups[i].TaskDebugCdp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugCdp.IsNull() || state.Taskgroups[i].TaskDebugCdp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/cdp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugBasicServices.IsNull() && !data.Taskgroups[i].TaskDebugBasicServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugBasicServices.IsNull() && state.Taskgroups[i].TaskDebugBasicServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugBasicServices.IsNull() || state.Taskgroups[i].TaskDebugBasicServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/basic-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugTtyAccess.IsNull() && !data.Taskgroups[i].TaskDebugTtyAccess.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugTtyAccess.IsNull() && state.Taskgroups[i].TaskDebugTtyAccess.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugTtyAccess.IsNull() || state.Taskgroups[i].TaskDebugTtyAccess.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/tty-access"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugSystem.IsNull() && !data.Taskgroups[i].TaskDebugSystem.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugSystem.IsNull() && state.Taskgroups[i].TaskDebugSystem.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugSystem.IsNull() || state.Taskgroups[i].TaskDebugSystem.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/system"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugPkgMgmt.IsNull() && !data.Taskgroups[i].TaskDebugPkgMgmt.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugPkgMgmt.IsNull() && state.Taskgroups[i].TaskDebugPkgMgmt.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugPkgMgmt.IsNull() || state.Taskgroups[i].TaskDebugPkgMgmt.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/pkg-mgmt"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugIpServices.IsNull() && !data.Taskgroups[i].TaskDebugIpServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugIpServices.IsNull() && state.Taskgroups[i].TaskDebugIpServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugIpServices.IsNull() || state.Taskgroups[i].TaskDebugIpServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/ip-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugInterface.IsNull() && !data.Taskgroups[i].TaskDebugInterface.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugInterface.IsNull() && state.Taskgroups[i].TaskDebugInterface.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugInterface.IsNull() || state.Taskgroups[i].TaskDebugInterface.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/interface"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugFilesystem.IsNull() && !data.Taskgroups[i].TaskDebugFilesystem.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugFilesystem.IsNull() && state.Taskgroups[i].TaskDebugFilesystem.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugFilesystem.IsNull() || state.Taskgroups[i].TaskDebugFilesystem.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/filesystem"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugFaultMgr.IsNull() && !data.Taskgroups[i].TaskDebugFaultMgr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugFaultMgr.IsNull() && state.Taskgroups[i].TaskDebugFaultMgr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugFaultMgr.IsNull() || state.Taskgroups[i].TaskDebugFaultMgr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/fault-mgr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugBoot.IsNull() && !data.Taskgroups[i].TaskDebugBoot.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugBoot.IsNull() && state.Taskgroups[i].TaskDebugBoot.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugBoot.IsNull() || state.Taskgroups[i].TaskDebugBoot.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/boot"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugHostServices.IsNull() && !data.Taskgroups[i].TaskDebugHostServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugHostServices.IsNull() && state.Taskgroups[i].TaskDebugHostServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugHostServices.IsNull() || state.Taskgroups[i].TaskDebugHostServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/host-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugConfigServices.IsNull() && !data.Taskgroups[i].TaskDebugConfigServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugConfigServices.IsNull() && state.Taskgroups[i].TaskDebugConfigServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugConfigServices.IsNull() || state.Taskgroups[i].TaskDebugConfigServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/config-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugConfigMgmt.IsNull() && !data.Taskgroups[i].TaskDebugConfigMgmt.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugConfigMgmt.IsNull() && state.Taskgroups[i].TaskDebugConfigMgmt.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugConfigMgmt.IsNull() || state.Taskgroups[i].TaskDebugConfigMgmt.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/config-mgmt"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugSnmp.IsNull() && !data.Taskgroups[i].TaskDebugSnmp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugSnmp.IsNull() && state.Taskgroups[i].TaskDebugSnmp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugSnmp.IsNull() || state.Taskgroups[i].TaskDebugSnmp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/snmp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugCrypto.IsNull() && !data.Taskgroups[i].TaskDebugCrypto.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugCrypto.IsNull() && state.Taskgroups[i].TaskDebugCrypto.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugCrypto.IsNull() || state.Taskgroups[i].TaskDebugCrypto.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/crypto"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugAaa.IsNull() && !data.Taskgroups[i].TaskDebugAaa.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugAaa.IsNull() && state.Taskgroups[i].TaskDebugAaa.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugAaa.IsNull() || state.Taskgroups[i].TaskDebugAaa.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/aaa"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugAcl.IsNull() && !data.Taskgroups[i].TaskDebugAcl.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugAcl.IsNull() && state.Taskgroups[i].TaskDebugAcl.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugAcl.IsNull() || state.Taskgroups[i].TaskDebugAcl.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/acl"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugQos.IsNull() && !data.Taskgroups[i].TaskDebugQos.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugQos.IsNull() && state.Taskgroups[i].TaskDebugQos.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugQos.IsNull() || state.Taskgroups[i].TaskDebugQos.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/qos"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugVlan.IsNull() && !data.Taskgroups[i].TaskDebugVlan.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugVlan.IsNull() && state.Taskgroups[i].TaskDebugVlan.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugVlan.IsNull() || state.Taskgroups[i].TaskDebugVlan.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/vlan"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugTunnel.IsNull() && !data.Taskgroups[i].TaskDebugTunnel.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugTunnel.IsNull() && state.Taskgroups[i].TaskDebugTunnel.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugTunnel.IsNull() || state.Taskgroups[i].TaskDebugTunnel.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/tunnel"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugDwdm.IsNull() && !data.Taskgroups[i].TaskDebugDwdm.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugDwdm.IsNull() && state.Taskgroups[i].TaskDebugDwdm.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugDwdm.IsNull() || state.Taskgroups[i].TaskDebugDwdm.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/dwdm"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugSonetSdh.IsNull() && !data.Taskgroups[i].TaskDebugSonetSdh.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugSonetSdh.IsNull() && state.Taskgroups[i].TaskDebugSonetSdh.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugSonetSdh.IsNull() || state.Taskgroups[i].TaskDebugSonetSdh.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/sonet-sdh"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugPosDpt.IsNull() && !data.Taskgroups[i].TaskDebugPosDpt.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugPosDpt.IsNull() && state.Taskgroups[i].TaskDebugPosDpt.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugPosDpt.IsNull() || state.Taskgroups[i].TaskDebugPosDpt.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/pos-dpt"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugHdlc.IsNull() && !data.Taskgroups[i].TaskDebugHdlc.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugHdlc.IsNull() && state.Taskgroups[i].TaskDebugHdlc.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugHdlc.IsNull() || state.Taskgroups[i].TaskDebugHdlc.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/hdlc"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugPpp.IsNull() && !data.Taskgroups[i].TaskDebugPpp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugPpp.IsNull() && state.Taskgroups[i].TaskDebugPpp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugPpp.IsNull() || state.Taskgroups[i].TaskDebugPpp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/ppp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugTransport.IsNull() && !data.Taskgroups[i].TaskDebugTransport.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugTransport.IsNull() && state.Taskgroups[i].TaskDebugTransport.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugTransport.IsNull() || state.Taskgroups[i].TaskDebugTransport.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/transport"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugNetwork.IsNull() && !data.Taskgroups[i].TaskDebugNetwork.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugNetwork.IsNull() && state.Taskgroups[i].TaskDebugNetwork.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugNetwork.IsNull() || state.Taskgroups[i].TaskDebugNetwork.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/network"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugBundle.IsNull() && !data.Taskgroups[i].TaskDebugBundle.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugBundle.IsNull() && state.Taskgroups[i].TaskDebugBundle.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugBundle.IsNull() || state.Taskgroups[i].TaskDebugBundle.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/bundle"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugFabric.IsNull() && !data.Taskgroups[i].TaskDebugFabric.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugFabric.IsNull() && state.Taskgroups[i].TaskDebugFabric.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugFabric.IsNull() || state.Taskgroups[i].TaskDebugFabric.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/fabric"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugOuni.IsNull() && !data.Taskgroups[i].TaskDebugOuni.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugOuni.IsNull() && state.Taskgroups[i].TaskDebugOuni.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugOuni.IsNull() || state.Taskgroups[i].TaskDebugOuni.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/ouni"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugMplsStatic.IsNull() && !data.Taskgroups[i].TaskDebugMplsStatic.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugMplsStatic.IsNull() && state.Taskgroups[i].TaskDebugMplsStatic.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugMplsStatic.IsNull() || state.Taskgroups[i].TaskDebugMplsStatic.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/mpls-static"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugMplsLdp.IsNull() && !data.Taskgroups[i].TaskDebugMplsLdp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugMplsLdp.IsNull() && state.Taskgroups[i].TaskDebugMplsLdp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugMplsLdp.IsNull() || state.Taskgroups[i].TaskDebugMplsLdp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/mpls-ldp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugMplsTe.IsNull() && !data.Taskgroups[i].TaskDebugMplsTe.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugMplsTe.IsNull() && state.Taskgroups[i].TaskDebugMplsTe.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugMplsTe.IsNull() || state.Taskgroups[i].TaskDebugMplsTe.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/mpls-te"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugMulticast.IsNull() && !data.Taskgroups[i].TaskDebugMulticast.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugMulticast.IsNull() && state.Taskgroups[i].TaskDebugMulticast.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugMulticast.IsNull() || state.Taskgroups[i].TaskDebugMulticast.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/multicast"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugRib.IsNull() && !data.Taskgroups[i].TaskDebugRib.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugRib.IsNull() && state.Taskgroups[i].TaskDebugRib.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugRib.IsNull() || state.Taskgroups[i].TaskDebugRib.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/rib"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugIpv4.IsNull() && !data.Taskgroups[i].TaskDebugIpv4.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugIpv4.IsNull() && state.Taskgroups[i].TaskDebugIpv4.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugIpv4.IsNull() || state.Taskgroups[i].TaskDebugIpv4.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/ipv4"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugLpts.IsNull() && !data.Taskgroups[i].TaskDebugLpts.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugLpts.IsNull() && state.Taskgroups[i].TaskDebugLpts.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugLpts.IsNull() || state.Taskgroups[i].TaskDebugLpts.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/lpts"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugCef.IsNull() && !data.Taskgroups[i].TaskDebugCef.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugCef.IsNull() && state.Taskgroups[i].TaskDebugCef.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugCef.IsNull() || state.Taskgroups[i].TaskDebugCef.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/cef"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugVrrp.IsNull() && !data.Taskgroups[i].TaskDebugVrrp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugVrrp.IsNull() && state.Taskgroups[i].TaskDebugVrrp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugVrrp.IsNull() || state.Taskgroups[i].TaskDebugVrrp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/vrrp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugStatic.IsNull() && !data.Taskgroups[i].TaskDebugStatic.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugStatic.IsNull() && state.Taskgroups[i].TaskDebugStatic.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugStatic.IsNull() || state.Taskgroups[i].TaskDebugStatic.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/static"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugRoutePolicy.IsNull() && !data.Taskgroups[i].TaskDebugRoutePolicy.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugRoutePolicy.IsNull() && state.Taskgroups[i].TaskDebugRoutePolicy.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugRoutePolicy.IsNull() || state.Taskgroups[i].TaskDebugRoutePolicy.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/route-policy"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugRouteMap.IsNull() && !data.Taskgroups[i].TaskDebugRouteMap.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugRouteMap.IsNull() && state.Taskgroups[i].TaskDebugRouteMap.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugRouteMap.IsNull() || state.Taskgroups[i].TaskDebugRouteMap.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/route-map"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugIsis.IsNull() && !data.Taskgroups[i].TaskDebugIsis.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugIsis.IsNull() && state.Taskgroups[i].TaskDebugIsis.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugIsis.IsNull() || state.Taskgroups[i].TaskDebugIsis.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/isis"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugHsrp.IsNull() && !data.Taskgroups[i].TaskDebugHsrp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugHsrp.IsNull() && state.Taskgroups[i].TaskDebugHsrp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugHsrp.IsNull() || state.Taskgroups[i].TaskDebugHsrp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/hsrp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugOspf.IsNull() && !data.Taskgroups[i].TaskDebugOspf.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugOspf.IsNull() && state.Taskgroups[i].TaskDebugOspf.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugOspf.IsNull() || state.Taskgroups[i].TaskDebugOspf.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/ospf"))
 			}
 		}
 		if !data.Taskgroups[i].TaskDebugBgp.IsNull() && !data.Taskgroups[i].TaskDebugBgp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskDebugBgp.IsNull() && state.Taskgroups[i].TaskDebugBgp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskDebugBgp.IsNull() || state.Taskgroups[i].TaskDebugBgp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/debug/bgp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteFc.IsNull() && !data.Taskgroups[i].TaskExecuteFc.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteFc.IsNull() && state.Taskgroups[i].TaskExecuteFc.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteFc.IsNull() || state.Taskgroups[i].TaskExecuteFc.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/fc"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteFti.IsNull() && !data.Taskgroups[i].TaskExecuteFti.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteFti.IsNull() && state.Taskgroups[i].TaskExecuteFti.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteFti.IsNull() || state.Taskgroups[i].TaskExecuteFti.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/fti"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteDossier.IsNull() && !data.Taskgroups[i].TaskExecuteDossier.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteDossier.IsNull() && state.Taskgroups[i].TaskExecuteDossier.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteDossier.IsNull() || state.Taskgroups[i].TaskExecuteDossier.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/dossier"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteL2rib.IsNull() && !data.Taskgroups[i].TaskExecuteL2rib.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteL2rib.IsNull() && state.Taskgroups[i].TaskExecuteL2rib.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteL2rib.IsNull() || state.Taskgroups[i].TaskExecuteL2rib.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/l2rib"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteLldp.IsNull() && !data.Taskgroups[i].TaskExecuteLldp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteLldp.IsNull() && state.Taskgroups[i].TaskExecuteLldp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteLldp.IsNull() || state.Taskgroups[i].TaskExecuteLldp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/lldp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteCpri.IsNull() && !data.Taskgroups[i].TaskExecuteCpri.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteCpri.IsNull() && state.Taskgroups[i].TaskExecuteCpri.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteCpri.IsNull() || state.Taskgroups[i].TaskExecuteCpri.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/cpri"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecutePlatMgr.IsNull() && !data.Taskgroups[i].TaskExecutePlatMgr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecutePlatMgr.IsNull() && state.Taskgroups[i].TaskExecutePlatMgr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecutePlatMgr.IsNull() || state.Taskgroups[i].TaskExecutePlatMgr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/plat-mgr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteNacm.IsNull() && !data.Taskgroups[i].TaskExecuteNacm.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteNacm.IsNull() && state.Taskgroups[i].TaskExecuteNacm.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteNacm.IsNull() || state.Taskgroups[i].TaskExecuteNacm.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/nacm"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteOtn.IsNull() && !data.Taskgroups[i].TaskExecuteOtn.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteOtn.IsNull() && state.Taskgroups[i].TaskExecuteOtn.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteOtn.IsNull() || state.Taskgroups[i].TaskExecuteOtn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/otn"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecutePbr.IsNull() && !data.Taskgroups[i].TaskExecutePbr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecutePbr.IsNull() && state.Taskgroups[i].TaskExecutePbr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecutePbr.IsNull() || state.Taskgroups[i].TaskExecutePbr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/pbr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteLisp.IsNull() && !data.Taskgroups[i].TaskExecuteLisp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteLisp.IsNull() && state.Taskgroups[i].TaskExecuteLisp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteLisp.IsNull() || state.Taskgroups[i].TaskExecuteLisp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/lisp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteNps.IsNull() && !data.Taskgroups[i].TaskExecuteNps.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteNps.IsNull() && state.Taskgroups[i].TaskExecuteNps.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteNps.IsNull() || state.Taskgroups[i].TaskExecuteNps.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/nps"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteVpdn.IsNull() && !data.Taskgroups[i].TaskExecuteVpdn.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteVpdn.IsNull() && state.Taskgroups[i].TaskExecuteVpdn.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteVpdn.IsNull() || state.Taskgroups[i].TaskExecuteVpdn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/vpdn"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteRcmd.IsNull() && !data.Taskgroups[i].TaskExecuteRcmd.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteRcmd.IsNull() && state.Taskgroups[i].TaskExecuteRcmd.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteRcmd.IsNull() || state.Taskgroups[i].TaskExecuteRcmd.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/rcmd"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteCallHome.IsNull() && !data.Taskgroups[i].TaskExecuteCallHome.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteCallHome.IsNull() && state.Taskgroups[i].TaskExecuteCallHome.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteCallHome.IsNull() || state.Taskgroups[i].TaskExecuteCallHome.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/call-home"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteCgn.IsNull() && !data.Taskgroups[i].TaskExecuteCgn.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteCgn.IsNull() && state.Taskgroups[i].TaskExecuteCgn.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteCgn.IsNull() || state.Taskgroups[i].TaskExecuteCgn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/cgn"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteAncp.IsNull() && !data.Taskgroups[i].TaskExecuteAncp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteAncp.IsNull() && state.Taskgroups[i].TaskExecuteAncp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteAncp.IsNull() || state.Taskgroups[i].TaskExecuteAncp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/ancp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteLi.IsNull() && !data.Taskgroups[i].TaskExecuteLi.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteLi.IsNull() && state.Taskgroups[i].TaskExecuteLi.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteLi.IsNull() || state.Taskgroups[i].TaskExecuteLi.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/li"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteEem.IsNull() && !data.Taskgroups[i].TaskExecuteEem.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteEem.IsNull() && state.Taskgroups[i].TaskExecuteEem.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteEem.IsNull() || state.Taskgroups[i].TaskExecuteEem.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/eem"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteEthernetServices.IsNull() && !data.Taskgroups[i].TaskExecuteEthernetServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteEthernetServices.IsNull() && state.Taskgroups[i].TaskExecuteEthernetServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteEthernetServices.IsNull() || state.Taskgroups[i].TaskExecuteEthernetServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/ethernet-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteL2vpn.IsNull() && !data.Taskgroups[i].TaskExecuteL2vpn.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteL2vpn.IsNull() && state.Taskgroups[i].TaskExecuteL2vpn.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteL2vpn.IsNull() || state.Taskgroups[i].TaskExecuteL2vpn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/l2vpn"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteFirewall.IsNull() && !data.Taskgroups[i].TaskExecuteFirewall.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteFirewall.IsNull() && state.Taskgroups[i].TaskExecuteFirewall.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteFirewall.IsNull() || state.Taskgroups[i].TaskExecuteFirewall.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/firewall"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteSbc.IsNull() && !data.Taskgroups[i].TaskExecuteSbc.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteSbc.IsNull() && state.Taskgroups[i].TaskExecuteSbc.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteSbc.IsNull() || state.Taskgroups[i].TaskExecuteSbc.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/sbc"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteEigrp.IsNull() && !data.Taskgroups[i].TaskExecuteEigrp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteEigrp.IsNull() && state.Taskgroups[i].TaskExecuteEigrp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteEigrp.IsNull() || state.Taskgroups[i].TaskExecuteEigrp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/eigrp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteRip.IsNull() && !data.Taskgroups[i].TaskExecuteRip.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteRip.IsNull() && state.Taskgroups[i].TaskExecuteRip.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteRip.IsNull() || state.Taskgroups[i].TaskExecuteRip.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/rip"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteBfd.IsNull() && !data.Taskgroups[i].TaskExecuteBfd.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteBfd.IsNull() && state.Taskgroups[i].TaskExecuteBfd.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteBfd.IsNull() || state.Taskgroups[i].TaskExecuteBfd.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/bfd"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteAtm.IsNull() && !data.Taskgroups[i].TaskExecuteAtm.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteAtm.IsNull() && state.Taskgroups[i].TaskExecuteAtm.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteAtm.IsNull() || state.Taskgroups[i].TaskExecuteAtm.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/atm"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteAdmin.IsNull() && !data.Taskgroups[i].TaskExecuteAdmin.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteAdmin.IsNull() && state.Taskgroups[i].TaskExecuteAdmin.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteAdmin.IsNull() || state.Taskgroups[i].TaskExecuteAdmin.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/admin"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteIpv6.IsNull() && !data.Taskgroups[i].TaskExecuteIpv6.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteIpv6.IsNull() && state.Taskgroups[i].TaskExecuteIpv6.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteIpv6.IsNull() || state.Taskgroups[i].TaskExecuteIpv6.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/ipv6"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteInventory.IsNull() && !data.Taskgroups[i].TaskExecuteInventory.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteInventory.IsNull() && state.Taskgroups[i].TaskExecuteInventory.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteInventory.IsNull() || state.Taskgroups[i].TaskExecuteInventory.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/inventory"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteMonitor.IsNull() && !data.Taskgroups[i].TaskExecuteMonitor.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteMonitor.IsNull() && state.Taskgroups[i].TaskExecuteMonitor.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteMonitor.IsNull() || state.Taskgroups[i].TaskExecuteMonitor.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/monitor"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteFr.IsNull() && !data.Taskgroups[i].TaskExecuteFr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteFr.IsNull() && state.Taskgroups[i].TaskExecuteFr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteFr.IsNull() || state.Taskgroups[i].TaskExecuteFr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/fr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteDrivers.IsNull() && !data.Taskgroups[i].TaskExecuteDrivers.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteDrivers.IsNull() && state.Taskgroups[i].TaskExecuteDrivers.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteDrivers.IsNull() || state.Taskgroups[i].TaskExecuteDrivers.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/drivers"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteNetflow.IsNull() && !data.Taskgroups[i].TaskExecuteNetflow.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteNetflow.IsNull() && state.Taskgroups[i].TaskExecuteNetflow.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteNetflow.IsNull() || state.Taskgroups[i].TaskExecuteNetflow.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/netflow"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteLogging.IsNull() && !data.Taskgroups[i].TaskExecuteLogging.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteLogging.IsNull() && state.Taskgroups[i].TaskExecuteLogging.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteLogging.IsNull() || state.Taskgroups[i].TaskExecuteLogging.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/logging"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteSysmgr.IsNull() && !data.Taskgroups[i].TaskExecuteSysmgr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteSysmgr.IsNull() && state.Taskgroups[i].TaskExecuteSysmgr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteSysmgr.IsNull() || state.Taskgroups[i].TaskExecuteSysmgr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/sysmgr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteBcdl.IsNull() && !data.Taskgroups[i].TaskExecuteBcdl.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteBcdl.IsNull() && state.Taskgroups[i].TaskExecuteBcdl.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteBcdl.IsNull() || state.Taskgroups[i].TaskExecuteBcdl.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/bcdl"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteExtAccess.IsNull() && !data.Taskgroups[i].TaskExecuteExtAccess.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteExtAccess.IsNull() && state.Taskgroups[i].TaskExecuteExtAccess.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteExtAccess.IsNull() || state.Taskgroups[i].TaskExecuteExtAccess.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/ext-access"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteDiag.IsNull() && !data.Taskgroups[i].TaskExecuteDiag.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteDiag.IsNull() && state.Taskgroups[i].TaskExecuteDiag.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteDiag.IsNull() || state.Taskgroups[i].TaskExecuteDiag.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/diag"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteCdp.IsNull() && !data.Taskgroups[i].TaskExecuteCdp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteCdp.IsNull() && state.Taskgroups[i].TaskExecuteCdp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteCdp.IsNull() || state.Taskgroups[i].TaskExecuteCdp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/cdp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteBasicServices.IsNull() && !data.Taskgroups[i].TaskExecuteBasicServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteBasicServices.IsNull() && state.Taskgroups[i].TaskExecuteBasicServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteBasicServices.IsNull() || state.Taskgroups[i].TaskExecuteBasicServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/basic-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteTtyAccess.IsNull() && !data.Taskgroups[i].TaskExecuteTtyAccess.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteTtyAccess.IsNull() && state.Taskgroups[i].TaskExecuteTtyAccess.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteTtyAccess.IsNull() || state.Taskgroups[i].TaskExecuteTtyAccess.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/tty-access"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteSystem.IsNull() && !data.Taskgroups[i].TaskExecuteSystem.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteSystem.IsNull() && state.Taskgroups[i].TaskExecuteSystem.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteSystem.IsNull() || state.Taskgroups[i].TaskExecuteSystem.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/system"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecutePkgMgmt.IsNull() && !data.Taskgroups[i].TaskExecutePkgMgmt.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecutePkgMgmt.IsNull() && state.Taskgroups[i].TaskExecutePkgMgmt.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecutePkgMgmt.IsNull() || state.Taskgroups[i].TaskExecutePkgMgmt.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/pkg-mgmt"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteIpServices.IsNull() && !data.Taskgroups[i].TaskExecuteIpServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteIpServices.IsNull() && state.Taskgroups[i].TaskExecuteIpServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteIpServices.IsNull() || state.Taskgroups[i].TaskExecuteIpServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/ip-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteInterface.IsNull() && !data.Taskgroups[i].TaskExecuteInterface.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteInterface.IsNull() && state.Taskgroups[i].TaskExecuteInterface.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteInterface.IsNull() || state.Taskgroups[i].TaskExecuteInterface.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/interface"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteFilesystem.IsNull() && !data.Taskgroups[i].TaskExecuteFilesystem.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteFilesystem.IsNull() && state.Taskgroups[i].TaskExecuteFilesystem.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteFilesystem.IsNull() || state.Taskgroups[i].TaskExecuteFilesystem.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/filesystem"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteFaultMgr.IsNull() && !data.Taskgroups[i].TaskExecuteFaultMgr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteFaultMgr.IsNull() && state.Taskgroups[i].TaskExecuteFaultMgr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteFaultMgr.IsNull() || state.Taskgroups[i].TaskExecuteFaultMgr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/fault-mgr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteBoot.IsNull() && !data.Taskgroups[i].TaskExecuteBoot.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteBoot.IsNull() && state.Taskgroups[i].TaskExecuteBoot.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteBoot.IsNull() || state.Taskgroups[i].TaskExecuteBoot.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/boot"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteHostServices.IsNull() && !data.Taskgroups[i].TaskExecuteHostServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteHostServices.IsNull() && state.Taskgroups[i].TaskExecuteHostServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteHostServices.IsNull() || state.Taskgroups[i].TaskExecuteHostServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/host-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteConfigServices.IsNull() && !data.Taskgroups[i].TaskExecuteConfigServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteConfigServices.IsNull() && state.Taskgroups[i].TaskExecuteConfigServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteConfigServices.IsNull() || state.Taskgroups[i].TaskExecuteConfigServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/config-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteConfigMgmt.IsNull() && !data.Taskgroups[i].TaskExecuteConfigMgmt.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteConfigMgmt.IsNull() && state.Taskgroups[i].TaskExecuteConfigMgmt.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteConfigMgmt.IsNull() || state.Taskgroups[i].TaskExecuteConfigMgmt.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/config-mgmt"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteSnmp.IsNull() && !data.Taskgroups[i].TaskExecuteSnmp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteSnmp.IsNull() && state.Taskgroups[i].TaskExecuteSnmp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteSnmp.IsNull() || state.Taskgroups[i].TaskExecuteSnmp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/snmp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteCrypto.IsNull() && !data.Taskgroups[i].TaskExecuteCrypto.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteCrypto.IsNull() && state.Taskgroups[i].TaskExecuteCrypto.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteCrypto.IsNull() || state.Taskgroups[i].TaskExecuteCrypto.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/crypto"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteAaa.IsNull() && !data.Taskgroups[i].TaskExecuteAaa.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteAaa.IsNull() && state.Taskgroups[i].TaskExecuteAaa.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteAaa.IsNull() || state.Taskgroups[i].TaskExecuteAaa.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/aaa"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteAcl.IsNull() && !data.Taskgroups[i].TaskExecuteAcl.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteAcl.IsNull() && state.Taskgroups[i].TaskExecuteAcl.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteAcl.IsNull() || state.Taskgroups[i].TaskExecuteAcl.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/acl"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteQos.IsNull() && !data.Taskgroups[i].TaskExecuteQos.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteQos.IsNull() && state.Taskgroups[i].TaskExecuteQos.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteQos.IsNull() || state.Taskgroups[i].TaskExecuteQos.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/qos"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteVlan.IsNull() && !data.Taskgroups[i].TaskExecuteVlan.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteVlan.IsNull() && state.Taskgroups[i].TaskExecuteVlan.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteVlan.IsNull() || state.Taskgroups[i].TaskExecuteVlan.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/vlan"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteTunnel.IsNull() && !data.Taskgroups[i].TaskExecuteTunnel.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteTunnel.IsNull() && state.Taskgroups[i].TaskExecuteTunnel.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteTunnel.IsNull() || state.Taskgroups[i].TaskExecuteTunnel.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/tunnel"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteDwdm.IsNull() && !data.Taskgroups[i].TaskExecuteDwdm.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteDwdm.IsNull() && state.Taskgroups[i].TaskExecuteDwdm.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteDwdm.IsNull() || state.Taskgroups[i].TaskExecuteDwdm.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/dwdm"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteSonetSdh.IsNull() && !data.Taskgroups[i].TaskExecuteSonetSdh.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteSonetSdh.IsNull() && state.Taskgroups[i].TaskExecuteSonetSdh.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteSonetSdh.IsNull() || state.Taskgroups[i].TaskExecuteSonetSdh.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/sonet-sdh"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecutePosDpt.IsNull() && !data.Taskgroups[i].TaskExecutePosDpt.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecutePosDpt.IsNull() && state.Taskgroups[i].TaskExecutePosDpt.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecutePosDpt.IsNull() || state.Taskgroups[i].TaskExecutePosDpt.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/pos-dpt"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteHdlc.IsNull() && !data.Taskgroups[i].TaskExecuteHdlc.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteHdlc.IsNull() && state.Taskgroups[i].TaskExecuteHdlc.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteHdlc.IsNull() || state.Taskgroups[i].TaskExecuteHdlc.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/hdlc"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecutePpp.IsNull() && !data.Taskgroups[i].TaskExecutePpp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecutePpp.IsNull() && state.Taskgroups[i].TaskExecutePpp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecutePpp.IsNull() || state.Taskgroups[i].TaskExecutePpp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/ppp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteTransport.IsNull() && !data.Taskgroups[i].TaskExecuteTransport.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteTransport.IsNull() && state.Taskgroups[i].TaskExecuteTransport.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteTransport.IsNull() || state.Taskgroups[i].TaskExecuteTransport.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/transport"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteNetwork.IsNull() && !data.Taskgroups[i].TaskExecuteNetwork.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteNetwork.IsNull() && state.Taskgroups[i].TaskExecuteNetwork.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteNetwork.IsNull() || state.Taskgroups[i].TaskExecuteNetwork.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/network"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteBundle.IsNull() && !data.Taskgroups[i].TaskExecuteBundle.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteBundle.IsNull() && state.Taskgroups[i].TaskExecuteBundle.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteBundle.IsNull() || state.Taskgroups[i].TaskExecuteBundle.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/bundle"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteFabric.IsNull() && !data.Taskgroups[i].TaskExecuteFabric.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteFabric.IsNull() && state.Taskgroups[i].TaskExecuteFabric.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteFabric.IsNull() || state.Taskgroups[i].TaskExecuteFabric.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/fabric"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteOuni.IsNull() && !data.Taskgroups[i].TaskExecuteOuni.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteOuni.IsNull() && state.Taskgroups[i].TaskExecuteOuni.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteOuni.IsNull() || state.Taskgroups[i].TaskExecuteOuni.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/ouni"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteMplsStatic.IsNull() && !data.Taskgroups[i].TaskExecuteMplsStatic.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteMplsStatic.IsNull() && state.Taskgroups[i].TaskExecuteMplsStatic.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteMplsStatic.IsNull() || state.Taskgroups[i].TaskExecuteMplsStatic.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/mpls-static"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteMplsLdp.IsNull() && !data.Taskgroups[i].TaskExecuteMplsLdp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteMplsLdp.IsNull() && state.Taskgroups[i].TaskExecuteMplsLdp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteMplsLdp.IsNull() || state.Taskgroups[i].TaskExecuteMplsLdp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/mpls-ldp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteMplsTe.IsNull() && !data.Taskgroups[i].TaskExecuteMplsTe.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteMplsTe.IsNull() && state.Taskgroups[i].TaskExecuteMplsTe.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteMplsTe.IsNull() || state.Taskgroups[i].TaskExecuteMplsTe.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/mpls-te"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteMulticast.IsNull() && !data.Taskgroups[i].TaskExecuteMulticast.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteMulticast.IsNull() && state.Taskgroups[i].TaskExecuteMulticast.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteMulticast.IsNull() || state.Taskgroups[i].TaskExecuteMulticast.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/multicast"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteRib.IsNull() && !data.Taskgroups[i].TaskExecuteRib.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteRib.IsNull() && state.Taskgroups[i].TaskExecuteRib.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteRib.IsNull() || state.Taskgroups[i].TaskExecuteRib.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/rib"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteIpv4.IsNull() && !data.Taskgroups[i].TaskExecuteIpv4.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteIpv4.IsNull() && state.Taskgroups[i].TaskExecuteIpv4.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteIpv4.IsNull() || state.Taskgroups[i].TaskExecuteIpv4.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/ipv4"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteLpts.IsNull() && !data.Taskgroups[i].TaskExecuteLpts.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteLpts.IsNull() && state.Taskgroups[i].TaskExecuteLpts.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteLpts.IsNull() || state.Taskgroups[i].TaskExecuteLpts.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/lpts"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteCef.IsNull() && !data.Taskgroups[i].TaskExecuteCef.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteCef.IsNull() && state.Taskgroups[i].TaskExecuteCef.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteCef.IsNull() || state.Taskgroups[i].TaskExecuteCef.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/cef"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteVrrp.IsNull() && !data.Taskgroups[i].TaskExecuteVrrp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteVrrp.IsNull() && state.Taskgroups[i].TaskExecuteVrrp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteVrrp.IsNull() || state.Taskgroups[i].TaskExecuteVrrp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/vrrp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteStatic.IsNull() && !data.Taskgroups[i].TaskExecuteStatic.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteStatic.IsNull() && state.Taskgroups[i].TaskExecuteStatic.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteStatic.IsNull() || state.Taskgroups[i].TaskExecuteStatic.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/static"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteRoutePolicy.IsNull() && !data.Taskgroups[i].TaskExecuteRoutePolicy.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteRoutePolicy.IsNull() && state.Taskgroups[i].TaskExecuteRoutePolicy.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteRoutePolicy.IsNull() || state.Taskgroups[i].TaskExecuteRoutePolicy.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/route-policy"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteRouteMap.IsNull() && !data.Taskgroups[i].TaskExecuteRouteMap.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteRouteMap.IsNull() && state.Taskgroups[i].TaskExecuteRouteMap.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteRouteMap.IsNull() || state.Taskgroups[i].TaskExecuteRouteMap.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/route-map"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteIsis.IsNull() && !data.Taskgroups[i].TaskExecuteIsis.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteIsis.IsNull() && state.Taskgroups[i].TaskExecuteIsis.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteIsis.IsNull() || state.Taskgroups[i].TaskExecuteIsis.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/isis"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteHsrp.IsNull() && !data.Taskgroups[i].TaskExecuteHsrp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteHsrp.IsNull() && state.Taskgroups[i].TaskExecuteHsrp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteHsrp.IsNull() || state.Taskgroups[i].TaskExecuteHsrp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/hsrp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteOspf.IsNull() && !data.Taskgroups[i].TaskExecuteOspf.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteOspf.IsNull() && state.Taskgroups[i].TaskExecuteOspf.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteOspf.IsNull() || state.Taskgroups[i].TaskExecuteOspf.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/ospf"))
 			}
 		}
 		if !data.Taskgroups[i].TaskExecuteBgp.IsNull() && !data.Taskgroups[i].TaskExecuteBgp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskExecuteBgp.IsNull() && state.Taskgroups[i].TaskExecuteBgp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskExecuteBgp.IsNull() || state.Taskgroups[i].TaskExecuteBgp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/execute/bgp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteFc.IsNull() && !data.Taskgroups[i].TaskWriteFc.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteFc.IsNull() && state.Taskgroups[i].TaskWriteFc.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteFc.IsNull() || state.Taskgroups[i].TaskWriteFc.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/fc"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteFti.IsNull() && !data.Taskgroups[i].TaskWriteFti.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteFti.IsNull() && state.Taskgroups[i].TaskWriteFti.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteFti.IsNull() || state.Taskgroups[i].TaskWriteFti.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/fti"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteDossier.IsNull() && !data.Taskgroups[i].TaskWriteDossier.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteDossier.IsNull() && state.Taskgroups[i].TaskWriteDossier.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteDossier.IsNull() || state.Taskgroups[i].TaskWriteDossier.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/dossier"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteL2rib.IsNull() && !data.Taskgroups[i].TaskWriteL2rib.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteL2rib.IsNull() && state.Taskgroups[i].TaskWriteL2rib.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteL2rib.IsNull() || state.Taskgroups[i].TaskWriteL2rib.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/l2rib"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteLldp.IsNull() && !data.Taskgroups[i].TaskWriteLldp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteLldp.IsNull() && state.Taskgroups[i].TaskWriteLldp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteLldp.IsNull() || state.Taskgroups[i].TaskWriteLldp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/lldp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteCpri.IsNull() && !data.Taskgroups[i].TaskWriteCpri.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteCpri.IsNull() && state.Taskgroups[i].TaskWriteCpri.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteCpri.IsNull() || state.Taskgroups[i].TaskWriteCpri.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/cpri"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWritePlatMgr.IsNull() && !data.Taskgroups[i].TaskWritePlatMgr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWritePlatMgr.IsNull() && state.Taskgroups[i].TaskWritePlatMgr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWritePlatMgr.IsNull() || state.Taskgroups[i].TaskWritePlatMgr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/plat-mgr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteNacm.IsNull() && !data.Taskgroups[i].TaskWriteNacm.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteNacm.IsNull() && state.Taskgroups[i].TaskWriteNacm.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteNacm.IsNull() || state.Taskgroups[i].TaskWriteNacm.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/nacm"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteOtn.IsNull() && !data.Taskgroups[i].TaskWriteOtn.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteOtn.IsNull() && state.Taskgroups[i].TaskWriteOtn.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteOtn.IsNull() || state.Taskgroups[i].TaskWriteOtn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/otn"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWritePbr.IsNull() && !data.Taskgroups[i].TaskWritePbr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWritePbr.IsNull() && state.Taskgroups[i].TaskWritePbr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWritePbr.IsNull() || state.Taskgroups[i].TaskWritePbr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/pbr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteLisp.IsNull() && !data.Taskgroups[i].TaskWriteLisp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteLisp.IsNull() && state.Taskgroups[i].TaskWriteLisp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteLisp.IsNull() || state.Taskgroups[i].TaskWriteLisp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/lisp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteNps.IsNull() && !data.Taskgroups[i].TaskWriteNps.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteNps.IsNull() && state.Taskgroups[i].TaskWriteNps.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteNps.IsNull() || state.Taskgroups[i].TaskWriteNps.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/nps"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteVpdn.IsNull() && !data.Taskgroups[i].TaskWriteVpdn.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteVpdn.IsNull() && state.Taskgroups[i].TaskWriteVpdn.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteVpdn.IsNull() || state.Taskgroups[i].TaskWriteVpdn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/vpdn"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteRcmd.IsNull() && !data.Taskgroups[i].TaskWriteRcmd.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteRcmd.IsNull() && state.Taskgroups[i].TaskWriteRcmd.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteRcmd.IsNull() || state.Taskgroups[i].TaskWriteRcmd.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/rcmd"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteCallHome.IsNull() && !data.Taskgroups[i].TaskWriteCallHome.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteCallHome.IsNull() && state.Taskgroups[i].TaskWriteCallHome.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteCallHome.IsNull() || state.Taskgroups[i].TaskWriteCallHome.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/call-home"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteCgn.IsNull() && !data.Taskgroups[i].TaskWriteCgn.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteCgn.IsNull() && state.Taskgroups[i].TaskWriteCgn.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteCgn.IsNull() || state.Taskgroups[i].TaskWriteCgn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/cgn"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteAncp.IsNull() && !data.Taskgroups[i].TaskWriteAncp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteAncp.IsNull() && state.Taskgroups[i].TaskWriteAncp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteAncp.IsNull() || state.Taskgroups[i].TaskWriteAncp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/ancp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteLi.IsNull() && !data.Taskgroups[i].TaskWriteLi.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteLi.IsNull() && state.Taskgroups[i].TaskWriteLi.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteLi.IsNull() || state.Taskgroups[i].TaskWriteLi.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/li"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteEem.IsNull() && !data.Taskgroups[i].TaskWriteEem.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteEem.IsNull() && state.Taskgroups[i].TaskWriteEem.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteEem.IsNull() || state.Taskgroups[i].TaskWriteEem.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/eem"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteEthernetServices.IsNull() && !data.Taskgroups[i].TaskWriteEthernetServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteEthernetServices.IsNull() && state.Taskgroups[i].TaskWriteEthernetServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteEthernetServices.IsNull() || state.Taskgroups[i].TaskWriteEthernetServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/ethernet-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteL2vpn.IsNull() && !data.Taskgroups[i].TaskWriteL2vpn.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteL2vpn.IsNull() && state.Taskgroups[i].TaskWriteL2vpn.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteL2vpn.IsNull() || state.Taskgroups[i].TaskWriteL2vpn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/l2vpn"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteFirewall.IsNull() && !data.Taskgroups[i].TaskWriteFirewall.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteFirewall.IsNull() && state.Taskgroups[i].TaskWriteFirewall.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteFirewall.IsNull() || state.Taskgroups[i].TaskWriteFirewall.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/firewall"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteSbc.IsNull() && !data.Taskgroups[i].TaskWriteSbc.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteSbc.IsNull() && state.Taskgroups[i].TaskWriteSbc.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteSbc.IsNull() || state.Taskgroups[i].TaskWriteSbc.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/sbc"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteEigrp.IsNull() && !data.Taskgroups[i].TaskWriteEigrp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteEigrp.IsNull() && state.Taskgroups[i].TaskWriteEigrp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteEigrp.IsNull() || state.Taskgroups[i].TaskWriteEigrp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/eigrp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteRip.IsNull() && !data.Taskgroups[i].TaskWriteRip.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteRip.IsNull() && state.Taskgroups[i].TaskWriteRip.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteRip.IsNull() || state.Taskgroups[i].TaskWriteRip.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/rip"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteBfd.IsNull() && !data.Taskgroups[i].TaskWriteBfd.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteBfd.IsNull() && state.Taskgroups[i].TaskWriteBfd.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteBfd.IsNull() || state.Taskgroups[i].TaskWriteBfd.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/bfd"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteAtm.IsNull() && !data.Taskgroups[i].TaskWriteAtm.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteAtm.IsNull() && state.Taskgroups[i].TaskWriteAtm.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteAtm.IsNull() || state.Taskgroups[i].TaskWriteAtm.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/atm"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteAdmin.IsNull() && !data.Taskgroups[i].TaskWriteAdmin.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteAdmin.IsNull() && state.Taskgroups[i].TaskWriteAdmin.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteAdmin.IsNull() || state.Taskgroups[i].TaskWriteAdmin.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/admin"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteIpv6.IsNull() && !data.Taskgroups[i].TaskWriteIpv6.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteIpv6.IsNull() && state.Taskgroups[i].TaskWriteIpv6.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteIpv6.IsNull() || state.Taskgroups[i].TaskWriteIpv6.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/ipv6"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteInventory.IsNull() && !data.Taskgroups[i].TaskWriteInventory.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteInventory.IsNull() && state.Taskgroups[i].TaskWriteInventory.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteInventory.IsNull() || state.Taskgroups[i].TaskWriteInventory.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/inventory"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteMonitor.IsNull() && !data.Taskgroups[i].TaskWriteMonitor.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteMonitor.IsNull() && state.Taskgroups[i].TaskWriteMonitor.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteMonitor.IsNull() || state.Taskgroups[i].TaskWriteMonitor.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/monitor"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteFr.IsNull() && !data.Taskgroups[i].TaskWriteFr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteFr.IsNull() && state.Taskgroups[i].TaskWriteFr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteFr.IsNull() || state.Taskgroups[i].TaskWriteFr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/fr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteDrivers.IsNull() && !data.Taskgroups[i].TaskWriteDrivers.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteDrivers.IsNull() && state.Taskgroups[i].TaskWriteDrivers.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteDrivers.IsNull() || state.Taskgroups[i].TaskWriteDrivers.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/drivers"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteNetflow.IsNull() && !data.Taskgroups[i].TaskWriteNetflow.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteNetflow.IsNull() && state.Taskgroups[i].TaskWriteNetflow.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteNetflow.IsNull() || state.Taskgroups[i].TaskWriteNetflow.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/netflow"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteLogging.IsNull() && !data.Taskgroups[i].TaskWriteLogging.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteLogging.IsNull() && state.Taskgroups[i].TaskWriteLogging.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteLogging.IsNull() || state.Taskgroups[i].TaskWriteLogging.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/logging"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteSysmgr.IsNull() && !data.Taskgroups[i].TaskWriteSysmgr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteSysmgr.IsNull() && state.Taskgroups[i].TaskWriteSysmgr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteSysmgr.IsNull() || state.Taskgroups[i].TaskWriteSysmgr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/sysmgr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteBcdl.IsNull() && !data.Taskgroups[i].TaskWriteBcdl.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteBcdl.IsNull() && state.Taskgroups[i].TaskWriteBcdl.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteBcdl.IsNull() || state.Taskgroups[i].TaskWriteBcdl.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/bcdl"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteExtAccess.IsNull() && !data.Taskgroups[i].TaskWriteExtAccess.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteExtAccess.IsNull() && state.Taskgroups[i].TaskWriteExtAccess.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteExtAccess.IsNull() || state.Taskgroups[i].TaskWriteExtAccess.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/ext-access"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteDiag.IsNull() && !data.Taskgroups[i].TaskWriteDiag.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteDiag.IsNull() && state.Taskgroups[i].TaskWriteDiag.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteDiag.IsNull() || state.Taskgroups[i].TaskWriteDiag.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/diag"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteCdp.IsNull() && !data.Taskgroups[i].TaskWriteCdp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteCdp.IsNull() && state.Taskgroups[i].TaskWriteCdp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteCdp.IsNull() || state.Taskgroups[i].TaskWriteCdp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/cdp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteBasicServices.IsNull() && !data.Taskgroups[i].TaskWriteBasicServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteBasicServices.IsNull() && state.Taskgroups[i].TaskWriteBasicServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteBasicServices.IsNull() || state.Taskgroups[i].TaskWriteBasicServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/basic-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteTtyAccess.IsNull() && !data.Taskgroups[i].TaskWriteTtyAccess.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteTtyAccess.IsNull() && state.Taskgroups[i].TaskWriteTtyAccess.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteTtyAccess.IsNull() || state.Taskgroups[i].TaskWriteTtyAccess.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/tty-access"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteSystem.IsNull() && !data.Taskgroups[i].TaskWriteSystem.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteSystem.IsNull() && state.Taskgroups[i].TaskWriteSystem.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteSystem.IsNull() || state.Taskgroups[i].TaskWriteSystem.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/system"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWritePkgMgmt.IsNull() && !data.Taskgroups[i].TaskWritePkgMgmt.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWritePkgMgmt.IsNull() && state.Taskgroups[i].TaskWritePkgMgmt.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWritePkgMgmt.IsNull() || state.Taskgroups[i].TaskWritePkgMgmt.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/pkg-mgmt"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteIpServices.IsNull() && !data.Taskgroups[i].TaskWriteIpServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteIpServices.IsNull() && state.Taskgroups[i].TaskWriteIpServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteIpServices.IsNull() || state.Taskgroups[i].TaskWriteIpServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/ip-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteInterface.IsNull() && !data.Taskgroups[i].TaskWriteInterface.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteInterface.IsNull() && state.Taskgroups[i].TaskWriteInterface.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteInterface.IsNull() || state.Taskgroups[i].TaskWriteInterface.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/interface"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteFilesystem.IsNull() && !data.Taskgroups[i].TaskWriteFilesystem.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteFilesystem.IsNull() && state.Taskgroups[i].TaskWriteFilesystem.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteFilesystem.IsNull() || state.Taskgroups[i].TaskWriteFilesystem.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/filesystem"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteFaultMgr.IsNull() && !data.Taskgroups[i].TaskWriteFaultMgr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteFaultMgr.IsNull() && state.Taskgroups[i].TaskWriteFaultMgr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteFaultMgr.IsNull() || state.Taskgroups[i].TaskWriteFaultMgr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/fault-mgr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteBoot.IsNull() && !data.Taskgroups[i].TaskWriteBoot.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteBoot.IsNull() && state.Taskgroups[i].TaskWriteBoot.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteBoot.IsNull() || state.Taskgroups[i].TaskWriteBoot.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/boot"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteHostServices.IsNull() && !data.Taskgroups[i].TaskWriteHostServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteHostServices.IsNull() && state.Taskgroups[i].TaskWriteHostServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteHostServices.IsNull() || state.Taskgroups[i].TaskWriteHostServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/host-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteConfigServices.IsNull() && !data.Taskgroups[i].TaskWriteConfigServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteConfigServices.IsNull() && state.Taskgroups[i].TaskWriteConfigServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteConfigServices.IsNull() || state.Taskgroups[i].TaskWriteConfigServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/config-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteConfigMgmt.IsNull() && !data.Taskgroups[i].TaskWriteConfigMgmt.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteConfigMgmt.IsNull() && state.Taskgroups[i].TaskWriteConfigMgmt.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteConfigMgmt.IsNull() || state.Taskgroups[i].TaskWriteConfigMgmt.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/config-mgmt"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteSnmp.IsNull() && !data.Taskgroups[i].TaskWriteSnmp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteSnmp.IsNull() && state.Taskgroups[i].TaskWriteSnmp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteSnmp.IsNull() || state.Taskgroups[i].TaskWriteSnmp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/snmp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteCrypto.IsNull() && !data.Taskgroups[i].TaskWriteCrypto.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteCrypto.IsNull() && state.Taskgroups[i].TaskWriteCrypto.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteCrypto.IsNull() || state.Taskgroups[i].TaskWriteCrypto.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/crypto"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteAaa.IsNull() && !data.Taskgroups[i].TaskWriteAaa.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteAaa.IsNull() && state.Taskgroups[i].TaskWriteAaa.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteAaa.IsNull() || state.Taskgroups[i].TaskWriteAaa.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/aaa"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteAcl.IsNull() && !data.Taskgroups[i].TaskWriteAcl.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteAcl.IsNull() && state.Taskgroups[i].TaskWriteAcl.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteAcl.IsNull() || state.Taskgroups[i].TaskWriteAcl.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/acl"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteQos.IsNull() && !data.Taskgroups[i].TaskWriteQos.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteQos.IsNull() && state.Taskgroups[i].TaskWriteQos.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteQos.IsNull() || state.Taskgroups[i].TaskWriteQos.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/qos"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteVlan.IsNull() && !data.Taskgroups[i].TaskWriteVlan.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteVlan.IsNull() && state.Taskgroups[i].TaskWriteVlan.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteVlan.IsNull() || state.Taskgroups[i].TaskWriteVlan.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/vlan"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteTunnel.IsNull() && !data.Taskgroups[i].TaskWriteTunnel.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteTunnel.IsNull() && state.Taskgroups[i].TaskWriteTunnel.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteTunnel.IsNull() || state.Taskgroups[i].TaskWriteTunnel.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/tunnel"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteDwdm.IsNull() && !data.Taskgroups[i].TaskWriteDwdm.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteDwdm.IsNull() && state.Taskgroups[i].TaskWriteDwdm.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteDwdm.IsNull() || state.Taskgroups[i].TaskWriteDwdm.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/dwdm"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteSonetSdh.IsNull() && !data.Taskgroups[i].TaskWriteSonetSdh.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteSonetSdh.IsNull() && state.Taskgroups[i].TaskWriteSonetSdh.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteSonetSdh.IsNull() || state.Taskgroups[i].TaskWriteSonetSdh.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/sonet-sdh"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWritePosDpt.IsNull() && !data.Taskgroups[i].TaskWritePosDpt.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWritePosDpt.IsNull() && state.Taskgroups[i].TaskWritePosDpt.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWritePosDpt.IsNull() || state.Taskgroups[i].TaskWritePosDpt.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/pos-dpt"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteHdlc.IsNull() && !data.Taskgroups[i].TaskWriteHdlc.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteHdlc.IsNull() && state.Taskgroups[i].TaskWriteHdlc.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteHdlc.IsNull() || state.Taskgroups[i].TaskWriteHdlc.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/hdlc"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWritePpp.IsNull() && !data.Taskgroups[i].TaskWritePpp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWritePpp.IsNull() && state.Taskgroups[i].TaskWritePpp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWritePpp.IsNull() || state.Taskgroups[i].TaskWritePpp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/ppp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteTransport.IsNull() && !data.Taskgroups[i].TaskWriteTransport.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteTransport.IsNull() && state.Taskgroups[i].TaskWriteTransport.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteTransport.IsNull() || state.Taskgroups[i].TaskWriteTransport.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/transport"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteNetwork.IsNull() && !data.Taskgroups[i].TaskWriteNetwork.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteNetwork.IsNull() && state.Taskgroups[i].TaskWriteNetwork.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteNetwork.IsNull() || state.Taskgroups[i].TaskWriteNetwork.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/network"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteBundle.IsNull() && !data.Taskgroups[i].TaskWriteBundle.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteBundle.IsNull() && state.Taskgroups[i].TaskWriteBundle.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteBundle.IsNull() || state.Taskgroups[i].TaskWriteBundle.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/bundle"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteFabric.IsNull() && !data.Taskgroups[i].TaskWriteFabric.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteFabric.IsNull() && state.Taskgroups[i].TaskWriteFabric.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteFabric.IsNull() || state.Taskgroups[i].TaskWriteFabric.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/fabric"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteOuni.IsNull() && !data.Taskgroups[i].TaskWriteOuni.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteOuni.IsNull() && state.Taskgroups[i].TaskWriteOuni.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteOuni.IsNull() || state.Taskgroups[i].TaskWriteOuni.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/ouni"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteMplsStatic.IsNull() && !data.Taskgroups[i].TaskWriteMplsStatic.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteMplsStatic.IsNull() && state.Taskgroups[i].TaskWriteMplsStatic.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteMplsStatic.IsNull() || state.Taskgroups[i].TaskWriteMplsStatic.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/mpls-static"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteMplsLdp.IsNull() && !data.Taskgroups[i].TaskWriteMplsLdp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteMplsLdp.IsNull() && state.Taskgroups[i].TaskWriteMplsLdp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteMplsLdp.IsNull() || state.Taskgroups[i].TaskWriteMplsLdp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/mpls-ldp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteMplsTe.IsNull() && !data.Taskgroups[i].TaskWriteMplsTe.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteMplsTe.IsNull() && state.Taskgroups[i].TaskWriteMplsTe.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteMplsTe.IsNull() || state.Taskgroups[i].TaskWriteMplsTe.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/mpls-te"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteMulticast.IsNull() && !data.Taskgroups[i].TaskWriteMulticast.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteMulticast.IsNull() && state.Taskgroups[i].TaskWriteMulticast.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteMulticast.IsNull() || state.Taskgroups[i].TaskWriteMulticast.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/multicast"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteRib.IsNull() && !data.Taskgroups[i].TaskWriteRib.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteRib.IsNull() && state.Taskgroups[i].TaskWriteRib.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteRib.IsNull() || state.Taskgroups[i].TaskWriteRib.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/rib"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteIpv4.IsNull() && !data.Taskgroups[i].TaskWriteIpv4.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteIpv4.IsNull() && state.Taskgroups[i].TaskWriteIpv4.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteIpv4.IsNull() || state.Taskgroups[i].TaskWriteIpv4.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/ipv4"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteLpts.IsNull() && !data.Taskgroups[i].TaskWriteLpts.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteLpts.IsNull() && state.Taskgroups[i].TaskWriteLpts.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteLpts.IsNull() || state.Taskgroups[i].TaskWriteLpts.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/lpts"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteCef.IsNull() && !data.Taskgroups[i].TaskWriteCef.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteCef.IsNull() && state.Taskgroups[i].TaskWriteCef.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteCef.IsNull() || state.Taskgroups[i].TaskWriteCef.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/cef"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteVrrp.IsNull() && !data.Taskgroups[i].TaskWriteVrrp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteVrrp.IsNull() && state.Taskgroups[i].TaskWriteVrrp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteVrrp.IsNull() || state.Taskgroups[i].TaskWriteVrrp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/vrrp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteStatic.IsNull() && !data.Taskgroups[i].TaskWriteStatic.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteStatic.IsNull() && state.Taskgroups[i].TaskWriteStatic.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteStatic.IsNull() || state.Taskgroups[i].TaskWriteStatic.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/static"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteRoutePolicy.IsNull() && !data.Taskgroups[i].TaskWriteRoutePolicy.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteRoutePolicy.IsNull() && state.Taskgroups[i].TaskWriteRoutePolicy.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteRoutePolicy.IsNull() || state.Taskgroups[i].TaskWriteRoutePolicy.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/route-policy"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteRouteMap.IsNull() && !data.Taskgroups[i].TaskWriteRouteMap.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteRouteMap.IsNull() && state.Taskgroups[i].TaskWriteRouteMap.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteRouteMap.IsNull() || state.Taskgroups[i].TaskWriteRouteMap.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/route-map"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteIsis.IsNull() && !data.Taskgroups[i].TaskWriteIsis.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteIsis.IsNull() && state.Taskgroups[i].TaskWriteIsis.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteIsis.IsNull() || state.Taskgroups[i].TaskWriteIsis.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/isis"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteHsrp.IsNull() && !data.Taskgroups[i].TaskWriteHsrp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteHsrp.IsNull() && state.Taskgroups[i].TaskWriteHsrp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteHsrp.IsNull() || state.Taskgroups[i].TaskWriteHsrp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/hsrp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteOspf.IsNull() && !data.Taskgroups[i].TaskWriteOspf.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteOspf.IsNull() && state.Taskgroups[i].TaskWriteOspf.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteOspf.IsNull() || state.Taskgroups[i].TaskWriteOspf.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/ospf"))
 			}
 		}
 		if !data.Taskgroups[i].TaskWriteBgp.IsNull() && !data.Taskgroups[i].TaskWriteBgp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskWriteBgp.IsNull() && state.Taskgroups[i].TaskWriteBgp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskWriteBgp.IsNull() || state.Taskgroups[i].TaskWriteBgp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/write/bgp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadFc.IsNull() && !data.Taskgroups[i].TaskReadFc.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadFc.IsNull() && state.Taskgroups[i].TaskReadFc.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadFc.IsNull() || state.Taskgroups[i].TaskReadFc.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/fc"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadFti.IsNull() && !data.Taskgroups[i].TaskReadFti.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadFti.IsNull() && state.Taskgroups[i].TaskReadFti.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadFti.IsNull() || state.Taskgroups[i].TaskReadFti.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/fti"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadDossier.IsNull() && !data.Taskgroups[i].TaskReadDossier.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadDossier.IsNull() && state.Taskgroups[i].TaskReadDossier.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadDossier.IsNull() || state.Taskgroups[i].TaskReadDossier.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/dossier"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadL2rib.IsNull() && !data.Taskgroups[i].TaskReadL2rib.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadL2rib.IsNull() && state.Taskgroups[i].TaskReadL2rib.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadL2rib.IsNull() || state.Taskgroups[i].TaskReadL2rib.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/l2rib"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadLldp.IsNull() && !data.Taskgroups[i].TaskReadLldp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadLldp.IsNull() && state.Taskgroups[i].TaskReadLldp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadLldp.IsNull() || state.Taskgroups[i].TaskReadLldp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/lldp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadCpri.IsNull() && !data.Taskgroups[i].TaskReadCpri.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadCpri.IsNull() && state.Taskgroups[i].TaskReadCpri.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadCpri.IsNull() || state.Taskgroups[i].TaskReadCpri.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/cpri"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadPlatMgr.IsNull() && !data.Taskgroups[i].TaskReadPlatMgr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadPlatMgr.IsNull() && state.Taskgroups[i].TaskReadPlatMgr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadPlatMgr.IsNull() || state.Taskgroups[i].TaskReadPlatMgr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/plat-mgr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadNacm.IsNull() && !data.Taskgroups[i].TaskReadNacm.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadNacm.IsNull() && state.Taskgroups[i].TaskReadNacm.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadNacm.IsNull() || state.Taskgroups[i].TaskReadNacm.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/nacm"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadOtn.IsNull() && !data.Taskgroups[i].TaskReadOtn.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadOtn.IsNull() && state.Taskgroups[i].TaskReadOtn.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadOtn.IsNull() || state.Taskgroups[i].TaskReadOtn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/otn"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadPbr.IsNull() && !data.Taskgroups[i].TaskReadPbr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadPbr.IsNull() && state.Taskgroups[i].TaskReadPbr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadPbr.IsNull() || state.Taskgroups[i].TaskReadPbr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/pbr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadLisp.IsNull() && !data.Taskgroups[i].TaskReadLisp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadLisp.IsNull() && state.Taskgroups[i].TaskReadLisp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadLisp.IsNull() || state.Taskgroups[i].TaskReadLisp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/lisp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadNps.IsNull() && !data.Taskgroups[i].TaskReadNps.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadNps.IsNull() && state.Taskgroups[i].TaskReadNps.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadNps.IsNull() || state.Taskgroups[i].TaskReadNps.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/nps"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadVpdn.IsNull() && !data.Taskgroups[i].TaskReadVpdn.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadVpdn.IsNull() && state.Taskgroups[i].TaskReadVpdn.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadVpdn.IsNull() || state.Taskgroups[i].TaskReadVpdn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/vpdn"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadRcmd.IsNull() && !data.Taskgroups[i].TaskReadRcmd.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadRcmd.IsNull() && state.Taskgroups[i].TaskReadRcmd.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadRcmd.IsNull() || state.Taskgroups[i].TaskReadRcmd.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/rcmd"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadCallHome.IsNull() && !data.Taskgroups[i].TaskReadCallHome.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadCallHome.IsNull() && state.Taskgroups[i].TaskReadCallHome.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadCallHome.IsNull() || state.Taskgroups[i].TaskReadCallHome.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/call-home"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadCgn.IsNull() && !data.Taskgroups[i].TaskReadCgn.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadCgn.IsNull() && state.Taskgroups[i].TaskReadCgn.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadCgn.IsNull() || state.Taskgroups[i].TaskReadCgn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/cgn"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadAncp.IsNull() && !data.Taskgroups[i].TaskReadAncp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadAncp.IsNull() && state.Taskgroups[i].TaskReadAncp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadAncp.IsNull() || state.Taskgroups[i].TaskReadAncp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/ancp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadLi.IsNull() && !data.Taskgroups[i].TaskReadLi.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadLi.IsNull() && state.Taskgroups[i].TaskReadLi.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadLi.IsNull() || state.Taskgroups[i].TaskReadLi.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/li"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadEem.IsNull() && !data.Taskgroups[i].TaskReadEem.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadEem.IsNull() && state.Taskgroups[i].TaskReadEem.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadEem.IsNull() || state.Taskgroups[i].TaskReadEem.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/eem"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadEthernetServices.IsNull() && !data.Taskgroups[i].TaskReadEthernetServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadEthernetServices.IsNull() && state.Taskgroups[i].TaskReadEthernetServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadEthernetServices.IsNull() || state.Taskgroups[i].TaskReadEthernetServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/ethernet-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadL2vpn.IsNull() && !data.Taskgroups[i].TaskReadL2vpn.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadL2vpn.IsNull() && state.Taskgroups[i].TaskReadL2vpn.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadL2vpn.IsNull() || state.Taskgroups[i].TaskReadL2vpn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/l2vpn"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadFirewall.IsNull() && !data.Taskgroups[i].TaskReadFirewall.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadFirewall.IsNull() && state.Taskgroups[i].TaskReadFirewall.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadFirewall.IsNull() || state.Taskgroups[i].TaskReadFirewall.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/firewall"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadSbc.IsNull() && !data.Taskgroups[i].TaskReadSbc.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadSbc.IsNull() && state.Taskgroups[i].TaskReadSbc.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadSbc.IsNull() || state.Taskgroups[i].TaskReadSbc.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/sbc"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadEigrp.IsNull() && !data.Taskgroups[i].TaskReadEigrp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadEigrp.IsNull() && state.Taskgroups[i].TaskReadEigrp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadEigrp.IsNull() || state.Taskgroups[i].TaskReadEigrp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/eigrp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadRip.IsNull() && !data.Taskgroups[i].TaskReadRip.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadRip.IsNull() && state.Taskgroups[i].TaskReadRip.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadRip.IsNull() || state.Taskgroups[i].TaskReadRip.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/rip"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadBfd.IsNull() && !data.Taskgroups[i].TaskReadBfd.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadBfd.IsNull() && state.Taskgroups[i].TaskReadBfd.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadBfd.IsNull() || state.Taskgroups[i].TaskReadBfd.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/bfd"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadAtm.IsNull() && !data.Taskgroups[i].TaskReadAtm.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadAtm.IsNull() && state.Taskgroups[i].TaskReadAtm.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadAtm.IsNull() || state.Taskgroups[i].TaskReadAtm.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/atm"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadAdmin.IsNull() && !data.Taskgroups[i].TaskReadAdmin.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadAdmin.IsNull() && state.Taskgroups[i].TaskReadAdmin.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadAdmin.IsNull() || state.Taskgroups[i].TaskReadAdmin.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/admin"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadIpv6.IsNull() && !data.Taskgroups[i].TaskReadIpv6.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadIpv6.IsNull() && state.Taskgroups[i].TaskReadIpv6.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadIpv6.IsNull() || state.Taskgroups[i].TaskReadIpv6.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/ipv6"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadInventory.IsNull() && !data.Taskgroups[i].TaskReadInventory.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadInventory.IsNull() && state.Taskgroups[i].TaskReadInventory.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadInventory.IsNull() || state.Taskgroups[i].TaskReadInventory.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/inventory"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadMonitor.IsNull() && !data.Taskgroups[i].TaskReadMonitor.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadMonitor.IsNull() && state.Taskgroups[i].TaskReadMonitor.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadMonitor.IsNull() || state.Taskgroups[i].TaskReadMonitor.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/monitor"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadFr.IsNull() && !data.Taskgroups[i].TaskReadFr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadFr.IsNull() && state.Taskgroups[i].TaskReadFr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadFr.IsNull() || state.Taskgroups[i].TaskReadFr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/fr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadDrivers.IsNull() && !data.Taskgroups[i].TaskReadDrivers.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadDrivers.IsNull() && state.Taskgroups[i].TaskReadDrivers.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadDrivers.IsNull() || state.Taskgroups[i].TaskReadDrivers.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/drivers"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadNetflow.IsNull() && !data.Taskgroups[i].TaskReadNetflow.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadNetflow.IsNull() && state.Taskgroups[i].TaskReadNetflow.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadNetflow.IsNull() || state.Taskgroups[i].TaskReadNetflow.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/netflow"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadLogging.IsNull() && !data.Taskgroups[i].TaskReadLogging.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadLogging.IsNull() && state.Taskgroups[i].TaskReadLogging.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadLogging.IsNull() || state.Taskgroups[i].TaskReadLogging.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/logging"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadSysmgr.IsNull() && !data.Taskgroups[i].TaskReadSysmgr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadSysmgr.IsNull() && state.Taskgroups[i].TaskReadSysmgr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadSysmgr.IsNull() || state.Taskgroups[i].TaskReadSysmgr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/sysmgr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadBcdl.IsNull() && !data.Taskgroups[i].TaskReadBcdl.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadBcdl.IsNull() && state.Taskgroups[i].TaskReadBcdl.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadBcdl.IsNull() || state.Taskgroups[i].TaskReadBcdl.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/bcdl"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadExtAccess.IsNull() && !data.Taskgroups[i].TaskReadExtAccess.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadExtAccess.IsNull() && state.Taskgroups[i].TaskReadExtAccess.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadExtAccess.IsNull() || state.Taskgroups[i].TaskReadExtAccess.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/ext-access"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadDiag.IsNull() && !data.Taskgroups[i].TaskReadDiag.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadDiag.IsNull() && state.Taskgroups[i].TaskReadDiag.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadDiag.IsNull() || state.Taskgroups[i].TaskReadDiag.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/diag"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadCdp.IsNull() && !data.Taskgroups[i].TaskReadCdp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadCdp.IsNull() && state.Taskgroups[i].TaskReadCdp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadCdp.IsNull() || state.Taskgroups[i].TaskReadCdp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/cdp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadBasicServices.IsNull() && !data.Taskgroups[i].TaskReadBasicServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadBasicServices.IsNull() && state.Taskgroups[i].TaskReadBasicServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadBasicServices.IsNull() || state.Taskgroups[i].TaskReadBasicServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/basic-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadTtyAccess.IsNull() && !data.Taskgroups[i].TaskReadTtyAccess.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadTtyAccess.IsNull() && state.Taskgroups[i].TaskReadTtyAccess.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadTtyAccess.IsNull() || state.Taskgroups[i].TaskReadTtyAccess.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/tty-access"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadSystem.IsNull() && !data.Taskgroups[i].TaskReadSystem.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadSystem.IsNull() && state.Taskgroups[i].TaskReadSystem.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadSystem.IsNull() || state.Taskgroups[i].TaskReadSystem.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/system"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadPkgMgmt.IsNull() && !data.Taskgroups[i].TaskReadPkgMgmt.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadPkgMgmt.IsNull() && state.Taskgroups[i].TaskReadPkgMgmt.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadPkgMgmt.IsNull() || state.Taskgroups[i].TaskReadPkgMgmt.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/pkg-mgmt"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadIpServices.IsNull() && !data.Taskgroups[i].TaskReadIpServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadIpServices.IsNull() && state.Taskgroups[i].TaskReadIpServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadIpServices.IsNull() || state.Taskgroups[i].TaskReadIpServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/ip-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadInterface.IsNull() && !data.Taskgroups[i].TaskReadInterface.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadInterface.IsNull() && state.Taskgroups[i].TaskReadInterface.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadInterface.IsNull() || state.Taskgroups[i].TaskReadInterface.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/interface"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadFilesystem.IsNull() && !data.Taskgroups[i].TaskReadFilesystem.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadFilesystem.IsNull() && state.Taskgroups[i].TaskReadFilesystem.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadFilesystem.IsNull() || state.Taskgroups[i].TaskReadFilesystem.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/filesystem"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadFaultMgr.IsNull() && !data.Taskgroups[i].TaskReadFaultMgr.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadFaultMgr.IsNull() && state.Taskgroups[i].TaskReadFaultMgr.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadFaultMgr.IsNull() || state.Taskgroups[i].TaskReadFaultMgr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/fault-mgr"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadBoot.IsNull() && !data.Taskgroups[i].TaskReadBoot.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadBoot.IsNull() && state.Taskgroups[i].TaskReadBoot.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadBoot.IsNull() || state.Taskgroups[i].TaskReadBoot.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/boot"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadHostServices.IsNull() && !data.Taskgroups[i].TaskReadHostServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadHostServices.IsNull() && state.Taskgroups[i].TaskReadHostServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadHostServices.IsNull() || state.Taskgroups[i].TaskReadHostServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/host-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadConfigServices.IsNull() && !data.Taskgroups[i].TaskReadConfigServices.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadConfigServices.IsNull() && state.Taskgroups[i].TaskReadConfigServices.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadConfigServices.IsNull() || state.Taskgroups[i].TaskReadConfigServices.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/config-services"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadConfigMgmt.IsNull() && !data.Taskgroups[i].TaskReadConfigMgmt.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadConfigMgmt.IsNull() && state.Taskgroups[i].TaskReadConfigMgmt.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadConfigMgmt.IsNull() || state.Taskgroups[i].TaskReadConfigMgmt.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/config-mgmt"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadSnmp.IsNull() && !data.Taskgroups[i].TaskReadSnmp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadSnmp.IsNull() && state.Taskgroups[i].TaskReadSnmp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadSnmp.IsNull() || state.Taskgroups[i].TaskReadSnmp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/snmp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadCrypto.IsNull() && !data.Taskgroups[i].TaskReadCrypto.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadCrypto.IsNull() && state.Taskgroups[i].TaskReadCrypto.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadCrypto.IsNull() || state.Taskgroups[i].TaskReadCrypto.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/crypto"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadAaa.IsNull() && !data.Taskgroups[i].TaskReadAaa.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadAaa.IsNull() && state.Taskgroups[i].TaskReadAaa.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadAaa.IsNull() || state.Taskgroups[i].TaskReadAaa.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/aaa"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadAcl.IsNull() && !data.Taskgroups[i].TaskReadAcl.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadAcl.IsNull() && state.Taskgroups[i].TaskReadAcl.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadAcl.IsNull() || state.Taskgroups[i].TaskReadAcl.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/acl"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadQos.IsNull() && !data.Taskgroups[i].TaskReadQos.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadQos.IsNull() && state.Taskgroups[i].TaskReadQos.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadQos.IsNull() || state.Taskgroups[i].TaskReadQos.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/qos"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadVlan.IsNull() && !data.Taskgroups[i].TaskReadVlan.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadVlan.IsNull() && state.Taskgroups[i].TaskReadVlan.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadVlan.IsNull() || state.Taskgroups[i].TaskReadVlan.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/vlan"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadTunnel.IsNull() && !data.Taskgroups[i].TaskReadTunnel.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadTunnel.IsNull() && state.Taskgroups[i].TaskReadTunnel.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadTunnel.IsNull() || state.Taskgroups[i].TaskReadTunnel.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/tunnel"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadDwdm.IsNull() && !data.Taskgroups[i].TaskReadDwdm.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadDwdm.IsNull() && state.Taskgroups[i].TaskReadDwdm.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadDwdm.IsNull() || state.Taskgroups[i].TaskReadDwdm.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/dwdm"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadSonetSdh.IsNull() && !data.Taskgroups[i].TaskReadSonetSdh.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadSonetSdh.IsNull() && state.Taskgroups[i].TaskReadSonetSdh.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadSonetSdh.IsNull() || state.Taskgroups[i].TaskReadSonetSdh.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/sonet-sdh"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadPosDpt.IsNull() && !data.Taskgroups[i].TaskReadPosDpt.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadPosDpt.IsNull() && state.Taskgroups[i].TaskReadPosDpt.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadPosDpt.IsNull() || state.Taskgroups[i].TaskReadPosDpt.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/pos-dpt"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadHdlc.IsNull() && !data.Taskgroups[i].TaskReadHdlc.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadHdlc.IsNull() && state.Taskgroups[i].TaskReadHdlc.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadHdlc.IsNull() || state.Taskgroups[i].TaskReadHdlc.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/hdlc"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadPpp.IsNull() && !data.Taskgroups[i].TaskReadPpp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadPpp.IsNull() && state.Taskgroups[i].TaskReadPpp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadPpp.IsNull() || state.Taskgroups[i].TaskReadPpp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/ppp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadTransport.IsNull() && !data.Taskgroups[i].TaskReadTransport.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadTransport.IsNull() && state.Taskgroups[i].TaskReadTransport.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadTransport.IsNull() || state.Taskgroups[i].TaskReadTransport.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/transport"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadNetwork.IsNull() && !data.Taskgroups[i].TaskReadNetwork.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadNetwork.IsNull() && state.Taskgroups[i].TaskReadNetwork.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadNetwork.IsNull() || state.Taskgroups[i].TaskReadNetwork.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/network"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadBundle.IsNull() && !data.Taskgroups[i].TaskReadBundle.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadBundle.IsNull() && state.Taskgroups[i].TaskReadBundle.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadBundle.IsNull() || state.Taskgroups[i].TaskReadBundle.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/bundle"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadFabric.IsNull() && !data.Taskgroups[i].TaskReadFabric.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadFabric.IsNull() && state.Taskgroups[i].TaskReadFabric.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadFabric.IsNull() || state.Taskgroups[i].TaskReadFabric.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/fabric"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadOuni.IsNull() && !data.Taskgroups[i].TaskReadOuni.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadOuni.IsNull() && state.Taskgroups[i].TaskReadOuni.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadOuni.IsNull() || state.Taskgroups[i].TaskReadOuni.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/ouni"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadMplsStatic.IsNull() && !data.Taskgroups[i].TaskReadMplsStatic.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadMplsStatic.IsNull() && state.Taskgroups[i].TaskReadMplsStatic.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadMplsStatic.IsNull() || state.Taskgroups[i].TaskReadMplsStatic.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/mpls-static"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadMplsLdp.IsNull() && !data.Taskgroups[i].TaskReadMplsLdp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadMplsLdp.IsNull() && state.Taskgroups[i].TaskReadMplsLdp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadMplsLdp.IsNull() || state.Taskgroups[i].TaskReadMplsLdp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/mpls-ldp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadMplsTe.IsNull() && !data.Taskgroups[i].TaskReadMplsTe.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadMplsTe.IsNull() && state.Taskgroups[i].TaskReadMplsTe.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadMplsTe.IsNull() || state.Taskgroups[i].TaskReadMplsTe.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/mpls-te"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadMulticast.IsNull() && !data.Taskgroups[i].TaskReadMulticast.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadMulticast.IsNull() && state.Taskgroups[i].TaskReadMulticast.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadMulticast.IsNull() || state.Taskgroups[i].TaskReadMulticast.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/multicast"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadRib.IsNull() && !data.Taskgroups[i].TaskReadRib.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadRib.IsNull() && state.Taskgroups[i].TaskReadRib.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadRib.IsNull() || state.Taskgroups[i].TaskReadRib.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/rib"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadIpv4.IsNull() && !data.Taskgroups[i].TaskReadIpv4.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadIpv4.IsNull() && state.Taskgroups[i].TaskReadIpv4.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadIpv4.IsNull() || state.Taskgroups[i].TaskReadIpv4.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/ipv4"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadLpts.IsNull() && !data.Taskgroups[i].TaskReadLpts.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadLpts.IsNull() && state.Taskgroups[i].TaskReadLpts.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadLpts.IsNull() || state.Taskgroups[i].TaskReadLpts.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/lpts"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadCef.IsNull() && !data.Taskgroups[i].TaskReadCef.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadCef.IsNull() && state.Taskgroups[i].TaskReadCef.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadCef.IsNull() || state.Taskgroups[i].TaskReadCef.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/cef"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadVrrp.IsNull() && !data.Taskgroups[i].TaskReadVrrp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadVrrp.IsNull() && state.Taskgroups[i].TaskReadVrrp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadVrrp.IsNull() || state.Taskgroups[i].TaskReadVrrp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/vrrp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadStatic.IsNull() && !data.Taskgroups[i].TaskReadStatic.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadStatic.IsNull() && state.Taskgroups[i].TaskReadStatic.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadStatic.IsNull() || state.Taskgroups[i].TaskReadStatic.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/static"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadRoutePolicy.IsNull() && !data.Taskgroups[i].TaskReadRoutePolicy.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadRoutePolicy.IsNull() && state.Taskgroups[i].TaskReadRoutePolicy.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadRoutePolicy.IsNull() || state.Taskgroups[i].TaskReadRoutePolicy.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/route-policy"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadRouteMap.IsNull() && !data.Taskgroups[i].TaskReadRouteMap.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadRouteMap.IsNull() && state.Taskgroups[i].TaskReadRouteMap.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadRouteMap.IsNull() || state.Taskgroups[i].TaskReadRouteMap.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/route-map"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadIsis.IsNull() && !data.Taskgroups[i].TaskReadIsis.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadIsis.IsNull() && state.Taskgroups[i].TaskReadIsis.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadIsis.IsNull() || state.Taskgroups[i].TaskReadIsis.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/isis"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadHsrp.IsNull() && !data.Taskgroups[i].TaskReadHsrp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadHsrp.IsNull() && state.Taskgroups[i].TaskReadHsrp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadHsrp.IsNull() || state.Taskgroups[i].TaskReadHsrp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/hsrp"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadOspf.IsNull() && !data.Taskgroups[i].TaskReadOspf.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadOspf.IsNull() && state.Taskgroups[i].TaskReadOspf.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadOspf.IsNull() || state.Taskgroups[i].TaskReadOspf.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/ospf"))
 			}
 		}
 		if !data.Taskgroups[i].TaskReadBgp.IsNull() && !data.Taskgroups[i].TaskReadBgp.ValueBool() {
-			if state != nil && i < len(state.Taskgroups) && !state.Taskgroups[i].TaskReadBgp.IsNull() && state.Taskgroups[i].TaskReadBgp.ValueBool() {
+			if state == nil || i >= len(state.Taskgroups) || state.Taskgroups[i].TaskReadBgp.IsNull() || state.Taskgroups[i].TaskReadBgp.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:taskgroups/taskgroup", keyString), "task/read/bgp"))
 			}
 		}
@@ -16590,62 +16590,62 @@ func (data *AAA) getEmptyLeafsDelete(ctx context.Context, state *AAA, version st
 			}
 		}
 		if !data.Usernames[i].GroupReadOnlyTg.IsNull() && !data.Usernames[i].GroupReadOnlyTg.ValueBool() {
-			if state != nil && i < len(state.Usernames) && !state.Usernames[i].GroupReadOnlyTg.IsNull() && state.Usernames[i].GroupReadOnlyTg.ValueBool() {
+			if state == nil || i >= len(state.Usernames) || state.Usernames[i].GroupReadOnlyTg.IsNull() || state.Usernames[i].GroupReadOnlyTg.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames/username", keyString), "group/read-only-tg"))
 			}
 		}
 		if !data.Usernames[i].GroupRetrieve.IsNull() && !data.Usernames[i].GroupRetrieve.ValueBool() {
-			if state != nil && i < len(state.Usernames) && !state.Usernames[i].GroupRetrieve.IsNull() && state.Usernames[i].GroupRetrieve.ValueBool() {
+			if state == nil || i >= len(state.Usernames) || state.Usernames[i].GroupRetrieve.IsNull() || state.Usernames[i].GroupRetrieve.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames/username", keyString), "group/retrieve"))
 			}
 		}
 		if !data.Usernames[i].GroupProvisioning.IsNull() && !data.Usernames[i].GroupProvisioning.ValueBool() {
-			if state != nil && i < len(state.Usernames) && !state.Usernames[i].GroupProvisioning.IsNull() && state.Usernames[i].GroupProvisioning.ValueBool() {
+			if state == nil || i >= len(state.Usernames) || state.Usernames[i].GroupProvisioning.IsNull() || state.Usernames[i].GroupProvisioning.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames/username", keyString), "group/provisioning"))
 			}
 		}
 		if !data.Usernames[i].GroupMaintenance.IsNull() && !data.Usernames[i].GroupMaintenance.ValueBool() {
-			if state != nil && i < len(state.Usernames) && !state.Usernames[i].GroupMaintenance.IsNull() && state.Usernames[i].GroupMaintenance.ValueBool() {
+			if state == nil || i >= len(state.Usernames) || state.Usernames[i].GroupMaintenance.IsNull() || state.Usernames[i].GroupMaintenance.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames/username", keyString), "group/maintenance"))
 			}
 		}
 		if !data.Usernames[i].GroupCiscoSupport.IsNull() && !data.Usernames[i].GroupCiscoSupport.ValueBool() {
-			if state != nil && i < len(state.Usernames) && !state.Usernames[i].GroupCiscoSupport.IsNull() && state.Usernames[i].GroupCiscoSupport.ValueBool() {
+			if state == nil || i >= len(state.Usernames) || state.Usernames[i].GroupCiscoSupport.IsNull() || state.Usernames[i].GroupCiscoSupport.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames/username", keyString), "group/cisco-support"))
 			}
 		}
 		if !data.Usernames[i].GroupOperator.IsNull() && !data.Usernames[i].GroupOperator.ValueBool() {
-			if state != nil && i < len(state.Usernames) && !state.Usernames[i].GroupOperator.IsNull() && state.Usernames[i].GroupOperator.ValueBool() {
+			if state == nil || i >= len(state.Usernames) || state.Usernames[i].GroupOperator.IsNull() || state.Usernames[i].GroupOperator.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames/username", keyString), "group/operator"))
 			}
 		}
 		if !data.Usernames[i].GroupServiceadmin.IsNull() && !data.Usernames[i].GroupServiceadmin.ValueBool() {
-			if state != nil && i < len(state.Usernames) && !state.Usernames[i].GroupServiceadmin.IsNull() && state.Usernames[i].GroupServiceadmin.ValueBool() {
+			if state == nil || i >= len(state.Usernames) || state.Usernames[i].GroupServiceadmin.IsNull() || state.Usernames[i].GroupServiceadmin.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames/username", keyString), "group/serviceadmin"))
 			}
 		}
 		if !data.Usernames[i].GroupSysadmin.IsNull() && !data.Usernames[i].GroupSysadmin.ValueBool() {
-			if state != nil && i < len(state.Usernames) && !state.Usernames[i].GroupSysadmin.IsNull() && state.Usernames[i].GroupSysadmin.ValueBool() {
+			if state == nil || i >= len(state.Usernames) || state.Usernames[i].GroupSysadmin.IsNull() || state.Usernames[i].GroupSysadmin.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames/username", keyString), "group/sysadmin"))
 			}
 		}
 		if !data.Usernames[i].GroupNetadmin.IsNull() && !data.Usernames[i].GroupNetadmin.ValueBool() {
-			if state != nil && i < len(state.Usernames) && !state.Usernames[i].GroupNetadmin.IsNull() && state.Usernames[i].GroupNetadmin.ValueBool() {
+			if state == nil || i >= len(state.Usernames) || state.Usernames[i].GroupNetadmin.IsNull() || state.Usernames[i].GroupNetadmin.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames/username", keyString), "group/netadmin"))
 			}
 		}
 		if !data.Usernames[i].GroupRootLr.IsNull() && !data.Usernames[i].GroupRootLr.ValueBool() {
-			if state != nil && i < len(state.Usernames) && !state.Usernames[i].GroupRootLr.IsNull() && state.Usernames[i].GroupRootLr.ValueBool() {
+			if state == nil || i >= len(state.Usernames) || state.Usernames[i].GroupRootLr.IsNull() || state.Usernames[i].GroupRootLr.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames/username", keyString), "group/root-lr"))
 			}
 		}
 		if !data.Usernames[i].LoginHistoryDisable.IsNull() && !data.Usernames[i].LoginHistoryDisable.ValueBool() {
-			if state != nil && i < len(state.Usernames) && !state.Usernames[i].LoginHistoryDisable.IsNull() && state.Usernames[i].LoginHistoryDisable.ValueBool() {
+			if state == nil || i >= len(state.Usernames) || state.Usernames[i].LoginHistoryDisable.IsNull() || state.Usernames[i].LoginHistoryDisable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames/username", keyString), "login-history/disable"))
 			}
 		}
 		if !data.Usernames[i].LoginHistoryEnable.IsNull() && !data.Usernames[i].LoginHistoryEnable.ValueBool() {
-			if state != nil && i < len(state.Usernames) && !state.Usernames[i].LoginHistoryEnable.IsNull() && state.Usernames[i].LoginHistoryEnable.ValueBool() {
+			if state == nil || i >= len(state.Usernames) || state.Usernames[i].LoginHistoryEnable.IsNull() || state.Usernames[i].LoginHistoryEnable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:usernames/username", keyString), "login-history/enable"))
 			}
 		}
@@ -16665,7 +16665,7 @@ func (data *AAA) getEmptyLeafsDelete(ctx context.Context, state *AAA, version st
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.IsNull() && !data.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.ValueBool() {
-				if state != nil && i < len(state.TacacsServerGroups) && ci < len(state.TacacsServerGroups[i].ServerPrivates) && !state.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.IsNull() && state.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.ValueBool() {
+				if state == nil || i >= len(state.TacacsServerGroups) || ci >= len(state.TacacsServerGroups[i].ServerPrivates) || state.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.IsNull() || state.TacacsServerGroups[i].ServerPrivates[ci].SingleConnection.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group", keyString, "server-privates/server-private", ckeyString), "single-connection"))
 				}
 			}
@@ -16687,18 +16687,18 @@ func (data *AAA) getEmptyLeafsDelete(ctx context.Context, state *AAA, version st
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if helpers.VersionAtLeast(version, "25.4") && !data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional.IsNull() && !data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional.ValueBool() {
-			if state != nil && i < len(state.ServerRadiusDynamicAuthorClients) && !state.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional.IsNull() && state.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional.ValueBool() {
+			if state == nil || i >= len(state.ServerRadiusDynamicAuthorClients) || state.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional.IsNull() || state.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorOptional.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/clients/client", keyString), "attribute/message-authenticator/optional"))
 			}
 		}
 		if helpers.VersionAtLeast(version, "25.4") && !data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate.IsNull() && !data.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate.ValueBool() {
-			if state != nil && i < len(state.ServerRadiusDynamicAuthorClients) && !state.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate.IsNull() && state.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate.ValueBool() {
+			if state == nil || i >= len(state.ServerRadiusDynamicAuthorClients) || state.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate.IsNull() || state.ServerRadiusDynamicAuthorClients[i].AttributeMessageAuthenticatorMandate.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/clients/client", keyString), "attribute/message-authenticator/mandate"))
 			}
 		}
 	}
 	if !data.ServerRadiusDynamicAuthorIgnoreServerKey.IsNull() && !data.ServerRadiusDynamicAuthorIgnoreServerKey.ValueBool() {
-		if state != nil && !state.ServerRadiusDynamicAuthorIgnoreServerKey.IsNull() && state.ServerRadiusDynamicAuthorIgnoreServerKey.ValueBool() {
+		if state == nil || state.ServerRadiusDynamicAuthorIgnoreServerKey.IsNull() || state.ServerRadiusDynamicAuthorIgnoreServerKey.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:server/radius/dynamic-author/ignore/server-key"))
 		}
 	}
@@ -16710,42 +16710,42 @@ func (data *AAA) getEmptyLeafsDelete(ctx context.Context, state *AAA, version st
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.RadiusServerGroups[i].AccountingReplyReject.IsNull() && !data.RadiusServerGroups[i].AccountingReplyReject.ValueBool() {
-			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].AccountingReplyReject.IsNull() && state.RadiusServerGroups[i].AccountingReplyReject.ValueBool() {
+			if state == nil || i >= len(state.RadiusServerGroups) || state.RadiusServerGroups[i].AccountingReplyReject.IsNull() || state.RadiusServerGroups[i].AccountingReplyReject.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString), "accounting/reply"))
 			}
 		}
 		if !data.RadiusServerGroups[i].AccountingReplyAccept.IsNull() && !data.RadiusServerGroups[i].AccountingReplyAccept.ValueBool() {
-			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].AccountingReplyAccept.IsNull() && state.RadiusServerGroups[i].AccountingReplyAccept.ValueBool() {
+			if state == nil || i >= len(state.RadiusServerGroups) || state.RadiusServerGroups[i].AccountingReplyAccept.IsNull() || state.RadiusServerGroups[i].AccountingReplyAccept.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString), "accounting/reply"))
 			}
 		}
 		if !data.RadiusServerGroups[i].AccountingRequestReject.IsNull() && !data.RadiusServerGroups[i].AccountingRequestReject.ValueBool() {
-			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].AccountingRequestReject.IsNull() && state.RadiusServerGroups[i].AccountingRequestReject.ValueBool() {
+			if state == nil || i >= len(state.RadiusServerGroups) || state.RadiusServerGroups[i].AccountingRequestReject.IsNull() || state.RadiusServerGroups[i].AccountingRequestReject.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString), "accounting/request"))
 			}
 		}
 		if !data.RadiusServerGroups[i].AccountingRequestAccept.IsNull() && !data.RadiusServerGroups[i].AccountingRequestAccept.ValueBool() {
-			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].AccountingRequestAccept.IsNull() && state.RadiusServerGroups[i].AccountingRequestAccept.ValueBool() {
+			if state == nil || i >= len(state.RadiusServerGroups) || state.RadiusServerGroups[i].AccountingRequestAccept.IsNull() || state.RadiusServerGroups[i].AccountingRequestAccept.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString), "accounting/request"))
 			}
 		}
 		if !data.RadiusServerGroups[i].AuthorizationReplyReject.IsNull() && !data.RadiusServerGroups[i].AuthorizationReplyReject.ValueBool() {
-			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].AuthorizationReplyReject.IsNull() && state.RadiusServerGroups[i].AuthorizationReplyReject.ValueBool() {
+			if state == nil || i >= len(state.RadiusServerGroups) || state.RadiusServerGroups[i].AuthorizationReplyReject.IsNull() || state.RadiusServerGroups[i].AuthorizationReplyReject.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString), "authorization/reply"))
 			}
 		}
 		if !data.RadiusServerGroups[i].AuthorizationReplyAccept.IsNull() && !data.RadiusServerGroups[i].AuthorizationReplyAccept.ValueBool() {
-			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].AuthorizationReplyAccept.IsNull() && state.RadiusServerGroups[i].AuthorizationReplyAccept.ValueBool() {
+			if state == nil || i >= len(state.RadiusServerGroups) || state.RadiusServerGroups[i].AuthorizationReplyAccept.IsNull() || state.RadiusServerGroups[i].AuthorizationReplyAccept.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString), "authorization/reply"))
 			}
 		}
 		if !data.RadiusServerGroups[i].AuthorizationRequestReject.IsNull() && !data.RadiusServerGroups[i].AuthorizationRequestReject.ValueBool() {
-			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].AuthorizationRequestReject.IsNull() && state.RadiusServerGroups[i].AuthorizationRequestReject.ValueBool() {
+			if state == nil || i >= len(state.RadiusServerGroups) || state.RadiusServerGroups[i].AuthorizationRequestReject.IsNull() || state.RadiusServerGroups[i].AuthorizationRequestReject.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString), "authorization/request"))
 			}
 		}
 		if !data.RadiusServerGroups[i].AuthorizationRequestAccept.IsNull() && !data.RadiusServerGroups[i].AuthorizationRequestAccept.ValueBool() {
-			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].AuthorizationRequestAccept.IsNull() && state.RadiusServerGroups[i].AuthorizationRequestAccept.ValueBool() {
+			if state == nil || i >= len(state.RadiusServerGroups) || state.RadiusServerGroups[i].AuthorizationRequestAccept.IsNull() || state.RadiusServerGroups[i].AuthorizationRequestAccept.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString), "authorization/request"))
 			}
 		}
@@ -16757,33 +16757,33 @@ func (data *AAA) getEmptyLeafsDelete(ctx context.Context, state *AAA, version st
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if helpers.VersionAtLeast(version, "25.4") && !data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional.IsNull() && !data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional.ValueBool() {
-				if state != nil && i < len(state.RadiusServerGroups) && ci < len(state.RadiusServerGroups[i].ServerPrivates) && !state.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional.IsNull() && state.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional.ValueBool() {
+				if state == nil || i >= len(state.RadiusServerGroups) || ci >= len(state.RadiusServerGroups[i].ServerPrivates) || state.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional.IsNull() || state.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorOptional.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString, "server-privates/server-private", ckeyString), "attribute/message-authenticator/optional"))
 				}
 			}
 			if helpers.VersionAtLeast(version, "25.4") && !data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate.IsNull() && !data.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate.ValueBool() {
-				if state != nil && i < len(state.RadiusServerGroups) && ci < len(state.RadiusServerGroups[i].ServerPrivates) && !state.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate.IsNull() && state.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate.ValueBool() {
+				if state == nil || i >= len(state.RadiusServerGroups) || ci >= len(state.RadiusServerGroups[i].ServerPrivates) || state.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate.IsNull() || state.RadiusServerGroups[i].ServerPrivates[ci].AttributeMessageAuthenticatorMandate.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString, "server-privates/server-private", ckeyString), "attribute/message-authenticator/mandate"))
 				}
 			}
 			if !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() && !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.ValueBool() {
-				if state != nil && i < len(state.RadiusServerGroups) && ci < len(state.RadiusServerGroups[i].ServerPrivates) && !state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() && state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.ValueBool() {
+				if state == nil || i >= len(state.RadiusServerGroups) || ci >= len(state.RadiusServerGroups[i].ServerPrivates) || state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.IsNull() || state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAcctPort.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString, "server-privates/server-private", ckeyString), "ignore-acct-port"))
 				}
 			}
 			if !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.IsNull() && !data.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.ValueBool() {
-				if state != nil && i < len(state.RadiusServerGroups) && ci < len(state.RadiusServerGroups[i].ServerPrivates) && !state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.IsNull() && state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.ValueBool() {
+				if state == nil || i >= len(state.RadiusServerGroups) || ci >= len(state.RadiusServerGroups[i].ServerPrivates) || state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.IsNull() || state.RadiusServerGroups[i].ServerPrivates[ci].IgnoreAuthPort.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString, "server-privates/server-private", ckeyString), "ignore-auth-port"))
 				}
 			}
 		}
 		if !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() && !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.ValueBool() {
-			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() && state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.ValueBool() {
+			if state == nil || i >= len(state.RadiusServerGroups) || state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() || state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstandingIgnorePreferredServer.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString), "load-balance/method/least-outstanding/ignore-preferred-server"))
 			}
 		}
 		if !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.IsNull() && !data.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.ValueBool() {
-			if state != nil && i < len(state.RadiusServerGroups) && !state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.IsNull() && state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.ValueBool() {
+			if state == nil || i >= len(state.RadiusServerGroups) || state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.IsNull() || state.RadiusServerGroups[i].LoadBalanceMethodLeastOutstanding.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-radius-server-cfg:group/server/radius/server-groups/server-group", keyString), "load-balance/method/least-outstanding"))
 			}
 		}

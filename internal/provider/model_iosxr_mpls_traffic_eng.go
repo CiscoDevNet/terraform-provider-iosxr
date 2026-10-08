@@ -201,7 +201,7 @@ func (data *MPLSTrafficEng) getDeletedItems(ctx context.Context, state MPLSTraff
 func (data *MPLSTrafficEng) getEmptyLeafsDelete(ctx context.Context, state *MPLSTrafficEng, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.TrafficEng.IsNull() && !data.TrafficEng.ValueBool() {
-		if state != nil && !state.TrafficEng.IsNull() && state.TrafficEng.ValueBool() {
+		if state == nil || state.TrafficEng.IsNull() || state.TrafficEng.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "traffic-eng"))
 		}
 	}

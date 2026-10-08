@@ -271,12 +271,12 @@ func (data *IPv4AccessListOptions) getDeletedItems(ctx context.Context, state IP
 func (data *IPv4AccessListOptions) getEmptyLeafsDelete(ctx context.Context, state *IPv4AccessListOptions, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.IcmpOff.IsNull() && !data.IcmpOff.ValueBool() {
-		if state != nil && !state.IcmpOff.IsNull() && state.IcmpOff.ValueBool() {
+		if state == nil || state.IcmpOff.IsNull() || state.IcmpOff.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "icmp-off"))
 		}
 	}
 	if !data.LogUpdateDisable.IsNull() && !data.LogUpdateDisable.ValueBool() {
-		if state != nil && !state.LogUpdateDisable.IsNull() && state.LogUpdateDisable.ValueBool() {
+		if state == nil || state.LogUpdateDisable.IsNull() || state.LogUpdateDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "log-update/disable"))
 		}
 	}

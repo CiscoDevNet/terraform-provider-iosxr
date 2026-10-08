@@ -604,7 +604,7 @@ func (data *FlowExporterMap) getDeletedItems(ctx context.Context, state FlowExpo
 func (data *FlowExporterMap) getEmptyLeafsDelete(ctx context.Context, state *FlowExporterMap, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.DfbitSet.IsNull() && !data.DfbitSet.ValueBool() {
-		if state != nil && !state.DfbitSet.IsNull() && state.DfbitSet.ValueBool() {
+		if state == nil || state.DfbitSet.IsNull() || state.DfbitSet.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "dfbit/set"))
 		}
 	}

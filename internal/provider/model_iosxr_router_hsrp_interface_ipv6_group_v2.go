@@ -786,12 +786,12 @@ func (data *RouterHSRPInterfaceIPv6GroupV2) getEmptyLeafsDelete(ctx context.Cont
 		}
 	}
 	if !data.AddressLinkLocalAutoconfigLegacyCompatible.IsNull() && !data.AddressLinkLocalAutoconfigLegacyCompatible.ValueBool() {
-		if state != nil && !state.AddressLinkLocalAutoconfigLegacyCompatible.IsNull() && state.AddressLinkLocalAutoconfigLegacyCompatible.ValueBool() {
+		if state == nil || state.AddressLinkLocalAutoconfigLegacyCompatible.IsNull() || state.AddressLinkLocalAutoconfigLegacyCompatible.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address/link-local/autoconfig/legacy-compatible"))
 		}
 	}
 	if !data.AddressLinkLocalAutoconfig.IsNull() && !data.AddressLinkLocalAutoconfig.ValueBool() {
-		if state != nil && !state.AddressLinkLocalAutoconfig.IsNull() && state.AddressLinkLocalAutoconfig.ValueBool() {
+		if state == nil || state.AddressLinkLocalAutoconfig.IsNull() || state.AddressLinkLocalAutoconfig.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address/link-local/autoconfig"))
 		}
 	}

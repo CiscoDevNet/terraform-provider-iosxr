@@ -1125,7 +1125,7 @@ func (data *PerformanceMeasurementLivenessProfile) getDeletedItems(ctx context.C
 func (data *PerformanceMeasurementLivenessProfile) getEmptyLeafsDelete(ctx context.Context, state *PerformanceMeasurementLivenessProfile, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() && !data.EndpointDefaultLivenessDetectionNpuOffload.ValueBool() {
-		if state != nil && !state.EndpointDefaultLivenessDetectionNpuOffload.IsNull() && state.EndpointDefaultLivenessDetectionNpuOffload.ValueBool() {
+		if state == nil || state.EndpointDefaultLivenessDetectionNpuOffload.IsNull() || state.EndpointDefaultLivenessDetectionNpuOffload.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/liveness-detection/npu-offload"))
 		}
 	}
@@ -1137,48 +1137,48 @@ func (data *PerformanceMeasurementLivenessProfile) getEmptyLeafsDelete(ctx conte
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Profiles[i].NpuOffload.IsNull() && !data.Profiles[i].NpuOffload.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].NpuOffload.IsNull() && state.Profiles[i].NpuOffload.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].NpuOffload.IsNull() || state.Profiles[i].NpuOffload.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "npu-offload"))
 			}
 		}
 		if !data.Profiles[i].ProbeFlowLabelExplicit.IsNull() && !data.Profiles[i].ProbeFlowLabelExplicit.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ProbeFlowLabelExplicit.IsNull() && state.Profiles[i].ProbeFlowLabelExplicit.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ProbeFlowLabelExplicit.IsNull() || state.Profiles[i].ProbeFlowLabelExplicit.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "probe/flow-label/explicits"))
 			}
 		}
 		if !data.Profiles[i].LivenessDetectionLoggingStateChange.IsNull() && !data.Profiles[i].LivenessDetectionLoggingStateChange.ValueBool() {
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].LivenessDetectionLoggingStateChange.IsNull() && state.Profiles[i].LivenessDetectionLoggingStateChange.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].LivenessDetectionLoggingStateChange.IsNull() || state.Profiles[i].LivenessDetectionLoggingStateChange.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "liveness-detection/logging/state-change"))
 			}
 		}
 	}
 	if !data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() && !data.EndpointDefaultLivenessDetectionLoggingStateChange.ValueBool() {
-		if state != nil && !state.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() && state.EndpointDefaultLivenessDetectionLoggingStateChange.ValueBool() {
+		if state == nil || state.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() || state.EndpointDefaultLivenessDetectionLoggingStateChange.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/liveness-detection/logging/state-change"))
 		}
 	}
 	if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() && !data.EndpointDefaultProbeFlowLabelExplicit.ValueBool() {
-		if state != nil && !state.EndpointDefaultProbeFlowLabelExplicit.IsNull() && state.EndpointDefaultProbeFlowLabelExplicit.ValueBool() {
+		if state == nil || state.EndpointDefaultProbeFlowLabelExplicit.IsNull() || state.EndpointDefaultProbeFlowLabelExplicit.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/probe/flow-label/explicits"))
 		}
 	}
 	if !data.EndpointDefault.IsNull() && !data.EndpointDefault.ValueBool() {
-		if state != nil && !state.EndpointDefault.IsNull() && state.EndpointDefault.ValueBool() {
+		if state == nil || state.EndpointDefault.IsNull() || state.EndpointDefault.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default"))
 		}
 	}
 	if !data.SrPolicyDefaultNpuOffload.IsNull() && !data.SrPolicyDefaultNpuOffload.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultNpuOffload.IsNull() && state.SrPolicyDefaultNpuOffload.ValueBool() {
+		if state == nil || state.SrPolicyDefaultNpuOffload.IsNull() || state.SrPolicyDefaultNpuOffload.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/npu-offload"))
 		}
 	}
 	if !data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() && !data.SrPolicyDefaultProbeFlowLabelExplicit.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() && state.SrPolicyDefaultProbeFlowLabelExplicit.ValueBool() {
+		if state == nil || state.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() || state.SrPolicyDefaultProbeFlowLabelExplicit.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/flow-label/explicits"))
 		}
 	}
 	if !data.SrPolicyDefault.IsNull() && !data.SrPolicyDefault.ValueBool() {
-		if state != nil && !state.SrPolicyDefault.IsNull() && state.SrPolicyDefault.ValueBool() {
+		if state == nil || state.SrPolicyDefault.IsNull() || state.SrPolicyDefault.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default"))
 		}
 	}

@@ -1907,232 +1907,232 @@ func (data *FlowMonitorMap) getDeletedItems(ctx context.Context, state FlowMonit
 func (data *FlowMonitorMap) getEmptyLeafsDelete(ctx context.Context, state *FlowMonitorMap, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.SflowOptionsExtendedIpv6TunnelEgress.IsNull() && !data.SflowOptionsExtendedIpv6TunnelEgress.ValueBool() {
-		if state != nil && !state.SflowOptionsExtendedIpv6TunnelEgress.IsNull() && state.SflowOptionsExtendedIpv6TunnelEgress.ValueBool() {
+		if state == nil || state.SflowOptionsExtendedIpv6TunnelEgress.IsNull() || state.SflowOptionsExtendedIpv6TunnelEgress.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sflow/options/extended-ipv6-tunnel-egress"))
 		}
 	}
 	if !data.SflowOptionsExtendedIpv4TunnelEgress.IsNull() && !data.SflowOptionsExtendedIpv4TunnelEgress.ValueBool() {
-		if state != nil && !state.SflowOptionsExtendedIpv4TunnelEgress.IsNull() && state.SflowOptionsExtendedIpv4TunnelEgress.ValueBool() {
+		if state == nil || state.SflowOptionsExtendedIpv4TunnelEgress.IsNull() || state.SflowOptionsExtendedIpv4TunnelEgress.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sflow/options/extended-ipv4-tunnel-egress"))
 		}
 	}
 	if !data.SflowOptionsExtendedGateway.IsNull() && !data.SflowOptionsExtendedGateway.ValueBool() {
-		if state != nil && !state.SflowOptionsExtendedGateway.IsNull() && state.SflowOptionsExtendedGateway.ValueBool() {
+		if state == nil || state.SflowOptionsExtendedGateway.IsNull() || state.SflowOptionsExtendedGateway.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sflow/options/extended-gateway"))
 		}
 	}
 	if !data.SflowOptionsExtendedRouter.IsNull() && !data.SflowOptionsExtendedRouter.ValueBool() {
-		if state != nil && !state.SflowOptionsExtendedRouter.IsNull() && state.SflowOptionsExtendedRouter.ValueBool() {
+		if state == nil || state.SflowOptionsExtendedRouter.IsNull() || state.SflowOptionsExtendedRouter.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sflow/options/extended-router"))
 		}
 	}
 	if !data.SflowOptions.IsNull() && !data.SflowOptions.ValueBool() {
-		if state != nil && !state.SflowOptions.IsNull() && state.SflowOptions.ValueBool() {
+		if state == nil || state.SflowOptions.IsNull() || state.SflowOptions.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sflow/options"))
 		}
 	}
 	if !data.CacheImmediate.IsNull() && !data.CacheImmediate.ValueBool() {
-		if state != nil && !state.CacheImmediate.IsNull() && state.CacheImmediate.ValueBool() {
+		if state == nil || state.CacheImmediate.IsNull() || state.CacheImmediate.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "cache/immediate"))
 		}
 	}
 	if !data.CachePermanent.IsNull() && !data.CachePermanent.ValueBool() {
-		if state != nil && !state.CachePermanent.IsNull() && state.CachePermanent.ValueBool() {
+		if state == nil || state.CachePermanent.IsNull() || state.CachePermanent.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "cache/permanent"))
 		}
 	}
 	if !data.RecordDefaultMdi.IsNull() && !data.RecordDefaultMdi.ValueBool() {
-		if state != nil && !state.RecordDefaultMdi.IsNull() && state.RecordDefaultMdi.ValueBool() {
+		if state == nil || state.RecordDefaultMdi.IsNull() || state.RecordDefaultMdi.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/default-mdi"))
 		}
 	}
 	if !data.RecordDefaultRtp.IsNull() && !data.RecordDefaultRtp.ValueBool() {
-		if state != nil && !state.RecordDefaultRtp.IsNull() && state.RecordDefaultRtp.ValueBool() {
+		if state == nil || state.RecordDefaultRtp.IsNull() || state.RecordDefaultRtp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/default-rtp"))
 		}
 	}
 	if !data.RecordDatalinkRecord.IsNull() && !data.RecordDatalinkRecord.ValueBool() {
-		if state != nil && !state.RecordDatalinkRecord.IsNull() && state.RecordDatalinkRecord.ValueBool() {
+		if state == nil || state.RecordDatalinkRecord.IsNull() || state.RecordDatalinkRecord.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/datalink-record"))
 		}
 	}
 	if !data.RecordSflow.IsNull() && !data.RecordSflow.ValueBool() {
-		if state != nil && !state.RecordSflow.IsNull() && state.RecordSflow.ValueBool() {
+		if state == nil || state.RecordSflow.IsNull() || state.RecordSflow.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/sflow"))
 		}
 	}
 	if !data.RecordMapT.IsNull() && !data.RecordMapT.ValueBool() {
-		if state != nil && !state.RecordMapT.IsNull() && state.RecordMapT.ValueBool() {
+		if state == nil || state.RecordMapT.IsNull() || state.RecordMapT.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/map-t"))
 		}
 	}
 	if !data.RecordMplsIpv4Ipv6Fields.IsNull() && !data.RecordMplsIpv4Ipv6Fields.ValueBool() {
-		if state != nil && !state.RecordMplsIpv4Ipv6Fields.IsNull() && state.RecordMplsIpv4Ipv6Fields.ValueBool() {
+		if state == nil || state.RecordMplsIpv4Ipv6Fields.IsNull() || state.RecordMplsIpv4Ipv6Fields.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/mpls/ipv4-ipv6-fields"))
 		}
 	}
 	if !data.RecordMplsIpv6Fields.IsNull() && !data.RecordMplsIpv6Fields.ValueBool() {
-		if state != nil && !state.RecordMplsIpv6Fields.IsNull() && state.RecordMplsIpv6Fields.ValueBool() {
+		if state == nil || state.RecordMplsIpv6Fields.IsNull() || state.RecordMplsIpv6Fields.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/mpls/ipv6-fields"))
 		}
 	}
 	if !data.RecordMplsIpv4Fields.IsNull() && !data.RecordMplsIpv4Fields.ValueBool() {
-		if state != nil && !state.RecordMplsIpv4Fields.IsNull() && state.RecordMplsIpv4Fields.ValueBool() {
+		if state == nil || state.RecordMplsIpv4Fields.IsNull() || state.RecordMplsIpv4Fields.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/mpls/ipv4-fields"))
 		}
 	}
 	if !data.RecordMpls.IsNull() && !data.RecordMpls.ValueBool() {
-		if state != nil && !state.RecordMpls.IsNull() && state.RecordMpls.ValueBool() {
+		if state == nil || state.RecordMpls.IsNull() || state.RecordMpls.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/mpls"))
 		}
 	}
 	if !data.RecordIpv6Extended.IsNull() && !data.RecordIpv6Extended.ValueBool() {
-		if state != nil && !state.RecordIpv6Extended.IsNull() && state.RecordIpv6Extended.ValueBool() {
+		if state == nil || state.RecordIpv6Extended.IsNull() || state.RecordIpv6Extended.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv6/extended"))
 		}
 	}
 	if !data.RecordIpv6L2L3.IsNull() && !data.RecordIpv6L2L3.ValueBool() {
-		if state != nil && !state.RecordIpv6L2L3.IsNull() && state.RecordIpv6L2L3.ValueBool() {
+		if state == nil || state.RecordIpv6L2L3.IsNull() || state.RecordIpv6L2L3.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv6/l2-l3"))
 		}
 	}
 	if !data.RecordIpv6Srv6.IsNull() && !data.RecordIpv6Srv6.ValueBool() {
-		if state != nil && !state.RecordIpv6Srv6.IsNull() && state.RecordIpv6Srv6.ValueBool() {
+		if state == nil || state.RecordIpv6Srv6.IsNull() || state.RecordIpv6Srv6.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv6/srv6"))
 		}
 	}
 	if !data.RecordIpv6Gtp.IsNull() && !data.RecordIpv6Gtp.ValueBool() {
-		if state != nil && !state.RecordIpv6Gtp.IsNull() && state.RecordIpv6Gtp.ValueBool() {
+		if state == nil || state.RecordIpv6Gtp.IsNull() || state.RecordIpv6Gtp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv6/gtp"))
 		}
 	}
 	if !data.RecordIpv6PeerAs.IsNull() && !data.RecordIpv6PeerAs.ValueBool() {
-		if state != nil && !state.RecordIpv6PeerAs.IsNull() && state.RecordIpv6PeerAs.ValueBool() {
+		if state == nil || state.RecordIpv6PeerAs.IsNull() || state.RecordIpv6PeerAs.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv6/peer-as"))
 		}
 	}
 	if !data.RecordIpv6Destination.IsNull() && !data.RecordIpv6Destination.ValueBool() {
-		if state != nil && !state.RecordIpv6Destination.IsNull() && state.RecordIpv6Destination.ValueBool() {
+		if state == nil || state.RecordIpv6Destination.IsNull() || state.RecordIpv6Destination.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv6/destination"))
 		}
 	}
 	if !data.RecordIpv6.IsNull() && !data.RecordIpv6.ValueBool() {
-		if state != nil && !state.RecordIpv6.IsNull() && state.RecordIpv6.ValueBool() {
+		if state == nil || state.RecordIpv6.IsNull() || state.RecordIpv6.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv6"))
 		}
 	}
 	if !data.RecordIpv4Extended.IsNull() && !data.RecordIpv4Extended.ValueBool() {
-		if state != nil && !state.RecordIpv4Extended.IsNull() && state.RecordIpv4Extended.ValueBool() {
+		if state == nil || state.RecordIpv4Extended.IsNull() || state.RecordIpv4Extended.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4/extended"))
 		}
 	}
 	if !data.RecordIpv4L2L3.IsNull() && !data.RecordIpv4L2L3.ValueBool() {
-		if state != nil && !state.RecordIpv4L2L3.IsNull() && state.RecordIpv4L2L3.ValueBool() {
+		if state == nil || state.RecordIpv4L2L3.IsNull() || state.RecordIpv4L2L3.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4/l2-l3"))
 		}
 	}
 	if !data.RecordIpv4Gtp.IsNull() && !data.RecordIpv4Gtp.ValueBool() {
-		if state != nil && !state.RecordIpv4Gtp.IsNull() && state.RecordIpv4Gtp.ValueBool() {
+		if state == nil || state.RecordIpv4Gtp.IsNull() || state.RecordIpv4Gtp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4/gtp"))
 		}
 	}
 	if !data.RecordIpv4PeerAs.IsNull() && !data.RecordIpv4PeerAs.ValueBool() {
-		if state != nil && !state.RecordIpv4PeerAs.IsNull() && state.RecordIpv4PeerAs.ValueBool() {
+		if state == nil || state.RecordIpv4PeerAs.IsNull() || state.RecordIpv4PeerAs.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4/peer-as"))
 		}
 	}
 	if !data.RecordIpv4BgpNexthopTos.IsNull() && !data.RecordIpv4BgpNexthopTos.ValueBool() {
-		if state != nil && !state.RecordIpv4BgpNexthopTos.IsNull() && state.RecordIpv4BgpNexthopTos.ValueBool() {
+		if state == nil || state.RecordIpv4BgpNexthopTos.IsNull() || state.RecordIpv4BgpNexthopTos.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4/bgp-nexthop-tos"))
 		}
 	}
 	if !data.RecordIpv4PrefixPort.IsNull() && !data.RecordIpv4PrefixPort.ValueBool() {
-		if state != nil && !state.RecordIpv4PrefixPort.IsNull() && state.RecordIpv4PrefixPort.ValueBool() {
+		if state == nil || state.RecordIpv4PrefixPort.IsNull() || state.RecordIpv4PrefixPort.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4/prefix-port"))
 		}
 	}
 	if !data.RecordIpv4DestinationPrefixTos.IsNull() && !data.RecordIpv4DestinationPrefixTos.ValueBool() {
-		if state != nil && !state.RecordIpv4DestinationPrefixTos.IsNull() && state.RecordIpv4DestinationPrefixTos.ValueBool() {
+		if state == nil || state.RecordIpv4DestinationPrefixTos.IsNull() || state.RecordIpv4DestinationPrefixTos.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4/destination-prefix-tos"))
 		}
 	}
 	if !data.RecordIpv4SourcePrefixTos.IsNull() && !data.RecordIpv4SourcePrefixTos.ValueBool() {
-		if state != nil && !state.RecordIpv4SourcePrefixTos.IsNull() && state.RecordIpv4SourcePrefixTos.ValueBool() {
+		if state == nil || state.RecordIpv4SourcePrefixTos.IsNull() || state.RecordIpv4SourcePrefixTos.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4/source-prefix-tos"))
 		}
 	}
 	if !data.RecordIpv4PrefixTos.IsNull() && !data.RecordIpv4PrefixTos.ValueBool() {
-		if state != nil && !state.RecordIpv4PrefixTos.IsNull() && state.RecordIpv4PrefixTos.ValueBool() {
+		if state == nil || state.RecordIpv4PrefixTos.IsNull() || state.RecordIpv4PrefixTos.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4/prefix-tos"))
 		}
 	}
 	if !data.RecordIpv4ProtocolPortTos.IsNull() && !data.RecordIpv4ProtocolPortTos.ValueBool() {
-		if state != nil && !state.RecordIpv4ProtocolPortTos.IsNull() && state.RecordIpv4ProtocolPortTos.ValueBool() {
+		if state == nil || state.RecordIpv4ProtocolPortTos.IsNull() || state.RecordIpv4ProtocolPortTos.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4/protocol-port-tos"))
 		}
 	}
 	if !data.RecordIpv4AsTos.IsNull() && !data.RecordIpv4AsTos.ValueBool() {
-		if state != nil && !state.RecordIpv4AsTos.IsNull() && state.RecordIpv4AsTos.ValueBool() {
+		if state == nil || state.RecordIpv4AsTos.IsNull() || state.RecordIpv4AsTos.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4/as-tos"))
 		}
 	}
 	if !data.RecordIpv4DestinationPrefix.IsNull() && !data.RecordIpv4DestinationPrefix.ValueBool() {
-		if state != nil && !state.RecordIpv4DestinationPrefix.IsNull() && state.RecordIpv4DestinationPrefix.ValueBool() {
+		if state == nil || state.RecordIpv4DestinationPrefix.IsNull() || state.RecordIpv4DestinationPrefix.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4/destination-prefix"))
 		}
 	}
 	if !data.RecordIpv4SourcePrefix.IsNull() && !data.RecordIpv4SourcePrefix.ValueBool() {
-		if state != nil && !state.RecordIpv4SourcePrefix.IsNull() && state.RecordIpv4SourcePrefix.ValueBool() {
+		if state == nil || state.RecordIpv4SourcePrefix.IsNull() || state.RecordIpv4SourcePrefix.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4/source-prefix"))
 		}
 	}
 	if !data.RecordIpv4Prefix.IsNull() && !data.RecordIpv4Prefix.ValueBool() {
-		if state != nil && !state.RecordIpv4Prefix.IsNull() && state.RecordIpv4Prefix.ValueBool() {
+		if state == nil || state.RecordIpv4Prefix.IsNull() || state.RecordIpv4Prefix.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4/prefix"))
 		}
 	}
 	if !data.RecordIpv4ProtocolPort.IsNull() && !data.RecordIpv4ProtocolPort.ValueBool() {
-		if state != nil && !state.RecordIpv4ProtocolPort.IsNull() && state.RecordIpv4ProtocolPort.ValueBool() {
+		if state == nil || state.RecordIpv4ProtocolPort.IsNull() || state.RecordIpv4ProtocolPort.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4/protocol-port"))
 		}
 	}
 	if !data.RecordIpv4As.IsNull() && !data.RecordIpv4As.ValueBool() {
-		if state != nil && !state.RecordIpv4As.IsNull() && state.RecordIpv4As.ValueBool() {
+		if state == nil || state.RecordIpv4As.IsNull() || state.RecordIpv4As.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4/as"))
 		}
 	}
 	if !data.RecordIpv4DestinationTos.IsNull() && !data.RecordIpv4DestinationTos.ValueBool() {
-		if state != nil && !state.RecordIpv4DestinationTos.IsNull() && state.RecordIpv4DestinationTos.ValueBool() {
+		if state == nil || state.RecordIpv4DestinationTos.IsNull() || state.RecordIpv4DestinationTos.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4/destination-tos"))
 		}
 	}
 	if !data.RecordIpv4Destination.IsNull() && !data.RecordIpv4Destination.ValueBool() {
-		if state != nil && !state.RecordIpv4Destination.IsNull() && state.RecordIpv4Destination.ValueBool() {
+		if state == nil || state.RecordIpv4Destination.IsNull() || state.RecordIpv4Destination.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4/destination"))
 		}
 	}
 	if !data.RecordIpv4.IsNull() && !data.RecordIpv4.ValueBool() {
-		if state != nil && !state.RecordIpv4.IsNull() && state.RecordIpv4.ValueBool() {
+		if state == nil || state.RecordIpv4.IsNull() || state.RecordIpv4.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "record/ipv4"))
 		}
 	}
 	if !data.OptionOutbundlemember.IsNull() && !data.OptionOutbundlemember.ValueBool() {
-		if state != nil && !state.OptionOutbundlemember.IsNull() && state.OptionOutbundlemember.ValueBool() {
+		if state == nil || state.OptionOutbundlemember.IsNull() || state.OptionOutbundlemember.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "option/outbundlemember"))
 		}
 	}
 	if !data.OptionBgpattr.IsNull() && !data.OptionBgpattr.ValueBool() {
-		if state != nil && !state.OptionBgpattr.IsNull() && state.OptionBgpattr.ValueBool() {
+		if state == nil || state.OptionBgpattr.IsNull() || state.OptionBgpattr.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "option/bgpattr"))
 		}
 	}
 	if !data.OptionFiltered.IsNull() && !data.OptionFiltered.ValueBool() {
-		if state != nil && !state.OptionFiltered.IsNull() && state.OptionFiltered.ValueBool() {
+		if state == nil || state.OptionFiltered.IsNull() || state.OptionFiltered.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "option/filtered"))
 		}
 	}
 	if !data.OptionOutphysint.IsNull() && !data.OptionOutphysint.ValueBool() {
-		if state != nil && !state.OptionOutphysint.IsNull() && state.OptionOutphysint.ValueBool() {
+		if state == nil || state.OptionOutphysint.IsNull() || state.OptionOutphysint.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "option/outphysint"))
 		}
 	}

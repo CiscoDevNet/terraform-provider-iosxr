@@ -615,52 +615,52 @@ func (data *MPLSOAM) getDeletedItems(ctx context.Context, state MPLSOAM, version
 func (data *MPLSOAM) getEmptyLeafsDelete(ctx context.Context, state *MPLSOAM, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if helpers.VersionAtLeast(version, "25.4") && !data.OamDpmShutdown.IsNull() && !data.OamDpmShutdown.ValueBool() {
-		if state != nil && !state.OamDpmShutdown.IsNull() && state.OamDpmShutdown.ValueBool() {
+		if state == nil || state.OamDpmShutdown.IsNull() || state.OamDpmShutdown.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "oam/dpm/shutdown"))
 		}
 	}
 	if helpers.VersionAtLeast(version, "25.4") && !data.OamEchoRevisionFive.IsNull() && !data.OamEchoRevisionFive.ValueBool() {
-		if state != nil && !state.OamEchoRevisionFive.IsNull() && state.OamEchoRevisionFive.ValueBool() {
+		if state == nil || state.OamEchoRevisionFive.IsNull() || state.OamEchoRevisionFive.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "oam/echo/revision/five"))
 		}
 	}
 	if !data.OamDpmDownstreamEcmpFaults.IsNull() && !data.OamDpmDownstreamEcmpFaults.ValueBool() {
-		if state != nil && !state.OamDpmDownstreamEcmpFaults.IsNull() && state.OamDpmDownstreamEcmpFaults.ValueBool() {
+		if state == nil || state.OamDpmDownstreamEcmpFaults.IsNull() || state.OamDpmDownstreamEcmpFaults.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "oam/dpm/downstream-ecmp-faults"))
 		}
 	}
 	if !data.OamEchoRevisionFour.IsNull() && !data.OamEchoRevisionFour.ValueBool() {
-		if state != nil && !state.OamEchoRevisionFour.IsNull() && state.OamEchoRevisionFour.ValueBool() {
+		if state == nil || state.OamEchoRevisionFour.IsNull() || state.OamEchoRevisionFour.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "oam/echo/revision/four"))
 		}
 	}
 	if !data.OamEchoRevisionThree.IsNull() && !data.OamEchoRevisionThree.ValueBool() {
-		if state != nil && !state.OamEchoRevisionThree.IsNull() && state.OamEchoRevisionThree.ValueBool() {
+		if state == nil || state.OamEchoRevisionThree.IsNull() || state.OamEchoRevisionThree.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "oam/echo/revision/three"))
 		}
 	}
 	if !data.OamEchoRevisionTwo.IsNull() && !data.OamEchoRevisionTwo.ValueBool() {
-		if state != nil && !state.OamEchoRevisionTwo.IsNull() && state.OamEchoRevisionTwo.ValueBool() {
+		if state == nil || state.OamEchoRevisionTwo.IsNull() || state.OamEchoRevisionTwo.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "oam/echo/revision/two"))
 		}
 	}
 	if !data.OamEchoRevisionOne.IsNull() && !data.OamEchoRevisionOne.ValueBool() {
-		if state != nil && !state.OamEchoRevisionOne.IsNull() && state.OamEchoRevisionOne.ValueBool() {
+		if state == nil || state.OamEchoRevisionOne.IsNull() || state.OamEchoRevisionOne.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "oam/echo/revision/one"))
 		}
 	}
 	if !data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() && !data.OamEchoReplyModeControlChannelAllowReverseLsp.ValueBool() {
-		if state != nil && !state.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() && state.OamEchoReplyModeControlChannelAllowReverseLsp.ValueBool() {
+		if state == nil || state.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() || state.OamEchoReplyModeControlChannelAllowReverseLsp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "oam/echo/reply-mode/control-channel/allow-reverse-lsp"))
 		}
 	}
 	if !data.OamEchoDisableVendorExtension.IsNull() && !data.OamEchoDisableVendorExtension.ValueBool() {
-		if state != nil && !state.OamEchoDisableVendorExtension.IsNull() && state.OamEchoDisableVendorExtension.ValueBool() {
+		if state == nil || state.OamEchoDisableVendorExtension.IsNull() || state.OamEchoDisableVendorExtension.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "oam/echo/disable-vendor-extension"))
 		}
 	}
 	if !data.Oam.IsNull() && !data.Oam.ValueBool() {
-		if state != nil && !state.Oam.IsNull() && state.Oam.ValueBool() {
+		if state == nil || state.Oam.IsNull() || state.Oam.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "oam"))
 		}
 	}

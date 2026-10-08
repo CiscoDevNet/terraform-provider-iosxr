@@ -354,7 +354,7 @@ func (data *FTP) getEmptyLeafsDelete(ctx context.Context, state *FTP, version st
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.ClientVrfs[i].Passive.IsNull() && !data.ClientVrfs[i].Passive.ValueBool() {
-			if state != nil && i < len(state.ClientVrfs) && !state.ClientVrfs[i].Passive.IsNull() && state.ClientVrfs[i].Passive.ValueBool() {
+			if state == nil || i >= len(state.ClientVrfs) || state.ClientVrfs[i].Passive.IsNull() || state.ClientVrfs[i].Passive.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "client/vrfs/vrf", keyString), "passive"))
 			}
 		}

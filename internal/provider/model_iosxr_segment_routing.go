@@ -279,7 +279,7 @@ func (data *SegmentRouting) getDeletedItems(ctx context.Context, state SegmentRo
 func (data *SegmentRouting) getEmptyLeafsDelete(ctx context.Context, state *SegmentRouting, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.Enable.IsNull() && !data.Enable.ValueBool() {
-		if state != nil && !state.Enable.IsNull() && state.Enable.ValueBool() {
+		if state == nil || state.Enable.IsNull() || state.Enable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "enable"))
 		}
 	}

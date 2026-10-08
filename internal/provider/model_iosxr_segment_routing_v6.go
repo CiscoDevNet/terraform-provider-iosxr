@@ -848,12 +848,12 @@ func (data *SegmentRoutingV6) getEmptyLeafsDelete(ctx context.Context, state *Se
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Locators[i].Anycast.IsNull() && !data.Locators[i].Anycast.ValueBool() {
-			if state != nil && i < len(state.Locators) && !state.Locators[i].Anycast.IsNull() && state.Locators[i].Anycast.ValueBool() {
+			if state == nil || i >= len(state.Locators) || state.Locators[i].Anycast.IsNull() || state.Locators[i].Anycast.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "locators/locators/locator", keyString), "anycast"))
 			}
 		}
 		if !data.Locators[i].LocatorEnable.IsNull() && !data.Locators[i].LocatorEnable.ValueBool() {
-			if state != nil && i < len(state.Locators) && !state.Locators[i].LocatorEnable.IsNull() && state.Locators[i].LocatorEnable.ValueBool() {
+			if state == nil || i >= len(state.Locators) || state.Locators[i].LocatorEnable.IsNull() || state.Locators[i].LocatorEnable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "locators/locators/locator", keyString), "locator-enable"))
 			}
 		}
@@ -866,18 +866,18 @@ func (data *SegmentRoutingV6) getEmptyLeafsDelete(ctx context.Context, state *Se
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Formats[i].FormatEnable.IsNull() && !data.Formats[i].FormatEnable.ValueBool() {
-			if state != nil && i < len(state.Formats) && !state.Formats[i].FormatEnable.IsNull() && state.Formats[i].FormatEnable.ValueBool() {
+			if state == nil || i >= len(state.Formats) || state.Formats[i].FormatEnable.IsNull() || state.Formats[i].FormatEnable.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "formats/formats/format", keyString), "format-enable"))
 			}
 		}
 	}
 	if !data.LoggingLocatorStatus.IsNull() && !data.LoggingLocatorStatus.ValueBool() {
-		if state != nil && !state.LoggingLocatorStatus.IsNull() && state.LoggingLocatorStatus.ValueBool() {
+		if state == nil || state.LoggingLocatorStatus.IsNull() || state.LoggingLocatorStatus.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/locator-status"))
 		}
 	}
 	if !data.Enable.IsNull() && !data.Enable.ValueBool() {
-		if state != nil && !state.Enable.IsNull() && state.Enable.ValueBool() {
+		if state == nil || state.Enable.IsNull() || state.Enable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "enable"))
 		}
 	}

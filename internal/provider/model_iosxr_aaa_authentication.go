@@ -856,82 +856,82 @@ func (data *AAAAuthentication) getEmptyLeafsDelete(ctx context.Context, state *A
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Login[i].A4Radius.IsNull() && !data.Login[i].A4Radius.ValueBool() {
-			if state != nil && i < len(state.Login) && !state.Login[i].A4Radius.IsNull() && state.Login[i].A4Radius.ValueBool() {
+			if state == nil || i >= len(state.Login) || state.Login[i].A4Radius.IsNull() || state.Login[i].A4Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "login/authentication-list", keyString), "groups/group-4/radius"))
 			}
 		}
 		if !data.Login[i].A4Tacacs.IsNull() && !data.Login[i].A4Tacacs.ValueBool() {
-			if state != nil && i < len(state.Login) && !state.Login[i].A4Tacacs.IsNull() && state.Login[i].A4Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Login) || state.Login[i].A4Tacacs.IsNull() || state.Login[i].A4Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "login/authentication-list", keyString), "groups/group-4/tacacs"))
 			}
 		}
 		if !data.Login[i].A4Line.IsNull() && !data.Login[i].A4Line.ValueBool() {
-			if state != nil && i < len(state.Login) && !state.Login[i].A4Line.IsNull() && state.Login[i].A4Line.ValueBool() {
+			if state == nil || i >= len(state.Login) || state.Login[i].A4Line.IsNull() || state.Login[i].A4Line.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "login/authentication-list", keyString), "groups/group-4/line"))
 			}
 		}
 		if !data.Login[i].A4Local.IsNull() && !data.Login[i].A4Local.ValueBool() {
-			if state != nil && i < len(state.Login) && !state.Login[i].A4Local.IsNull() && state.Login[i].A4Local.ValueBool() {
+			if state == nil || i >= len(state.Login) || state.Login[i].A4Local.IsNull() || state.Login[i].A4Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "login/authentication-list", keyString), "groups/group-4/local"))
 			}
 		}
 		if !data.Login[i].A3Radius.IsNull() && !data.Login[i].A3Radius.ValueBool() {
-			if state != nil && i < len(state.Login) && !state.Login[i].A3Radius.IsNull() && state.Login[i].A3Radius.ValueBool() {
+			if state == nil || i >= len(state.Login) || state.Login[i].A3Radius.IsNull() || state.Login[i].A3Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "login/authentication-list", keyString), "groups/group-3/radius"))
 			}
 		}
 		if !data.Login[i].A3Tacacs.IsNull() && !data.Login[i].A3Tacacs.ValueBool() {
-			if state != nil && i < len(state.Login) && !state.Login[i].A3Tacacs.IsNull() && state.Login[i].A3Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Login) || state.Login[i].A3Tacacs.IsNull() || state.Login[i].A3Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "login/authentication-list", keyString), "groups/group-3/tacacs"))
 			}
 		}
 		if !data.Login[i].A3Line.IsNull() && !data.Login[i].A3Line.ValueBool() {
-			if state != nil && i < len(state.Login) && !state.Login[i].A3Line.IsNull() && state.Login[i].A3Line.ValueBool() {
+			if state == nil || i >= len(state.Login) || state.Login[i].A3Line.IsNull() || state.Login[i].A3Line.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "login/authentication-list", keyString), "groups/group-3/line"))
 			}
 		}
 		if !data.Login[i].A3Local.IsNull() && !data.Login[i].A3Local.ValueBool() {
-			if state != nil && i < len(state.Login) && !state.Login[i].A3Local.IsNull() && state.Login[i].A3Local.ValueBool() {
+			if state == nil || i >= len(state.Login) || state.Login[i].A3Local.IsNull() || state.Login[i].A3Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "login/authentication-list", keyString), "groups/group-3/local"))
 			}
 		}
 		if !data.Login[i].A2Radius.IsNull() && !data.Login[i].A2Radius.ValueBool() {
-			if state != nil && i < len(state.Login) && !state.Login[i].A2Radius.IsNull() && state.Login[i].A2Radius.ValueBool() {
+			if state == nil || i >= len(state.Login) || state.Login[i].A2Radius.IsNull() || state.Login[i].A2Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "login/authentication-list", keyString), "groups/group-2/radius"))
 			}
 		}
 		if !data.Login[i].A2Tacacs.IsNull() && !data.Login[i].A2Tacacs.ValueBool() {
-			if state != nil && i < len(state.Login) && !state.Login[i].A2Tacacs.IsNull() && state.Login[i].A2Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Login) || state.Login[i].A2Tacacs.IsNull() || state.Login[i].A2Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "login/authentication-list", keyString), "groups/group-2/tacacs"))
 			}
 		}
 		if !data.Login[i].A2Line.IsNull() && !data.Login[i].A2Line.ValueBool() {
-			if state != nil && i < len(state.Login) && !state.Login[i].A2Line.IsNull() && state.Login[i].A2Line.ValueBool() {
+			if state == nil || i >= len(state.Login) || state.Login[i].A2Line.IsNull() || state.Login[i].A2Line.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "login/authentication-list", keyString), "groups/group-2/line"))
 			}
 		}
 		if !data.Login[i].A2Local.IsNull() && !data.Login[i].A2Local.ValueBool() {
-			if state != nil && i < len(state.Login) && !state.Login[i].A2Local.IsNull() && state.Login[i].A2Local.ValueBool() {
+			if state == nil || i >= len(state.Login) || state.Login[i].A2Local.IsNull() || state.Login[i].A2Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "login/authentication-list", keyString), "groups/group-2/local"))
 			}
 		}
 		if !data.Login[i].A1Radius.IsNull() && !data.Login[i].A1Radius.ValueBool() {
-			if state != nil && i < len(state.Login) && !state.Login[i].A1Radius.IsNull() && state.Login[i].A1Radius.ValueBool() {
+			if state == nil || i >= len(state.Login) || state.Login[i].A1Radius.IsNull() || state.Login[i].A1Radius.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "login/authentication-list", keyString), "groups/group-1/radius"))
 			}
 		}
 		if !data.Login[i].A1Tacacs.IsNull() && !data.Login[i].A1Tacacs.ValueBool() {
-			if state != nil && i < len(state.Login) && !state.Login[i].A1Tacacs.IsNull() && state.Login[i].A1Tacacs.ValueBool() {
+			if state == nil || i >= len(state.Login) || state.Login[i].A1Tacacs.IsNull() || state.Login[i].A1Tacacs.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "login/authentication-list", keyString), "groups/group-1/tacacs"))
 			}
 		}
 		if !data.Login[i].A1Line.IsNull() && !data.Login[i].A1Line.ValueBool() {
-			if state != nil && i < len(state.Login) && !state.Login[i].A1Line.IsNull() && state.Login[i].A1Line.ValueBool() {
+			if state == nil || i >= len(state.Login) || state.Login[i].A1Line.IsNull() || state.Login[i].A1Line.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "login/authentication-list", keyString), "line"))
 			}
 		}
 		if !data.Login[i].A1Local.IsNull() && !data.Login[i].A1Local.ValueBool() {
-			if state != nil && i < len(state.Login) && !state.Login[i].A1Local.IsNull() && state.Login[i].A1Local.ValueBool() {
+			if state == nil || i >= len(state.Login) || state.Login[i].A1Local.IsNull() || state.Login[i].A1Local.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "login/authentication-list", keyString), "local"))
 			}
 		}

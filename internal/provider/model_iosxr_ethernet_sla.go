@@ -1387,7 +1387,7 @@ func (data *EthernetSLA) getDeletedItems(ctx context.Context, state EthernetSLA,
 func (data *EthernetSLA) getEmptyLeafsDelete(ctx context.Context, state *EthernetSLA, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.ScheduleEveryDay.IsNull() && !data.ScheduleEveryDay.ValueBool() {
-		if state != nil && !state.ScheduleEveryDay.IsNull() && state.ScheduleEveryDay.ValueBool() {
+		if state == nil || state.ScheduleEveryDay.IsNull() || state.ScheduleEveryDay.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "schedule/every/day"))
 		}
 	}
@@ -1399,68 +1399,68 @@ func (data *EthernetSLA) getEmptyLeafsDelete(ctx context.Context, state *Etherne
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if helpers.VersionAtLeast(version, "25.4") && !data.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() && !data.StatisticsMeasure[i].AggregateUsecMinimumDelay.ValueBool() {
-			if state != nil && i < len(state.StatisticsMeasure) && !state.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() && state.StatisticsMeasure[i].AggregateUsecMinimumDelay.ValueBool() {
+			if state == nil || i >= len(state.StatisticsMeasure) || state.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() || state.StatisticsMeasure[i].AggregateUsecMinimumDelay.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "statistics/measures/measure", keyString), "aggregate/usec-minimum-delay"))
 			}
 		}
 		if !data.StatisticsMeasure[i].BucketsProbes.IsNull() && !data.StatisticsMeasure[i].BucketsProbes.ValueBool() {
-			if state != nil && i < len(state.StatisticsMeasure) && !state.StatisticsMeasure[i].BucketsProbes.IsNull() && state.StatisticsMeasure[i].BucketsProbes.ValueBool() {
+			if state == nil || i >= len(state.StatisticsMeasure) || state.StatisticsMeasure[i].BucketsProbes.IsNull() || state.StatisticsMeasure[i].BucketsProbes.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "statistics/measures/measure", keyString), "buckets/probes"))
 			}
 		}
 		if !data.StatisticsMeasure[i].AggregateUsec.IsNull() && !data.StatisticsMeasure[i].AggregateUsec.ValueBool() {
-			if state != nil && i < len(state.StatisticsMeasure) && !state.StatisticsMeasure[i].AggregateUsec.IsNull() && state.StatisticsMeasure[i].AggregateUsec.ValueBool() {
+			if state == nil || i >= len(state.StatisticsMeasure) || state.StatisticsMeasure[i].AggregateUsec.IsNull() || state.StatisticsMeasure[i].AggregateUsec.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "statistics/measures/measure", keyString), "aggregate/usec"))
 			}
 		}
 		if !data.StatisticsMeasure[i].AggregateNone.IsNull() && !data.StatisticsMeasure[i].AggregateNone.ValueBool() {
-			if state != nil && i < len(state.StatisticsMeasure) && !state.StatisticsMeasure[i].AggregateNone.IsNull() && state.StatisticsMeasure[i].AggregateNone.ValueBool() {
+			if state == nil || i >= len(state.StatisticsMeasure) || state.StatisticsMeasure[i].AggregateNone.IsNull() || state.StatisticsMeasure[i].AggregateNone.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "statistics/measures/measure", keyString), "aggregate/none"))
 			}
 		}
 	}
 	if !data.ProbeSendBurstEveryHours.IsNull() && !data.ProbeSendBurstEveryHours.ValueBool() {
-		if state != nil && !state.ProbeSendBurstEveryHours.IsNull() && state.ProbeSendBurstEveryHours.ValueBool() {
+		if state == nil || state.ProbeSendBurstEveryHours.IsNull() || state.ProbeSendBurstEveryHours.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "probe/send/burst/every/hours"))
 		}
 	}
 	if !data.ProbeSendBurstEveryMinutes.IsNull() && !data.ProbeSendBurstEveryMinutes.ValueBool() {
-		if state != nil && !state.ProbeSendBurstEveryMinutes.IsNull() && state.ProbeSendBurstEveryMinutes.ValueBool() {
+		if state == nil || state.ProbeSendBurstEveryMinutes.IsNull() || state.ProbeSendBurstEveryMinutes.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "probe/send/burst/every/minutes"))
 		}
 	}
 	if !data.ProbeSendBurstEverySeconds.IsNull() && !data.ProbeSendBurstEverySeconds.ValueBool() {
-		if state != nil && !state.ProbeSendBurstEverySeconds.IsNull() && state.ProbeSendBurstEverySeconds.ValueBool() {
+		if state == nil || state.ProbeSendBurstEverySeconds.IsNull() || state.ProbeSendBurstEverySeconds.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "probe/send/burst/every/seconds"))
 		}
 	}
 	if !data.ProbeSendBurstOnce.IsNull() && !data.ProbeSendBurstOnce.ValueBool() {
-		if state != nil && !state.ProbeSendBurstOnce.IsNull() && state.ProbeSendBurstOnce.ValueBool() {
+		if state == nil || state.ProbeSendBurstOnce.IsNull() || state.ProbeSendBurstOnce.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "probe/send/burst/once"))
 		}
 	}
 	if !data.ProbeSendPacketEveryHours.IsNull() && !data.ProbeSendPacketEveryHours.ValueBool() {
-		if state != nil && !state.ProbeSendPacketEveryHours.IsNull() && state.ProbeSendPacketEveryHours.ValueBool() {
+		if state == nil || state.ProbeSendPacketEveryHours.IsNull() || state.ProbeSendPacketEveryHours.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "probe/send/packet/every/hours"))
 		}
 	}
 	if !data.ProbeSendPacketEveryMinutes.IsNull() && !data.ProbeSendPacketEveryMinutes.ValueBool() {
-		if state != nil && !state.ProbeSendPacketEveryMinutes.IsNull() && state.ProbeSendPacketEveryMinutes.ValueBool() {
+		if state == nil || state.ProbeSendPacketEveryMinutes.IsNull() || state.ProbeSendPacketEveryMinutes.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "probe/send/packet/every/minutes"))
 		}
 	}
 	if !data.ProbeSendPacketEverySeconds.IsNull() && !data.ProbeSendPacketEverySeconds.ValueBool() {
-		if state != nil && !state.ProbeSendPacketEverySeconds.IsNull() && state.ProbeSendPacketEverySeconds.ValueBool() {
+		if state == nil || state.ProbeSendPacketEverySeconds.IsNull() || state.ProbeSendPacketEverySeconds.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "probe/send/packet/every/seconds"))
 		}
 	}
 	if !data.ProbeSendPacketEveryMilliseconds.IsNull() && !data.ProbeSendPacketEveryMilliseconds.ValueBool() {
-		if state != nil && !state.ProbeSendPacketEveryMilliseconds.IsNull() && state.ProbeSendPacketEveryMilliseconds.ValueBool() {
+		if state == nil || state.ProbeSendPacketEveryMilliseconds.IsNull() || state.ProbeSendPacketEveryMilliseconds.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "probe/send/packet/every/milliseconds"))
 		}
 	}
 	if !data.ProbeSendPacketOnce.IsNull() && !data.ProbeSendPacketOnce.ValueBool() {
-		if state != nil && !state.ProbeSendPacketOnce.IsNull() && state.ProbeSendPacketOnce.ValueBool() {
+		if state == nil || state.ProbeSendPacketOnce.IsNull() || state.ProbeSendPacketOnce.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "probe/send/packet/once"))
 		}
 	}

@@ -294,22 +294,22 @@ func (data *FPD) getDeletedItems(ctx context.Context, state FPD, version string)
 func (data *FPD) getEmptyLeafsDelete(ctx context.Context, state *FPD, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.AutoReloadDisable.IsNull() && !data.AutoReloadDisable.ValueBool() {
-		if state != nil && !state.AutoReloadDisable.IsNull() && state.AutoReloadDisable.ValueBool() {
+		if state == nil || state.AutoReloadDisable.IsNull() || state.AutoReloadDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "auto-reload/disable"))
 		}
 	}
 	if !data.AutoReloadEnable.IsNull() && !data.AutoReloadEnable.ValueBool() {
-		if state != nil && !state.AutoReloadEnable.IsNull() && state.AutoReloadEnable.ValueBool() {
+		if state == nil || state.AutoReloadEnable.IsNull() || state.AutoReloadEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "auto-reload/enable"))
 		}
 	}
 	if !data.AutoUpgradeDisable.IsNull() && !data.AutoUpgradeDisable.ValueBool() {
-		if state != nil && !state.AutoUpgradeDisable.IsNull() && state.AutoUpgradeDisable.ValueBool() {
+		if state == nil || state.AutoUpgradeDisable.IsNull() || state.AutoUpgradeDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "auto-upgrade/disable"))
 		}
 	}
 	if !data.AutoUpgradeEnable.IsNull() && !data.AutoUpgradeEnable.ValueBool() {
-		if state != nil && !state.AutoUpgradeEnable.IsNull() && state.AutoUpgradeEnable.ValueBool() {
+		if state == nil || state.AutoUpgradeEnable.IsNull() || state.AutoUpgradeEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "auto-upgrade/enable"))
 		}
 	}

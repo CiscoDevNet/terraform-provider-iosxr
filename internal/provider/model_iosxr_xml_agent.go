@@ -925,18 +925,18 @@ func (data *XMLAgent) getEmptyLeafsDelete(ctx context.Context, state *XMLAgent, 
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Vrfs[i].Shutdown.IsNull() && !data.Vrfs[i].Shutdown.ValueBool() {
-			if state != nil && i < len(state.Vrfs) && !state.Vrfs[i].Shutdown.IsNull() && state.Vrfs[i].Shutdown.ValueBool() {
+			if state == nil || i >= len(state.Vrfs) || state.Vrfs[i].Shutdown.IsNull() || state.Vrfs[i].Shutdown.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "vrfs/vrf", keyString), "shutdown"))
 			}
 		}
 	}
 	if !data.Ipv4Disable.IsNull() && !data.Ipv4Disable.ValueBool() {
-		if state != nil && !state.Ipv4Disable.IsNull() && state.Ipv4Disable.ValueBool() {
+		if state == nil || state.Ipv4Disable.IsNull() || state.Ipv4Disable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/disable"))
 		}
 	}
 	if !data.Ipv6Enable.IsNull() && !data.Ipv6Enable.ValueBool() {
-		if state != nil && !state.Ipv6Enable.IsNull() && state.Ipv6Enable.ValueBool() {
+		if state == nil || state.Ipv6Enable.IsNull() || state.Ipv6Enable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/enable"))
 		}
 	}
@@ -948,23 +948,23 @@ func (data *XMLAgent) getEmptyLeafsDelete(ctx context.Context, state *XMLAgent, 
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.SslVrfs[i].Shutdown.IsNull() && !data.SslVrfs[i].Shutdown.ValueBool() {
-			if state != nil && i < len(state.SslVrfs) && !state.SslVrfs[i].Shutdown.IsNull() && state.SslVrfs[i].Shutdown.ValueBool() {
+			if state == nil || i >= len(state.SslVrfs) || state.SslVrfs[i].Shutdown.IsNull() || state.SslVrfs[i].Shutdown.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ssl/vrfs/vrf", keyString), "shutdown"))
 			}
 		}
 	}
 	if !data.SslEnable.IsNull() && !data.SslEnable.ValueBool() {
-		if state != nil && !state.SslEnable.IsNull() && state.SslEnable.ValueBool() {
+		if state == nil || state.SslEnable.IsNull() || state.SslEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ssl"))
 		}
 	}
 	if !data.TtyEnable.IsNull() && !data.TtyEnable.ValueBool() {
-		if state != nil && !state.TtyEnable.IsNull() && state.TtyEnable.ValueBool() {
+		if state == nil || state.TtyEnable.IsNull() || state.TtyEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "tty"))
 		}
 	}
 	if !data.Enable.IsNull() && !data.Enable.ValueBool() {
-		if state != nil && !state.Enable.IsNull() && state.Enable.ValueBool() {
+		if state == nil || state.Enable.IsNull() || state.Enable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "enable"))
 		}
 	}

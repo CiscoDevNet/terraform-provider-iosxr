@@ -342,27 +342,27 @@ func (data *CEFAccounting) getDeletedItems(ctx context.Context, state CEFAccount
 func (data *CEFAccounting) getEmptyLeafsDelete(ctx context.Context, state *CEFAccounting, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if helpers.VersionAtLeast(version, "25.4") && !data.SegmentRoutingPoliciesSrv6Disable.IsNull() && !data.SegmentRoutingPoliciesSrv6Disable.ValueBool() {
-		if state != nil && !state.SegmentRoutingPoliciesSrv6Disable.IsNull() && state.SegmentRoutingPoliciesSrv6Disable.ValueBool() {
+		if state == nil || state.SegmentRoutingPoliciesSrv6Disable.IsNull() || state.SegmentRoutingPoliciesSrv6Disable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/policies/srv6/disable"))
 		}
 	}
 	if !data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsNull() && !data.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.ValueBool() {
-		if state != nil && !state.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsNull() && state.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.ValueBool() {
+		if state == nil || state.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.IsNull() || state.PrefixesIpv6ModePerPrefixPerNexthopSrv6Locators.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "prefixes/ipv6/mode/per-prefix"))
 		}
 	}
 	if !data.InterfacesSegmentRoutingMplsIpv6.IsNull() && !data.InterfacesSegmentRoutingMplsIpv6.ValueBool() {
-		if state != nil && !state.InterfacesSegmentRoutingMplsIpv6.IsNull() && state.InterfacesSegmentRoutingMplsIpv6.ValueBool() {
+		if state == nil || state.InterfacesSegmentRoutingMplsIpv6.IsNull() || state.InterfacesSegmentRoutingMplsIpv6.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/segment-routing/mpls/ipv6"))
 		}
 	}
 	if !data.InterfacesSegmentRoutingMplsIpv4.IsNull() && !data.InterfacesSegmentRoutingMplsIpv4.ValueBool() {
-		if state != nil && !state.InterfacesSegmentRoutingMplsIpv4.IsNull() && state.InterfacesSegmentRoutingMplsIpv4.ValueBool() {
+		if state == nil || state.InterfacesSegmentRoutingMplsIpv4.IsNull() || state.InterfacesSegmentRoutingMplsIpv4.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/segment-routing/mpls/ipv4"))
 		}
 	}
 	if !data.InterfacesMplsIpv4RsvpTe.IsNull() && !data.InterfacesMplsIpv4RsvpTe.ValueBool() {
-		if state != nil && !state.InterfacesMplsIpv4RsvpTe.IsNull() && state.InterfacesMplsIpv4RsvpTe.ValueBool() {
+		if state == nil || state.InterfacesMplsIpv4RsvpTe.IsNull() || state.InterfacesMplsIpv4RsvpTe.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/mpls/ipv4"))
 		}
 	}

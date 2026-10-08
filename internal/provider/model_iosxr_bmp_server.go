@@ -769,18 +769,18 @@ func (data *BMPServer) getEmptyLeafsDelete(ctx context.Context, state *BMPServer
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Servers[i].InitialRefreshSkip.IsNull() && !data.Servers[i].InitialRefreshSkip.ValueBool() {
-			if state != nil && i < len(state.Servers) && !state.Servers[i].InitialRefreshSkip.IsNull() && state.Servers[i].InitialRefreshSkip.ValueBool() {
+			if state == nil || i >= len(state.Servers) || state.Servers[i].InitialRefreshSkip.IsNull() || state.Servers[i].InitialRefreshSkip.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "server", keyString), "initial-refresh"))
 			}
 		}
 		if !data.Servers[i].Shutdown.IsNull() && !data.Servers[i].Shutdown.ValueBool() {
-			if state != nil && i < len(state.Servers) && !state.Servers[i].Shutdown.IsNull() && state.Servers[i].Shutdown.ValueBool() {
+			if state == nil || i >= len(state.Servers) || state.Servers[i].Shutdown.IsNull() || state.Servers[i].Shutdown.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "server", keyString), "shutdown"))
 			}
 		}
 	}
 	if !data.AllRouteMirroringInboundPrePolicy.IsNull() && !data.AllRouteMirroringInboundPrePolicy.ValueBool() {
-		if state != nil && !state.AllRouteMirroringInboundPrePolicy.IsNull() && state.AllRouteMirroringInboundPrePolicy.ValueBool() {
+		if state == nil || state.AllRouteMirroringInboundPrePolicy.IsNull() || state.AllRouteMirroringInboundPrePolicy.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "all/route-mirroring/inbound/pre-policy"))
 		}
 	}

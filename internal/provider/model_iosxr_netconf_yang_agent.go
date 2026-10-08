@@ -376,17 +376,17 @@ func (data *NetconfYangAgent) getDeletedItems(ctx context.Context, state Netconf
 func (data *NetconfYangAgent) getEmptyLeafsDelete(ctx context.Context, state *NetconfYangAgent, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.NetconfV1StreamingDisabled.IsNull() && !data.NetconfV1StreamingDisabled.ValueBool() {
-		if state != nil && !state.NetconfV1StreamingDisabled.IsNull() && state.NetconfV1StreamingDisabled.ValueBool() {
+		if state == nil || state.NetconfV1StreamingDisabled.IsNull() || state.NetconfV1StreamingDisabled.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "netconf1.0"))
 		}
 	}
 	if !data.WithDefaultsSupport.IsNull() && !data.WithDefaultsSupport.ValueBool() {
-		if state != nil && !state.WithDefaultsSupport.IsNull() && state.WithDefaultsSupport.ValueBool() {
+		if state == nil || state.WithDefaultsSupport.IsNull() || state.WithDefaultsSupport.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "with-defaults-support/enable"))
 		}
 	}
 	if !data.Ssh.IsNull() && !data.Ssh.ValueBool() {
-		if state != nil && !state.Ssh.IsNull() && state.Ssh.ValueBool() {
+		if state == nil || state.Ssh.IsNull() || state.Ssh.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ssh"))
 		}
 	}

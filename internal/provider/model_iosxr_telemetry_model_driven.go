@@ -1908,12 +1908,12 @@ func (data *TelemetryModelDriven) getEmptyLeafsDelete(ctx context.Context, state
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.Subscriptions[i].SensorGroupIds[ci].StrictTimer.IsNull() && !data.Subscriptions[i].SensorGroupIds[ci].StrictTimer.ValueBool() {
-				if state != nil && i < len(state.Subscriptions) && ci < len(state.Subscriptions[i].SensorGroupIds) && !state.Subscriptions[i].SensorGroupIds[ci].StrictTimer.IsNull() && state.Subscriptions[i].SensorGroupIds[ci].StrictTimer.ValueBool() {
+				if state == nil || i >= len(state.Subscriptions) || ci >= len(state.Subscriptions[i].SensorGroupIds) || state.Subscriptions[i].SensorGroupIds[ci].StrictTimer.IsNull() || state.Subscriptions[i].SensorGroupIds[ci].StrictTimer.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "subscriptions/subscription", keyString, "sensor-group-ids/sensor-group-id", ckeyString), "strict-timer"))
 				}
 			}
 			if !data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.IsNull() && !data.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.ValueBool() {
-				if state != nil && i < len(state.Subscriptions) && ci < len(state.Subscriptions[i].SensorGroupIds) && !state.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.IsNull() && state.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.ValueBool() {
+				if state == nil || i >= len(state.Subscriptions) || ci >= len(state.Subscriptions[i].SensorGroupIds) || state.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.IsNull() || state.Subscriptions[i].SensorGroupIds[ci].HeartbeatAlways.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "subscriptions/subscription", keyString, "sensor-group-ids/sensor-group-id", ckeyString), "heartbeat/always"))
 				}
 			}
@@ -1934,27 +1934,27 @@ func (data *TelemetryModelDriven) getEmptyLeafsDelete(ctx context.Context, state
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.DestinationGroups[i].Destinations[ci].ProtocolUdp.IsNull() && !data.DestinationGroups[i].Destinations[ci].ProtocolUdp.ValueBool() {
-				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].Destinations) && !state.DestinationGroups[i].Destinations[ci].ProtocolUdp.IsNull() && state.DestinationGroups[i].Destinations[ci].ProtocolUdp.ValueBool() {
+				if state == nil || i >= len(state.DestinationGroups) || ci >= len(state.DestinationGroups[i].Destinations) || state.DestinationGroups[i].Destinations[ci].ProtocolUdp.IsNull() || state.DestinationGroups[i].Destinations[ci].ProtocolUdp.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "destination-groups/destination-group", keyString, "destinations/destination", ckeyString), "protocol/udp"))
 				}
 			}
 			if !data.DestinationGroups[i].Destinations[ci].ProtocolTcp.IsNull() && !data.DestinationGroups[i].Destinations[ci].ProtocolTcp.ValueBool() {
-				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].Destinations) && !state.DestinationGroups[i].Destinations[ci].ProtocolTcp.IsNull() && state.DestinationGroups[i].Destinations[ci].ProtocolTcp.ValueBool() {
+				if state == nil || i >= len(state.DestinationGroups) || ci >= len(state.DestinationGroups[i].Destinations) || state.DestinationGroups[i].Destinations[ci].ProtocolTcp.IsNull() || state.DestinationGroups[i].Destinations[ci].ProtocolTcp.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "destination-groups/destination-group", keyString, "destinations/destination", ckeyString), "protocol/tcp"))
 				}
 			}
 			if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.IsNull() && !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.ValueBool() {
-				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].Destinations) && !state.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.IsNull() && state.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.ValueBool() {
+				if state == nil || i >= len(state.DestinationGroups) || ci >= len(state.DestinationGroups[i].Destinations) || state.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.IsNull() || state.DestinationGroups[i].Destinations[ci].ProtocolGrpcGzip.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "destination-groups/destination-group", keyString, "destinations/destination", ckeyString), "protocol/grpc"))
 				}
 			}
 			if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.IsNull() && !data.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.ValueBool() {
-				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].Destinations) && !state.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.IsNull() && state.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.ValueBool() {
+				if state == nil || i >= len(state.DestinationGroups) || ci >= len(state.DestinationGroups[i].Destinations) || state.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.IsNull() || state.DestinationGroups[i].Destinations[ci].ProtocolGrpcNoTls.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "destination-groups/destination-group", keyString, "destinations/destination", ckeyString), "protocol/grpc"))
 				}
 			}
 			if !data.DestinationGroups[i].Destinations[ci].ProtocolGrpc.IsNull() && !data.DestinationGroups[i].Destinations[ci].ProtocolGrpc.ValueBool() {
-				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].Destinations) && !state.DestinationGroups[i].Destinations[ci].ProtocolGrpc.IsNull() && state.DestinationGroups[i].Destinations[ci].ProtocolGrpc.ValueBool() {
+				if state == nil || i >= len(state.DestinationGroups) || ci >= len(state.DestinationGroups[i].Destinations) || state.DestinationGroups[i].Destinations[ci].ProtocolGrpc.IsNull() || state.DestinationGroups[i].Destinations[ci].ProtocolGrpc.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "destination-groups/destination-group", keyString, "destinations/destination", ckeyString), "protocol/grpc"))
 				}
 			}
@@ -1967,54 +1967,54 @@ func (data *TelemetryModelDriven) getEmptyLeafsDelete(ctx context.Context, state
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.ValueBool() {
-				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].AddressFamily) && !state.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.IsNull() && state.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.ValueBool() {
+				if state == nil || i >= len(state.DestinationGroups) || ci >= len(state.DestinationGroups[i].AddressFamily) || state.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.IsNull() || state.DestinationGroups[i].AddressFamily[ci].ProtocolUdp.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "destination-groups/destination-group", keyString, "address-families/address-family", ckeyString), "protocol/udp"))
 				}
 			}
 			if !data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.ValueBool() {
-				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].AddressFamily) && !state.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.IsNull() && state.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.ValueBool() {
+				if state == nil || i >= len(state.DestinationGroups) || ci >= len(state.DestinationGroups[i].AddressFamily) || state.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.IsNull() || state.DestinationGroups[i].AddressFamily[ci].ProtocolTcp.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "destination-groups/destination-group", keyString, "address-families/address-family", ckeyString), "protocol/tcp"))
 				}
 			}
 			if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.ValueBool() {
-				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].AddressFamily) && !state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.IsNull() && state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.ValueBool() {
+				if state == nil || i >= len(state.DestinationGroups) || ci >= len(state.DestinationGroups[i].AddressFamily) || state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.IsNull() || state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcGzip.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "destination-groups/destination-group", keyString, "address-families/address-family", ckeyString), "protocol/grpc"))
 				}
 			}
 			if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.ValueBool() {
-				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].AddressFamily) && !state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.IsNull() && state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.ValueBool() {
+				if state == nil || i >= len(state.DestinationGroups) || ci >= len(state.DestinationGroups[i].AddressFamily) || state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.IsNull() || state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpcNoTls.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "destination-groups/destination-group", keyString, "address-families/address-family", ckeyString), "protocol/grpc"))
 				}
 			}
 			if !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.IsNull() && !data.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.ValueBool() {
-				if state != nil && i < len(state.DestinationGroups) && ci < len(state.DestinationGroups[i].AddressFamily) && !state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.IsNull() && state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.ValueBool() {
+				if state == nil || i >= len(state.DestinationGroups) || ci >= len(state.DestinationGroups[i].AddressFamily) || state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.IsNull() || state.DestinationGroups[i].AddressFamily[ci].ProtocolGrpc.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "destination-groups/destination-group", keyString, "address-families/address-family", ckeyString), "protocol/grpc"))
 				}
 			}
 		}
 	}
 	if !data.GnmiBundling.IsNull() && !data.GnmiBundling.ValueBool() {
-		if state != nil && !state.GnmiBundling.IsNull() && state.GnmiBundling.ValueBool() {
+		if state == nil || state.GnmiBundling.IsNull() || state.GnmiBundling.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "gnmi/bundling"))
 		}
 	}
 	if !data.GnmiHeartbeatAlways.IsNull() && !data.GnmiHeartbeatAlways.ValueBool() {
-		if state != nil && !state.GnmiHeartbeatAlways.IsNull() && state.GnmiHeartbeatAlways.ValueBool() {
+		if state == nil || state.GnmiHeartbeatAlways.IsNull() || state.GnmiHeartbeatAlways.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "gnmi/heartbeat/always"))
 		}
 	}
 	if !data.IncludeEmptyValues.IsNull() && !data.IncludeEmptyValues.ValueBool() {
-		if state != nil && !state.IncludeEmptyValues.IsNull() && state.IncludeEmptyValues.ValueBool() {
+		if state == nil || state.IncludeEmptyValues.IsNull() || state.IncludeEmptyValues.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "include/empty/values"))
 		}
 	}
 	if !data.IncludeSelectLeavesOnEvents.IsNull() && !data.IncludeSelectLeavesOnEvents.ValueBool() {
-		if state != nil && !state.IncludeSelectLeavesOnEvents.IsNull() && state.IncludeSelectLeavesOnEvents.ValueBool() {
+		if state == nil || state.IncludeSelectLeavesOnEvents.IsNull() || state.IncludeSelectLeavesOnEvents.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "include/select-leaves-on-events"))
 		}
 	}
 	if !data.StrictTimer.IsNull() && !data.StrictTimer.ValueBool() {
-		if state != nil && !state.StrictTimer.IsNull() && state.StrictTimer.ValueBool() {
+		if state == nil || state.StrictTimer.IsNull() || state.StrictTimer.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "strict-timer"))
 		}
 	}

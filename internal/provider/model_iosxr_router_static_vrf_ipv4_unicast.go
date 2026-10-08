@@ -2191,7 +2191,7 @@ func (data *RouterStaticVRFIPv4Unicast) getEmptyLeafsDelete(ctx context.Context,
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.Vrfs[i].SrPolicies[ci].Permanent.IsNull() && !data.Vrfs[i].SrPolicies[ci].Permanent.ValueBool() {
-				if state != nil && i < len(state.Vrfs) && ci < len(state.Vrfs[i].SrPolicies) && !state.Vrfs[i].SrPolicies[ci].Permanent.IsNull() && state.Vrfs[i].SrPolicies[ci].Permanent.ValueBool() {
+				if state == nil || i >= len(state.Vrfs) || ci >= len(state.Vrfs[i].SrPolicies) || state.Vrfs[i].SrPolicies[ci].Permanent.IsNull() || state.Vrfs[i].SrPolicies[ci].Permanent.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "vrfs/vrf", keyString, "sr-policies/sr-policy", ckeyString), "permanent"))
 				}
 			}
@@ -2204,7 +2204,7 @@ func (data *RouterStaticVRFIPv4Unicast) getEmptyLeafsDelete(ctx context.Context,
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() && !data.Vrfs[i].NexthopAddresses[ci].Permanent.ValueBool() {
-				if state != nil && i < len(state.Vrfs) && ci < len(state.Vrfs[i].NexthopAddresses) && !state.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() && state.Vrfs[i].NexthopAddresses[ci].Permanent.ValueBool() {
+				if state == nil || i >= len(state.Vrfs) || ci >= len(state.Vrfs[i].NexthopAddresses) || state.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() || state.Vrfs[i].NexthopAddresses[ci].Permanent.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "vrfs/vrf", keyString, "nexthop-addresses/nexthop-address", ckeyString), "permanent"))
 				}
 			}
@@ -2217,7 +2217,7 @@ func (data *RouterStaticVRFIPv4Unicast) getEmptyLeafsDelete(ctx context.Context,
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() && !data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.ValueBool() {
-				if state != nil && i < len(state.Vrfs) && ci < len(state.Vrfs[i].NexthopInterfaceAddresses) && !state.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() && state.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.ValueBool() {
+				if state == nil || i >= len(state.Vrfs) || ci >= len(state.Vrfs[i].NexthopInterfaceAddresses) || state.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() || state.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "vrfs/vrf", keyString, "nexthop-interface-addresses/nexthop-interface-address", ckeyString), "permanent"))
 				}
 			}
@@ -2230,7 +2230,7 @@ func (data *RouterStaticVRFIPv4Unicast) getEmptyLeafsDelete(ctx context.Context,
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() && !data.Vrfs[i].NexthopInterfaces[ci].Permanent.ValueBool() {
-				if state != nil && i < len(state.Vrfs) && ci < len(state.Vrfs[i].NexthopInterfaces) && !state.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() && state.Vrfs[i].NexthopInterfaces[ci].Permanent.ValueBool() {
+				if state == nil || i >= len(state.Vrfs) || ci >= len(state.Vrfs[i].NexthopInterfaces) || state.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() || state.Vrfs[i].NexthopInterfaces[ci].Permanent.ValueBool() {
 					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "vrfs/vrf", keyString, "nexthop-interfaces/nexthop-interface", ckeyString), "permanent"))
 				}
 			}
@@ -2244,7 +2244,7 @@ func (data *RouterStaticVRFIPv4Unicast) getEmptyLeafsDelete(ctx context.Context,
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.SrPolicies[i].Permanent.IsNull() && !data.SrPolicies[i].Permanent.ValueBool() {
-			if state != nil && i < len(state.SrPolicies) && !state.SrPolicies[i].Permanent.IsNull() && state.SrPolicies[i].Permanent.ValueBool() {
+			if state == nil || i >= len(state.SrPolicies) || state.SrPolicies[i].Permanent.IsNull() || state.SrPolicies[i].Permanent.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "sr-policies/sr-policy", keyString), "permanent"))
 			}
 		}
@@ -2257,7 +2257,7 @@ func (data *RouterStaticVRFIPv4Unicast) getEmptyLeafsDelete(ctx context.Context,
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.NexthopAddresses[i].Permanent.IsNull() && !data.NexthopAddresses[i].Permanent.ValueBool() {
-			if state != nil && i < len(state.NexthopAddresses) && !state.NexthopAddresses[i].Permanent.IsNull() && state.NexthopAddresses[i].Permanent.ValueBool() {
+			if state == nil || i >= len(state.NexthopAddresses) || state.NexthopAddresses[i].Permanent.IsNull() || state.NexthopAddresses[i].Permanent.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "nexthop-addresses/nexthop-address", keyString), "permanent"))
 			}
 		}
@@ -2270,7 +2270,7 @@ func (data *RouterStaticVRFIPv4Unicast) getEmptyLeafsDelete(ctx context.Context,
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.NexthopInterfaceAddresses[i].Permanent.IsNull() && !data.NexthopInterfaceAddresses[i].Permanent.ValueBool() {
-			if state != nil && i < len(state.NexthopInterfaceAddresses) && !state.NexthopInterfaceAddresses[i].Permanent.IsNull() && state.NexthopInterfaceAddresses[i].Permanent.ValueBool() {
+			if state == nil || i >= len(state.NexthopInterfaceAddresses) || state.NexthopInterfaceAddresses[i].Permanent.IsNull() || state.NexthopInterfaceAddresses[i].Permanent.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "nexthop-interface-addresses/nexthop-interface-address", keyString), "permanent"))
 			}
 		}
@@ -2283,7 +2283,7 @@ func (data *RouterStaticVRFIPv4Unicast) getEmptyLeafsDelete(ctx context.Context,
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.NexthopInterfaces[i].Permanent.IsNull() && !data.NexthopInterfaces[i].Permanent.ValueBool() {
-			if state != nil && i < len(state.NexthopInterfaces) && !state.NexthopInterfaces[i].Permanent.IsNull() && state.NexthopInterfaces[i].Permanent.ValueBool() {
+			if state == nil || i >= len(state.NexthopInterfaces) || state.NexthopInterfaces[i].Permanent.IsNull() || state.NexthopInterfaces[i].Permanent.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "nexthop-interfaces/nexthop-interface", keyString), "permanent"))
 			}
 		}

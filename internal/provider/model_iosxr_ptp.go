@@ -1783,162 +1783,162 @@ func (data *PTP) getDeletedItems(ctx context.Context, state PTP, version string)
 func (data *PTP) getEmptyLeafsDelete(ctx context.Context, state *PTP, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.ClockProfileG82752ClockTypeTTsc.IsNull() && !data.ClockProfileG82752ClockTypeTTsc.ValueBool() {
-		if state != nil && !state.ClockProfileG82752ClockTypeTTsc.IsNull() && state.ClockProfileG82752ClockTypeTTsc.ValueBool() {
+		if state == nil || state.ClockProfileG82752ClockTypeTTsc.IsNull() || state.ClockProfileG82752ClockTypeTTsc.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/profile/g-8275-2/clock-type/t-tsc"))
 		}
 	}
 	if !data.ClockProfileG82752ClockTypeTGm.IsNull() && !data.ClockProfileG82752ClockTypeTGm.ValueBool() {
-		if state != nil && !state.ClockProfileG82752ClockTypeTGm.IsNull() && state.ClockProfileG82752ClockTypeTGm.ValueBool() {
+		if state == nil || state.ClockProfileG82752ClockTypeTGm.IsNull() || state.ClockProfileG82752ClockTypeTGm.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/profile/g-8275-2/clock-type/t-gm"))
 		}
 	}
 	if !data.ClockProfileG82752ClockTypeTBc.IsNull() && !data.ClockProfileG82752ClockTypeTBc.ValueBool() {
-		if state != nil && !state.ClockProfileG82752ClockTypeTBc.IsNull() && state.ClockProfileG82752ClockTypeTBc.ValueBool() {
+		if state == nil || state.ClockProfileG82752ClockTypeTBc.IsNull() || state.ClockProfileG82752ClockTypeTBc.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/profile/g-8275-2/clock-type/t-bc"))
 		}
 	}
 	if !data.ClockProfileG82751ClockTypeTTsc.IsNull() && !data.ClockProfileG82751ClockTypeTTsc.ValueBool() {
-		if state != nil && !state.ClockProfileG82751ClockTypeTTsc.IsNull() && state.ClockProfileG82751ClockTypeTTsc.ValueBool() {
+		if state == nil || state.ClockProfileG82751ClockTypeTTsc.IsNull() || state.ClockProfileG82751ClockTypeTTsc.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/profile/g-8275-1/clock-type/t-tsc"))
 		}
 	}
 	if !data.ClockProfileG82751ClockTypeTGm.IsNull() && !data.ClockProfileG82751ClockTypeTGm.ValueBool() {
-		if state != nil && !state.ClockProfileG82751ClockTypeTGm.IsNull() && state.ClockProfileG82751ClockTypeTGm.ValueBool() {
+		if state == nil || state.ClockProfileG82751ClockTypeTGm.IsNull() || state.ClockProfileG82751ClockTypeTGm.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/profile/g-8275-1/clock-type/t-gm"))
 		}
 	}
 	if !data.ClockProfileG82751ClockTypeTBc.IsNull() && !data.ClockProfileG82751ClockTypeTBc.ValueBool() {
-		if state != nil && !state.ClockProfileG82751ClockTypeTBc.IsNull() && state.ClockProfileG82751ClockTypeTBc.ValueBool() {
+		if state == nil || state.ClockProfileG82751ClockTypeTBc.IsNull() || state.ClockProfileG82751ClockTypeTBc.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/profile/g-8275-1/clock-type/t-bc"))
 		}
 	}
 	if !data.ClockProfileG82651ClockTypeSlave.IsNull() && !data.ClockProfileG82651ClockTypeSlave.ValueBool() {
-		if state != nil && !state.ClockProfileG82651ClockTypeSlave.IsNull() && state.ClockProfileG82651ClockTypeSlave.ValueBool() {
+		if state == nil || state.ClockProfileG82651ClockTypeSlave.IsNull() || state.ClockProfileG82651ClockTypeSlave.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/profile/g-8265-1/clock-type"))
 		}
 	}
 	if !data.ClockProfileG82651ClockTypeMaster.IsNull() && !data.ClockProfileG82651ClockTypeMaster.ValueBool() {
-		if state != nil && !state.ClockProfileG82651ClockTypeMaster.IsNull() && state.ClockProfileG82651ClockTypeMaster.ValueBool() {
+		if state == nil || state.ClockProfileG82651ClockTypeMaster.IsNull() || state.ClockProfileG82651ClockTypeMaster.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/profile/g-8265-1/clock-type"))
 		}
 	}
 	if !data.ClockProfileG82651.IsNull() && !data.ClockProfileG82651.ValueBool() {
-		if state != nil && !state.ClockProfileG82651.IsNull() && state.ClockProfileG82651.ValueBool() {
+		if state == nil || state.ClockProfileG82651.IsNull() || state.ClockProfileG82651.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/profile/g-8265-1"))
 		}
 	}
 	if !data.ClockTimeSourceInternalOscillator.IsNull() && !data.ClockTimeSourceInternalOscillator.ValueBool() {
-		if state != nil && !state.ClockTimeSourceInternalOscillator.IsNull() && state.ClockTimeSourceInternalOscillator.ValueBool() {
+		if state == nil || state.ClockTimeSourceInternalOscillator.IsNull() || state.ClockTimeSourceInternalOscillator.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/time-source/internal-oscillator"))
 		}
 	}
 	if !data.ClockTimeSourceOther.IsNull() && !data.ClockTimeSourceOther.ValueBool() {
-		if state != nil && !state.ClockTimeSourceOther.IsNull() && state.ClockTimeSourceOther.ValueBool() {
+		if state == nil || state.ClockTimeSourceOther.IsNull() || state.ClockTimeSourceOther.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/time-source/other"))
 		}
 	}
 	if !data.ClockTimeSourceHandSet.IsNull() && !data.ClockTimeSourceHandSet.ValueBool() {
-		if state != nil && !state.ClockTimeSourceHandSet.IsNull() && state.ClockTimeSourceHandSet.ValueBool() {
+		if state == nil || state.ClockTimeSourceHandSet.IsNull() || state.ClockTimeSourceHandSet.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/time-source/hand-set"))
 		}
 	}
 	if !data.ClockTimeSourceNtp.IsNull() && !data.ClockTimeSourceNtp.ValueBool() {
-		if state != nil && !state.ClockTimeSourceNtp.IsNull() && state.ClockTimeSourceNtp.ValueBool() {
+		if state == nil || state.ClockTimeSourceNtp.IsNull() || state.ClockTimeSourceNtp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/time-source/ntp"))
 		}
 	}
 	if !data.ClockTimeSourcePtp.IsNull() && !data.ClockTimeSourcePtp.ValueBool() {
-		if state != nil && !state.ClockTimeSourcePtp.IsNull() && state.ClockTimeSourcePtp.ValueBool() {
+		if state == nil || state.ClockTimeSourcePtp.IsNull() || state.ClockTimeSourcePtp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/time-source/ptp"))
 		}
 	}
 	if !data.ClockTimeSourceTerrestrialRadio.IsNull() && !data.ClockTimeSourceTerrestrialRadio.ValueBool() {
-		if state != nil && !state.ClockTimeSourceTerrestrialRadio.IsNull() && state.ClockTimeSourceTerrestrialRadio.ValueBool() {
+		if state == nil || state.ClockTimeSourceTerrestrialRadio.IsNull() || state.ClockTimeSourceTerrestrialRadio.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/time-source/terrestrial-radio"))
 		}
 	}
 	if !data.ClockTimeSourceGps.IsNull() && !data.ClockTimeSourceGps.ValueBool() {
-		if state != nil && !state.ClockTimeSourceGps.IsNull() && state.ClockTimeSourceGps.ValueBool() {
+		if state == nil || state.ClockTimeSourceGps.IsNull() || state.ClockTimeSourceGps.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/time-source/gps"))
 		}
 	}
 	if !data.ClockTimeSourceAtomicClock.IsNull() && !data.ClockTimeSourceAtomicClock.ValueBool() {
-		if state != nil && !state.ClockTimeSourceAtomicClock.IsNull() && state.ClockTimeSourceAtomicClock.ValueBool() {
+		if state == nil || state.ClockTimeSourceAtomicClock.IsNull() || state.ClockTimeSourceAtomicClock.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/time-source/atomic-clock"))
 		}
 	}
 	if !data.ClockTimescaleArb.IsNull() && !data.ClockTimescaleArb.ValueBool() {
-		if state != nil && !state.ClockTimescaleArb.IsNull() && state.ClockTimescaleArb.ValueBool() {
+		if state == nil || state.ClockTimescaleArb.IsNull() || state.ClockTimescaleArb.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/timescale/arb"))
 		}
 	}
 	if !data.ClockTimescalePtp.IsNull() && !data.ClockTimescalePtp.ValueBool() {
-		if state != nil && !state.ClockTimescalePtp.IsNull() && state.ClockTimescalePtp.ValueBool() {
+		if state == nil || state.ClockTimescalePtp.IsNull() || state.ClockTimescalePtp.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/timescale/ptp"))
 		}
 	}
 	if !data.ClockIdentityMacAddressRouter.IsNull() && !data.ClockIdentityMacAddressRouter.ValueBool() {
-		if state != nil && !state.ClockIdentityMacAddressRouter.IsNull() && state.ClockIdentityMacAddressRouter.ValueBool() {
+		if state == nil || state.ClockIdentityMacAddressRouter.IsNull() || state.ClockIdentityMacAddressRouter.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/identity/mac-address/router"))
 		}
 	}
 	if !data.VirtualPort.IsNull() && !data.VirtualPort.ValueBool() {
-		if state != nil && !state.VirtualPort.IsNull() && state.VirtualPort.ValueBool() {
+		if state == nil || state.VirtualPort.IsNull() || state.VirtualPort.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "virtual-port"))
 		}
 	}
 	if !data.LogServoEvents.IsNull() && !data.LogServoEvents.ValueBool() {
-		if state != nil && !state.LogServoEvents.IsNull() && state.LogServoEvents.ValueBool() {
+		if state == nil || state.LogServoEvents.IsNull() || state.LogServoEvents.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "log/Cisco-IOS-XR-um-ptp-log-servo-cfg:servo/events"))
 		}
 	}
 	if !data.LogBestPrimaryClockChanges.IsNull() && !data.LogBestPrimaryClockChanges.ValueBool() {
-		if state != nil && !state.LogBestPrimaryClockChanges.IsNull() && state.LogBestPrimaryClockChanges.ValueBool() {
+		if state == nil || state.LogBestPrimaryClockChanges.IsNull() || state.LogBestPrimaryClockChanges.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "log/best-primary-clock/changes"))
 		}
 	}
 	if !data.PerformanceMonitoring.IsNull() && !data.PerformanceMonitoring.ValueBool() {
-		if state != nil && !state.PerformanceMonitoring.IsNull() && state.PerformanceMonitoring.ValueBool() {
+		if state == nil || state.PerformanceMonitoring.IsNull() || state.PerformanceMonitoring.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "performance-monitoring"))
 		}
 	}
 	if !data.DetectPtsfUnusable.IsNull() && !data.DetectPtsfUnusable.ValueBool() {
-		if state != nil && !state.DetectPtsfUnusable.IsNull() && state.DetectPtsfUnusable.ValueBool() {
+		if state == nil || state.DetectPtsfUnusable.IsNull() || state.DetectPtsfUnusable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "detect-ptsf-unusable"))
 		}
 	}
 	if !data.Apts.IsNull() && !data.Apts.ValueBool() {
-		if state != nil && !state.Apts.IsNull() && state.Apts.ValueBool() {
+		if state == nil || state.Apts.IsNull() || state.Apts.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "apts"))
 		}
 	}
 	if !data.HoldoverSpecTraceableOverride.IsNull() && !data.HoldoverSpecTraceableOverride.ValueBool() {
-		if state != nil && !state.HoldoverSpecTraceableOverride.IsNull() && state.HoldoverSpecTraceableOverride.ValueBool() {
+		if state == nil || state.HoldoverSpecTraceableOverride.IsNull() || state.HoldoverSpecTraceableOverride.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "holdover-spec-traceable-override"))
 		}
 	}
 	if !data.NetworkTypeHighPdv.IsNull() && !data.NetworkTypeHighPdv.ValueBool() {
-		if state != nil && !state.NetworkTypeHighPdv.IsNull() && state.NetworkTypeHighPdv.ValueBool() {
+		if state == nil || state.NetworkTypeHighPdv.IsNull() || state.NetworkTypeHighPdv.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "network-type/high-pdv"))
 		}
 	}
 	if !data.PhysicalLayerFrequency.IsNull() && !data.PhysicalLayerFrequency.ValueBool() {
-		if state != nil && !state.PhysicalLayerFrequency.IsNull() && state.PhysicalLayerFrequency.ValueBool() {
+		if state == nil || state.PhysicalLayerFrequency.IsNull() || state.PhysicalLayerFrequency.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "physical-layer-frequency"))
 		}
 	}
 	if !data.TransparentClockDomainAll.IsNull() && !data.TransparentClockDomainAll.ValueBool() {
-		if state != nil && !state.TransparentClockDomainAll.IsNull() && state.TransparentClockDomainAll.ValueBool() {
+		if state == nil || state.TransparentClockDomainAll.IsNull() || state.TransparentClockDomainAll.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transparent-clock/domain/all"))
 		}
 	}
 	if !data.UncalibratedTraceableOverride.IsNull() && !data.UncalibratedTraceableOverride.ValueBool() {
-		if state != nil && !state.UncalibratedTraceableOverride.IsNull() && state.UncalibratedTraceableOverride.ValueBool() {
+		if state == nil || state.UncalibratedTraceableOverride.IsNull() || state.UncalibratedTraceableOverride.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "uncalibrated-traceable-override"))
 		}
 	}
 	if !data.UncalibratedClockClassUnlessFromHoldover.IsNull() && !data.UncalibratedClockClassUnlessFromHoldover.ValueBool() {
-		if state != nil && !state.UncalibratedClockClassUnlessFromHoldover.IsNull() && state.UncalibratedClockClassUnlessFromHoldover.ValueBool() {
+		if state == nil || state.UncalibratedClockClassUnlessFromHoldover.IsNull() || state.UncalibratedClockClassUnlessFromHoldover.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "uncalibrated-clock-class"))
 		}
 	}
@@ -1951,7 +1951,7 @@ func (data *PTP) getEmptyLeafsDelete(ctx context.Context, state *PTP, version st
 		}
 	}
 	if !data.Ipv6VerifyChecksum.IsNull() && !data.Ipv6VerifyChecksum.ValueBool() {
-		if state != nil && !state.Ipv6VerifyChecksum.IsNull() && state.Ipv6VerifyChecksum.ValueBool() {
+		if state == nil || state.Ipv6VerifyChecksum.IsNull() || state.Ipv6VerifyChecksum.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6-verify-checksum"))
 		}
 	}

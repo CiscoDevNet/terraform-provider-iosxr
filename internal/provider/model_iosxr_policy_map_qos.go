@@ -1829,12 +1829,12 @@ func (data *PolicyMapQoS) getEmptyLeafsDelete(ctx context.Context, state *Policy
 			}
 		}
 		if !data.Classes[i].RandomDetectEcn.IsNull() && !data.Classes[i].RandomDetectEcn.ValueBool() {
-			if state != nil && i < len(state.Classes) && !state.Classes[i].RandomDetectEcn.IsNull() && state.Classes[i].RandomDetectEcn.ValueBool() {
+			if state == nil || i >= len(state.Classes) || state.Classes[i].RandomDetectEcn.IsNull() || state.Classes[i].RandomDetectEcn.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "class", keyString), "random-detect-ecn"))
 			}
 		}
 		if !data.Classes[i].RandomDetectDefault.IsNull() && !data.Classes[i].RandomDetectDefault.ValueBool() {
-			if state != nil && i < len(state.Classes) && !state.Classes[i].RandomDetectDefault.IsNull() && state.Classes[i].RandomDetectDefault.ValueBool() {
+			if state == nil || i >= len(state.Classes) || state.Classes[i].RandomDetectDefault.IsNull() || state.Classes[i].RandomDetectDefault.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "class", keyString), "random-detect-default"))
 			}
 		}
@@ -1847,32 +1847,32 @@ func (data *PolicyMapQoS) getEmptyLeafsDelete(ctx context.Context, state *Policy
 			}
 		}
 		if !data.Classes[i].PoliceViolateActionDrop.IsNull() && !data.Classes[i].PoliceViolateActionDrop.ValueBool() {
-			if state != nil && i < len(state.Classes) && !state.Classes[i].PoliceViolateActionDrop.IsNull() && state.Classes[i].PoliceViolateActionDrop.ValueBool() {
+			if state == nil || i >= len(state.Classes) || state.Classes[i].PoliceViolateActionDrop.IsNull() || state.Classes[i].PoliceViolateActionDrop.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "class", keyString), "police/violate-action/drop"))
 			}
 		}
 		if !data.Classes[i].PoliceViolateActionTransmit.IsNull() && !data.Classes[i].PoliceViolateActionTransmit.ValueBool() {
-			if state != nil && i < len(state.Classes) && !state.Classes[i].PoliceViolateActionTransmit.IsNull() && state.Classes[i].PoliceViolateActionTransmit.ValueBool() {
+			if state == nil || i >= len(state.Classes) || state.Classes[i].PoliceViolateActionTransmit.IsNull() || state.Classes[i].PoliceViolateActionTransmit.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "class", keyString), "police/violate-action/transmit"))
 			}
 		}
 		if !data.Classes[i].PoliceExceedActionDrop.IsNull() && !data.Classes[i].PoliceExceedActionDrop.ValueBool() {
-			if state != nil && i < len(state.Classes) && !state.Classes[i].PoliceExceedActionDrop.IsNull() && state.Classes[i].PoliceExceedActionDrop.ValueBool() {
+			if state == nil || i >= len(state.Classes) || state.Classes[i].PoliceExceedActionDrop.IsNull() || state.Classes[i].PoliceExceedActionDrop.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "class", keyString), "police/exceed-action/drop"))
 			}
 		}
 		if !data.Classes[i].PoliceExceedActionTransmit.IsNull() && !data.Classes[i].PoliceExceedActionTransmit.ValueBool() {
-			if state != nil && i < len(state.Classes) && !state.Classes[i].PoliceExceedActionTransmit.IsNull() && state.Classes[i].PoliceExceedActionTransmit.ValueBool() {
+			if state == nil || i >= len(state.Classes) || state.Classes[i].PoliceExceedActionTransmit.IsNull() || state.Classes[i].PoliceExceedActionTransmit.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "class", keyString), "police/exceed-action/transmit"))
 			}
 		}
 		if !data.Classes[i].PoliceConformActionDrop.IsNull() && !data.Classes[i].PoliceConformActionDrop.ValueBool() {
-			if state != nil && i < len(state.Classes) && !state.Classes[i].PoliceConformActionDrop.IsNull() && state.Classes[i].PoliceConformActionDrop.ValueBool() {
+			if state == nil || i >= len(state.Classes) || state.Classes[i].PoliceConformActionDrop.IsNull() || state.Classes[i].PoliceConformActionDrop.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "class", keyString), "police/conform-action/drop"))
 			}
 		}
 		if !data.Classes[i].PoliceConformActionTransmit.IsNull() && !data.Classes[i].PoliceConformActionTransmit.ValueBool() {
-			if state != nil && i < len(state.Classes) && !state.Classes[i].PoliceConformActionTransmit.IsNull() && state.Classes[i].PoliceConformActionTransmit.ValueBool() {
+			if state == nil || i >= len(state.Classes) || state.Classes[i].PoliceConformActionTransmit.IsNull() || state.Classes[i].PoliceConformActionTransmit.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "class", keyString), "police/conform-action/transmit"))
 			}
 		}

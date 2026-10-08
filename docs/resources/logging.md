@@ -344,7 +344,7 @@ Optional:
 - `source_interface` (String) Specify Source interface
   - Supported from version: `25.4`
 - `tls_hostname` (String) Hostname or FQDN of Secure Log server
-  - Length: `1`-`1024` (v24.4), `1`-`253` (v26.2)
+  - Length: `1`-`1024` (v25.4), `1`-`253` (v26.2)
   - Supported from version: `25.4`
 - `tls_max_version` (String) Max TLS version
   - Choices: `tls1.0`, `tls1.1`, `tls1.2`, `tls1.3`

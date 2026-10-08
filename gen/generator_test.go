@@ -1385,6 +1385,83 @@ func TestGetVersionConstraintsTemplate_IntroducedInVersion(t *testing.T) {
 	}
 }
 
+// An attribute added in 25.4 and changed in 26.2 must seed its "_base" entry under 25.4, the version
+// it first exists in, not under the resource's base version.
+func TestFixAttributeBaseVersion_AddedAttributeSeedsUnderAddedVersion(t *testing.T) {
+	base := []YamlConfigAttribute{{YangName: "other", TfName: "other", Type: "String"}}
+	after25 := mergeAttributes(base, []YamlConfigAttribute{
+		{YangName: "host", TfName: "host", Type: "String", StringMinLength: 1, StringMaxLength: 1024},
+	}, "25.4")
+	after26 := mergeAttributes(after25, []YamlConfigAttribute{
+		{YangName: "host", StringMinLength: 1, StringMaxLength: 253},
+	}, "26.2")
+
+	attr := after26[1]
+	fixAttributeBaseVersion(&attr, "24.4")
+
+	if _, has := attr.VersionStringLengths["24.4"]; has {
+		t.Errorf("VersionStringLengths has a 24.4 key for an attribute added in 25.4: %v", attr.VersionStringLengths)
+	}
+	if got := attr.VersionStringLengths["25.4"]; got.Min != 1 || got.Max != 1024 {
+		t.Errorf("VersionStringLengths[25.4]: got %+v, want {1 1024}", got)
+	}
+	if got := attr.VersionStringLengths["26.2"]; got.Min != 1 || got.Max != 253 {
+		t.Errorf("VersionStringLengths[26.2]: got %+v, want {1 253}", got)
+	}
+}
+
+// Attributes present in the base version keep the resource base version as their label.
+func TestFixAttributeBaseVersion_BaseAttributeKeepsBaseVersion(t *testing.T) {
+	base := []YamlConfigAttribute{{YangName: "mtu", TfName: "mtu", Type: "Int64", MinInt: 1, MaxInt: 10}}
+	after25 := mergeAttributes(base, []YamlConfigAttribute{{YangName: "mtu", MinInt: 1, MaxInt: 20}}, "25.4")
+
+	attr := after25[0]
+	fixAttributeBaseVersion(&attr, "24.4")
+
+	if _, has := attr.VersionRanges["24.4"]; !has {
+		t.Errorf("VersionRanges: want a 24.4 key for a base attribute, got %v", attr.VersionRanges)
+	}
+}
+
+// A grandchild whose AddedInVersion was not stamped (its parent existed and only gained children)
+// inherits the label of its parent, not the resource base version.
+func TestFixAttributeBaseVersion_ChildInheritsParentLabel(t *testing.T) {
+	attr := YamlConfigAttribute{
+		YangName: "list", TfName: "list", AddedInVersion: "25.4",
+		Attributes: []YamlConfigAttribute{
+			{
+				YangName: "leaf", TfName: "leaf",
+				VersionRanges: map[string]RangeConstraint{"_base": {Min: 1, Max: 10}, "26.2": {Min: 1, Max: 20}},
+			},
+		},
+	}
+	fixAttributeBaseVersion(&attr, "24.4")
+
+	child := attr.Attributes[0]
+	if _, has := child.VersionRanges["24.4"]; has {
+		t.Errorf("child VersionRanges has a 24.4 key under a 25.4-added parent: %v", child.VersionRanges)
+	}
+	if _, has := child.VersionRanges["25.4"]; !has {
+		t.Errorf("child VersionRanges: want a 25.4 key inherited from the parent, got %v", child.VersionRanges)
+	}
+}
+
+// Renaming an attribute added in 25.4 in 26.2 reports 26.2, not the 25.4 seed, as the move.
+func TestFixAttributeBaseVersion_RenameOfAddedAttributeMovedInVersion(t *testing.T) {
+	attr := YamlConfigAttribute{
+		YangName: "new-name", TfName: "name", AddedInVersion: "25.4",
+		VersionYangNames: map[string]string{"_base": "old-name", "26.2": "new-name"},
+	}
+	fixAttributeBaseVersion(&attr, "24.4")
+
+	if attr.MovedInVersion != "26.2" {
+		t.Errorf("MovedInVersion: got %q, want %q", attr.MovedInVersion, "26.2")
+	}
+	if got := attr.VersionYangNames["25.4"]; got != "old-name" {
+		t.Errorf("VersionYangNames[25.4]: got %q, want %q", got, "old-name")
+	}
+}
+
 // F26/BUG-5: findNoAugmentConfigViolations/validateNoAugmentConfigCarryover -- an attribute (or
 // whole resource) with no_augment_config: true in an earlier version must have that flag
 // restated in any later delta that re-lists it, or real YANG augmentation would silently

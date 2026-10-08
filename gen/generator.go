@@ -2317,8 +2317,13 @@ func fixBaseVersionInRanges(config *YamlConfig, baseVersion string) {
 	}
 }
 
-// fixAttributeBaseVersion recursively fixes base version in attribute and its children
+// fixAttributeBaseVersion recursively resolves the "_base" sentinel in attribute and its children.
+// baseVersion is the label inherited from the parent (the resource base version at the top level);
+// an attribute added in a later version labels its seed with its own AddedInVersion instead.
 func fixAttributeBaseVersion(attr *YamlConfigAttribute, baseVersion string) {
+	if attr.AddedInVersion != "" {
+		baseVersion = attr.AddedInVersion
+	}
 	if attr.VersionRanges != nil {
 		if baseRange, exists := attr.VersionRanges["_base"]; exists {
 			delete(attr.VersionRanges, "_base")

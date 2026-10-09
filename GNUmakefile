@@ -13,10 +13,10 @@ endif
 testall:
 	TF_ACC=1 go test -v $(TESTARGS) -timeout 120m ./internal/provider
 
-# Run acceptance tests against the default versions (24.4 and 25.4)
+# Run acceptance tests against the default versions (24.4, 25.4, 26.2)
 # Usage: make test [NAME=TestName] [DEBUG=1]
 .PHONY: test
-test: test-244 test-254
+test: test-244 test-254 test-262
 	@echo ""
 	@echo "All multi-version tests completed!"
 

@@ -1591,6 +1591,19 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 	}
 }
 
+// resolveYangPathForVersion returns the path_version entry in effect for version, taking the
+// delta's own entries over those accumulated from earlier versions. Empty if none applies.
+func resolveYangPathForVersion(version string, accumulated, own map[string]string) string {
+	merged := make(map[string]string, len(accumulated)+len(own))
+	for k, v := range accumulated {
+		merged[k] = v
+	}
+	for k, v := range own {
+		merged[k] = v
+	}
+	return getVersionValue(version, merged, "")
+}
+
 func augmentConfig(config *YamlConfig, modelPaths []string) {
 	path := ""
 	if config.AugmentPath != "" {
@@ -2597,7 +2610,7 @@ func main() {
 	augmentedCache := make(map[string]YamlConfig) // key = "name@version"
 
 	// Helper: augment a config from YANG models for a given version
-	augmentForVersion := func(cfg YamlConfig, version string) YamlConfig {
+	augmentForVersion := func(cfg YamlConfig, version string, accPathVersion map[string]string) YamlConfig {
 		cacheKey := cfg.Name + "@" + version
 		if cached, ok := augmentedCache[cacheKey]; ok {
 			return cached
@@ -2615,7 +2628,13 @@ func main() {
 			}
 			if len(vModelPaths) > 0 {
 				log.Printf("  Augmenting '%s' version %s from YANG models", cfg.Name, version)
+				// Without augment_path, use the path_version entry in effect for this version.
+				origAugmentPath := cfg.AugmentPath
+				if cfg.AugmentPath == "" {
+					cfg.AugmentPath = resolveYangPathForVersion(version, accPathVersion, cfg.PathVersion)
+				}
 				augmentConfig(&cfg, vModelPaths)
+				cfg.AugmentPath = origAugmentPath
 			}
 		}
 		augmentedCache[cacheKey] = cfg
@@ -2657,7 +2676,7 @@ func main() {
 			if i > 0 {
 				validateNoAugmentConfigCarryover(unifiedConfig, versionConfigs[v], v)
 			}
-			augmented := augmentForVersion(versionConfigs[v], v)
+			augmented := augmentForVersion(versionConfigs[v], v, unifiedConfig.PathVersion)
 
 			if i == 0 {
 				// First version becomes the base - DO NOT mark attributes with version

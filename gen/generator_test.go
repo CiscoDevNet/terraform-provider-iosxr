@@ -985,6 +985,31 @@ func TestMergeAttributes_RangeZeroMinRestated(t *testing.T) {
 
 // A multi-part YANG range must use the first segment's minimum and the last segment's maximum, not the
 // first segment's maximum, or valid values in later segments are rejected.
+func TestResolveYangPathForVersion(t *testing.T) {
+	acc := map[string]string{"24.4": "old", "25.4": "mid"}
+	tests := []struct {
+		name    string
+		version string
+		acc     map[string]string
+		own     map[string]string
+		want    string
+	}{
+		{"no path_version", "25.4", nil, nil, ""},
+		{"exact own entry", "25.4", nil, map[string]string{"25.4": "new"}, "new"},
+		{"below every entry", "24.4", nil, map[string]string{"25.4": "new"}, ""},
+		{"inherits accumulated", "26.2", acc, nil, "mid"},
+		{"own overrides accumulated", "26.2", acc, map[string]string{"26.2": "new"}, "new"},
+		{"numeric compare", "25.10", map[string]string{"25.4": "mid"}, nil, "mid"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := resolveYangPathForVersion(tt.version, tt.acc, tt.own); got != tt.want {
+				t.Errorf("got %q, want %q", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestRangeBounds(t *testing.T) {
 	tests := []struct {
 		name    string

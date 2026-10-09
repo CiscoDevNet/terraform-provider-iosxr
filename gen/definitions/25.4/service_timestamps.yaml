@@ -1,7 +1,6 @@
 ---
 name: Service Timestamps
 path: Cisco-IOS-XR-um-service-timestamps-cfg:/service/timestamps
-augment_path: Cisco-IOS-XR-um-service-cfg:/service/Cisco-IOS-XR-um-logging-cfg:timestamps
 no_delete_attributes: true
 doc_category: Management
 path_version:

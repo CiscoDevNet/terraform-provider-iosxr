@@ -2061,14 +2061,11 @@ func mergeAttributes(base, override []YamlConfigAttribute, overrideVersion strin
 					// result[i].MinInt/MaxInt, which freezes at the original base value once
 					// VersionRanges exists.
 					hasBase := result[i].MinInt != 0 || result[i].MaxInt != 0
-					baseMin := result[i].lastRangeMin
-					if baseMin == 0 {
-						// Never tracked yet -- result[i].MinInt is still accurate at this point.
-						baseMin = result[i].MinInt
-					}
-					baseMax := result[i].lastRangeMax
-					if baseMax == 0 {
-						baseMax = result[i].MaxInt
+					// A tracked range always has a non-zero max (goyang gives every integer a full-width range),
+					// so lastRangeMax != 0 means "a delta has stated a range" and lastRangeMin may legitimately be 0.
+					baseMin, baseMax := result[i].MinInt, result[i].MaxInt
+					if result[i].lastRangeMax != 0 {
+						baseMin, baseMax = result[i].lastRangeMin, result[i].lastRangeMax
 					}
 					overrideMin := newAttr.MinInt
 					overrideMax := newAttr.MaxInt
@@ -2094,9 +2091,7 @@ func mergeAttributes(base, override []YamlConfigAttribute, overrideVersion strin
 					// Track this delta's own explicit range unconditionally, decoupled from the
 					// frozen schema scalar above, so the next fold's comparison is always against
 					// the true immediately-preceding version.
-					if newAttr.MinInt != 0 {
-						result[i].lastRangeMin = newAttr.MinInt
-					}
+					result[i].lastRangeMin = newAttr.MinInt
 					if newAttr.MaxInt != 0 {
 						result[i].lastRangeMax = newAttr.MaxInt
 					}

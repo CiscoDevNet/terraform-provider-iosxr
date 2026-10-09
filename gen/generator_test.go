@@ -944,6 +944,43 @@ func TestMergeAttributes_StringLengthEnvelopeStaleness_RestatedBaseValueIsNotADi
 	}
 }
 
+// A delta that states a zero minimum must not leave the previous non-zero minimum as the baseline, or a later
+// delta that restores the old range is compared equal and its version entry is lost.
+func TestMergeAttributes_RangeZeroMinThenRestore(t *testing.T) {
+	base := []YamlConfigAttribute{{YangName: "x", TfName: "x", Type: "Int64", MinInt: 1, MaxInt: 10}}
+	after25 := mergeAttributes(base, []YamlConfigAttribute{{YangName: "x", MinInt: 0, MaxInt: 10}}, "25.4")
+	after26 := mergeAttributes(after25, []YamlConfigAttribute{{YangName: "x", MinInt: 1, MaxInt: 10}}, "26.2")
+
+	attr := after26[0]
+	fixAttributeBaseVersion(&attr, "24.4")
+
+	want := map[string]RangeConstraint{
+		"24.4": {Min: 1, Max: 10},
+		"25.4": {Min: 0, Max: 10},
+		"26.2": {Min: 1, Max: 10},
+	}
+	if len(attr.VersionRanges) != len(want) {
+		t.Fatalf("VersionRanges: got %v, want %v", attr.VersionRanges, want)
+	}
+	for v, w := range want {
+		if got := attr.VersionRanges[v]; got != w {
+			t.Errorf("VersionRanges[%s]: got %+v, want %+v", v, got, w)
+		}
+	}
+}
+
+// Restating a zero-minimum range in a later delta is not a new divergence.
+func TestMergeAttributes_RangeZeroMinRestated(t *testing.T) {
+	base := []YamlConfigAttribute{{YangName: "x", TfName: "x", Type: "Int64", MinInt: 1, MaxInt: 10}}
+	after25 := mergeAttributes(base, []YamlConfigAttribute{{YangName: "x", MinInt: 0, MaxInt: 10}}, "25.4")
+	after26 := mergeAttributes(after25, []YamlConfigAttribute{{YangName: "x", MinInt: 0, MaxInt: 10}}, "26.2")
+
+	attr := after26[0]
+	if _, has := attr.VersionRanges["26.2"]; has {
+		t.Errorf("VersionRanges[26.2]: got an entry %+v, want none (restates 25.4's range)", attr.VersionRanges["26.2"])
+	}
+}
+
 func TestMergeAttributes_TypeYangBoolFreezeReuse_RestatedBaseValueIsNotADivergence(t *testing.T) {
 	base := []YamlConfigAttribute{
 		{YangName: "monitor-receiver", TfName: "monitor_receiver", Type: "Bool", TypeYangBool: "presence"},

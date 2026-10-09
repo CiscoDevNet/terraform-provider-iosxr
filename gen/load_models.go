@@ -97,6 +97,7 @@ var models = []string{
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-snmp-server-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-vrf-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-ssh-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-grpc-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-route-policy-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-l2-ethernet-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/2442/Cisco-IOS-XR-um-if-l2transport-cfg.yang",

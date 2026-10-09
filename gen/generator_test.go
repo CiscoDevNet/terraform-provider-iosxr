@@ -34,6 +34,8 @@ import (
 	"strings"
 	"testing"
 	"text/template"
+
+	"github.com/openconfig/goyang/pkg/yang"
 )
 
 // ---------------------------------------------------------------------------
@@ -978,6 +980,35 @@ func TestMergeAttributes_RangeZeroMinRestated(t *testing.T) {
 	attr := after26[0]
 	if _, has := attr.VersionRanges["26.2"]; has {
 		t.Errorf("VersionRanges[26.2]: got an entry %+v, want none (restates 25.4's range)", attr.VersionRanges["26.2"])
+	}
+}
+
+// A multi-part YANG range must use the first segment's minimum and the last segment's maximum, not the
+// first segment's maximum, or valid values in later segments are rejected.
+func TestRangeBounds(t *testing.T) {
+	tests := []struct {
+		name    string
+		rng     string
+		wantMin int64
+		wantMax int64
+	}{
+		{"single segment", "1..2047", 1, 2047},
+		{"two segments", "4..5|7..17", 4, 17},
+		{"single values", "0|30|60|600", 0, 600},
+		{"power of two values", "1|2|4|8|16|32|64|128", 1, 128},
+		{"negative minimum", "-10..-1|5..20", -10, 20},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			r, err := yang.ParseRangesInt(tt.rng)
+			if err != nil {
+				t.Fatalf("parse %q: %v", tt.rng, err)
+			}
+			gotMin, gotMax := rangeBounds(r)
+			if gotMin != tt.wantMin || gotMax != tt.wantMax {
+				t.Errorf("rangeBounds(%q) = (%d, %d), want (%d, %d)", tt.rng, gotMin, gotMax, tt.wantMin, tt.wantMax)
+			}
+		})
 	}
 }
 

@@ -139,6 +139,7 @@ resource "iosxr_interface_loopback" "example" {
 - `ipv6_verify_unicast_source_reachable_via_type` (String) Source reachable type
   - Choices: `any`, `rx`
 - `load_interval` (Number) Specify interval for load calculation for an interface
+  - Range: `0`-`600`
 - `logging_events_link_status` (Boolean) Enable interface and line-protocol state change alarms
 - `mtu` (Number) Set the MTU on an interface
   - Range: `64`-`65535`

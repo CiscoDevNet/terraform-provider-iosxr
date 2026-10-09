@@ -233,8 +233,11 @@ func (r *InterfaceEthernetResource) Schema(ctx context.Context, req resource.Sch
 				},
 			},
 			"load_interval": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify interval for load calculation for an interface").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Specify interval for load calculation for an interface").AddIntegerRangeDescription(0, 600).String,
 				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 600),
+				},
 			},
 			"vrf": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set VRF in which the interface operates").String,

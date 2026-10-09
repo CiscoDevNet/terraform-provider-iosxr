@@ -203,6 +203,7 @@ resource "iosxr_interface_tunnel_te" "example" {
 - `ipv6_enable` (Boolean) Enable IPv6 on interface
 - `ipv6_ttl_propagate_disable` (Boolean) Disable ipv6 ttl propagation on this interface
 - `load_interval` (Number) Specify interval for load calculation for an interface
+  - Range: `0`-`600`
 - `load_share` (Number) Specify tunnel load-sharing metric
   - Range: `1`-`4294967295`
 - `logging_events_all` (Boolean) Enable all logging for this tunnel

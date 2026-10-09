@@ -87,6 +87,7 @@ resource "iosxr_interface_tunnel_ip" "example" {
 - `keepalive_period` (Number) Keepalive period in seconds (default 10 seconds)
   - Range: `1`-`32767`
 - `load_interval` (Number) Specify interval for load calculation for an interface
+  - Range: `0`-`600`
 - `logging_events_link_status` (Boolean) Enable interface and line-protocol state change alarms
 - `mtu` (Number) Set the MTU on an interface
   - Range: `64`-`65535`

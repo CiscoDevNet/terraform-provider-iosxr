@@ -1481,6 +1481,22 @@ func addKeys(e *yang.Entry, config *YamlConfig) {
 	}
 }
 
+// rangeBounds returns the outer bounds of a possibly multi-part YANG range. YANG requires ascending,
+// non-overlapping segments, so the first segment holds the minimum and the last holds the maximum.
+func rangeBounds(r yang.YangRange) (lo, hi int64) {
+	first, last := r[0], r[len(r)-1]
+	lo = int64(first.Min.Value)
+	if first.Min.Negative {
+		lo = -lo
+	}
+	maxV := last.Max.Value
+	// hack to not introduce unsigned types
+	if maxV > math.MaxInt64 {
+		maxV = math.MaxInt64
+	}
+	return lo, int64(maxV)
+}
+
 func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 	leaf := resolvePath(e, attr.YangName)
 	//fmt.Printf("%s, Entry: %+v\n\n", attr.YangName, e)
@@ -1516,19 +1532,12 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 		} else if helpers.Contains([]string{"int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
 			attr.Type = "Int64"
 			if leaf.Type.Range != nil {
+				minV, maxV := rangeBounds(leaf.Type.Range)
 				if attr.MinInt == 0 {
-					attr.MinInt = int64(leaf.Type.Range[0].Min.Value)
-					if leaf.Type.Range[0].Min.Negative {
-						attr.MinInt = -attr.MinInt
-					}
-				}
-				max := leaf.Type.Range[0].Max.Value
-				// hack to not introduce unsigned types
-				if max > math.MaxInt64 {
-					max = math.MaxInt64
+					attr.MinInt = minV
 				}
 				if attr.MaxInt == 0 {
-					attr.MaxInt = int64(max)
+					attr.MaxInt = maxV
 				}
 			}
 		} else if helpers.Contains([]string{"boolean", "empty"}, leaf.Type.Kind.String()) {

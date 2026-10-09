@@ -550,17 +550,17 @@ func (r *NTPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							},
 						},
 						"minpoll": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Configure minimum polling rate").AddIntegerRangeDescription(4, 5).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Configure minimum polling rate").AddIntegerRangeDescription(4, 17).String,
 							Optional:            true,
 							Validators: []validator.Int64{
-								int64validator.Between(4, 5),
+								int64validator.Between(4, 17),
 							},
 						},
 						"maxpoll": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Configure maximum polling rate").AddIntegerRangeDescription(4, 9).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Configure maximum polling rate").AddIntegerRangeDescription(4, 17).String,
 							Optional:            true,
 							Validators: []validator.Int64{
-								int64validator.Between(4, 9),
+								int64validator.Between(4, 17),
 							},
 						},
 						"prefer": schema.BoolAttribute{
@@ -621,17 +621,17 @@ func (r *NTPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							},
 						},
 						"minpoll": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Configure minimum polling rate").AddIntegerRangeDescription(4, 5).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Configure minimum polling rate").AddIntegerRangeDescription(4, 17).String,
 							Optional:            true,
 							Validators: []validator.Int64{
-								int64validator.Between(4, 5),
+								int64validator.Between(4, 17),
 							},
 						},
 						"maxpoll": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Configure maximum polling rate").AddIntegerRangeDescription(4, 9).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Configure maximum polling rate").AddIntegerRangeDescription(4, 17).String,
 							Optional:            true,
 							Validators: []validator.Int64{
-								int64validator.Between(4, 9),
+								int64validator.Between(4, 17),
 							},
 						},
 						"prefer": schema.BoolAttribute{
@@ -700,17 +700,17 @@ func (r *NTPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							},
 						},
 						"minpoll": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Configure minimum polling rate").AddIntegerRangeDescription(4, 5).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Configure minimum polling rate").AddIntegerRangeDescription(4, 17).String,
 							Optional:            true,
 							Validators: []validator.Int64{
-								int64validator.Between(4, 5),
+								int64validator.Between(4, 17),
 							},
 						},
 						"maxpoll": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Configure maximum polling rate").AddIntegerRangeDescription(4, 9).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Configure maximum polling rate").AddIntegerRangeDescription(4, 17).String,
 							Optional:            true,
 							Validators: []validator.Int64{
-								int64validator.Between(4, 9),
+								int64validator.Between(4, 17),
 							},
 						},
 						"prefer": schema.BoolAttribute{
@@ -783,17 +783,17 @@ func (r *NTPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										},
 									},
 									"minpoll": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Configure minimum polling rate").AddIntegerRangeDescription(4, 5).String,
+										MarkdownDescription: helpers.NewAttributeDescription("Configure minimum polling rate").AddIntegerRangeDescription(4, 17).String,
 										Optional:            true,
 										Validators: []validator.Int64{
-											int64validator.Between(4, 5),
+											int64validator.Between(4, 17),
 										},
 									},
 									"maxpoll": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Configure maximum polling rate").AddIntegerRangeDescription(4, 9).String,
+										MarkdownDescription: helpers.NewAttributeDescription("Configure maximum polling rate").AddIntegerRangeDescription(4, 17).String,
 										Optional:            true,
 										Validators: []validator.Int64{
-											int64validator.Between(4, 9),
+											int64validator.Between(4, 17),
 										},
 									},
 									"prefer": schema.BoolAttribute{
@@ -854,17 +854,17 @@ func (r *NTPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										},
 									},
 									"minpoll": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Configure minimum polling rate").AddIntegerRangeDescription(4, 5).String,
+										MarkdownDescription: helpers.NewAttributeDescription("Configure minimum polling rate").AddIntegerRangeDescription(4, 17).String,
 										Optional:            true,
 										Validators: []validator.Int64{
-											int64validator.Between(4, 5),
+											int64validator.Between(4, 17),
 										},
 									},
 									"maxpoll": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Configure maximum polling rate").AddIntegerRangeDescription(4, 9).String,
+										MarkdownDescription: helpers.NewAttributeDescription("Configure maximum polling rate").AddIntegerRangeDescription(4, 17).String,
 										Optional:            true,
 										Validators: []validator.Int64{
-											int64validator.Between(4, 9),
+											int64validator.Between(4, 17),
 										},
 									},
 									"prefer": schema.BoolAttribute{
@@ -933,17 +933,17 @@ func (r *NTPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										},
 									},
 									"minpoll": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Configure minimum polling rate").AddIntegerRangeDescription(4, 5).String,
+										MarkdownDescription: helpers.NewAttributeDescription("Configure minimum polling rate").AddIntegerRangeDescription(4, 17).String,
 										Optional:            true,
 										Validators: []validator.Int64{
-											int64validator.Between(4, 5),
+											int64validator.Between(4, 17),
 										},
 									},
 									"maxpoll": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Configure maximum polling rate").AddIntegerRangeDescription(4, 9).String,
+										MarkdownDescription: helpers.NewAttributeDescription("Configure maximum polling rate").AddIntegerRangeDescription(4, 17).String,
 										Optional:            true,
 										Validators: []validator.Int64{
-											int64validator.Between(4, 9),
+											int64validator.Between(4, 17),
 										},
 									},
 									"prefer": schema.BoolAttribute{

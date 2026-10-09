@@ -485,6 +485,7 @@ resource "iosxr_interface_ethernet" "example" {
 - `lldp_tagged` (Boolean) Enable VLAN tagging on LLDP PDU on an interface
 - `lldp_transmit_disable` (Boolean) Disable LLDP TX on an interface
 - `load_interval` (Number) Specify interval for load calculation for an interface
+  - Range: `0`-`600`
 - `logging_events_link_status` (Boolean) Enable interface and line-protocol state change alarms
 - `mac_address` (String) Set the Mac address(xxxx.xxxx.xxxx) on an interface
 - `macsec_eap_policy` (String) Enter the policy name

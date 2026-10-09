@@ -98,10 +98,10 @@ func (r *PerformanceMeasurementResource) Schema(ctx context.Context, req resourc
 				},
 			},
 			"protocol_twamp_light_measurement_delay_unauthenticated_querier_dst_port": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Port number").AddIntegerRangeDescription(862, 862).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Port number").AddIntegerRangeDescription(862, 14999).String,
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(862, 862),
+					int64validator.Between(862, 14999),
 				},
 			},
 			"protocol_twamp_light_measurement_delay_unauthenticated_querier_src_port": schema.Int64Attribute{

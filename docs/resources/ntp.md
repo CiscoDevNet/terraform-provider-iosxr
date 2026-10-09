@@ -333,9 +333,9 @@ Optional:
 - `key` (Number) Configure peer authentication key
   - Range: `1`-`65535`
 - `maxpoll` (Number) Configure maximum polling rate
-  - Range: `4`-`9`
+  - Range: `4`-`17`
 - `minpoll` (Number) Configure minimum polling rate
-  - Range: `4`-`5`
+  - Range: `4`-`17`
 - `prefer` (Boolean) Prefer this peer when possible
 - `source` (String) Interface for source address
 - `version` (Number) Configure NTP version
@@ -406,9 +406,9 @@ Optional:
 - `key` (Number) Configure peer authentication key
   - Range: `1`-`65535`
 - `maxpoll` (Number) Configure maximum polling rate
-  - Range: `4`-`9`
+  - Range: `4`-`17`
 - `minpoll` (Number) Configure minimum polling rate
-  - Range: `4`-`5`
+  - Range: `4`-`17`
 - `prefer` (Boolean) Prefer this peer when possible
 - `source` (String) Interface for source address
 - `version` (Number) Configure NTP version
@@ -432,9 +432,9 @@ Optional:
 - `key` (Number) Configure peer authentication key
   - Range: `1`-`65535`
 - `maxpoll` (Number) Configure maximum polling rate
-  - Range: `4`-`9`
+  - Range: `4`-`17`
 - `minpoll` (Number) Configure minimum polling rate
-  - Range: `4`-`5`
+  - Range: `4`-`17`
 - `prefer` (Boolean) Prefer this peer when possible
 - `source` (String) Interface for source address
 - `version` (Number) Configure NTP version
@@ -470,9 +470,9 @@ Optional:
 - `key` (Number) Configure peer authentication key
   - Range: `1`-`65535`
 - `maxpoll` (Number) Configure maximum polling rate
-  - Range: `4`-`9`
+  - Range: `4`-`17`
 - `minpoll` (Number) Configure minimum polling rate
-  - Range: `4`-`5`
+  - Range: `4`-`17`
 - `prefer` (Boolean) Prefer this peer when possible
 - `source` (String) Interface for source address
 - `version` (Number) Configure NTP version
@@ -495,9 +495,9 @@ Optional:
 - `key` (Number) Configure peer authentication key
   - Range: `1`-`65535`
 - `maxpoll` (Number) Configure maximum polling rate
-  - Range: `4`-`9`
+  - Range: `4`-`17`
 - `minpoll` (Number) Configure minimum polling rate
-  - Range: `4`-`5`
+  - Range: `4`-`17`
 - `prefer` (Boolean) Prefer this peer when possible
 - `source` (String) Interface for source address
 - `version` (Number) Configure NTP version
@@ -521,9 +521,9 @@ Optional:
 - `key` (Number) Configure peer authentication key
   - Range: `1`-`65535`
 - `maxpoll` (Number) Configure maximum polling rate
-  - Range: `4`-`9`
+  - Range: `4`-`17`
 - `minpoll` (Number) Configure minimum polling rate
-  - Range: `4`-`5`
+  - Range: `4`-`17`
 - `prefer` (Boolean) Prefer this peer when possible
 - `source` (String) Interface for source address
 - `version` (Number) Configure NTP version

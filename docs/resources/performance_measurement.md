@@ -101,7 +101,7 @@ resource "iosxr_performance_measurement" "example" {
 - `protocol_twamp_light_measurement_delay_unauthenticated_ipv6_timestamp2_label` (Number) label
   - Range: `256`-`23999`
 - `protocol_twamp_light_measurement_delay_unauthenticated_querier_dst_port` (Number) Port number
-  - Range: `862`-`862`
+  - Range: `862`-`14999`
 - `protocol_twamp_light_measurement_delay_unauthenticated_querier_src_port` (Number) UDP port opened on Route Processor to be used as source port in queries
   - Range: `1024`-`14999`
 - `source_address_ipv4` (String) IPv4 endpoint

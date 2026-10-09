@@ -402,6 +402,7 @@ resource "iosxr_interface_bundle_ether_subinterface" "example" {
 - `lldp_receive_disable` (Boolean) Disable LLDP RX on an interface
 - `lldp_transmit_disable` (Boolean) Disable LLDP TX on an interface
 - `load_interval` (Number) Specify interval for load calculation for an interface
+  - Range: `0`-`600`
 - `logging_events_link_status` (Boolean) Enable interface and line-protocol state change alarms
 - `macsec_eap_policy` (String) Enter the policy name
 - `macsec_fallback_psk_keychain` (String) Configure MKA fallback PSK Keychain

@@ -120,6 +120,7 @@ var releases = []release{
 			"Cisco-IOS-XR-um-snmp-server-cfg.yang",
 			"Cisco-IOS-XR-um-vrf-cfg.yang",
 			"Cisco-IOS-XR-um-ssh-cfg.yang",
+			"Cisco-IOS-XR-um-grpc-cfg.yang",
 			"Cisco-IOS-XR-um-route-policy-cfg.yang",
 			"Cisco-IOS-XR-um-l2-ethernet-cfg.yang",
 			"Cisco-IOS-XR-um-if-l2transport-cfg.yang",

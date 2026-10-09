@@ -1,0 +1,57 @@
+---
+name: gRPC
+path: Cisco-IOS-XR-um-grpc-cfg:/grpc
+doc_category: Management
+# grpc is a presence container: deleting it shuts down the gRPC server, which
+# is also the transport the provider uses (gNMI). Destroy therefore always
+# removes only the configured attributes and never the container itself.
+default_delete_attributes: true
+no_delete_attributes: true
+test_tags: [GRPC]
+attributes:
+  - yang_name: port
+    description: "Server listening port (1024-65535), default: 57400"
+    example: 57400
+    minimum_test_value: 57400
+  - yang_name: vrf
+    example: default
+    exclude_test: true
+  - yang_name: address-family/ipv4
+    tf_name: address_family_ipv4
+    description: "IPv4 address-family"
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    example: false
+    exclude_test: true
+  - yang_name: address-family/ipv6
+    tf_name: address_family_ipv6
+    description: "IPv6 address-family"
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    example: false
+    exclude_test: true
+  - yang_name: address-family/dual
+    tf_name: address_family_dual
+    description: "Dual stack address-family"
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    example: true
+  - yang_name: no-tls
+    example: true
+    exclude_test: true
+  - yang_name: local-connection
+    example: true
+  - yang_name: certificate-authentication
+    example: false
+    exclude_test: true
+  - yang_name: max-request-total
+    example: 128
+  - yang_name: max-request-per-user
+    example: 10
+  - yang_name: max-streams
+    example: 32
+  - yang_name: max-streams-per-user
+    example: 32

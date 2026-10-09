@@ -1238,6 +1238,7 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewVRFResource,
 		NewVTYPoolResource,
 		NewXMLAgentResource,
+		NewGRPCResource,
 	}
 }
 
@@ -1448,6 +1449,7 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewVRFDataSource,
 		NewVTYPoolDataSource,
 		NewXMLAgentDataSource,
+		NewGRPCDataSource,
 	}
 }
 

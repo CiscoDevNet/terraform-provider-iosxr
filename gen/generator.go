@@ -1614,9 +1614,13 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 	path = strings.TrimPrefix(path, "/")
 	module := strings.Split(path, ":")[0]
 	e, errors := yang.GetModule(module, modelPaths...)
+	if e == nil {
+		log.Fatalf("definition %q @ %s: YANG module %q not found (path %q): %+v\n"+
+			"Add the module to gen/load_models.go, or set legacy / no_augment_config.",
+			config.Name, config.Version, module, path, errors)
+	}
 	if len(errors) > 0 {
 		fmt.Printf("YANG parser error(s): %+v\n\n", errors)
-		return
 	}
 
 	// Print definition/model info
@@ -2615,7 +2619,7 @@ func main() {
 		if cached, ok := augmentedCache[cacheKey]; ok {
 			return cached
 		}
-		if !cfg.NoAugmentConfig {
+		if !cfg.NoAugmentConfig && !cfg.Legacy {
 			vModelPath := filepath.Join(modelsPath, version)
 			var vModelPaths []string
 			if _, err := os.Stat(vModelPath); err == nil {
@@ -2626,16 +2630,17 @@ func main() {
 					}
 				}
 			}
-			if len(vModelPaths) > 0 {
-				log.Printf("  Augmenting '%s' version %s from YANG models", cfg.Name, version)
-				// Without augment_path, use the path_version entry in effect for this version.
-				origAugmentPath := cfg.AugmentPath
-				if cfg.AugmentPath == "" {
-					cfg.AugmentPath = resolveYangPathForVersion(version, accPathVersion, cfg.PathVersion)
-				}
-				augmentConfig(&cfg, vModelPaths)
-				cfg.AugmentPath = origAugmentPath
+			if len(vModelPaths) == 0 {
+				log.Fatalf("definition %q @ %s: no YANG models found in %s", cfg.Name, version, vModelPath)
 			}
+			log.Printf("  Augmenting '%s' version %s from YANG models", cfg.Name, version)
+			// Without augment_path, use the path_version entry in effect for this version.
+			origAugmentPath := cfg.AugmentPath
+			if cfg.AugmentPath == "" {
+				cfg.AugmentPath = resolveYangPathForVersion(version, accPathVersion, cfg.PathVersion)
+			}
+			augmentConfig(&cfg, vModelPaths)
+			cfg.AugmentPath = origAugmentPath
 		}
 		augmentedCache[cacheKey] = cfg
 		return cfg

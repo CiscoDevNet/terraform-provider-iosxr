@@ -40,6 +40,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
@@ -52,24 +53,25 @@ import (
 
 // End of section. //template:end imports
 
+{{- $versionSuffix := versionSuffix .Version}}
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
-func New{{camelCase .Name}}Resource() resource.Resource {
-	return &{{camelCase .Name}}Resource{}
+func New{{camelCase .Name}}{{$versionSuffix}}Resource() resource.Resource {
+	return &{{camelCase .Name}}{{$versionSuffix}}Resource{}
 }
 
-type {{camelCase .Name}}Resource struct{
+type {{camelCase .Name}}{{$versionSuffix}}Resource struct{
 	data *IosxrProviderData
 }
 
-func (r *{{camelCase .Name}}Resource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_{{snakeCase .Name}}"
 }
 
-func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
-	resp.Schema = schema.Schema{
-		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "{{.ResDescription}}",
+func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+        resp.Schema = schema.Schema{
+                // This description is used by the documentation generator and the language server.
+                MarkdownDescription: "{{.ResDescription}}{{if ne .IntroducedInVersion ""}}\n\n> **Note:** This resource is only supported from IOS-XR version {{formatVersionDisplay .IntroducedInVersion}} and above.{{end}}{{if ne .RemovedInVersion ""}}\n\n> **Warning:** This resource is not supported from IOS-XR version {{formatVersionDisplay .RemovedInVersion}} and above.{{end}}",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -92,15 +94,43 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				},
 			},
 			{{- end}}
-			{{- range .Attributes}}
+			{{- range  .Attributes}}
 			"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if eq .Type "Set"}}SetNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}"){{- if len .EnumValues -}}.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}}){{- end -}}{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}}){{- end -}}{{- if len .DefaultValue -}}.AddDefaultValueDescription("{{.DefaultValue}}"){{- end -}}.String,
+				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
+					{{- if and (len .EnumValues) (not .VersionEnums) -}}
+					.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
+					{{- end -}}
+					{{- if len .VersionEnums -}}
+					.String + "\n  - Choices: {{formatVersionEnums .VersionEnums}}"
+					{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}
+					{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
+					{{- else if .VersionRanges -}}
+					.String + "\n  - Range: {{formatVersionRanges .VersionRanges}}"
+					{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}
+					{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
+					{{- else if .VersionStringLengths -}}
+					.String + "\n  - Length: {{formatVersionStringLengths .VersionStringLengths}}"
+					{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}
+					{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
+					{{- else if or (ne .MinInt 0) (ne .MaxInt 0) -}}
+					.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
+					{{- if .AddedInVersion}}.String + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},{{else if .RemovedInVersion}}.String + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**",{{else}}.String,{{end}}
+					{{- else if .AddedInVersion -}}
+					.String + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
+					{{- else if .RemovedInVersion -}}
+					.String + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**",
+					{{- else -}}
+					{{- if len .DefaultValue -}}
+					.AddDefaultValueDescription("{{.DefaultValue}}")
+					{{- end -}}
+					.String,
+					{{- end}}
 				{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
 				ElementType:         types.StringType,
 				{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
 				ElementType:         types.Int64Type,
 				{{- end}}
-				{{- if or .Id .Reference .Mandatory}}
+				{{- if and (or .Id .Reference .Mandatory) (not .RemovedInVersion) (not .AddedInVersion)}}
 				Required:            true,
 				{{- else}}
 				Optional:            true,
@@ -115,7 +145,11 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				Validators: []validator.String{
 					stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
 				},
-				{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
+				{{- else if .VersionStringLengths}}
+				Validators: []validator.String{
+					stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
+				},
+				{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0) }}
 				Validators: []validator.String{
 					{{- if or (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
 					stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
@@ -124,12 +158,19 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					stringvalidator.RegexMatches(regexp.MustCompile(`{{.}}`), ""),
 					{{- end}}
 				},
+				{{- else if .VersionEnums}}
+				// Version-specific enum validation done at runtime in Create/Update
+				{{- else if .VersionRanges}}
+				Validators: []validator.Int64{
+					int64validator.Between({{index (getWidestRange .VersionRanges) 0}}, {{index (getWidestRange .VersionRanges) 1}}),
+				},
+				// Precise per-version range validation still done at runtime in Create/Update.
 				{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
 				Validators: []validator.Int64{
 					int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 				},
 				{{- end}}
-				{{- if or .Id .Reference .RequiresReplace}}
+			{{- if or .Id .Reference .RequiresReplace}}
 				PlanModifiers: []planmodifier.{{.Type}}{
 					{{snakeCase .Type}}planmodifier.RequiresReplace(),
 				},
@@ -144,15 +185,33 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				{{- if or (eq .Type "List") (eq .Type "Set")}}
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						{{- range .Attributes}}
+						{{- range  .Attributes}}
 						"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if eq .Type "Set"}}SetNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}"){{- if len .EnumValues -}}.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}}){{- end -}}{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}}){{- end -}}{{- if len .DefaultValue -}}.AddDefaultValueDescription("{{.DefaultValue}}"){{- end -}}.String,
+							MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
+								{{- if and (len .EnumValues) (not .VersionEnums) -}}
+								.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
+								{{- end -}}
+								{{- if len .VersionEnums -}}
+								.String + "\n  - Choices: {{formatVersionEnums .VersionEnums}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
+								{{- else if .VersionRanges -}}
+								.String + "\n  - Range: {{formatVersionRanges .VersionRanges}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
+								{{- else if .VersionStringLengths -}}
+								.String + "\n  - Length: {{formatVersionStringLengths .VersionStringLengths}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
+								{{- else if or (ne .MinInt 0) (ne .MaxInt 0) -}}
+								.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
+								{{- end -}}
+								{{- if len .DefaultValue -}}
+								.AddDefaultValueDescription("{{.DefaultValue}}")
+								{{- end -}}
+								{{- if and (not .VersionRanges) (not .VersionEnums) (not .VersionStringLengths) -}}
+								.String{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
+								{{- end}}
 							{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
 							ElementType:         types.StringType,
 							{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
 							ElementType:         types.Int64Type,
 							{{- end}}
-							{{- if or .Id .Mandatory}}
+							{{- if and (or .Id .Mandatory) (not .RemovedInVersion) (not .AddedInVersion)}}
 							Required:            true,
 							{{- else}}
 							Optional:            true,
@@ -167,7 +226,11 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 							Validators: []validator.String{
 								stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
 							},
-							{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
+							{{- else if .VersionStringLengths}}
+							Validators: []validator.String{
+								stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
+							},
+							{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0) }}
 							Validators: []validator.String{
 								{{- if or (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
 								stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
@@ -175,6 +238,18 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 								{{- range .StringPatterns}}
 								stringvalidator.RegexMatches(regexp.MustCompile(`{{.}}`), ""),
 								{{- end}}
+							},
+							{{- else if .VersionEnums}}
+							// Version-specific enum validation done at runtime in Create/Update
+							{{- else if .VersionRanges}}
+							Validators: []validator.Int64{
+								int64validator.Between({{index (getWidestRange .VersionRanges) 0}}, {{index (getWidestRange .VersionRanges) 1}}),
+							},
+							// Precise per-version range validation still done at runtime in Create/Update.
+							{{- else if and .RemovedInVersion (or (ne .MinInt 0) (ne .MaxInt 0))}}
+							// Field removed in version {{.RemovedInVersion}} - keep base range validation + runtime check
+							Validators: []validator.Int64{
+								int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 							},
 							{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
 							Validators: []validator.Int64{
@@ -191,15 +266,33 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 							{{- if or (eq .Type "List") (eq .Type "Set")}}
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									{{- range .Attributes}}
+									{{- range  .Attributes}}
 									"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if eq .Type "Set"}}SetNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}"){{- if len .EnumValues -}}.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}}){{- end -}}{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}}){{- end -}}{{- if len .DefaultValue -}}.AddDefaultValueDescription("{{.DefaultValue}}"){{- end -}}.String,
+										MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
+											{{- if and (len .EnumValues) (not .VersionEnums) -}}
+											.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
+											{{- end -}}
+											{{- if len .VersionEnums -}}
+											.String + "\n  - Choices: {{formatVersionEnums .VersionEnums}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
+											{{- else if .VersionRanges -}}
+											.String + "\n  - Range: {{formatVersionRanges .VersionRanges}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
+											{{- else if .VersionStringLengths -}}
+											.String + "\n  - Length: {{formatVersionStringLengths .VersionStringLengths}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
+											{{- else if or (ne .MinInt 0) (ne .MaxInt 0) -}}
+											.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
+											{{- end -}}
+											{{- if len .DefaultValue -}}
+											.AddDefaultValueDescription("{{.DefaultValue}}")
+											{{- end -}}
+											{{- if and (not .VersionRanges) (not .VersionEnums) (not .VersionStringLengths) -}}
+											.String{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
+											{{- end}}
 										{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
 										ElementType:         types.StringType,
 										{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
 										ElementType:         types.Int64Type,
 										{{- end}}
-										{{- if or .Id .Mandatory}}
+										{{- if and (or .Id .Mandatory) (not .RemovedInVersion) (not .AddedInVersion)}}
 										Required:            true,
 										{{- else}}
 										Optional:            true,
@@ -214,7 +307,11 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 										Validators: []validator.String{
 											stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
 										},
-										{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
+										{{- else if .VersionStringLengths}}
+										Validators: []validator.String{
+											stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
+										},
+										{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0) }}
 										Validators: []validator.String{
 											{{- if or (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
 											stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
@@ -222,6 +319,18 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 											{{- range .StringPatterns}}
 											stringvalidator.RegexMatches(regexp.MustCompile(`{{.}}`), ""),
 											{{- end}}
+										},
+										{{- else if .VersionEnums}}
+										// Version-specific enum validation done at runtime in Create/Update
+										{{- else if .VersionRanges}}
+										Validators: []validator.Int64{
+											int64validator.Between({{index (getWidestRange .VersionRanges) 0}}, {{index (getWidestRange .VersionRanges) 1}}),
+										},
+										// Precise per-version range validation still done at runtime in Create/Update.
+										{{- else if and .RemovedInVersion (or (ne .MinInt 0) (ne .MaxInt 0))}}
+										// Field removed in version {{.RemovedInVersion}} - keep base range validation + runtime check
+										Validators: []validator.Int64{
+											int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 										},
 										{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
 										Validators: []validator.Int64{
@@ -238,107 +347,175 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 										{{- if or (eq .Type "List") (eq .Type "Set")}}
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
-												{{- range .Attributes}}
-												"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if eq .Type "Set"}}SetNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
-													MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}"){{- if len .EnumValues -}}.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}}){{- end -}}{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}}){{- end -}}{{- if len .DefaultValue -}}.AddDefaultValueDescription("{{.DefaultValue}}"){{- end -}}.String,
-													{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
-													ElementType:         types.StringType,
-													{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
-													ElementType:         types.Int64Type,
+											{{- range  .Attributes}}
+											"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if eq .Type "Set"}}SetNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
+												MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
+													{{- if and (len .EnumValues) (not .VersionEnums) -}}
+													.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
+													{{- end -}}
+													{{- if len .VersionEnums -}}
+													.String + "\n  - Choices: {{formatVersionEnums .VersionEnums}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
+													{{- else if .VersionRanges -}}
+													.String + "\n  - Range: {{formatVersionRanges .VersionRanges}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
+													{{- else if .VersionStringLengths -}}
+													.String + "\n  - Length: {{formatVersionStringLengths .VersionStringLengths}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
+													{{- else if or (ne .MinInt 0) (ne .MaxInt 0) -}}
+													.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
+													{{- end -}}
+													{{- if len .DefaultValue -}}
+													.AddDefaultValueDescription("{{.DefaultValue}}")
+													{{- end -}}
+													{{- if and (not .VersionEnums) (not .VersionRanges) (not .VersionStringLengths) -}}
+													.String{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 													{{- end}}
-													{{- if or .Id .Mandatory}}
-													Required:            true,
-													{{- else}}
-													Optional:            true,
+												{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
+												ElementType:         types.StringType,
+												{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
+												ElementType:         types.Int64Type,
+												{{- end}}
+												{{- if and (or .Id .Mandatory) (not .RemovedInVersion) (not .AddedInVersion)}}
+												Required:            true,
+												{{- else}}
+												Optional:            true,
+												{{- end}}
+												{{- if len .DefaultValue}}
+												Computed:            true,
+												{{- end}}
+												{{- if .Sensitive}}
+												Sensitive:           true,
+												{{- end}}
+												{{- if len .EnumValues}}
+												Validators: []validator.String{
+													stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
+												},
+												{{- else if .VersionStringLengths}}
+												Validators: []validator.String{
+													stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
+												},
+												{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0) }}
+												Validators: []validator.String{
+													{{- if or (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
+													stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
 													{{- end}}
-													{{- if len .DefaultValue}}
-													Computed:            true,
+													{{- range .StringPatterns}}
+													stringvalidator.RegexMatches(regexp.MustCompile(`{{.}}`), ""),
 													{{- end}}
-													{{- if .Sensitive}}
-													Sensitive:           true,
-													{{- end}}
-													{{- if len .EnumValues}}
-													Validators: []validator.String{
-														stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
-													},
-													{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
-													Validators: []validator.String{
-														{{- if or (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
-														stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
-														{{- end}}
-														{{- range .StringPatterns}}
-														stringvalidator.RegexMatches(regexp.MustCompile(`{{.}}`), ""),
-														{{- end}}
-													},
-													{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
-													Validators: []validator.Int64{
-														int64validator.Between({{.MinInt}}, {{.MaxInt}}),
-													},
-													{{- end}}
-													{{- if and (len .DefaultValue) (eq .Type "Int64")}}
-													Default:             int64default.StaticInt64({{.DefaultValue}}),
-													{{- else if and (len .DefaultValue) (eq .Type "Bool")}}
-													Default:             booldefault.StaticBool({{.DefaultValue}}),
-													{{- else if and (len .DefaultValue) (eq .Type "String")}}
-													Default:             stringdefault.StaticString("{{.DefaultValue}}"),
-													{{- end}}
-													{{- if or (eq .Type "List") (eq .Type "Set")}}
-													NestedObject: schema.NestedAttributeObject{
-														Attributes: map[string]schema.Attribute{
-															{{- range .Attributes}}
-															"{{.TfName}}": schema.{{if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
-																MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}"){{- if len .EnumValues -}}.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}}){{- end -}}{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}}){{- end -}}{{- if len .DefaultValue -}}.AddDefaultValueDescription("{{.DefaultValue}}"){{- end -}}.String,
-																{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
-																ElementType:         types.StringType,
-																{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
-																ElementType:         types.Int64Type,
+												},
+												{{- else if .VersionEnums}}
+												// Version-specific enum validation done at runtime in Create/Update
+												{{- else if .VersionRanges}}
+												Validators: []validator.Int64{
+													int64validator.Between({{index (getWidestRange .VersionRanges) 0}}, {{index (getWidestRange .VersionRanges) 1}}),
+												},
+												// Precise per-version range validation still done at runtime in Create/Update.
+												{{- else if and .RemovedInVersion (or (ne .MinInt 0) (ne .MaxInt 0))}}
+												// Field removed in version {{.RemovedInVersion}} - keep base range validation + runtime check
+												Validators: []validator.Int64{
+													int64validator.Between({{.MinInt}}, {{.MaxInt}}),
+												},
+												{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
+												Validators: []validator.Int64{
+													int64validator.Between({{.MinInt}}, {{.MaxInt}}),
+												},
+												{{- end}}
+												{{- if and (len .DefaultValue) (eq .Type "Int64")}}
+												Default:             int64default.StaticInt64({{.DefaultValue}}),
+												{{- else if and (len .DefaultValue) (eq .Type "Bool")}}
+												Default:             booldefault.StaticBool({{.DefaultValue}}),
+												{{- else if and (len .DefaultValue) (eq .Type "String")}}
+												Default:             stringdefault.StaticString("{{.DefaultValue}}"),
+												{{- end}}
+												{{- if or (eq .Type "List") (eq .Type "Set")}}
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														{{- range  .Attributes}}
+														"{{.TfName}}": schema.{{if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
+															MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
+																{{- if and (len .EnumValues) (not .VersionEnums) -}}
+																.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
+																{{- end -}}
+																{{- if len .VersionEnums -}}
+																.String + "\n  - Choices: {{formatVersionEnums .VersionEnums}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
+																{{- else if .VersionRanges -}}
+																.String + "\n  - Range: {{formatVersionRanges .VersionRanges}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
+																{{- else if .VersionStringLengths -}}
+																.String + "\n  - Length: {{formatVersionStringLengths .VersionStringLengths}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
+																{{- else if or (ne .MinInt 0) (ne .MaxInt 0) -}}
+																.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
+																{{- end -}}
+																{{- if len .DefaultValue -}}
+																.AddDefaultValueDescription("{{.DefaultValue}}")
+																{{- end -}}
+																{{- if and (not .VersionEnums) (not .VersionRanges) (not .VersionStringLengths) -}}
+																.String{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 																{{- end}}
-																{{- if or .Id .Mandatory}}
-																Required:            true,
-																{{- else}}
-																Optional:            true,
+															{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
+															ElementType:         types.StringType,
+															{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
+															ElementType:         types.Int64Type,
+															{{- end}}
+															{{- if and (or .Id .Mandatory) (not .RemovedInVersion) (not .AddedInVersion)}}
+															Required:            true,
+															{{- else}}
+															Optional:            true,
+															{{- end}}
+															{{- if len .DefaultValue}}
+															Computed:            true,
+															{{- end}}
+															{{- if .Sensitive}}
+															Sensitive:           true,
+															{{- end}}
+															{{- if len .EnumValues}}
+															Validators: []validator.String{
+																stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
+															},
+															{{- else if .VersionStringLengths}}
+															Validators: []validator.String{
+																stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
+															},
+															{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0) }}
+															Validators: []validator.String{
+																{{- if or (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
+																stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
 																{{- end}}
-																{{- if len .DefaultValue}}
-																Computed:            true,
-																{{- end}}
-																{{- if .Sensitive}}
-																Sensitive:           true,
-																{{- end}}
-																{{- if len .EnumValues}}
-																Validators: []validator.String{
-																	stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
-																},
-																{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
-																Validators: []validator.String{
-																	{{- if or (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
-																	stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
-																	{{- end}}
-																	{{- range .StringPatterns}}
-																	stringvalidator.RegexMatches(regexp.MustCompile(`{{.}}`), ""),
-																	{{- end}}
-																},
-																{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
-																Validators: []validator.Int64{
-																	int64validator.Between({{.MinInt}}, {{.MaxInt}}),
-																},
-																{{- end}}
-																{{- if and (len .DefaultValue) (eq .Type "Int64")}}
-																Default:             int64default.StaticInt64({{.DefaultValue}}),
-																{{- else if and (len .DefaultValue) (eq .Type "Bool")}}
-																Default:             booldefault.StaticBool({{.DefaultValue}}),
-																{{- else if and (len .DefaultValue) (eq .Type "String")}}
-																Default:             stringdefault.StaticString("{{.DefaultValue}}"),
+																{{- range .StringPatterns}}
+																stringvalidator.RegexMatches(regexp.MustCompile(`{{.}}`), ""),
 																{{- end}}
 															},
+															{{- else if .VersionEnums}}
+															// Version-specific enum validation done at runtime in Create/Update
+															{{- else if .VersionRanges}}
+															Validators: []validator.Int64{
+																int64validator.Between({{index (getWidestRange .VersionRanges) 0}}, {{index (getWidestRange .VersionRanges) 1}}),
+															},
+															// Precise per-version range validation still done at runtime in Create/Update.
+															{{- else if and .RemovedInVersion (or (ne .MinInt 0) (ne .MaxInt 0))}}
+															// Field removed in version {{.RemovedInVersion}} - keep base range validation + runtime check
+															Validators: []validator.Int64{
+																int64validator.Between({{.MinInt}}, {{.MaxInt}}),
+															},
+															{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
+															Validators: []validator.Int64{
+																int64validator.Between({{.MinInt}}, {{.MaxInt}}),
+															},
+															{{- end}}
+															{{- if and (len .DefaultValue) (eq .Type "Int64")}}
+															Default:             int64default.StaticInt64({{.DefaultValue}}),
+															{{- else if and (len .DefaultValue) (eq .Type "Bool")}}
+															Default:             booldefault.StaticBool({{.DefaultValue}}),
+															{{- else if and (len .DefaultValue) (eq .Type "String")}}
+															Default:             stringdefault.StaticString("{{.DefaultValue}}"),
 															{{- end}}
 														},
+														{{- end}}
 													},
-													{{- end}}
 												},
 												{{- end}}
 											},
+											{{- end}}
 										},
-										{{- end}}
+									},
+									{{- end}}
 									},
 									{{- end}}
 								},
@@ -355,7 +532,9 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 	}
 }
 
-func (r *{{camelCase .Name}}Resource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+{{- $versionSuffix := versionSuffix .Version}}
+
+func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -367,8 +546,8 @@ func (r *{{camelCase .Name}}Resource) Configure(_ context.Context, req resource.
 
 // Section below is generated&owned by "gen/generator.go". //template:begin create
 
-func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan {{camelCase .Name}}
+func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan {{camelCase .Name}}{{$versionSuffix}}
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -383,7 +562,15 @@ func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.C
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
+{{- if .HasVersionDifferences}}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
+
+{{- end}}
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", {{if .HasPathVersion}}plan.getPathForVersion(device.Version){{else}}plan.getPath(){{end}}))
+
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
@@ -397,14 +584,13 @@ func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.C
 				return
 			}
 
-
 			var ops []gnmi.SetOperation
 
 			// Create object
-			body := plan.toBody(ctx)
-			tflog.Debug(ctx, fmt.Sprintf("gNMI Set body for path %s: %s", plan.getPath(), body))
+			body := plan.toBody(ctx, device.Version)
+			tflog.Debug(ctx, fmt.Sprintf("gNMI Set body for path %s: %s", {{if .HasPathVersion}}plan.getPathForVersion(device.Version){{else}}plan.getPath(){{end}}, body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -415,7 +601,7 @@ func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.C
 			// rejects a "{}" update); still send it when it's the only op so bare
 			// containers are created and the SetRequest isn't empty.
 			if body != "{}" || len(ops) == 0 {
-				ops = append(ops, gnmi.Update(plan.getPath(), body))
+				ops = append(ops, gnmi.Update({{if .HasPathVersion}}plan.getPathForVersion(device.Version){{else}}plan.getPath(){{end}}, body))
 			}
 
 			_, err := device.GnmiClient.Set(ctx, ops)
@@ -446,9 +632,9 @@ func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.C
 		}
 	}
 
-	plan.Id = types.StringValue(plan.getPath())
+	plan.Id = types.StringValue({{if .HasPathVersion}}plan.getPathForVersion(device.Version){{else}}plan.getPath(){{end}})
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getPath()))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", {{if .HasPathVersion}}plan.getPathForVersion(device.Version){{else}}plan.getPath(){{end}}))
 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
@@ -460,8 +646,9 @@ func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.C
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
 
-func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state {{camelCase .Name}}
+{{- $versionSuffix := versionSuffix .Version}}
+func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state {{camelCase .Name}}{{$versionSuffix}}
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -501,7 +688,12 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 			}
 
 			// Use GetWithRetry to handle device sync delays
+			{{- if .HasPathVersion}}
+			readPath := state.getPathForVersion(device.Version)
+			getResp, notFound, err := helpers.GetWithRetry(ctx, device.GnmiClient, []string{readPath}, readPath)
+			{{- else}}
 			getResp, notFound, err := helpers.GetWithRetry(ctx, device.GnmiClient, []string{state.Id.ValueString()}, state.Id.ValueString())
+			{{- end}}
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
 				return
@@ -524,10 +716,10 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 				if imp {
 					// After `terraform import` we switch to a full read so all device
 					// attributes are populated in state (fromBody overwrites everything).
-					state.fromBody(ctx, gjson.ParseBytes(respBody))
+					state.fromBody(ctx, respBody, device.Version)
 				} else {
 					// Normal read: preserve config-only fields not returned by the device.
-					state.updateFromBody(ctx, gjson.ParseBytes(respBody))
+					state.updateFromBody(ctx, respBody, device.Version)
 				}
 			}
 		} else {
@@ -568,7 +760,9 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 			}
 		}
 	}
-
+{{- if .HasPathVersion}}
+	state.Id = types.StringValue(state.getPathForVersion(device.Version))
+{{- end}}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
@@ -581,8 +775,9 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
 
-func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state {{camelCase .Name}}
+{{- $versionSuffix := versionSuffix .Version}}
+func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state {{camelCase .Name}}{{$versionSuffix}}
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -604,6 +799,14 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 		return
 	}
 
+{{- if .HasVersionDifferences}}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
+
+{{- end}}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
 	if device.Managed {
@@ -618,33 +821,32 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 				return
 			}
 
-
 			var ops []gnmi.SetOperation
 
 			// Update object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 
-			deletedListItems := plan.getDeletedItems(ctx, state)
+			deletedListItems := plan.getDeletedItems(ctx, state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
 
 			for _, i := range deletedListItems {
 				ops = append(ops, gnmi.Delete(i))
 			}
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
-		for _, i := range emptyLeafsDelete {
-			ops = append(ops, gnmi.Delete(i))
-		}
+			for _, i := range emptyLeafsDelete {
+				ops = append(ops, gnmi.Delete(i))
+			}
 
 			// Skip an empty "{}" body when other ops carry the intent; still send it
 			// when it's the only op (see Create for rationale).
 			if body != "{}" || len(ops) == 0 {
-				ops = append(ops, gnmi.Update(plan.getPath(), body))
+				ops = append(ops, gnmi.Update({{if .HasPathVersion}}plan.getPathForVersion(device.Version){{else}}plan.getPath(){{end}}, body))
 			}
 
-		_, err := device.GnmiClient.Set(ctx, ops)
+			_, err := device.GnmiClient.Set(ctx, ops)
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 				return
@@ -666,15 +868,18 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 			body := plan.toBodyXML(ctx, &state)
 			deleteBody := plan.addDeletedItemsXML(ctx, state, body)
 
-			 // Combine update and delete operations into a single transaction
-		 	combinedBody := body + deleteBody
-		 	if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, true); err != nil {
-		 		resp.Diagnostics.AddError("Client Error", err.Error())
-		 		return
+			// Combine update and delete operations into a single transaction
+			combinedBody := body + deleteBody
+			if err := helpers.EditConfig(ctx, device.NetconfClient, combinedBody, true); err != nil {
+				resp.Diagnostics.AddError("Client Error", err.Error())
+				return
 			}
 		}
 	}
 
+{{- if .HasPathVersion}}
+	plan.Id = types.StringValue(plan.getPathForVersion(device.Version))
+{{- end}}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
@@ -685,8 +890,9 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
 
-func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state {{camelCase .Name}}
+{{- $versionSuffix := versionSuffix .Version}}
+func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state {{camelCase .Name}}{{$versionSuffix}}
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -700,6 +906,16 @@ func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.D
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
 	}
+{{- if .HasVersionDifferences}}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+	}
+{{- end}}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 
@@ -783,7 +999,7 @@ func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.D
 
 
 				var ops []gnmi.SetOperation
-				deletePaths := state.getDeletePaths(ctx)
+				deletePaths := state.getDeletePaths(ctx, device.Version)
 				tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
 
 				for _, i := range deletePaths {
@@ -832,7 +1048,8 @@ func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.D
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
 
-func (r *{{camelCase .Name}}Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+{{- $versionSuffix := versionSuffix .Version}}
+func (r *{{camelCase .Name}}{{$versionSuffix}}Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)
 
@@ -854,7 +1071,7 @@ func (r *{{camelCase .Name}}Resource) ImportState(ctx context.Context, req resou
 	}
 
 	// construct path for 'id' attribute
-	var state {{camelCase .Name}}
+	var state {{camelCase .Name}}{{$versionSuffix}}
 	{{- if importAttributes .}}
 	diags := resp.State.Get(ctx, &state)
 	resp.Diagnostics.Append(diags...)

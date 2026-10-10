@@ -30,6 +30,8 @@ data "iosxr_radius_server" "example" {
 - `attribute_acct_session_id_prepend_nas_port_id` (Boolean) Prepend Acct-Session-Id attribute with Nas-Port-Id
 - `attribute_filter_id_11_default_direction` (String) Set the attribute default direction
 - `attribute_lists` (Attributes List) List of Attribute Types (see [below for nested schema](#nestedatt--attribute_lists))
+- `attribute_message_authenticator` (Boolean) Enable Message-authenticator attribute(80) validation in all radius packets
+  - Supported from version: `25.4`
 - `dead_criteria_time` (Number) Minimum time that must elapse since a response was received from this RADIUS server
 - `dead_criteria_tries` (Number) The minimum number of transmissions (original attempts plus retransmits) to this RADIUS server
 - `deadtime` (Number) Time in minutes for which a RADIUS server will be marked dead
@@ -56,9 +58,35 @@ data "iosxr_radius_server" "example" {
 
 Read-Only:
 
+- `attribute_vendor_cisco_vendor_types` (Attributes List) Vendor 9 vendor-type entry
+  - Supported from version: `26.2` (see [below for nested schema](#nestedatt--attribute_lists--attribute_vendor_cisco_vendor_types))
 - `attribute_vendor_ids` (Attributes List) vendor-id (see [below for nested schema](#nestedatt--attribute_lists--attribute_vendor_ids))
 - `name` (String) List of Attribute Types
 - `radius_attributes` (String) Comma-delimited list of RADIUS attributes
+
+<a id="nestedatt--attribute_lists--attribute_vendor_cisco_vendor_types"></a>
+### Nested Schema for `attribute_lists.attribute_vendor_cisco_vendor_types`
+
+Read-Only:
+
+- `all_attributes` (Boolean) Apply to all attributes for this vendor 9 vendor-type.
+  - Supported from version: `26.2`
+- `all_avpairs` (Boolean) Apply to all avpairs with vendor 9 type 1 special semantics.
+  - Supported from version: `26.2`
+- `avpairs` (Attributes List) Named Av-Pair entry for vendor 9 type 1.
+  - Supported from version: `26.2` (see [below for nested schema](#nestedatt--attribute_lists--attribute_vendor_cisco_vendor_types--avpairs))
+- `vendor_type_id` (Number) Vendor 9 vendor-type id.
+  - Supported from version: `26.2`
+
+<a id="nestedatt--attribute_lists--attribute_vendor_cisco_vendor_types--avpairs"></a>
+### Nested Schema for `attribute_lists.attribute_vendor_cisco_vendor_types.avpairs`
+
+Read-Only:
+
+- `avpair_name` (String) Av-Pair name for vendor 9 type 1.
+  - Supported from version: `26.2`
+
+
 
 <a id="nestedatt--attribute_lists--attribute_vendor_ids"></a>
 ### Nested Schema for `attribute_lists.attribute_vendor_ids`
@@ -85,6 +113,10 @@ Read-Only:
 
 - `acct_port` (Number) UDP port for RADIUS accounting requests (default is 1646)
 - `address` (String) IPv4/IPv6 address of RADIUS server
+- `attribute_message_authenticator_mandate` (Boolean) Enforce message-authenticator attribute validation mandatorily in all radius packets received
+  - Supported from version: `25.4`
+- `attribute_message_authenticator_optional` (Boolean) Enforce message-authenticator attribute validation optional in all radius packets received (Default)
+  - Supported from version: `25.4`
 - `auth_port` (Number) UDP port for RADIUS authentication requests (default is 1645)
 - `dtls_server_trustpoint` (String) Trustpoint to be used for RADIUS over DTLS
 - `idle_time` (Number) Idle time after which automated test should start

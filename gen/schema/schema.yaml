@@ -1,6 +1,7 @@
 ---
 name: str()  # The name of the resource and data source
 path: str()  # The YANG path of the resource and data source
+path_version: map(str(), str(), required=False)  # version threshold → YANG module path; overrides path at runtime for that version
 augment_path: str(required=False)  # If a different path is required to augment the definition it can be provided here
 no_delete: bool(required=False)  # Set to true if the resource path cannot be deleted (delete mode == all), e.g. a physical interface
 no_delete_attributes: bool(required=False)  # Set to true if the resource should not provide the option (delete_mode == attributes) to delete the top level attributes individually
@@ -11,6 +12,7 @@ no_augment_config: bool(required=False)  # Set to true if the definition should 
 ds_description: str(required=False)  # Description for the data source
 res_description: str(required=False)  # Description for the resource
 doc_category: str()  # Documentation category for the resource
+legacy: bool(required=False)  # Set to true if the entire resource is removed in this version (used in override definitions)
 attributes: list(include('attribute'), required=False)  # List of attributes
 test_prerequisites: list(include('test_prerequisite'), required=False)  # List of test prerequisites
 ---
@@ -18,6 +20,7 @@ attribute:
   yang_name: str(required=False)  # YANG name/path of the attribute
   yang_scope: str(required=False)  # When trying to find a matching element in the YANG model, limit the scope by proving the parent element name here
   tf_name: str(required=False)  # Optionally provide a Terraform name for the attribute, otherwise it will be derived from the YANG name
+  replaces_yang_name: str(required=False)  # YANG name/path this attribute replaced in a prior version; enables version-conditional path selection at runtime
   xpath: str(required=False)  # Optionally provide an XPath for the attribute, otherwise it will be derived from 'yang_name'
   type: enum('String', 'Int64', 'Bool', 'List', 'Set', 'StringList', 'Int64List', 'StringSet', 'Int64Set', required=False)  # Terraform type of the attribute
   read_raw: bool(required=False)  # Set to true if the attribute value should be read as raw JSON without processing
@@ -47,6 +50,8 @@ attribute:
   no_delete: bool(required=False)  # Set to true if the attribute should not be deleted
   test_tags: list(str(), required=False)  # List of test tags, tests are only executed if an environment variable for each of these tags is configured
   minimum_test_value: any(str(), int(), bool(), list(), required=False) # Value used for "minimum" resource acceptance test
+  legacy: bool(required=False)  # Set to true if the attribute is removed/dropped in this version (used in override definitions)
+  yang_type_change: bool(required=False)  # Set to true for an incompatible type change at the same YANG path — treat as new attr addition (requires a distinct tf_name)
   attributes: list(include('attribute'), required=False)  # List of attributes in case of a list
 
 test_prerequisite:

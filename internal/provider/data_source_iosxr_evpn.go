@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -175,7 +174,7 @@ func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Computed:            true,
 			},
 			"srv6_locators": schema.ListNestedAttribute{
-				MarkdownDescription: "Default locator to use for EVPN SID allocation",
+				MarkdownDescription: "Default locator to use for EVPN SID allocation" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -390,6 +389,50 @@ func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "Set ES-Import Route Target",
 				Computed:            true,
 			},
+			"srv6_locator_name": schema.StringAttribute{
+				MarkdownDescription: "Default locator to use for EVPN SID allocation" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"srv6_locator_usid_allocation_wide_local_id_block": schema.BoolAttribute{
+				MarkdownDescription: "Enable uSID wide function knob for the locator" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"virtual_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify interface name" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Specify interface name" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"ethernet_segment_esi_zero": schema.StringAttribute{
+							MarkdownDescription: "ESI value" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"ethernet_segment_service_carving_hrw": schema.BoolAttribute{
+							MarkdownDescription: "HRW mode of carving services" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"ethernet_segment_bgp_rt": schema.StringAttribute{
+							MarkdownDescription: "Set ES-Import Route Target" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"ethernet_segment_convergence_reroute": schema.BoolAttribute{
+							MarkdownDescription: "Redirect unicast traffic to backup peer" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"ethernet_segment_convergence_mac_mobility": schema.BoolAttribute{
+							MarkdownDescription: "MAC-Mobility triggered reconvergence" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"ethernet_segment_convergence_nexthop_tracking": schema.BoolAttribute{
+							MarkdownDescription: "Enable EVPN procedures to be influenced by BGP nexthop reachability" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -437,7 +480,6 @@ func (d *EVPNDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -457,7 +499,7 @@ func (d *EVPNDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

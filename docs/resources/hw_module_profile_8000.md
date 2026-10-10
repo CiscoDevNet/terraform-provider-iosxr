@@ -10,55 +10,43 @@ description: |-
 
 This resource can manage the HW Module Profile configuration on Cisco 8000 series routers.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `profile_cef_mplsoudp_scale` | `25.4` |
+| `profile_gue_udp_dest_port_ipv4` | `25.4` |
+| `profile_gue_udp_dest_port_ipv6` | `25.4` |
+| `profile_gue_udp_dest_port_mpls` | `25.4` |
+| `profile_tcam_fib_ipv4_unicast_percent` | `25.4` |
+| `profile_tcam_fib_ipv6_unicast_percent` | `25.4` |
+| `profile_tcam_format_og_compr_id_extension` | `26.2` |
+
 ## Example Usage
 
 ```terraform
 resource "iosxr_hw_module_profile_8000" "example" {
-  profile_tcam_fib_ipv4_unicast_percent                       = 50
-  profile_tcam_fib_ipv6_unicast_percent                       = 50
-  profile_tcam_format_access_list_ipv4_src_addr               = true
-  profile_tcam_format_access_list_ipv4_dst_addr               = true
-  profile_tcam_format_access_list_ipv4_src_port               = true
-  profile_tcam_format_access_list_ipv4_dst_port               = true
-  profile_tcam_format_access_list_ipv4_proto                  = true
-  profile_tcam_format_access_list_ipv4_precedence             = true
-  profile_tcam_format_access_list_ipv4_ttl_match              = true
-  profile_tcam_format_access_list_ipv4_tcp_flags              = true
-  profile_tcam_format_access_list_ipv4_frag_bit               = true
-  profile_tcam_format_access_list_ipv4_packet_len             = true
-  profile_tcam_format_access_list_ipv4_fragment_offset        = true
-  profile_tcam_format_access_list_ipv6_src_addr               = true
-  profile_tcam_format_access_list_ipv6_dst_addr               = true
-  profile_tcam_format_access_list_ipv6_dst_port               = true
-  profile_tcam_format_access_list_ipv6_next_hdr               = true
-  profile_tcam_format_access_list_ipv6_traffic_class          = true
-  profile_tcam_format_access_list_ipv6_frag_bit               = true
-  profile_tcam_format_access_list_ipv6_tcp_flags              = true
-  profile_tcam_format_access_list_ipv6_packet_len             = true
-  profile_qos_voq_mode_fair_eight                             = true
-  profile_qos_l2_mode                                         = "L3"
-  profile_qos_low_latency_mode                                = "1"
-  profile_qos_intra_npu_over_fabric                           = "disable"
-  profile_qos_qos_stats_push_collection                       = true
-  profile_qos_high_water_marks                                = true
-  profile_cef_dark_bw                                         = "enable"
-  profile_cef_sropt                                           = "enable"
+  profile_bw_threshold                                        = "80"
   profile_cef_bgplu                                           = "enable"
   profile_cef_cbf                                             = "enable"
   profile_cef_cbf_forward_class_list                          = [0]
+  profile_cef_dark_bw                                         = "enable"
+  profile_cef_hash_ip_field_duplication                       = true
+  profile_cef_ip_redirect                                     = "enable"
+  profile_cef_iptunnel_scale                                  = true
   profile_cef_ipv6_hop_limit                                  = "punt"
   profile_cef_lpts_acl                                        = true
-  profile_cef_lpts_pifib_entry_counters                       = 256
-  profile_cef_vxlan_ipv6_tnl_scale                            = true
-  profile_cef_mplsoudp_scale                                  = true
-  profile_cef_stats_label_app_default                         = "dynamic"
-  profile_cef_ttl_tunnel_ip_decrement                         = "disable"
-  profile_cef_te_tunnel_highscale_no_ldp_over_te              = true
-  profile_cef_te_tunnel_highscale_ldp_over_te_no_sr_over_srte = true
-  profile_cef_te_tunnel_label_over_te_counters                = true
-  profile_cef_ip_redirect                                     = "enable"
-  profile_cef_unipath_surpf_enable                            = true
   profile_cef_source_rtbh_enable                              = true
+  profile_cef_sropt                                           = "enable"
+  profile_cef_stats_label_app_default                         = "dynamic"
+  profile_cef_te_tunnel_highscale_ldp_over_te_no_sr_over_srte = true
+  profile_cef_te_tunnel_highscale_no_ldp_over_te              = true
+  profile_cef_te_tunnel_label_over_te_counters                = true
+  profile_cef_ttl_tunnel_ip_decrement                         = "disable"
+  profile_cef_unipath_surpf_enable                            = true
+  profile_cef_vxlan_ipv6_tnl_scale                            = true
   profile_encap_exact_interfaces = [
     {
       interface_name = "FourHundredGigE0/0/0/0"
@@ -71,25 +59,48 @@ resource "iosxr_hw_module_profile_8000" "example" {
   ]
   profile_encap_exact_locations_all         = true
   profile_encap_exact_locations_all_virtual = true
-  profile_stats_voqs_sharing_counters       = "1"
-  profile_stats_no_bvi_ingress              = true
-  profile_stats_acl_permit                  = true
-  profile_bw_threshold                      = "80"
-  profile_gue_udp_dest_port_ipv4            = 7000
-  profile_gue_udp_dest_port_ipv6            = 8000
-  profile_gue_udp_dest_port_mpls            = 9000
+  profile_flowspec_ipv6_packet_len_enable   = true
+  profile_l2fib_bridge_flush_convergence    = true
+  profile_l2fib_evpn_aging                  = true
+  profile_l2fib_higher_scale                = true
+  profile_l2fib_pw_stats                    = true
   profile_npu_buffer_extended_locations = [
     {
-      location_name                         = "0/RP0/CPU0"
       bandwidth_congestion_detection_enable = true
       bandwidth_congestion_protect_enable   = true
+      location_name                         = "0/RP0/CPU0"
     }
   ]
-  profile_l2fib_pw_stats                                 = true
-  profile_l2fib_bridge_flush_convergence                 = true
-  profile_l2fib_higher_scale                             = true
+  profile_qos_high_water_marks                           = true
+  profile_qos_intra_npu_over_fabric                      = "disable"
+  profile_qos_l2_mode                                    = "L3"
+  profile_qos_low_latency_mode                           = "1"
+  profile_qos_mode                                       = "l3vpn-short-pipe"
+  profile_qos_qos_stats_push_collection                  = true
+  profile_qos_voq_mode_fair_eight                        = true
   profile_route_scale_ipv6_unicast_connected_prefix_high = true
-  profile_flowspec_ipv6_packet_len_enable                = true
+  profile_stats_acl_permit                               = true
+  profile_stats_no_bvi_ingress                           = true
+  profile_stats_voqs_sharing_counters                    = "1"
+  profile_tcam_format_access_list_ipv4_dst_addr          = true
+  profile_tcam_format_access_list_ipv4_dst_port          = true
+  profile_tcam_format_access_list_ipv4_frag_bit          = true
+  profile_tcam_format_access_list_ipv4_fragment_offset   = true
+  profile_tcam_format_access_list_ipv4_packet_len        = true
+  profile_tcam_format_access_list_ipv4_precedence        = true
+  profile_tcam_format_access_list_ipv4_proto             = true
+  profile_tcam_format_access_list_ipv4_src_addr          = true
+  profile_tcam_format_access_list_ipv4_src_port          = true
+  profile_tcam_format_access_list_ipv4_tcp_flags         = true
+  profile_tcam_format_access_list_ipv4_ttl_match         = true
+  profile_tcam_format_access_list_ipv6_dst_addr          = true
+  profile_tcam_format_access_list_ipv6_dst_port          = true
+  profile_tcam_format_access_list_ipv6_frag_bit          = true
+  profile_tcam_format_access_list_ipv6_next_hdr          = true
+  profile_tcam_format_access_list_ipv6_packet_len        = true
+  profile_tcam_format_access_list_ipv6_src_addr          = true
+  profile_tcam_format_access_list_ipv6_tcp_flags         = true
+  profile_tcam_format_access_list_ipv6_traffic_class     = true
 }
 ```
 
@@ -112,14 +123,19 @@ resource "iosxr_hw_module_profile_8000" "example" {
 - `profile_cef_cbf_forward_class_list` (List of Number) Configure hardware forward class list
 - `profile_cef_dark_bw` (String) Configure dark-bandwidth
   - Choices: `enable`
+- `profile_cef_hash_ip_field_duplication` (Boolean) Enable IP field duplication for hash
+  - Supported from version: `25.4`
 - `profile_cef_ip_redirect` (String) IP redirect
   - Choices: `enable`
+- `profile_cef_iptunnel_scale` (Boolean) Enable iptunnel scale
+  - Supported from version: `25.4`
 - `profile_cef_ipv6_hop_limit` (String) Hop-limit 0 packets
   - Choices: `punt`
 - `profile_cef_lpts_acl` (Boolean) Enable ACL
 - `profile_cef_lpts_pifib_entry_counters` (Number) Configure number of counters
   - Range: `256`-`512`
 - `profile_cef_mplsoudp_scale` (Boolean) Enable mplsoudp scale
+  - **Not supported from version `25.4` and above**
 - `profile_cef_source_rtbh_enable` (Boolean) Enable Source-based RTBH
 - `profile_cef_sropt` (String) Enable debug message for SROPT
   - Choices: `enable`
@@ -139,12 +155,17 @@ resource "iosxr_hw_module_profile_8000" "example" {
 - `profile_flowspec_ipv6_packet_len_enable` (Boolean) flowspec enable ipv6-packet-length configuration
 - `profile_gue_udp_dest_port_ipv4` (Number) Configure unreserved udp port number for ipv4 payload
   - Range: `1000`-`64000`
+  - **Not supported from version `25.4` and above**
 - `profile_gue_udp_dest_port_ipv6` (Number) Configure unreserved udp port number for ipv6 payload
   - Range: `1000`-`64000`
+  - **Not supported from version `25.4` and above**
 - `profile_gue_udp_dest_port_mpls` (Number) Configure unreserved udp port number for mpls payload
   - Range: `1000`-`64000`
+  - **Not supported from version `25.4` and above**
 - `profile_irb_throughput_optimized` (Boolean) Configure BVI throughput-optimized mode
 - `profile_l2fib_bridge_flush_convergence` (Boolean) Configure BD flush convergence mode
+- `profile_l2fib_evpn_aging` (Boolean) Configure evpn-aging profile
+  - Supported from version: `25.4`
 - `profile_l2fib_higher_scale` (Boolean) Configure L2 high-scale mode
 - `profile_l2fib_pw_stats` (Boolean) Configure PW stats
 - `profile_l2fib_vxlan_dc_leaf` (Boolean) Configure vxlan-dc-leaf profile
@@ -159,20 +180,29 @@ resource "iosxr_hw_module_profile_8000" "example" {
   - Choices: `L2`, `L3`
 - `profile_qos_low_latency_mode` (String) Configure QOS low-latency
   - Choices: `1`
+- `profile_qos_mode` (String) Configure QOS Mode
+  - Choices: `l3vpn-short-pipe`
+  - Supported from version: `25.4`
 - `profile_qos_qos_stats_push_collection` (Boolean) Enable QoS stats push collection
 - `profile_qos_voq_mode_eight` (Boolean) 8 VoQ Mode
 - `profile_qos_voq_mode_fair_eight` (Boolean) fair-8 VoQ Mode
 - `profile_qos_voq_mode_fair_four` (Boolean) fair-4 VoQ Mode
 - `profile_qos_voq_mode_four` (Boolean) 4 VoQ Mode
+- `profile_route_scale_host_route` (Boolean) Enable host route scale for ARP/ND
+  - Supported from version: `25.4`
 - `profile_route_scale_ipv6_unicast_connected_prefix_high` (Boolean) Enable profile ipv6-unicast connected-prefix high
+- `profile_route_scale_lpm_full_scale` (Boolean) Enable full scale for LPM
+  - Supported from version: `25.4`
 - `profile_stats_acl_permit` (Boolean) Configure ACL permit stats
 - `profile_stats_no_bvi_ingress` (Boolean) Disable BVI ingress counter stats
 - `profile_stats_voqs_sharing_counters` (String) Configure number of voqs (1, 2, 4) sharing counters
   - Choices: `1`, `2`, `4`
 - `profile_tcam_fib_ipv4_unicast_percent` (Number) percent to configure
   - Range: `1`-`100`
+  - **Not supported from version `25.4` and above**
 - `profile_tcam_fib_ipv6_unicast_percent` (Number) percent to configure
   - Range: `0`-`100`
+  - **Not supported from version `25.4` and above**
 - `profile_tcam_format_access_list_ipv4_dst_addr` (Boolean) ipv4 destination address
 - `profile_tcam_format_access_list_ipv4_dst_object_group` (Boolean) destination object group
 - `profile_tcam_format_access_list_ipv4_dst_port` (Boolean) destination port for TCP/UDP
@@ -212,6 +242,13 @@ resource "iosxr_hw_module_profile_8000" "example" {
 - `profile_tcam_format_access_list_ipv6_udf6` (String) user defined filter
 - `profile_tcam_format_access_list_ipv6_udf7` (String) user defined filter
 - `profile_tcam_format_access_list_ipv6_udf8` (String) user defined filter
+- `profile_tcam_format_og_compr_id_extension` (Boolean) Enable wide compression result of OG ACL
+  - Supported from version: `25.4`
+  - **Not supported from version `26.2` and above**
+- `profile_tcam_format_og_compr_id_extension_egress` (Boolean) Enable wide compression result of egress OG ACL
+  - Supported from version: `26.2`
+- `profile_tcam_format_og_compr_id_extension_ingress` (Boolean) Enable wide compression result of ingress OG ACL
+  - Supported from version: `26.2`
 
 ### Read-Only
 
@@ -257,6 +294,14 @@ Optional:
 
 - `buffer_extended_traffic_class` (Attributes List) configure traffic-class (see [below for nested schema](#nestedatt--profile_priority_flow_control_locations--buffer_extended_traffic_class))
 - `buffer_internal_traffic_class` (Attributes List) configure traffic-class (see [below for nested schema](#nestedatt--profile_priority_flow_control_locations--buffer_internal_traffic_class))
+- `non_pfc_tcs` (Boolean) configure to allow lossy TCs to evict.
+  - Supported from version: `25.4`
+- `non_pfc_tcs_max_non_pfc_voqs_hbm_buffers_percentage` (Number) configure hbm-buffers-percentage for non-pfc-tcs
+  - Range: `50`-`80`
+  - Supported from version: `25.4`
+- `non_pfc_tcs_max_non_pfc_voqs_number_of_evict_voqs` (Number) number of evict voqs
+  - Range: `1`-`3800`
+  - Supported from version: `25.4`
 
 <a id="nestedatt--profile_priority_flow_control_locations--buffer_extended_traffic_class"></a>
 ### Nested Schema for `profile_priority_flow_control_locations.buffer_extended_traffic_class`
@@ -292,18 +337,18 @@ Optional:
 Required:
 
 - `headroom` (Number) configure headroom
-  - Range: `345600`-`1651200`
+  - Range: `345600`-`1651200` (v24.4), `201600`-`1651200` (v25.4)
 - `pause_threshold` (Number) configure pause-threshold
-  - Range: `307200`-`1574400`
+  - Range: `307200`-`1574400` (v24.4), `307200`-`5760000` (v25.4)
 - `traffic_class_id` (Number) configure traffic-class
   - Range: `0`-`7`
 
 Optional:
 
 - `ecn` (Number) configure ecn
-  - Range: `153600`-`897408`
+  - Range: `153600`-`897408` (v24.4), `153600`-`5749376` (v25.4)
 - `max_threshold` (Number) ecn max threshold
-  - Range: `153600`-`1495680`
+  - Range: `153600`-`1495680` (v24.4), `153600`-`5759616` (v25.4)
 - `probability_percentage` (Number) maximum probability percentage
   - Range: `1`-`100`
 

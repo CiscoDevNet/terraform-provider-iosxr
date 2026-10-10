@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
@@ -77,7 +78,7 @@ func (data MPLSTrafficEngData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data MPLSTrafficEng) toBody(ctx context.Context) string {
+func (data MPLSTrafficEng) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.TrafficEng.IsNull() && !data.TrafficEng.IsUnknown() {
 		if data.TrafficEng.ValueBool() {
@@ -88,6 +89,135 @@ func (data MPLSTrafficEng) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
+
+// GetVersionConstraints returns the version constraints for all fields
+func (data MPLSTrafficEng) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data MPLSTrafficEng) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data MPLSTrafficEng) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data MPLSTrafficEng) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data MPLSTrafficEng) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *MPLSTrafficEng) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "traffic-eng"); !data.TrafficEng.IsNull() {
+		if value.Exists() {
+			data.TrafficEng = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TrafficEng = types.BoolValue(false)
+		}
+	} else if data.TrafficEng.IsNull() {
+		data.TrafficEng = types.BoolNull()
+	}
+}
+
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *MPLSTrafficEng) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "traffic-eng"); value.Exists() {
+		data.TrafficEng = types.BoolValue(true)
+	} else if !data.TrafficEng.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TrafficEng = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *MPLSTrafficEngData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "traffic-eng"); value.Exists() {
+		data.TrafficEng = types.BoolValue(true)
+	} else {
+		data.TrafficEng = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *MPLSTrafficEng) getDeletedItems(ctx context.Context, state MPLSTrafficEng, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.TrafficEng.IsNull() && data.TrafficEng.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "traffic-eng"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *MPLSTrafficEng) getEmptyLeafsDelete(ctx context.Context, state *MPLSTrafficEng, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if !data.TrafficEng.IsNull() && !data.TrafficEng.ValueBool() {
+		if state == nil || state.TrafficEng.IsNull() || state.TrafficEng.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "traffic-eng"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *MPLSTrafficEng) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.TrafficEng.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "traffic-eng"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
@@ -124,7 +254,7 @@ func (data MPLSTrafficEng) toBodyXML(ctx context.Context, stateArg ...*MPLSTraff
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -132,24 +262,6 @@ func (data MPLSTrafficEng) toBodyXML(ctx context.Context, stateArg ...*MPLSTraff
 }
 
 // End of section. //template:end toBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
-
-func (data *MPLSTrafficEng) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("traffic-eng"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TrafficEng.IsNull() {
-			data.TrafficEng = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TrafficEng.IsNull() {
-			data.TrafficEng = types.BoolNull()
-		}
-	}
-}
-
-// End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
@@ -168,46 +280,7 @@ func (data *MPLSTrafficEng) updateFromBodyXML(ctx context.Context, res xmldot.Re
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *MPLSTrafficEng) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "traffic-eng"); value.Exists() {
-		data.TrafficEng = types.BoolValue(true)
-	} else if !data.TrafficEng.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TrafficEng = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *MPLSTrafficEngData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "traffic-eng"); value.Exists() {
-		data.TrafficEng = types.BoolValue(true)
-	} else {
-		data.TrafficEng = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *MPLSTrafficEng) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -219,6 +292,7 @@ func (data *MPLSTrafficEng) fromBodyXML(ctx context.Context, res xmldot.Result) 
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *MPLSTrafficEngData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -230,43 +304,7 @@ func (data *MPLSTrafficEngData) fromBodyXML(ctx context.Context, res xmldot.Resu
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *MPLSTrafficEng) getDeletedItems(ctx context.Context, state MPLSTrafficEng) []string {
-	deletedItems := make([]string, 0)
-	if !state.TrafficEng.IsNull() && data.TrafficEng.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traffic-eng", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *MPLSTrafficEng) getEmptyLeafsDelete(ctx context.Context, state *MPLSTrafficEng) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.TrafficEng.IsNull() && !data.TrafficEng.ValueBool() {
-		if state != nil && !state.TrafficEng.IsNull() && state.TrafficEng.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traffic-eng", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *MPLSTrafficEng) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.TrafficEng.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traffic-eng", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *MPLSTrafficEng) addDeletedItemsXML(ctx context.Context, state MPLSTrafficEng, body string) string {
@@ -296,6 +334,7 @@ func (data *MPLSTrafficEng) addDeletedItemsXML(ctx context.Context, state MPLSTr
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *MPLSTrafficEng) addDeletePathsXML(ctx context.Context, body string) string {

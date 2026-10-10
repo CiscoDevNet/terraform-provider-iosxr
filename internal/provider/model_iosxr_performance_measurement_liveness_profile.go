@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -68,6 +69,7 @@ type PerformanceMeasurementLivenessProfile struct {
 	EndpointDefaultLivenessDetectionMultiplier         types.Int64                                     `tfsdk:"endpoint_default_liveness_detection_multiplier"`
 	EndpointDefaultLivenessDetectionLoggingStateChange types.Bool                                      `tfsdk:"endpoint_default_liveness_detection_logging_state_change"`
 	Profiles                                           []PerformanceMeasurementLivenessProfileProfiles `tfsdk:"profiles"`
+	EndpointDefaultLivenessDetectionNpuOffload         types.Bool                                      `tfsdk:"endpoint_default_liveness_detection_npu_offload"`
 }
 
 type PerformanceMeasurementLivenessProfileData struct {
@@ -98,6 +100,7 @@ type PerformanceMeasurementLivenessProfileData struct {
 	EndpointDefaultLivenessDetectionMultiplier         types.Int64                                     `tfsdk:"endpoint_default_liveness_detection_multiplier"`
 	EndpointDefaultLivenessDetectionLoggingStateChange types.Bool                                      `tfsdk:"endpoint_default_liveness_detection_logging_state_change"`
 	Profiles                                           []PerformanceMeasurementLivenessProfileProfiles `tfsdk:"profiles"`
+	EndpointDefaultLivenessDetectionNpuOffload         types.Bool                                      `tfsdk:"endpoint_default_liveness_detection_npu_offload"`
 }
 type PerformanceMeasurementLivenessProfileProfiles struct {
 	ProfileName                         types.String `tfsdk:"profile_name"`
@@ -142,7 +145,7 @@ func (data PerformanceMeasurementLivenessProfileData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data PerformanceMeasurementLivenessProfile) toBody(ctx context.Context) string {
+func (data PerformanceMeasurementLivenessProfile) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.SrPolicyDefault.IsNull() && !data.SrPolicyDefault.IsUnknown() {
 		if data.SrPolicyDefault.ValueBool() {
@@ -232,6 +235,13 @@ func (data PerformanceMeasurementLivenessProfile) toBody(ctx context.Context) st
 			body, _ = sjson.Set(body, "endpoint.default.liveness-detection.logging.state-change", map[string]string{})
 		}
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() && !data.EndpointDefaultLivenessDetectionNpuOffload.IsUnknown() {
+			if data.EndpointDefaultLivenessDetectionNpuOffload.ValueBool() {
+				body, _ = sjson.Set(body, "endpoint.default.liveness-detection.npu-offload", map[string]string{})
+			}
+		}
+	}
 	if len(data.Profiles) > 0 {
 		body, _ = sjson.Set(body, "names.name", []interface{}{})
 		for index, item := range data.Profiles {
@@ -289,171 +299,228 @@ func (data PerformanceMeasurementLivenessProfile) toBody(ctx context.Context) st
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *PerformanceMeasurementLivenessProfile) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("sr-policy.default"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SrPolicyDefault.IsNull() {
-			data.SrPolicyDefault = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SrPolicyDefault.IsNull() {
-			data.SrPolicyDefault = types.BoolNull()
-		}
+// GetVersionConstraints returns the version constraints for all fields
+func (data PerformanceMeasurementLivenessProfile) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "endpoint_default_liveness_detection_npu_offload",
+			AddedInVersion: "25.4",
+		},
+	}...)
+	if len(constraints) == 0 {
+		return nil
 	}
-	if value := res.Get("sr-policy.default.liveness-detection.multiplier"); value.Exists() && !data.SrPolicyDefaultLivenessDetectionMultiplier.IsNull() {
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data PerformanceMeasurementLivenessProfile) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return []helpers.FieldRangeConstraint{
+		{
+			FieldPath: "endpoint_default_probe_tx_interval",
+			VersionRanges: map[string]helpers.VersionRange{
+				"24.4": {Min: 30000, Max: 15000000},
+				"25.4": {Min: 3300, Max: 15000000},
+			},
+		},
+	}
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data PerformanceMeasurementLivenessProfile) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data PerformanceMeasurementLivenessProfile) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data PerformanceMeasurementLivenessProfile) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *PerformanceMeasurementLivenessProfile) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "sr-policy.default"); !data.SrPolicyDefault.IsNull() {
+		if value.Exists() {
+			data.SrPolicyDefault = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SrPolicyDefault = types.BoolValue(false)
+		}
+	} else if data.SrPolicyDefault.IsNull() {
+		data.SrPolicyDefault = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.liveness-detection.multiplier"); value.Exists() && !data.SrPolicyDefaultLivenessDetectionMultiplier.IsNull() {
 		data.SrPolicyDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultLivenessDetectionMultiplier.IsNull() {
 		data.SrPolicyDefaultLivenessDetectionMultiplier = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.probe.tx-interval"); value.Exists() && !data.SrPolicyDefaultProbeTxInterval.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.tx-interval"); value.Exists() && !data.SrPolicyDefaultProbeTxInterval.IsNull() {
 		data.SrPolicyDefaultProbeTxInterval = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeTxInterval.IsNull() {
 		data.SrPolicyDefaultProbeTxInterval = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.probe.flow-label.explicits"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.explicits"); !data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() {
+		if value.Exists() {
 			data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() {
-			data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolNull()
-		}
+	} else if data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() {
+		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolNull()
 	}
-	if value := res.Get("sr-policy.default.probe.flow-label.explicits.explicit"); value.Exists() && !data.SrPolicyDefaultProbeFlowLabelExplicitList.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.explicits.explicit"); value.Exists() && !data.SrPolicyDefaultProbeFlowLabelExplicitList.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
 	} else if data.SrPolicyDefaultProbeFlowLabelExplicitList.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
 	}
-	if value := res.Get("sr-policy.default.probe.flow-label.from"); value.Exists() && !data.SrPolicyDefaultProbeFlowLabelFrom.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.from"); value.Exists() && !data.SrPolicyDefaultProbeFlowLabelFrom.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeFlowLabelFrom.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelFrom = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.probe.flow-label.to"); value.Exists() && !data.SrPolicyDefaultProbeFlowLabelTo.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.to"); value.Exists() && !data.SrPolicyDefaultProbeFlowLabelTo.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeFlowLabelTo.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelTo = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.probe.flow-label.increment"); value.Exists() && !data.SrPolicyDefaultProbeFlowLabelIncrement.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.increment"); value.Exists() && !data.SrPolicyDefaultProbeFlowLabelIncrement.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeFlowLabelIncrement.IsNull() {
 		data.SrPolicyDefaultProbeFlowLabelIncrement = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.probe.sweep.destination.ipv4"); value.Exists() && !data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.sweep.destination.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
 	} else if data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringNull()
 	}
-	if value := res.Get("sr-policy.default.probe.sweep.destination.range"); value.Exists() && !data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.sweep.destination.range"); value.Exists() && !data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.probe.tos.dscp"); value.Exists() && !data.SrPolicyDefaultProbeTosDscp.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.tos.dscp"); value.Exists() && !data.SrPolicyDefaultProbeTosDscp.IsNull() {
 		data.SrPolicyDefaultProbeTosDscp = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeTosDscp.IsNull() {
 		data.SrPolicyDefaultProbeTosDscp = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.npu-offload"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SrPolicyDefaultNpuOffload.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.npu-offload"); !data.SrPolicyDefaultNpuOffload.IsNull() {
+		if value.Exists() {
 			data.SrPolicyDefaultNpuOffload = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SrPolicyDefaultNpuOffload = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SrPolicyDefaultNpuOffload.IsNull() {
-			data.SrPolicyDefaultNpuOffload = types.BoolNull()
-		}
+	} else if data.SrPolicyDefaultNpuOffload.IsNull() {
+		data.SrPolicyDefaultNpuOffload = types.BoolNull()
 	}
-	if value := res.Get("endpoint.default"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.EndpointDefault.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default"); !data.EndpointDefault.IsNull() {
+		if value.Exists() {
 			data.EndpointDefault = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefault = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.EndpointDefault.IsNull() {
-			data.EndpointDefault = types.BoolNull()
-		}
+	} else if data.EndpointDefault.IsNull() {
+		data.EndpointDefault = types.BoolNull()
 	}
-	if value := res.Get("endpoint.default.probe.tx-interval"); value.Exists() && !data.EndpointDefaultProbeTxInterval.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.tx-interval"); value.Exists() && !data.EndpointDefaultProbeTxInterval.IsNull() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeTxInterval.IsNull() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.probe.flow-label.explicits"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.explicits"); !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
+		if value.Exists() {
 			data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
-			data.EndpointDefaultProbeFlowLabelExplicit = types.BoolNull()
-		}
+	} else if data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
+		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolNull()
 	}
-	if value := res.Get("endpoint.default.probe.flow-label.explicits.explicit"); value.Exists() && !data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.explicits.explicit"); value.Exists() && !data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
 	} else if data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
 	}
-	if value := res.Get("endpoint.default.probe.flow-label.from"); value.Exists() && !data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.from"); value.Exists() && !data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
 		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
 		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.probe.flow-label.to"); value.Exists() && !data.EndpointDefaultProbeFlowLabelTo.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.to"); value.Exists() && !data.EndpointDefaultProbeFlowLabelTo.IsNull() {
 		data.EndpointDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeFlowLabelTo.IsNull() {
 		data.EndpointDefaultProbeFlowLabelTo = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.probe.flow-label.increment"); value.Exists() && !data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.increment"); value.Exists() && !data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
 		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
 		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.probe.sweep.destination.ipv4"); value.Exists() && !data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.sweep.destination.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
 	} else if data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringNull()
 	}
-	if value := res.Get("endpoint.default.probe.sweep.destination.range"); value.Exists() && !data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.sweep.destination.range"); value.Exists() && !data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.probe.tos.dscp"); value.Exists() && !data.EndpointDefaultProbeTosDscp.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.tos.dscp"); value.Exists() && !data.EndpointDefaultProbeTosDscp.IsNull() {
 		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeTosDscp.IsNull() {
 		data.EndpointDefaultProbeTosDscp = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.liveness-detection.multiplier"); value.Exists() && !data.EndpointDefaultLivenessDetectionMultiplier.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.liveness-detection.multiplier"); value.Exists() && !data.EndpointDefaultLivenessDetectionMultiplier.IsNull() {
 		data.EndpointDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultLivenessDetectionMultiplier.IsNull() {
 		data.EndpointDefaultLivenessDetectionMultiplier = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.liveness-detection.logging.state-change"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.liveness-detection.logging.state-change"); !data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() {
+		if value.Exists() {
 			data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() {
-			data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolNull()
-		}
+	} else if data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() {
+		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolNull()
 	}
 	for i := range data.Profiles {
 		keys := [...]string{"profile-name"}
 		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}
 
 		var r gjson.Result
-		res.Get("names.name").ForEach(
+		gjson.GetBytes(res, "names.name").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -471,7 +538,7 @@ func (data *PerformanceMeasurementLivenessProfile) updateFromBody(ctx context.Co
 				return true
 			},
 		)
-		if value := r.Get("profile-name"); value.Exists() && !data.Profiles[i].ProfileName.IsNull() {
+		if value := r.Get("profile-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Profiles[i].ProfileName.IsNull() {
 			data.Profiles[i].ProfileName = types.StringValue(value.String())
 		} else {
 			data.Profiles[i].ProfileName = types.StringNull()
@@ -530,7 +597,7 @@ func (data *PerformanceMeasurementLivenessProfile) updateFromBody(ctx context.Co
 		} else {
 			data.Profiles[i].ProbeFlowLabelIncrement = types.Int64Null()
 		}
-		if value := r.Get("probe.sweep.destination.ipv4"); value.Exists() && !data.Profiles[i].ProbeSweepDestinationIpv4.IsNull() {
+		if value := r.Get("probe.sweep.destination.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Profiles[i].ProbeSweepDestinationIpv4.IsNull() {
 			data.Profiles[i].ProbeSweepDestinationIpv4 = types.StringValue(value.String())
 		} else {
 			data.Profiles[i].ProbeSweepDestinationIpv4 = types.StringNull()
@@ -558,9 +625,667 @@ func (data *PerformanceMeasurementLivenessProfile) updateFromBody(ctx context.Co
 			}
 		}
 	}
+	if value := gjson.GetBytes(res, "endpoint.default.liveness-detection.npu-offload"); helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() {
+		if value.Exists() {
+			data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(false)
+		}
+	} else if data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() {
+		data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *PerformanceMeasurementLivenessProfile) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "sr-policy.default"); value.Exists() {
+		data.SrPolicyDefault = types.BoolValue(true)
+	} else if !data.SrPolicyDefault.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefault = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.liveness-detection.multiplier"); value.Exists() {
+		data.SrPolicyDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.tx-interval"); value.Exists() {
+		data.SrPolicyDefaultProbeTxInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.explicits"); value.Exists() {
+		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(true)
+	} else if !data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.explicits.explicit"); value.Exists() {
+		data.SrPolicyDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
+	} else {
+		data.SrPolicyDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.from"); value.Exists() {
+		data.SrPolicyDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.to"); value.Exists() {
+		data.SrPolicyDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.increment"); value.Exists() {
+		data.SrPolicyDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.sweep.destination.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.sweep.destination.range"); value.Exists() {
+		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.tos.dscp"); value.Exists() {
+		data.SrPolicyDefaultProbeTosDscp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.npu-offload"); value.Exists() {
+		data.SrPolicyDefaultNpuOffload = types.BoolValue(true)
+	} else if !data.SrPolicyDefaultNpuOffload.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultNpuOffload = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default"); value.Exists() {
+		data.EndpointDefault = types.BoolValue(true)
+	} else if !data.EndpointDefault.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefault = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.tx-interval"); value.Exists() {
+		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.explicits"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
+	} else if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.explicits.explicit"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
+	} else {
+		data.EndpointDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.from"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.to"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.increment"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.sweep.destination.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.sweep.destination.range"); value.Exists() {
+		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.tos.dscp"); value.Exists() {
+		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.liveness-detection.multiplier"); value.Exists() {
+		data.EndpointDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.liveness-detection.logging.state-change"); value.Exists() {
+		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(true)
+	} else if !data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "names.name"); value.Exists() {
+		data.Profiles = make([]PerformanceMeasurementLivenessProfileProfiles, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PerformanceMeasurementLivenessProfileProfiles{}
+			if cValue := v.Get("profile-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.ProfileName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("liveness-detection.multiplier"); cValue.Exists() {
+				item.LivenessDetectionMultiplier = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("liveness-detection.logging.state-change"); cValue.Exists() {
+				item.LivenessDetectionLoggingStateChange = types.BoolValue(true)
+			} else if !item.LivenessDetectionLoggingStateChange.IsNull() {
+				// Only set to false if it was previously set
+				item.LivenessDetectionLoggingStateChange = types.BoolValue(false)
+			}
+			if cValue := v.Get("probe.tx-interval"); cValue.Exists() {
+				item.ProbeTxInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.flow-label.explicits"); cValue.Exists() {
+				item.ProbeFlowLabelExplicit = types.BoolValue(true)
+			} else if !item.ProbeFlowLabelExplicit.IsNull() {
+				// Only set to false if it was previously set
+				item.ProbeFlowLabelExplicit = types.BoolValue(false)
+			}
+			if cValue := v.Get("probe.flow-label.explicits.explicit"); cValue.Exists() {
+				item.ProbeFlowLabelExplicitList = helpers.GetInt64List(cValue.Array())
+			} else {
+				item.ProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
+			}
+			if cValue := v.Get("probe.flow-label.from"); cValue.Exists() {
+				item.ProbeFlowLabelFrom = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.flow-label.to"); cValue.Exists() {
+				item.ProbeFlowLabelTo = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.flow-label.increment"); cValue.Exists() {
+				item.ProbeFlowLabelIncrement = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.sweep.destination.ipv4"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.ProbeSweepDestinationIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("probe.sweep.destination.range"); cValue.Exists() {
+				item.ProbeSweepDestinationRange = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.tos.dscp"); cValue.Exists() {
+				item.ProbeTosDscp = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("npu-offload"); cValue.Exists() {
+				item.NpuOffload = types.BoolValue(true)
+			} else if !item.NpuOffload.IsNull() {
+				// Only set to false if it was previously set
+				item.NpuOffload = types.BoolValue(false)
+			}
+			data.Profiles = append(data.Profiles, item)
+			return true
+		})
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "endpoint.default.liveness-detection.npu-offload"); value.Exists() {
+			data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(true)
+		} else if !data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() {
+			// Only set to false if it was previously set in state
+			data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(false)
+		}
+	} else {
+		data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolNull()
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *PerformanceMeasurementLivenessProfileData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "sr-policy.default"); value.Exists() {
+		data.SrPolicyDefault = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefault = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.liveness-detection.multiplier"); value.Exists() {
+		data.SrPolicyDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.tx-interval"); value.Exists() {
+		data.SrPolicyDefaultProbeTxInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.explicits"); value.Exists() {
+		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.explicits.explicit"); value.Exists() {
+		data.SrPolicyDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
+	} else {
+		data.SrPolicyDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.from"); value.Exists() {
+		data.SrPolicyDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.to"); value.Exists() {
+		data.SrPolicyDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.flow-label.increment"); value.Exists() {
+		data.SrPolicyDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.sweep.destination.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.sweep.destination.range"); value.Exists() {
+		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.tos.dscp"); value.Exists() {
+		data.SrPolicyDefaultProbeTosDscp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.npu-offload"); value.Exists() {
+		data.SrPolicyDefaultNpuOffload = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefaultNpuOffload = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default"); value.Exists() {
+		data.EndpointDefault = types.BoolValue(true)
+	} else {
+		data.EndpointDefault = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.tx-interval"); value.Exists() {
+		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.explicits"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.explicits.explicit"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
+	} else {
+		data.EndpointDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.from"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.to"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.increment"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.sweep.destination.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.sweep.destination.range"); value.Exists() {
+		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.tos.dscp"); value.Exists() {
+		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.liveness-detection.multiplier"); value.Exists() {
+		data.EndpointDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.liveness-detection.logging.state-change"); value.Exists() {
+		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "names.name"); value.Exists() {
+		data.Profiles = make([]PerformanceMeasurementLivenessProfileProfiles, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PerformanceMeasurementLivenessProfileProfiles{}
+			if cValue := v.Get("profile-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.ProfileName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("liveness-detection.multiplier"); cValue.Exists() {
+				item.LivenessDetectionMultiplier = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("liveness-detection.logging.state-change"); cValue.Exists() {
+				item.LivenessDetectionLoggingStateChange = types.BoolValue(true)
+			} else {
+				item.LivenessDetectionLoggingStateChange = types.BoolValue(false)
+			}
+			if cValue := v.Get("probe.tx-interval"); cValue.Exists() {
+				item.ProbeTxInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.flow-label.explicits"); cValue.Exists() {
+				item.ProbeFlowLabelExplicit = types.BoolValue(true)
+			} else {
+				item.ProbeFlowLabelExplicit = types.BoolValue(false)
+			}
+			if cValue := v.Get("probe.flow-label.explicits.explicit"); cValue.Exists() {
+				item.ProbeFlowLabelExplicitList = helpers.GetInt64List(cValue.Array())
+			} else {
+				item.ProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
+			}
+			if cValue := v.Get("probe.flow-label.from"); cValue.Exists() {
+				item.ProbeFlowLabelFrom = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.flow-label.to"); cValue.Exists() {
+				item.ProbeFlowLabelTo = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.flow-label.increment"); cValue.Exists() {
+				item.ProbeFlowLabelIncrement = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.sweep.destination.ipv4"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.ProbeSweepDestinationIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("probe.sweep.destination.range"); cValue.Exists() {
+				item.ProbeSweepDestinationRange = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.tos.dscp"); cValue.Exists() {
+				item.ProbeTosDscp = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("npu-offload"); cValue.Exists() {
+				item.NpuOffload = types.BoolValue(true)
+			} else {
+				item.NpuOffload = types.BoolValue(false)
+			}
+			data.Profiles = append(data.Profiles, item)
+			return true
+		})
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "endpoint.default.liveness-detection.npu-offload"); value.Exists() {
+			data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(true)
+		} else {
+			data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(false)
+		}
+	} else {
+		data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolNull()
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *PerformanceMeasurementLivenessProfile) getDeletedItems(ctx context.Context, state PerformanceMeasurementLivenessProfile, version string) []string {
+	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !state.EndpointDefaultLivenessDetectionNpuOffload.IsNull() && data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/liveness-detection/npu-offload"))
+	}
+	for i := range state.Profiles {
+		keys := [...]string{"profile-name"}
+		stateKeyValues := [...]string{state.Profiles[i].ProfileName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Profiles[i].ProfileName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Profiles {
+			found = true
+			if state.Profiles[i].ProfileName.ValueString() != data.Profiles[j].ProfileName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Profiles[i].NpuOffload.IsNull() && data.Profiles[j].NpuOffload.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "npu-offload"))
+				}
+				if !state.Profiles[i].ProbeTosDscp.IsNull() && data.Profiles[j].ProbeTosDscp.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/tos/dscp"))
+				}
+				if !state.Profiles[i].ProbeSweepDestinationRange.IsNull() && data.Profiles[j].ProbeSweepDestinationRange.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/sweep/destination/range"))
+				}
+				if !state.Profiles[i].ProbeSweepDestinationIpv4.IsNull() && data.Profiles[j].ProbeSweepDestinationIpv4.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/sweep/destination/ipv4"))
+				}
+				if !state.Profiles[i].ProbeFlowLabelIncrement.IsNull() && data.Profiles[j].ProbeFlowLabelIncrement.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/flow-label/increment"))
+				}
+				if !state.Profiles[i].ProbeFlowLabelTo.IsNull() && data.Profiles[j].ProbeFlowLabelTo.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/flow-label/to"))
+				}
+				if !state.Profiles[i].ProbeFlowLabelFrom.IsNull() && data.Profiles[j].ProbeFlowLabelFrom.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/flow-label/from"))
+				}
+				if !state.Profiles[i].ProbeFlowLabelExplicitList.IsNull() && data.Profiles[j].ProbeFlowLabelExplicitList.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/flow-label/explicits/explicit"))
+				}
+				if !state.Profiles[i].ProbeFlowLabelExplicit.IsNull() && data.Profiles[j].ProbeFlowLabelExplicit.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/flow-label/explicits"))
+				}
+				if !state.Profiles[i].ProbeTxInterval.IsNull() && data.Profiles[j].ProbeTxInterval.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/tx-interval"))
+				}
+				if !state.Profiles[i].LivenessDetectionLoggingStateChange.IsNull() && data.Profiles[j].LivenessDetectionLoggingStateChange.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "liveness-detection/logging/state-change"))
+				}
+				if !state.Profiles[i].LivenessDetectionMultiplier.IsNull() && data.Profiles[j].LivenessDetectionMultiplier.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "liveness-detection/multiplier"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString))
+		}
+	}
+	if !state.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() && data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/liveness-detection/logging/state-change"))
+	}
+	if !state.EndpointDefaultLivenessDetectionMultiplier.IsNull() && data.EndpointDefaultLivenessDetectionMultiplier.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/liveness-detection/multiplier"))
+	}
+	if !state.EndpointDefaultProbeTosDscp.IsNull() && data.EndpointDefaultProbeTosDscp.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/tos/dscp"))
+	}
+	if !state.EndpointDefaultProbeSweepDestinationRange.IsNull() && data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/sweep/destination/range"))
+	}
+	if !state.EndpointDefaultProbeSweepDestinationIpv4.IsNull() && data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/sweep/destination/ipv4"))
+	}
+	if !state.EndpointDefaultProbeFlowLabelIncrement.IsNull() && data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/flow-label/increment"))
+	}
+	if !state.EndpointDefaultProbeFlowLabelTo.IsNull() && data.EndpointDefaultProbeFlowLabelTo.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/flow-label/to"))
+	}
+	if !state.EndpointDefaultProbeFlowLabelFrom.IsNull() && data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/flow-label/from"))
+	}
+	if !state.EndpointDefaultProbeFlowLabelExplicitList.IsNull() && data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/flow-label/explicits/explicit"))
+	}
+	if !state.EndpointDefaultProbeFlowLabelExplicit.IsNull() && data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/flow-label/explicits"))
+	}
+	if !state.EndpointDefaultProbeTxInterval.IsNull() && data.EndpointDefaultProbeTxInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/tx-interval"))
+	}
+	if !state.EndpointDefault.IsNull() && data.EndpointDefault.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default"))
+	}
+	if !state.SrPolicyDefaultNpuOffload.IsNull() && data.SrPolicyDefaultNpuOffload.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/npu-offload"))
+	}
+	if !state.SrPolicyDefaultProbeTosDscp.IsNull() && data.SrPolicyDefaultProbeTosDscp.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/tos/dscp"))
+	}
+	if !state.SrPolicyDefaultProbeSweepDestinationRange.IsNull() && data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/sweep/destination/range"))
+	}
+	if !state.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() && data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/sweep/destination/ipv4"))
+	}
+	if !state.SrPolicyDefaultProbeFlowLabelIncrement.IsNull() && data.SrPolicyDefaultProbeFlowLabelIncrement.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/flow-label/increment"))
+	}
+	if !state.SrPolicyDefaultProbeFlowLabelTo.IsNull() && data.SrPolicyDefaultProbeFlowLabelTo.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/flow-label/to"))
+	}
+	if !state.SrPolicyDefaultProbeFlowLabelFrom.IsNull() && data.SrPolicyDefaultProbeFlowLabelFrom.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/flow-label/from"))
+	}
+	if !state.SrPolicyDefaultProbeFlowLabelExplicitList.IsNull() && data.SrPolicyDefaultProbeFlowLabelExplicitList.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/flow-label/explicits/explicit"))
+	}
+	if !state.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() && data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/flow-label/explicits"))
+	}
+	if !state.SrPolicyDefaultProbeTxInterval.IsNull() && data.SrPolicyDefaultProbeTxInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/tx-interval"))
+	}
+	if !state.SrPolicyDefaultLivenessDetectionMultiplier.IsNull() && data.SrPolicyDefaultLivenessDetectionMultiplier.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/liveness-detection/multiplier"))
+	}
+	if !state.SrPolicyDefault.IsNull() && data.SrPolicyDefault.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *PerformanceMeasurementLivenessProfile) getEmptyLeafsDelete(ctx context.Context, state *PerformanceMeasurementLivenessProfile, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() && !data.EndpointDefaultLivenessDetectionNpuOffload.ValueBool() {
+		if state == nil || state.EndpointDefaultLivenessDetectionNpuOffload.IsNull() || state.EndpointDefaultLivenessDetectionNpuOffload.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/liveness-detection/npu-offload"))
+		}
+	}
+	for i := range data.Profiles {
+		keys := [...]string{"profile-name"}
+		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Profiles[i].NpuOffload.IsNull() && !data.Profiles[i].NpuOffload.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].NpuOffload.IsNull() || state.Profiles[i].NpuOffload.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "npu-offload"))
+			}
+		}
+		if !data.Profiles[i].ProbeFlowLabelExplicit.IsNull() && !data.Profiles[i].ProbeFlowLabelExplicit.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ProbeFlowLabelExplicit.IsNull() || state.Profiles[i].ProbeFlowLabelExplicit.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "probe/flow-label/explicits"))
+			}
+		}
+		if !data.Profiles[i].LivenessDetectionLoggingStateChange.IsNull() && !data.Profiles[i].LivenessDetectionLoggingStateChange.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].LivenessDetectionLoggingStateChange.IsNull() || state.Profiles[i].LivenessDetectionLoggingStateChange.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "liveness-detection/logging/state-change"))
+			}
+		}
+	}
+	if !data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() && !data.EndpointDefaultLivenessDetectionLoggingStateChange.ValueBool() {
+		if state == nil || state.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() || state.EndpointDefaultLivenessDetectionLoggingStateChange.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/liveness-detection/logging/state-change"))
+		}
+	}
+	if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() && !data.EndpointDefaultProbeFlowLabelExplicit.ValueBool() {
+		if state == nil || state.EndpointDefaultProbeFlowLabelExplicit.IsNull() || state.EndpointDefaultProbeFlowLabelExplicit.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/probe/flow-label/explicits"))
+		}
+	}
+	if !data.EndpointDefault.IsNull() && !data.EndpointDefault.ValueBool() {
+		if state == nil || state.EndpointDefault.IsNull() || state.EndpointDefault.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default"))
+		}
+	}
+	if !data.SrPolicyDefaultNpuOffload.IsNull() && !data.SrPolicyDefaultNpuOffload.ValueBool() {
+		if state == nil || state.SrPolicyDefaultNpuOffload.IsNull() || state.SrPolicyDefaultNpuOffload.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/npu-offload"))
+		}
+	}
+	if !data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() && !data.SrPolicyDefaultProbeFlowLabelExplicit.ValueBool() {
+		if state == nil || state.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() || state.SrPolicyDefaultProbeFlowLabelExplicit.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/flow-label/explicits"))
+		}
+	}
+	if !data.SrPolicyDefault.IsNull() && !data.SrPolicyDefault.ValueBool() {
+		if state == nil || state.SrPolicyDefault.IsNull() || state.SrPolicyDefault.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *PerformanceMeasurementLivenessProfile) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/liveness-detection/npu-offload"))
+	}
+	for i := range data.Profiles {
+		keys := [...]string{"profile-name"}
+		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.Profiles[i].ProfileName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString))
+	}
+	if !data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/liveness-detection/logging/state-change"))
+	}
+	if !data.EndpointDefaultLivenessDetectionMultiplier.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/liveness-detection/multiplier"))
+	}
+	if !data.EndpointDefaultProbeTosDscp.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/tos/dscp"))
+	}
+	if !data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/sweep/destination/range"))
+	}
+	if !data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/sweep/destination/ipv4"))
+	}
+	if !data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/flow-label/increment"))
+	}
+	if !data.EndpointDefaultProbeFlowLabelTo.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/flow-label/to"))
+	}
+	if !data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/flow-label/from"))
+	}
+	if !data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/flow-label/explicits/explicit"))
+	}
+	if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/flow-label/explicits"))
+	}
+	if !data.EndpointDefaultProbeTxInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/tx-interval"))
+	}
+	if !data.EndpointDefault.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default"))
+	}
+	if !data.SrPolicyDefaultNpuOffload.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/npu-offload"))
+	}
+	if !data.SrPolicyDefaultProbeTosDscp.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/tos/dscp"))
+	}
+	if !data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/sweep/destination/range"))
+	}
+	if !data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/sweep/destination/ipv4"))
+	}
+	if !data.SrPolicyDefaultProbeFlowLabelIncrement.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/flow-label/increment"))
+	}
+	if !data.SrPolicyDefaultProbeFlowLabelTo.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/flow-label/to"))
+	}
+	if !data.SrPolicyDefaultProbeFlowLabelFrom.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/flow-label/from"))
+	}
+	if !data.SrPolicyDefaultProbeFlowLabelExplicitList.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/flow-label/explicits/explicit"))
+	}
+	if !data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/flow-label/explicits"))
+	}
+	if !data.SrPolicyDefaultProbeTxInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/tx-interval"))
+	}
+	if !data.SrPolicyDefaultLivenessDetectionMultiplier.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/liveness-detection/multiplier"))
+	}
+	if !data.SrPolicyDefault.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data PerformanceMeasurementLivenessProfile) toBodyXML(ctx context.Context, stateArg ...*PerformanceMeasurementLivenessProfile) string {
@@ -715,6 +1440,11 @@ func (data PerformanceMeasurementLivenessProfile) toBodyXML(ctx context.Context,
 			}
 		}
 	}
+	if !data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() && !data.EndpointDefaultLivenessDetectionNpuOffload.IsUnknown() {
+		if data.EndpointDefaultLivenessDetectionNpuOffload.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/endpoint/default/liveness-detection/npu-offload", "")
+		}
+	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
 		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
@@ -737,7 +1467,7 @@ func (data PerformanceMeasurementLivenessProfile) toBodyXML(ctx context.Context,
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -745,6 +1475,7 @@ func (data PerformanceMeasurementLivenessProfile) toBodyXML(ctx context.Context,
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *PerformanceMeasurementLivenessProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1014,333 +1745,21 @@ func (data *PerformanceMeasurementLivenessProfile) updateFromBodyXML(ctx context
 			}
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/liveness-detection/npu-offload"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() {
+			data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() {
+			data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *PerformanceMeasurementLivenessProfile) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "sr-policy.default"); value.Exists() {
-		data.SrPolicyDefault = types.BoolValue(true)
-	} else if !data.SrPolicyDefault.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrPolicyDefault = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.liveness-detection.multiplier"); value.Exists() {
-		data.SrPolicyDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.tx-interval"); value.Exists() {
-		data.SrPolicyDefaultProbeTxInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.flow-label.explicits"); value.Exists() {
-		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(true)
-	} else if !data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.flow-label.explicits.explicit"); value.Exists() {
-		data.SrPolicyDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
-	} else {
-		data.SrPolicyDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.flow-label.from"); value.Exists() {
-		data.SrPolicyDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.flow-label.to"); value.Exists() {
-		data.SrPolicyDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.flow-label.increment"); value.Exists() {
-		data.SrPolicyDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.sweep.destination.ipv4"); value.Exists() {
-		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.sweep.destination.range"); value.Exists() {
-		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.tos.dscp"); value.Exists() {
-		data.SrPolicyDefaultProbeTosDscp = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.npu-offload"); value.Exists() {
-		data.SrPolicyDefaultNpuOffload = types.BoolValue(true)
-	} else if !data.SrPolicyDefaultNpuOffload.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrPolicyDefaultNpuOffload = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default"); value.Exists() {
-		data.EndpointDefault = types.BoolValue(true)
-	} else if !data.EndpointDefault.IsNull() {
-		// Only set to false if it was previously set in state
-		data.EndpointDefault = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.tx-interval"); value.Exists() {
-		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.explicits"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
-	} else if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
-		// Only set to false if it was previously set in state
-		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.explicits.explicit"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
-	} else {
-		data.EndpointDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.from"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.to"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.increment"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.sweep.destination.ipv4"); value.Exists() {
-		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.sweep.destination.range"); value.Exists() {
-		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.tos.dscp"); value.Exists() {
-		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.liveness-detection.multiplier"); value.Exists() {
-		data.EndpointDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.liveness-detection.logging.state-change"); value.Exists() {
-		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(true)
-	} else if !data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() {
-		// Only set to false if it was previously set in state
-		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "names.name"); value.Exists() {
-		data.Profiles = make([]PerformanceMeasurementLivenessProfileProfiles, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PerformanceMeasurementLivenessProfileProfiles{}
-			if cValue := v.Get("profile-name"); cValue.Exists() {
-				item.ProfileName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("liveness-detection.multiplier"); cValue.Exists() {
-				item.LivenessDetectionMultiplier = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("liveness-detection.logging.state-change"); cValue.Exists() {
-				item.LivenessDetectionLoggingStateChange = types.BoolValue(true)
-			} else if !item.LivenessDetectionLoggingStateChange.IsNull() {
-				// Only set to false if it was previously set
-				item.LivenessDetectionLoggingStateChange = types.BoolValue(false)
-			}
-			if cValue := v.Get("probe.tx-interval"); cValue.Exists() {
-				item.ProbeTxInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.flow-label.explicits"); cValue.Exists() {
-				item.ProbeFlowLabelExplicit = types.BoolValue(true)
-			} else if !item.ProbeFlowLabelExplicit.IsNull() {
-				// Only set to false if it was previously set
-				item.ProbeFlowLabelExplicit = types.BoolValue(false)
-			}
-			if cValue := v.Get("probe.flow-label.explicits.explicit"); cValue.Exists() {
-				item.ProbeFlowLabelExplicitList = helpers.GetInt64List(cValue.Array())
-			} else {
-				item.ProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
-			}
-			if cValue := v.Get("probe.flow-label.from"); cValue.Exists() {
-				item.ProbeFlowLabelFrom = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.flow-label.to"); cValue.Exists() {
-				item.ProbeFlowLabelTo = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.flow-label.increment"); cValue.Exists() {
-				item.ProbeFlowLabelIncrement = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.sweep.destination.ipv4"); cValue.Exists() {
-				item.ProbeSweepDestinationIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("probe.sweep.destination.range"); cValue.Exists() {
-				item.ProbeSweepDestinationRange = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.tos.dscp"); cValue.Exists() {
-				item.ProbeTosDscp = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("npu-offload"); cValue.Exists() {
-				item.NpuOffload = types.BoolValue(true)
-			} else if !item.NpuOffload.IsNull() {
-				// Only set to false if it was previously set
-				item.NpuOffload = types.BoolValue(false)
-			}
-			data.Profiles = append(data.Profiles, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *PerformanceMeasurementLivenessProfileData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "sr-policy.default"); value.Exists() {
-		data.SrPolicyDefault = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefault = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.liveness-detection.multiplier"); value.Exists() {
-		data.SrPolicyDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.tx-interval"); value.Exists() {
-		data.SrPolicyDefaultProbeTxInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.flow-label.explicits"); value.Exists() {
-		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultProbeFlowLabelExplicit = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.flow-label.explicits.explicit"); value.Exists() {
-		data.SrPolicyDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
-	} else {
-		data.SrPolicyDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.flow-label.from"); value.Exists() {
-		data.SrPolicyDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.flow-label.to"); value.Exists() {
-		data.SrPolicyDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.flow-label.increment"); value.Exists() {
-		data.SrPolicyDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.sweep.destination.ipv4"); value.Exists() {
-		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.sweep.destination.range"); value.Exists() {
-		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.tos.dscp"); value.Exists() {
-		data.SrPolicyDefaultProbeTosDscp = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.npu-offload"); value.Exists() {
-		data.SrPolicyDefaultNpuOffload = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultNpuOffload = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default"); value.Exists() {
-		data.EndpointDefault = types.BoolValue(true)
-	} else {
-		data.EndpointDefault = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.tx-interval"); value.Exists() {
-		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.explicits"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.explicits.explicit"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
-	} else {
-		data.EndpointDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.from"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.to"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.increment"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.sweep.destination.ipv4"); value.Exists() {
-		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.sweep.destination.range"); value.Exists() {
-		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.tos.dscp"); value.Exists() {
-		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.liveness-detection.multiplier"); value.Exists() {
-		data.EndpointDefaultLivenessDetectionMultiplier = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.liveness-detection.logging.state-change"); value.Exists() {
-		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultLivenessDetectionLoggingStateChange = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "names.name"); value.Exists() {
-		data.Profiles = make([]PerformanceMeasurementLivenessProfileProfiles, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PerformanceMeasurementLivenessProfileProfiles{}
-			if cValue := v.Get("profile-name"); cValue.Exists() {
-				item.ProfileName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("liveness-detection.multiplier"); cValue.Exists() {
-				item.LivenessDetectionMultiplier = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("liveness-detection.logging.state-change"); cValue.Exists() {
-				item.LivenessDetectionLoggingStateChange = types.BoolValue(true)
-			} else {
-				item.LivenessDetectionLoggingStateChange = types.BoolValue(false)
-			}
-			if cValue := v.Get("probe.tx-interval"); cValue.Exists() {
-				item.ProbeTxInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.flow-label.explicits"); cValue.Exists() {
-				item.ProbeFlowLabelExplicit = types.BoolValue(true)
-			} else {
-				item.ProbeFlowLabelExplicit = types.BoolValue(false)
-			}
-			if cValue := v.Get("probe.flow-label.explicits.explicit"); cValue.Exists() {
-				item.ProbeFlowLabelExplicitList = helpers.GetInt64List(cValue.Array())
-			} else {
-				item.ProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
-			}
-			if cValue := v.Get("probe.flow-label.from"); cValue.Exists() {
-				item.ProbeFlowLabelFrom = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.flow-label.to"); cValue.Exists() {
-				item.ProbeFlowLabelTo = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.flow-label.increment"); cValue.Exists() {
-				item.ProbeFlowLabelIncrement = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.sweep.destination.ipv4"); cValue.Exists() {
-				item.ProbeSweepDestinationIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("probe.sweep.destination.range"); cValue.Exists() {
-				item.ProbeSweepDestinationRange = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.tos.dscp"); cValue.Exists() {
-				item.ProbeTosDscp = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("npu-offload"); cValue.Exists() {
-				item.NpuOffload = types.BoolValue(true)
-			} else {
-				item.NpuOffload = types.BoolValue(false)
-			}
-			data.Profiles = append(data.Profiles, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *PerformanceMeasurementLivenessProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1487,9 +1906,15 @@ func (data *PerformanceMeasurementLivenessProfile) fromBodyXML(ctx context.Conte
 			return true
 		})
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/liveness-detection/npu-offload"); value.Exists() {
+		data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *PerformanceMeasurementLivenessProfileData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1636,315 +2061,15 @@ func (data *PerformanceMeasurementLivenessProfileData) fromBodyXML(ctx context.C
 			return true
 		})
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/liveness-detection/npu-offload"); value.Exists() {
+		data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultLivenessDetectionNpuOffload = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *PerformanceMeasurementLivenessProfile) getDeletedItems(ctx context.Context, state PerformanceMeasurementLivenessProfile) []string {
-	deletedItems := make([]string, 0)
-	for i := range state.Profiles {
-		keys := [...]string{"profile-name"}
-		stateKeyValues := [...]string{state.Profiles[i].ProfileName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Profiles[i].ProfileName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Profiles {
-			found = true
-			if state.Profiles[i].ProfileName.ValueString() != data.Profiles[j].ProfileName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.Profiles[i].NpuOffload.IsNull() && data.Profiles[j].NpuOffload.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/npu-offload", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeTosDscp.IsNull() && data.Profiles[j].ProbeTosDscp.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/tos/dscp", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeSweepDestinationRange.IsNull() && data.Profiles[j].ProbeSweepDestinationRange.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/sweep/destination/range", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeSweepDestinationIpv4.IsNull() && data.Profiles[j].ProbeSweepDestinationIpv4.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/sweep/destination/ipv4", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeFlowLabelIncrement.IsNull() && data.Profiles[j].ProbeFlowLabelIncrement.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/flow-label/increment", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeFlowLabelTo.IsNull() && data.Profiles[j].ProbeFlowLabelTo.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/flow-label/to", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeFlowLabelFrom.IsNull() && data.Profiles[j].ProbeFlowLabelFrom.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/flow-label/from", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeFlowLabelExplicitList.IsNull() && data.Profiles[j].ProbeFlowLabelExplicitList.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/flow-label/explicits/explicit", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeFlowLabelExplicit.IsNull() && data.Profiles[j].ProbeFlowLabelExplicit.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/flow-label/explicits", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeTxInterval.IsNull() && data.Profiles[j].ProbeTxInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/tx-interval", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].LivenessDetectionLoggingStateChange.IsNull() && data.Profiles[j].LivenessDetectionLoggingStateChange.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/liveness-detection/logging/state-change", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].LivenessDetectionMultiplier.IsNull() && data.Profiles[j].LivenessDetectionMultiplier.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/liveness-detection/multiplier", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v", state.getPath(), keyString))
-		}
-	}
-	if !state.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() && data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/liveness-detection/logging/state-change", state.getPath()))
-	}
-	if !state.EndpointDefaultLivenessDetectionMultiplier.IsNull() && data.EndpointDefaultLivenessDetectionMultiplier.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/liveness-detection/multiplier", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeTosDscp.IsNull() && data.EndpointDefaultProbeTosDscp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/tos/dscp", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeSweepDestinationRange.IsNull() && data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/sweep/destination/range", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeSweepDestinationIpv4.IsNull() && data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/sweep/destination/ipv4", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeFlowLabelIncrement.IsNull() && data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/flow-label/increment", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeFlowLabelTo.IsNull() && data.EndpointDefaultProbeFlowLabelTo.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/flow-label/to", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeFlowLabelFrom.IsNull() && data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/flow-label/from", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeFlowLabelExplicitList.IsNull() && data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/flow-label/explicits/explicit", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeFlowLabelExplicit.IsNull() && data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/flow-label/explicits", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeTxInterval.IsNull() && data.EndpointDefaultProbeTxInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/tx-interval", state.getPath()))
-	}
-	if !state.EndpointDefault.IsNull() && data.EndpointDefault.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default", state.getPath()))
-	}
-	if !state.SrPolicyDefaultNpuOffload.IsNull() && data.SrPolicyDefaultNpuOffload.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/npu-offload", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeTosDscp.IsNull() && data.SrPolicyDefaultProbeTosDscp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/tos/dscp", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeSweepDestinationRange.IsNull() && data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/sweep/destination/range", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() && data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/sweep/destination/ipv4", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeFlowLabelIncrement.IsNull() && data.SrPolicyDefaultProbeFlowLabelIncrement.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/flow-label/increment", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeFlowLabelTo.IsNull() && data.SrPolicyDefaultProbeFlowLabelTo.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/flow-label/to", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeFlowLabelFrom.IsNull() && data.SrPolicyDefaultProbeFlowLabelFrom.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/flow-label/from", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeFlowLabelExplicitList.IsNull() && data.SrPolicyDefaultProbeFlowLabelExplicitList.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/flow-label/explicits/explicit", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() && data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/flow-label/explicits", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeTxInterval.IsNull() && data.SrPolicyDefaultProbeTxInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/tx-interval", state.getPath()))
-	}
-	if !state.SrPolicyDefaultLivenessDetectionMultiplier.IsNull() && data.SrPolicyDefaultLivenessDetectionMultiplier.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/liveness-detection/multiplier", state.getPath()))
-	}
-	if !state.SrPolicyDefault.IsNull() && data.SrPolicyDefault.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *PerformanceMeasurementLivenessProfile) getEmptyLeafsDelete(ctx context.Context, state *PerformanceMeasurementLivenessProfile) []string {
-	emptyLeafsDelete := make([]string, 0)
-	for i := range data.Profiles {
-		keys := [...]string{"profile-name"}
-		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.Profiles[i].NpuOffload.IsNull() && !data.Profiles[i].NpuOffload.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].NpuOffload.IsNull() && state.Profiles[i].NpuOffload.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/names/name%v/npu-offload", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Profiles[i].ProbeFlowLabelExplicit.IsNull() && !data.Profiles[i].ProbeFlowLabelExplicit.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ProbeFlowLabelExplicit.IsNull() && state.Profiles[i].ProbeFlowLabelExplicit.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/names/name%v/probe/flow-label/explicits", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Profiles[i].LivenessDetectionLoggingStateChange.IsNull() && !data.Profiles[i].LivenessDetectionLoggingStateChange.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].LivenessDetectionLoggingStateChange.IsNull() && state.Profiles[i].LivenessDetectionLoggingStateChange.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/names/name%v/liveness-detection/logging/state-change", data.getXPath(), keyString))
-			}
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() && !data.EndpointDefaultLivenessDetectionLoggingStateChange.ValueBool() {
-		if state != nil && !state.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() && state.EndpointDefaultLivenessDetectionLoggingStateChange.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/endpoint/default/liveness-detection/logging/state-change", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() && !data.EndpointDefaultProbeFlowLabelExplicit.ValueBool() {
-		if state != nil && !state.EndpointDefaultProbeFlowLabelExplicit.IsNull() && state.EndpointDefaultProbeFlowLabelExplicit.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/endpoint/default/probe/flow-label/explicits", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.EndpointDefault.IsNull() && !data.EndpointDefault.ValueBool() {
-		if state != nil && !state.EndpointDefault.IsNull() && state.EndpointDefault.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/endpoint/default", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrPolicyDefaultNpuOffload.IsNull() && !data.SrPolicyDefaultNpuOffload.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultNpuOffload.IsNull() && state.SrPolicyDefaultNpuOffload.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sr-policy/default/npu-offload", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() && !data.SrPolicyDefaultProbeFlowLabelExplicit.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() && state.SrPolicyDefaultProbeFlowLabelExplicit.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sr-policy/default/probe/flow-label/explicits", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrPolicyDefault.IsNull() && !data.SrPolicyDefault.ValueBool() {
-		if state != nil && !state.SrPolicyDefault.IsNull() && state.SrPolicyDefault.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sr-policy/default", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *PerformanceMeasurementLivenessProfile) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	for i := range data.Profiles {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[profile-name=" + data.Profiles[i].ProfileName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/names/name%v", data.getPath(), keyPath))
-	}
-	if !data.EndpointDefaultLivenessDetectionLoggingStateChange.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/liveness-detection/logging/state-change", data.getPath()))
-	}
-	if !data.EndpointDefaultLivenessDetectionMultiplier.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/liveness-detection/multiplier", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeTosDscp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/tos/dscp", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/sweep/destination/range", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/sweep/destination/ipv4", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/flow-label/increment", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeFlowLabelTo.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/flow-label/to", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/flow-label/from", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/flow-label/explicits/explicit", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/flow-label/explicits", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeTxInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/tx-interval", data.getPath()))
-	}
-	if !data.EndpointDefault.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default", data.getPath()))
-	}
-	if !data.SrPolicyDefaultNpuOffload.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/npu-offload", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeTosDscp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/tos/dscp", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/sweep/destination/range", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/sweep/destination/ipv4", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeFlowLabelIncrement.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/flow-label/increment", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeFlowLabelTo.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/flow-label/to", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeFlowLabelFrom.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/flow-label/from", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeFlowLabelExplicitList.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/flow-label/explicits/explicit", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeFlowLabelExplicit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/flow-label/explicits", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeTxInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/tx-interval", data.getPath()))
-	}
-	if !data.SrPolicyDefaultLivenessDetectionMultiplier.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/liveness-detection/multiplier", data.getPath()))
-	}
-	if !data.SrPolicyDefault.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *PerformanceMeasurementLivenessProfile) addDeletedItemsXML(ctx context.Context, state PerformanceMeasurementLivenessProfile, body string) string {
@@ -1952,6 +2077,22 @@ func (data *PerformanceMeasurementLivenessProfile) addDeletedItemsXML(ctx contex
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EndpointDefaultLivenessDetectionNpuOffload.IsNull() && state.EndpointDefaultLivenessDetectionNpuOffload.ValueBool() && data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() {
+		deletePath := state.getXPath() + "/endpoint/default/liveness-detection/npu-offload"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	for i := range state.Profiles {
 		stateKeys := [...]string{"profile-name"}
 		stateKeyValues := [...]string{state.Profiles[i].ProfileName.ValueString()}
@@ -2435,10 +2576,14 @@ func (data *PerformanceMeasurementLivenessProfile) addDeletedItemsXML(ctx contex
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *PerformanceMeasurementLivenessProfile) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.EndpointDefaultLivenessDetectionNpuOffload.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/endpoint/default/liveness-detection/npu-offload")
+	}
 	for i := range data.Profiles {
 		keys := [...]string{"profile-name"}
 		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}

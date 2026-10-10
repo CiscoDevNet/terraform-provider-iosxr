@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"sort"
 	"strconv"
@@ -524,7 +525,7 @@ func (data RouterISISAddressFamilyData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
+func (data RouterISISAddressFamily) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.AfName.IsNull() && !data.AfName.IsUnknown() {
 		body, _ = sjson.Set(body, "af-name", data.AfName.ValueString())
@@ -1437,6 +1438,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator"+"."+strconv.Itoa(index)+"."+"tag", strconv.FormatInt(item.Tag.ValueInt64(), 10))
 			}
 			if len(item.MetricLevels) > 0 {
+				body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator"+"."+strconv.Itoa(index)+"."+"metric-levels.metric-level", []interface{}{})
 				for cindex, citem := range item.MetricLevels {
 					if !citem.LevelNumber.IsNull() && !citem.LevelNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator"+"."+strconv.Itoa(index)+"."+"metric-levels.metric-level"+"."+strconv.Itoa(cindex)+"."+"level-number", strconv.FormatInt(citem.LevelNumber.ValueInt64(), 10))
@@ -1447,6 +1449,7 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.TagLevels) > 0 {
+				body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator"+"."+strconv.Itoa(index)+"."+"tag-levels.tag-level", []interface{}{})
 				for cindex, citem := range item.TagLevels {
 					if !citem.LevelNumber.IsNull() && !citem.LevelNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator"+"."+strconv.Itoa(index)+"."+"tag-levels.tag-level"+"."+strconv.Itoa(cindex)+"."+"level-number", strconv.FormatInt(citem.LevelNumber.ValueInt64(), 10))
@@ -1503,10 +1506,59 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("distance.global"); value.Exists() && !data.Distance.IsNull() {
+// GetVersionConstraints returns the version constraints for all fields
+func (data RouterISISAddressFamily) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data RouterISISAddressFamily) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data RouterISISAddressFamily) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data RouterISISAddressFamily) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data RouterISISAddressFamily) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "distance.global"); value.Exists() && !data.Distance.IsNull() {
 		data.Distance = types.Int64Value(value.Int())
 	} else if data.Distance.IsNull() {
 		data.Distance = types.Int64Null()
@@ -1516,7 +1568,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{data.DistanceSources[i].Address.ValueString(), strconv.FormatInt(data.DistanceSources[i].Prefix.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("distance.ip-addresses.ip-address").ForEach(
+		gjson.GetBytes(res, "distance.ip-addresses.ip-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1534,7 +1586,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() && !data.DistanceSources[i].Address.IsNull() {
+		if value := r.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DistanceSources[i].Address.IsNull() {
 			data.DistanceSources[i].Address = types.StringValue(value.String())
 		} else {
 			data.DistanceSources[i].Address = types.StringNull()
@@ -1549,80 +1601,78 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		} else {
 			data.DistanceSources[i].Distance = types.Int64Null()
 		}
-		if value := r.Get("prefix-list-or-access-list-to"); value.Exists() && !data.DistanceSources[i].RouteFilter.IsNull() {
+		if value := r.Get("prefix-list-or-access-list-to"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DistanceSources[i].RouteFilter.IsNull() {
 			data.DistanceSources[i].RouteFilter = types.StringValue(value.String())
 		} else {
 			data.DistanceSources[i].RouteFilter = types.StringNull()
 		}
 	}
-	if value := res.Get("distribute-list.prefix-list.prefix-list-string"); value.Exists() && !data.DistributeListPrefixListIn.IsNull() {
+	if value := gjson.GetBytes(res, "distribute-list.prefix-list.prefix-list-string"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DistributeListPrefixListIn.IsNull() {
 		data.DistributeListPrefixListIn = types.StringValue(value.String())
 	} else if data.DistributeListPrefixListIn.IsNull() {
 		data.DistributeListPrefixListIn = types.StringNull()
 	}
-	if value := res.Get("distribute-list.route-policy"); value.Exists() && !data.DistributeListRoutePolicyIn.IsNull() {
+	if value := gjson.GetBytes(res, "distribute-list.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DistributeListRoutePolicyIn.IsNull() {
 		data.DistributeListRoutePolicyIn = types.StringValue(value.String())
 	} else if data.DistributeListRoutePolicyIn.IsNull() {
 		data.DistributeListRoutePolicyIn = types.StringNull()
 	}
-	if value := res.Get("redistribute.connected"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.RedistributeConnected.IsNull() {
+	if value := gjson.GetBytes(res, "redistribute.connected"); !data.RedistributeConnected.IsNull() {
+		if value.Exists() {
 			data.RedistributeConnected = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.RedistributeConnected = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.RedistributeConnected.IsNull() {
-			data.RedistributeConnected = types.BoolNull()
-		}
+	} else if data.RedistributeConnected.IsNull() {
+		data.RedistributeConnected = types.BoolNull()
 	}
-	if value := res.Get("redistribute.connected.redistribute-route-level"); value.Exists() && !data.RedistributeConnectedLevel.IsNull() {
+	if value := gjson.GetBytes(res, "redistribute.connected.redistribute-route-level"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeConnectedLevel.IsNull() {
 		data.RedistributeConnectedLevel = types.StringValue(value.String())
 	} else if data.RedistributeConnectedLevel.IsNull() {
 		data.RedistributeConnectedLevel = types.StringNull()
 	}
-	if value := res.Get("redistribute.connected.metric"); value.Exists() && !data.RedistributeConnectedMetric.IsNull() {
+	if value := gjson.GetBytes(res, "redistribute.connected.metric"); value.Exists() && !data.RedistributeConnectedMetric.IsNull() {
 		data.RedistributeConnectedMetric = types.Int64Value(value.Int())
 	} else if data.RedistributeConnectedMetric.IsNull() {
 		data.RedistributeConnectedMetric = types.Int64Null()
 	}
-	if value := res.Get("redistribute.connected.route-policy"); value.Exists() && !data.RedistributeConnectedRoutePolicy.IsNull() {
+	if value := gjson.GetBytes(res, "redistribute.connected.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeConnectedRoutePolicy.IsNull() {
 		data.RedistributeConnectedRoutePolicy = types.StringValue(value.String())
 	} else if data.RedistributeConnectedRoutePolicy.IsNull() {
 		data.RedistributeConnectedRoutePolicy = types.StringNull()
 	}
-	if value := res.Get("redistribute.connected.metric-type"); value.Exists() && !data.RedistributeConnectedMetricType.IsNull() {
+	if value := gjson.GetBytes(res, "redistribute.connected.metric-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeConnectedMetricType.IsNull() {
 		data.RedistributeConnectedMetricType = types.StringValue(value.String())
 	} else if data.RedistributeConnectedMetricType.IsNull() {
 		data.RedistributeConnectedMetricType = types.StringNull()
 	}
-	if value := res.Get("redistribute.static"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.RedistributeStatic.IsNull() {
+	if value := gjson.GetBytes(res, "redistribute.static"); !data.RedistributeStatic.IsNull() {
+		if value.Exists() {
 			data.RedistributeStatic = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.RedistributeStatic = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.RedistributeStatic.IsNull() {
-			data.RedistributeStatic = types.BoolNull()
-		}
+	} else if data.RedistributeStatic.IsNull() {
+		data.RedistributeStatic = types.BoolNull()
 	}
-	if value := res.Get("redistribute.static.redistribute-route-level"); value.Exists() && !data.RedistributeStaticLevel.IsNull() {
+	if value := gjson.GetBytes(res, "redistribute.static.redistribute-route-level"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeStaticLevel.IsNull() {
 		data.RedistributeStaticLevel = types.StringValue(value.String())
 	} else if data.RedistributeStaticLevel.IsNull() {
 		data.RedistributeStaticLevel = types.StringNull()
 	}
-	if value := res.Get("redistribute.static.metric"); value.Exists() && !data.RedistributeStaticMetric.IsNull() {
+	if value := gjson.GetBytes(res, "redistribute.static.metric"); value.Exists() && !data.RedistributeStaticMetric.IsNull() {
 		data.RedistributeStaticMetric = types.Int64Value(value.Int())
 	} else if data.RedistributeStaticMetric.IsNull() {
 		data.RedistributeStaticMetric = types.Int64Null()
 	}
-	if value := res.Get("redistribute.static.route-policy"); value.Exists() && !data.RedistributeStaticRoutePolicy.IsNull() {
+	if value := gjson.GetBytes(res, "redistribute.static.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeStaticRoutePolicy.IsNull() {
 		data.RedistributeStaticRoutePolicy = types.StringValue(value.String())
 	} else if data.RedistributeStaticRoutePolicy.IsNull() {
 		data.RedistributeStaticRoutePolicy = types.StringNull()
 	}
-	if value := res.Get("redistribute.static.metric-type"); value.Exists() && !data.RedistributeStaticMetricType.IsNull() {
+	if value := gjson.GetBytes(res, "redistribute.static.metric-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeStaticMetricType.IsNull() {
 		data.RedistributeStaticMetricType = types.StringValue(value.String())
 	} else if data.RedistributeStaticMetricType.IsNull() {
 		data.RedistributeStaticMetricType = types.StringNull()
@@ -1632,7 +1682,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{data.RedistributeIsis[i].InstanceId.ValueString()}
 
 		var r gjson.Result
-		res.Get("redistribute.isis-processes.isis-process").ForEach(
+		gjson.GetBytes(res, "redistribute.isis-processes.isis-process").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1650,12 +1700,12 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 				return true
 			},
 		)
-		if value := r.Get("isis-string"); value.Exists() && !data.RedistributeIsis[i].InstanceId.IsNull() {
+		if value := r.Get("isis-string"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeIsis[i].InstanceId.IsNull() {
 			data.RedistributeIsis[i].InstanceId = types.StringValue(value.String())
 		} else {
 			data.RedistributeIsis[i].InstanceId = types.StringNull()
 		}
-		if value := r.Get("redistribute-route-level"); value.Exists() && !data.RedistributeIsis[i].Level.IsNull() {
+		if value := r.Get("redistribute-route-level"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeIsis[i].Level.IsNull() {
 			data.RedistributeIsis[i].Level = types.StringValue(value.String())
 		} else {
 			data.RedistributeIsis[i].Level = types.StringNull()
@@ -1665,12 +1715,12 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		} else {
 			data.RedistributeIsis[i].Metric = types.Int64Null()
 		}
-		if value := r.Get("route-policy"); value.Exists() && !data.RedistributeIsis[i].RoutePolicy.IsNull() {
+		if value := r.Get("route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeIsis[i].RoutePolicy.IsNull() {
 			data.RedistributeIsis[i].RoutePolicy = types.StringValue(value.String())
 		} else {
 			data.RedistributeIsis[i].RoutePolicy = types.StringNull()
 		}
-		if value := r.Get("metric-type"); value.Exists() && !data.RedistributeIsis[i].MetricType.IsNull() {
+		if value := r.Get("metric-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeIsis[i].MetricType.IsNull() {
 			data.RedistributeIsis[i].MetricType = types.StringValue(value.String())
 		} else {
 			data.RedistributeIsis[i].MetricType = types.StringNull()
@@ -1693,7 +1743,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{data.RedistributeBgp[i].AsNumber.ValueString()}
 
 		var r gjson.Result
-		res.Get("redistribute.bgps.bgp").ForEach(
+		gjson.GetBytes(res, "redistribute.bgps.bgp").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1711,12 +1761,12 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 				return true
 			},
 		)
-		if value := r.Get("as-number"); value.Exists() && !data.RedistributeBgp[i].AsNumber.IsNull() {
+		if value := r.Get("as-number"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeBgp[i].AsNumber.IsNull() {
 			data.RedistributeBgp[i].AsNumber = types.StringValue(value.String())
 		} else {
 			data.RedistributeBgp[i].AsNumber = types.StringNull()
 		}
-		if value := r.Get("redistribute-route-level"); value.Exists() && !data.RedistributeBgp[i].Level.IsNull() {
+		if value := r.Get("redistribute-route-level"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeBgp[i].Level.IsNull() {
 			data.RedistributeBgp[i].Level = types.StringValue(value.String())
 		} else {
 			data.RedistributeBgp[i].Level = types.StringNull()
@@ -1726,12 +1776,12 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		} else {
 			data.RedistributeBgp[i].Metric = types.Int64Null()
 		}
-		if value := r.Get("route-policy"); value.Exists() && !data.RedistributeBgp[i].RoutePolicy.IsNull() {
+		if value := r.Get("route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeBgp[i].RoutePolicy.IsNull() {
 			data.RedistributeBgp[i].RoutePolicy = types.StringValue(value.String())
 		} else {
 			data.RedistributeBgp[i].RoutePolicy = types.StringNull()
 		}
-		if value := r.Get("metric-type"); value.Exists() && !data.RedistributeBgp[i].MetricType.IsNull() {
+		if value := r.Get("metric-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeBgp[i].MetricType.IsNull() {
 			data.RedistributeBgp[i].MetricType = types.StringValue(value.String())
 		} else {
 			data.RedistributeBgp[i].MetricType = types.StringNull()
@@ -1742,7 +1792,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{data.RedistributeOspf[i].InstanceId.ValueString()}
 
 		var r gjson.Result
-		res.Get("redistribute.ospfs.ospf").ForEach(
+		gjson.GetBytes(res, "redistribute.ospfs.ospf").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1760,7 +1810,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 				return true
 			},
 		)
-		if value := r.Get("ospf-process-id"); value.Exists() && !data.RedistributeOspf[i].InstanceId.IsNull() {
+		if value := r.Get("ospf-process-id"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeOspf[i].InstanceId.IsNull() {
 			data.RedistributeOspf[i].InstanceId = types.StringValue(value.String())
 		} else {
 			data.RedistributeOspf[i].InstanceId = types.StringNull()
@@ -1789,7 +1839,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 				data.RedistributeOspf[i].MatchExternal = types.BoolNull()
 			}
 		}
-		if value := r.Get("redistribute-route-level"); value.Exists() && !data.RedistributeOspf[i].Level.IsNull() {
+		if value := r.Get("redistribute-route-level"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeOspf[i].Level.IsNull() {
 			data.RedistributeOspf[i].Level = types.StringValue(value.String())
 		} else {
 			data.RedistributeOspf[i].Level = types.StringNull()
@@ -1799,12 +1849,12 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		} else {
 			data.RedistributeOspf[i].Metric = types.Int64Null()
 		}
-		if value := r.Get("route-policy"); value.Exists() && !data.RedistributeOspf[i].RoutePolicy.IsNull() {
+		if value := r.Get("route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeOspf[i].RoutePolicy.IsNull() {
 			data.RedistributeOspf[i].RoutePolicy = types.StringValue(value.String())
 		} else {
 			data.RedistributeOspf[i].RoutePolicy = types.StringNull()
 		}
-		if value := r.Get("metric-type"); value.Exists() && !data.RedistributeOspf[i].MetricType.IsNull() {
+		if value := r.Get("metric-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeOspf[i].MetricType.IsNull() {
 			data.RedistributeOspf[i].MetricType = types.StringValue(value.String())
 		} else {
 			data.RedistributeOspf[i].MetricType = types.StringNull()
@@ -1815,7 +1865,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{data.RedistributeOspfv3[i].InstanceId.ValueString()}
 
 		var r gjson.Result
-		res.Get("redistribute.ospfv3s.ospfv3").ForEach(
+		gjson.GetBytes(res, "redistribute.ospfv3s.ospfv3").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1833,7 +1883,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 				return true
 			},
 		)
-		if value := r.Get("ospfv3-process-id"); value.Exists() && !data.RedistributeOspfv3[i].InstanceId.IsNull() {
+		if value := r.Get("ospfv3-process-id"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeOspfv3[i].InstanceId.IsNull() {
 			data.RedistributeOspfv3[i].InstanceId = types.StringValue(value.String())
 		} else {
 			data.RedistributeOspfv3[i].InstanceId = types.StringNull()
@@ -1862,7 +1912,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 				data.RedistributeOspfv3[i].MatchExternal = types.BoolNull()
 			}
 		}
-		if value := r.Get("redistribute-route-level"); value.Exists() && !data.RedistributeOspfv3[i].Level.IsNull() {
+		if value := r.Get("redistribute-route-level"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeOspfv3[i].Level.IsNull() {
 			data.RedistributeOspfv3[i].Level = types.StringValue(value.String())
 		} else {
 			data.RedistributeOspfv3[i].Level = types.StringNull()
@@ -1872,82 +1922,78 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		} else {
 			data.RedistributeOspfv3[i].Metric = types.Int64Null()
 		}
-		if value := r.Get("route-policy"); value.Exists() && !data.RedistributeOspfv3[i].RoutePolicy.IsNull() {
+		if value := r.Get("route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeOspfv3[i].RoutePolicy.IsNull() {
 			data.RedistributeOspfv3[i].RoutePolicy = types.StringValue(value.String())
 		} else {
 			data.RedistributeOspfv3[i].RoutePolicy = types.StringNull()
 		}
-		if value := r.Get("metric-type"); value.Exists() && !data.RedistributeOspfv3[i].MetricType.IsNull() {
+		if value := r.Get("metric-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedistributeOspfv3[i].MetricType.IsNull() {
 			data.RedistributeOspfv3[i].MetricType = types.StringValue(value.String())
 		} else {
 			data.RedistributeOspfv3[i].MetricType = types.StringNull()
 		}
 	}
-	if value := res.Get("maximum-paths"); value.Exists() && !data.MaximumPaths.IsNull() {
+	if value := gjson.GetBytes(res, "maximum-paths"); value.Exists() && !data.MaximumPaths.IsNull() {
 		data.MaximumPaths = types.Int64Value(value.Int())
 	} else if data.MaximumPaths.IsNull() {
 		data.MaximumPaths = types.Int64Null()
 	}
-	if value := res.Get("router-id.interface-name"); value.Exists() && !data.RouterIdInterfaceName.IsNull() {
+	if value := gjson.GetBytes(res, "router-id.interface-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RouterIdInterfaceName.IsNull() {
 		data.RouterIdInterfaceName = types.StringValue(value.String())
 	} else if data.RouterIdInterfaceName.IsNull() {
 		data.RouterIdInterfaceName = types.StringNull()
 	}
-	if value := res.Get("router-id.ip-address"); value.Exists() && !data.RouterIdIpAddress.IsNull() {
+	if value := gjson.GetBytes(res, "router-id.ip-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RouterIdIpAddress.IsNull() {
 		data.RouterIdIpAddress = types.StringValue(value.String())
 	} else if data.RouterIdIpAddress.IsNull() {
 		data.RouterIdIpAddress = types.StringNull()
 	}
-	if value := res.Get("advertise.passive-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.AdvertisePassiveOnly.IsNull() {
+	if value := gjson.GetBytes(res, "advertise.passive-only"); !data.AdvertisePassiveOnly.IsNull() {
+		if value.Exists() {
 			data.AdvertisePassiveOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.AdvertisePassiveOnly = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.AdvertisePassiveOnly.IsNull() {
-			data.AdvertisePassiveOnly = types.BoolNull()
-		}
+	} else if data.AdvertisePassiveOnly.IsNull() {
+		data.AdvertisePassiveOnly = types.BoolNull()
 	}
-	if value := res.Get("advertise.link.attributes"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.AdvertiseLinkAttributes.IsNull() {
+	if value := gjson.GetBytes(res, "advertise.link.attributes"); !data.AdvertiseLinkAttributes.IsNull() {
+		if value.Exists() {
 			data.AdvertiseLinkAttributes = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.AdvertiseLinkAttributes = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.AdvertiseLinkAttributes.IsNull() {
-			data.AdvertiseLinkAttributes = types.BoolNull()
-		}
+	} else if data.AdvertiseLinkAttributes.IsNull() {
+		data.AdvertiseLinkAttributes = types.BoolNull()
 	}
-	if value := res.Get("microloop.avoidance.enable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MicroloopAvoidance.IsNull() {
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable"); !data.MicroloopAvoidance.IsNull() {
+		if value.Exists() {
 			data.MicroloopAvoidance = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MicroloopAvoidance = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MicroloopAvoidance.IsNull() {
-			data.MicroloopAvoidance = types.BoolNull()
-		}
+	} else if data.MicroloopAvoidance.IsNull() {
+		data.MicroloopAvoidance = types.BoolNull()
 	}
-	if value := res.Get("microloop.avoidance.enable.protected"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MicroloopAvoidanceProtected.IsNull() {
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable.protected"); !data.MicroloopAvoidanceProtected.IsNull() {
+		if value.Exists() {
 			data.MicroloopAvoidanceProtected = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MicroloopAvoidanceProtected = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MicroloopAvoidanceProtected.IsNull() {
-			data.MicroloopAvoidanceProtected = types.BoolNull()
-		}
+	} else if data.MicroloopAvoidanceProtected.IsNull() {
+		data.MicroloopAvoidanceProtected = types.BoolNull()
 	}
-	if value := res.Get("microloop.avoidance.enable.segment-routing.route-policy"); value.Exists() && !data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() {
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable.segment-routing.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() {
 		data.MicroloopAvoidanceSegmentRoutingRoutePolicy = types.StringValue(value.String())
 	} else if data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() {
 		data.MicroloopAvoidanceSegmentRoutingRoutePolicy = types.StringNull()
 	}
-	if value := res.Get("microloop.avoidance.rib-update-delay"); value.Exists() && !data.MicroloopAvoidanceRibUpdateDelay.IsNull() {
+	if value := gjson.GetBytes(res, "microloop.avoidance.rib-update-delay"); value.Exists() && !data.MicroloopAvoidanceRibUpdateDelay.IsNull() {
 		data.MicroloopAvoidanceRibUpdateDelay = types.Int64Value(value.Int())
 	} else if data.MicroloopAvoidanceRibUpdateDelay.IsNull() {
 		data.MicroloopAvoidanceRibUpdateDelay = types.Int64Null()
@@ -1957,7 +2003,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{data.SummaryPrefixes[i].Address.ValueString(), strconv.FormatInt(data.SummaryPrefixes[i].Prefix.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("summary-prefix.ip-addresses.ip-address").ForEach(
+		gjson.GetBytes(res, "summary-prefix.ip-addresses.ip-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1975,7 +2021,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() && !data.SummaryPrefixes[i].Address.IsNull() {
+		if value := r.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SummaryPrefixes[i].Address.IsNull() {
 			data.SummaryPrefixes[i].Address = types.StringValue(value.String())
 		} else {
 			data.SummaryPrefixes[i].Address = types.StringNull()
@@ -2054,7 +2100,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 			}
 		}
 	}
-	if value := res.Get("metric"); value.Exists() && !data.Metric.IsNull() {
+	if value := gjson.GetBytes(res, "metric"); value.Exists() && !data.Metric.IsNull() {
 		data.Metric = types.Int64Value(value.Int())
 	} else if data.Metric.IsNull() {
 		data.Metric = types.Int64Null()
@@ -2064,7 +2110,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{strconv.FormatInt(data.MetricLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("metric-levels.metric-level").ForEach(
+		gjson.GetBytes(res, "metric-levels.metric-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2093,67 +2139,62 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 			data.MetricLevels[i].Metric = types.Int64Null()
 		}
 	}
-	if value := res.Get("metric-style.narrow"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MetricStyleNarrow.IsNull() {
+	if value := gjson.GetBytes(res, "metric-style.narrow"); !data.MetricStyleNarrow.IsNull() {
+		if value.Exists() {
 			data.MetricStyleNarrow = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MetricStyleNarrow = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MetricStyleNarrow.IsNull() {
-			data.MetricStyleNarrow = types.BoolNull()
-		}
+	} else if data.MetricStyleNarrow.IsNull() {
+		data.MetricStyleNarrow = types.BoolNull()
 	}
-	if value := res.Get("metric-style.narrow.transition"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MetricStyleNarrowTransition.IsNull() {
+	if value := gjson.GetBytes(res, "metric-style.narrow.transition"); !data.MetricStyleNarrowTransition.IsNull() {
+		if value.Exists() {
 			data.MetricStyleNarrowTransition = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MetricStyleNarrowTransition = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MetricStyleNarrowTransition.IsNull() {
-			data.MetricStyleNarrowTransition = types.BoolNull()
-		}
+	} else if data.MetricStyleNarrowTransition.IsNull() {
+		data.MetricStyleNarrowTransition = types.BoolNull()
 	}
-	if value := res.Get("metric-style.wide"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MetricStyleWide.IsNull() {
+	if value := gjson.GetBytes(res, "metric-style.wide"); !data.MetricStyleWide.IsNull() {
+		if value.Exists() {
 			data.MetricStyleWide = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MetricStyleWide = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MetricStyleWide.IsNull() {
-			data.MetricStyleWide = types.BoolNull()
-		}
+	} else if data.MetricStyleWide.IsNull() {
+		data.MetricStyleWide = types.BoolNull()
 	}
-	if value := res.Get("metric-style.wide.transition"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MetricStyleWideTransition.IsNull() {
+	if value := gjson.GetBytes(res, "metric-style.wide.transition"); !data.MetricStyleWideTransition.IsNull() {
+		if value.Exists() {
 			data.MetricStyleWideTransition = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MetricStyleWideTransition = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MetricStyleWideTransition.IsNull() {
-			data.MetricStyleWideTransition = types.BoolNull()
-		}
+	} else if data.MetricStyleWideTransition.IsNull() {
+		data.MetricStyleWideTransition = types.BoolNull()
 	}
-	if value := res.Get("metric-style.transition"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MetricStyleTransition.IsNull() {
+	if value := gjson.GetBytes(res, "metric-style.transition"); !data.MetricStyleTransition.IsNull() {
+		if value.Exists() {
 			data.MetricStyleTransition = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MetricStyleTransition = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MetricStyleTransition.IsNull() {
-			data.MetricStyleTransition = types.BoolNull()
-		}
+	} else if data.MetricStyleTransition.IsNull() {
+		data.MetricStyleTransition = types.BoolNull()
 	}
 	for i := range data.MetricStyleLevels {
 		keys := [...]string{"level-number"}
 		keyValues := [...]string{strconv.FormatInt(data.MetricStyleLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("metric-style-levels.metric-style-level").ForEach(
+		gjson.GetBytes(res, "metric-style-levels.metric-style-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2237,53 +2278,52 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 			}
 		}
 	}
-	if value := res.Get("spf-interval.maximum-wait"); value.Exists() && !data.SpfIntervalMaximumWait.IsNull() {
+	if value := gjson.GetBytes(res, "spf-interval.maximum-wait"); value.Exists() && !data.SpfIntervalMaximumWait.IsNull() {
 		data.SpfIntervalMaximumWait = types.Int64Value(value.Int())
 	} else if data.SpfIntervalMaximumWait.IsNull() {
 		data.SpfIntervalMaximumWait = types.Int64Null()
 	}
-	if value := res.Get("spf-interval.initial-wait"); value.Exists() && !data.SpfIntervalInitialWait.IsNull() {
+	if value := gjson.GetBytes(res, "spf-interval.initial-wait"); value.Exists() && !data.SpfIntervalInitialWait.IsNull() {
 		data.SpfIntervalInitialWait = types.Int64Value(value.Int())
 	} else if data.SpfIntervalInitialWait.IsNull() {
 		data.SpfIntervalInitialWait = types.Int64Null()
 	}
-	if value := res.Get("spf-interval.secondary-wait"); value.Exists() && !data.SpfIntervalSecondaryWait.IsNull() {
+	if value := gjson.GetBytes(res, "spf-interval.secondary-wait"); value.Exists() && !data.SpfIntervalSecondaryWait.IsNull() {
 		data.SpfIntervalSecondaryWait = types.Int64Value(value.Int())
 	} else if data.SpfIntervalSecondaryWait.IsNull() {
 		data.SpfIntervalSecondaryWait = types.Int64Null()
 	}
-	if value := res.Get("spf-interval.ietf"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SpfIntervalIetf.IsNull() {
+	if value := gjson.GetBytes(res, "spf-interval.ietf"); !data.SpfIntervalIetf.IsNull() {
+		if value.Exists() {
 			data.SpfIntervalIetf = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SpfIntervalIetf = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SpfIntervalIetf.IsNull() {
-			data.SpfIntervalIetf = types.BoolNull()
-		}
+	} else if data.SpfIntervalIetf.IsNull() {
+		data.SpfIntervalIetf = types.BoolNull()
 	}
-	if value := res.Get("spf-interval.ietf.initial-wait"); value.Exists() && !data.SpfIntervalIetfInitialWait.IsNull() {
+	if value := gjson.GetBytes(res, "spf-interval.ietf.initial-wait"); value.Exists() && !data.SpfIntervalIetfInitialWait.IsNull() {
 		data.SpfIntervalIetfInitialWait = types.Int64Value(value.Int())
 	} else if data.SpfIntervalIetfInitialWait.IsNull() {
 		data.SpfIntervalIetfInitialWait = types.Int64Null()
 	}
-	if value := res.Get("spf-interval.ietf.short-wait"); value.Exists() && !data.SpfIntervalIetfShortWait.IsNull() {
+	if value := gjson.GetBytes(res, "spf-interval.ietf.short-wait"); value.Exists() && !data.SpfIntervalIetfShortWait.IsNull() {
 		data.SpfIntervalIetfShortWait = types.Int64Value(value.Int())
 	} else if data.SpfIntervalIetfShortWait.IsNull() {
 		data.SpfIntervalIetfShortWait = types.Int64Null()
 	}
-	if value := res.Get("spf-interval.ietf.long-wait"); value.Exists() && !data.SpfIntervalIetfLongWait.IsNull() {
+	if value := gjson.GetBytes(res, "spf-interval.ietf.long-wait"); value.Exists() && !data.SpfIntervalIetfLongWait.IsNull() {
 		data.SpfIntervalIetfLongWait = types.Int64Value(value.Int())
 	} else if data.SpfIntervalIetfLongWait.IsNull() {
 		data.SpfIntervalIetfLongWait = types.Int64Null()
 	}
-	if value := res.Get("spf-interval.ietf.learn-interval"); value.Exists() && !data.SpfIntervalIetfLearnInterval.IsNull() {
+	if value := gjson.GetBytes(res, "spf-interval.ietf.learn-interval"); value.Exists() && !data.SpfIntervalIetfLearnInterval.IsNull() {
 		data.SpfIntervalIetfLearnInterval = types.Int64Value(value.Int())
 	} else if data.SpfIntervalIetfLearnInterval.IsNull() {
 		data.SpfIntervalIetfLearnInterval = types.Int64Null()
 	}
-	if value := res.Get("spf-interval.ietf.holddown-interval"); value.Exists() && !data.SpfIntervalIetfHolddownInterval.IsNull() {
+	if value := gjson.GetBytes(res, "spf-interval.ietf.holddown-interval"); value.Exists() && !data.SpfIntervalIetfHolddownInterval.IsNull() {
 		data.SpfIntervalIetfHolddownInterval = types.Int64Value(value.Int())
 	} else if data.SpfIntervalIetfHolddownInterval.IsNull() {
 		data.SpfIntervalIetfHolddownInterval = types.Int64Null()
@@ -2293,7 +2333,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{strconv.FormatInt(data.SpfIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("spf-interval-levels.level").ForEach(
+		gjson.GetBytes(res, "spf-interval-levels.level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2369,32 +2409,32 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 			data.SpfIntervalLevels[i].IetfHolddownInterval = types.Int64Null()
 		}
 	}
-	if value := res.Get("spf.prefix-priority.critical.tag"); value.Exists() && !data.SpfPrefixPriorityCriticalTag.IsNull() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority.critical.tag"); value.Exists() && !data.SpfPrefixPriorityCriticalTag.IsNull() {
 		data.SpfPrefixPriorityCriticalTag = types.Int64Value(value.Int())
 	} else if data.SpfPrefixPriorityCriticalTag.IsNull() {
 		data.SpfPrefixPriorityCriticalTag = types.Int64Null()
 	}
-	if value := res.Get("spf.prefix-priority.critical.prefixlist-name"); value.Exists() && !data.SpfPrefixPriorityCriticalPrefixListName.IsNull() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority.critical.prefixlist-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SpfPrefixPriorityCriticalPrefixListName.IsNull() {
 		data.SpfPrefixPriorityCriticalPrefixListName = types.StringValue(value.String())
 	} else if data.SpfPrefixPriorityCriticalPrefixListName.IsNull() {
 		data.SpfPrefixPriorityCriticalPrefixListName = types.StringNull()
 	}
-	if value := res.Get("spf.prefix-priority.high.tag"); value.Exists() && !data.SpfPrefixPriorityHighTag.IsNull() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority.high.tag"); value.Exists() && !data.SpfPrefixPriorityHighTag.IsNull() {
 		data.SpfPrefixPriorityHighTag = types.Int64Value(value.Int())
 	} else if data.SpfPrefixPriorityHighTag.IsNull() {
 		data.SpfPrefixPriorityHighTag = types.Int64Null()
 	}
-	if value := res.Get("spf.prefix-priority.high.prefixlist-name"); value.Exists() && !data.SpfPrefixPriorityHighPrefixListName.IsNull() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority.high.prefixlist-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SpfPrefixPriorityHighPrefixListName.IsNull() {
 		data.SpfPrefixPriorityHighPrefixListName = types.StringValue(value.String())
 	} else if data.SpfPrefixPriorityHighPrefixListName.IsNull() {
 		data.SpfPrefixPriorityHighPrefixListName = types.StringNull()
 	}
-	if value := res.Get("spf.prefix-priority.medium.tag"); value.Exists() && !data.SpfPrefixPriorityMediumTag.IsNull() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority.medium.tag"); value.Exists() && !data.SpfPrefixPriorityMediumTag.IsNull() {
 		data.SpfPrefixPriorityMediumTag = types.Int64Value(value.Int())
 	} else if data.SpfPrefixPriorityMediumTag.IsNull() {
 		data.SpfPrefixPriorityMediumTag = types.Int64Null()
 	}
-	if value := res.Get("spf.prefix-priority.medium.prefixlist-name"); value.Exists() && !data.SpfPrefixPriorityMediumPrefixListName.IsNull() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority.medium.prefixlist-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SpfPrefixPriorityMediumPrefixListName.IsNull() {
 		data.SpfPrefixPriorityMediumPrefixListName = types.StringValue(value.String())
 	} else if data.SpfPrefixPriorityMediumPrefixListName.IsNull() {
 		data.SpfPrefixPriorityMediumPrefixListName = types.StringNull()
@@ -2404,7 +2444,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{strconv.FormatInt(data.SpfPrefixPriorityCriticalLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("spf.prefix-priority-critical-levels.prefix-priority-critical-level").ForEach(
+		gjson.GetBytes(res, "spf.prefix-priority-critical-levels.prefix-priority-critical-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2432,7 +2472,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		} else {
 			data.SpfPrefixPriorityCriticalLevels[i].Tag = types.Int64Null()
 		}
-		if value := r.Get("prefixlist-name"); value.Exists() && !data.SpfPrefixPriorityCriticalLevels[i].PrefixListName.IsNull() {
+		if value := r.Get("prefixlist-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SpfPrefixPriorityCriticalLevels[i].PrefixListName.IsNull() {
 			data.SpfPrefixPriorityCriticalLevels[i].PrefixListName = types.StringValue(value.String())
 		} else {
 			data.SpfPrefixPriorityCriticalLevels[i].PrefixListName = types.StringNull()
@@ -2443,7 +2483,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{strconv.FormatInt(data.SpfPrefixPriorityHighLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("spf.prefix-priority-high-levels.prefix-priority-high-level").ForEach(
+		gjson.GetBytes(res, "spf.prefix-priority-high-levels.prefix-priority-high-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2471,7 +2511,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		} else {
 			data.SpfPrefixPriorityHighLevels[i].Tag = types.Int64Null()
 		}
-		if value := r.Get("prefixlist-name"); value.Exists() && !data.SpfPrefixPriorityHighLevels[i].PrefixListName.IsNull() {
+		if value := r.Get("prefixlist-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SpfPrefixPriorityHighLevels[i].PrefixListName.IsNull() {
 			data.SpfPrefixPriorityHighLevels[i].PrefixListName = types.StringValue(value.String())
 		} else {
 			data.SpfPrefixPriorityHighLevels[i].PrefixListName = types.StringNull()
@@ -2482,7 +2522,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{strconv.FormatInt(data.SpfPrefixPriorityMediumLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("spf.prefix-priority-medium-levels.prefix-priority-medium-level").ForEach(
+		gjson.GetBytes(res, "spf.prefix-priority-medium-levels.prefix-priority-medium-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2510,13 +2550,13 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		} else {
 			data.SpfPrefixPriorityMediumLevels[i].Tag = types.Int64Null()
 		}
-		if value := r.Get("prefixlist-name"); value.Exists() && !data.SpfPrefixPriorityMediumLevels[i].PrefixListName.IsNull() {
+		if value := r.Get("prefixlist-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SpfPrefixPriorityMediumLevels[i].PrefixListName.IsNull() {
 			data.SpfPrefixPriorityMediumLevels[i].PrefixListName = types.StringValue(value.String())
 		} else {
 			data.SpfPrefixPriorityMediumLevels[i].PrefixListName = types.StringNull()
 		}
 	}
-	if value := res.Get("maximum-redistributed-prefixes"); value.Exists() && !data.MaximumRedistributedPrefixes.IsNull() {
+	if value := gjson.GetBytes(res, "maximum-redistributed-prefixes"); value.Exists() && !data.MaximumRedistributedPrefixes.IsNull() {
 		data.MaximumRedistributedPrefixes = types.Int64Value(value.Int())
 	} else if data.MaximumRedistributedPrefixes.IsNull() {
 		data.MaximumRedistributedPrefixes = types.Int64Null()
@@ -2526,7 +2566,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{strconv.FormatInt(data.MaximumRedistributedPrefixesLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("maximum-redistributed-prefixes-levels.maximum-redistributed-prefixes-level").ForEach(
+		gjson.GetBytes(res, "maximum-redistributed-prefixes-levels.maximum-redistributed-prefixes-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2560,7 +2600,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{strconv.FormatInt(data.PropagateLevels[i].SourceLevel.ValueInt64(), 10), strconv.FormatInt(data.PropagateLevels[i].DestinationLevel.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("propagate.levels.level").ForEach(
+		gjson.GetBytes(res, "propagate.levels.level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2588,56 +2628,53 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		} else {
 			data.PropagateLevels[i].DestinationLevel = types.Int64Null()
 		}
-		if value := r.Get("route-policy"); value.Exists() && !data.PropagateLevels[i].RoutePolicy.IsNull() {
+		if value := r.Get("route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PropagateLevels[i].RoutePolicy.IsNull() {
 			data.PropagateLevels[i].RoutePolicy = types.StringValue(value.String())
 		} else {
 			data.PropagateLevels[i].RoutePolicy = types.StringNull()
 		}
 	}
-	if value := res.Get("adjacency-check.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.AdjacencyCheckDisable.IsNull() {
+	if value := gjson.GetBytes(res, "adjacency-check.disable"); !data.AdjacencyCheckDisable.IsNull() {
+		if value.Exists() {
 			data.AdjacencyCheckDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.AdjacencyCheckDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.AdjacencyCheckDisable.IsNull() {
-			data.AdjacencyCheckDisable = types.BoolNull()
-		}
+	} else if data.AdjacencyCheckDisable.IsNull() {
+		data.AdjacencyCheckDisable = types.BoolNull()
 	}
-	if value := res.Get("route.source.first-hop"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.RouteSourceFirstHop.IsNull() {
+	if value := gjson.GetBytes(res, "route.source.first-hop"); !data.RouteSourceFirstHop.IsNull() {
+		if value.Exists() {
 			data.RouteSourceFirstHop = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.RouteSourceFirstHop = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.RouteSourceFirstHop.IsNull() {
-			data.RouteSourceFirstHop = types.BoolNull()
-		}
+	} else if data.RouteSourceFirstHop.IsNull() {
+		data.RouteSourceFirstHop = types.BoolNull()
 	}
-	if value := res.Get("attached-bit.receive.ignore"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.AttachedBitReceiveIgnore.IsNull() {
+	if value := gjson.GetBytes(res, "attached-bit.receive.ignore"); !data.AttachedBitReceiveIgnore.IsNull() {
+		if value.Exists() {
 			data.AttachedBitReceiveIgnore = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.AttachedBitReceiveIgnore = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.AttachedBitReceiveIgnore.IsNull() {
-			data.AttachedBitReceiveIgnore = types.BoolNull()
-		}
+	} else if data.AttachedBitReceiveIgnore.IsNull() {
+		data.AttachedBitReceiveIgnore = types.BoolNull()
 	}
-	if value := res.Get("attached-bit.send"); value.Exists() && !data.AttachedBitSend.IsNull() {
+	if value := gjson.GetBytes(res, "attached-bit.send"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AttachedBitSend.IsNull() {
 		data.AttachedBitSend = types.StringValue(value.String())
 	} else if data.AttachedBitSend.IsNull() {
 		data.AttachedBitSend = types.StringNull()
 	}
-	if value := res.Get("fast-reroute.delay-interval"); value.Exists() && !data.FastRerouteDelayInterval.IsNull() {
+	if value := gjson.GetBytes(res, "fast-reroute.delay-interval"); value.Exists() && !data.FastRerouteDelayInterval.IsNull() {
 		data.FastRerouteDelayInterval = types.Int64Value(value.Int())
 	} else if data.FastRerouteDelayInterval.IsNull() {
 		data.FastRerouteDelayInterval = types.Int64Null()
 	}
-	if value := res.Get("fast-reroute.per-prefix.priority-limit"); value.Exists() && !data.FastReroutePerPrefixPriorityLimit.IsNull() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.FastReroutePerPrefixPriorityLimit.IsNull() {
 		data.FastReroutePerPrefixPriorityLimit = types.StringValue(value.String())
 	} else if data.FastReroutePerPrefixPriorityLimit.IsNull() {
 		data.FastReroutePerPrefixPriorityLimit = types.StringNull()
@@ -2647,7 +2684,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixPriorityLimitLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("fast-reroute.per-prefix.priority-limit-levels.priority-limit-level").ForEach(
+		gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit-levels.priority-limit-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2670,40 +2707,38 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		} else {
 			data.FastReroutePerPrefixPriorityLimitLevels[i].LevelNumber = types.Int64Null()
 		}
-		if value := r.Get("priority-limit"); value.Exists() && !data.FastReroutePerPrefixPriorityLimitLevels[i].PriorityLimit.IsNull() {
+		if value := r.Get("priority-limit"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.FastReroutePerPrefixPriorityLimitLevels[i].PriorityLimit.IsNull() {
 			data.FastReroutePerPrefixPriorityLimitLevels[i].PriorityLimit = types.StringValue(value.String())
 		} else {
 			data.FastReroutePerPrefixPriorityLimitLevels[i].PriorityLimit = types.StringNull()
 		}
 	}
-	if value := res.Get("fast-reroute.per-prefix.use-candidate-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.FastReroutePerPrefixUseCandidateOnly.IsNull() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.use-candidate-only"); !data.FastReroutePerPrefixUseCandidateOnly.IsNull() {
+		if value.Exists() {
 			data.FastReroutePerPrefixUseCandidateOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.FastReroutePerPrefixUseCandidateOnly = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.FastReroutePerPrefixUseCandidateOnly.IsNull() {
-			data.FastReroutePerPrefixUseCandidateOnly = types.BoolNull()
-		}
+	} else if data.FastReroutePerPrefixUseCandidateOnly.IsNull() {
+		data.FastReroutePerPrefixUseCandidateOnly = types.BoolNull()
 	}
-	if value := res.Get("fast-reroute.per-prefix.srlg-protection.weighted-global"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsNull() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.srlg-protection.weighted-global"); !data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsNull() {
+		if value.Exists() {
 			data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsNull() {
-			data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolNull()
-		}
+	} else if data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsNull() {
+		data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolNull()
 	}
 	for i := range data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels {
 		keys := [...]string{"level-number"}
 		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("fast-reroute.per-prefix.srlg-protection.weighted-global-levels.weighted-global-level").ForEach(
+		gjson.GetBytes(res, "fast-reroute.per-prefix.srlg-protection.weighted-global-levels.weighted-global-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2727,7 +2762,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 			data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels[i].LevelNumber = types.Int64Null()
 		}
 	}
-	if value := res.Get("fast-reroute.per-prefix.remote-lfa.prefix-list"); value.Exists() && !data.FastReroutePerPrefixRemoteLfaPrefixList.IsNull() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.prefix-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.FastReroutePerPrefixRemoteLfaPrefixList.IsNull() {
 		data.FastReroutePerPrefixRemoteLfaPrefixList = types.StringValue(value.String())
 	} else if data.FastReroutePerPrefixRemoteLfaPrefixList.IsNull() {
 		data.FastReroutePerPrefixRemoteLfaPrefixList = types.StringNull()
@@ -2737,7 +2772,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("fast-reroute.per-prefix.remote-lfa.prefix-list-levels.prefix-list-level").ForEach(
+		gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.prefix-list-levels.prefix-list-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2760,29 +2795,28 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		} else {
 			data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].LevelNumber = types.Int64Null()
 		}
-		if value := r.Get("prefix-list"); value.Exists() && !data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].PrefixList.IsNull() {
+		if value := r.Get("prefix-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].PrefixList.IsNull() {
 			data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].PrefixList = types.StringValue(value.String())
 		} else {
 			data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].PrefixList = types.StringNull()
 		}
 	}
-	if value := res.Get("fast-reroute.per-prefix.load-sharing.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.FastReroutePerPrefixLoadSharingDisable.IsNull() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.load-sharing.disable"); !data.FastReroutePerPrefixLoadSharingDisable.IsNull() {
+		if value.Exists() {
 			data.FastReroutePerPrefixLoadSharingDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.FastReroutePerPrefixLoadSharingDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.FastReroutePerPrefixLoadSharingDisable.IsNull() {
-			data.FastReroutePerPrefixLoadSharingDisable = types.BoolNull()
-		}
+	} else if data.FastReroutePerPrefixLoadSharingDisable.IsNull() {
+		data.FastReroutePerPrefixLoadSharingDisable = types.BoolNull()
 	}
 	for i := range data.FastReroutePerPrefixLoadSharingDisableLevels {
 		keys := [...]string{"level-number"}
 		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixLoadSharingDisableLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("fast-reroute.per-prefix.load-sharing.disable-levels.disable-level").ForEach(
+		gjson.GetBytes(res, "fast-reroute.per-prefix.load-sharing.disable-levels.disable-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2806,58 +2840,57 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 			data.FastReroutePerPrefixLoadSharingDisableLevels[i].LevelNumber = types.Int64Null()
 		}
 	}
-	if value := res.Get("fast-reroute.per-prefix.tiebreaker.downstream.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerDownstreamIndex.IsNull() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.downstream.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerDownstreamIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerDownstreamIndex = types.Int64Value(value.Int())
 	} else if data.FastReroutePerPrefixTiebreakerDownstreamIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerDownstreamIndex = types.Int64Null()
 	}
-	if value := res.Get("fast-reroute.per-prefix.tiebreaker.lc-disjoint.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsNull() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lc-disjoint.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Value(value.Int())
 	} else if data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Null()
 	}
-	if value := res.Get("fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex.IsNull() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex = types.Int64Value(value.Int())
 	} else if data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex = types.Int64Null()
 	}
-	if value := res.Get("fast-reroute.per-prefix.tiebreaker.node-protecting.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.node-protecting.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Value(value.Int())
 	} else if data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Null()
 	}
-	if value := res.Get("fast-reroute.per-prefix.tiebreaker.primary-path.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerPrimaryPathIndex.IsNull() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.primary-path.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerPrimaryPathIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerPrimaryPathIndex = types.Int64Value(value.Int())
 	} else if data.FastReroutePerPrefixTiebreakerPrimaryPathIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerPrimaryPathIndex = types.Int64Null()
 	}
-	if value := res.Get("fast-reroute.per-prefix.tiebreaker.secondary-path.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerSecondaryPathIndex.IsNull() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.secondary-path.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerSecondaryPathIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerSecondaryPathIndex = types.Int64Value(value.Int())
 	} else if data.FastReroutePerPrefixTiebreakerSecondaryPathIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerSecondaryPathIndex = types.Int64Null()
 	}
-	if value := res.Get("fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index"); value.Exists() && !data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Value(value.Int())
 	} else if data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() {
 		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Null()
 	}
-	if value := res.Get("fast-reroute.per-link.use-candidate-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.FastReroutePerLinkUseCandidateOnly.IsNull() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.use-candidate-only"); !data.FastReroutePerLinkUseCandidateOnly.IsNull() {
+		if value.Exists() {
 			data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.FastReroutePerLinkUseCandidateOnly.IsNull() {
-			data.FastReroutePerLinkUseCandidateOnly = types.BoolNull()
-		}
+	} else if data.FastReroutePerLinkUseCandidateOnly.IsNull() {
+		data.FastReroutePerLinkUseCandidateOnly = types.BoolNull()
 	}
 	for i := range data.FastReroutePerLinkUseCandidateOnlyLevels {
 		keys := [...]string{"level-number"}
 		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerLinkUseCandidateOnlyLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("fast-reroute.per-link.use-candidate-only-levels.use-candidate-only-level").ForEach(
+		gjson.GetBytes(res, "fast-reroute.per-link.use-candidate-only-levels.use-candidate-only-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2881,7 +2914,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 			data.FastReroutePerLinkUseCandidateOnlyLevels[i].LevelNumber = types.Int64Null()
 		}
 	}
-	if value := res.Get("fast-reroute.per-link.priority-limit"); value.Exists() && !data.FastReroutePerLinkPriorityLimit.IsNull() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.priority-limit"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.FastReroutePerLinkPriorityLimit.IsNull() {
 		data.FastReroutePerLinkPriorityLimit = types.StringValue(value.String())
 	} else if data.FastReroutePerLinkPriorityLimit.IsNull() {
 		data.FastReroutePerLinkPriorityLimit = types.StringNull()
@@ -2891,7 +2924,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerLinkPriorityLimitLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("fast-reroute.per-link.priority-limit-levels.priority-limit-level").ForEach(
+		gjson.GetBytes(res, "fast-reroute.per-link.priority-limit-levels.priority-limit-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2914,159 +2947,148 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		} else {
 			data.FastReroutePerLinkPriorityLimitLevels[i].LevelNumber = types.Int64Null()
 		}
-		if value := r.Get("priority-limit"); value.Exists() && !data.FastReroutePerLinkPriorityLimitLevels[i].PriorityLimit.IsNull() {
+		if value := r.Get("priority-limit"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.FastReroutePerLinkPriorityLimitLevels[i].PriorityLimit.IsNull() {
 			data.FastReroutePerLinkPriorityLimitLevels[i].PriorityLimit = types.StringValue(value.String())
 		} else {
 			data.FastReroutePerLinkPriorityLimitLevels[i].PriorityLimit = types.StringNull()
 		}
 	}
-	if value := res.Get("default-information.originate"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.DefaultInformationOriginate.IsNull() {
+	if value := gjson.GetBytes(res, "default-information.originate"); !data.DefaultInformationOriginate.IsNull() {
+		if value.Exists() {
 			data.DefaultInformationOriginate = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.DefaultInformationOriginate = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.DefaultInformationOriginate.IsNull() {
-			data.DefaultInformationOriginate = types.BoolNull()
-		}
+	} else if data.DefaultInformationOriginate.IsNull() {
+		data.DefaultInformationOriginate = types.BoolNull()
 	}
-	if value := res.Get("default-information.originate.route-policy.text"); value.Exists() && !data.DefaultInformationOriginateRoutePolicy.IsNull() {
+	if value := gjson.GetBytes(res, "default-information.originate.route-policy.text"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DefaultInformationOriginateRoutePolicy.IsNull() {
 		data.DefaultInformationOriginateRoutePolicy = types.StringValue(value.String())
 	} else if data.DefaultInformationOriginateRoutePolicy.IsNull() {
 		data.DefaultInformationOriginateRoutePolicy = types.StringNull()
 	}
-	if value := res.Get("segment-routing.bundle-member-adj-sid"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SegmentRoutingBundleMemberAdjSid.IsNull() {
+	if value := gjson.GetBytes(res, "segment-routing.bundle-member-adj-sid"); !data.SegmentRoutingBundleMemberAdjSid.IsNull() {
+		if value.Exists() {
 			data.SegmentRoutingBundleMemberAdjSid = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SegmentRoutingBundleMemberAdjSid = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SegmentRoutingBundleMemberAdjSid.IsNull() {
-			data.SegmentRoutingBundleMemberAdjSid = types.BoolNull()
-		}
+	} else if data.SegmentRoutingBundleMemberAdjSid.IsNull() {
+		data.SegmentRoutingBundleMemberAdjSid = types.BoolNull()
 	}
-	if value := res.Get("segment-routing.labeled-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SegmentRoutingLabeledOnly.IsNull() {
+	if value := gjson.GetBytes(res, "segment-routing.labeled-only"); !data.SegmentRoutingLabeledOnly.IsNull() {
+		if value.Exists() {
 			data.SegmentRoutingLabeledOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SegmentRoutingLabeledOnly = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SegmentRoutingLabeledOnly.IsNull() {
-			data.SegmentRoutingLabeledOnly = types.BoolNull()
-		}
+	} else if data.SegmentRoutingLabeledOnly.IsNull() {
+		data.SegmentRoutingLabeledOnly = types.BoolNull()
 	}
-	if value := res.Get("segment-routing.protected-adjacency-sid-delay"); value.Exists() && !data.SegmentRoutingProtectedAdjacencySidDelay.IsNull() {
+	if value := gjson.GetBytes(res, "segment-routing.protected-adjacency-sid-delay"); value.Exists() && !data.SegmentRoutingProtectedAdjacencySidDelay.IsNull() {
 		data.SegmentRoutingProtectedAdjacencySidDelay = types.Int64Value(value.Int())
 	} else if data.SegmentRoutingProtectedAdjacencySidDelay.IsNull() {
 		data.SegmentRoutingProtectedAdjacencySidDelay = types.Int64Null()
 	}
-	if value := res.Get("segment-routing.mpls.enable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SegmentRoutingMplsEnable.IsNull() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.enable"); !data.SegmentRoutingMplsEnable.IsNull() {
+		if value.Exists() {
 			data.SegmentRoutingMplsEnable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SegmentRoutingMplsEnable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SegmentRoutingMplsEnable.IsNull() {
-			data.SegmentRoutingMplsEnable = types.BoolNull()
-		}
+	} else if data.SegmentRoutingMplsEnable.IsNull() {
+		data.SegmentRoutingMplsEnable = types.BoolNull()
 	}
-	if value := res.Get("segment-routing.mpls.sr-prefer"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SegmentRoutingMplsSrPrefer.IsNull() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.sr-prefer"); !data.SegmentRoutingMplsSrPrefer.IsNull() {
+		if value.Exists() {
 			data.SegmentRoutingMplsSrPrefer = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SegmentRoutingMplsSrPrefer = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SegmentRoutingMplsSrPrefer.IsNull() {
-			data.SegmentRoutingMplsSrPrefer = types.BoolNull()
-		}
+	} else if data.SegmentRoutingMplsSrPrefer.IsNull() {
+		data.SegmentRoutingMplsSrPrefer = types.BoolNull()
 	}
-	if value := res.Get("segment-routing.mpls.unlabeled.protection.prefix-list"); value.Exists() && !data.SegmentRoutingMplsUnlabeledProtectionPrefixList.IsNull() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.unlabeled.protection.prefix-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingMplsUnlabeledProtectionPrefixList.IsNull() {
 		data.SegmentRoutingMplsUnlabeledProtectionPrefixList = types.StringValue(value.String())
 	} else if data.SegmentRoutingMplsUnlabeledProtectionPrefixList.IsNull() {
 		data.SegmentRoutingMplsUnlabeledProtectionPrefixList = types.StringNull()
 	}
-	if value := res.Get("segment-routing.mpls.unlabeled.protection.route-policy"); value.Exists() && !data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy.IsNull() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.unlabeled.protection.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy.IsNull() {
 		data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy = types.StringValue(value.String())
 	} else if data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy.IsNull() {
 		data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy = types.StringNull()
 	}
-	if value := res.Get("segment-routing.mpls.unlabeled.protection.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SegmentRoutingMplsUnlabeledProtectionDisable.IsNull() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.unlabeled.protection.disable"); !data.SegmentRoutingMplsUnlabeledProtectionDisable.IsNull() {
+		if value.Exists() {
 			data.SegmentRoutingMplsUnlabeledProtectionDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SegmentRoutingMplsUnlabeledProtectionDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SegmentRoutingMplsUnlabeledProtectionDisable.IsNull() {
-			data.SegmentRoutingMplsUnlabeledProtectionDisable = types.BoolNull()
-		}
+	} else if data.SegmentRoutingMplsUnlabeledProtectionDisable.IsNull() {
+		data.SegmentRoutingMplsUnlabeledProtectionDisable = types.BoolNull()
 	}
-	if value := res.Get("segment-routing.mpls.prefix-sid-map.receive"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SegmentRoutingMplsPrefixSidMapReceive.IsNull() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.receive"); !data.SegmentRoutingMplsPrefixSidMapReceive.IsNull() {
+		if value.Exists() {
 			data.SegmentRoutingMplsPrefixSidMapReceive = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SegmentRoutingMplsPrefixSidMapReceive = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SegmentRoutingMplsPrefixSidMapReceive.IsNull() {
-			data.SegmentRoutingMplsPrefixSidMapReceive = types.BoolNull()
-		}
+	} else if data.SegmentRoutingMplsPrefixSidMapReceive.IsNull() {
+		data.SegmentRoutingMplsPrefixSidMapReceive = types.BoolNull()
 	}
-	if value := res.Get("segment-routing.mpls.prefix-sid-map.receive.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsNull() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.receive.disable"); !data.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsNull() {
+		if value.Exists() {
 			data.SegmentRoutingMplsPrefixSidMapReceiveDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SegmentRoutingMplsPrefixSidMapReceiveDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsNull() {
-			data.SegmentRoutingMplsPrefixSidMapReceiveDisable = types.BoolNull()
-		}
+	} else if data.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsNull() {
+		data.SegmentRoutingMplsPrefixSidMapReceiveDisable = types.BoolNull()
 	}
-	if value := res.Get("segment-routing.mpls.prefix-sid-map.advertise-local"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsNull() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.advertise-local"); !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsNull() {
+		if value.Exists() {
 			data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsNull() {
-			data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal = types.BoolNull()
-		}
+	} else if data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsNull() {
+		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal = types.BoolNull()
 	}
-	if value := res.Get("segment-routing.mpls.prefix-sid-map.advertise-local.domain-wide"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsNull() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.advertise-local.domain-wide"); !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsNull() {
+		if value.Exists() {
 			data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsNull() {
-			data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide = types.BoolNull()
-		}
+	} else if data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsNull() {
+		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide = types.BoolNull()
 	}
-	if value := res.Get("segment-routing.mpls.connected-prefix-sid-map"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SegmentRoutingMplsConnectedPrefixSidMap.IsNull() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map"); !data.SegmentRoutingMplsConnectedPrefixSidMap.IsNull() {
+		if value.Exists() {
 			data.SegmentRoutingMplsConnectedPrefixSidMap = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SegmentRoutingMplsConnectedPrefixSidMap = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SegmentRoutingMplsConnectedPrefixSidMap.IsNull() {
-			data.SegmentRoutingMplsConnectedPrefixSidMap = types.BoolNull()
-		}
+	} else if data.SegmentRoutingMplsConnectedPrefixSidMap.IsNull() {
+		data.SegmentRoutingMplsConnectedPrefixSidMap = types.BoolNull()
 	}
 	for i := range data.SegmentRoutingMplsConnectedPrefixSidMapAddresses {
 		keys := [...]string{"ip-address", "address-prefix"}
 		keyValues := [...]string{data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IpAddress.ValueString(), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].Prefix.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("segment-routing.mpls.connected-prefix-sid-map.addresses.address").ForEach(
+		gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map.addresses.address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3084,7 +3106,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 				return true
 			},
 		)
-		if value := r.Get("ip-address"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IpAddress.IsNull() {
+		if value := r.Get("ip-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IpAddress.IsNull() {
 			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IpAddress = types.StringValue(value.String())
 		} else {
 			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IpAddress = types.StringNull()
@@ -3099,7 +3121,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		} else {
 			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexId = types.Int64Null()
 		}
-		if value := r.Get("index.interface"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexInterface.IsNull() {
+		if value := r.Get("index.interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexInterface.IsNull() {
 			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexInterface = types.StringValue(value.String())
 		} else {
 			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexInterface = types.StringNull()
@@ -3133,7 +3155,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		} else {
 			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteId = types.Int64Null()
 		}
-		if value := r.Get("absolute.interface"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteInterface.IsNull() {
+		if value := r.Get("absolute.interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteInterface.IsNull() {
 			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteInterface = types.StringValue(value.String())
 		} else {
 			data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteInterface = types.StringNull()
@@ -3168,7 +3190,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IpAddress.ValueString(), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].Prefix.ValueInt64(), 10), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].FlexAlgo.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address").ForEach(
+		gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3186,7 +3208,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 				return true
 			},
 		)
-		if value := r.Get("ip-address"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IpAddress.IsNull() {
+		if value := r.Get("ip-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IpAddress.IsNull() {
 			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IpAddress = types.StringValue(value.String())
 		} else {
 			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IpAddress = types.StringNull()
@@ -3206,7 +3228,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		} else {
 			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexId = types.Int64Null()
 		}
-		if value := r.Get("index.interface"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexInterface.IsNull() {
+		if value := r.Get("index.interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexInterface.IsNull() {
 			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexInterface = types.StringValue(value.String())
 		} else {
 			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexInterface = types.StringNull()
@@ -3240,7 +3262,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		} else {
 			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteId = types.Int64Null()
 		}
-		if value := r.Get("absolute.interface"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteInterface.IsNull() {
+		if value := r.Get("absolute.interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteInterface.IsNull() {
 			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteInterface = types.StringValue(value.String())
 		} else {
 			data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteInterface = types.StringNull()
@@ -3275,7 +3297,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IpAddress.ValueString(), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].Prefix.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address").ForEach(
+		gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3293,7 +3315,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 				return true
 			},
 		)
-		if value := r.Get("ip-address"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IpAddress.IsNull() {
+		if value := r.Get("ip-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IpAddress.IsNull() {
 			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IpAddress = types.StringValue(value.String())
 		} else {
 			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IpAddress = types.StringNull()
@@ -3308,7 +3330,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		} else {
 			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexId = types.Int64Null()
 		}
-		if value := r.Get("index.interface"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexInterface.IsNull() {
+		if value := r.Get("index.interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexInterface.IsNull() {
 			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexInterface = types.StringValue(value.String())
 		} else {
 			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexInterface = types.StringNull()
@@ -3342,7 +3364,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		} else {
 			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteId = types.Int64Null()
 		}
-		if value := r.Get("absolute.interface"); value.Exists() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteInterface.IsNull() {
+		if value := r.Get("absolute.interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteInterface.IsNull() {
 			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteInterface = types.StringValue(value.String())
 		} else {
 			data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteInterface = types.StringNull()
@@ -3377,7 +3399,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{data.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()}
 
 		var r gjson.Result
-		res.Get("segment-routing.srv6.locators.locator").ForEach(
+		gjson.GetBytes(res, "segment-routing.srv6.locators.locator").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3395,7 +3417,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 				return true
 			},
 		)
-		if value := r.Get("locator-string"); value.Exists() && !data.SegmentRoutingSrv6Locators[i].LocatorName.IsNull() {
+		if value := r.Get("locator-string"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingSrv6Locators[i].LocatorName.IsNull() {
 			data.SegmentRoutingSrv6Locators[i].LocatorName = types.StringValue(value.String())
 		} else {
 			data.SegmentRoutingSrv6Locators[i].LocatorName = types.StringNull()
@@ -3484,23 +3506,22 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 			}
 		}
 	}
-	if value := res.Get("partition-detect"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.PartitionDetect.IsNull() {
+	if value := gjson.GetBytes(res, "partition-detect"); !data.PartitionDetect.IsNull() {
+		if value.Exists() {
 			data.PartitionDetect = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.PartitionDetect = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.PartitionDetect.IsNull() {
-			data.PartitionDetect = types.BoolNull()
-		}
+	} else if data.PartitionDetect.IsNull() {
+		data.PartitionDetect = types.BoolNull()
 	}
 	for i := range data.PartitionDetectTracks {
 		keys := [...]string{"address"}
 		keyValues := [...]string{data.PartitionDetectTracks[i].Address.ValueString()}
 
 		var r gjson.Result
-		res.Get("partition-detect.tracks.track").ForEach(
+		gjson.GetBytes(res, "partition-detect.tracks.track").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3518,7 +3539,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() && !data.PartitionDetectTracks[i].Address.IsNull() {
+		if value := r.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PartitionDetectTracks[i].Address.IsNull() {
 			data.PartitionDetectTracks[i].Address = types.StringValue(value.String())
 		} else {
 			data.PartitionDetectTracks[i].Address = types.StringNull()
@@ -3553,7 +3574,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 		keyValues := [...]string{data.PartitionDetectExternalAddressTracks[i].Address.ValueString()}
 
 		var r gjson.Result
-		res.Get("partition-detect.external-address-tracks.external-address-track").ForEach(
+		gjson.GetBytes(res, "partition-detect.external-address-tracks.external-address-track").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3571,104 +3592,98 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() && !data.PartitionDetectExternalAddressTracks[i].Address.IsNull() {
+		if value := r.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PartitionDetectExternalAddressTracks[i].Address.IsNull() {
 			data.PartitionDetectExternalAddressTracks[i].Address = types.StringValue(value.String())
 		} else {
 			data.PartitionDetectExternalAddressTracks[i].Address = types.StringNull()
 		}
-		if value := r.Get("external-address"); value.Exists() && !data.PartitionDetectExternalAddressTracks[i].ExternalAddress.IsNull() {
+		if value := r.Get("external-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PartitionDetectExternalAddressTracks[i].ExternalAddress.IsNull() {
 			data.PartitionDetectExternalAddressTracks[i].ExternalAddress = types.StringValue(value.String())
 		} else {
 			data.PartitionDetectExternalAddressTracks[i].ExternalAddress = types.StringNull()
 		}
 	}
-	if value := res.Get("mpls.ldp.auto-config"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MplsLdpAutoConfig.IsNull() {
+	if value := gjson.GetBytes(res, "mpls.ldp.auto-config"); !data.MplsLdpAutoConfig.IsNull() {
+		if value.Exists() {
 			data.MplsLdpAutoConfig = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MplsLdpAutoConfig = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MplsLdpAutoConfig.IsNull() {
-			data.MplsLdpAutoConfig = types.BoolNull()
-		}
+	} else if data.MplsLdpAutoConfig.IsNull() {
+		data.MplsLdpAutoConfig = types.BoolNull()
 	}
-	if value := res.Get("mpls.traffic-eng.router-id.ipv4-address"); value.Exists() && !data.MplsTrafficEngRouterIdIpv4Address.IsNull() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.ipv4-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MplsTrafficEngRouterIdIpv4Address.IsNull() {
 		data.MplsTrafficEngRouterIdIpv4Address = types.StringValue(value.String())
 	} else if data.MplsTrafficEngRouterIdIpv4Address.IsNull() {
 		data.MplsTrafficEngRouterIdIpv4Address = types.StringNull()
 	}
-	if value := res.Get("mpls.traffic-eng.router-id.interface-name"); value.Exists() && !data.MplsTrafficEngRouterIdInterfaceName.IsNull() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.interface-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MplsTrafficEngRouterIdInterfaceName.IsNull() {
 		data.MplsTrafficEngRouterIdInterfaceName = types.StringValue(value.String())
 	} else if data.MplsTrafficEngRouterIdInterfaceName.IsNull() {
 		data.MplsTrafficEngRouterIdInterfaceName = types.StringNull()
 	}
-	if value := res.Get("mpls.traffic-eng.igp-intact"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MplsTrafficEngIgpIntact.IsNull() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.igp-intact"); !data.MplsTrafficEngIgpIntact.IsNull() {
+		if value.Exists() {
 			data.MplsTrafficEngIgpIntact = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MplsTrafficEngIgpIntact = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MplsTrafficEngIgpIntact.IsNull() {
-			data.MplsTrafficEngIgpIntact = types.BoolNull()
-		}
+	} else if data.MplsTrafficEngIgpIntact.IsNull() {
+		data.MplsTrafficEngIgpIntact = types.BoolNull()
 	}
-	if value := res.Get("mpls.traffic-eng.multicast-intact"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MplsTrafficEngMulticastIntact.IsNull() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.multicast-intact"); !data.MplsTrafficEngMulticastIntact.IsNull() {
+		if value.Exists() {
 			data.MplsTrafficEngMulticastIntact = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MplsTrafficEngMulticastIntact = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MplsTrafficEngMulticastIntact.IsNull() {
-			data.MplsTrafficEngMulticastIntact = types.BoolNull()
-		}
+	} else if data.MplsTrafficEngMulticastIntact.IsNull() {
+		data.MplsTrafficEngMulticastIntact = types.BoolNull()
 	}
-	if value := res.Get("mpls.traffic-eng.tunnel.restricted"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MplsTrafficEngTunnelRestricted.IsNull() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.restricted"); !data.MplsTrafficEngTunnelRestricted.IsNull() {
+		if value.Exists() {
 			data.MplsTrafficEngTunnelRestricted = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MplsTrafficEngTunnelRestricted = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MplsTrafficEngTunnelRestricted.IsNull() {
-			data.MplsTrafficEngTunnelRestricted = types.BoolNull()
-		}
+	} else if data.MplsTrafficEngTunnelRestricted.IsNull() {
+		data.MplsTrafficEngTunnelRestricted = types.BoolNull()
 	}
-	if value := res.Get("mpls.traffic-eng.tunnel.preferred"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MplsTrafficEngTunnelPreferred.IsNull() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.preferred"); !data.MplsTrafficEngTunnelPreferred.IsNull() {
+		if value.Exists() {
 			data.MplsTrafficEngTunnelPreferred = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MplsTrafficEngTunnelPreferred = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MplsTrafficEngTunnelPreferred.IsNull() {
-			data.MplsTrafficEngTunnelPreferred = types.BoolNull()
-		}
+	} else if data.MplsTrafficEngTunnelPreferred.IsNull() {
+		data.MplsTrafficEngTunnelPreferred = types.BoolNull()
 	}
-	if value := res.Get("mpls.traffic-eng.tunnel.metric"); value.Exists() && !data.MplsTrafficEngTunnelMetric.IsNull() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.metric"); value.Exists() && !data.MplsTrafficEngTunnelMetric.IsNull() {
 		data.MplsTrafficEngTunnelMetric = types.Int64Value(value.Int())
 	} else if data.MplsTrafficEngTunnelMetric.IsNull() {
 		data.MplsTrafficEngTunnelMetric = types.Int64Null()
 	}
-	if value := res.Get("mpls.traffic-eng.tunnel.anycast-prefer-igp-cost"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MplsTrafficEngTunnelAnycastPreferIgpCost.IsNull() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.anycast-prefer-igp-cost"); !data.MplsTrafficEngTunnelAnycastPreferIgpCost.IsNull() {
+		if value.Exists() {
 			data.MplsTrafficEngTunnelAnycastPreferIgpCost = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MplsTrafficEngTunnelAnycastPreferIgpCost = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MplsTrafficEngTunnelAnycastPreferIgpCost.IsNull() {
-			data.MplsTrafficEngTunnelAnycastPreferIgpCost = types.BoolNull()
-		}
+	} else if data.MplsTrafficEngTunnelAnycastPreferIgpCost.IsNull() {
+		data.MplsTrafficEngTunnelAnycastPreferIgpCost = types.BoolNull()
 	}
 	for i := range data.MplsTrafficEngTunnelMetricLevels {
 		keys := [...]string{"level-number"}
 		keyValues := [...]string{strconv.FormatInt(data.MplsTrafficEngTunnelMetricLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("mpls.traffic-eng.tunnel.metric-levels.metric-level").ForEach(
+		gjson.GetBytes(res, "mpls.traffic-eng.tunnel.metric-levels.metric-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -3697,108 +3712,100 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 			data.MplsTrafficEngTunnelMetricLevels[i].Metric = types.Int64Null()
 		}
 	}
-	if value := res.Get("mpls.traffic-eng.traffic-eng-level.level-one-two"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MplsTrafficEngLevel12.IsNull() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-one-two"); !data.MplsTrafficEngLevel12.IsNull() {
+		if value.Exists() {
 			data.MplsTrafficEngLevel12 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MplsTrafficEngLevel12 = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MplsTrafficEngLevel12.IsNull() {
-			data.MplsTrafficEngLevel12 = types.BoolNull()
-		}
+	} else if data.MplsTrafficEngLevel12.IsNull() {
+		data.MplsTrafficEngLevel12 = types.BoolNull()
 	}
-	if value := res.Get("mpls.traffic-eng.traffic-eng-level.level-one"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MplsTrafficEngLevel1.IsNull() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-one"); !data.MplsTrafficEngLevel1.IsNull() {
+		if value.Exists() {
 			data.MplsTrafficEngLevel1 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MplsTrafficEngLevel1 = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MplsTrafficEngLevel1.IsNull() {
-			data.MplsTrafficEngLevel1 = types.BoolNull()
-		}
+	} else if data.MplsTrafficEngLevel1.IsNull() {
+		data.MplsTrafficEngLevel1 = types.BoolNull()
 	}
-	if value := res.Get("mpls.traffic-eng.traffic-eng-level.level-two-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MplsTrafficEngLevel2Only.IsNull() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-two-only"); !data.MplsTrafficEngLevel2Only.IsNull() {
+		if value.Exists() {
 			data.MplsTrafficEngLevel2Only = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MplsTrafficEngLevel2Only = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MplsTrafficEngLevel2Only.IsNull() {
-			data.MplsTrafficEngLevel2Only = types.BoolNull()
-		}
+	} else if data.MplsTrafficEngLevel2Only.IsNull() {
+		data.MplsTrafficEngLevel2Only = types.BoolNull()
 	}
-	if value := res.Get("prefix-unreachable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.PrefixUnreachable.IsNull() {
+	if value := gjson.GetBytes(res, "prefix-unreachable"); !data.PrefixUnreachable.IsNull() {
+		if value.Exists() {
 			data.PrefixUnreachable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.PrefixUnreachable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.PrefixUnreachable.IsNull() {
-			data.PrefixUnreachable = types.BoolNull()
-		}
+	} else if data.PrefixUnreachable.IsNull() {
+		data.PrefixUnreachable = types.BoolNull()
 	}
-	if value := res.Get("prefix-unreachable.adv-maximum"); value.Exists() && !data.PrefixUnreachableAdvMaximum.IsNull() {
+	if value := gjson.GetBytes(res, "prefix-unreachable.adv-maximum"); value.Exists() && !data.PrefixUnreachableAdvMaximum.IsNull() {
 		data.PrefixUnreachableAdvMaximum = types.Int64Value(value.Int())
 	} else if data.PrefixUnreachableAdvMaximum.IsNull() {
 		data.PrefixUnreachableAdvMaximum = types.Int64Null()
 	}
-	if value := res.Get("prefix-unreachable.adv-lifetime"); value.Exists() && !data.PrefixUnreachableAdvLifetime.IsNull() {
+	if value := gjson.GetBytes(res, "prefix-unreachable.adv-lifetime"); value.Exists() && !data.PrefixUnreachableAdvLifetime.IsNull() {
 		data.PrefixUnreachableAdvLifetime = types.Int64Value(value.Int())
 	} else if data.PrefixUnreachableAdvLifetime.IsNull() {
 		data.PrefixUnreachableAdvLifetime = types.Int64Null()
 	}
-	if value := res.Get("prefix-unreachable.adv-metric"); value.Exists() && !data.PrefixUnreachableAdvMetric.IsNull() {
+	if value := gjson.GetBytes(res, "prefix-unreachable.adv-metric"); value.Exists() && !data.PrefixUnreachableAdvMetric.IsNull() {
 		data.PrefixUnreachableAdvMetric = types.Int64Value(value.Int())
 	} else if data.PrefixUnreachableAdvMetric.IsNull() {
 		data.PrefixUnreachableAdvMetric = types.Int64Null()
 	}
-	if value := res.Get("prefix-unreachable.rx-process-enable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.PrefixUnreachableRxProcessEnable.IsNull() {
+	if value := gjson.GetBytes(res, "prefix-unreachable.rx-process-enable"); !data.PrefixUnreachableRxProcessEnable.IsNull() {
+		if value.Exists() {
 			data.PrefixUnreachableRxProcessEnable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.PrefixUnreachableRxProcessEnable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.PrefixUnreachableRxProcessEnable.IsNull() {
-			data.PrefixUnreachableRxProcessEnable = types.BoolNull()
-		}
+	} else if data.PrefixUnreachableRxProcessEnable.IsNull() {
+		data.PrefixUnreachableRxProcessEnable = types.BoolNull()
 	}
-	if value := res.Get("apply-weight.ecmp-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ApplyWeightEcmpOnly.IsNull() {
+	if value := gjson.GetBytes(res, "apply-weight.ecmp-only"); !data.ApplyWeightEcmpOnly.IsNull() {
+		if value.Exists() {
 			data.ApplyWeightEcmpOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ApplyWeightEcmpOnly = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ApplyWeightEcmpOnly.IsNull() {
-			data.ApplyWeightEcmpOnly = types.BoolNull()
-		}
+	} else if data.ApplyWeightEcmpOnly.IsNull() {
+		data.ApplyWeightEcmpOnly = types.BoolNull()
 	}
-	if value := res.Get("apply-weight.ecmp-only.bandwidth"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ApplyWeightEcmpOnlyBandwidth.IsNull() {
+	if value := gjson.GetBytes(res, "apply-weight.ecmp-only.bandwidth"); !data.ApplyWeightEcmpOnlyBandwidth.IsNull() {
+		if value.Exists() {
 			data.ApplyWeightEcmpOnlyBandwidth = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ApplyWeightEcmpOnlyBandwidth = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ApplyWeightEcmpOnlyBandwidth.IsNull() {
-			data.ApplyWeightEcmpOnlyBandwidth = types.BoolNull()
-		}
+	} else if data.ApplyWeightEcmpOnlyBandwidth.IsNull() {
+		data.ApplyWeightEcmpOnlyBandwidth = types.BoolNull()
 	}
-	if value := res.Get("apply-weight.ucmp-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ApplyWeightUcmpOnly.IsNull() {
+	if value := gjson.GetBytes(res, "apply-weight.ucmp-only"); !data.ApplyWeightUcmpOnly.IsNull() {
+		if value.Exists() {
 			data.ApplyWeightUcmpOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ApplyWeightUcmpOnly = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ApplyWeightUcmpOnly.IsNull() {
-			data.ApplyWeightUcmpOnly = types.BoolNull()
-		}
+	} else if data.ApplyWeightUcmpOnly.IsNull() {
+		data.ApplyWeightUcmpOnly = types.BoolNull()
 	}
 }
 
@@ -3806,23 +3813,15 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res gjs
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "distance.global"); value.Exists() {
+func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "distance.global"); value.Exists() {
 		data.Distance = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "distance.ip-addresses.ip-address"); value.Exists() {
+	if value := gjson.GetBytes(res, "distance.ip-addresses.ip-address"); value.Exists() {
 		data.DistanceSources = make([]RouterISISAddressFamilyDistanceSources, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyDistanceSources{}
-			if cValue := v.Get("address"); cValue.Exists() {
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Address = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("address-prefix"); cValue.Exists() {
@@ -3831,72 +3830,72 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("distance-number"); cValue.Exists() {
 				item.Distance = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("prefix-list-or-access-list-to"); cValue.Exists() {
+			if cValue := v.Get("prefix-list-or-access-list-to"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.RouteFilter = types.StringValue(cValue.String())
 			}
 			data.DistanceSources = append(data.DistanceSources, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "distribute-list.prefix-list.prefix-list-string"); value.Exists() {
+	if value := gjson.GetBytes(res, "distribute-list.prefix-list.prefix-list-string"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.DistributeListPrefixListIn = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "distribute-list.route-policy"); value.Exists() {
+	if value := gjson.GetBytes(res, "distribute-list.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.DistributeListRoutePolicyIn = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "redistribute.connected"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.connected"); value.Exists() {
 		data.RedistributeConnected = types.BoolValue(true)
 	} else if !data.RedistributeConnected.IsNull() {
 		// Only set to false if it was previously set in state
 		data.RedistributeConnected = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "redistribute.connected.redistribute-route-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.connected.redistribute-route-level"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.RedistributeConnectedLevel = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "redistribute.connected.metric"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.connected.metric"); value.Exists() {
 		data.RedistributeConnectedMetric = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "redistribute.connected.route-policy"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.connected.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.RedistributeConnectedRoutePolicy = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "redistribute.connected.metric-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.connected.metric-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.RedistributeConnectedMetricType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "redistribute.static"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.static"); value.Exists() {
 		data.RedistributeStatic = types.BoolValue(true)
 	} else if !data.RedistributeStatic.IsNull() {
 		// Only set to false if it was previously set in state
 		data.RedistributeStatic = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "redistribute.static.redistribute-route-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.static.redistribute-route-level"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.RedistributeStaticLevel = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "redistribute.static.metric"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.static.metric"); value.Exists() {
 		data.RedistributeStaticMetric = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "redistribute.static.route-policy"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.static.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.RedistributeStaticRoutePolicy = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "redistribute.static.metric-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.static.metric-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.RedistributeStaticMetricType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "redistribute.isis-processes.isis-process"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.isis-processes.isis-process"); value.Exists() {
 		data.RedistributeIsis = make([]RouterISISAddressFamilyRedistributeIsis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyRedistributeIsis{}
-			if cValue := v.Get("isis-string"); cValue.Exists() {
+			if cValue := v.Get("isis-string"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.InstanceId = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
+			if cValue := v.Get("redistribute-route-level"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Level = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("route-policy"); cValue.Exists() {
+			if cValue := v.Get("route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.RoutePolicy = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("metric-type"); cValue.Exists() {
+			if cValue := v.Get("metric-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.MetricType = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("down-flag-clear"); cValue.Exists() {
@@ -3909,34 +3908,34 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "redistribute.bgps.bgp"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.bgps.bgp"); value.Exists() {
 		data.RedistributeBgp = make([]RouterISISAddressFamilyRedistributeBgp, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyRedistributeBgp{}
-			if cValue := v.Get("as-number"); cValue.Exists() {
+			if cValue := v.Get("as-number"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.AsNumber = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
+			if cValue := v.Get("redistribute-route-level"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Level = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("route-policy"); cValue.Exists() {
+			if cValue := v.Get("route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.RoutePolicy = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("metric-type"); cValue.Exists() {
+			if cValue := v.Get("metric-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.MetricType = types.StringValue(cValue.String())
 			}
 			data.RedistributeBgp = append(data.RedistributeBgp, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "redistribute.ospfs.ospf"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.ospfs.ospf"); value.Exists() {
 		data.RedistributeOspf = make([]RouterISISAddressFamilyRedistributeOspf, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyRedistributeOspf{}
-			if cValue := v.Get("ospf-process-id"); cValue.Exists() {
+			if cValue := v.Get("ospf-process-id"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.InstanceId = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("match.internal"); cValue.Exists() {
@@ -3951,27 +3950,27 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 				// Only set to false if it was previously set
 				item.MatchExternal = types.BoolValue(false)
 			}
-			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
+			if cValue := v.Get("redistribute-route-level"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Level = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("route-policy"); cValue.Exists() {
+			if cValue := v.Get("route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.RoutePolicy = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("metric-type"); cValue.Exists() {
+			if cValue := v.Get("metric-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.MetricType = types.StringValue(cValue.String())
 			}
 			data.RedistributeOspf = append(data.RedistributeOspf, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "redistribute.ospfv3s.ospfv3"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.ospfv3s.ospfv3"); value.Exists() {
 		data.RedistributeOspfv3 = make([]RouterISISAddressFamilyRedistributeOspfv3, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyRedistributeOspfv3{}
-			if cValue := v.Get("ospfv3-process-id"); cValue.Exists() {
+			if cValue := v.Get("ospfv3-process-id"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.InstanceId = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("match.internal"); cValue.Exists() {
@@ -3986,66 +3985,66 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 				// Only set to false if it was previously set
 				item.MatchExternal = types.BoolValue(false)
 			}
-			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
+			if cValue := v.Get("redistribute-route-level"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Level = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("route-policy"); cValue.Exists() {
+			if cValue := v.Get("route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.RoutePolicy = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("metric-type"); cValue.Exists() {
+			if cValue := v.Get("metric-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.MetricType = types.StringValue(cValue.String())
 			}
 			data.RedistributeOspfv3 = append(data.RedistributeOspfv3, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "maximum-paths"); value.Exists() {
+	if value := gjson.GetBytes(res, "maximum-paths"); value.Exists() {
 		data.MaximumPaths = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "router-id.interface-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "router-id.interface-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.RouterIdInterfaceName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "router-id.ip-address"); value.Exists() {
+	if value := gjson.GetBytes(res, "router-id.ip-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.RouterIdIpAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "advertise.passive-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "advertise.passive-only"); value.Exists() {
 		data.AdvertisePassiveOnly = types.BoolValue(true)
 	} else if !data.AdvertisePassiveOnly.IsNull() {
 		// Only set to false if it was previously set in state
 		data.AdvertisePassiveOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "advertise.link.attributes"); value.Exists() {
+	if value := gjson.GetBytes(res, "advertise.link.attributes"); value.Exists() {
 		data.AdvertiseLinkAttributes = types.BoolValue(true)
 	} else if !data.AdvertiseLinkAttributes.IsNull() {
 		// Only set to false if it was previously set in state
 		data.AdvertiseLinkAttributes = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "microloop.avoidance.enable"); value.Exists() {
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable"); value.Exists() {
 		data.MicroloopAvoidance = types.BoolValue(true)
 	} else if !data.MicroloopAvoidance.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MicroloopAvoidance = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "microloop.avoidance.enable.protected"); value.Exists() {
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable.protected"); value.Exists() {
 		data.MicroloopAvoidanceProtected = types.BoolValue(true)
 	} else if !data.MicroloopAvoidanceProtected.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MicroloopAvoidanceProtected = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "microloop.avoidance.enable.segment-routing.route-policy"); value.Exists() {
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable.segment-routing.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.MicroloopAvoidanceSegmentRoutingRoutePolicy = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "microloop.avoidance.rib-update-delay"); value.Exists() {
+	if value := gjson.GetBytes(res, "microloop.avoidance.rib-update-delay"); value.Exists() {
 		data.MicroloopAvoidanceRibUpdateDelay = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "summary-prefix.ip-addresses.ip-address"); value.Exists() {
+	if value := gjson.GetBytes(res, "summary-prefix.ip-addresses.ip-address"); value.Exists() {
 		data.SummaryPrefixes = make([]RouterISISAddressFamilySummaryPrefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySummaryPrefixes{}
-			if cValue := v.Get("address"); cValue.Exists() {
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Address = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("address-prefix"); cValue.Exists() {
@@ -4091,10 +4090,10 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "metric"); value.Exists() {
+	if value := gjson.GetBytes(res, "metric"); value.Exists() {
 		data.Metric = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "metric-levels.metric-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "metric-levels.metric-level"); value.Exists() {
 		data.MetricLevels = make([]RouterISISAddressFamilyMetricLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyMetricLevels{}
@@ -4108,37 +4107,37 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "metric-style.narrow"); value.Exists() {
+	if value := gjson.GetBytes(res, "metric-style.narrow"); value.Exists() {
 		data.MetricStyleNarrow = types.BoolValue(true)
 	} else if !data.MetricStyleNarrow.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MetricStyleNarrow = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "metric-style.narrow.transition"); value.Exists() {
+	if value := gjson.GetBytes(res, "metric-style.narrow.transition"); value.Exists() {
 		data.MetricStyleNarrowTransition = types.BoolValue(true)
 	} else if !data.MetricStyleNarrowTransition.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MetricStyleNarrowTransition = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "metric-style.wide"); value.Exists() {
+	if value := gjson.GetBytes(res, "metric-style.wide"); value.Exists() {
 		data.MetricStyleWide = types.BoolValue(true)
 	} else if !data.MetricStyleWide.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MetricStyleWide = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "metric-style.wide.transition"); value.Exists() {
+	if value := gjson.GetBytes(res, "metric-style.wide.transition"); value.Exists() {
 		data.MetricStyleWideTransition = types.BoolValue(true)
 	} else if !data.MetricStyleWideTransition.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MetricStyleWideTransition = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "metric-style.transition"); value.Exists() {
+	if value := gjson.GetBytes(res, "metric-style.transition"); value.Exists() {
 		data.MetricStyleTransition = types.BoolValue(true)
 	} else if !data.MetricStyleTransition.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MetricStyleTransition = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "metric-style-levels.metric-style-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "metric-style-levels.metric-style-level"); value.Exists() {
 		data.MetricStyleLevels = make([]RouterISISAddressFamilyMetricStyleLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyMetricStyleLevels{}
@@ -4179,37 +4178,37 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "spf-interval.maximum-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval.maximum-wait"); value.Exists() {
 		data.SpfIntervalMaximumWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf-interval.initial-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval.initial-wait"); value.Exists() {
 		data.SpfIntervalInitialWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf-interval.secondary-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval.secondary-wait"); value.Exists() {
 		data.SpfIntervalSecondaryWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf-interval.ietf"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval.ietf"); value.Exists() {
 		data.SpfIntervalIetf = types.BoolValue(true)
 	} else if !data.SpfIntervalIetf.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SpfIntervalIetf = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "spf-interval.ietf.initial-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval.ietf.initial-wait"); value.Exists() {
 		data.SpfIntervalIetfInitialWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf-interval.ietf.short-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval.ietf.short-wait"); value.Exists() {
 		data.SpfIntervalIetfShortWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf-interval.ietf.long-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval.ietf.long-wait"); value.Exists() {
 		data.SpfIntervalIetfLongWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf-interval.ietf.learn-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval.ietf.learn-interval"); value.Exists() {
 		data.SpfIntervalIetfLearnInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf-interval.ietf.holddown-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval.ietf.holddown-interval"); value.Exists() {
 		data.SpfIntervalIetfHolddownInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf-interval-levels.level"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval-levels.level"); value.Exists() {
 		data.SpfIntervalLevels = make([]RouterISISAddressFamilySpfIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySpfIntervalLevels{}
@@ -4250,25 +4249,25 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "spf.prefix-priority.critical.tag"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority.critical.tag"); value.Exists() {
 		data.SpfPrefixPriorityCriticalTag = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf.prefix-priority.critical.prefixlist-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority.critical.prefixlist-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.SpfPrefixPriorityCriticalPrefixListName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "spf.prefix-priority.high.tag"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority.high.tag"); value.Exists() {
 		data.SpfPrefixPriorityHighTag = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf.prefix-priority.high.prefixlist-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority.high.prefixlist-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.SpfPrefixPriorityHighPrefixListName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "spf.prefix-priority.medium.tag"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority.medium.tag"); value.Exists() {
 		data.SpfPrefixPriorityMediumTag = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf.prefix-priority.medium.prefixlist-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority.medium.prefixlist-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.SpfPrefixPriorityMediumPrefixListName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "spf.prefix-priority-critical-levels.prefix-priority-critical-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority-critical-levels.prefix-priority-critical-level"); value.Exists() {
 		data.SpfPrefixPriorityCriticalLevels = make([]RouterISISAddressFamilySpfPrefixPriorityCriticalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySpfPrefixPriorityCriticalLevels{}
@@ -4278,14 +4277,14 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("prefixlist-name"); cValue.Exists() {
+			if cValue := v.Get("prefixlist-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.PrefixListName = types.StringValue(cValue.String())
 			}
 			data.SpfPrefixPriorityCriticalLevels = append(data.SpfPrefixPriorityCriticalLevels, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "spf.prefix-priority-high-levels.prefix-priority-high-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority-high-levels.prefix-priority-high-level"); value.Exists() {
 		data.SpfPrefixPriorityHighLevels = make([]RouterISISAddressFamilySpfPrefixPriorityHighLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySpfPrefixPriorityHighLevels{}
@@ -4295,14 +4294,14 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("prefixlist-name"); cValue.Exists() {
+			if cValue := v.Get("prefixlist-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.PrefixListName = types.StringValue(cValue.String())
 			}
 			data.SpfPrefixPriorityHighLevels = append(data.SpfPrefixPriorityHighLevels, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "spf.prefix-priority-medium-levels.prefix-priority-medium-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority-medium-levels.prefix-priority-medium-level"); value.Exists() {
 		data.SpfPrefixPriorityMediumLevels = make([]RouterISISAddressFamilySpfPrefixPriorityMediumLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySpfPrefixPriorityMediumLevels{}
@@ -4312,17 +4311,17 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("prefixlist-name"); cValue.Exists() {
+			if cValue := v.Get("prefixlist-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.PrefixListName = types.StringValue(cValue.String())
 			}
 			data.SpfPrefixPriorityMediumLevels = append(data.SpfPrefixPriorityMediumLevels, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "maximum-redistributed-prefixes"); value.Exists() {
+	if value := gjson.GetBytes(res, "maximum-redistributed-prefixes"); value.Exists() {
 		data.MaximumRedistributedPrefixes = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "maximum-redistributed-prefixes-levels.maximum-redistributed-prefixes-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "maximum-redistributed-prefixes-levels.maximum-redistributed-prefixes-level"); value.Exists() {
 		data.MaximumRedistributedPrefixesLevels = make([]RouterISISAddressFamilyMaximumRedistributedPrefixesLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyMaximumRedistributedPrefixesLevels{}
@@ -4336,7 +4335,7 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "propagate.levels.level"); value.Exists() {
+	if value := gjson.GetBytes(res, "propagate.levels.level"); value.Exists() {
 		data.PropagateLevels = make([]RouterISISAddressFamilyPropagateLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyPropagateLevels{}
@@ -4346,67 +4345,67 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("destination-level"); cValue.Exists() {
 				item.DestinationLevel = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("route-policy"); cValue.Exists() {
+			if cValue := v.Get("route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.RoutePolicy = types.StringValue(cValue.String())
 			}
 			data.PropagateLevels = append(data.PropagateLevels, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "adjacency-check.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "adjacency-check.disable"); value.Exists() {
 		data.AdjacencyCheckDisable = types.BoolValue(true)
 	} else if !data.AdjacencyCheckDisable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.AdjacencyCheckDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "route.source.first-hop"); value.Exists() {
+	if value := gjson.GetBytes(res, "route.source.first-hop"); value.Exists() {
 		data.RouteSourceFirstHop = types.BoolValue(true)
 	} else if !data.RouteSourceFirstHop.IsNull() {
 		// Only set to false if it was previously set in state
 		data.RouteSourceFirstHop = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "attached-bit.receive.ignore"); value.Exists() {
+	if value := gjson.GetBytes(res, "attached-bit.receive.ignore"); value.Exists() {
 		data.AttachedBitReceiveIgnore = types.BoolValue(true)
 	} else if !data.AttachedBitReceiveIgnore.IsNull() {
 		// Only set to false if it was previously set in state
 		data.AttachedBitReceiveIgnore = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "attached-bit.send"); value.Exists() {
+	if value := gjson.GetBytes(res, "attached-bit.send"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.AttachedBitSend = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "fast-reroute.delay-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.delay-interval"); value.Exists() {
 		data.FastRerouteDelayInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.priority-limit"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.FastReroutePerPrefixPriorityLimit = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.priority-limit-levels.priority-limit-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit-levels.priority-limit-level"); value.Exists() {
 		data.FastReroutePerPrefixPriorityLimitLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels{}
 			if cValue := v.Get("level-number"); cValue.Exists() {
 				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("priority-limit"); cValue.Exists() {
+			if cValue := v.Get("priority-limit"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.PriorityLimit = types.StringValue(cValue.String())
 			}
 			data.FastReroutePerPrefixPriorityLimitLevels = append(data.FastReroutePerPrefixPriorityLimitLevels, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.use-candidate-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.use-candidate-only"); value.Exists() {
 		data.FastReroutePerPrefixUseCandidateOnly = types.BoolValue(true)
 	} else if !data.FastReroutePerPrefixUseCandidateOnly.IsNull() {
 		// Only set to false if it was previously set in state
 		data.FastReroutePerPrefixUseCandidateOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.srlg-protection.weighted-global"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.srlg-protection.weighted-global"); value.Exists() {
 		data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolValue(true)
 	} else if !data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsNull() {
 		// Only set to false if it was previously set in state
 		data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.srlg-protection.weighted-global-levels.weighted-global-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.srlg-protection.weighted-global-levels.weighted-global-level"); value.Exists() {
 		data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixSrlgProtectionWeightedGlobalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyFastReroutePerPrefixSrlgProtectionWeightedGlobalLevels{}
@@ -4417,30 +4416,30 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.remote-lfa.prefix-list"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.prefix-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.FastReroutePerPrefixRemoteLfaPrefixList = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.remote-lfa.prefix-list-levels.prefix-list-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.prefix-list-levels.prefix-list-level"); value.Exists() {
 		data.FastReroutePerPrefixRemoteLfaPrefixListLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixRemoteLfaPrefixListLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyFastReroutePerPrefixRemoteLfaPrefixListLevels{}
 			if cValue := v.Get("level-number"); cValue.Exists() {
 				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("prefix-list"); cValue.Exists() {
+			if cValue := v.Get("prefix-list"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.PrefixList = types.StringValue(cValue.String())
 			}
 			data.FastReroutePerPrefixRemoteLfaPrefixListLevels = append(data.FastReroutePerPrefixRemoteLfaPrefixListLevels, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.load-sharing.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.load-sharing.disable"); value.Exists() {
 		data.FastReroutePerPrefixLoadSharingDisable = types.BoolValue(true)
 	} else if !data.FastReroutePerPrefixLoadSharingDisable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.FastReroutePerPrefixLoadSharingDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.load-sharing.disable-levels.disable-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.load-sharing.disable-levels.disable-level"); value.Exists() {
 		data.FastReroutePerPrefixLoadSharingDisableLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixLoadSharingDisableLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyFastReroutePerPrefixLoadSharingDisableLevels{}
@@ -4451,34 +4450,34 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.tiebreaker.downstream.index"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.downstream.index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerDownstreamIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.tiebreaker.lc-disjoint.index"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lc-disjoint.index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.index"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.tiebreaker.node-protecting.index"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.node-protecting.index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.tiebreaker.primary-path.index"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.primary-path.index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerPrimaryPathIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.tiebreaker.secondary-path.index"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.secondary-path.index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerSecondaryPathIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-link.use-candidate-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.use-candidate-only"); value.Exists() {
 		data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(true)
 	} else if !data.FastReroutePerLinkUseCandidateOnly.IsNull() {
 		// Only set to false if it was previously set in state
 		data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "fast-reroute.per-link.use-candidate-only-levels.use-candidate-only-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.use-candidate-only-levels.use-candidate-only-level"); value.Exists() {
 		data.FastReroutePerLinkUseCandidateOnlyLevels = make([]RouterISISAddressFamilyFastReroutePerLinkUseCandidateOnlyLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyFastReroutePerLinkUseCandidateOnlyLevels{}
@@ -4489,106 +4488,106 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "fast-reroute.per-link.priority-limit"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.priority-limit"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.FastReroutePerLinkPriorityLimit = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-link.priority-limit-levels.priority-limit-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.priority-limit-levels.priority-limit-level"); value.Exists() {
 		data.FastReroutePerLinkPriorityLimitLevels = make([]RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels{}
 			if cValue := v.Get("level-number"); cValue.Exists() {
 				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("priority-limit"); cValue.Exists() {
+			if cValue := v.Get("priority-limit"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.PriorityLimit = types.StringValue(cValue.String())
 			}
 			data.FastReroutePerLinkPriorityLimitLevels = append(data.FastReroutePerLinkPriorityLimitLevels, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "default-information.originate"); value.Exists() {
+	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
 		data.DefaultInformationOriginate = types.BoolValue(true)
 	} else if !data.DefaultInformationOriginate.IsNull() {
 		// Only set to false if it was previously set in state
 		data.DefaultInformationOriginate = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "default-information.originate.route-policy.text"); value.Exists() {
+	if value := gjson.GetBytes(res, "default-information.originate.route-policy.text"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.DefaultInformationOriginateRoutePolicy = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "segment-routing.bundle-member-adj-sid"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.bundle-member-adj-sid"); value.Exists() {
 		data.SegmentRoutingBundleMemberAdjSid = types.BoolValue(true)
 	} else if !data.SegmentRoutingBundleMemberAdjSid.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SegmentRoutingBundleMemberAdjSid = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.labeled-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.labeled-only"); value.Exists() {
 		data.SegmentRoutingLabeledOnly = types.BoolValue(true)
 	} else if !data.SegmentRoutingLabeledOnly.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SegmentRoutingLabeledOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.protected-adjacency-sid-delay"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.protected-adjacency-sid-delay"); value.Exists() {
 		data.SegmentRoutingProtectedAdjacencySidDelay = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.enable"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.enable"); value.Exists() {
 		data.SegmentRoutingMplsEnable = types.BoolValue(true)
 	} else if !data.SegmentRoutingMplsEnable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SegmentRoutingMplsEnable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.sr-prefer"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.sr-prefer"); value.Exists() {
 		data.SegmentRoutingMplsSrPrefer = types.BoolValue(true)
 	} else if !data.SegmentRoutingMplsSrPrefer.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SegmentRoutingMplsSrPrefer = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.unlabeled.protection.prefix-list"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.unlabeled.protection.prefix-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.SegmentRoutingMplsUnlabeledProtectionPrefixList = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.unlabeled.protection.route-policy"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.unlabeled.protection.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.unlabeled.protection.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.unlabeled.protection.disable"); value.Exists() {
 		data.SegmentRoutingMplsUnlabeledProtectionDisable = types.BoolValue(true)
 	} else if !data.SegmentRoutingMplsUnlabeledProtectionDisable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SegmentRoutingMplsUnlabeledProtectionDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.prefix-sid-map.receive"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.receive"); value.Exists() {
 		data.SegmentRoutingMplsPrefixSidMapReceive = types.BoolValue(true)
 	} else if !data.SegmentRoutingMplsPrefixSidMapReceive.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SegmentRoutingMplsPrefixSidMapReceive = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.prefix-sid-map.receive.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.receive.disable"); value.Exists() {
 		data.SegmentRoutingMplsPrefixSidMapReceiveDisable = types.BoolValue(true)
 	} else if !data.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SegmentRoutingMplsPrefixSidMapReceiveDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.prefix-sid-map.advertise-local"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.advertise-local"); value.Exists() {
 		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal = types.BoolValue(true)
 	} else if !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.prefix-sid-map.advertise-local.domain-wide"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.advertise-local.domain-wide"); value.Exists() {
 		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide = types.BoolValue(true)
 	} else if !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.connected-prefix-sid-map"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map"); value.Exists() {
 		data.SegmentRoutingMplsConnectedPrefixSidMap = types.BoolValue(true)
 	} else if !data.SegmentRoutingMplsConnectedPrefixSidMap.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SegmentRoutingMplsConnectedPrefixSidMap = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.connected-prefix-sid-map.addresses.address"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"); value.Exists() {
 		data.SegmentRoutingMplsConnectedPrefixSidMapAddresses = make([]RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapAddresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapAddresses{}
-			if cValue := v.Get("ip-address"); cValue.Exists() {
+			if cValue := v.Get("ip-address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.IpAddress = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("address-prefix"); cValue.Exists() {
@@ -4597,7 +4596,7 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("index.index-id"); cValue.Exists() {
 				item.IndexId = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("index.interface"); cValue.Exists() {
+			if cValue := v.Get("index.interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.IndexInterface = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("index.php-disable"); cValue.Exists() {
@@ -4615,7 +4614,7 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
 				item.AbsoluteId = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("absolute.interface"); cValue.Exists() {
+			if cValue := v.Get("absolute.interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.AbsoluteInterface = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
@@ -4634,11 +4633,11 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"); value.Exists() {
 		data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses = make([]RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses{}
-			if cValue := v.Get("ip-address"); cValue.Exists() {
+			if cValue := v.Get("ip-address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.IpAddress = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("address-prefix"); cValue.Exists() {
@@ -4650,7 +4649,7 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("index.index-id"); cValue.Exists() {
 				item.IndexId = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("index.interface"); cValue.Exists() {
+			if cValue := v.Get("index.interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.IndexInterface = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("index.php-disable"); cValue.Exists() {
@@ -4668,7 +4667,7 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
 				item.AbsoluteId = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("absolute.interface"); cValue.Exists() {
+			if cValue := v.Get("absolute.interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.AbsoluteInterface = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
@@ -4687,11 +4686,11 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"); value.Exists() {
 		data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses = make([]RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses{}
-			if cValue := v.Get("ip-address"); cValue.Exists() {
+			if cValue := v.Get("ip-address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.IpAddress = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("address-prefix"); cValue.Exists() {
@@ -4700,7 +4699,7 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("index.index-id"); cValue.Exists() {
 				item.IndexId = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("index.interface"); cValue.Exists() {
+			if cValue := v.Get("index.interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.IndexInterface = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("index.php-disable"); cValue.Exists() {
@@ -4718,7 +4717,7 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
 				item.AbsoluteId = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("absolute.interface"); cValue.Exists() {
+			if cValue := v.Get("absolute.interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.AbsoluteInterface = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
@@ -4737,11 +4736,11 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "segment-routing.srv6.locators.locator"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.srv6.locators.locator"); value.Exists() {
 		data.SegmentRoutingSrv6Locators = make([]RouterISISAddressFamilySegmentRoutingSrv6Locators, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySegmentRoutingSrv6Locators{}
-			if cValue := v.Get("locator-string"); cValue.Exists() {
+			if cValue := v.Get("locator-string"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.LocatorName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("level"); cValue.Exists() {
@@ -4785,17 +4784,17 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "partition-detect"); value.Exists() {
+	if value := gjson.GetBytes(res, "partition-detect"); value.Exists() {
 		data.PartitionDetect = types.BoolValue(true)
 	} else if !data.PartitionDetect.IsNull() {
 		// Only set to false if it was previously set in state
 		data.PartitionDetect = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "partition-detect.tracks.track"); value.Exists() {
+	if value := gjson.GetBytes(res, "partition-detect.tracks.track"); value.Exists() {
 		data.PartitionDetectTracks = make([]RouterISISAddressFamilyPartitionDetectTracks, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyPartitionDetectTracks{}
-			if cValue := v.Get("address"); cValue.Exists() {
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Address = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("ipv4"); cValue.Exists() {
@@ -4814,66 +4813,66 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "partition-detect.external-address-tracks.external-address-track"); value.Exists() {
+	if value := gjson.GetBytes(res, "partition-detect.external-address-tracks.external-address-track"); value.Exists() {
 		data.PartitionDetectExternalAddressTracks = make([]RouterISISAddressFamilyPartitionDetectExternalAddressTracks, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyPartitionDetectExternalAddressTracks{}
-			if cValue := v.Get("address"); cValue.Exists() {
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Address = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("external-address"); cValue.Exists() {
+			if cValue := v.Get("external-address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.ExternalAddress = types.StringValue(cValue.String())
 			}
 			data.PartitionDetectExternalAddressTracks = append(data.PartitionDetectExternalAddressTracks, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "mpls.ldp.auto-config"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.ldp.auto-config"); value.Exists() {
 		data.MplsLdpAutoConfig = types.BoolValue(true)
 	} else if !data.MplsLdpAutoConfig.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MplsLdpAutoConfig = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.router-id.ipv4-address"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.ipv4-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.MplsTrafficEngRouterIdIpv4Address = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.router-id.interface-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.interface-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.MplsTrafficEngRouterIdInterfaceName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.igp-intact"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.igp-intact"); value.Exists() {
 		data.MplsTrafficEngIgpIntact = types.BoolValue(true)
 	} else if !data.MplsTrafficEngIgpIntact.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MplsTrafficEngIgpIntact = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.multicast-intact"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.multicast-intact"); value.Exists() {
 		data.MplsTrafficEngMulticastIntact = types.BoolValue(true)
 	} else if !data.MplsTrafficEngMulticastIntact.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MplsTrafficEngMulticastIntact = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.tunnel.restricted"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.restricted"); value.Exists() {
 		data.MplsTrafficEngTunnelRestricted = types.BoolValue(true)
 	} else if !data.MplsTrafficEngTunnelRestricted.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MplsTrafficEngTunnelRestricted = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.tunnel.preferred"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.preferred"); value.Exists() {
 		data.MplsTrafficEngTunnelPreferred = types.BoolValue(true)
 	} else if !data.MplsTrafficEngTunnelPreferred.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MplsTrafficEngTunnelPreferred = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.tunnel.metric"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.metric"); value.Exists() {
 		data.MplsTrafficEngTunnelMetric = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.tunnel.anycast-prefer-igp-cost"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.anycast-prefer-igp-cost"); value.Exists() {
 		data.MplsTrafficEngTunnelAnycastPreferIgpCost = types.BoolValue(true)
 	} else if !data.MplsTrafficEngTunnelAnycastPreferIgpCost.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MplsTrafficEngTunnelAnycastPreferIgpCost = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.tunnel.metric-levels.metric-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.metric-levels.metric-level"); value.Exists() {
 		data.MplsTrafficEngTunnelMetricLevels = make([]RouterISISAddressFamilyMplsTrafficEngTunnelMetricLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyMplsTrafficEngTunnelMetricLevels{}
@@ -4887,58 +4886,58 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.traffic-eng-level.level-one-two"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-one-two"); value.Exists() {
 		data.MplsTrafficEngLevel12 = types.BoolValue(true)
 	} else if !data.MplsTrafficEngLevel12.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MplsTrafficEngLevel12 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.traffic-eng-level.level-one"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-one"); value.Exists() {
 		data.MplsTrafficEngLevel1 = types.BoolValue(true)
 	} else if !data.MplsTrafficEngLevel1.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MplsTrafficEngLevel1 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.traffic-eng-level.level-two-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-two-only"); value.Exists() {
 		data.MplsTrafficEngLevel2Only = types.BoolValue(true)
 	} else if !data.MplsTrafficEngLevel2Only.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MplsTrafficEngLevel2Only = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "prefix-unreachable"); value.Exists() {
+	if value := gjson.GetBytes(res, "prefix-unreachable"); value.Exists() {
 		data.PrefixUnreachable = types.BoolValue(true)
 	} else if !data.PrefixUnreachable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.PrefixUnreachable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "prefix-unreachable.adv-maximum"); value.Exists() {
+	if value := gjson.GetBytes(res, "prefix-unreachable.adv-maximum"); value.Exists() {
 		data.PrefixUnreachableAdvMaximum = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "prefix-unreachable.adv-lifetime"); value.Exists() {
+	if value := gjson.GetBytes(res, "prefix-unreachable.adv-lifetime"); value.Exists() {
 		data.PrefixUnreachableAdvLifetime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "prefix-unreachable.adv-metric"); value.Exists() {
+	if value := gjson.GetBytes(res, "prefix-unreachable.adv-metric"); value.Exists() {
 		data.PrefixUnreachableAdvMetric = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "prefix-unreachable.rx-process-enable"); value.Exists() {
+	if value := gjson.GetBytes(res, "prefix-unreachable.rx-process-enable"); value.Exists() {
 		data.PrefixUnreachableRxProcessEnable = types.BoolValue(true)
 	} else if !data.PrefixUnreachableRxProcessEnable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.PrefixUnreachableRxProcessEnable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "apply-weight.ecmp-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "apply-weight.ecmp-only"); value.Exists() {
 		data.ApplyWeightEcmpOnly = types.BoolValue(true)
 	} else if !data.ApplyWeightEcmpOnly.IsNull() {
 		// Only set to false if it was previously set in state
 		data.ApplyWeightEcmpOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "apply-weight.ecmp-only.bandwidth"); value.Exists() {
+	if value := gjson.GetBytes(res, "apply-weight.ecmp-only.bandwidth"); value.Exists() {
 		data.ApplyWeightEcmpOnlyBandwidth = types.BoolValue(true)
 	} else if !data.ApplyWeightEcmpOnlyBandwidth.IsNull() {
 		// Only set to false if it was previously set in state
 		data.ApplyWeightEcmpOnlyBandwidth = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "apply-weight.ucmp-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "apply-weight.ucmp-only"); value.Exists() {
 		data.ApplyWeightUcmpOnly = types.BoolValue(true)
 	} else if !data.ApplyWeightUcmpOnly.IsNull() {
 		// Only set to false if it was previously set in state
@@ -4950,24 +4949,15 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res gjson.Res
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "distance.global"); value.Exists() {
+func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "distance.global"); value.Exists() {
 		data.Distance = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "distance.ip-addresses.ip-address"); value.Exists() {
+	if value := gjson.GetBytes(res, "distance.ip-addresses.ip-address"); value.Exists() {
 		data.DistanceSources = make([]RouterISISAddressFamilyDistanceSources, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyDistanceSources{}
-			if cValue := v.Get("address"); cValue.Exists() {
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Address = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("address-prefix"); cValue.Exists() {
@@ -4976,70 +4966,70 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			if cValue := v.Get("distance-number"); cValue.Exists() {
 				item.Distance = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("prefix-list-or-access-list-to"); cValue.Exists() {
+			if cValue := v.Get("prefix-list-or-access-list-to"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.RouteFilter = types.StringValue(cValue.String())
 			}
 			data.DistanceSources = append(data.DistanceSources, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "distribute-list.prefix-list.prefix-list-string"); value.Exists() {
+	if value := gjson.GetBytes(res, "distribute-list.prefix-list.prefix-list-string"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.DistributeListPrefixListIn = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "distribute-list.route-policy"); value.Exists() {
+	if value := gjson.GetBytes(res, "distribute-list.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.DistributeListRoutePolicyIn = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "redistribute.connected"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.connected"); value.Exists() {
 		data.RedistributeConnected = types.BoolValue(true)
 	} else {
 		data.RedistributeConnected = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "redistribute.connected.redistribute-route-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.connected.redistribute-route-level"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.RedistributeConnectedLevel = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "redistribute.connected.metric"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.connected.metric"); value.Exists() {
 		data.RedistributeConnectedMetric = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "redistribute.connected.route-policy"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.connected.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.RedistributeConnectedRoutePolicy = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "redistribute.connected.metric-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.connected.metric-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.RedistributeConnectedMetricType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "redistribute.static"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.static"); value.Exists() {
 		data.RedistributeStatic = types.BoolValue(true)
 	} else {
 		data.RedistributeStatic = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "redistribute.static.redistribute-route-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.static.redistribute-route-level"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.RedistributeStaticLevel = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "redistribute.static.metric"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.static.metric"); value.Exists() {
 		data.RedistributeStaticMetric = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "redistribute.static.route-policy"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.static.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.RedistributeStaticRoutePolicy = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "redistribute.static.metric-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.static.metric-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.RedistributeStaticMetricType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "redistribute.isis-processes.isis-process"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.isis-processes.isis-process"); value.Exists() {
 		data.RedistributeIsis = make([]RouterISISAddressFamilyRedistributeIsis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyRedistributeIsis{}
-			if cValue := v.Get("isis-string"); cValue.Exists() {
+			if cValue := v.Get("isis-string"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.InstanceId = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
+			if cValue := v.Get("redistribute-route-level"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Level = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("route-policy"); cValue.Exists() {
+			if cValue := v.Get("route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.RoutePolicy = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("metric-type"); cValue.Exists() {
+			if cValue := v.Get("metric-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.MetricType = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("down-flag-clear"); cValue.Exists() {
@@ -5051,34 +5041,34 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			return true
 		})
 	}
-	if value := res.Get(prefix + "redistribute.bgps.bgp"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.bgps.bgp"); value.Exists() {
 		data.RedistributeBgp = make([]RouterISISAddressFamilyRedistributeBgp, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyRedistributeBgp{}
-			if cValue := v.Get("as-number"); cValue.Exists() {
+			if cValue := v.Get("as-number"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.AsNumber = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
+			if cValue := v.Get("redistribute-route-level"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Level = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("route-policy"); cValue.Exists() {
+			if cValue := v.Get("route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.RoutePolicy = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("metric-type"); cValue.Exists() {
+			if cValue := v.Get("metric-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.MetricType = types.StringValue(cValue.String())
 			}
 			data.RedistributeBgp = append(data.RedistributeBgp, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "redistribute.ospfs.ospf"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.ospfs.ospf"); value.Exists() {
 		data.RedistributeOspf = make([]RouterISISAddressFamilyRedistributeOspf, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyRedistributeOspf{}
-			if cValue := v.Get("ospf-process-id"); cValue.Exists() {
+			if cValue := v.Get("ospf-process-id"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.InstanceId = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("match.internal"); cValue.Exists() {
@@ -5091,27 +5081,27 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			} else {
 				item.MatchExternal = types.BoolValue(false)
 			}
-			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
+			if cValue := v.Get("redistribute-route-level"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Level = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("route-policy"); cValue.Exists() {
+			if cValue := v.Get("route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.RoutePolicy = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("metric-type"); cValue.Exists() {
+			if cValue := v.Get("metric-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.MetricType = types.StringValue(cValue.String())
 			}
 			data.RedistributeOspf = append(data.RedistributeOspf, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "redistribute.ospfv3s.ospfv3"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.ospfv3s.ospfv3"); value.Exists() {
 		data.RedistributeOspfv3 = make([]RouterISISAddressFamilyRedistributeOspfv3, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyRedistributeOspfv3{}
-			if cValue := v.Get("ospfv3-process-id"); cValue.Exists() {
+			if cValue := v.Get("ospfv3-process-id"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.InstanceId = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("match.internal"); cValue.Exists() {
@@ -5124,62 +5114,62 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			} else {
 				item.MatchExternal = types.BoolValue(false)
 			}
-			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
+			if cValue := v.Get("redistribute-route-level"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Level = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("route-policy"); cValue.Exists() {
+			if cValue := v.Get("route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.RoutePolicy = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("metric-type"); cValue.Exists() {
+			if cValue := v.Get("metric-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.MetricType = types.StringValue(cValue.String())
 			}
 			data.RedistributeOspfv3 = append(data.RedistributeOspfv3, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "maximum-paths"); value.Exists() {
+	if value := gjson.GetBytes(res, "maximum-paths"); value.Exists() {
 		data.MaximumPaths = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "router-id.interface-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "router-id.interface-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.RouterIdInterfaceName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "router-id.ip-address"); value.Exists() {
+	if value := gjson.GetBytes(res, "router-id.ip-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.RouterIdIpAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "advertise.passive-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "advertise.passive-only"); value.Exists() {
 		data.AdvertisePassiveOnly = types.BoolValue(true)
 	} else {
 		data.AdvertisePassiveOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "advertise.link.attributes"); value.Exists() {
+	if value := gjson.GetBytes(res, "advertise.link.attributes"); value.Exists() {
 		data.AdvertiseLinkAttributes = types.BoolValue(true)
 	} else {
 		data.AdvertiseLinkAttributes = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "microloop.avoidance.enable"); value.Exists() {
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable"); value.Exists() {
 		data.MicroloopAvoidance = types.BoolValue(true)
 	} else {
 		data.MicroloopAvoidance = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "microloop.avoidance.enable.protected"); value.Exists() {
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable.protected"); value.Exists() {
 		data.MicroloopAvoidanceProtected = types.BoolValue(true)
 	} else {
 		data.MicroloopAvoidanceProtected = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "microloop.avoidance.enable.segment-routing.route-policy"); value.Exists() {
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable.segment-routing.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.MicroloopAvoidanceSegmentRoutingRoutePolicy = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "microloop.avoidance.rib-update-delay"); value.Exists() {
+	if value := gjson.GetBytes(res, "microloop.avoidance.rib-update-delay"); value.Exists() {
 		data.MicroloopAvoidanceRibUpdateDelay = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "summary-prefix.ip-addresses.ip-address"); value.Exists() {
+	if value := gjson.GetBytes(res, "summary-prefix.ip-addresses.ip-address"); value.Exists() {
 		data.SummaryPrefixes = make([]RouterISISAddressFamilySummaryPrefixes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySummaryPrefixes{}
-			if cValue := v.Get("address"); cValue.Exists() {
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Address = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("address-prefix"); cValue.Exists() {
@@ -5221,10 +5211,10 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			return true
 		})
 	}
-	if value := res.Get(prefix + "metric"); value.Exists() {
+	if value := gjson.GetBytes(res, "metric"); value.Exists() {
 		data.Metric = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "metric-levels.metric-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "metric-levels.metric-level"); value.Exists() {
 		data.MetricLevels = make([]RouterISISAddressFamilyMetricLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyMetricLevels{}
@@ -5238,32 +5228,32 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			return true
 		})
 	}
-	if value := res.Get(prefix + "metric-style.narrow"); value.Exists() {
+	if value := gjson.GetBytes(res, "metric-style.narrow"); value.Exists() {
 		data.MetricStyleNarrow = types.BoolValue(true)
 	} else {
 		data.MetricStyleNarrow = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "metric-style.narrow.transition"); value.Exists() {
+	if value := gjson.GetBytes(res, "metric-style.narrow.transition"); value.Exists() {
 		data.MetricStyleNarrowTransition = types.BoolValue(true)
 	} else {
 		data.MetricStyleNarrowTransition = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "metric-style.wide"); value.Exists() {
+	if value := gjson.GetBytes(res, "metric-style.wide"); value.Exists() {
 		data.MetricStyleWide = types.BoolValue(true)
 	} else {
 		data.MetricStyleWide = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "metric-style.wide.transition"); value.Exists() {
+	if value := gjson.GetBytes(res, "metric-style.wide.transition"); value.Exists() {
 		data.MetricStyleWideTransition = types.BoolValue(true)
 	} else {
 		data.MetricStyleWideTransition = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "metric-style.transition"); value.Exists() {
+	if value := gjson.GetBytes(res, "metric-style.transition"); value.Exists() {
 		data.MetricStyleTransition = types.BoolValue(true)
 	} else {
 		data.MetricStyleTransition = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "metric-style-levels.metric-style-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "metric-style-levels.metric-style-level"); value.Exists() {
 		data.MetricStyleLevels = make([]RouterISISAddressFamilyMetricStyleLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyMetricStyleLevels{}
@@ -5299,36 +5289,36 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			return true
 		})
 	}
-	if value := res.Get(prefix + "spf-interval.maximum-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval.maximum-wait"); value.Exists() {
 		data.SpfIntervalMaximumWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf-interval.initial-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval.initial-wait"); value.Exists() {
 		data.SpfIntervalInitialWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf-interval.secondary-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval.secondary-wait"); value.Exists() {
 		data.SpfIntervalSecondaryWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf-interval.ietf"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval.ietf"); value.Exists() {
 		data.SpfIntervalIetf = types.BoolValue(true)
 	} else {
 		data.SpfIntervalIetf = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "spf-interval.ietf.initial-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval.ietf.initial-wait"); value.Exists() {
 		data.SpfIntervalIetfInitialWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf-interval.ietf.short-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval.ietf.short-wait"); value.Exists() {
 		data.SpfIntervalIetfShortWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf-interval.ietf.long-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval.ietf.long-wait"); value.Exists() {
 		data.SpfIntervalIetfLongWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf-interval.ietf.learn-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval.ietf.learn-interval"); value.Exists() {
 		data.SpfIntervalIetfLearnInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf-interval.ietf.holddown-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval.ietf.holddown-interval"); value.Exists() {
 		data.SpfIntervalIetfHolddownInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf-interval-levels.level"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf-interval-levels.level"); value.Exists() {
 		data.SpfIntervalLevels = make([]RouterISISAddressFamilySpfIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySpfIntervalLevels{}
@@ -5368,25 +5358,25 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			return true
 		})
 	}
-	if value := res.Get(prefix + "spf.prefix-priority.critical.tag"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority.critical.tag"); value.Exists() {
 		data.SpfPrefixPriorityCriticalTag = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf.prefix-priority.critical.prefixlist-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority.critical.prefixlist-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.SpfPrefixPriorityCriticalPrefixListName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "spf.prefix-priority.high.tag"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority.high.tag"); value.Exists() {
 		data.SpfPrefixPriorityHighTag = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf.prefix-priority.high.prefixlist-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority.high.prefixlist-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.SpfPrefixPriorityHighPrefixListName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "spf.prefix-priority.medium.tag"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority.medium.tag"); value.Exists() {
 		data.SpfPrefixPriorityMediumTag = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "spf.prefix-priority.medium.prefixlist-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority.medium.prefixlist-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.SpfPrefixPriorityMediumPrefixListName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "spf.prefix-priority-critical-levels.prefix-priority-critical-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority-critical-levels.prefix-priority-critical-level"); value.Exists() {
 		data.SpfPrefixPriorityCriticalLevels = make([]RouterISISAddressFamilySpfPrefixPriorityCriticalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySpfPrefixPriorityCriticalLevels{}
@@ -5396,14 +5386,14 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("prefixlist-name"); cValue.Exists() {
+			if cValue := v.Get("prefixlist-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.PrefixListName = types.StringValue(cValue.String())
 			}
 			data.SpfPrefixPriorityCriticalLevels = append(data.SpfPrefixPriorityCriticalLevels, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "spf.prefix-priority-high-levels.prefix-priority-high-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority-high-levels.prefix-priority-high-level"); value.Exists() {
 		data.SpfPrefixPriorityHighLevels = make([]RouterISISAddressFamilySpfPrefixPriorityHighLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySpfPrefixPriorityHighLevels{}
@@ -5413,14 +5403,14 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("prefixlist-name"); cValue.Exists() {
+			if cValue := v.Get("prefixlist-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.PrefixListName = types.StringValue(cValue.String())
 			}
 			data.SpfPrefixPriorityHighLevels = append(data.SpfPrefixPriorityHighLevels, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "spf.prefix-priority-medium-levels.prefix-priority-medium-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "spf.prefix-priority-medium-levels.prefix-priority-medium-level"); value.Exists() {
 		data.SpfPrefixPriorityMediumLevels = make([]RouterISISAddressFamilySpfPrefixPriorityMediumLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySpfPrefixPriorityMediumLevels{}
@@ -5430,17 +5420,17 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("prefixlist-name"); cValue.Exists() {
+			if cValue := v.Get("prefixlist-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.PrefixListName = types.StringValue(cValue.String())
 			}
 			data.SpfPrefixPriorityMediumLevels = append(data.SpfPrefixPriorityMediumLevels, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "maximum-redistributed-prefixes"); value.Exists() {
+	if value := gjson.GetBytes(res, "maximum-redistributed-prefixes"); value.Exists() {
 		data.MaximumRedistributedPrefixes = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "maximum-redistributed-prefixes-levels.maximum-redistributed-prefixes-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "maximum-redistributed-prefixes-levels.maximum-redistributed-prefixes-level"); value.Exists() {
 		data.MaximumRedistributedPrefixesLevels = make([]RouterISISAddressFamilyMaximumRedistributedPrefixesLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyMaximumRedistributedPrefixesLevels{}
@@ -5454,7 +5444,7 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			return true
 		})
 	}
-	if value := res.Get(prefix + "propagate.levels.level"); value.Exists() {
+	if value := gjson.GetBytes(res, "propagate.levels.level"); value.Exists() {
 		data.PropagateLevels = make([]RouterISISAddressFamilyPropagateLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyPropagateLevels{}
@@ -5464,62 +5454,62 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			if cValue := v.Get("destination-level"); cValue.Exists() {
 				item.DestinationLevel = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("route-policy"); cValue.Exists() {
+			if cValue := v.Get("route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.RoutePolicy = types.StringValue(cValue.String())
 			}
 			data.PropagateLevels = append(data.PropagateLevels, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "adjacency-check.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "adjacency-check.disable"); value.Exists() {
 		data.AdjacencyCheckDisable = types.BoolValue(true)
 	} else {
 		data.AdjacencyCheckDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "route.source.first-hop"); value.Exists() {
+	if value := gjson.GetBytes(res, "route.source.first-hop"); value.Exists() {
 		data.RouteSourceFirstHop = types.BoolValue(true)
 	} else {
 		data.RouteSourceFirstHop = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "attached-bit.receive.ignore"); value.Exists() {
+	if value := gjson.GetBytes(res, "attached-bit.receive.ignore"); value.Exists() {
 		data.AttachedBitReceiveIgnore = types.BoolValue(true)
 	} else {
 		data.AttachedBitReceiveIgnore = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "attached-bit.send"); value.Exists() {
+	if value := gjson.GetBytes(res, "attached-bit.send"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.AttachedBitSend = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "fast-reroute.delay-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.delay-interval"); value.Exists() {
 		data.FastRerouteDelayInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.priority-limit"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.FastReroutePerPrefixPriorityLimit = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.priority-limit-levels.priority-limit-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit-levels.priority-limit-level"); value.Exists() {
 		data.FastReroutePerPrefixPriorityLimitLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels{}
 			if cValue := v.Get("level-number"); cValue.Exists() {
 				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("priority-limit"); cValue.Exists() {
+			if cValue := v.Get("priority-limit"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.PriorityLimit = types.StringValue(cValue.String())
 			}
 			data.FastReroutePerPrefixPriorityLimitLevels = append(data.FastReroutePerPrefixPriorityLimitLevels, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.use-candidate-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.use-candidate-only"); value.Exists() {
 		data.FastReroutePerPrefixUseCandidateOnly = types.BoolValue(true)
 	} else {
 		data.FastReroutePerPrefixUseCandidateOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.srlg-protection.weighted-global"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.srlg-protection.weighted-global"); value.Exists() {
 		data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolValue(true)
 	} else {
 		data.FastReroutePerPrefixSrlgProtectionWeightedGlobal = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.srlg-protection.weighted-global-levels.weighted-global-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.srlg-protection.weighted-global-levels.weighted-global-level"); value.Exists() {
 		data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixSrlgProtectionWeightedGlobalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyFastReroutePerPrefixSrlgProtectionWeightedGlobalLevels{}
@@ -5530,29 +5520,29 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			return true
 		})
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.remote-lfa.prefix-list"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.prefix-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.FastReroutePerPrefixRemoteLfaPrefixList = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.remote-lfa.prefix-list-levels.prefix-list-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.remote-lfa.prefix-list-levels.prefix-list-level"); value.Exists() {
 		data.FastReroutePerPrefixRemoteLfaPrefixListLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixRemoteLfaPrefixListLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyFastReroutePerPrefixRemoteLfaPrefixListLevels{}
 			if cValue := v.Get("level-number"); cValue.Exists() {
 				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("prefix-list"); cValue.Exists() {
+			if cValue := v.Get("prefix-list"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.PrefixList = types.StringValue(cValue.String())
 			}
 			data.FastReroutePerPrefixRemoteLfaPrefixListLevels = append(data.FastReroutePerPrefixRemoteLfaPrefixListLevels, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.load-sharing.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.load-sharing.disable"); value.Exists() {
 		data.FastReroutePerPrefixLoadSharingDisable = types.BoolValue(true)
 	} else {
 		data.FastReroutePerPrefixLoadSharingDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.load-sharing.disable-levels.disable-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.load-sharing.disable-levels.disable-level"); value.Exists() {
 		data.FastReroutePerPrefixLoadSharingDisableLevels = make([]RouterISISAddressFamilyFastReroutePerPrefixLoadSharingDisableLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyFastReroutePerPrefixLoadSharingDisableLevels{}
@@ -5563,33 +5553,33 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			return true
 		})
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.tiebreaker.downstream.index"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.downstream.index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerDownstreamIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.tiebreaker.lc-disjoint.index"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lc-disjoint.index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerLcDisjointIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.index"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.lowest-backup-metric.index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.tiebreaker.node-protecting.index"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.node-protecting.index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerNodeProtectingIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.tiebreaker.primary-path.index"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.primary-path.index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerPrimaryPathIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.tiebreaker.secondary-path.index"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.secondary-path.index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerSecondaryPathIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index"); value.Exists() {
 		data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-link.use-candidate-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.use-candidate-only"); value.Exists() {
 		data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(true)
 	} else {
 		data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "fast-reroute.per-link.use-candidate-only-levels.use-candidate-only-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.use-candidate-only-levels.use-candidate-only-level"); value.Exists() {
 		data.FastReroutePerLinkUseCandidateOnlyLevels = make([]RouterISISAddressFamilyFastReroutePerLinkUseCandidateOnlyLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyFastReroutePerLinkUseCandidateOnlyLevels{}
@@ -5600,95 +5590,95 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			return true
 		})
 	}
-	if value := res.Get(prefix + "fast-reroute.per-link.priority-limit"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.priority-limit"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.FastReroutePerLinkPriorityLimit = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "fast-reroute.per-link.priority-limit-levels.priority-limit-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.priority-limit-levels.priority-limit-level"); value.Exists() {
 		data.FastReroutePerLinkPriorityLimitLevels = make([]RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels{}
 			if cValue := v.Get("level-number"); cValue.Exists() {
 				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("priority-limit"); cValue.Exists() {
+			if cValue := v.Get("priority-limit"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.PriorityLimit = types.StringValue(cValue.String())
 			}
 			data.FastReroutePerLinkPriorityLimitLevels = append(data.FastReroutePerLinkPriorityLimitLevels, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "default-information.originate"); value.Exists() {
+	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
 		data.DefaultInformationOriginate = types.BoolValue(true)
 	} else {
 		data.DefaultInformationOriginate = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "default-information.originate.route-policy.text"); value.Exists() {
+	if value := gjson.GetBytes(res, "default-information.originate.route-policy.text"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.DefaultInformationOriginateRoutePolicy = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "segment-routing.bundle-member-adj-sid"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.bundle-member-adj-sid"); value.Exists() {
 		data.SegmentRoutingBundleMemberAdjSid = types.BoolValue(true)
 	} else {
 		data.SegmentRoutingBundleMemberAdjSid = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.labeled-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.labeled-only"); value.Exists() {
 		data.SegmentRoutingLabeledOnly = types.BoolValue(true)
 	} else {
 		data.SegmentRoutingLabeledOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.protected-adjacency-sid-delay"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.protected-adjacency-sid-delay"); value.Exists() {
 		data.SegmentRoutingProtectedAdjacencySidDelay = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.enable"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.enable"); value.Exists() {
 		data.SegmentRoutingMplsEnable = types.BoolValue(true)
 	} else {
 		data.SegmentRoutingMplsEnable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.sr-prefer"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.sr-prefer"); value.Exists() {
 		data.SegmentRoutingMplsSrPrefer = types.BoolValue(true)
 	} else {
 		data.SegmentRoutingMplsSrPrefer = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.unlabeled.protection.prefix-list"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.unlabeled.protection.prefix-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.SegmentRoutingMplsUnlabeledProtectionPrefixList = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.unlabeled.protection.route-policy"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.unlabeled.protection.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.unlabeled.protection.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.unlabeled.protection.disable"); value.Exists() {
 		data.SegmentRoutingMplsUnlabeledProtectionDisable = types.BoolValue(true)
 	} else {
 		data.SegmentRoutingMplsUnlabeledProtectionDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.prefix-sid-map.receive"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.receive"); value.Exists() {
 		data.SegmentRoutingMplsPrefixSidMapReceive = types.BoolValue(true)
 	} else {
 		data.SegmentRoutingMplsPrefixSidMapReceive = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.prefix-sid-map.receive.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.receive.disable"); value.Exists() {
 		data.SegmentRoutingMplsPrefixSidMapReceiveDisable = types.BoolValue(true)
 	} else {
 		data.SegmentRoutingMplsPrefixSidMapReceiveDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.prefix-sid-map.advertise-local"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.advertise-local"); value.Exists() {
 		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal = types.BoolValue(true)
 	} else {
 		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.prefix-sid-map.advertise-local.domain-wide"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.prefix-sid-map.advertise-local.domain-wide"); value.Exists() {
 		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide = types.BoolValue(true)
 	} else {
 		data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.connected-prefix-sid-map"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map"); value.Exists() {
 		data.SegmentRoutingMplsConnectedPrefixSidMap = types.BoolValue(true)
 	} else {
 		data.SegmentRoutingMplsConnectedPrefixSidMap = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.connected-prefix-sid-map.addresses.address"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map.addresses.address"); value.Exists() {
 		data.SegmentRoutingMplsConnectedPrefixSidMapAddresses = make([]RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapAddresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapAddresses{}
-			if cValue := v.Get("ip-address"); cValue.Exists() {
+			if cValue := v.Get("ip-address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.IpAddress = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("address-prefix"); cValue.Exists() {
@@ -5697,7 +5687,7 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			if cValue := v.Get("index.index-id"); cValue.Exists() {
 				item.IndexId = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("index.interface"); cValue.Exists() {
+			if cValue := v.Get("index.interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.IndexInterface = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("index.php-disable"); cValue.Exists() {
@@ -5713,7 +5703,7 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
 				item.AbsoluteId = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("absolute.interface"); cValue.Exists() {
+			if cValue := v.Get("absolute.interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.AbsoluteInterface = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
@@ -5730,11 +5720,11 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			return true
 		})
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map.addresses.flex-algo-address"); value.Exists() {
 		data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses = make([]RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses{}
-			if cValue := v.Get("ip-address"); cValue.Exists() {
+			if cValue := v.Get("ip-address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.IpAddress = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("address-prefix"); cValue.Exists() {
@@ -5746,7 +5736,7 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			if cValue := v.Get("index.index-id"); cValue.Exists() {
 				item.IndexId = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("index.interface"); cValue.Exists() {
+			if cValue := v.Get("index.interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.IndexInterface = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("index.php-disable"); cValue.Exists() {
@@ -5762,7 +5752,7 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
 				item.AbsoluteId = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("absolute.interface"); cValue.Exists() {
+			if cValue := v.Get("absolute.interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.AbsoluteInterface = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
@@ -5779,11 +5769,11 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			return true
 		})
 	}
-	if value := res.Get(prefix + "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.mpls.connected-prefix-sid-map.addresses.strict-spf-address"); value.Exists() {
 		data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses = make([]RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses{}
-			if cValue := v.Get("ip-address"); cValue.Exists() {
+			if cValue := v.Get("ip-address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.IpAddress = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("address-prefix"); cValue.Exists() {
@@ -5792,7 +5782,7 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			if cValue := v.Get("index.index-id"); cValue.Exists() {
 				item.IndexId = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("index.interface"); cValue.Exists() {
+			if cValue := v.Get("index.interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.IndexInterface = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("index.php-disable"); cValue.Exists() {
@@ -5808,7 +5798,7 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			if cValue := v.Get("absolute.absolute-id"); cValue.Exists() {
 				item.AbsoluteId = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("absolute.interface"); cValue.Exists() {
+			if cValue := v.Get("absolute.interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.AbsoluteInterface = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("absolute.php-disable"); cValue.Exists() {
@@ -5825,11 +5815,11 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			return true
 		})
 	}
-	if value := res.Get(prefix + "segment-routing.srv6.locators.locator"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.srv6.locators.locator"); value.Exists() {
 		data.SegmentRoutingSrv6Locators = make([]RouterISISAddressFamilySegmentRoutingSrv6Locators, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySegmentRoutingSrv6Locators{}
-			if cValue := v.Get("locator-string"); cValue.Exists() {
+			if cValue := v.Get("locator-string"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.LocatorName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("level"); cValue.Exists() {
@@ -5873,16 +5863,16 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			return true
 		})
 	}
-	if value := res.Get(prefix + "partition-detect"); value.Exists() {
+	if value := gjson.GetBytes(res, "partition-detect"); value.Exists() {
 		data.PartitionDetect = types.BoolValue(true)
 	} else {
 		data.PartitionDetect = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "partition-detect.tracks.track"); value.Exists() {
+	if value := gjson.GetBytes(res, "partition-detect.tracks.track"); value.Exists() {
 		data.PartitionDetectTracks = make([]RouterISISAddressFamilyPartitionDetectTracks, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyPartitionDetectTracks{}
-			if cValue := v.Get("address"); cValue.Exists() {
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Address = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("ipv4"); cValue.Exists() {
@@ -5899,60 +5889,60 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			return true
 		})
 	}
-	if value := res.Get(prefix + "partition-detect.external-address-tracks.external-address-track"); value.Exists() {
+	if value := gjson.GetBytes(res, "partition-detect.external-address-tracks.external-address-track"); value.Exists() {
 		data.PartitionDetectExternalAddressTracks = make([]RouterISISAddressFamilyPartitionDetectExternalAddressTracks, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyPartitionDetectExternalAddressTracks{}
-			if cValue := v.Get("address"); cValue.Exists() {
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Address = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("external-address"); cValue.Exists() {
+			if cValue := v.Get("external-address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.ExternalAddress = types.StringValue(cValue.String())
 			}
 			data.PartitionDetectExternalAddressTracks = append(data.PartitionDetectExternalAddressTracks, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "mpls.ldp.auto-config"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.ldp.auto-config"); value.Exists() {
 		data.MplsLdpAutoConfig = types.BoolValue(true)
 	} else {
 		data.MplsLdpAutoConfig = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.router-id.ipv4-address"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.ipv4-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.MplsTrafficEngRouterIdIpv4Address = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.router-id.interface-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.interface-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.MplsTrafficEngRouterIdInterfaceName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.igp-intact"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.igp-intact"); value.Exists() {
 		data.MplsTrafficEngIgpIntact = types.BoolValue(true)
 	} else {
 		data.MplsTrafficEngIgpIntact = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.multicast-intact"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.multicast-intact"); value.Exists() {
 		data.MplsTrafficEngMulticastIntact = types.BoolValue(true)
 	} else {
 		data.MplsTrafficEngMulticastIntact = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.tunnel.restricted"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.restricted"); value.Exists() {
 		data.MplsTrafficEngTunnelRestricted = types.BoolValue(true)
 	} else {
 		data.MplsTrafficEngTunnelRestricted = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.tunnel.preferred"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.preferred"); value.Exists() {
 		data.MplsTrafficEngTunnelPreferred = types.BoolValue(true)
 	} else {
 		data.MplsTrafficEngTunnelPreferred = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.tunnel.metric"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.metric"); value.Exists() {
 		data.MplsTrafficEngTunnelMetric = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.tunnel.anycast-prefer-igp-cost"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.anycast-prefer-igp-cost"); value.Exists() {
 		data.MplsTrafficEngTunnelAnycastPreferIgpCost = types.BoolValue(true)
 	} else {
 		data.MplsTrafficEngTunnelAnycastPreferIgpCost = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.tunnel.metric-levels.metric-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.tunnel.metric-levels.metric-level"); value.Exists() {
 		data.MplsTrafficEngTunnelMetricLevels = make([]RouterISISAddressFamilyMplsTrafficEngTunnelMetricLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilyMplsTrafficEngTunnelMetricLevels{}
@@ -5966,51 +5956,51 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 			return true
 		})
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.traffic-eng-level.level-one-two"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-one-two"); value.Exists() {
 		data.MplsTrafficEngLevel12 = types.BoolValue(true)
 	} else {
 		data.MplsTrafficEngLevel12 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.traffic-eng-level.level-one"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-one"); value.Exists() {
 		data.MplsTrafficEngLevel1 = types.BoolValue(true)
 	} else {
 		data.MplsTrafficEngLevel1 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.traffic-eng.traffic-eng-level.level-two-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.traffic-eng-level.level-two-only"); value.Exists() {
 		data.MplsTrafficEngLevel2Only = types.BoolValue(true)
 	} else {
 		data.MplsTrafficEngLevel2Only = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "prefix-unreachable"); value.Exists() {
+	if value := gjson.GetBytes(res, "prefix-unreachable"); value.Exists() {
 		data.PrefixUnreachable = types.BoolValue(true)
 	} else {
 		data.PrefixUnreachable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "prefix-unreachable.adv-maximum"); value.Exists() {
+	if value := gjson.GetBytes(res, "prefix-unreachable.adv-maximum"); value.Exists() {
 		data.PrefixUnreachableAdvMaximum = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "prefix-unreachable.adv-lifetime"); value.Exists() {
+	if value := gjson.GetBytes(res, "prefix-unreachable.adv-lifetime"); value.Exists() {
 		data.PrefixUnreachableAdvLifetime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "prefix-unreachable.adv-metric"); value.Exists() {
+	if value := gjson.GetBytes(res, "prefix-unreachable.adv-metric"); value.Exists() {
 		data.PrefixUnreachableAdvMetric = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "prefix-unreachable.rx-process-enable"); value.Exists() {
+	if value := gjson.GetBytes(res, "prefix-unreachable.rx-process-enable"); value.Exists() {
 		data.PrefixUnreachableRxProcessEnable = types.BoolValue(true)
 	} else {
 		data.PrefixUnreachableRxProcessEnable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "apply-weight.ecmp-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "apply-weight.ecmp-only"); value.Exists() {
 		data.ApplyWeightEcmpOnly = types.BoolValue(true)
 	} else {
 		data.ApplyWeightEcmpOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "apply-weight.ecmp-only.bandwidth"); value.Exists() {
+	if value := gjson.GetBytes(res, "apply-weight.ecmp-only.bandwidth"); value.Exists() {
 		data.ApplyWeightEcmpOnlyBandwidth = types.BoolValue(true)
 	} else {
 		data.ApplyWeightEcmpOnlyBandwidth = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "apply-weight.ucmp-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "apply-weight.ucmp-only"); value.Exists() {
 		data.ApplyWeightUcmpOnly = types.BoolValue(true)
 	} else {
 		data.ApplyWeightUcmpOnly = types.BoolValue(false)
@@ -6021,40 +6011,40 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res gjson
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state RouterISISAddressFamily) []string {
+func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state RouterISISAddressFamily, version string) []string {
 	deletedItems := make([]string, 0)
 	if !state.ApplyWeightUcmpOnly.IsNull() && data.ApplyWeightUcmpOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/apply-weight", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "apply-weight"))
 	}
 	if !state.ApplyWeightEcmpOnlyBandwidth.IsNull() && data.ApplyWeightEcmpOnlyBandwidth.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/apply-weight/ecmp-only", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "apply-weight/ecmp-only"))
 	}
 	if !state.ApplyWeightEcmpOnly.IsNull() && data.ApplyWeightEcmpOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/apply-weight", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "apply-weight"))
 	}
 	if !state.PrefixUnreachableRxProcessEnable.IsNull() && data.PrefixUnreachableRxProcessEnable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-unreachable/rx-process-enable", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "prefix-unreachable/rx-process-enable"))
 	}
 	if !state.PrefixUnreachableAdvMetric.IsNull() && data.PrefixUnreachableAdvMetric.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-unreachable/adv-metric", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "prefix-unreachable/adv-metric"))
 	}
 	if !state.PrefixUnreachableAdvLifetime.IsNull() && data.PrefixUnreachableAdvLifetime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-unreachable/adv-lifetime", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "prefix-unreachable/adv-lifetime"))
 	}
 	if !state.PrefixUnreachableAdvMaximum.IsNull() && data.PrefixUnreachableAdvMaximum.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-unreachable/adv-maximum", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "prefix-unreachable/adv-maximum"))
 	}
 	if !state.PrefixUnreachable.IsNull() && data.PrefixUnreachable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-unreachable", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "prefix-unreachable"))
 	}
 	if !state.MplsTrafficEngLevel2Only.IsNull() && data.MplsTrafficEngLevel2Only.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-two-only", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "mpls/traffic-eng/traffic-eng-level/level-two-only"))
 	}
 	if !state.MplsTrafficEngLevel1.IsNull() && data.MplsTrafficEngLevel1.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "mpls/traffic-eng/traffic-eng-level/level-one"))
 	}
 	if !state.MplsTrafficEngLevel12.IsNull() && data.MplsTrafficEngLevel12.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one-two", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "mpls/traffic-eng/traffic-eng-level/level-one-two"))
 	}
 	for i := range state.MplsTrafficEngTunnelMetricLevels {
 		keys := [...]string{"level-number"}
@@ -6080,41 +6070,41 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.MplsTrafficEngTunnelMetricLevels[i].Metric.IsNull() && data.MplsTrafficEngTunnelMetricLevels[j].Metric.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/metric-levels/metric-level%v/metric", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "mpls/traffic-eng/tunnel/metric-levels/metric-level", keyString), "metric"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/metric-levels/metric-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "mpls/traffic-eng/tunnel/metric-levels/metric-level", keyString))
 		}
 	}
 	if !state.MplsTrafficEngTunnelAnycastPreferIgpCost.IsNull() && data.MplsTrafficEngTunnelAnycastPreferIgpCost.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/anycast-prefer-igp-cost", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "mpls/traffic-eng/tunnel/anycast-prefer-igp-cost"))
 	}
 	if !state.MplsTrafficEngTunnelMetric.IsNull() && data.MplsTrafficEngTunnelMetric.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/metric", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "mpls/traffic-eng/tunnel/metric"))
 	}
 	if !state.MplsTrafficEngTunnelPreferred.IsNull() && data.MplsTrafficEngTunnelPreferred.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/preferred", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "mpls/traffic-eng/tunnel/preferred"))
 	}
 	if !state.MplsTrafficEngTunnelRestricted.IsNull() && data.MplsTrafficEngTunnelRestricted.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/restricted", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "mpls/traffic-eng/tunnel/restricted"))
 	}
 	if !state.MplsTrafficEngMulticastIntact.IsNull() && data.MplsTrafficEngMulticastIntact.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/multicast-intact", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "mpls/traffic-eng/multicast-intact"))
 	}
 	if !state.MplsTrafficEngIgpIntact.IsNull() && data.MplsTrafficEngIgpIntact.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/igp-intact", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "mpls/traffic-eng/igp-intact"))
 	}
 	if !state.MplsTrafficEngRouterIdInterfaceName.IsNull() && data.MplsTrafficEngRouterIdInterfaceName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/router-id/interface-name", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "mpls/traffic-eng/router-id/interface-name"))
 	}
 	if !state.MplsTrafficEngRouterIdIpv4Address.IsNull() && data.MplsTrafficEngRouterIdIpv4Address.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/router-id/ipv4-address", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "mpls/traffic-eng/router-id/ipv4-address"))
 	}
 	if !state.MplsLdpAutoConfig.IsNull() && data.MplsLdpAutoConfig.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/ldp/auto-config", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "mpls/ldp/auto-config"))
 	}
 	for i := range state.PartitionDetectExternalAddressTracks {
 		keys := [...]string{"address"}
@@ -6140,13 +6130,13 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.PartitionDetectExternalAddressTracks[i].ExternalAddress.IsNull() && data.PartitionDetectExternalAddressTracks[j].ExternalAddress.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/partition-detect/external-address-tracks/external-address-track%v/external-address", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "partition-detect/external-address-tracks/external-address-track", keyString), "external-address"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/partition-detect/external-address-tracks/external-address-track%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "partition-detect/external-address-tracks/external-address-track", keyString))
 		}
 	}
 	for i := range state.PartitionDetectTracks {
@@ -6173,20 +6163,20 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.PartitionDetectTracks[i].Ipv6.IsNull() && data.PartitionDetectTracks[j].Ipv6.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/partition-detect/tracks/track%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "partition-detect/tracks/track", keyString), ""))
 				}
 				if !state.PartitionDetectTracks[i].Ipv4.IsNull() && data.PartitionDetectTracks[j].Ipv4.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/partition-detect/tracks/track%v/", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "partition-detect/tracks/track", keyString), ""))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/partition-detect/tracks/track%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "partition-detect/tracks/track", keyString))
 		}
 	}
 	if !state.PartitionDetect.IsNull() && data.PartitionDetect.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/partition-detect", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "partition-detect"))
 	}
 	for i := range state.SegmentRoutingSrv6Locators {
 		keys := [...]string{"locator-string"}
@@ -6235,17 +6225,17 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 						}
 						if found {
 							if !state.SegmentRoutingSrv6Locators[i].TagLevels[ci].Tag.IsNull() && data.SegmentRoutingSrv6Locators[j].TagLevels[cj].Tag.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v/tag-levels/tag-level%v/tag", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "segment-routing/srv6/locators/locator", keyString, "tag-levels/tag-level", ckeyString), "tag"))
 							}
 							break
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v/tag-levels/tag-level%v", state.getPath(), keyString, ckeyString))
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "segment-routing/srv6/locators/locator", keyString, "tag-levels/tag-level", ckeyString))
 					}
 				}
 				if !state.SegmentRoutingSrv6Locators[i].Tag.IsNull() && data.SegmentRoutingSrv6Locators[j].Tag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v/tag", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/srv6/locators/locator", keyString), "tag"))
 				}
 				for ci := range state.SegmentRoutingSrv6Locators[i].MetricLevels {
 					ckeys := [...]string{"level-number"}
@@ -6271,26 +6261,26 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 						}
 						if found {
 							if !state.SegmentRoutingSrv6Locators[i].MetricLevels[ci].Metric.IsNull() && data.SegmentRoutingSrv6Locators[j].MetricLevels[cj].Metric.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v/metric-levels/metric-level%v/metric", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "segment-routing/srv6/locators/locator", keyString, "metric-levels/metric-level", ckeyString), "metric"))
 							}
 							break
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v/metric-levels/metric-level%v", state.getPath(), keyString, ckeyString))
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "segment-routing/srv6/locators/locator", keyString, "metric-levels/metric-level", ckeyString))
 					}
 				}
 				if !state.SegmentRoutingSrv6Locators[i].Metric.IsNull() && data.SegmentRoutingSrv6Locators[j].Metric.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v/metric", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/srv6/locators/locator", keyString), "metric"))
 				}
 				if !state.SegmentRoutingSrv6Locators[i].Level.IsNull() && data.SegmentRoutingSrv6Locators[j].Level.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v/level", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/srv6/locators/locator", keyString), "level"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/srv6/locators/locator", keyString))
 		}
 	}
 	for i := range state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses {
@@ -6323,34 +6313,34 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[j].AbsoluteExplicitNull.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/absolute/explicit-null", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address", keyString), "absolute/explicit-null"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[j].AbsolutePhpDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/absolute/php-disable", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address", keyString), "absolute/php-disable"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteInterface.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[j].AbsoluteInterface.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/absolute/interface", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address", keyString), "absolute/interface"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteId.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[j].AbsoluteId.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/absolute/absolute-id", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address", keyString), "absolute/absolute-id"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[j].IndexExplicitNull.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/index/explicit-null", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address", keyString), "index/explicit-null"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[j].IndexPhpDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/index/php-disable", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address", keyString), "index/php-disable"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexInterface.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[j].IndexInterface.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/index/interface", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address", keyString), "index/interface"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexId.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[j].IndexId.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/index/index-id", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address", keyString), "index/index-id"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address", keyString))
 		}
 	}
 	for i := range state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses {
@@ -6389,34 +6379,34 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].AbsoluteExplicitNull.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/absolute/explicit-null", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address", keyString), "absolute/explicit-null"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].AbsolutePhpDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/absolute/php-disable", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address", keyString), "absolute/php-disable"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteInterface.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].AbsoluteInterface.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/absolute/interface", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address", keyString), "absolute/interface"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteId.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].AbsoluteId.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/absolute/absolute-id", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address", keyString), "absolute/absolute-id"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].IndexExplicitNull.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/index/explicit-null", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address", keyString), "index/explicit-null"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].IndexPhpDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/index/php-disable", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address", keyString), "index/php-disable"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexInterface.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].IndexInterface.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/index/interface", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address", keyString), "index/interface"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexId.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[j].IndexId.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/index/index-id", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address", keyString), "index/index-id"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address", keyString))
 		}
 	}
 	for i := range state.SegmentRoutingMplsConnectedPrefixSidMapAddresses {
@@ -6449,80 +6439,80 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[j].AbsoluteExplicitNull.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/absolute/explicit-null", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/address", keyString), "absolute/explicit-null"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[j].AbsolutePhpDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/absolute/php-disable", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/address", keyString), "absolute/php-disable"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteInterface.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[j].AbsoluteInterface.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/absolute/interface", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/address", keyString), "absolute/interface"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteId.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[j].AbsoluteId.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/absolute/absolute-id", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/address", keyString), "absolute/absolute-id"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[j].IndexExplicitNull.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/index/explicit-null", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/address", keyString), "index/explicit-null"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[j].IndexPhpDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/index/php-disable", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/address", keyString), "index/php-disable"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexInterface.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[j].IndexInterface.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/index/interface", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/address", keyString), "index/interface"))
 				}
 				if !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexId.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[j].IndexId.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/index/index-id", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/address", keyString), "index/index-id"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/address", keyString))
 		}
 	}
 	if !state.SegmentRoutingMplsConnectedPrefixSidMap.IsNull() && data.SegmentRoutingMplsConnectedPrefixSidMap.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/mpls/connected-prefix-sid-map"))
 	}
 	if !state.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsNull() && data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/advertise-local", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/mpls/prefix-sid-map/advertise-local"))
 	}
 	if !state.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsNull() && data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/advertise-local", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/mpls/prefix-sid-map/advertise-local"))
 	}
 	if !state.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsNull() && data.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/receive", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/mpls/prefix-sid-map/receive"))
 	}
 	if !state.SegmentRoutingMplsPrefixSidMapReceive.IsNull() && data.SegmentRoutingMplsPrefixSidMapReceive.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/receive", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/mpls/prefix-sid-map/receive"))
 	}
 	if !state.SegmentRoutingMplsUnlabeledProtectionDisable.IsNull() && data.SegmentRoutingMplsUnlabeledProtectionDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/unlabeled/protection/disable", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/mpls/unlabeled/protection/disable"))
 	}
 	if !state.SegmentRoutingMplsUnlabeledProtectionRoutePolicy.IsNull() && data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/unlabeled/protection/route-policy", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/mpls/unlabeled/protection/route-policy"))
 	}
 	if !state.SegmentRoutingMplsUnlabeledProtectionPrefixList.IsNull() && data.SegmentRoutingMplsUnlabeledProtectionPrefixList.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/unlabeled/protection/prefix-list", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/mpls/unlabeled/protection/prefix-list"))
 	}
 	if !state.SegmentRoutingMplsSrPrefer.IsNull() && data.SegmentRoutingMplsSrPrefer.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/sr-prefer", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/mpls/sr-prefer"))
 	}
 	if !state.SegmentRoutingMplsEnable.IsNull() && data.SegmentRoutingMplsEnable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls/enable", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/mpls/enable"))
 	}
 	if !state.SegmentRoutingProtectedAdjacencySidDelay.IsNull() && data.SegmentRoutingProtectedAdjacencySidDelay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/protected-adjacency-sid-delay", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/protected-adjacency-sid-delay"))
 	}
 	if !state.SegmentRoutingLabeledOnly.IsNull() && data.SegmentRoutingLabeledOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/labeled-only", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/labeled-only"))
 	}
 	if !state.SegmentRoutingBundleMemberAdjSid.IsNull() && data.SegmentRoutingBundleMemberAdjSid.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/bundle-member-adj-sid", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/bundle-member-adj-sid"))
 	}
 	if !state.DefaultInformationOriginateRoutePolicy.IsNull() && data.DefaultInformationOriginateRoutePolicy.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-information/originate/route-policy", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "default-information/originate/route-policy"))
 	}
 	if !state.DefaultInformationOriginate.IsNull() && data.DefaultInformationOriginate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-information/originate", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "default-information/originate"))
 	}
 	for i := range state.FastReroutePerLinkPriorityLimitLevels {
 		keys := [...]string{"level-number"}
@@ -6548,17 +6538,17 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.FastReroutePerLinkPriorityLimitLevels[i].PriorityLimit.IsNull() && data.FastReroutePerLinkPriorityLimitLevels[j].PriorityLimit.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-link/priority-limit-levels/priority-limit-level%v/priority-limit", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "fast-reroute/per-link/priority-limit-levels/priority-limit-level", keyString), "priority-limit"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-link/priority-limit-levels/priority-limit-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "fast-reroute/per-link/priority-limit-levels/priority-limit-level", keyString))
 		}
 	}
 	if !state.FastReroutePerLinkPriorityLimit.IsNull() && data.FastReroutePerLinkPriorityLimit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-link/priority-limit", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fast-reroute/per-link/priority-limit"))
 	}
 	for i := range state.FastReroutePerLinkUseCandidateOnlyLevels {
 		keys := [...]string{"level-number"}
@@ -6587,32 +6577,32 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-link/use-candidate-only-levels/use-candidate-only-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "fast-reroute/per-link/use-candidate-only-levels/use-candidate-only-level", keyString))
 		}
 	}
 	if !state.FastReroutePerLinkUseCandidateOnly.IsNull() && data.FastReroutePerLinkUseCandidateOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-link/use-candidate-only", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fast-reroute/per-link/use-candidate-only"))
 	}
 	if !state.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() && data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index"))
 	}
 	if !state.FastReroutePerPrefixTiebreakerSecondaryPathIndex.IsNull() && data.FastReroutePerPrefixTiebreakerSecondaryPathIndex.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/secondary-path/index", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fast-reroute/per-prefix/tiebreaker/secondary-path/index"))
 	}
 	if !state.FastReroutePerPrefixTiebreakerPrimaryPathIndex.IsNull() && data.FastReroutePerPrefixTiebreakerPrimaryPathIndex.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/primary-path/index", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fast-reroute/per-prefix/tiebreaker/primary-path/index"))
 	}
 	if !state.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() && data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/node-protecting/index", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fast-reroute/per-prefix/tiebreaker/node-protecting/index"))
 	}
 	if !state.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex.IsNull() && data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/lowest-backup-metric/index", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fast-reroute/per-prefix/tiebreaker/lowest-backup-metric/index"))
 	}
 	if !state.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsNull() && data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/lc-disjoint/index", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fast-reroute/per-prefix/tiebreaker/lc-disjoint/index"))
 	}
 	if !state.FastReroutePerPrefixTiebreakerDownstreamIndex.IsNull() && data.FastReroutePerPrefixTiebreakerDownstreamIndex.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/downstream/index", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fast-reroute/per-prefix/tiebreaker/downstream/index"))
 	}
 	for i := range state.FastReroutePerPrefixLoadSharingDisableLevels {
 		keys := [...]string{"level-number"}
@@ -6641,11 +6631,11 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/load-sharing/disable-levels/disable-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "fast-reroute/per-prefix/load-sharing/disable-levels/disable-level", keyString))
 		}
 	}
 	if !state.FastReroutePerPrefixLoadSharingDisable.IsNull() && data.FastReroutePerPrefixLoadSharingDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/load-sharing/disable", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fast-reroute/per-prefix/load-sharing/disable"))
 	}
 	for i := range state.FastReroutePerPrefixRemoteLfaPrefixListLevels {
 		keys := [...]string{"level-number"}
@@ -6671,17 +6661,17 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].PrefixList.IsNull() && data.FastReroutePerPrefixRemoteLfaPrefixListLevels[j].PrefixList.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/remote-lfa/prefix-list-levels/prefix-list-level%v/prefix-list", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "fast-reroute/per-prefix/remote-lfa/prefix-list-levels/prefix-list-level", keyString), "prefix-list"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/remote-lfa/prefix-list-levels/prefix-list-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "fast-reroute/per-prefix/remote-lfa/prefix-list-levels/prefix-list-level", keyString))
 		}
 	}
 	if !state.FastReroutePerPrefixRemoteLfaPrefixList.IsNull() && data.FastReroutePerPrefixRemoteLfaPrefixList.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/remote-lfa/prefix-list", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fast-reroute/per-prefix/remote-lfa/prefix-list"))
 	}
 	for i := range state.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels {
 		keys := [...]string{"level-number"}
@@ -6710,14 +6700,14 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/srlg-protection/weighted-global-levels/weighted-global-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "fast-reroute/per-prefix/srlg-protection/weighted-global-levels/weighted-global-level", keyString))
 		}
 	}
 	if !state.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsNull() && data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/srlg-protection/weighted-global", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fast-reroute/per-prefix/srlg-protection/weighted-global"))
 	}
 	if !state.FastReroutePerPrefixUseCandidateOnly.IsNull() && data.FastReroutePerPrefixUseCandidateOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/use-candidate-only", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fast-reroute/per-prefix/use-candidate-only"))
 	}
 	for i := range state.FastReroutePerPrefixPriorityLimitLevels {
 		keys := [...]string{"level-number"}
@@ -6743,32 +6733,32 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.FastReroutePerPrefixPriorityLimitLevels[i].PriorityLimit.IsNull() && data.FastReroutePerPrefixPriorityLimitLevels[j].PriorityLimit.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/priority-limit-levels/priority-limit-level%v/priority-limit", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "fast-reroute/per-prefix/priority-limit-levels/priority-limit-level", keyString), "priority-limit"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/priority-limit-levels/priority-limit-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "fast-reroute/per-prefix/priority-limit-levels/priority-limit-level", keyString))
 		}
 	}
 	if !state.FastReroutePerPrefixPriorityLimit.IsNull() && data.FastReroutePerPrefixPriorityLimit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/priority-limit", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fast-reroute/per-prefix/priority-limit"))
 	}
 	if !state.FastRerouteDelayInterval.IsNull() && data.FastRerouteDelayInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/delay-interval", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fast-reroute/delay-interval"))
 	}
 	if !state.AttachedBitSend.IsNull() && data.AttachedBitSend.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/attached-bit/send", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "attached-bit/send"))
 	}
 	if !state.AttachedBitReceiveIgnore.IsNull() && data.AttachedBitReceiveIgnore.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/attached-bit/receive/ignore", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "attached-bit/receive/ignore"))
 	}
 	if !state.RouteSourceFirstHop.IsNull() && data.RouteSourceFirstHop.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/route/source/first-hop", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "route/source/first-hop"))
 	}
 	if !state.AdjacencyCheckDisable.IsNull() && data.AdjacencyCheckDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/adjacency-check/disable", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "adjacency-check/disable"))
 	}
 	for i := range state.PropagateLevels {
 		keys := [...]string{"source-level", "destination-level"}
@@ -6800,13 +6790,13 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.PropagateLevels[i].RoutePolicy.IsNull() && data.PropagateLevels[j].RoutePolicy.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/propagate/levels/level%v/route-policy", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "propagate/levels/level", keyString), "route-policy"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/propagate/levels/level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "propagate/levels/level", keyString))
 		}
 	}
 	for i := range state.MaximumRedistributedPrefixesLevels {
@@ -6833,17 +6823,17 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.MaximumRedistributedPrefixesLevels[i].MaximumRedistributedPrefixes.IsNull() && data.MaximumRedistributedPrefixesLevels[j].MaximumRedistributedPrefixes.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-redistributed-prefixes-levels/maximum-redistributed-prefixes-level%v/maximum-redistributed-prefixes", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "maximum-redistributed-prefixes-levels/maximum-redistributed-prefixes-level", keyString), "maximum-redistributed-prefixes"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-redistributed-prefixes-levels/maximum-redistributed-prefixes-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "maximum-redistributed-prefixes-levels/maximum-redistributed-prefixes-level", keyString))
 		}
 	}
 	if !state.MaximumRedistributedPrefixes.IsNull() && data.MaximumRedistributedPrefixes.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-redistributed-prefixes", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "maximum-redistributed-prefixes"))
 	}
 	for i := range state.SpfPrefixPriorityMediumLevels {
 		keys := [...]string{"level-number"}
@@ -6869,16 +6859,16 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.SpfPrefixPriorityMediumLevels[i].PrefixListName.IsNull() && data.SpfPrefixPriorityMediumLevels[j].PrefixListName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v/prefixlist-name", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "spf/prefix-priority-medium-levels/prefix-priority-medium-level", keyString), "prefixlist-name"))
 				}
 				if !state.SpfPrefixPriorityMediumLevels[i].Tag.IsNull() && data.SpfPrefixPriorityMediumLevels[j].Tag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v/tag", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "spf/prefix-priority-medium-levels/prefix-priority-medium-level", keyString), "tag"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "spf/prefix-priority-medium-levels/prefix-priority-medium-level", keyString))
 		}
 	}
 	for i := range state.SpfPrefixPriorityHighLevels {
@@ -6905,16 +6895,16 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.SpfPrefixPriorityHighLevels[i].PrefixListName.IsNull() && data.SpfPrefixPriorityHighLevels[j].PrefixListName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v/prefixlist-name", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "spf/prefix-priority-high-levels/prefix-priority-high-level", keyString), "prefixlist-name"))
 				}
 				if !state.SpfPrefixPriorityHighLevels[i].Tag.IsNull() && data.SpfPrefixPriorityHighLevels[j].Tag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v/tag", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "spf/prefix-priority-high-levels/prefix-priority-high-level", keyString), "tag"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "spf/prefix-priority-high-levels/prefix-priority-high-level", keyString))
 		}
 	}
 	for i := range state.SpfPrefixPriorityCriticalLevels {
@@ -6941,35 +6931,35 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.SpfPrefixPriorityCriticalLevels[i].PrefixListName.IsNull() && data.SpfPrefixPriorityCriticalLevels[j].PrefixListName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v/prefixlist-name", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "spf/prefix-priority-critical-levels/prefix-priority-critical-level", keyString), "prefixlist-name"))
 				}
 				if !state.SpfPrefixPriorityCriticalLevels[i].Tag.IsNull() && data.SpfPrefixPriorityCriticalLevels[j].Tag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v/tag", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "spf/prefix-priority-critical-levels/prefix-priority-critical-level", keyString), "tag"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "spf/prefix-priority-critical-levels/prefix-priority-critical-level", keyString))
 		}
 	}
 	if !state.SpfPrefixPriorityMediumPrefixListName.IsNull() && data.SpfPrefixPriorityMediumPrefixListName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/medium/prefixlist-name", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "spf/prefix-priority/medium/prefixlist-name"))
 	}
 	if !state.SpfPrefixPriorityMediumTag.IsNull() && data.SpfPrefixPriorityMediumTag.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/medium/tag", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "spf/prefix-priority/medium/tag"))
 	}
 	if !state.SpfPrefixPriorityHighPrefixListName.IsNull() && data.SpfPrefixPriorityHighPrefixListName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/high/prefixlist-name", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "spf/prefix-priority/high/prefixlist-name"))
 	}
 	if !state.SpfPrefixPriorityHighTag.IsNull() && data.SpfPrefixPriorityHighTag.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/high/tag", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "spf/prefix-priority/high/tag"))
 	}
 	if !state.SpfPrefixPriorityCriticalPrefixListName.IsNull() && data.SpfPrefixPriorityCriticalPrefixListName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/critical/prefixlist-name", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "spf/prefix-priority/critical/prefixlist-name"))
 	}
 	if !state.SpfPrefixPriorityCriticalTag.IsNull() && data.SpfPrefixPriorityCriticalTag.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/critical/tag", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "spf/prefix-priority/critical/tag"))
 	}
 	for i := range state.SpfIntervalLevels {
 		keys := [...]string{"level-number"}
@@ -6995,65 +6985,65 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.SpfIntervalLevels[i].IetfHolddownInterval.IsNull() && data.SpfIntervalLevels[j].IetfHolddownInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf/holddown-interval", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "spf-interval-levels/level", keyString), "ietf/holddown-interval"))
 				}
 				if !state.SpfIntervalLevels[i].IetfLearnInterval.IsNull() && data.SpfIntervalLevels[j].IetfLearnInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf/learn-interval", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "spf-interval-levels/level", keyString), "ietf/learn-interval"))
 				}
 				if !state.SpfIntervalLevels[i].IetfLongWait.IsNull() && data.SpfIntervalLevels[j].IetfLongWait.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf/long-wait", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "spf-interval-levels/level", keyString), "ietf/long-wait"))
 				}
 				if !state.SpfIntervalLevels[i].IetfShortWait.IsNull() && data.SpfIntervalLevels[j].IetfShortWait.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf/short-wait", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "spf-interval-levels/level", keyString), "ietf/short-wait"))
 				}
 				if !state.SpfIntervalLevels[i].IetfInitialWait.IsNull() && data.SpfIntervalLevels[j].IetfInitialWait.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf/initial-wait", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "spf-interval-levels/level", keyString), "ietf/initial-wait"))
 				}
 				if !state.SpfIntervalLevels[i].Ietf.IsNull() && data.SpfIntervalLevels[j].Ietf.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "spf-interval-levels/level", keyString), "ietf"))
 				}
 				if !state.SpfIntervalLevels[i].SecondaryWait.IsNull() && data.SpfIntervalLevels[j].SecondaryWait.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/secondary-wait", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "spf-interval-levels/level", keyString), "secondary-wait"))
 				}
 				if !state.SpfIntervalLevels[i].InitialWait.IsNull() && data.SpfIntervalLevels[j].InitialWait.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/initial-wait", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "spf-interval-levels/level", keyString), "initial-wait"))
 				}
 				if !state.SpfIntervalLevels[i].MaximumWait.IsNull() && data.SpfIntervalLevels[j].MaximumWait.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v/maximum-wait", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "spf-interval-levels/level", keyString), "maximum-wait"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval-levels/level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "spf-interval-levels/level", keyString))
 		}
 	}
 	if !state.SpfIntervalIetfHolddownInterval.IsNull() && data.SpfIntervalIetfHolddownInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/ietf/holddown-interval", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "spf-interval/ietf/holddown-interval"))
 	}
 	if !state.SpfIntervalIetfLearnInterval.IsNull() && data.SpfIntervalIetfLearnInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/ietf/learn-interval", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "spf-interval/ietf/learn-interval"))
 	}
 	if !state.SpfIntervalIetfLongWait.IsNull() && data.SpfIntervalIetfLongWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/ietf/long-wait", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "spf-interval/ietf/long-wait"))
 	}
 	if !state.SpfIntervalIetfShortWait.IsNull() && data.SpfIntervalIetfShortWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/ietf/short-wait", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "spf-interval/ietf/short-wait"))
 	}
 	if !state.SpfIntervalIetfInitialWait.IsNull() && data.SpfIntervalIetfInitialWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/ietf/initial-wait", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "spf-interval/ietf/initial-wait"))
 	}
 	if !state.SpfIntervalIetf.IsNull() && data.SpfIntervalIetf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/ietf", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "spf-interval/ietf"))
 	}
 	if !state.SpfIntervalSecondaryWait.IsNull() && data.SpfIntervalSecondaryWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/secondary-wait", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "spf-interval/secondary-wait"))
 	}
 	if !state.SpfIntervalInitialWait.IsNull() && data.SpfIntervalInitialWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/initial-wait", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "spf-interval/initial-wait"))
 	}
 	if !state.SpfIntervalMaximumWait.IsNull() && data.SpfIntervalMaximumWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/maximum-wait", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "spf-interval/maximum-wait"))
 	}
 	for i := range state.MetricStyleLevels {
 		keys := [...]string{"level-number"}
@@ -7079,41 +7069,41 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.MetricStyleLevels[i].Transition.IsNull() && data.MetricStyleLevels[j].Transition.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/transition", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "metric-style-levels/metric-style-level", keyString), "transition"))
 				}
 				if !state.MetricStyleLevels[i].WideTransition.IsNull() && data.MetricStyleLevels[j].WideTransition.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/wide/transition", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "metric-style-levels/metric-style-level", keyString), "wide/transition"))
 				}
 				if !state.MetricStyleLevels[i].Wide.IsNull() && data.MetricStyleLevels[j].Wide.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/wide", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "metric-style-levels/metric-style-level", keyString), "wide"))
 				}
 				if !state.MetricStyleLevels[i].NarrowTransition.IsNull() && data.MetricStyleLevels[j].NarrowTransition.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/narrow/transition", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "metric-style-levels/metric-style-level", keyString), "narrow/transition"))
 				}
 				if !state.MetricStyleLevels[i].Narrow.IsNull() && data.MetricStyleLevels[j].Narrow.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/narrow", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "metric-style-levels/metric-style-level", keyString), "narrow"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "metric-style-levels/metric-style-level", keyString))
 		}
 	}
 	if !state.MetricStyleTransition.IsNull() && data.MetricStyleTransition.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/transition", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "metric-style/transition"))
 	}
 	if !state.MetricStyleWideTransition.IsNull() && data.MetricStyleWideTransition.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/wide/transition", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "metric-style/wide/transition"))
 	}
 	if !state.MetricStyleWide.IsNull() && data.MetricStyleWide.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/wide", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "metric-style/wide"))
 	}
 	if !state.MetricStyleNarrowTransition.IsNull() && data.MetricStyleNarrowTransition.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/narrow/transition", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "metric-style/narrow/transition"))
 	}
 	if !state.MetricStyleNarrow.IsNull() && data.MetricStyleNarrow.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/narrow", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "metric-style/narrow"))
 	}
 	for i := range state.MetricLevels {
 		keys := [...]string{"level-number"}
@@ -7139,17 +7129,17 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.MetricLevels[i].Metric.IsNull() && data.MetricLevels[j].Metric.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-levels/metric-level%v/metric", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "metric-levels/metric-level", keyString), "metric"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-levels/metric-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "metric-levels/metric-level", keyString))
 		}
 	}
 	if !state.Metric.IsNull() && data.Metric.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "metric"))
 	}
 	for i := range state.SummaryPrefixes {
 		keys := [...]string{"address", "address-prefix"}
@@ -7181,62 +7171,62 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.SummaryPrefixes[i].PartitionRepair.IsNull() && data.SummaryPrefixes[j].PartitionRepair.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/partition-repair", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "summary-prefix/ip-addresses/ip-address", keyString), "partition-repair"))
 				}
 				if !state.SummaryPrefixes[i].UnreachableTagExcludePrefixes.IsNull() && data.SummaryPrefixes[j].UnreachableTagExcludePrefixes.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/adv-unreachable/unreachable-component-tag/exclude", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "summary-prefix/ip-addresses/ip-address", keyString), "adv-unreachable/unreachable-component-tag/exclude"))
 				}
 				if !state.SummaryPrefixes[i].UnreachableTag.IsNull() && data.SummaryPrefixes[j].UnreachableTag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/adv-unreachable/unreachable-component-tag/unreachable-component-tag-number", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "summary-prefix/ip-addresses/ip-address", keyString), "adv-unreachable/unreachable-component-tag/unreachable-component-tag-number"))
 				}
 				if !state.SummaryPrefixes[i].AdvUnreachable.IsNull() && data.SummaryPrefixes[j].AdvUnreachable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/adv-unreachable", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "summary-prefix/ip-addresses/ip-address", keyString), "adv-unreachable"))
 				}
 				if !state.SummaryPrefixes[i].Explicit.IsNull() && data.SummaryPrefixes[j].Explicit.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/explicit", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "summary-prefix/ip-addresses/ip-address", keyString), "explicit"))
 				}
 				if !state.SummaryPrefixes[i].Algorithm.IsNull() && data.SummaryPrefixes[j].Algorithm.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/algorithm", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "summary-prefix/ip-addresses/ip-address", keyString), "algorithm"))
 				}
 				if !state.SummaryPrefixes[i].Level.IsNull() && data.SummaryPrefixes[j].Level.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/level", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "summary-prefix/ip-addresses/ip-address", keyString), "level"))
 				}
 				if !state.SummaryPrefixes[i].Tag.IsNull() && data.SummaryPrefixes[j].Tag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/tag", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "summary-prefix/ip-addresses/ip-address", keyString), "tag"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "summary-prefix/ip-addresses/ip-address", keyString))
 		}
 	}
 	if !state.MicroloopAvoidanceRibUpdateDelay.IsNull() && data.MicroloopAvoidanceRibUpdateDelay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/microloop/avoidance/rib-update-delay", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "microloop/avoidance/rib-update-delay"))
 	}
 	if !state.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() && data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/microloop/avoidance/enable/segment-routing/route-policy", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "microloop/avoidance/enable/segment-routing/route-policy"))
 	}
 	if !state.MicroloopAvoidanceProtected.IsNull() && data.MicroloopAvoidanceProtected.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/microloop/avoidance/enable/protected", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "microloop/avoidance/enable/protected"))
 	}
 	if !state.MicroloopAvoidance.IsNull() && data.MicroloopAvoidance.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/microloop/avoidance/enable", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "microloop/avoidance/enable"))
 	}
 	if !state.AdvertiseLinkAttributes.IsNull() && data.AdvertiseLinkAttributes.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/link/attributes", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "advertise/link/attributes"))
 	}
 	if !state.AdvertisePassiveOnly.IsNull() && data.AdvertisePassiveOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/passive-only", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "advertise/passive-only"))
 	}
 	if !state.RouterIdIpAddress.IsNull() && data.RouterIdIpAddress.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "router-id"))
 	}
 	if !state.RouterIdInterfaceName.IsNull() && data.RouterIdInterfaceName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "router-id"))
 	}
 	if !state.MaximumPaths.IsNull() && data.MaximumPaths.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-paths", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "maximum-paths"))
 	}
 	for i := range state.RedistributeOspfv3 {
 		keys := [...]string{"ospfv3-process-id"}
@@ -7262,28 +7252,28 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.RedistributeOspfv3[i].MetricType.IsNull() && data.RedistributeOspfv3[j].MetricType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/metric-type", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/ospfv3s/ospfv3", keyString), "metric-type"))
 				}
 				if !state.RedistributeOspfv3[i].RoutePolicy.IsNull() && data.RedistributeOspfv3[j].RoutePolicy.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/route-policy", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/ospfv3s/ospfv3", keyString), "route-policy"))
 				}
 				if !state.RedistributeOspfv3[i].Metric.IsNull() && data.RedistributeOspfv3[j].Metric.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/metric", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/ospfv3s/ospfv3", keyString), "metric"))
 				}
 				if !state.RedistributeOspfv3[i].Level.IsNull() && data.RedistributeOspfv3[j].Level.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/redistribute-route-level", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/ospfv3s/ospfv3", keyString), "redistribute-route-level"))
 				}
 				if !state.RedistributeOspfv3[i].MatchExternal.IsNull() && data.RedistributeOspfv3[j].MatchExternal.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/external", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/ospfv3s/ospfv3", keyString), "match/external"))
 				}
 				if !state.RedistributeOspfv3[i].MatchInternal.IsNull() && data.RedistributeOspfv3[j].MatchInternal.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/internal", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/ospfv3s/ospfv3", keyString), "match/internal"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/ospfv3s/ospfv3", keyString))
 		}
 	}
 	for i := range state.RedistributeOspf {
@@ -7310,28 +7300,28 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.RedistributeOspf[i].MetricType.IsNull() && data.RedistributeOspf[j].MetricType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/metric-type", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/ospfs/ospf", keyString), "metric-type"))
 				}
 				if !state.RedistributeOspf[i].RoutePolicy.IsNull() && data.RedistributeOspf[j].RoutePolicy.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/route-policy", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/ospfs/ospf", keyString), "route-policy"))
 				}
 				if !state.RedistributeOspf[i].Metric.IsNull() && data.RedistributeOspf[j].Metric.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/metric", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/ospfs/ospf", keyString), "metric"))
 				}
 				if !state.RedistributeOspf[i].Level.IsNull() && data.RedistributeOspf[j].Level.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/redistribute-route-level", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/ospfs/ospf", keyString), "redistribute-route-level"))
 				}
 				if !state.RedistributeOspf[i].MatchExternal.IsNull() && data.RedistributeOspf[j].MatchExternal.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/external", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/ospfs/ospf", keyString), "match/external"))
 				}
 				if !state.RedistributeOspf[i].MatchInternal.IsNull() && data.RedistributeOspf[j].MatchInternal.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/internal", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/ospfs/ospf", keyString), "match/internal"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/ospfs/ospf", keyString))
 		}
 	}
 	for i := range state.RedistributeBgp {
@@ -7358,22 +7348,22 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.RedistributeBgp[i].MetricType.IsNull() && data.RedistributeBgp[j].MetricType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/bgps/bgp%v/metric-type", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/bgps/bgp", keyString), "metric-type"))
 				}
 				if !state.RedistributeBgp[i].RoutePolicy.IsNull() && data.RedistributeBgp[j].RoutePolicy.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/bgps/bgp%v/route-policy", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/bgps/bgp", keyString), "route-policy"))
 				}
 				if !state.RedistributeBgp[i].Metric.IsNull() && data.RedistributeBgp[j].Metric.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/bgps/bgp%v/metric", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/bgps/bgp", keyString), "metric"))
 				}
 				if !state.RedistributeBgp[i].Level.IsNull() && data.RedistributeBgp[j].Level.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/bgps/bgp%v/redistribute-route-level", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/bgps/bgp", keyString), "redistribute-route-level"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/bgps/bgp%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/bgps/bgp", keyString))
 		}
 	}
 	for i := range state.RedistributeIsis {
@@ -7400,62 +7390,62 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.RedistributeIsis[i].DownFlagClear.IsNull() && data.RedistributeIsis[j].DownFlagClear.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/down-flag-clear", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/isis-processes/isis-process", keyString), "down-flag-clear"))
 				}
 				if !state.RedistributeIsis[i].MetricType.IsNull() && data.RedistributeIsis[j].MetricType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/metric-type", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/isis-processes/isis-process", keyString), "metric-type"))
 				}
 				if !state.RedistributeIsis[i].RoutePolicy.IsNull() && data.RedistributeIsis[j].RoutePolicy.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/route-policy", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/isis-processes/isis-process", keyString), "route-policy"))
 				}
 				if !state.RedistributeIsis[i].Metric.IsNull() && data.RedistributeIsis[j].Metric.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/metric", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/isis-processes/isis-process", keyString), "metric"))
 				}
 				if !state.RedistributeIsis[i].Level.IsNull() && data.RedistributeIsis[j].Level.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/redistribute-route-level", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/isis-processes/isis-process", keyString), "redistribute-route-level"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "redistribute/isis-processes/isis-process", keyString))
 		}
 	}
 	if !state.RedistributeStaticMetricType.IsNull() && data.RedistributeStaticMetricType.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static/metric-type", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "redistribute/static/metric-type"))
 	}
 	if !state.RedistributeStaticRoutePolicy.IsNull() && data.RedistributeStaticRoutePolicy.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static/route-policy", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "redistribute/static/route-policy"))
 	}
 	if !state.RedistributeStaticMetric.IsNull() && data.RedistributeStaticMetric.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static/metric", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "redistribute/static/metric"))
 	}
 	if !state.RedistributeStaticLevel.IsNull() && data.RedistributeStaticLevel.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "redistribute/static"))
 	}
 	if !state.RedistributeStatic.IsNull() && data.RedistributeStatic.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "redistribute/static"))
 	}
 	if !state.RedistributeConnectedMetricType.IsNull() && data.RedistributeConnectedMetricType.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/connected/metric-type", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "redistribute/connected/metric-type"))
 	}
 	if !state.RedistributeConnectedRoutePolicy.IsNull() && data.RedistributeConnectedRoutePolicy.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/connected/route-policy", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "redistribute/connected/route-policy"))
 	}
 	if !state.RedistributeConnectedMetric.IsNull() && data.RedistributeConnectedMetric.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/connected/metric", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "redistribute/connected/metric"))
 	}
 	if !state.RedistributeConnectedLevel.IsNull() && data.RedistributeConnectedLevel.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/connected", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "redistribute/connected"))
 	}
 	if !state.RedistributeConnected.IsNull() && data.RedistributeConnected.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/connected", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "redistribute/connected"))
 	}
 	if !state.DistributeListRoutePolicyIn.IsNull() && data.DistributeListRoutePolicyIn.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute-list/route-policy", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "distribute-list/route-policy"))
 	}
 	if !state.DistributeListPrefixListIn.IsNull() && data.DistributeListPrefixListIn.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute-list/prefix-list/prefix-list-string", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "distribute-list/prefix-list/prefix-list-string"))
 	}
 	for i := range state.DistanceSources {
 		keys := [...]string{"address", "address-prefix"}
@@ -7487,20 +7477,20 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.DistanceSources[i].RouteFilter.IsNull() && data.DistanceSources[j].RouteFilter.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/distance/ip-addresses/ip-address%v/prefix-list-or-access-list-to", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "distance/ip-addresses/ip-address", keyString), "prefix-list-or-access-list-to"))
 				}
 				if !state.DistanceSources[i].Distance.IsNull() && data.DistanceSources[j].Distance.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/distance/ip-addresses/ip-address%v/distance-number", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "distance/ip-addresses/ip-address", keyString), "distance-number"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/distance/ip-addresses/ip-address%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "distance/ip-addresses/ip-address", keyString))
 		}
 	}
 	if !state.Distance.IsNull() && data.Distance.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/distance/global", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "distance/global"))
 	}
 	return deletedItems
 }
@@ -7509,54 +7499,46 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, state *RouterISISAddressFamily) []string {
+func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, state *RouterISISAddressFamily, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
 	if !data.ApplyWeightUcmpOnly.IsNull() && !data.ApplyWeightUcmpOnly.ValueBool() {
-		if state != nil && !state.ApplyWeightUcmpOnly.IsNull() && state.ApplyWeightUcmpOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/apply-weight", data.getXPath()))
+		if state == nil || state.ApplyWeightUcmpOnly.IsNull() || state.ApplyWeightUcmpOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "apply-weight"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.ApplyWeightEcmpOnlyBandwidth.IsNull() && !data.ApplyWeightEcmpOnlyBandwidth.ValueBool() {
-		if state != nil && !state.ApplyWeightEcmpOnlyBandwidth.IsNull() && state.ApplyWeightEcmpOnlyBandwidth.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/apply-weight/ecmp-only", data.getXPath()))
+		if state == nil || state.ApplyWeightEcmpOnlyBandwidth.IsNull() || state.ApplyWeightEcmpOnlyBandwidth.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "apply-weight/ecmp-only"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.ApplyWeightEcmpOnly.IsNull() && !data.ApplyWeightEcmpOnly.ValueBool() {
-		if state != nil && !state.ApplyWeightEcmpOnly.IsNull() && state.ApplyWeightEcmpOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/apply-weight", data.getXPath()))
+		if state == nil || state.ApplyWeightEcmpOnly.IsNull() || state.ApplyWeightEcmpOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "apply-weight"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.PrefixUnreachableRxProcessEnable.IsNull() && !data.PrefixUnreachableRxProcessEnable.ValueBool() {
-		if state != nil && !state.PrefixUnreachableRxProcessEnable.IsNull() && state.PrefixUnreachableRxProcessEnable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/prefix-unreachable/rx-process-enable", data.getXPath()))
+		if state == nil || state.PrefixUnreachableRxProcessEnable.IsNull() || state.PrefixUnreachableRxProcessEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "prefix-unreachable/rx-process-enable"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.PrefixUnreachable.IsNull() && !data.PrefixUnreachable.ValueBool() {
-		if state != nil && !state.PrefixUnreachable.IsNull() && state.PrefixUnreachable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/prefix-unreachable", data.getXPath()))
+		if state == nil || state.PrefixUnreachable.IsNull() || state.PrefixUnreachable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "prefix-unreachable"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MplsTrafficEngLevel2Only.IsNull() && !data.MplsTrafficEngLevel2Only.ValueBool() {
-		if state != nil && !state.MplsTrafficEngLevel2Only.IsNull() && state.MplsTrafficEngLevel2Only.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-two-only", data.getXPath()))
+		if state == nil || state.MplsTrafficEngLevel2Only.IsNull() || state.MplsTrafficEngLevel2Only.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "mpls/traffic-eng/traffic-eng-level/level-two-only"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MplsTrafficEngLevel1.IsNull() && !data.MplsTrafficEngLevel1.ValueBool() {
-		if state != nil && !state.MplsTrafficEngLevel1.IsNull() && state.MplsTrafficEngLevel1.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one", data.getXPath()))
+		if state == nil || state.MplsTrafficEngLevel1.IsNull() || state.MplsTrafficEngLevel1.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "mpls/traffic-eng/traffic-eng-level/level-one"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MplsTrafficEngLevel12.IsNull() && !data.MplsTrafficEngLevel12.ValueBool() {
-		if state != nil && !state.MplsTrafficEngLevel12.IsNull() && state.MplsTrafficEngLevel12.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one-two", data.getXPath()))
+		if state == nil || state.MplsTrafficEngLevel12.IsNull() || state.MplsTrafficEngLevel12.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "mpls/traffic-eng/traffic-eng-level/level-one-two"))
 		}
 	}
 	for i := range data.MplsTrafficEngTunnelMetricLevels {
@@ -7567,40 +7549,34 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, st
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MplsTrafficEngTunnelAnycastPreferIgpCost.IsNull() && !data.MplsTrafficEngTunnelAnycastPreferIgpCost.ValueBool() {
-		if state != nil && !state.MplsTrafficEngTunnelAnycastPreferIgpCost.IsNull() && state.MplsTrafficEngTunnelAnycastPreferIgpCost.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/anycast-prefer-igp-cost", data.getXPath()))
+		if state == nil || state.MplsTrafficEngTunnelAnycastPreferIgpCost.IsNull() || state.MplsTrafficEngTunnelAnycastPreferIgpCost.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "mpls/traffic-eng/tunnel/anycast-prefer-igp-cost"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MplsTrafficEngTunnelPreferred.IsNull() && !data.MplsTrafficEngTunnelPreferred.ValueBool() {
-		if state != nil && !state.MplsTrafficEngTunnelPreferred.IsNull() && state.MplsTrafficEngTunnelPreferred.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/preferred", data.getXPath()))
+		if state == nil || state.MplsTrafficEngTunnelPreferred.IsNull() || state.MplsTrafficEngTunnelPreferred.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "mpls/traffic-eng/tunnel/preferred"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MplsTrafficEngTunnelRestricted.IsNull() && !data.MplsTrafficEngTunnelRestricted.ValueBool() {
-		if state != nil && !state.MplsTrafficEngTunnelRestricted.IsNull() && state.MplsTrafficEngTunnelRestricted.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/restricted", data.getXPath()))
+		if state == nil || state.MplsTrafficEngTunnelRestricted.IsNull() || state.MplsTrafficEngTunnelRestricted.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "mpls/traffic-eng/tunnel/restricted"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MplsTrafficEngMulticastIntact.IsNull() && !data.MplsTrafficEngMulticastIntact.ValueBool() {
-		if state != nil && !state.MplsTrafficEngMulticastIntact.IsNull() && state.MplsTrafficEngMulticastIntact.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/multicast-intact", data.getXPath()))
+		if state == nil || state.MplsTrafficEngMulticastIntact.IsNull() || state.MplsTrafficEngMulticastIntact.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "mpls/traffic-eng/multicast-intact"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MplsTrafficEngIgpIntact.IsNull() && !data.MplsTrafficEngIgpIntact.ValueBool() {
-		if state != nil && !state.MplsTrafficEngIgpIntact.IsNull() && state.MplsTrafficEngIgpIntact.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/igp-intact", data.getXPath()))
+		if state == nil || state.MplsTrafficEngIgpIntact.IsNull() || state.MplsTrafficEngIgpIntact.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "mpls/traffic-eng/igp-intact"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MplsLdpAutoConfig.IsNull() && !data.MplsLdpAutoConfig.ValueBool() {
-		if state != nil && !state.MplsLdpAutoConfig.IsNull() && state.MplsLdpAutoConfig.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/ldp/auto-config", data.getXPath()))
+		if state == nil || state.MplsLdpAutoConfig.IsNull() || state.MplsLdpAutoConfig.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "mpls/ldp/auto-config"))
 		}
 	}
 	for i := range data.PartitionDetectExternalAddressTracks {
@@ -7618,25 +7594,20 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, st
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		// Only delete if state has true and plan has false
 		if !data.PartitionDetectTracks[i].Ipv6.IsNull() && !data.PartitionDetectTracks[i].Ipv6.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.PartitionDetectTracks) && !state.PartitionDetectTracks[i].Ipv6.IsNull() && state.PartitionDetectTracks[i].Ipv6.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/partition-detect/tracks/track%v/", data.getXPath(), keyString))
+			if state == nil || i >= len(state.PartitionDetectTracks) || state.PartitionDetectTracks[i].Ipv6.IsNull() || state.PartitionDetectTracks[i].Ipv6.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "partition-detect/tracks/track", keyString), ""))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.PartitionDetectTracks[i].Ipv4.IsNull() && !data.PartitionDetectTracks[i].Ipv4.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.PartitionDetectTracks) && !state.PartitionDetectTracks[i].Ipv4.IsNull() && state.PartitionDetectTracks[i].Ipv4.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/partition-detect/tracks/track%v/", data.getXPath(), keyString))
+			if state == nil || i >= len(state.PartitionDetectTracks) || state.PartitionDetectTracks[i].Ipv4.IsNull() || state.PartitionDetectTracks[i].Ipv4.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "partition-detect/tracks/track", keyString), ""))
 			}
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.PartitionDetect.IsNull() && !data.PartitionDetect.ValueBool() {
-		if state != nil && !state.PartitionDetect.IsNull() && state.PartitionDetect.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/partition-detect", data.getXPath()))
+		if state == nil || state.PartitionDetect.IsNull() || state.PartitionDetect.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "partition-detect"))
 		}
 	}
 	for i := range data.SegmentRoutingSrv6Locators {
@@ -7670,32 +7641,24 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, st
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		// Only delete if state has true and plan has false
 		if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses) && !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull.IsNull() && state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/absolute/explicit-null", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses) || state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull.IsNull() || state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsoluteExplicitNull.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address", keyString), "absolute/explicit-null"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses) && !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable.IsNull() && state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/absolute/php-disable", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses) || state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable.IsNull() || state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].AbsolutePhpDisable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address", keyString), "absolute/php-disable"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses) && !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull.IsNull() && state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/index/explicit-null", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses) || state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull.IsNull() || state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexExplicitNull.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address", keyString), "index/explicit-null"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses) && !state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable.IsNull() && state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v/index/php-disable", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses) || state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable.IsNull() || state.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IndexPhpDisable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address", keyString), "index/php-disable"))
 			}
 		}
 	}
@@ -7706,32 +7669,24 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, st
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		// Only delete if state has true and plan has false
 		if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses) && !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull.IsNull() && state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/absolute/explicit-null", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses) || state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull.IsNull() || state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsoluteExplicitNull.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address", keyString), "absolute/explicit-null"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses) && !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable.IsNull() && state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/absolute/php-disable", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses) || state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable.IsNull() || state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].AbsolutePhpDisable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address", keyString), "absolute/php-disable"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses) && !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull.IsNull() && state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/index/explicit-null", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses) || state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull.IsNull() || state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexExplicitNull.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address", keyString), "index/explicit-null"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses) && !state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable.IsNull() && state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v/index/php-disable", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses) || state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable.IsNull() || state.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IndexPhpDisable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address", keyString), "index/php-disable"))
 			}
 		}
 	}
@@ -7742,99 +7697,80 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, st
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		// Only delete if state has true and plan has false
 		if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SegmentRoutingMplsConnectedPrefixSidMapAddresses) && !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull.IsNull() && state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/absolute/explicit-null", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SegmentRoutingMplsConnectedPrefixSidMapAddresses) || state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull.IsNull() || state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsoluteExplicitNull.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/address", keyString), "absolute/explicit-null"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SegmentRoutingMplsConnectedPrefixSidMapAddresses) && !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable.IsNull() && state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/absolute/php-disable", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SegmentRoutingMplsConnectedPrefixSidMapAddresses) || state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable.IsNull() || state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].AbsolutePhpDisable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/address", keyString), "absolute/php-disable"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SegmentRoutingMplsConnectedPrefixSidMapAddresses) && !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull.IsNull() && state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/index/explicit-null", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SegmentRoutingMplsConnectedPrefixSidMapAddresses) || state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull.IsNull() || state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexExplicitNull.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/address", keyString), "index/explicit-null"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SegmentRoutingMplsConnectedPrefixSidMapAddresses) && !state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable.IsNull() && state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v/index/php-disable", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SegmentRoutingMplsConnectedPrefixSidMapAddresses) || state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable.IsNull() || state.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IndexPhpDisable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/address", keyString), "index/php-disable"))
 			}
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SegmentRoutingMplsConnectedPrefixSidMap.IsNull() && !data.SegmentRoutingMplsConnectedPrefixSidMap.ValueBool() {
-		if state != nil && !state.SegmentRoutingMplsConnectedPrefixSidMap.IsNull() && state.SegmentRoutingMplsConnectedPrefixSidMap.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map", data.getXPath()))
+		if state == nil || state.SegmentRoutingMplsConnectedPrefixSidMap.IsNull() || state.SegmentRoutingMplsConnectedPrefixSidMap.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/mpls/connected-prefix-sid-map"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsNull() && !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.ValueBool() {
-		if state != nil && !state.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsNull() && state.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/advertise-local", data.getXPath()))
+		if state == nil || state.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsNull() || state.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/mpls/prefix-sid-map/advertise-local"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsNull() && !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.ValueBool() {
-		if state != nil && !state.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsNull() && state.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/advertise-local", data.getXPath()))
+		if state == nil || state.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsNull() || state.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/mpls/prefix-sid-map/advertise-local"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsNull() && !data.SegmentRoutingMplsPrefixSidMapReceiveDisable.ValueBool() {
-		if state != nil && !state.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsNull() && state.SegmentRoutingMplsPrefixSidMapReceiveDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/receive", data.getXPath()))
+		if state == nil || state.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsNull() || state.SegmentRoutingMplsPrefixSidMapReceiveDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/mpls/prefix-sid-map/receive"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SegmentRoutingMplsPrefixSidMapReceive.IsNull() && !data.SegmentRoutingMplsPrefixSidMapReceive.ValueBool() {
-		if state != nil && !state.SegmentRoutingMplsPrefixSidMapReceive.IsNull() && state.SegmentRoutingMplsPrefixSidMapReceive.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/receive", data.getXPath()))
+		if state == nil || state.SegmentRoutingMplsPrefixSidMapReceive.IsNull() || state.SegmentRoutingMplsPrefixSidMapReceive.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/mpls/prefix-sid-map/receive"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SegmentRoutingMplsUnlabeledProtectionDisable.IsNull() && !data.SegmentRoutingMplsUnlabeledProtectionDisable.ValueBool() {
-		if state != nil && !state.SegmentRoutingMplsUnlabeledProtectionDisable.IsNull() && state.SegmentRoutingMplsUnlabeledProtectionDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/unlabeled/protection/disable", data.getXPath()))
+		if state == nil || state.SegmentRoutingMplsUnlabeledProtectionDisable.IsNull() || state.SegmentRoutingMplsUnlabeledProtectionDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/mpls/unlabeled/protection/disable"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SegmentRoutingMplsSrPrefer.IsNull() && !data.SegmentRoutingMplsSrPrefer.ValueBool() {
-		if state != nil && !state.SegmentRoutingMplsSrPrefer.IsNull() && state.SegmentRoutingMplsSrPrefer.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/sr-prefer", data.getXPath()))
+		if state == nil || state.SegmentRoutingMplsSrPrefer.IsNull() || state.SegmentRoutingMplsSrPrefer.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/mpls/sr-prefer"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SegmentRoutingMplsEnable.IsNull() && !data.SegmentRoutingMplsEnable.ValueBool() {
-		if state != nil && !state.SegmentRoutingMplsEnable.IsNull() && state.SegmentRoutingMplsEnable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls/enable", data.getXPath()))
+		if state == nil || state.SegmentRoutingMplsEnable.IsNull() || state.SegmentRoutingMplsEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/mpls/enable"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SegmentRoutingLabeledOnly.IsNull() && !data.SegmentRoutingLabeledOnly.ValueBool() {
-		if state != nil && !state.SegmentRoutingLabeledOnly.IsNull() && state.SegmentRoutingLabeledOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/labeled-only", data.getXPath()))
+		if state == nil || state.SegmentRoutingLabeledOnly.IsNull() || state.SegmentRoutingLabeledOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/labeled-only"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SegmentRoutingBundleMemberAdjSid.IsNull() && !data.SegmentRoutingBundleMemberAdjSid.ValueBool() {
-		if state != nil && !state.SegmentRoutingBundleMemberAdjSid.IsNull() && state.SegmentRoutingBundleMemberAdjSid.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/bundle-member-adj-sid", data.getXPath()))
+		if state == nil || state.SegmentRoutingBundleMemberAdjSid.IsNull() || state.SegmentRoutingBundleMemberAdjSid.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/bundle-member-adj-sid"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.ValueBool() {
-		if state != nil && !state.DefaultInformationOriginate.IsNull() && state.DefaultInformationOriginate.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-information/originate", data.getXPath()))
+		if state == nil || state.DefaultInformationOriginate.IsNull() || state.DefaultInformationOriginate.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "default-information/originate"))
 		}
 	}
 	for i := range data.FastReroutePerLinkPriorityLimitLevels {
@@ -7853,10 +7789,9 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, st
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.FastReroutePerLinkUseCandidateOnly.IsNull() && !data.FastReroutePerLinkUseCandidateOnly.ValueBool() {
-		if state != nil && !state.FastReroutePerLinkUseCandidateOnly.IsNull() && state.FastReroutePerLinkUseCandidateOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fast-reroute/per-link/use-candidate-only", data.getXPath()))
+		if state == nil || state.FastReroutePerLinkUseCandidateOnly.IsNull() || state.FastReroutePerLinkUseCandidateOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fast-reroute/per-link/use-candidate-only"))
 		}
 	}
 	for i := range data.FastReroutePerPrefixLoadSharingDisableLevels {
@@ -7867,10 +7802,9 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, st
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.FastReroutePerPrefixLoadSharingDisable.IsNull() && !data.FastReroutePerPrefixLoadSharingDisable.ValueBool() {
-		if state != nil && !state.FastReroutePerPrefixLoadSharingDisable.IsNull() && state.FastReroutePerPrefixLoadSharingDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fast-reroute/per-prefix/load-sharing/disable", data.getXPath()))
+		if state == nil || state.FastReroutePerPrefixLoadSharingDisable.IsNull() || state.FastReroutePerPrefixLoadSharingDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fast-reroute/per-prefix/load-sharing/disable"))
 		}
 	}
 	for i := range data.FastReroutePerPrefixRemoteLfaPrefixListLevels {
@@ -7889,16 +7823,14 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, st
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsNull() && !data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.ValueBool() {
-		if state != nil && !state.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsNull() && state.FastReroutePerPrefixSrlgProtectionWeightedGlobal.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fast-reroute/per-prefix/srlg-protection/weighted-global", data.getXPath()))
+		if state == nil || state.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsNull() || state.FastReroutePerPrefixSrlgProtectionWeightedGlobal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fast-reroute/per-prefix/srlg-protection/weighted-global"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.FastReroutePerPrefixUseCandidateOnly.IsNull() && !data.FastReroutePerPrefixUseCandidateOnly.ValueBool() {
-		if state != nil && !state.FastReroutePerPrefixUseCandidateOnly.IsNull() && state.FastReroutePerPrefixUseCandidateOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fast-reroute/per-prefix/use-candidate-only", data.getXPath()))
+		if state == nil || state.FastReroutePerPrefixUseCandidateOnly.IsNull() || state.FastReroutePerPrefixUseCandidateOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fast-reroute/per-prefix/use-candidate-only"))
 		}
 	}
 	for i := range data.FastReroutePerPrefixPriorityLimitLevels {
@@ -7909,22 +7841,19 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, st
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.AttachedBitReceiveIgnore.IsNull() && !data.AttachedBitReceiveIgnore.ValueBool() {
-		if state != nil && !state.AttachedBitReceiveIgnore.IsNull() && state.AttachedBitReceiveIgnore.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/attached-bit/receive/ignore", data.getXPath()))
+		if state == nil || state.AttachedBitReceiveIgnore.IsNull() || state.AttachedBitReceiveIgnore.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "attached-bit/receive/ignore"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.RouteSourceFirstHop.IsNull() && !data.RouteSourceFirstHop.ValueBool() {
-		if state != nil && !state.RouteSourceFirstHop.IsNull() && state.RouteSourceFirstHop.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/route/source/first-hop", data.getXPath()))
+		if state == nil || state.RouteSourceFirstHop.IsNull() || state.RouteSourceFirstHop.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "route/source/first-hop"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.AdjacencyCheckDisable.IsNull() && !data.AdjacencyCheckDisable.ValueBool() {
-		if state != nil && !state.AdjacencyCheckDisable.IsNull() && state.AdjacencyCheckDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/adjacency-check/disable", data.getXPath()))
+		if state == nil || state.AdjacencyCheckDisable.IsNull() || state.AdjacencyCheckDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "adjacency-check/disable"))
 		}
 	}
 	for i := range data.PropagateLevels {
@@ -7974,18 +7903,15 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, st
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		// Only delete if state has true and plan has false
 		if !data.SpfIntervalLevels[i].Ietf.IsNull() && !data.SpfIntervalLevels[i].Ietf.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SpfIntervalLevels) && !state.SpfIntervalLevels[i].Ietf.IsNull() && state.SpfIntervalLevels[i].Ietf.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/spf-interval-levels/level%v/ietf", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SpfIntervalLevels) || state.SpfIntervalLevels[i].Ietf.IsNull() || state.SpfIntervalLevels[i].Ietf.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "spf-interval-levels/level", keyString), "ietf"))
 			}
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SpfIntervalIetf.IsNull() && !data.SpfIntervalIetf.ValueBool() {
-		if state != nil && !state.SpfIntervalIetf.IsNull() && state.SpfIntervalIetf.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/spf-interval/ietf", data.getXPath()))
+		if state == nil || state.SpfIntervalIetf.IsNull() || state.SpfIntervalIetf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "spf-interval/ietf"))
 		}
 	}
 	for i := range data.MetricStyleLevels {
@@ -7995,70 +7921,55 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, st
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		// Only delete if state has true and plan has false
 		if !data.MetricStyleLevels[i].Transition.IsNull() && !data.MetricStyleLevels[i].Transition.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MetricStyleLevels) && !state.MetricStyleLevels[i].Transition.IsNull() && state.MetricStyleLevels[i].Transition.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/transition", data.getXPath(), keyString))
+			if state == nil || i >= len(state.MetricStyleLevels) || state.MetricStyleLevels[i].Transition.IsNull() || state.MetricStyleLevels[i].Transition.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "metric-style-levels/metric-style-level", keyString), "transition"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.MetricStyleLevels[i].WideTransition.IsNull() && !data.MetricStyleLevels[i].WideTransition.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MetricStyleLevels) && !state.MetricStyleLevels[i].WideTransition.IsNull() && state.MetricStyleLevels[i].WideTransition.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/wide/transition", data.getXPath(), keyString))
+			if state == nil || i >= len(state.MetricStyleLevels) || state.MetricStyleLevels[i].WideTransition.IsNull() || state.MetricStyleLevels[i].WideTransition.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "metric-style-levels/metric-style-level", keyString), "wide/transition"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.MetricStyleLevels[i].Wide.IsNull() && !data.MetricStyleLevels[i].Wide.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MetricStyleLevels) && !state.MetricStyleLevels[i].Wide.IsNull() && state.MetricStyleLevels[i].Wide.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/wide", data.getXPath(), keyString))
+			if state == nil || i >= len(state.MetricStyleLevels) || state.MetricStyleLevels[i].Wide.IsNull() || state.MetricStyleLevels[i].Wide.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "metric-style-levels/metric-style-level", keyString), "wide"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.MetricStyleLevels[i].NarrowTransition.IsNull() && !data.MetricStyleLevels[i].NarrowTransition.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MetricStyleLevels) && !state.MetricStyleLevels[i].NarrowTransition.IsNull() && state.MetricStyleLevels[i].NarrowTransition.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/narrow/transition", data.getXPath(), keyString))
+			if state == nil || i >= len(state.MetricStyleLevels) || state.MetricStyleLevels[i].NarrowTransition.IsNull() || state.MetricStyleLevels[i].NarrowTransition.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "metric-style-levels/metric-style-level", keyString), "narrow/transition"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.MetricStyleLevels[i].Narrow.IsNull() && !data.MetricStyleLevels[i].Narrow.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MetricStyleLevels) && !state.MetricStyleLevels[i].Narrow.IsNull() && state.MetricStyleLevels[i].Narrow.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/narrow", data.getXPath(), keyString))
+			if state == nil || i >= len(state.MetricStyleLevels) || state.MetricStyleLevels[i].Narrow.IsNull() || state.MetricStyleLevels[i].Narrow.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "metric-style-levels/metric-style-level", keyString), "narrow"))
 			}
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MetricStyleTransition.IsNull() && !data.MetricStyleTransition.ValueBool() {
-		if state != nil && !state.MetricStyleTransition.IsNull() && state.MetricStyleTransition.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/transition", data.getXPath()))
+		if state == nil || state.MetricStyleTransition.IsNull() || state.MetricStyleTransition.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "metric-style/transition"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MetricStyleWideTransition.IsNull() && !data.MetricStyleWideTransition.ValueBool() {
-		if state != nil && !state.MetricStyleWideTransition.IsNull() && state.MetricStyleWideTransition.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/wide/transition", data.getXPath()))
+		if state == nil || state.MetricStyleWideTransition.IsNull() || state.MetricStyleWideTransition.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "metric-style/wide/transition"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MetricStyleWide.IsNull() && !data.MetricStyleWide.ValueBool() {
-		if state != nil && !state.MetricStyleWide.IsNull() && state.MetricStyleWide.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/wide", data.getXPath()))
+		if state == nil || state.MetricStyleWide.IsNull() || state.MetricStyleWide.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "metric-style/wide"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MetricStyleNarrowTransition.IsNull() && !data.MetricStyleNarrowTransition.ValueBool() {
-		if state != nil && !state.MetricStyleNarrowTransition.IsNull() && state.MetricStyleNarrowTransition.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/narrow/transition", data.getXPath()))
+		if state == nil || state.MetricStyleNarrowTransition.IsNull() || state.MetricStyleNarrowTransition.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "metric-style/narrow/transition"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MetricStyleNarrow.IsNull() && !data.MetricStyleNarrow.ValueBool() {
-		if state != nil && !state.MetricStyleNarrow.IsNull() && state.MetricStyleNarrow.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/narrow", data.getXPath()))
+		if state == nil || state.MetricStyleNarrow.IsNull() || state.MetricStyleNarrow.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "metric-style/narrow"))
 		}
 	}
 	for i := range data.MetricLevels {
@@ -8076,57 +7987,45 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, st
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		// Only delete if state has true and plan has false
 		if !data.SummaryPrefixes[i].PartitionRepair.IsNull() && !data.SummaryPrefixes[i].PartitionRepair.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SummaryPrefixes) && !state.SummaryPrefixes[i].PartitionRepair.IsNull() && state.SummaryPrefixes[i].PartitionRepair.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/partition-repair", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SummaryPrefixes) || state.SummaryPrefixes[i].PartitionRepair.IsNull() || state.SummaryPrefixes[i].PartitionRepair.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "summary-prefix/ip-addresses/ip-address", keyString), "partition-repair"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.SummaryPrefixes[i].UnreachableTagExcludePrefixes.IsNull() && !data.SummaryPrefixes[i].UnreachableTagExcludePrefixes.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SummaryPrefixes) && !state.SummaryPrefixes[i].UnreachableTagExcludePrefixes.IsNull() && state.SummaryPrefixes[i].UnreachableTagExcludePrefixes.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/adv-unreachable/unreachable-component-tag/exclude", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SummaryPrefixes) || state.SummaryPrefixes[i].UnreachableTagExcludePrefixes.IsNull() || state.SummaryPrefixes[i].UnreachableTagExcludePrefixes.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "summary-prefix/ip-addresses/ip-address", keyString), "adv-unreachable/unreachable-component-tag/exclude"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.SummaryPrefixes[i].AdvUnreachable.IsNull() && !data.SummaryPrefixes[i].AdvUnreachable.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SummaryPrefixes) && !state.SummaryPrefixes[i].AdvUnreachable.IsNull() && state.SummaryPrefixes[i].AdvUnreachable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/adv-unreachable", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SummaryPrefixes) || state.SummaryPrefixes[i].AdvUnreachable.IsNull() || state.SummaryPrefixes[i].AdvUnreachable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "summary-prefix/ip-addresses/ip-address", keyString), "adv-unreachable"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.SummaryPrefixes[i].Explicit.IsNull() && !data.SummaryPrefixes[i].Explicit.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SummaryPrefixes) && !state.SummaryPrefixes[i].Explicit.IsNull() && state.SummaryPrefixes[i].Explicit.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v/explicit", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SummaryPrefixes) || state.SummaryPrefixes[i].Explicit.IsNull() || state.SummaryPrefixes[i].Explicit.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "summary-prefix/ip-addresses/ip-address", keyString), "explicit"))
 			}
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MicroloopAvoidanceProtected.IsNull() && !data.MicroloopAvoidanceProtected.ValueBool() {
-		if state != nil && !state.MicroloopAvoidanceProtected.IsNull() && state.MicroloopAvoidanceProtected.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/microloop/avoidance/enable/protected", data.getXPath()))
+		if state == nil || state.MicroloopAvoidanceProtected.IsNull() || state.MicroloopAvoidanceProtected.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "microloop/avoidance/enable/protected"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MicroloopAvoidance.IsNull() && !data.MicroloopAvoidance.ValueBool() {
-		if state != nil && !state.MicroloopAvoidance.IsNull() && state.MicroloopAvoidance.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/microloop/avoidance/enable", data.getXPath()))
+		if state == nil || state.MicroloopAvoidance.IsNull() || state.MicroloopAvoidance.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "microloop/avoidance/enable"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.AdvertiseLinkAttributes.IsNull() && !data.AdvertiseLinkAttributes.ValueBool() {
-		if state != nil && !state.AdvertiseLinkAttributes.IsNull() && state.AdvertiseLinkAttributes.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/link/attributes", data.getXPath()))
+		if state == nil || state.AdvertiseLinkAttributes.IsNull() || state.AdvertiseLinkAttributes.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "advertise/link/attributes"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.AdvertisePassiveOnly.IsNull() && !data.AdvertisePassiveOnly.ValueBool() {
-		if state != nil && !state.AdvertisePassiveOnly.IsNull() && state.AdvertisePassiveOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/passive-only", data.getXPath()))
+		if state == nil || state.AdvertisePassiveOnly.IsNull() || state.AdvertisePassiveOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "advertise/passive-only"))
 		}
 	}
 	for i := range data.RedistributeOspfv3 {
@@ -8136,18 +8035,14 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, st
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		// Only delete if state has true and plan has false
 		if !data.RedistributeOspfv3[i].MatchExternal.IsNull() && !data.RedistributeOspfv3[i].MatchExternal.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.RedistributeOspfv3) && !state.RedistributeOspfv3[i].MatchExternal.IsNull() && state.RedistributeOspfv3[i].MatchExternal.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/external", data.getXPath(), keyString))
+			if state == nil || i >= len(state.RedistributeOspfv3) || state.RedistributeOspfv3[i].MatchExternal.IsNull() || state.RedistributeOspfv3[i].MatchExternal.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "redistribute/ospfv3s/ospfv3", keyString), "match/external"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.RedistributeOspfv3[i].MatchInternal.IsNull() && !data.RedistributeOspfv3[i].MatchInternal.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.RedistributeOspfv3) && !state.RedistributeOspfv3[i].MatchInternal.IsNull() && state.RedistributeOspfv3[i].MatchInternal.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/internal", data.getXPath(), keyString))
+			if state == nil || i >= len(state.RedistributeOspfv3) || state.RedistributeOspfv3[i].MatchInternal.IsNull() || state.RedistributeOspfv3[i].MatchInternal.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "redistribute/ospfv3s/ospfv3", keyString), "match/internal"))
 			}
 		}
 	}
@@ -8158,18 +8053,14 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, st
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		// Only delete if state has true and plan has false
 		if !data.RedistributeOspf[i].MatchExternal.IsNull() && !data.RedistributeOspf[i].MatchExternal.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.RedistributeOspf) && !state.RedistributeOspf[i].MatchExternal.IsNull() && state.RedistributeOspf[i].MatchExternal.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/external", data.getXPath(), keyString))
+			if state == nil || i >= len(state.RedistributeOspf) || state.RedistributeOspf[i].MatchExternal.IsNull() || state.RedistributeOspf[i].MatchExternal.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "redistribute/ospfs/ospf", keyString), "match/external"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.RedistributeOspf[i].MatchInternal.IsNull() && !data.RedistributeOspf[i].MatchInternal.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.RedistributeOspf) && !state.RedistributeOspf[i].MatchInternal.IsNull() && state.RedistributeOspf[i].MatchInternal.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/internal", data.getXPath(), keyString))
+			if state == nil || i >= len(state.RedistributeOspf) || state.RedistributeOspf[i].MatchInternal.IsNull() || state.RedistributeOspf[i].MatchInternal.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "redistribute/ospfs/ospf", keyString), "match/internal"))
 			}
 		}
 	}
@@ -8188,24 +8079,20 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, st
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		// Only delete if state has true and plan has false
 		if !data.RedistributeIsis[i].DownFlagClear.IsNull() && !data.RedistributeIsis[i].DownFlagClear.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.RedistributeIsis) && !state.RedistributeIsis[i].DownFlagClear.IsNull() && state.RedistributeIsis[i].DownFlagClear.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/down-flag-clear", data.getXPath(), keyString))
+			if state == nil || i >= len(state.RedistributeIsis) || state.RedistributeIsis[i].DownFlagClear.IsNull() || state.RedistributeIsis[i].DownFlagClear.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "redistribute/isis-processes/isis-process", keyString), "down-flag-clear"))
 			}
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.RedistributeStatic.IsNull() && !data.RedistributeStatic.ValueBool() {
-		if state != nil && !state.RedistributeStatic.IsNull() && state.RedistributeStatic.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/static", data.getXPath()))
+		if state == nil || state.RedistributeStatic.IsNull() || state.RedistributeStatic.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "redistribute/static"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.RedistributeConnected.IsNull() && !data.RedistributeConnected.ValueBool() {
-		if state != nil && !state.RedistributeConnected.IsNull() && state.RedistributeConnected.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/connected", data.getXPath()))
+		if state == nil || state.RedistributeConnected.IsNull() || state.RedistributeConnected.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "redistribute/connected"))
 		}
 	}
 	for i := range data.DistanceSources {
@@ -8222,474 +8109,811 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context, st
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []string {
+func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
 	if !data.ApplyWeightUcmpOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/apply-weight", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "apply-weight"))
 	}
 	if !data.ApplyWeightEcmpOnlyBandwidth.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/apply-weight/ecmp-only", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "apply-weight/ecmp-only"))
 	}
 	if !data.ApplyWeightEcmpOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/apply-weight", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "apply-weight"))
 	}
 	if !data.PrefixUnreachableRxProcessEnable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-unreachable/rx-process-enable", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "prefix-unreachable/rx-process-enable"))
 	}
 	if !data.PrefixUnreachableAdvMetric.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-unreachable/adv-metric", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "prefix-unreachable/adv-metric"))
 	}
 	if !data.PrefixUnreachableAdvLifetime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-unreachable/adv-lifetime", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "prefix-unreachable/adv-lifetime"))
 	}
 	if !data.PrefixUnreachableAdvMaximum.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-unreachable/adv-maximum", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "prefix-unreachable/adv-maximum"))
 	}
 	if !data.PrefixUnreachable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-unreachable", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "prefix-unreachable"))
 	}
 	if !data.MplsTrafficEngLevel2Only.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-two-only", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "mpls/traffic-eng/traffic-eng-level/level-two-only"))
 	}
 	if !data.MplsTrafficEngLevel1.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "mpls/traffic-eng/traffic-eng-level/level-one"))
 	}
 	if !data.MplsTrafficEngLevel12.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one-two", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "mpls/traffic-eng/traffic-eng-level/level-one-two"))
 	}
 	for i := range data.MplsTrafficEngTunnelMetricLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.MplsTrafficEngTunnelMetricLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/metric-levels/metric-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.MplsTrafficEngTunnelMetricLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.MplsTrafficEngTunnelMetricLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "mpls/traffic-eng/tunnel/metric-levels/metric-level", keyString))
 	}
 	if !data.MplsTrafficEngTunnelAnycastPreferIgpCost.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/anycast-prefer-igp-cost", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "mpls/traffic-eng/tunnel/anycast-prefer-igp-cost"))
 	}
 	if !data.MplsTrafficEngTunnelMetric.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/metric", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "mpls/traffic-eng/tunnel/metric"))
 	}
 	if !data.MplsTrafficEngTunnelPreferred.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/preferred", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "mpls/traffic-eng/tunnel/preferred"))
 	}
 	if !data.MplsTrafficEngTunnelRestricted.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/tunnel/restricted", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "mpls/traffic-eng/tunnel/restricted"))
 	}
 	if !data.MplsTrafficEngMulticastIntact.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/multicast-intact", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "mpls/traffic-eng/multicast-intact"))
 	}
 	if !data.MplsTrafficEngIgpIntact.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/igp-intact", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "mpls/traffic-eng/igp-intact"))
 	}
 	if !data.MplsTrafficEngRouterIdInterfaceName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/router-id/interface-name", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "mpls/traffic-eng/router-id/interface-name"))
 	}
 	if !data.MplsTrafficEngRouterIdIpv4Address.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/router-id/ipv4-address", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "mpls/traffic-eng/router-id/ipv4-address"))
 	}
 	if !data.MplsLdpAutoConfig.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/ldp/auto-config", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "mpls/ldp/auto-config"))
 	}
 	for i := range data.PartitionDetectExternalAddressTracks {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.PartitionDetectExternalAddressTracks[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/partition-detect/external-address-tracks/external-address-track%v", data.getPath(), keyPath))
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.PartitionDetectExternalAddressTracks[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.PartitionDetectExternalAddressTracks[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "partition-detect/external-address-tracks/external-address-track", keyString))
 	}
 	for i := range data.PartitionDetectTracks {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.PartitionDetectTracks[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/partition-detect/tracks/track%v", data.getPath(), keyPath))
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.PartitionDetectTracks[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.PartitionDetectTracks[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "partition-detect/tracks/track", keyString))
 	}
 	if !data.PartitionDetect.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/partition-detect", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "partition-detect"))
 	}
 	for i := range data.SegmentRoutingSrv6Locators {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[locator-string=" + data.SegmentRoutingSrv6Locators[i].LocatorName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v", data.getPath(), keyPath))
+		keys := [...]string{"locator-string"}
+		keyValues := [...]string{data.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/srv6/locators/locator", keyString))
 	}
 	for i := range data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[ip-address=" + data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IpAddress.ValueString() + "]"
-		keyPath += "[address-prefix=" + strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].Prefix.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address%v", data.getPath(), keyPath))
+		keys := [...]string{"ip-address", "address-prefix"}
+		keyValues := [...]string{data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IpAddress.ValueString(), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].Prefix.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].IpAddress.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(data.SegmentRoutingMplsConnectedPrefixSidMapStrictSpfAddresses[i].Prefix.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address", keyString))
 	}
 	for i := range data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[ip-address=" + data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IpAddress.ValueString() + "]"
-		keyPath += "[address-prefix=" + strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].Prefix.ValueInt64(), 10) + "]"
-		keyPath += "[flex-algo=" + strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].FlexAlgo.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address%v", data.getPath(), keyPath))
+		keys := [...]string{"ip-address", "address-prefix", "flex-algo"}
+		keyValues := [...]string{data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IpAddress.ValueString(), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].Prefix.ValueInt64(), 10), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].FlexAlgo.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].IpAddress.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].Prefix.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(data.SegmentRoutingMplsConnectedPrefixSidMapFlexAlgoAddresses[i].FlexAlgo.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address", keyString))
 	}
 	for i := range data.SegmentRoutingMplsConnectedPrefixSidMapAddresses {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[ip-address=" + data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IpAddress.ValueString() + "]"
-		keyPath += "[address-prefix=" + strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].Prefix.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map/addresses/address%v", data.getPath(), keyPath))
+		keys := [...]string{"ip-address", "address-prefix"}
+		keyValues := [...]string{data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IpAddress.ValueString(), strconv.FormatInt(data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].Prefix.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].IpAddress.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(data.SegmentRoutingMplsConnectedPrefixSidMapAddresses[i].Prefix.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/mpls/connected-prefix-sid-map/addresses/address", keyString))
 	}
 	if !data.SegmentRoutingMplsConnectedPrefixSidMap.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/connected-prefix-sid-map", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/mpls/connected-prefix-sid-map"))
 	}
 	if !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocalDomainWide.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/advertise-local", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/mpls/prefix-sid-map/advertise-local"))
 	}
 	if !data.SegmentRoutingMplsPrefixSidMapAdvertiseLocal.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/advertise-local", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/mpls/prefix-sid-map/advertise-local"))
 	}
 	if !data.SegmentRoutingMplsPrefixSidMapReceiveDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/receive", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/mpls/prefix-sid-map/receive"))
 	}
 	if !data.SegmentRoutingMplsPrefixSidMapReceive.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/prefix-sid-map/receive", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/mpls/prefix-sid-map/receive"))
 	}
 	if !data.SegmentRoutingMplsUnlabeledProtectionDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/unlabeled/protection/disable", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/mpls/unlabeled/protection/disable"))
 	}
 	if !data.SegmentRoutingMplsUnlabeledProtectionRoutePolicy.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/unlabeled/protection/route-policy", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/mpls/unlabeled/protection/route-policy"))
 	}
 	if !data.SegmentRoutingMplsUnlabeledProtectionPrefixList.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/unlabeled/protection/prefix-list", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/mpls/unlabeled/protection/prefix-list"))
 	}
 	if !data.SegmentRoutingMplsSrPrefer.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/sr-prefer", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/mpls/sr-prefer"))
 	}
 	if !data.SegmentRoutingMplsEnable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/enable", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/mpls/enable"))
 	}
 	if !data.SegmentRoutingProtectedAdjacencySidDelay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/protected-adjacency-sid-delay", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/protected-adjacency-sid-delay"))
 	}
 	if !data.SegmentRoutingLabeledOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/labeled-only", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/labeled-only"))
 	}
 	if !data.SegmentRoutingBundleMemberAdjSid.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/bundle-member-adj-sid", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/bundle-member-adj-sid"))
 	}
 	if !data.DefaultInformationOriginateRoutePolicy.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-information/originate/route-policy", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "default-information/originate/route-policy"))
 	}
 	if !data.DefaultInformationOriginate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-information/originate", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "default-information/originate"))
 	}
 	for i := range data.FastReroutePerLinkPriorityLimitLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.FastReroutePerLinkPriorityLimitLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/priority-limit-levels/priority-limit-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerLinkPriorityLimitLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.FastReroutePerLinkPriorityLimitLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "fast-reroute/per-link/priority-limit-levels/priority-limit-level", keyString))
 	}
 	if !data.FastReroutePerLinkPriorityLimit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/priority-limit", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fast-reroute/per-link/priority-limit"))
 	}
 	for i := range data.FastReroutePerLinkUseCandidateOnlyLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.FastReroutePerLinkUseCandidateOnlyLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/use-candidate-only-levels/use-candidate-only-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerLinkUseCandidateOnlyLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.FastReroutePerLinkUseCandidateOnlyLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "fast-reroute/per-link/use-candidate-only-levels/use-candidate-only-level", keyString))
 	}
 	if !data.FastReroutePerLinkUseCandidateOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/use-candidate-only", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fast-reroute/per-link/use-candidate-only"))
 	}
 	if !data.FastReroutePerPrefixTiebreakerSrlgDisjointIndex.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index"))
 	}
 	if !data.FastReroutePerPrefixTiebreakerSecondaryPathIndex.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/secondary-path/index", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fast-reroute/per-prefix/tiebreaker/secondary-path/index"))
 	}
 	if !data.FastReroutePerPrefixTiebreakerPrimaryPathIndex.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/primary-path/index", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fast-reroute/per-prefix/tiebreaker/primary-path/index"))
 	}
 	if !data.FastReroutePerPrefixTiebreakerNodeProtectingIndex.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/node-protecting/index", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fast-reroute/per-prefix/tiebreaker/node-protecting/index"))
 	}
 	if !data.FastReroutePerPrefixTiebreakerLowestBackupMetricIndex.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/lowest-backup-metric/index", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fast-reroute/per-prefix/tiebreaker/lowest-backup-metric/index"))
 	}
 	if !data.FastReroutePerPrefixTiebreakerLcDisjointIndex.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/lc-disjoint/index", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fast-reroute/per-prefix/tiebreaker/lc-disjoint/index"))
 	}
 	if !data.FastReroutePerPrefixTiebreakerDownstreamIndex.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/tiebreaker/downstream/index", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fast-reroute/per-prefix/tiebreaker/downstream/index"))
 	}
 	for i := range data.FastReroutePerPrefixLoadSharingDisableLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.FastReroutePerPrefixLoadSharingDisableLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/load-sharing/disable-levels/disable-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixLoadSharingDisableLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.FastReroutePerPrefixLoadSharingDisableLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "fast-reroute/per-prefix/load-sharing/disable-levels/disable-level", keyString))
 	}
 	if !data.FastReroutePerPrefixLoadSharingDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/load-sharing/disable", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fast-reroute/per-prefix/load-sharing/disable"))
 	}
 	for i := range data.FastReroutePerPrefixRemoteLfaPrefixListLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/remote-lfa/prefix-list-levels/prefix-list-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.FastReroutePerPrefixRemoteLfaPrefixListLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "fast-reroute/per-prefix/remote-lfa/prefix-list-levels/prefix-list-level", keyString))
 	}
 	if !data.FastReroutePerPrefixRemoteLfaPrefixList.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/remote-lfa/prefix-list", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fast-reroute/per-prefix/remote-lfa/prefix-list"))
 	}
 	for i := range data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/srlg-protection/weighted-global-levels/weighted-global-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.FastReroutePerPrefixSrlgProtectionWeightedGlobalLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "fast-reroute/per-prefix/srlg-protection/weighted-global-levels/weighted-global-level", keyString))
 	}
 	if !data.FastReroutePerPrefixSrlgProtectionWeightedGlobal.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/srlg-protection/weighted-global", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fast-reroute/per-prefix/srlg-protection/weighted-global"))
 	}
 	if !data.FastReroutePerPrefixUseCandidateOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/use-candidate-only", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fast-reroute/per-prefix/use-candidate-only"))
 	}
 	for i := range data.FastReroutePerPrefixPriorityLimitLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.FastReroutePerPrefixPriorityLimitLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/priority-limit-levels/priority-limit-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixPriorityLimitLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.FastReroutePerPrefixPriorityLimitLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "fast-reroute/per-prefix/priority-limit-levels/priority-limit-level", keyString))
 	}
 	if !data.FastReroutePerPrefixPriorityLimit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/priority-limit", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fast-reroute/per-prefix/priority-limit"))
 	}
 	if !data.FastRerouteDelayInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/delay-interval", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fast-reroute/delay-interval"))
 	}
 	if !data.AttachedBitSend.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/attached-bit/send", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "attached-bit/send"))
 	}
 	if !data.AttachedBitReceiveIgnore.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/attached-bit/receive/ignore", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "attached-bit/receive/ignore"))
 	}
 	if !data.RouteSourceFirstHop.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/route/source/first-hop", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "route/source/first-hop"))
 	}
 	if !data.AdjacencyCheckDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/adjacency-check/disable", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "adjacency-check/disable"))
 	}
 	for i := range data.PropagateLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[source-level=" + strconv.FormatInt(data.PropagateLevels[i].SourceLevel.ValueInt64(), 10) + "]"
-		keyPath += "[destination-level=" + strconv.FormatInt(data.PropagateLevels[i].DestinationLevel.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/propagate/levels/level%v", data.getPath(), keyPath))
+		keys := [...]string{"source-level", "destination-level"}
+		keyValues := [...]string{strconv.FormatInt(data.PropagateLevels[i].SourceLevel.ValueInt64(), 10), strconv.FormatInt(data.PropagateLevels[i].DestinationLevel.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.PropagateLevels[i].SourceLevel.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(data.PropagateLevels[i].DestinationLevel.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "propagate/levels/level", keyString))
 	}
 	for i := range data.MaximumRedistributedPrefixesLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.MaximumRedistributedPrefixesLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-redistributed-prefixes-levels/maximum-redistributed-prefixes-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.MaximumRedistributedPrefixesLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.MaximumRedistributedPrefixesLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "maximum-redistributed-prefixes-levels/maximum-redistributed-prefixes-level", keyString))
 	}
 	if !data.MaximumRedistributedPrefixes.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-redistributed-prefixes", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "maximum-redistributed-prefixes"))
 	}
 	for i := range data.SpfPrefixPriorityMediumLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.SpfPrefixPriorityMediumLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.SpfPrefixPriorityMediumLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.SpfPrefixPriorityMediumLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "spf/prefix-priority-medium-levels/prefix-priority-medium-level", keyString))
 	}
 	for i := range data.SpfPrefixPriorityHighLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.SpfPrefixPriorityHighLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.SpfPrefixPriorityHighLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.SpfPrefixPriorityHighLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "spf/prefix-priority-high-levels/prefix-priority-high-level", keyString))
 	}
 	for i := range data.SpfPrefixPriorityCriticalLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.SpfPrefixPriorityCriticalLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.SpfPrefixPriorityCriticalLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.SpfPrefixPriorityCriticalLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "spf/prefix-priority-critical-levels/prefix-priority-critical-level", keyString))
 	}
 	if !data.SpfPrefixPriorityMediumPrefixListName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/medium/prefixlist-name", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "spf/prefix-priority/medium/prefixlist-name"))
 	}
 	if !data.SpfPrefixPriorityMediumTag.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/medium/tag", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "spf/prefix-priority/medium/tag"))
 	}
 	if !data.SpfPrefixPriorityHighPrefixListName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/high/prefixlist-name", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "spf/prefix-priority/high/prefixlist-name"))
 	}
 	if !data.SpfPrefixPriorityHighTag.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/high/tag", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "spf/prefix-priority/high/tag"))
 	}
 	if !data.SpfPrefixPriorityCriticalPrefixListName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/critical/prefixlist-name", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "spf/prefix-priority/critical/prefixlist-name"))
 	}
 	if !data.SpfPrefixPriorityCriticalTag.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/critical/tag", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "spf/prefix-priority/critical/tag"))
 	}
 	for i := range data.SpfIntervalLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.SpfIntervalLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf-interval-levels/level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.SpfIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.SpfIntervalLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "spf-interval-levels/level", keyString))
 	}
 	if !data.SpfIntervalIetfHolddownInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf-interval/ietf/holddown-interval", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "spf-interval/ietf/holddown-interval"))
 	}
 	if !data.SpfIntervalIetfLearnInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf-interval/ietf/learn-interval", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "spf-interval/ietf/learn-interval"))
 	}
 	if !data.SpfIntervalIetfLongWait.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf-interval/ietf/long-wait", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "spf-interval/ietf/long-wait"))
 	}
 	if !data.SpfIntervalIetfShortWait.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf-interval/ietf/short-wait", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "spf-interval/ietf/short-wait"))
 	}
 	if !data.SpfIntervalIetfInitialWait.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf-interval/ietf/initial-wait", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "spf-interval/ietf/initial-wait"))
 	}
 	if !data.SpfIntervalIetf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf-interval/ietf", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "spf-interval/ietf"))
 	}
 	if !data.SpfIntervalSecondaryWait.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf-interval/secondary-wait", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "spf-interval/secondary-wait"))
 	}
 	if !data.SpfIntervalInitialWait.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf-interval/initial-wait", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "spf-interval/initial-wait"))
 	}
 	if !data.SpfIntervalMaximumWait.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf-interval/maximum-wait", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "spf-interval/maximum-wait"))
 	}
 	for i := range data.MetricStyleLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.MetricStyleLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.MetricStyleLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.MetricStyleLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "metric-style-levels/metric-style-level", keyString))
 	}
 	if !data.MetricStyleTransition.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/transition", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "metric-style/transition"))
 	}
 	if !data.MetricStyleWideTransition.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/wide/transition", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "metric-style/wide/transition"))
 	}
 	if !data.MetricStyleWide.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/wide", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "metric-style/wide"))
 	}
 	if !data.MetricStyleNarrowTransition.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/narrow/transition", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "metric-style/narrow/transition"))
 	}
 	if !data.MetricStyleNarrow.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/narrow", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "metric-style/narrow"))
 	}
 	for i := range data.MetricLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.MetricLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-levels/metric-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.MetricLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.MetricLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "metric-levels/metric-level", keyString))
 	}
 	if !data.Metric.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "metric"))
 	}
 	for i := range data.SummaryPrefixes {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.SummaryPrefixes[i].Address.ValueString() + "]"
-		keyPath += "[address-prefix=" + strconv.FormatInt(data.SummaryPrefixes[i].Prefix.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/summary-prefix/ip-addresses/ip-address%v", data.getPath(), keyPath))
+		keys := [...]string{"address", "address-prefix"}
+		keyValues := [...]string{data.SummaryPrefixes[i].Address.ValueString(), strconv.FormatInt(data.SummaryPrefixes[i].Prefix.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.SummaryPrefixes[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(data.SummaryPrefixes[i].Prefix.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "summary-prefix/ip-addresses/ip-address", keyString))
 	}
 	if !data.MicroloopAvoidanceRibUpdateDelay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/microloop/avoidance/rib-update-delay", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "microloop/avoidance/rib-update-delay"))
 	}
 	if !data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/microloop/avoidance/enable/segment-routing/route-policy", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "microloop/avoidance/enable/segment-routing/route-policy"))
 	}
 	if !data.MicroloopAvoidanceProtected.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/microloop/avoidance/enable/protected", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "microloop/avoidance/enable/protected"))
 	}
 	if !data.MicroloopAvoidance.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/microloop/avoidance/enable", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "microloop/avoidance/enable"))
 	}
 	if !data.AdvertiseLinkAttributes.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/link/attributes", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "advertise/link/attributes"))
 	}
 	if !data.AdvertisePassiveOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/passive-only", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "advertise/passive-only"))
 	}
 	if !data.RouterIdIpAddress.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "router-id"))
 	}
 	if !data.RouterIdInterfaceName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "router-id"))
 	}
 	if !data.MaximumPaths.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-paths", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "maximum-paths"))
 	}
 	for i := range data.RedistributeOspfv3 {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[ospfv3-process-id=" + data.RedistributeOspfv3[i].InstanceId.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v", data.getPath(), keyPath))
+		keys := [...]string{"ospfv3-process-id"}
+		keyValues := [...]string{data.RedistributeOspfv3[i].InstanceId.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.RedistributeOspfv3[i].InstanceId.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "redistribute/ospfv3s/ospfv3", keyString))
 	}
 	for i := range data.RedistributeOspf {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[ospf-process-id=" + data.RedistributeOspf[i].InstanceId.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/ospfs/ospf%v", data.getPath(), keyPath))
+		keys := [...]string{"ospf-process-id"}
+		keyValues := [...]string{data.RedistributeOspf[i].InstanceId.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.RedistributeOspf[i].InstanceId.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "redistribute/ospfs/ospf", keyString))
 	}
 	for i := range data.RedistributeBgp {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[as-number=" + data.RedistributeBgp[i].AsNumber.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/bgps/bgp%v", data.getPath(), keyPath))
+		keys := [...]string{"as-number"}
+		keyValues := [...]string{data.RedistributeBgp[i].AsNumber.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.RedistributeBgp[i].AsNumber.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "redistribute/bgps/bgp", keyString))
 	}
 	for i := range data.RedistributeIsis {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[isis-string=" + data.RedistributeIsis[i].InstanceId.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v", data.getPath(), keyPath))
+		keys := [...]string{"isis-string"}
+		keyValues := [...]string{data.RedistributeIsis[i].InstanceId.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.RedistributeIsis[i].InstanceId.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "redistribute/isis-processes/isis-process", keyString))
 	}
 	if !data.RedistributeStaticMetricType.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/static/metric-type", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "redistribute/static/metric-type"))
 	}
 	if !data.RedistributeStaticRoutePolicy.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/static/route-policy", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "redistribute/static/route-policy"))
 	}
 	if !data.RedistributeStaticMetric.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/static/metric", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "redistribute/static/metric"))
 	}
 	if !data.RedistributeStaticLevel.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/static", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "redistribute/static"))
 	}
 	if !data.RedistributeStatic.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/static", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "redistribute/static"))
 	}
 	if !data.RedistributeConnectedMetricType.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/connected/metric-type", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "redistribute/connected/metric-type"))
 	}
 	if !data.RedistributeConnectedRoutePolicy.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/connected/route-policy", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "redistribute/connected/route-policy"))
 	}
 	if !data.RedistributeConnectedMetric.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/connected/metric", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "redistribute/connected/metric"))
 	}
 	if !data.RedistributeConnectedLevel.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/connected", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "redistribute/connected"))
 	}
 	if !data.RedistributeConnected.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/connected", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "redistribute/connected"))
 	}
 	if !data.DistributeListRoutePolicyIn.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute-list/route-policy", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "distribute-list/route-policy"))
 	}
 	if !data.DistributeListPrefixListIn.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute-list/prefix-list/prefix-list-string", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "distribute-list/prefix-list/prefix-list-string"))
 	}
 	for i := range data.DistanceSources {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.DistanceSources[i].Address.ValueString() + "]"
-		keyPath += "[address-prefix=" + strconv.FormatInt(data.DistanceSources[i].Prefix.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/distance/ip-addresses/ip-address%v", data.getPath(), keyPath))
+		keys := [...]string{"address", "address-prefix"}
+		keyValues := [...]string{data.DistanceSources[i].Address.ValueString(), strconv.FormatInt(data.DistanceSources[i].Prefix.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.DistanceSources[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(data.DistanceSources[i].Prefix.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "distance/ip-addresses/ip-address", keyString))
 	}
 	if !data.Distance.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/distance/global", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "distance/global"))
 	}
 
 	return deletePaths
@@ -9695,7 +9919,7 @@ func (data RouterISISAddressFamily) toBodyXML(ctx context.Context, stateArg ...*
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))

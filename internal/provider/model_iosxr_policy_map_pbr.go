@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -109,7 +110,7 @@ func (data PolicyMapPBRData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data PolicyMapPBR) toBody(ctx context.Context) string {
+func (data PolicyMapPBR) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.PolicyMapName.IsNull() && !data.PolicyMapName.IsUnknown() {
 		body, _ = sjson.Set(body, "policy-map-name", data.PolicyMapName.ValueString())
@@ -204,10 +205,59 @@ func (data PolicyMapPBR) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *PolicyMapPBR) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("description"); value.Exists() && !data.Description.IsNull() {
+// GetVersionConstraints returns the version constraints for all fields
+func (data PolicyMapPBR) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data PolicyMapPBR) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data PolicyMapPBR) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data PolicyMapPBR) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data PolicyMapPBR) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *PolicyMapPBR) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
 	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
@@ -217,7 +267,7 @@ func (data *PolicyMapPBR) updateFromBody(ctx context.Context, res gjson.Result) 
 		keyValues := [...]string{data.Classes[i].Name.ValueString(), data.Classes[i].Type.ValueString()}
 
 		var r gjson.Result
-		res.Get("class").ForEach(
+		gjson.GetBytes(res, "class").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -235,12 +285,12 @@ func (data *PolicyMapPBR) updateFromBody(ctx context.Context, res gjson.Result) 
 				return true
 			},
 		)
-		if value := r.Get("name"); value.Exists() && !data.Classes[i].Name.IsNull() {
+		if value := r.Get("name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Classes[i].Name.IsNull() {
 			data.Classes[i].Name = types.StringValue(value.String())
 		} else {
 			data.Classes[i].Name = types.StringNull()
 		}
-		if value := r.Get("type"); value.Exists() && !data.Classes[i].Type.IsNull() {
+		if value := r.Get("type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Classes[i].Type.IsNull() {
 			data.Classes[i].Type = types.StringValue(value.String())
 		} else {
 			data.Classes[i].Type = types.StringNull()
@@ -250,7 +300,7 @@ func (data *PolicyMapPBR) updateFromBody(ctx context.Context, res gjson.Result) 
 		} else {
 			data.Classes[i].PoliceRateValue = types.Int64Null()
 		}
-		if value := r.Get("police.rate.unit"); value.Exists() && !data.Classes[i].PoliceRateUnit.IsNull() {
+		if value := r.Get("police.rate.unit"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Classes[i].PoliceRateUnit.IsNull() {
 			data.Classes[i].PoliceRateUnit = types.StringValue(value.String())
 		} else {
 			data.Classes[i].PoliceRateUnit = types.StringNull()
@@ -279,32 +329,32 @@ func (data *PolicyMapPBR) updateFromBody(ctx context.Context, res gjson.Result) 
 				data.Classes[i].RedirectIpv4DefaultRoute = types.BoolNull()
 			}
 		}
-		if value := r.Get("redirect-ipv4.nexthop1.address"); value.Exists() && !data.Classes[i].RedirectIpv4Nexthop1Address.IsNull() {
+		if value := r.Get("redirect-ipv4.nexthop1.address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Classes[i].RedirectIpv4Nexthop1Address.IsNull() {
 			data.Classes[i].RedirectIpv4Nexthop1Address = types.StringValue(value.String())
 		} else {
 			data.Classes[i].RedirectIpv4Nexthop1Address = types.StringNull()
 		}
-		if value := r.Get("redirect-ipv4.nexthop1.vrf"); value.Exists() && !data.Classes[i].RedirectIpv4Nexthop1Vrf.IsNull() {
+		if value := r.Get("redirect-ipv4.nexthop1.vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Classes[i].RedirectIpv4Nexthop1Vrf.IsNull() {
 			data.Classes[i].RedirectIpv4Nexthop1Vrf = types.StringValue(value.String())
 		} else {
 			data.Classes[i].RedirectIpv4Nexthop1Vrf = types.StringNull()
 		}
-		if value := r.Get("redirect-ipv4.nexthop2.address"); value.Exists() && !data.Classes[i].RedirectIpv4Nexthop2Address.IsNull() {
+		if value := r.Get("redirect-ipv4.nexthop2.address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Classes[i].RedirectIpv4Nexthop2Address.IsNull() {
 			data.Classes[i].RedirectIpv4Nexthop2Address = types.StringValue(value.String())
 		} else {
 			data.Classes[i].RedirectIpv4Nexthop2Address = types.StringNull()
 		}
-		if value := r.Get("redirect-ipv4.nexthop2.vrf"); value.Exists() && !data.Classes[i].RedirectIpv4Nexthop2Vrf.IsNull() {
+		if value := r.Get("redirect-ipv4.nexthop2.vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Classes[i].RedirectIpv4Nexthop2Vrf.IsNull() {
 			data.Classes[i].RedirectIpv4Nexthop2Vrf = types.StringValue(value.String())
 		} else {
 			data.Classes[i].RedirectIpv4Nexthop2Vrf = types.StringNull()
 		}
-		if value := r.Get("redirect-ipv4.nexthop3.address"); value.Exists() && !data.Classes[i].RedirectIpv4Nexthop3Address.IsNull() {
+		if value := r.Get("redirect-ipv4.nexthop3.address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Classes[i].RedirectIpv4Nexthop3Address.IsNull() {
 			data.Classes[i].RedirectIpv4Nexthop3Address = types.StringValue(value.String())
 		} else {
 			data.Classes[i].RedirectIpv4Nexthop3Address = types.StringNull()
 		}
-		if value := r.Get("redirect-ipv4.nexthop3.vrf"); value.Exists() && !data.Classes[i].RedirectIpv4Nexthop3Vrf.IsNull() {
+		if value := r.Get("redirect-ipv4.nexthop3.vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Classes[i].RedirectIpv4Nexthop3Vrf.IsNull() {
 			data.Classes[i].RedirectIpv4Nexthop3Vrf = types.StringValue(value.String())
 		} else {
 			data.Classes[i].RedirectIpv4Nexthop3Vrf = types.StringNull()
@@ -321,42 +371,42 @@ func (data *PolicyMapPBR) updateFromBody(ctx context.Context, res gjson.Result) 
 				data.Classes[i].RedirectIpv6DefaultRoute = types.BoolNull()
 			}
 		}
-		if value := r.Get("redirect-ipv6.nexthop1.address"); value.Exists() && !data.Classes[i].RedirectIpv6Nexthop1Address.IsNull() {
+		if value := r.Get("redirect-ipv6.nexthop1.address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Classes[i].RedirectIpv6Nexthop1Address.IsNull() {
 			data.Classes[i].RedirectIpv6Nexthop1Address = types.StringValue(value.String())
 		} else {
 			data.Classes[i].RedirectIpv6Nexthop1Address = types.StringNull()
 		}
-		if value := r.Get("redirect-ipv6.nexthop1.vrf"); value.Exists() && !data.Classes[i].RedirectIpv6Nexthop1Vrf.IsNull() {
+		if value := r.Get("redirect-ipv6.nexthop1.vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Classes[i].RedirectIpv6Nexthop1Vrf.IsNull() {
 			data.Classes[i].RedirectIpv6Nexthop1Vrf = types.StringValue(value.String())
 		} else {
 			data.Classes[i].RedirectIpv6Nexthop1Vrf = types.StringNull()
 		}
-		if value := r.Get("redirect-ipv6.nexthop2.address"); value.Exists() && !data.Classes[i].RedirectIpv6Nexthop2Address.IsNull() {
+		if value := r.Get("redirect-ipv6.nexthop2.address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Classes[i].RedirectIpv6Nexthop2Address.IsNull() {
 			data.Classes[i].RedirectIpv6Nexthop2Address = types.StringValue(value.String())
 		} else {
 			data.Classes[i].RedirectIpv6Nexthop2Address = types.StringNull()
 		}
-		if value := r.Get("redirect-ipv6.nexthop2.vrf"); value.Exists() && !data.Classes[i].RedirectIpv6Nexthop2Vrf.IsNull() {
+		if value := r.Get("redirect-ipv6.nexthop2.vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Classes[i].RedirectIpv6Nexthop2Vrf.IsNull() {
 			data.Classes[i].RedirectIpv6Nexthop2Vrf = types.StringValue(value.String())
 		} else {
 			data.Classes[i].RedirectIpv6Nexthop2Vrf = types.StringNull()
 		}
-		if value := r.Get("redirect-ipv6.nexthop3.address"); value.Exists() && !data.Classes[i].RedirectIpv6Nexthop3Address.IsNull() {
+		if value := r.Get("redirect-ipv6.nexthop3.address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Classes[i].RedirectIpv6Nexthop3Address.IsNull() {
 			data.Classes[i].RedirectIpv6Nexthop3Address = types.StringValue(value.String())
 		} else {
 			data.Classes[i].RedirectIpv6Nexthop3Address = types.StringNull()
 		}
-		if value := r.Get("redirect-ipv6.nexthop3.vrf"); value.Exists() && !data.Classes[i].RedirectIpv6Nexthop3Vrf.IsNull() {
+		if value := r.Get("redirect-ipv6.nexthop3.vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Classes[i].RedirectIpv6Nexthop3Vrf.IsNull() {
 			data.Classes[i].RedirectIpv6Nexthop3Vrf = types.StringValue(value.String())
 		} else {
 			data.Classes[i].RedirectIpv6Nexthop3Vrf = types.StringNull()
 		}
-		if value := r.Get("redirect-nexthop.route-target.as-number"); value.Exists() && !data.Classes[i].RedirectNexthopRouteTargetAsFormat.IsNull() {
+		if value := r.Get("redirect-nexthop.route-target.as-number"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Classes[i].RedirectNexthopRouteTargetAsFormat.IsNull() {
 			data.Classes[i].RedirectNexthopRouteTargetAsFormat = types.StringValue(value.String())
 		} else {
 			data.Classes[i].RedirectNexthopRouteTargetAsFormat = types.StringNull()
 		}
-		if value := r.Get("set.dscp"); value.Exists() && !data.Classes[i].SetDscp.IsNull() {
+		if value := r.Get("set.dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Classes[i].SetDscp.IsNull() {
 			data.Classes[i].SetDscp = types.StringValue(value.String())
 		} else {
 			data.Classes[i].SetDscp = types.StringNull()
@@ -382,6 +432,382 @@ func (data *PolicyMapPBR) updateFromBody(ctx context.Context, res gjson.Result) 
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *PolicyMapPBR) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "class"); value.Exists() {
+		data.Classes = make([]PolicyMapPBRClasses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PolicyMapPBRClasses{}
+			if cValue := v.Get("name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Type = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("police.rate.value"); cValue.Exists() {
+				item.PoliceRateValue = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("police.rate.unit"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.PoliceRateUnit = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("drop"); cValue.Exists() {
+				item.Drop = types.BoolValue(true)
+			} else if !item.Drop.IsNull() {
+				// Only set to false if it was previously set
+				item.Drop = types.BoolValue(false)
+			}
+			if cValue := v.Get("redirect-ipv4.default-route"); cValue.Exists() {
+				item.RedirectIpv4DefaultRoute = types.BoolValue(true)
+			} else if !item.RedirectIpv4DefaultRoute.IsNull() {
+				// Only set to false if it was previously set
+				item.RedirectIpv4DefaultRoute = types.BoolValue(false)
+			}
+			if cValue := v.Get("redirect-ipv4.nexthop1.address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv4Nexthop1Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv4.nexthop1.vrf"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv4Nexthop1Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv4.nexthop2.address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv4Nexthop2Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv4.nexthop2.vrf"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv4Nexthop2Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv4.nexthop3.address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv4Nexthop3Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv4.nexthop3.vrf"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv4Nexthop3Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv6.default-route"); cValue.Exists() {
+				item.RedirectIpv6DefaultRoute = types.BoolValue(true)
+			} else if !item.RedirectIpv6DefaultRoute.IsNull() {
+				// Only set to false if it was previously set
+				item.RedirectIpv6DefaultRoute = types.BoolValue(false)
+			}
+			if cValue := v.Get("redirect-ipv6.nexthop1.address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv6Nexthop1Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv6.nexthop1.vrf"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv6Nexthop1Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv6.nexthop2.address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv6Nexthop2Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv6.nexthop2.vrf"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv6Nexthop2Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv6.nexthop3.address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv6Nexthop3Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv6.nexthop3.vrf"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv6Nexthop3Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-nexthop.route-target.as-number"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectNexthopRouteTargetAsFormat = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("set.dscp"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.SetDscp = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("set.forward-class"); cValue.Exists() {
+				item.SetForwardClass = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("decapsulate.gre"); cValue.Exists() {
+				item.DecapsulateGre = types.BoolValue(true)
+			} else if !item.DecapsulateGre.IsNull() {
+				// Only set to false if it was previously set
+				item.DecapsulateGre = types.BoolValue(false)
+			}
+			data.Classes = append(data.Classes, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *PolicyMapPBRData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "class"); value.Exists() {
+		data.Classes = make([]PolicyMapPBRClasses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PolicyMapPBRClasses{}
+			if cValue := v.Get("name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Type = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("police.rate.value"); cValue.Exists() {
+				item.PoliceRateValue = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("police.rate.unit"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.PoliceRateUnit = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("drop"); cValue.Exists() {
+				item.Drop = types.BoolValue(true)
+			} else {
+				item.Drop = types.BoolValue(false)
+			}
+			if cValue := v.Get("redirect-ipv4.default-route"); cValue.Exists() {
+				item.RedirectIpv4DefaultRoute = types.BoolValue(true)
+			} else {
+				item.RedirectIpv4DefaultRoute = types.BoolValue(false)
+			}
+			if cValue := v.Get("redirect-ipv4.nexthop1.address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv4Nexthop1Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv4.nexthop1.vrf"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv4Nexthop1Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv4.nexthop2.address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv4Nexthop2Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv4.nexthop2.vrf"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv4Nexthop2Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv4.nexthop3.address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv4Nexthop3Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv4.nexthop3.vrf"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv4Nexthop3Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv6.default-route"); cValue.Exists() {
+				item.RedirectIpv6DefaultRoute = types.BoolValue(true)
+			} else {
+				item.RedirectIpv6DefaultRoute = types.BoolValue(false)
+			}
+			if cValue := v.Get("redirect-ipv6.nexthop1.address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv6Nexthop1Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv6.nexthop1.vrf"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv6Nexthop1Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv6.nexthop2.address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv6Nexthop2Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv6.nexthop2.vrf"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv6Nexthop2Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv6.nexthop3.address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv6Nexthop3Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-ipv6.nexthop3.vrf"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectIpv6Nexthop3Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("redirect-nexthop.route-target.as-number"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RedirectNexthopRouteTargetAsFormat = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("set.dscp"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.SetDscp = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("set.forward-class"); cValue.Exists() {
+				item.SetForwardClass = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("decapsulate.gre"); cValue.Exists() {
+				item.DecapsulateGre = types.BoolValue(true)
+			} else {
+				item.DecapsulateGre = types.BoolValue(false)
+			}
+			data.Classes = append(data.Classes, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *PolicyMapPBR) getDeletedItems(ctx context.Context, state PolicyMapPBR, version string) []string {
+	deletedItems := make([]string, 0)
+	for i := range state.Classes {
+		keys := [...]string{"name", "type"}
+		stateKeyValues := [...]string{state.Classes[i].Name.ValueString(), state.Classes[i].Type.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Classes[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Classes[i].Type.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Classes {
+			found = true
+			if state.Classes[i].Name.ValueString() != data.Classes[j].Name.ValueString() {
+				found = false
+			}
+			if state.Classes[i].Type.ValueString() != data.Classes[j].Type.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Classes[i].DecapsulateGre.IsNull() && data.Classes[j].DecapsulateGre.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "decapsulate/gre"))
+				}
+				if !state.Classes[i].SetForwardClass.IsNull() && data.Classes[j].SetForwardClass.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "set/forward-class"))
+				}
+				if !state.Classes[i].SetDscp.IsNull() && data.Classes[j].SetDscp.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "set/dscp"))
+				}
+				if !state.Classes[i].RedirectNexthopRouteTargetAsFormat.IsNull() && data.Classes[j].RedirectNexthopRouteTargetAsFormat.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "redirect-nexthop/route-target/as-number"))
+				}
+				if !state.Classes[i].RedirectIpv6Nexthop3Vrf.IsNull() && data.Classes[j].RedirectIpv6Nexthop3Vrf.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "redirect-ipv6/nexthop3/vrf"))
+				}
+				if !state.Classes[i].RedirectIpv6Nexthop3Address.IsNull() && data.Classes[j].RedirectIpv6Nexthop3Address.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "redirect-ipv6/nexthop3/address"))
+				}
+				if !state.Classes[i].RedirectIpv6Nexthop2Vrf.IsNull() && data.Classes[j].RedirectIpv6Nexthop2Vrf.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "redirect-ipv6/nexthop2/vrf"))
+				}
+				if !state.Classes[i].RedirectIpv6Nexthop2Address.IsNull() && data.Classes[j].RedirectIpv6Nexthop2Address.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "redirect-ipv6/nexthop2/address"))
+				}
+				if !state.Classes[i].RedirectIpv6Nexthop1Vrf.IsNull() && data.Classes[j].RedirectIpv6Nexthop1Vrf.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "redirect-ipv6/nexthop1/vrf"))
+				}
+				if !state.Classes[i].RedirectIpv6Nexthop1Address.IsNull() && data.Classes[j].RedirectIpv6Nexthop1Address.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "redirect-ipv6/nexthop1/address"))
+				}
+				if !state.Classes[i].RedirectIpv6DefaultRoute.IsNull() && data.Classes[j].RedirectIpv6DefaultRoute.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "redirect-ipv6/default-route"))
+				}
+				if !state.Classes[i].RedirectIpv4Nexthop3Vrf.IsNull() && data.Classes[j].RedirectIpv4Nexthop3Vrf.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "redirect-ipv4/nexthop3/vrf"))
+				}
+				if !state.Classes[i].RedirectIpv4Nexthop3Address.IsNull() && data.Classes[j].RedirectIpv4Nexthop3Address.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "redirect-ipv4/nexthop3/address"))
+				}
+				if !state.Classes[i].RedirectIpv4Nexthop2Vrf.IsNull() && data.Classes[j].RedirectIpv4Nexthop2Vrf.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "redirect-ipv4/nexthop2/vrf"))
+				}
+				if !state.Classes[i].RedirectIpv4Nexthop2Address.IsNull() && data.Classes[j].RedirectIpv4Nexthop2Address.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "redirect-ipv4/nexthop2/address"))
+				}
+				if !state.Classes[i].RedirectIpv4Nexthop1Vrf.IsNull() && data.Classes[j].RedirectIpv4Nexthop1Vrf.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "redirect-ipv4/nexthop1/vrf"))
+				}
+				if !state.Classes[i].RedirectIpv4Nexthop1Address.IsNull() && data.Classes[j].RedirectIpv4Nexthop1Address.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "redirect-ipv4/nexthop1/address"))
+				}
+				if !state.Classes[i].RedirectIpv4DefaultRoute.IsNull() && data.Classes[j].RedirectIpv4DefaultRoute.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "redirect-ipv4/default-route"))
+				}
+				if !state.Classes[i].Drop.IsNull() && data.Classes[j].Drop.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "drop"))
+				}
+				if !state.Classes[i].PoliceRateUnit.IsNull() && data.Classes[j].PoliceRateUnit.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "police/rate/unit"))
+				}
+				if !state.Classes[i].PoliceRateValue.IsNull() && data.Classes[j].PoliceRateValue.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString), "police/rate/value"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "class", keyString))
+		}
+	}
+	if !state.Description.IsNull() && data.Description.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "description"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *PolicyMapPBR) getEmptyLeafsDelete(ctx context.Context, state *PolicyMapPBR, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	for i := range data.Classes {
+		keys := [...]string{"name", "type"}
+		keyValues := [...]string{data.Classes[i].Name.ValueString(), data.Classes[i].Type.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Classes[i].DecapsulateGre.IsNull() && !data.Classes[i].DecapsulateGre.ValueBool() {
+			if state == nil || i >= len(state.Classes) || state.Classes[i].DecapsulateGre.IsNull() || state.Classes[i].DecapsulateGre.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "class", keyString), "decapsulate/gre"))
+			}
+		}
+		if !data.Classes[i].RedirectIpv6DefaultRoute.IsNull() && !data.Classes[i].RedirectIpv6DefaultRoute.ValueBool() {
+			if state == nil || i >= len(state.Classes) || state.Classes[i].RedirectIpv6DefaultRoute.IsNull() || state.Classes[i].RedirectIpv6DefaultRoute.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "class", keyString), "redirect-ipv6/default-route"))
+			}
+		}
+		if !data.Classes[i].RedirectIpv4DefaultRoute.IsNull() && !data.Classes[i].RedirectIpv4DefaultRoute.ValueBool() {
+			if state == nil || i >= len(state.Classes) || state.Classes[i].RedirectIpv4DefaultRoute.IsNull() || state.Classes[i].RedirectIpv4DefaultRoute.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "class", keyString), "redirect-ipv4/default-route"))
+			}
+		}
+		if !data.Classes[i].Drop.IsNull() && !data.Classes[i].Drop.ValueBool() {
+			if state == nil || i >= len(state.Classes) || state.Classes[i].Drop.IsNull() || state.Classes[i].Drop.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "class", keyString), "drop"))
+			}
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *PolicyMapPBR) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	for i := range data.Classes {
+		keys := [...]string{"name", "type"}
+		keyValues := [...]string{data.Classes[i].Name.ValueString(), data.Classes[i].Type.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.Classes[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(data.Classes[i].Type.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "class", keyString))
+	}
+	if !data.Description.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "description"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data PolicyMapPBR) toBodyXML(ctx context.Context, stateArg ...*PolicyMapPBR) string {
@@ -497,7 +923,7 @@ func (data PolicyMapPBR) toBodyXML(ctx context.Context, stateArg ...*PolicyMapPB
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -505,6 +931,7 @@ func (data PolicyMapPBR) toBodyXML(ctx context.Context, stateArg ...*PolicyMapPB
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *PolicyMapPBR) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -683,215 +1110,7 @@ func (data *PolicyMapPBR) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *PolicyMapPBR) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "description"); value.Exists() {
-		data.Description = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "class"); value.Exists() {
-		data.Classes = make([]PolicyMapPBRClasses, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PolicyMapPBRClasses{}
-			if cValue := v.Get("name"); cValue.Exists() {
-				item.Name = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type"); cValue.Exists() {
-				item.Type = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("police.rate.value"); cValue.Exists() {
-				item.PoliceRateValue = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("police.rate.unit"); cValue.Exists() {
-				item.PoliceRateUnit = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("drop"); cValue.Exists() {
-				item.Drop = types.BoolValue(true)
-			} else if !item.Drop.IsNull() {
-				// Only set to false if it was previously set
-				item.Drop = types.BoolValue(false)
-			}
-			if cValue := v.Get("redirect-ipv4.default-route"); cValue.Exists() {
-				item.RedirectIpv4DefaultRoute = types.BoolValue(true)
-			} else if !item.RedirectIpv4DefaultRoute.IsNull() {
-				// Only set to false if it was previously set
-				item.RedirectIpv4DefaultRoute = types.BoolValue(false)
-			}
-			if cValue := v.Get("redirect-ipv4.nexthop1.address"); cValue.Exists() {
-				item.RedirectIpv4Nexthop1Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv4.nexthop1.vrf"); cValue.Exists() {
-				item.RedirectIpv4Nexthop1Vrf = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv4.nexthop2.address"); cValue.Exists() {
-				item.RedirectIpv4Nexthop2Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv4.nexthop2.vrf"); cValue.Exists() {
-				item.RedirectIpv4Nexthop2Vrf = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv4.nexthop3.address"); cValue.Exists() {
-				item.RedirectIpv4Nexthop3Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv4.nexthop3.vrf"); cValue.Exists() {
-				item.RedirectIpv4Nexthop3Vrf = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv6.default-route"); cValue.Exists() {
-				item.RedirectIpv6DefaultRoute = types.BoolValue(true)
-			} else if !item.RedirectIpv6DefaultRoute.IsNull() {
-				// Only set to false if it was previously set
-				item.RedirectIpv6DefaultRoute = types.BoolValue(false)
-			}
-			if cValue := v.Get("redirect-ipv6.nexthop1.address"); cValue.Exists() {
-				item.RedirectIpv6Nexthop1Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv6.nexthop1.vrf"); cValue.Exists() {
-				item.RedirectIpv6Nexthop1Vrf = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv6.nexthop2.address"); cValue.Exists() {
-				item.RedirectIpv6Nexthop2Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv6.nexthop2.vrf"); cValue.Exists() {
-				item.RedirectIpv6Nexthop2Vrf = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv6.nexthop3.address"); cValue.Exists() {
-				item.RedirectIpv6Nexthop3Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv6.nexthop3.vrf"); cValue.Exists() {
-				item.RedirectIpv6Nexthop3Vrf = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-nexthop.route-target.as-number"); cValue.Exists() {
-				item.RedirectNexthopRouteTargetAsFormat = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("set.dscp"); cValue.Exists() {
-				item.SetDscp = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("set.forward-class"); cValue.Exists() {
-				item.SetForwardClass = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("decapsulate.gre"); cValue.Exists() {
-				item.DecapsulateGre = types.BoolValue(true)
-			} else if !item.DecapsulateGre.IsNull() {
-				// Only set to false if it was previously set
-				item.DecapsulateGre = types.BoolValue(false)
-			}
-			data.Classes = append(data.Classes, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *PolicyMapPBRData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "description"); value.Exists() {
-		data.Description = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "class"); value.Exists() {
-		data.Classes = make([]PolicyMapPBRClasses, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PolicyMapPBRClasses{}
-			if cValue := v.Get("name"); cValue.Exists() {
-				item.Name = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("type"); cValue.Exists() {
-				item.Type = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("police.rate.value"); cValue.Exists() {
-				item.PoliceRateValue = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("police.rate.unit"); cValue.Exists() {
-				item.PoliceRateUnit = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("drop"); cValue.Exists() {
-				item.Drop = types.BoolValue(true)
-			} else {
-				item.Drop = types.BoolValue(false)
-			}
-			if cValue := v.Get("redirect-ipv4.default-route"); cValue.Exists() {
-				item.RedirectIpv4DefaultRoute = types.BoolValue(true)
-			} else {
-				item.RedirectIpv4DefaultRoute = types.BoolValue(false)
-			}
-			if cValue := v.Get("redirect-ipv4.nexthop1.address"); cValue.Exists() {
-				item.RedirectIpv4Nexthop1Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv4.nexthop1.vrf"); cValue.Exists() {
-				item.RedirectIpv4Nexthop1Vrf = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv4.nexthop2.address"); cValue.Exists() {
-				item.RedirectIpv4Nexthop2Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv4.nexthop2.vrf"); cValue.Exists() {
-				item.RedirectIpv4Nexthop2Vrf = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv4.nexthop3.address"); cValue.Exists() {
-				item.RedirectIpv4Nexthop3Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv4.nexthop3.vrf"); cValue.Exists() {
-				item.RedirectIpv4Nexthop3Vrf = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv6.default-route"); cValue.Exists() {
-				item.RedirectIpv6DefaultRoute = types.BoolValue(true)
-			} else {
-				item.RedirectIpv6DefaultRoute = types.BoolValue(false)
-			}
-			if cValue := v.Get("redirect-ipv6.nexthop1.address"); cValue.Exists() {
-				item.RedirectIpv6Nexthop1Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv6.nexthop1.vrf"); cValue.Exists() {
-				item.RedirectIpv6Nexthop1Vrf = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv6.nexthop2.address"); cValue.Exists() {
-				item.RedirectIpv6Nexthop2Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv6.nexthop2.vrf"); cValue.Exists() {
-				item.RedirectIpv6Nexthop2Vrf = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv6.nexthop3.address"); cValue.Exists() {
-				item.RedirectIpv6Nexthop3Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-ipv6.nexthop3.vrf"); cValue.Exists() {
-				item.RedirectIpv6Nexthop3Vrf = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("redirect-nexthop.route-target.as-number"); cValue.Exists() {
-				item.RedirectNexthopRouteTargetAsFormat = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("set.dscp"); cValue.Exists() {
-				item.SetDscp = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("set.forward-class"); cValue.Exists() {
-				item.SetForwardClass = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("decapsulate.gre"); cValue.Exists() {
-				item.DecapsulateGre = types.BoolValue(true)
-			} else {
-				item.DecapsulateGre = types.BoolValue(false)
-			}
-			data.Classes = append(data.Classes, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *PolicyMapPBR) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -986,6 +1205,7 @@ func (data *PolicyMapPBR) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *PolicyMapPBRData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1080,179 +1300,7 @@ func (data *PolicyMapPBRData) fromBodyXML(ctx context.Context, res xmldot.Result
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *PolicyMapPBR) getDeletedItems(ctx context.Context, state PolicyMapPBR) []string {
-	deletedItems := make([]string, 0)
-	for i := range state.Classes {
-		keys := [...]string{"name", "type"}
-		stateKeyValues := [...]string{state.Classes[i].Name.ValueString(), state.Classes[i].Type.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Classes[i].Name.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if !reflect.ValueOf(state.Classes[i].Type.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Classes {
-			found = true
-			if state.Classes[i].Name.ValueString() != data.Classes[j].Name.ValueString() {
-				found = false
-			}
-			if state.Classes[i].Type.ValueString() != data.Classes[j].Type.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.Classes[i].DecapsulateGre.IsNull() && data.Classes[j].DecapsulateGre.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/decapsulate/gre", state.getPath(), keyString))
-				}
-				if !state.Classes[i].SetForwardClass.IsNull() && data.Classes[j].SetForwardClass.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/forward-class", state.getPath(), keyString))
-				}
-				if !state.Classes[i].SetDscp.IsNull() && data.Classes[j].SetDscp.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/dscp", state.getPath(), keyString))
-				}
-				if !state.Classes[i].RedirectNexthopRouteTargetAsFormat.IsNull() && data.Classes[j].RedirectNexthopRouteTargetAsFormat.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/redirect-nexthop/route-target/as-number", state.getPath(), keyString))
-				}
-				if !state.Classes[i].RedirectIpv6Nexthop3Vrf.IsNull() && data.Classes[j].RedirectIpv6Nexthop3Vrf.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/redirect-ipv6/nexthop3/vrf", state.getPath(), keyString))
-				}
-				if !state.Classes[i].RedirectIpv6Nexthop3Address.IsNull() && data.Classes[j].RedirectIpv6Nexthop3Address.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/redirect-ipv6/nexthop3/address", state.getPath(), keyString))
-				}
-				if !state.Classes[i].RedirectIpv6Nexthop2Vrf.IsNull() && data.Classes[j].RedirectIpv6Nexthop2Vrf.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/redirect-ipv6/nexthop2/vrf", state.getPath(), keyString))
-				}
-				if !state.Classes[i].RedirectIpv6Nexthop2Address.IsNull() && data.Classes[j].RedirectIpv6Nexthop2Address.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/redirect-ipv6/nexthop2/address", state.getPath(), keyString))
-				}
-				if !state.Classes[i].RedirectIpv6Nexthop1Vrf.IsNull() && data.Classes[j].RedirectIpv6Nexthop1Vrf.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/redirect-ipv6/nexthop1/vrf", state.getPath(), keyString))
-				}
-				if !state.Classes[i].RedirectIpv6Nexthop1Address.IsNull() && data.Classes[j].RedirectIpv6Nexthop1Address.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/redirect-ipv6/nexthop1/address", state.getPath(), keyString))
-				}
-				if !state.Classes[i].RedirectIpv6DefaultRoute.IsNull() && data.Classes[j].RedirectIpv6DefaultRoute.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/redirect-ipv6/default-route", state.getPath(), keyString))
-				}
-				if !state.Classes[i].RedirectIpv4Nexthop3Vrf.IsNull() && data.Classes[j].RedirectIpv4Nexthop3Vrf.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/redirect-ipv4/nexthop3/vrf", state.getPath(), keyString))
-				}
-				if !state.Classes[i].RedirectIpv4Nexthop3Address.IsNull() && data.Classes[j].RedirectIpv4Nexthop3Address.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/redirect-ipv4/nexthop3/address", state.getPath(), keyString))
-				}
-				if !state.Classes[i].RedirectIpv4Nexthop2Vrf.IsNull() && data.Classes[j].RedirectIpv4Nexthop2Vrf.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/redirect-ipv4/nexthop2/vrf", state.getPath(), keyString))
-				}
-				if !state.Classes[i].RedirectIpv4Nexthop2Address.IsNull() && data.Classes[j].RedirectIpv4Nexthop2Address.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/redirect-ipv4/nexthop2/address", state.getPath(), keyString))
-				}
-				if !state.Classes[i].RedirectIpv4Nexthop1Vrf.IsNull() && data.Classes[j].RedirectIpv4Nexthop1Vrf.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/redirect-ipv4/nexthop1/vrf", state.getPath(), keyString))
-				}
-				if !state.Classes[i].RedirectIpv4Nexthop1Address.IsNull() && data.Classes[j].RedirectIpv4Nexthop1Address.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/redirect-ipv4/nexthop1/address", state.getPath(), keyString))
-				}
-				if !state.Classes[i].RedirectIpv4DefaultRoute.IsNull() && data.Classes[j].RedirectIpv4DefaultRoute.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/redirect-ipv4/default-route", state.getPath(), keyString))
-				}
-				if !state.Classes[i].Drop.IsNull() && data.Classes[j].Drop.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/drop", state.getPath(), keyString))
-				}
-				if !state.Classes[i].PoliceRateUnit.IsNull() && data.Classes[j].PoliceRateUnit.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/rate/unit", state.getPath(), keyString))
-				}
-				if !state.Classes[i].PoliceRateValue.IsNull() && data.Classes[j].PoliceRateValue.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/rate/value", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v", state.getPath(), keyString))
-		}
-	}
-	if !state.Description.IsNull() && data.Description.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/description", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *PolicyMapPBR) getEmptyLeafsDelete(ctx context.Context, state *PolicyMapPBR) []string {
-	emptyLeafsDelete := make([]string, 0)
-	for i := range data.Classes {
-		keys := [...]string{"name", "type"}
-		keyValues := [...]string{data.Classes[i].Name.ValueString(), data.Classes[i].Type.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.Classes[i].DecapsulateGre.IsNull() && !data.Classes[i].DecapsulateGre.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Classes) && !state.Classes[i].DecapsulateGre.IsNull() && state.Classes[i].DecapsulateGre.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/class%v/decapsulate/gre", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Classes[i].RedirectIpv6DefaultRoute.IsNull() && !data.Classes[i].RedirectIpv6DefaultRoute.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Classes) && !state.Classes[i].RedirectIpv6DefaultRoute.IsNull() && state.Classes[i].RedirectIpv6DefaultRoute.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/class%v/redirect-ipv6/default-route", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Classes[i].RedirectIpv4DefaultRoute.IsNull() && !data.Classes[i].RedirectIpv4DefaultRoute.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Classes) && !state.Classes[i].RedirectIpv4DefaultRoute.IsNull() && state.Classes[i].RedirectIpv4DefaultRoute.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/class%v/redirect-ipv4/default-route", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Classes[i].Drop.IsNull() && !data.Classes[i].Drop.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Classes) && !state.Classes[i].Drop.IsNull() && state.Classes[i].Drop.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/class%v/drop", data.getXPath(), keyString))
-			}
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *PolicyMapPBR) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	for i := range data.Classes {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[name=" + data.Classes[i].Name.ValueString() + "]"
-		keyPath += "[type=" + data.Classes[i].Type.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/class%v", data.getPath(), keyPath))
-	}
-	if !data.Description.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *PolicyMapPBR) addDeletedItemsXML(ctx context.Context, state PolicyMapPBR, body string) string {
@@ -1384,6 +1432,7 @@ func (data *PolicyMapPBR) addDeletedItemsXML(ctx context.Context, state PolicyMa
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *PolicyMapPBR) addDeletePathsXML(ctx context.Context, body string) string {

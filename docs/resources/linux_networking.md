@@ -14,7 +14,6 @@ This resource can manage the Linux Networking configuration.
 
 ```terraform
 resource "iosxr_linux_networking" "example" {
-  statistics_synchronization_sixty_seconds = true
   exposed_interfaces = [
     {
       interface_name                           = "GigabitEthernet0/0/0/0"
@@ -22,11 +21,12 @@ resource "iosxr_linux_networking" "example" {
       statistics_synchronization_sixty_seconds = true
     }
   ]
+  statistics_synchronization_sixty_seconds = true
   vrfs = [
     {
-      vrf_name                            = "default"
       ipv4_source_interface_default_route = "GigabitEthernet0/0/0/0"
       ipv6_source_interface_default_route = "GigabitEthernet0/0/0/0"
+      vrf_name                            = "default"
     }
   ]
 }
@@ -66,7 +66,7 @@ Required:
 
 - `interface_name` (String) Specify an IOS-XR interface to expose to Linux
 - `linux_managed` (String) Properties of this interface are controlled by linux, not IOS-XR
-  - Choices: `disable`, `enable`
+  - Choices: `disable`, `enable` (v24.4), `disable`, `disable-l3-only`, `enable` (v25.4)
 
 Optional:
 

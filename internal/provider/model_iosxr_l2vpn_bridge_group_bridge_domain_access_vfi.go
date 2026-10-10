@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -98,7 +99,7 @@ func (data L2VPNBridgeGroupBridgeDomainAccessVFIData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data L2VPNBridgeGroupBridgeDomainAccessVFI) toBody(ctx context.Context) string {
+func (data L2VPNBridgeGroupBridgeDomainAccessVFI) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.AccessVfiName.IsNull() && !data.AccessVfiName.IsUnknown() {
 		body, _ = sjson.Set(body, "access-vfi-name", data.AccessVfiName.ValueString())
@@ -121,6 +122,7 @@ func (data L2VPNBridgeGroupBridgeDomainAccessVFI) toBody(ctx context.Context) st
 				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"pw-class", item.PwClass.ValueString())
 			}
 			if len(item.StaticMacAddresses) > 0 {
+				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"static-mac-addresses.static-mac-address", []interface{}{})
 				for cindex, citem := range item.StaticMacAddresses {
 					if !citem.MacAddress.IsNull() && !citem.MacAddress.IsUnknown() {
 						body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"static-mac-addresses.static-mac-address"+"."+strconv.Itoa(cindex)+"."+"mac-address", citem.MacAddress.ValueString())
@@ -134,26 +136,74 @@ func (data L2VPNBridgeGroupBridgeDomainAccessVFI) toBody(ctx context.Context) st
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("shutdown"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Shutdown.IsNull() {
+// GetVersionConstraints returns the version constraints for all fields
+func (data L2VPNBridgeGroupBridgeDomainAccessVFI) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data L2VPNBridgeGroupBridgeDomainAccessVFI) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data L2VPNBridgeGroupBridgeDomainAccessVFI) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data L2VPNBridgeGroupBridgeDomainAccessVFI) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data L2VPNBridgeGroupBridgeDomainAccessVFI) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "shutdown"); !data.Shutdown.IsNull() {
+		if value.Exists() {
 			data.Shutdown = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Shutdown = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Shutdown.IsNull() {
-			data.Shutdown = types.BoolNull()
-		}
+	} else if data.Shutdown.IsNull() {
+		data.Shutdown = types.BoolNull()
 	}
 	for i := range data.Neighbors {
 		keys := [...]string{"address", "pw-id"}
 		keyValues := [...]string{data.Neighbors[i].Address.ValueString(), strconv.FormatInt(data.Neighbors[i].PwId.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("neighbors.neighbor").ForEach(
+		gjson.GetBytes(res, "neighbors.neighbor").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -171,7 +221,7 @@ func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) updateFromBody(ctx context.Co
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() && !data.Neighbors[i].Address.IsNull() {
+		if value := r.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Neighbors[i].Address.IsNull() {
 			data.Neighbors[i].Address = types.StringValue(value.String())
 		} else {
 			data.Neighbors[i].Address = types.StringNull()
@@ -204,13 +254,13 @@ func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) updateFromBody(ctx context.Co
 					return true
 				},
 			)
-			if value := cr.Get("mac-address"); value.Exists() && !data.Neighbors[i].StaticMacAddresses[ci].MacAddress.IsNull() {
+			if value := cr.Get("mac-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Neighbors[i].StaticMacAddresses[ci].MacAddress.IsNull() {
 				data.Neighbors[i].StaticMacAddresses[ci].MacAddress = types.StringValue(value.String())
 			} else {
 				data.Neighbors[i].StaticMacAddresses[ci].MacAddress = types.StringNull()
 			}
 		}
-		if value := r.Get("pw-class"); value.Exists() && !data.Neighbors[i].PwClass.IsNull() {
+		if value := r.Get("pw-class"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Neighbors[i].PwClass.IsNull() {
 			data.Neighbors[i].PwClass = types.StringValue(value.String())
 		} else {
 			data.Neighbors[i].PwClass = types.StringNull()
@@ -219,6 +269,232 @@ func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) updateFromBody(ctx context.Co
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
+		data.Shutdown = types.BoolValue(true)
+	} else if !data.Shutdown.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Shutdown = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "neighbors.neighbor"); value.Exists() {
+		data.Neighbors = make([]L2VPNBridgeGroupBridgeDomainAccessVFINeighbors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainAccessVFINeighbors{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("pw-id"); cValue.Exists() {
+				item.PwId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("static-mac-addresses.static-mac-address"); cValue.Exists() {
+				item.StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainAccessVFINeighborsStaticMacAddresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNBridgeGroupBridgeDomainAccessVFINeighborsStaticMacAddresses{}
+					if ccValue := cv.Get("mac-address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.MacAddress = types.StringValue(ccValue.String())
+					}
+					item.StaticMacAddresses = append(item.StaticMacAddresses, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("pw-class"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.PwClass = types.StringValue(cValue.String())
+			}
+			data.Neighbors = append(data.Neighbors, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *L2VPNBridgeGroupBridgeDomainAccessVFIData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
+		data.Shutdown = types.BoolValue(true)
+	} else {
+		data.Shutdown = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "neighbors.neighbor"); value.Exists() {
+		data.Neighbors = make([]L2VPNBridgeGroupBridgeDomainAccessVFINeighbors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainAccessVFINeighbors{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("pw-id"); cValue.Exists() {
+				item.PwId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("static-mac-addresses.static-mac-address"); cValue.Exists() {
+				item.StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainAccessVFINeighborsStaticMacAddresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNBridgeGroupBridgeDomainAccessVFINeighborsStaticMacAddresses{}
+					if ccValue := cv.Get("mac-address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.MacAddress = types.StringValue(ccValue.String())
+					}
+					item.StaticMacAddresses = append(item.StaticMacAddresses, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("pw-class"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.PwClass = types.StringValue(cValue.String())
+			}
+			data.Neighbors = append(data.Neighbors, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) getDeletedItems(ctx context.Context, state L2VPNBridgeGroupBridgeDomainAccessVFI, version string) []string {
+	deletedItems := make([]string, 0)
+	for i := range state.Neighbors {
+		keys := [...]string{"address", "pw-id"}
+		stateKeyValues := [...]string{state.Neighbors[i].Address.ValueString(), strconv.FormatInt(state.Neighbors[i].PwId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Neighbors[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Neighbors[i].PwId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Neighbors {
+			found = true
+			if state.Neighbors[i].Address.ValueString() != data.Neighbors[j].Address.ValueString() {
+				found = false
+			}
+			if state.Neighbors[i].PwId.ValueInt64() != data.Neighbors[j].PwId.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.Neighbors[i].PwClass.IsNull() && data.Neighbors[j].PwClass.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "neighbors/neighbor", keyString), "pw-class"))
+				}
+				for ci := range state.Neighbors[i].StaticMacAddresses {
+					ckeys := [...]string{"mac-address"}
+					cstateKeyValues := [...]string{state.Neighbors[i].StaticMacAddresses[ci].MacAddress.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Neighbors[i].StaticMacAddresses[ci].MacAddress.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Neighbors[j].StaticMacAddresses {
+						found = true
+						if state.Neighbors[i].StaticMacAddresses[ci].MacAddress.ValueString() != data.Neighbors[j].StaticMacAddresses[cj].MacAddress.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "neighbors/neighbor", keyString, "static-mac-addresses/static-mac-address", ckeyString))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "neighbors/neighbor", keyString))
+		}
+	}
+	if !state.Shutdown.IsNull() && data.Shutdown.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "shutdown"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) getEmptyLeafsDelete(ctx context.Context, state *L2VPNBridgeGroupBridgeDomainAccessVFI, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	for i := range data.Neighbors {
+		keys := [...]string{"address", "pw-id"}
+		keyValues := [...]string{data.Neighbors[i].Address.ValueString(), strconv.FormatInt(data.Neighbors[i].PwId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.Neighbors[i].StaticMacAddresses {
+			ckeys := [...]string{"mac-address"}
+			ckeyValues := [...]string{data.Neighbors[i].StaticMacAddresses[ci].MacAddress.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+	}
+	if !data.Shutdown.IsNull() && !data.Shutdown.ValueBool() {
+		if state == nil || state.Shutdown.IsNull() || state.Shutdown.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "shutdown"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	for i := range data.Neighbors {
+		keys := [...]string{"address", "pw-id"}
+		keyValues := [...]string{data.Neighbors[i].Address.ValueString(), strconv.FormatInt(data.Neighbors[i].PwId.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.Neighbors[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(data.Neighbors[i].PwId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "neighbors/neighbor", keyString))
+	}
+	if !data.Shutdown.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "shutdown"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data L2VPNBridgeGroupBridgeDomainAccessVFI) toBodyXML(ctx context.Context, stateArg ...*L2VPNBridgeGroupBridgeDomainAccessVFI) string {
@@ -276,7 +552,7 @@ func (data L2VPNBridgeGroupBridgeDomainAccessVFI) toBodyXML(ctx context.Context,
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -284,6 +560,7 @@ func (data L2VPNBridgeGroupBridgeDomainAccessVFI) toBodyXML(ctx context.Context,
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -369,102 +646,7 @@ func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) updateFromBodyXML(ctx context
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "shutdown"); value.Exists() {
-		data.Shutdown = types.BoolValue(true)
-	} else if !data.Shutdown.IsNull() {
-		// Only set to false if it was previously set in state
-		data.Shutdown = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "neighbors.neighbor"); value.Exists() {
-		data.Neighbors = make([]L2VPNBridgeGroupBridgeDomainAccessVFINeighbors, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := L2VPNBridgeGroupBridgeDomainAccessVFINeighbors{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("pw-id"); cValue.Exists() {
-				item.PwId = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("static-mac-addresses.static-mac-address"); cValue.Exists() {
-				item.StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainAccessVFINeighborsStaticMacAddresses, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := L2VPNBridgeGroupBridgeDomainAccessVFINeighborsStaticMacAddresses{}
-					if ccValue := cv.Get("mac-address"); ccValue.Exists() {
-						cItem.MacAddress = types.StringValue(ccValue.String())
-					}
-					item.StaticMacAddresses = append(item.StaticMacAddresses, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("pw-class"); cValue.Exists() {
-				item.PwClass = types.StringValue(cValue.String())
-			}
-			data.Neighbors = append(data.Neighbors, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *L2VPNBridgeGroupBridgeDomainAccessVFIData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "shutdown"); value.Exists() {
-		data.Shutdown = types.BoolValue(true)
-	} else {
-		data.Shutdown = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "neighbors.neighbor"); value.Exists() {
-		data.Neighbors = make([]L2VPNBridgeGroupBridgeDomainAccessVFINeighbors, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := L2VPNBridgeGroupBridgeDomainAccessVFINeighbors{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("pw-id"); cValue.Exists() {
-				item.PwId = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("static-mac-addresses.static-mac-address"); cValue.Exists() {
-				item.StaticMacAddresses = make([]L2VPNBridgeGroupBridgeDomainAccessVFINeighborsStaticMacAddresses, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := L2VPNBridgeGroupBridgeDomainAccessVFINeighborsStaticMacAddresses{}
-					if ccValue := cv.Get("mac-address"); ccValue.Exists() {
-						cItem.MacAddress = types.StringValue(ccValue.String())
-					}
-					item.StaticMacAddresses = append(item.StaticMacAddresses, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("pw-class"); cValue.Exists() {
-				item.PwClass = types.StringValue(cValue.String())
-			}
-			data.Neighbors = append(data.Neighbors, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -504,6 +686,7 @@ func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) fromBodyXML(ctx context.Conte
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *L2VPNBridgeGroupBridgeDomainAccessVFIData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -543,135 +726,7 @@ func (data *L2VPNBridgeGroupBridgeDomainAccessVFIData) fromBodyXML(ctx context.C
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) getDeletedItems(ctx context.Context, state L2VPNBridgeGroupBridgeDomainAccessVFI) []string {
-	deletedItems := make([]string, 0)
-	for i := range state.Neighbors {
-		keys := [...]string{"address", "pw-id"}
-		stateKeyValues := [...]string{state.Neighbors[i].Address.ValueString(), strconv.FormatInt(state.Neighbors[i].PwId.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Neighbors[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if !reflect.ValueOf(state.Neighbors[i].PwId.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Neighbors {
-			found = true
-			if state.Neighbors[i].Address.ValueString() != data.Neighbors[j].Address.ValueString() {
-				found = false
-			}
-			if state.Neighbors[i].PwId.ValueInt64() != data.Neighbors[j].PwId.ValueInt64() {
-				found = false
-			}
-			if found {
-				if !state.Neighbors[i].PwClass.IsNull() && data.Neighbors[j].PwClass.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/pw-class", state.getPath(), keyString))
-				}
-				for ci := range state.Neighbors[i].StaticMacAddresses {
-					ckeys := [...]string{"mac-address"}
-					cstateKeyValues := [...]string{state.Neighbors[i].StaticMacAddresses[ci].MacAddress.ValueString()}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.Neighbors[i].StaticMacAddresses[ci].MacAddress.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.Neighbors[j].StaticMacAddresses {
-						found = true
-						if state.Neighbors[i].StaticMacAddresses[ci].MacAddress.ValueString() != data.Neighbors[j].StaticMacAddresses[cj].MacAddress.ValueString() {
-							found = false
-						}
-						if found {
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/static-mac-addresses/static-mac-address%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v", state.getPath(), keyString))
-		}
-	}
-	if !state.Shutdown.IsNull() && data.Shutdown.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/shutdown", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) getEmptyLeafsDelete(ctx context.Context, state *L2VPNBridgeGroupBridgeDomainAccessVFI) []string {
-	emptyLeafsDelete := make([]string, 0)
-	for i := range data.Neighbors {
-		keys := [...]string{"address", "pw-id"}
-		keyValues := [...]string{data.Neighbors[i].Address.ValueString(), strconv.FormatInt(data.Neighbors[i].PwId.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		for ci := range data.Neighbors[i].StaticMacAddresses {
-			ckeys := [...]string{"mac-address"}
-			ckeyValues := [...]string{data.Neighbors[i].StaticMacAddresses[ci].MacAddress.ValueString()}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.Shutdown.IsNull() && !data.Shutdown.ValueBool() {
-		if state != nil && !state.Shutdown.IsNull() && state.Shutdown.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/shutdown", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	for i := range data.Neighbors {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.Neighbors[i].Address.ValueString() + "]"
-		keyPath += "[pw-id=" + strconv.FormatInt(data.Neighbors[i].PwId.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbors/neighbor%v", data.getPath(), keyPath))
-	}
-	if !data.Shutdown.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/shutdown", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) addDeletedItemsXML(ctx context.Context, state L2VPNBridgeGroupBridgeDomainAccessVFI, body string) string {
@@ -770,6 +825,7 @@ func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) addDeletedItemsXML(ctx contex
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *L2VPNBridgeGroupBridgeDomainAccessVFI) addDeletePathsXML(ctx context.Context, body string) string {

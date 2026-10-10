@@ -14,71 +14,75 @@ This resource can manage the SSH configuration.
 
 ```terraform
 resource "iosxr_ssh" "example" {
-  timeout = 60
-  server_vrfs = [
-    {
-      vrf_name         = "VRF1"
-      ipv4_access_list = "ACL1"
-      ipv6_access_list = "ACL2"
-    }
-  ]
-  server_v2                     = true
-  server_rate_limit             = 60
-  server_disable_hmac_sha2_512  = false
-  server_disable_hmac_sha1      = true
-  server_disable_hmac_sha2_256  = false
-  server_enable_cipher_aes_cbc  = true
-  server_enable_cipher_3des_cbc = true
-  server_session_limit          = 10
-  server_logging                = true
-  server_dscp                   = 48
-  server_netconf_port           = 830
-  server_netconf_vrfs = [
-    {
-      vrf_name         = "VRF2"
-      ipv4_access_list = "ACL1"
-      ipv6_access_list = "ACL2"
-    }
-  ]
-  server_netconf_xml                        = true
-  server_rekey_time                         = 60
-  server_rekey_volume                       = 2048
-  server_algorithms_key_exchanges           = ["ecdh-sha2-nistp521"]
+  client_algorithms_ciphers                 = ["aes128-ctr"]
+  client_algorithms_key_exchanges           = ["ecdh-sha2-nistp521"]
+  client_disable_hmac_sha1                  = true
+  client_disable_hmac_sha2_256              = false
+  client_disable_hmac_sha2_512              = false
+  client_dscp                               = 16
+  client_enable_cipher_3des_cbc             = true
+  client_enable_cipher_aes_cbc              = true
+  client_rekey_time                         = 60
+  client_rekey_volume                       = 2048
+  client_source_interface                   = "Loopback100"
+  client_tcp_window_scale                   = 7
+  client_v2                                 = true
+  client_vrf                                = "MGMT"
+  server_algorithms_ciphers                 = ["aes128-ctr"]
+  server_algorithms_host_key_dsa            = true
   server_algorithms_host_key_ecdsa_nistp256 = true
   server_algorithms_host_key_ecdsa_nistp384 = true
   server_algorithms_host_key_ecdsa_nistp521 = true
-  server_algorithms_host_key_rsa            = true
-  server_algorithms_host_key_dsa            = true
-  server_algorithms_host_key_x509v3_ssh_rsa = true
   server_algorithms_host_key_ed25519        = true
-  server_algorithms_host_key_rsa_sha512     = true
+  server_algorithms_host_key_rsa            = true
   server_algorithms_host_key_rsa_sha256     = true
+  server_algorithms_host_key_rsa_sha512     = true
   server_algorithms_host_key_ssh_rsa        = true
-  server_algorithms_ciphers                 = ["aes128-ctr"]
+  server_algorithms_host_key_x509v3_ssh_rsa = true
+  server_algorithms_key_exchanges           = ["ecdh-sha2-nistp521"]
+  server_disable_hmac_sha1                  = true
+  server_disable_hmac_sha2_256              = false
+  server_disable_hmac_sha2_512              = false
+  server_dscp                               = 48
+  server_enable_cipher_3des_cbc             = true
+  server_enable_cipher_aes_cbc              = true
+  server_logging                            = true
   server_max_auth_limit                     = 10
-  server_tcp_window_scale                   = 7
-  server_port_forwarding_local              = true
-  server_port                               = 5522
-  server_usernames = [
+  server_netconf_disable_ssh_port           = true
+  server_netconf_port                       = 830
+  server_netconf_vrfs = [
     {
-      username  = "cisco"
-      keystring = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCv60WjxoM39LgPDbiW7ne3gu18q0NIVv0RE6rDLNal1quXZ6k5I9nV0WbPSqJLRm4Q2aHEGQ3NG2dJ5ZZ3xYDOm5X9JtMSjLFCJhSHVnGz6w+s8zPKiLmBjBD4VmxBKGMj0C/4LlZJ1F3yJfPTCzDwIMAMF8fJBJ8PqFKfvMTMqLkBfjB7xhXIx5N3jAZJdmxPkzdPPLnqLOKUjGKHRgmLWbynKZwRkjqvNJPQd3pf9Yb/HGqhWLvXc0z2xGlqODBhC3vLg0tlSKFpSdcJqj6eZLmKQ5BLHhZkJHDVdKzKNw5r0dBbLqFzF7nHiJ3uD+fUgPNzKOc7vF/TzLmNDlWr"
+      ipv4_access_list = "ACL1"
+      ipv6_access_list = "ACL2"
+      vrf_name         = "VRF2"
     }
   ]
-  client_source_interface         = "Loopback100"
-  client_vrf                      = "MGMT"
-  client_dscp                     = 16
-  client_rekey_time               = 60
-  client_rekey_volume             = 2048
-  client_disable_hmac_sha1        = true
-  client_disable_hmac_sha2_512    = false
-  client_disable_hmac_sha2_256    = false
-  client_enable_cipher_aes_cbc    = true
-  client_enable_cipher_3des_cbc   = true
-  client_algorithms_key_exchanges = ["ecdh-sha2-nistp521"]
-  client_algorithms_ciphers       = ["aes128-ctr"]
-  client_tcp_window_scale         = 7
-  client_v2                       = true
+  server_netconf_xml               = true
+  server_packet_flow_netio_ingress = true
+  server_port                      = 5522
+  server_port_forwarding_local     = true
+  server_rate_limit                = 60
+  server_rekey_time                = 60
+  server_rekey_volume              = 2048
+  server_session_limit             = 10
+  server_tcp_window_scale          = 7
+  server_timeout_channel           = 3600
+  server_timeout_connection        = 3600
+  server_usernames = [
+    {
+      keystring = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCv60WjxoM39LgPDbiW7ne3gu18q0NIVv0RE6rDLNal1quXZ6k5I9nV0WbPSqJLRm4Q2aHEGQ3NG2dJ5ZZ3xYDOm5X9JtMSjLFCJhSHVnGz6w+s8zPKiLmBjBD4VmxBKGMj0C/4LlZJ1F3yJfPTCzDwIMAMF8fJBJ8PqFKfvMTMqLkBfjB7xhXIx5N3jAZJdmxPkzdPPLnqLOKUjGKHRgmLWbynKZwRkjqvNJPQd3pf9Yb/HGqhWLvXc0z2xGlqODBhC3vLg0tlSKFpSdcJqj6eZLmKQ5BLHhZkJHDVdKzKNw5r0dBbLqFzF7nHiJ3uD+fUgPNzKOc7vF/TzLmNDlWr"
+      username  = "cisco"
+    }
+  ]
+  server_v2 = true
+  server_vrfs = [
+    {
+      ipv4_access_list = "ACL1"
+      ipv6_access_list = "ACL2"
+      vrf_name         = "VRF1"
+    }
+  ]
+  timeout = 60
 }
 ```
 
@@ -111,7 +115,7 @@ resource "iosxr_ssh" "example" {
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `server_algorithms_ciphers` (List of String) cipher algorithms
-- `server_algorithms_host_key_dsa` (Boolean) dsa
+- `server_algorithms_host_key_dsa` (Boolean) dsa. This is deprecated in 25.3.1
 - `server_algorithms_host_key_ecdsa_nistp256` (Boolean) ecdsa-nistp256
 - `server_algorithms_host_key_ecdsa_nistp384` (Boolean) ecdsa-nistp384
 - `server_algorithms_host_key_ecdsa_nistp521` (Boolean) ecdsa-nistp521
@@ -132,10 +136,14 @@ resource "iosxr_ssh" "example" {
 - `server_logging` (Boolean) Enable ssh server logging
 - `server_max_auth_limit` (Number) User Configurable max authentication attempts
   - Range: `3`-`20`
+- `server_netconf_disable_ssh_port` (Boolean) SSH-port (Netconf will not work on SSH port)
+  - Supported from version: `25.4`
 - `server_netconf_port` (Number) Port to start ssh netconf subsystem service (Default 830)
   - Range: `1`-`65535`
 - `server_netconf_vrfs` (Attributes List) Cisco netconf VRF name (see [below for nested schema](#nestedatt--server_netconf_vrfs))
 - `server_netconf_xml` (Boolean) Use Netconf XML stack
+- `server_packet_flow_netio_ingress` (Boolean) incoming Packets
+  - Supported from version: `25.4`
 - `server_port` (Number) User Configurable ssh port (Default 22)
   - Range: `5520`-`5529`
 - `server_port_forwarding_local` (Boolean) Enable local port forwarding for ssh server
@@ -149,8 +157,14 @@ resource "iosxr_ssh" "example" {
   - Range: `1`-`150`
 - `server_tcp_window_scale` (Number) Set tcp window-scale factor for High Latency links
   - Range: `1`-`14`
+- `server_timeout_channel` (Number) Idle timeout to close ssh channel
+  - Range: `1`-`86400`
+  - Supported from version: `25.4`
+- `server_timeout_connection` (Number) Idle timeout to close ssh connection
+  - Range: `1`-`86400`
+  - Supported from version: `25.4`
 - `server_usernames` (Attributes List) ssh user (see [below for nested schema](#nestedatt--server_usernames))
-- `server_v1` (Boolean) Cisco sshd protocol version 1
+- `server_v1` (Boolean) Cisco sshd protocol version 1. This is deprecated in 25.3.1
 - `server_v2` (Boolean) Cisco sshd protocol version 2
 - `server_vrfs` (Attributes List) Cisco sshd VRF name (see [below for nested schema](#nestedatt--server_vrfs))
 - `timeout` (Number) Set timeout value for SSH

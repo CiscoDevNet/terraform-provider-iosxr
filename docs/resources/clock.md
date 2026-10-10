@@ -3,12 +3,12 @@
 page_title: "iosxr_clock Resource - terraform-provider-iosxr"
 subcategory: "Management"
 description: |-
-  This resource can manage the Clock configuration.
+  
 ---
 
 # iosxr_clock (Resource)
 
-This resource can manage the Clock configuration.
+
 
 ## Example Usage
 

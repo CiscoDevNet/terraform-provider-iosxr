@@ -65,7 +65,7 @@ func TestAccDataSourceIosxrEVPNEVI(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrEVPNEVIPrerequisitesConfig + testAccDataSourceIosxrEVPNEVIConfig(),
+				Config: testAccDataSourceIosxrEVPNEVIPrerequisitesConfig() + testAccDataSourceIosxrEVPNEVIConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -75,7 +75,7 @@ func TestAccDataSourceIosxrEVPNEVI(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrEVPNEVIPrerequisitesConfig = `
+const testAccDataSourceIosxrEVPNEVIPrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]"
 	attributes = {
@@ -86,9 +86,20 @@ resource "iosxr_yang" "PreReq0" {
 
 resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
+	attributes = {
+	}
 }
 
 `
+
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccDataSourceIosxrEVPNEVIPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccDataSourceIosxrEVPNEVIPrerequisitesConfig_V24_4,
+		},
+	)
+}
 
 // End of section. //template:end testPrerequisites
 
@@ -130,7 +141,9 @@ func testAccDataSourceIosxrEVPNEVIConfig() string {
 	config += `	etree_rt_leaf = true` + "\n"
 	config += `	vpws_single_active_backup_suppression = true` + "\n"
 	config += `	bvi_coupled_mode = true` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 
 	config += `

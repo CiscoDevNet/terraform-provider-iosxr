@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -73,6 +74,8 @@ type TACACSServerHosts struct {
 	KeyType6                    types.String `tfsdk:"key_type_6"`
 	SingleConnection            types.Bool   `tfsdk:"single_connection"`
 	SingleConnectionIdleTimeout types.Int64  `tfsdk:"single_connection_idle_timeout"`
+	TlsTrustpoint               types.String `tfsdk:"tls_trustpoint"`
+	TlsServerNameIndicator      types.String `tfsdk:"tls_server_name_indicator"`
 }
 
 // End of section. //template:end types
@@ -102,7 +105,7 @@ func (data TACACSServerData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data TACACSServer) toBody(ctx context.Context) string {
+func (data TACACSServer) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.KeyType7.IsNull() && !data.KeyType7.IsUnknown() {
 		body, _ = sjson.Set(body, "key.seven", data.KeyType7.ValueString())
@@ -154,6 +157,16 @@ func (data TACACSServer) toBody(ctx context.Context) string {
 			if !item.SingleConnectionIdleTimeout.IsNull() && !item.SingleConnectionIdleTimeout.IsUnknown() {
 				body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"single-connection-idle-timeout", strconv.FormatInt(item.SingleConnectionIdleTimeout.ValueInt64(), 10))
 			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.TlsTrustpoint.IsNull() && !item.TlsTrustpoint.IsUnknown() {
+					body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"tls.trustpoint", item.TlsTrustpoint.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.TlsServerNameIndicator.IsNull() && !item.TlsServerNameIndicator.IsUnknown() {
+					body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"tls.server-name-indicator", item.TlsServerNameIndicator.ValueString())
+				}
+			}
 		}
 	}
 	return body
@@ -161,15 +174,74 @@ func (data TACACSServer) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *TACACSServer) updateFromBody(ctx context.Context, res gjson.Result) {
+// GetVersionConstraints returns the version constraints for all fields
+func (data TACACSServer) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "hosts.tls_trustpoint",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "hosts.tls_server_name_indicator",
+			AddedInVersion: "25.4",
+		},
+	}...)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data TACACSServer) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data TACACSServer) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data TACACSServer) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data TACACSServer) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *TACACSServer) updateFromBody(ctx context.Context, res []byte, version string) {
 	for i := range data.Hosts {
 		keys := [...]string{"ordering-index", "address", "port"}
 		keyValues := [...]string{strconv.FormatInt(data.Hosts[i].OrderingIndex.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].Port.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("hosts.host").ForEach(
+		gjson.GetBytes(res, "hosts.host").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -192,7 +264,7 @@ func (data *TACACSServer) updateFromBody(ctx context.Context, res gjson.Result) 
 		} else {
 			data.Hosts[i].OrderingIndex = types.Int64Null()
 		}
-		if value := r.Get("address"); value.Exists() && !data.Hosts[i].Address.IsNull() {
+		if value := r.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Hosts[i].Address.IsNull() {
 			data.Hosts[i].Address = types.StringValue(value.String())
 		} else {
 			data.Hosts[i].Address = types.StringNull()
@@ -229,23 +301,33 @@ func (data *TACACSServer) updateFromBody(ctx context.Context, res gjson.Result) 
 		} else {
 			data.Hosts[i].SingleConnectionIdleTimeout = types.Int64Null()
 		}
+		if value := r.Get("tls.trustpoint"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Hosts[i].TlsTrustpoint.IsNull() {
+			data.Hosts[i].TlsTrustpoint = types.StringValue(value.String())
+		} else {
+			data.Hosts[i].TlsTrustpoint = types.StringNull()
+		}
+		if value := r.Get("tls.server-name-indicator"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Hosts[i].TlsServerNameIndicator.IsNull() {
+			data.Hosts[i].TlsServerNameIndicator = types.StringValue(value.String())
+		} else {
+			data.Hosts[i].TlsServerNameIndicator = types.StringNull()
+		}
 	}
-	if value := res.Get("timeout"); value.Exists() && !data.Timeout.IsNull() {
+	if value := gjson.GetBytes(res, "timeout"); value.Exists() && !data.Timeout.IsNull() {
 		data.Timeout = types.Int64Value(value.Int())
 	} else if data.Timeout.IsNull() {
 		data.Timeout = types.Int64Null()
 	}
-	if value := res.Get("holddown-time"); value.Exists() && !data.HolddownTime.IsNull() {
+	if value := gjson.GetBytes(res, "holddown-time"); value.Exists() && !data.HolddownTime.IsNull() {
 		data.HolddownTime = types.Int64Value(value.Int())
 	} else if data.HolddownTime.IsNull() {
 		data.HolddownTime = types.Int64Null()
 	}
-	if value := res.Get("ipv4.dscp"); value.Exists() && !data.Ipv4Dscp.IsNull() {
+	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	} else if data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringNull()
 	}
-	if value := res.Get("ipv6.dscp"); value.Exists() && !data.Ipv6Dscp.IsNull() {
+	if value := gjson.GetBytes(res, "ipv6.dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	} else if data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringNull()
@@ -253,6 +335,302 @@ func (data *TACACSServer) updateFromBody(ctx context.Context, res gjson.Result) 
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *TACACSServer) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "hosts.host"); value.Exists() {
+		data.Hosts = make([]TACACSServerHosts, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := TACACSServerHosts{}
+			if cValue := v.Get("ordering-index"); cValue.Exists() {
+				item.OrderingIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("port"); cValue.Exists() {
+				item.Port = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("timeout"); cValue.Exists() {
+				item.Timeout = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("holddown-time"); cValue.Exists() {
+				item.HolddownTime = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("single-connection"); cValue.Exists() {
+				item.SingleConnection = types.BoolValue(true)
+			} else if !item.SingleConnection.IsNull() {
+				// Only set to false if it was previously set
+				item.SingleConnection = types.BoolValue(false)
+			}
+			if cValue := v.Get("single-connection-idle-timeout"); cValue.Exists() {
+				item.SingleConnectionIdleTimeout = types.Int64Value(cValue.Int())
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tls.trustpoint"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.TlsTrustpoint = types.StringValue(cValue.String())
+				}
+			} else {
+				item.TlsTrustpoint = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tls.server-name-indicator"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.TlsServerNameIndicator = types.StringValue(cValue.String())
+				}
+			} else {
+				item.TlsServerNameIndicator = types.StringNull()
+			}
+			data.Hosts = append(data.Hosts, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "timeout"); value.Exists() {
+		data.Timeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "holddown-time"); value.Exists() {
+		data.HolddownTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Ipv4Dscp = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ipv6.dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Ipv6Dscp = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *TACACSServerData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "hosts.host"); value.Exists() {
+		data.Hosts = make([]TACACSServerHosts, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := TACACSServerHosts{}
+			if cValue := v.Get("ordering-index"); cValue.Exists() {
+				item.OrderingIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("port"); cValue.Exists() {
+				item.Port = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("timeout"); cValue.Exists() {
+				item.Timeout = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("holddown-time"); cValue.Exists() {
+				item.HolddownTime = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("single-connection"); cValue.Exists() {
+				item.SingleConnection = types.BoolValue(true)
+			} else {
+				item.SingleConnection = types.BoolValue(false)
+			}
+			if cValue := v.Get("single-connection-idle-timeout"); cValue.Exists() {
+				item.SingleConnectionIdleTimeout = types.Int64Value(cValue.Int())
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tls.trustpoint"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.TlsTrustpoint = types.StringValue(cValue.String())
+				}
+			} else {
+				item.TlsTrustpoint = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tls.server-name-indicator"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.TlsServerNameIndicator = types.StringValue(cValue.String())
+				}
+			} else {
+				item.TlsServerNameIndicator = types.StringNull()
+			}
+			data.Hosts = append(data.Hosts, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "timeout"); value.Exists() {
+		data.Timeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "holddown-time"); value.Exists() {
+		data.HolddownTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Ipv4Dscp = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ipv6.dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Ipv6Dscp = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *TACACSServer) getDeletedItems(ctx context.Context, state TACACSServer, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.Ipv6Dscp.IsNull() && data.Ipv6Dscp.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv6/dscp"))
+	}
+	if !state.Ipv4Dscp.IsNull() && data.Ipv4Dscp.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv4/dscp"))
+	}
+	if !state.HolddownTime.IsNull() && data.HolddownTime.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "holddown-time"))
+	}
+	if !state.Timeout.IsNull() && data.Timeout.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "timeout"))
+	}
+	if !state.KeyType6.IsNull() && data.KeyType6.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "key/six"))
+	}
+	if !state.KeyType7.IsNull() && data.KeyType7.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "key/seven"))
+	}
+	for i := range state.Hosts {
+		keys := [...]string{"ordering-index", "address", "port"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Hosts[i].OrderingIndex.ValueInt64(), 10), state.Hosts[i].Address.ValueString(), strconv.FormatInt(state.Hosts[i].Port.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Hosts[i].OrderingIndex.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Hosts[i].Port.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Hosts {
+			found = true
+			if state.Hosts[i].OrderingIndex.ValueInt64() != data.Hosts[j].OrderingIndex.ValueInt64() {
+				found = false
+			}
+			if state.Hosts[i].Address.ValueString() != data.Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if state.Hosts[i].Port.ValueInt64() != data.Hosts[j].Port.ValueInt64() {
+				found = false
+			}
+			if found {
+				if helpers.VersionAtLeast(version, "25.4") && !state.Hosts[i].TlsServerNameIndicator.IsNull() && data.Hosts[j].TlsServerNameIndicator.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "tls/server-name-indicator"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.Hosts[i].TlsTrustpoint.IsNull() && data.Hosts[j].TlsTrustpoint.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "tls/trustpoint"))
+				}
+				if !state.Hosts[i].SingleConnectionIdleTimeout.IsNull() && data.Hosts[j].SingleConnectionIdleTimeout.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "single-connection-idle-timeout"))
+				}
+				if !state.Hosts[i].SingleConnection.IsNull() && data.Hosts[j].SingleConnection.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "single-connection"))
+				}
+				if !state.Hosts[i].KeyType6.IsNull() && data.Hosts[j].KeyType6.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "key/six"))
+				}
+				if !state.Hosts[i].KeyType7.IsNull() && data.Hosts[j].KeyType7.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "key/seven"))
+				}
+				if !state.Hosts[i].HolddownTime.IsNull() && data.Hosts[j].HolddownTime.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "holddown-time"))
+				}
+				if !state.Hosts[i].Timeout.IsNull() && data.Hosts[j].Timeout.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "timeout"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString))
+		}
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *TACACSServer) getEmptyLeafsDelete(ctx context.Context, state *TACACSServer, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	for i := range data.Hosts {
+		keys := [...]string{"ordering-index", "address", "port"}
+		keyValues := [...]string{strconv.FormatInt(data.Hosts[i].OrderingIndex.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].Port.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Hosts[i].SingleConnection.IsNull() && !data.Hosts[i].SingleConnection.ValueBool() {
+			if state == nil || i >= len(state.Hosts) || state.Hosts[i].SingleConnection.IsNull() || state.Hosts[i].SingleConnection.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "hosts/host", keyString), "single-connection"))
+			}
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *TACACSServer) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.Ipv6Dscp.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv6/dscp"))
+	}
+	if !data.Ipv4Dscp.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv4/dscp"))
+	}
+	if !data.HolddownTime.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "holddown-time"))
+	}
+	if !data.Timeout.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "timeout"))
+	}
+	if !data.KeyType6.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "key/six"))
+	}
+	if !data.KeyType7.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "key/seven"))
+	}
+	for i := range data.Hosts {
+		keys := [...]string{"ordering-index", "address", "port"}
+		keyValues := [...]string{strconv.FormatInt(data.Hosts[i].OrderingIndex.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].Port.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.Hosts[i].OrderingIndex.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(data.Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(data.Hosts[i].Port.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "hosts/host", keyString))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data TACACSServer) toBodyXML(ctx context.Context, stateArg ...*TACACSServer) string {
@@ -292,6 +670,12 @@ func (data TACACSServer) toBodyXML(ctx context.Context, stateArg ...*TACACSServe
 			}
 			if !item.SingleConnectionIdleTimeout.IsNull() && !item.SingleConnectionIdleTimeout.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/single-connection-idle-timeout", strconv.FormatInt(item.SingleConnectionIdleTimeout.ValueInt64(), 10))
+			}
+			if !item.TlsTrustpoint.IsNull() && !item.TlsTrustpoint.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/tls/trustpoint", item.TlsTrustpoint.ValueString())
+			}
+			if !item.TlsServerNameIndicator.IsNull() && !item.TlsServerNameIndicator.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/tls/server-name-indicator", item.TlsServerNameIndicator.ValueString())
 			}
 		}
 	}
@@ -335,7 +719,7 @@ func (data TACACSServer) toBodyXML(ctx context.Context, stateArg ...*TACACSServe
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -343,6 +727,7 @@ func (data TACACSServer) toBodyXML(ctx context.Context, stateArg ...*TACACSServe
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *TACACSServer) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -411,6 +796,16 @@ func (data *TACACSServer) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 		} else if data.Hosts[i].SingleConnectionIdleTimeout.IsNull() {
 			data.Hosts[i].SingleConnectionIdleTimeout = types.Int64Null()
 		}
+		if value := helpers.GetFromXPath(r, "tls/trustpoint"); value.Exists() && !data.Hosts[i].TlsTrustpoint.IsNull() {
+			data.Hosts[i].TlsTrustpoint = types.StringValue(value.String())
+		} else if data.Hosts[i].TlsTrustpoint.IsNull() {
+			data.Hosts[i].TlsTrustpoint = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "tls/server-name-indicator"); value.Exists() && !data.Hosts[i].TlsServerNameIndicator.IsNull() {
+			data.Hosts[i].TlsServerNameIndicator = types.StringValue(value.String())
+		} else if data.Hosts[i].TlsServerNameIndicator.IsNull() {
+			data.Hosts[i].TlsServerNameIndicator = types.StringNull()
+		}
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timeout"); value.Exists() && !data.Timeout.IsNull() {
 		data.Timeout = types.Int64Value(value.Int())
@@ -435,134 +830,7 @@ func (data *TACACSServer) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *TACACSServer) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "hosts.host"); value.Exists() {
-		data.Hosts = make([]TACACSServerHosts, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := TACACSServerHosts{}
-			if cValue := v.Get("ordering-index"); cValue.Exists() {
-				item.OrderingIndex = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("port"); cValue.Exists() {
-				item.Port = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("timeout"); cValue.Exists() {
-				item.Timeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("holddown-time"); cValue.Exists() {
-				item.HolddownTime = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("single-connection"); cValue.Exists() {
-				item.SingleConnection = types.BoolValue(true)
-			} else if !item.SingleConnection.IsNull() {
-				// Only set to false if it was previously set
-				item.SingleConnection = types.BoolValue(false)
-			}
-			if cValue := v.Get("single-connection-idle-timeout"); cValue.Exists() {
-				item.SingleConnectionIdleTimeout = types.Int64Value(cValue.Int())
-			}
-			data.Hosts = append(data.Hosts, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "timeout"); value.Exists() {
-		data.Timeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "holddown-time"); value.Exists() {
-		data.HolddownTime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ipv4.dscp"); value.Exists() {
-		data.Ipv4Dscp = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ipv6.dscp"); value.Exists() {
-		data.Ipv6Dscp = types.StringValue(value.String())
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *TACACSServerData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "hosts.host"); value.Exists() {
-		data.Hosts = make([]TACACSServerHosts, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := TACACSServerHosts{}
-			if cValue := v.Get("ordering-index"); cValue.Exists() {
-				item.OrderingIndex = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("port"); cValue.Exists() {
-				item.Port = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("timeout"); cValue.Exists() {
-				item.Timeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("holddown-time"); cValue.Exists() {
-				item.HolddownTime = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("key.seven"); cValue.Exists() {
-				item.KeyType7 = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("key.six"); cValue.Exists() {
-				item.KeyType6 = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("single-connection"); cValue.Exists() {
-				item.SingleConnection = types.BoolValue(true)
-			} else {
-				item.SingleConnection = types.BoolValue(false)
-			}
-			if cValue := v.Get("single-connection-idle-timeout"); cValue.Exists() {
-				item.SingleConnectionIdleTimeout = types.Int64Value(cValue.Int())
-			}
-			data.Hosts = append(data.Hosts, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "key.seven"); value.Exists() {
-		data.KeyType7 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "key.six"); value.Exists() {
-		data.KeyType6 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "timeout"); value.Exists() {
-		data.Timeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "holddown-time"); value.Exists() {
-		data.HolddownTime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ipv4.dscp"); value.Exists() {
-		data.Ipv4Dscp = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ipv6.dscp"); value.Exists() {
-		data.Ipv6Dscp = types.StringValue(value.String())
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *TACACSServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -599,6 +867,12 @@ func (data *TACACSServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "single-connection-idle-timeout"); cValue.Exists() {
 				item.SingleConnectionIdleTimeout = types.Int64Value(cValue.Int())
 			}
+			if cValue := helpers.GetFromXPath(v, "tls/trustpoint"); cValue.Exists() {
+				item.TlsTrustpoint = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "tls/server-name-indicator"); cValue.Exists() {
+				item.TlsServerNameIndicator = types.StringValue(cValue.String())
+			}
 			data.Hosts = append(data.Hosts, item)
 			return true
 		})
@@ -624,6 +898,7 @@ func (data *TACACSServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *TACACSServerData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -660,6 +935,12 @@ func (data *TACACSServerData) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "single-connection-idle-timeout"); cValue.Exists() {
 				item.SingleConnectionIdleTimeout = types.Int64Value(cValue.Int())
 			}
+			if cValue := helpers.GetFromXPath(v, "tls/trustpoint"); cValue.Exists() {
+				item.TlsTrustpoint = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "tls/server-name-indicator"); cValue.Exists() {
+				item.TlsServerNameIndicator = types.StringValue(cValue.String())
+			}
 			data.Hosts = append(data.Hosts, item)
 			return true
 		})
@@ -685,150 +966,7 @@ func (data *TACACSServerData) fromBodyXML(ctx context.Context, res xmldot.Result
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *TACACSServer) getDeletedItems(ctx context.Context, state TACACSServer) []string {
-	deletedItems := make([]string, 0)
-	if !state.Ipv6Dscp.IsNull() && data.Ipv6Dscp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/dscp", state.getPath()))
-	}
-	if !state.Ipv4Dscp.IsNull() && data.Ipv4Dscp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/dscp", state.getPath()))
-	}
-	if !state.HolddownTime.IsNull() && data.HolddownTime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/holddown-time", state.getPath()))
-	}
-	if !state.Timeout.IsNull() && data.Timeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timeout", state.getPath()))
-	}
-	if !state.KeyType6.IsNull() && data.KeyType6.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/key/six", state.getPath()))
-	}
-	if !state.KeyType7.IsNull() && data.KeyType7.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/key/seven", state.getPath()))
-	}
-	for i := range state.Hosts {
-		keys := [...]string{"ordering-index", "address", "port"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.Hosts[i].OrderingIndex.ValueInt64(), 10), state.Hosts[i].Address.ValueString(), strconv.FormatInt(state.Hosts[i].Port.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Hosts[i].OrderingIndex.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if !reflect.ValueOf(state.Hosts[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if !reflect.ValueOf(state.Hosts[i].Port.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Hosts {
-			found = true
-			if state.Hosts[i].OrderingIndex.ValueInt64() != data.Hosts[j].OrderingIndex.ValueInt64() {
-				found = false
-			}
-			if state.Hosts[i].Address.ValueString() != data.Hosts[j].Address.ValueString() {
-				found = false
-			}
-			if state.Hosts[i].Port.ValueInt64() != data.Hosts[j].Port.ValueInt64() {
-				found = false
-			}
-			if found {
-				if !state.Hosts[i].SingleConnectionIdleTimeout.IsNull() && data.Hosts[j].SingleConnectionIdleTimeout.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/single-connection-idle-timeout", state.getPath(), keyString))
-				}
-				if !state.Hosts[i].SingleConnection.IsNull() && data.Hosts[j].SingleConnection.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/single-connection", state.getPath(), keyString))
-				}
-				if !state.Hosts[i].KeyType6.IsNull() && data.Hosts[j].KeyType6.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/key/six", state.getPath(), keyString))
-				}
-				if !state.Hosts[i].KeyType7.IsNull() && data.Hosts[j].KeyType7.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/key/seven", state.getPath(), keyString))
-				}
-				if !state.Hosts[i].HolddownTime.IsNull() && data.Hosts[j].HolddownTime.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/holddown-time", state.getPath(), keyString))
-				}
-				if !state.Hosts[i].Timeout.IsNull() && data.Hosts[j].Timeout.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/timeout", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v", state.getPath(), keyString))
-		}
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *TACACSServer) getEmptyLeafsDelete(ctx context.Context, state *TACACSServer) []string {
-	emptyLeafsDelete := make([]string, 0)
-	for i := range data.Hosts {
-		keys := [...]string{"ordering-index", "address", "port"}
-		keyValues := [...]string{strconv.FormatInt(data.Hosts[i].OrderingIndex.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].Port.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.Hosts[i].SingleConnection.IsNull() && !data.Hosts[i].SingleConnection.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Hosts) && !state.Hosts[i].SingleConnection.IsNull() && state.Hosts[i].SingleConnection.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hosts/host%v/single-connection", data.getXPath(), keyString))
-			}
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *TACACSServer) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.Ipv6Dscp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/dscp", data.getPath()))
-	}
-	if !data.Ipv4Dscp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/dscp", data.getPath()))
-	}
-	if !data.HolddownTime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/holddown-time", data.getPath()))
-	}
-	if !data.Timeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timeout", data.getPath()))
-	}
-	if !data.KeyType6.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/key/six", data.getPath()))
-	}
-	if !data.KeyType7.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/key/seven", data.getPath()))
-	}
-	for i := range data.Hosts {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[ordering-index=" + strconv.FormatInt(data.Hosts[i].OrderingIndex.ValueInt64(), 10) + "]"
-		keyPath += "[address=" + data.Hosts[i].Address.ValueString() + "]"
-		keyPath += "[port=" + strconv.FormatInt(data.Hosts[i].Port.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hosts/host%v", data.getPath(), keyPath))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *TACACSServer) addDeletedItemsXML(ctx context.Context, state TACACSServer, body string) string {
@@ -961,6 +1099,12 @@ func (data *TACACSServer) addDeletedItemsXML(ctx context.Context, state TACACSSe
 				found = false
 			}
 			if found {
+				if !state.Hosts[i].TlsServerNameIndicator.IsNull() && data.Hosts[j].TlsServerNameIndicator.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/tls/server-name-indicator", predicates))
+				}
+				if !state.Hosts[i].TlsTrustpoint.IsNull() && data.Hosts[j].TlsTrustpoint.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/tls/trustpoint", predicates))
+				}
 				if !state.Hosts[i].SingleConnectionIdleTimeout.IsNull() && data.Hosts[j].SingleConnectionIdleTimeout.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/single-connection-idle-timeout", predicates))
 				}
@@ -993,6 +1137,7 @@ func (data *TACACSServer) addDeletedItemsXML(ctx context.Context, state TACACSSe
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *TACACSServer) addDeletePathsXML(ctx context.Context, body string) string {

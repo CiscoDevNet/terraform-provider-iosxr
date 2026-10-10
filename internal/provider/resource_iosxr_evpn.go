@@ -39,11 +39,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
-	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
-
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewEVPNResource() resource.Resource {
@@ -239,7 +237,7 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Optional:            true,
 			},
 			"srv6_locators": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Default locator to use for EVPN SID allocation").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Default locator to use for EVPN SID allocation").String + "\n  - **Not supported from version `25.4` and above**",
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -554,6 +552,64 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
 				},
 			},
+			"srv6_locator_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default locator to use for EVPN SID allocation").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 58),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-z0-9A-Z][a-z0-9A-Z_.:]*`), ""),
+				},
+			},
+			"srv6_locator_usid_allocation_wide_local_id_block": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable uSID wide function knob for the locator").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"virtual_interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify interface name").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify interface name").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+						"ethernet_segment_esi_zero": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ESI value").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 254),
+							},
+						},
+						"ethernet_segment_service_carving_hrw": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("HRW mode of carving services").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
+						"ethernet_segment_bgp_rt": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set ES-Import Route Target").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+							},
+						},
+						"ethernet_segment_convergence_reroute": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redirect unicast traffic to backup peer").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
+						"ethernet_segment_convergence_mac_mobility": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MAC-Mobility triggered reconvergence").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
+						"ethernet_segment_convergence_nexthop_tracking": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable EVPN procedures to be influenced by BGP nexthop reachability").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -585,7 +641,10 @@ func (r *EVPNResource) Create(ctx context.Context, req resource.CreateRequest, r
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
-
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
@@ -603,10 +662,10 @@ func (r *EVPNResource) Create(ctx context.Context, req resource.CreateRequest, r
 			var ops []gnmi.SetOperation
 
 			// Create object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("gNMI Set body for path %s: %s", plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -661,7 +720,6 @@ func (r *EVPNResource) Create(ctx context.Context, req resource.CreateRequest, r
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-
 func (r *EVPNResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state EVPN
 
@@ -726,10 +784,10 @@ func (r *EVPNResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 				if imp {
 					// After `terraform import` we switch to a full read so all device
 					// attributes are populated in state (fromBody overwrites everything).
-					state.fromBody(ctx, gjson.ParseBytes(respBody))
+					state.fromBody(ctx, respBody, device.Version)
 				} else {
 					// Normal read: preserve config-only fields not returned by the device.
-					state.updateFromBody(ctx, gjson.ParseBytes(respBody))
+					state.updateFromBody(ctx, respBody, device.Version)
 				}
 			}
 		} else {
@@ -770,7 +828,6 @@ func (r *EVPNResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 			}
 		}
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
@@ -782,7 +839,6 @@ func (r *EVPNResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-
 func (r *EVPNResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state EVPN
 
@@ -805,6 +861,10 @@ func (r *EVPNResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -823,16 +883,16 @@ func (r *EVPNResource) Update(ctx context.Context, req resource.UpdateRequest, r
 			var ops []gnmi.SetOperation
 
 			// Update object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 
-			deletedListItems := plan.getDeletedItems(ctx, state)
+			deletedListItems := plan.getDeletedItems(ctx, state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
 
 			for _, i := range deletedListItems {
 				ops = append(ops, gnmi.Delete(i))
 			}
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -875,7 +935,6 @@ func (r *EVPNResource) Update(ctx context.Context, req resource.UpdateRequest, r
 			}
 		}
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
@@ -885,7 +944,6 @@ func (r *EVPNResource) Update(ctx context.Context, req resource.UpdateRequest, r
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-
 func (r *EVPNResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state EVPN
 
@@ -900,6 +958,14 @@ func (r *EVPNResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
@@ -976,7 +1042,7 @@ func (r *EVPNResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 				}
 
 				var ops []gnmi.SetOperation
-				deletePaths := state.getDeletePaths(ctx)
+				deletePaths := state.getDeletePaths(ctx, device.Version)
 				tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
 
 				for _, i := range deletePaths {
@@ -1024,7 +1090,6 @@ func (r *EVPNResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-
 func (r *EVPNResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)

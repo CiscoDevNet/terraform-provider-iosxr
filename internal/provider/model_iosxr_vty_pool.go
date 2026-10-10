@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"sort"
 	"strconv"
@@ -97,7 +98,7 @@ func (data VTYPoolData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data VTYPool) toBody(ctx context.Context) string {
+func (data VTYPool) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.DefaultFirstVty.IsNull() && !data.DefaultFirstVty.IsUnknown() {
 		body, _ = sjson.Set(body, "default.first-vty-number", strconv.FormatInt(data.DefaultFirstVty.ValueInt64(), 10))
@@ -139,35 +140,84 @@ func (data VTYPool) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *VTYPool) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("default.first-vty-number"); value.Exists() && !data.DefaultFirstVty.IsNull() {
+// GetVersionConstraints returns the version constraints for all fields
+func (data VTYPool) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data VTYPool) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data VTYPool) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data VTYPool) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data VTYPool) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *VTYPool) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "default.first-vty-number"); value.Exists() && !data.DefaultFirstVty.IsNull() {
 		data.DefaultFirstVty = types.Int64Value(value.Int())
 	} else if data.DefaultFirstVty.IsNull() {
 		data.DefaultFirstVty = types.Int64Null()
 	}
-	if value := res.Get("default.last-vty-number"); value.Exists() && !data.DefaultLastVty.IsNull() {
+	if value := gjson.GetBytes(res, "default.last-vty-number"); value.Exists() && !data.DefaultLastVty.IsNull() {
 		data.DefaultLastVty = types.Int64Value(value.Int())
 	} else if data.DefaultLastVty.IsNull() {
 		data.DefaultLastVty = types.Int64Null()
 	}
-	if value := res.Get("default.line-template"); value.Exists() && !data.DefaultLineTemplate.IsNull() {
+	if value := gjson.GetBytes(res, "default.line-template"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DefaultLineTemplate.IsNull() {
 		data.DefaultLineTemplate = types.StringValue(value.String())
 	} else if data.DefaultLineTemplate.IsNull() {
 		data.DefaultLineTemplate = types.StringNull()
 	}
-	if value := res.Get("eem.first-vty-number"); value.Exists() && !data.EemFirstVty.IsNull() {
+	if value := gjson.GetBytes(res, "eem.first-vty-number"); value.Exists() && !data.EemFirstVty.IsNull() {
 		data.EemFirstVty = types.Int64Value(value.Int())
 	} else if data.EemFirstVty.IsNull() {
 		data.EemFirstVty = types.Int64Null()
 	}
-	if value := res.Get("eem.last-vty-number"); value.Exists() && !data.EemLastVty.IsNull() {
+	if value := gjson.GetBytes(res, "eem.last-vty-number"); value.Exists() && !data.EemLastVty.IsNull() {
 		data.EemLastVty = types.Int64Value(value.Int())
 	} else if data.EemLastVty.IsNull() {
 		data.EemLastVty = types.Int64Null()
 	}
-	if value := res.Get("eem.line-template"); value.Exists() && !data.EemLineTemplate.IsNull() {
+	if value := gjson.GetBytes(res, "eem.line-template"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.EemLineTemplate.IsNull() {
 		data.EemLineTemplate = types.StringValue(value.String())
 	} else if data.EemLineTemplate.IsNull() {
 		data.EemLineTemplate = types.StringNull()
@@ -177,7 +227,7 @@ func (data *VTYPool) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{data.Pools[i].PoolName.ValueString()}
 
 		var r gjson.Result
-		res.Get("pools.pool").ForEach(
+		gjson.GetBytes(res, "pools.pool").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -195,22 +245,22 @@ func (data *VTYPool) updateFromBody(ctx context.Context, res gjson.Result) {
 				return true
 			},
 		)
-		if value := r.Get("pool-name"); value.Exists() && !data.Pools[i].PoolName.IsNull() {
+		if value := r.Get("pool-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Pools[i].PoolName.IsNull() {
 			data.Pools[i].PoolName = types.StringValue(value.String())
 		} else {
 			data.Pools[i].PoolName = types.StringNull()
 		}
-		if value := r.Get("first-vty-number"); value.Exists() && !data.Pools[i].FirstVty.IsNull() {
+		if value := r.Get("first-vty-number"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Pools[i].FirstVty.IsNull() {
 			data.Pools[i].FirstVty = types.StringValue(value.String())
 		} else {
 			data.Pools[i].FirstVty = types.StringNull()
 		}
-		if value := r.Get("last-vty-number"); value.Exists() && !data.Pools[i].LastVty.IsNull() {
+		if value := r.Get("last-vty-number"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Pools[i].LastVty.IsNull() {
 			data.Pools[i].LastVty = types.StringValue(value.String())
 		} else {
 			data.Pools[i].LastVty = types.StringNull()
 		}
-		if value := r.Get("line-template"); value.Exists() && !data.Pools[i].LineTemplate.IsNull() {
+		if value := r.Get("line-template"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Pools[i].LineTemplate.IsNull() {
 			data.Pools[i].LineTemplate = types.StringValue(value.String())
 		} else {
 			data.Pools[i].LineTemplate = types.StringNull()
@@ -219,6 +269,225 @@ func (data *VTYPool) updateFromBody(ctx context.Context, res gjson.Result) {
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *VTYPool) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "default.first-vty-number"); value.Exists() {
+		data.DefaultFirstVty = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "default.last-vty-number"); value.Exists() {
+		data.DefaultLastVty = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "default.line-template"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.DefaultLineTemplate = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "eem.first-vty-number"); value.Exists() {
+		data.EemFirstVty = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "eem.last-vty-number"); value.Exists() {
+		data.EemLastVty = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "eem.line-template"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.EemLineTemplate = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "pools.pool"); value.Exists() {
+		data.Pools = make([]VTYPoolPools, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VTYPoolPools{}
+			if cValue := v.Get("pool-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.PoolName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("first-vty-number"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.FirstVty = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("last-vty-number"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LastVty = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("line-template"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LineTemplate = types.StringValue(cValue.String())
+			}
+			data.Pools = append(data.Pools, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *VTYPoolData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "default.first-vty-number"); value.Exists() {
+		data.DefaultFirstVty = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "default.last-vty-number"); value.Exists() {
+		data.DefaultLastVty = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "default.line-template"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.DefaultLineTemplate = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "eem.first-vty-number"); value.Exists() {
+		data.EemFirstVty = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "eem.last-vty-number"); value.Exists() {
+		data.EemLastVty = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "eem.line-template"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.EemLineTemplate = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "pools.pool"); value.Exists() {
+		data.Pools = make([]VTYPoolPools, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VTYPoolPools{}
+			if cValue := v.Get("pool-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.PoolName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("first-vty-number"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.FirstVty = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("last-vty-number"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LastVty = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("line-template"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LineTemplate = types.StringValue(cValue.String())
+			}
+			data.Pools = append(data.Pools, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *VTYPool) getDeletedItems(ctx context.Context, state VTYPool, version string) []string {
+	deletedItems := make([]string, 0)
+	for i := range state.Pools {
+		keys := [...]string{"pool-name"}
+		stateKeyValues := [...]string{state.Pools[i].PoolName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Pools[i].PoolName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Pools {
+			found = true
+			if state.Pools[i].PoolName.ValueString() != data.Pools[j].PoolName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Pools[i].LineTemplate.IsNull() && data.Pools[j].LineTemplate.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "pools/pool", keyString), "line-template"))
+				}
+				if !state.Pools[i].LastVty.IsNull() && data.Pools[j].LastVty.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "pools/pool", keyString), "last-vty-number"))
+				}
+				if !state.Pools[i].FirstVty.IsNull() && data.Pools[j].FirstVty.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "pools/pool", keyString), "first-vty-number"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "pools/pool", keyString))
+		}
+	}
+	if !state.EemLineTemplate.IsNull() && data.EemLineTemplate.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "eem"))
+	}
+	if !state.EemLastVty.IsNull() && data.EemLastVty.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "eem"))
+	}
+	if !state.EemFirstVty.IsNull() && data.EemFirstVty.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "eem"))
+	}
+	if !state.DefaultLineTemplate.IsNull() && data.DefaultLineTemplate.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "default"))
+	}
+	if !state.DefaultLastVty.IsNull() && data.DefaultLastVty.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "default"))
+	}
+	if !state.DefaultFirstVty.IsNull() && data.DefaultFirstVty.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "default"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *VTYPool) getEmptyLeafsDelete(ctx context.Context, state *VTYPool, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	for i := range data.Pools {
+		keys := [...]string{"pool-name"}
+		keyValues := [...]string{data.Pools[i].PoolName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *VTYPool) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	for i := range data.Pools {
+		keys := [...]string{"pool-name"}
+		keyValues := [...]string{data.Pools[i].PoolName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.Pools[i].PoolName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "pools/pool", keyString))
+	}
+	if !data.EemLineTemplate.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "eem"))
+	}
+	if !data.EemLastVty.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "eem"))
+	}
+	if !data.EemFirstVty.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "eem"))
+	}
+	if !data.DefaultLineTemplate.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "default"))
+	}
+	if !data.DefaultLastVty.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "default"))
+	}
+	if !data.DefaultFirstVty.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "default"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data VTYPool) toBodyXML(ctx context.Context, stateArg ...*VTYPool) string {
@@ -284,7 +553,7 @@ func (data VTYPool) toBodyXML(ctx context.Context, stateArg ...*VTYPool) string 
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -292,6 +561,7 @@ func (data VTYPool) toBodyXML(ctx context.Context, stateArg ...*VTYPool) string 
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *VTYPool) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -372,111 +642,7 @@ func (data *VTYPool) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *VTYPool) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "default.first-vty-number"); value.Exists() {
-		data.DefaultFirstVty = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "default.last-vty-number"); value.Exists() {
-		data.DefaultLastVty = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "default.line-template"); value.Exists() {
-		data.DefaultLineTemplate = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "eem.first-vty-number"); value.Exists() {
-		data.EemFirstVty = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "eem.last-vty-number"); value.Exists() {
-		data.EemLastVty = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "eem.line-template"); value.Exists() {
-		data.EemLineTemplate = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "pools.pool"); value.Exists() {
-		data.Pools = make([]VTYPoolPools, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := VTYPoolPools{}
-			if cValue := v.Get("pool-name"); cValue.Exists() {
-				item.PoolName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("first-vty-number"); cValue.Exists() {
-				item.FirstVty = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("last-vty-number"); cValue.Exists() {
-				item.LastVty = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("line-template"); cValue.Exists() {
-				item.LineTemplate = types.StringValue(cValue.String())
-			}
-			data.Pools = append(data.Pools, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *VTYPoolData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "default.first-vty-number"); value.Exists() {
-		data.DefaultFirstVty = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "default.last-vty-number"); value.Exists() {
-		data.DefaultLastVty = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "default.line-template"); value.Exists() {
-		data.DefaultLineTemplate = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "eem.first-vty-number"); value.Exists() {
-		data.EemFirstVty = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "eem.last-vty-number"); value.Exists() {
-		data.EemLastVty = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "eem.line-template"); value.Exists() {
-		data.EemLineTemplate = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "pools.pool"); value.Exists() {
-		data.Pools = make([]VTYPoolPools, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := VTYPoolPools{}
-			if cValue := v.Get("pool-name"); cValue.Exists() {
-				item.PoolName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("first-vty-number"); cValue.Exists() {
-				item.FirstVty = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("last-vty-number"); cValue.Exists() {
-				item.LastVty = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("line-template"); cValue.Exists() {
-				item.LineTemplate = types.StringValue(cValue.String())
-			}
-			data.Pools = append(data.Pools, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *VTYPool) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -521,6 +687,7 @@ func (data *VTYPool) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *VTYPoolData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -565,120 +732,7 @@ func (data *VTYPoolData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *VTYPool) getDeletedItems(ctx context.Context, state VTYPool) []string {
-	deletedItems := make([]string, 0)
-	for i := range state.Pools {
-		keys := [...]string{"pool-name"}
-		stateKeyValues := [...]string{state.Pools[i].PoolName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Pools[i].PoolName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Pools {
-			found = true
-			if state.Pools[i].PoolName.ValueString() != data.Pools[j].PoolName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.Pools[i].LineTemplate.IsNull() && data.Pools[j].LineTemplate.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/pools/pool%v/line-template", state.getPath(), keyString))
-				}
-				if !state.Pools[i].LastVty.IsNull() && data.Pools[j].LastVty.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/pools/pool%v/last-vty-number", state.getPath(), keyString))
-				}
-				if !state.Pools[i].FirstVty.IsNull() && data.Pools[j].FirstVty.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/pools/pool%v/first-vty-number", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/pools/pool%v", state.getPath(), keyString))
-		}
-	}
-	if !state.EemLineTemplate.IsNull() && data.EemLineTemplate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/eem", state.getPath()))
-	}
-	if !state.EemLastVty.IsNull() && data.EemLastVty.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/eem", state.getPath()))
-	}
-	if !state.EemFirstVty.IsNull() && data.EemFirstVty.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/eem", state.getPath()))
-	}
-	if !state.DefaultLineTemplate.IsNull() && data.DefaultLineTemplate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default", state.getPath()))
-	}
-	if !state.DefaultLastVty.IsNull() && data.DefaultLastVty.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default", state.getPath()))
-	}
-	if !state.DefaultFirstVty.IsNull() && data.DefaultFirstVty.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *VTYPool) getEmptyLeafsDelete(ctx context.Context, state *VTYPool) []string {
-	emptyLeafsDelete := make([]string, 0)
-	for i := range data.Pools {
-		keys := [...]string{"pool-name"}
-		keyValues := [...]string{data.Pools[i].PoolName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *VTYPool) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	for i := range data.Pools {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[pool-name=" + data.Pools[i].PoolName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/pools/pool%v", data.getPath(), keyPath))
-	}
-	if !data.EemLineTemplate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/eem", data.getPath()))
-	}
-	if !data.EemLastVty.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/eem", data.getPath()))
-	}
-	if !data.EemFirstVty.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/eem", data.getPath()))
-	}
-	if !data.DefaultLineTemplate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/default", data.getPath()))
-	}
-	if !data.DefaultLastVty.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/default", data.getPath()))
-	}
-	if !data.DefaultFirstVty.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/default", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body string) string {
@@ -881,6 +935,7 @@ func (data *VTYPool) addDeletedItemsXML(ctx context.Context, state VTYPool, body
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *VTYPool) addDeletePathsXML(ctx context.Context, body string) string {

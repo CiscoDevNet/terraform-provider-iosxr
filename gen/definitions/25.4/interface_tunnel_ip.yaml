@@ -1,0 +1,12 @@
+---
+name: Interface Tunnel IP
+path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=tunnel-ip%s]
+doc_category: Interface
+attributes:
+  # ===========================================================
+  # tunnel/destination/prefix-list: length range widened
+  # 24.4: length 1..64
+  # 25.4: length 1..128
+  # ===========================================================
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/destination/prefix-list
+    tf_name: tunnel_destination_prefix_list

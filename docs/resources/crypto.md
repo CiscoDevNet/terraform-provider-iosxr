@@ -10,69 +10,79 @@ description: |-
 
 This resource can manage the Crypto configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `ca_trustpoints.method_est_credential_certificate` | `25.4` |
+
 ## Example Usage
 
 ```terraform
 resource "iosxr_crypto" "example" {
+  ca_crl_curl_timeout            = 10
+  ca_fqdn_check_ip_address_allow = true
+  ca_http_proxy                  = "proxy.example.com"
+  ca_http_proxy_port             = 8080
+  ca_openssh_trustpoints = [
+    {
+      rsakeypair      = "KEY1"
+      trustpoint_name = "OPENSSH-TP1"
+    }
+  ]
+  ca_rsa_1024_disable                               = true
+  ca_source_interface_ipv4                          = "Loopback0"
+  ca_trustpoint_system_auto_enroll                  = 80
+  ca_trustpoint_system_ca_keypair_ecdsanistp521     = "KEY4"
+  ca_trustpoint_system_crl_optional                 = true
   ca_trustpoint_system_description                  = "System trustpoint description"
   ca_trustpoint_system_enrollment_retry_count       = 10
   ca_trustpoint_system_enrollment_retry_period      = 5
   ca_trustpoint_system_enrollment_url               = "http://ca.example.com"
-  ca_trustpoint_system_sftp_username                = "sftpuser"
-  ca_trustpoint_system_sftp_password                = "1511021F0725"
-  ca_trustpoint_system_auto_enroll                  = 80
-  ca_trustpoint_system_renewal_message_type_pkcsreq = true
-  ca_trustpoint_system_skip_challenge_password      = true
-  ca_trustpoint_system_rsa_keypair                  = "KEY1"
-  ca_trustpoint_system_ca_keypair_ecdsanistp521     = "KEY4"
-  ca_trustpoint_system_crl_optional                 = true
-  ca_trustpoint_system_query_url                    = "ldap://ca.example.com/certsrv"
   ca_trustpoint_system_ip_address                   = "10.1.1.1"
-  ca_trustpoint_system_subject_name                 = "CN=Router1,OU=Network,O=Example,C=US"
-  ca_trustpoint_system_subject_name_ca_certificate  = "CN=CA,OU=Security,O=Example,C=US"
-  ca_trustpoint_system_subject_alternative_name     = "DNS:router1.example.com,IP:192.168.1.1"
-  ca_trustpoint_system_serial_number                = true
-  ca_trustpoint_system_vrf                          = "VRF1"
   ca_trustpoint_system_lifetime_ca_certificate      = 90
   ca_trustpoint_system_lifetime_certificate         = 90
   ca_trustpoint_system_message_digest               = "sha256"
+  ca_trustpoint_system_query_url                    = "ldap://ca.example.com/certsrv"
+  ca_trustpoint_system_renewal_message_type_pkcsreq = true
+  ca_trustpoint_system_rsa_keypair                  = "KEY1"
+  ca_trustpoint_system_serial_number                = true
+  ca_trustpoint_system_sftp_password                = "1511021F0725"
+  ca_trustpoint_system_sftp_username                = "sftpuser"
+  ca_trustpoint_system_skip_challenge_password      = true
+  ca_trustpoint_system_subject_alternative_name     = "DNS:router1.example.com,IP:192.168.1.1"
+  ca_trustpoint_system_subject_name                 = "CN=Router1,OU=Network,O=Example,C=US"
+  ca_trustpoint_system_subject_name_ca_certificate  = "CN=CA,OU=Security,O=Example,C=US"
+  ca_trustpoint_system_vrf                          = "VRF1"
   ca_trustpoints = [
     {
-      trustpoint_name                   = "TP1"
-      description                       = "Custom trustpoint"
-      enrollment_retry_count            = 10
-      enrollment_retry_period           = 5
-      enrollment_url                    = "http://ca.example.com"
-      sftp_username                     = "sftpuser"
-      sftp_password                     = "1511021F0725"
-      auto_enroll                       = 80
-      renewal_message_type_renewalreq   = true
-      skip_challenge_password           = true
-      rsakeypair                        = "KEY1"
-      crl_optional                      = true
-      query_url                         = "ldap://ca.example.com/certsrv"
-      ip_address                        = "10.1.1.2"
-      subject_name                      = "CN=Router2,OU=Network,O=Example,C=US"
-      subject_alternative_name          = "DNS:router2.example.com,IP:192.168.1.2"
-      serial_number                     = true
-      vrf                               = "VRF1"
-      message_digest                    = "sha256"
-      method_est_credential_certificate = "EST-BOOTSTRAP"
+      auto_enroll                          = 80
+      crl_optional                         = true
+      description                          = "Custom trustpoint"
+      enrollment_authentication_profile    = "EAP_PROFILE"
+      enrollment_retry_count               = 10
+      enrollment_retry_period              = 5
+      enrollment_url                       = "http://ca.example.com"
+      ip_address                           = "10.1.1.2"
+      message_digest                       = "sha256"
+      query_url                            = "ldap://ca.example.com/certsrv"
+      re_enrollment_authentication_profile = "EAP_PROFILE"
+      renewal_message_type_renewalreq      = true
+      rsakeypair                           = "KEY1"
+      serial_number                        = true
+      sftp_password                        = "1511021F0725"
+      sftp_username                        = "sftpuser"
+      skip_challenge_password              = true
+      ssl_profile                          = "MTLS_PROFILE"
+      subject_alternative_name             = "DNS:router2.example.com,IP:192.168.1.2"
+      subject_name                         = "CN=Router2,OU=Network,O=Example,C=US"
+      trustpoint_name                      = "TP1"
+      vrf                                  = "VRF1"
     }
   ]
-  ca_openssh_trustpoints = [
-    {
-      trustpoint_name = "OPENSSH-TP1"
-      rsakeypair      = "KEY1"
-    }
-  ]
-  ca_http_proxy                  = "proxy.example.com"
-  ca_http_proxy_port             = 8080
-  ca_source_interface_ipv4       = "Loopback0"
-  ca_rsa_1024_disable            = true
-  ca_fqdn_check_ip_address_allow = true
-  ca_crl_curl_timeout            = 10
-  fips_mode                      = true
+  fips_mode = true
 }
 ```
 
@@ -101,6 +111,8 @@ resource "iosxr_crypto" "example" {
 - `ca_trustpoint_system_ca_keypair_rsa` (String) Self enrollment, rsa key pair
 - `ca_trustpoint_system_crl_optional` (Boolean) CRL verification as optional
 - `ca_trustpoint_system_description` (String) Description for the trustpoint
+- `ca_trustpoint_system_enrollment_local` (Boolean) Enroll via file present on local filesystem
+  - Supported from version: `25.4`
 - `ca_trustpoint_system_enrollment_retry_count` (Number) How many times to poll CA for our certificate
   - Range: `1`-`100`
 - `ca_trustpoint_system_enrollment_retry_period` (Number) How long to wait between requests to CA for our certificate
@@ -170,6 +182,10 @@ Optional:
   - Range: `1`-`99`
 - `crl_optional` (Boolean) CRL verification as optional
 - `description` (String) Description for the trustpoint
+- `enrollment_authentication_profile` (String) Authentication profile used during certificate enrollment
+  - Supported from version: `25.4`
+- `enrollment_local` (Boolean) Enroll via file present on local filesystem
+  - Supported from version: `25.4`
 - `enrollment_retry_count` (Number) How many times to poll CA for our certificate
   - Range: `1`-`100`
 - `enrollment_retry_period` (Number) How long to wait between requests to CA for our certificate
@@ -181,7 +197,10 @@ Optional:
 - `message_digest` (String) Certificate message digesti self enrollment
   - Choices: `md5`, `sha1`, `sha256`, `sha384`, `sha512`
 - `method_est_credential_certificate` (String) Certificate based authentication in TLS handshake during bootstrap
+  - **Not supported from version `25.4` and above**
 - `query_url` (String) CA server query URL
+- `re_enrollment_authentication_profile` (String) Authentication profile used during certificate re-enrollment
+  - Supported from version: `25.4`
 - `renewal_message_type_pkcsreq` (Boolean) Message type PKCSReq(Default)
 - `renewal_message_type_renewalreq` (Boolean) Message type RenewalReq
 - `rsakeypair` (String) RSA key pair
@@ -190,6 +209,8 @@ Optional:
 - `sftp_password` (String, Sensitive) Enter password in encrypted form
 - `sftp_username` (String) Secure FTP username
 - `skip_challenge_password` (Boolean) Skip challenge password attribute for manual enrollment request
+- `ssl_profile` (String) SSL profile parameters used during TLS/mTLS handshake
+  - Supported from version: `25.4`
 - `subject_alternative_name` (String) Include Subject Alternative Name(SAN) in CSR request
 - `subject_name` (String) Subject Name
 - `vrf` (String) Source interface VRF

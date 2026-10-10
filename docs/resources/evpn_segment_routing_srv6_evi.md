@@ -10,42 +10,46 @@ description: |-
 
 This resource can manage the EVPN Segment Routing SRv6 EVI configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `locators` | `25.4` |
+
 ## Example Usage
 
 ```terraform
 resource "iosxr_evpn_segment_routing_srv6_evi" "example" {
-  vpn_id                     = 103
-  description                = "My Description"
-  bgp_rd_four_byte_as_number = 65536
   bgp_rd_four_byte_as_index  = 103
-  bgp_route_target_import_four_byte_as_format = [
-    {
-      as_number       = 65536
-      assigned_number = 103
-    }
-  ]
+  bgp_rd_four_byte_as_number = 65536
+  bgp_route_policy_export    = "EVI_POLICY_1"
+  bgp_route_policy_import    = "EVI_POLICY_1"
   bgp_route_target_export_four_byte_as_format = [
     {
       as_number       = 65536
       assigned_number = 103
     }
   ]
-  bgp_route_policy_import                = "EVI_POLICY_1"
-  bgp_route_policy_export                = "EVI_POLICY_1"
-  preferred_nexthop_modulo               = true
-  unknown_unicast_suppression            = true
-  ignore_mtu_mismatch                    = true
-  ignore_mtu_mismatch_disable_deprecated = true
-  transmit_mtu_zero                      = true
-  transmit_mtu_zero_disable_deprecated   = true
-  re_origination_disable                 = true
-  etree                                  = true
-  etree_rt_leaf                          = true
-  locators = [
+  bgp_route_target_import_four_byte_as_format = [
     {
-      locator_name = "LOC12"
+      as_number       = 65536
+      assigned_number = 103
     }
   ]
+  description                            = "My Description"
+  etree                                  = true
+  etree_rt_leaf                          = true
+  ignore_mtu_mismatch                    = true
+  ignore_mtu_mismatch_disable_deprecated = true
+  locator_name                           = "LOC12"
+  preferred_nexthop_modulo               = true
+  re_origination_disable                 = true
+  transmit_mtu_zero                      = true
+  transmit_mtu_zero_disable_deprecated   = true
+  unknown_unicast_suppression            = true
+  vpn_id                                 = 103
 }
 ```
 
@@ -55,7 +59,7 @@ resource "iosxr_evpn_segment_routing_srv6_evi" "example" {
 ### Required
 
 - `vpn_id` (Number) Configure EVPN Instance VPN ID
-  - Range: `1`-`65534`
+  - Range: `1`-`65534` (v24.4), `1`-`16777215` (v26.2)
 
 ### Optional
 
@@ -95,7 +99,12 @@ resource "iosxr_evpn_segment_routing_srv6_evi" "example" {
 - `etree_rt_leaf` (Boolean) Designate EVPN Instance as EVPN E-Tree Route-Target Leaf Site
 - `ignore_mtu_mismatch` (Boolean) Ignore mismatch of local and remote MTUs
 - `ignore_mtu_mismatch_disable_deprecated` (Boolean) Disables ingoring mismatch of local and remote MTUs (deprecated)
-- `locators` (Attributes List) EVI locator to use for EVPN SID allocation (see [below for nested schema](#nestedatt--locators))
+- `locator_name` (String) EVI locator to use for EVPN SID allocation
+  - Supported from version: `25.4`
+- `locator_usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function knob for the locator
+  - Supported from version: `25.4`
+- `locators` (Attributes List) EVI locator to use for EVPN SID allocation
+  - **Not supported from version `25.4` and above** (see [below for nested schema](#nestedatt--locators))
 - `preferred_nexthop_highest_ip` (Boolean) Highest nexthop IP is active
 - `preferred_nexthop_lowest_ip` (Boolean) Lowest nexthop IP is active
 - `preferred_nexthop_modulo` (Boolean) EVI modulo of nexthops cardinality is active

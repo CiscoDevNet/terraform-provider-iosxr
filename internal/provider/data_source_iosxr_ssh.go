@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -95,7 +94,7 @@ func (d *SSHDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				},
 			},
 			"server_v1": schema.BoolAttribute{
-				MarkdownDescription: "Cisco sshd protocol version 1 ",
+				MarkdownDescription: "Cisco sshd protocol version 1. This is deprecated in 25.3.1",
 				Computed:            true,
 			},
 			"server_v2": schema.BoolAttribute{
@@ -196,7 +195,7 @@ func (d *SSHDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				Computed:            true,
 			},
 			"server_algorithms_host_key_dsa": schema.BoolAttribute{
-				MarkdownDescription: "dsa",
+				MarkdownDescription: "dsa. This is deprecated in 25.3.1",
 				Computed:            true,
 			},
 			"server_algorithms_host_key_x509v3_ssh_rsa": schema.BoolAttribute{
@@ -323,6 +322,22 @@ func (d *SSHDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Set ssh client to use version 1 ",
 				Computed:            true,
 			},
+			"server_netconf_disable_ssh_port": schema.BoolAttribute{
+				MarkdownDescription: "SSH-port (Netconf will not work on SSH port)" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"server_packet_flow_netio_ingress": schema.BoolAttribute{
+				MarkdownDescription: "incoming Packets" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"server_timeout_channel": schema.Int64Attribute{
+				MarkdownDescription: "Idle timeout to close ssh channel" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"server_timeout_connection": schema.Int64Attribute{
+				MarkdownDescription: "Idle timeout to close ssh connection" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
 		},
 	}
 }
@@ -370,7 +385,6 @@ func (d *SSHDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -390,7 +404,7 @@ func (d *SSHDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

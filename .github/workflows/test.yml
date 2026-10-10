@@ -39,6 +39,7 @@ jobs:
       - run: go mod download
       - run: go generate
       - run: git diff --exit-code
+      - run: make test-unit
       - run: go build -v .
 
   # Run acceptance tests in a matrix with Terraform CLI versions

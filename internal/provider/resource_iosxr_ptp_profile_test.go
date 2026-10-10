@@ -112,14 +112,24 @@ func TestAccIosxrPTPProfile(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ptp_profile.test", "interop_ingress_conversion_clock_class_default", "6"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ptp_profile.test", "interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_from", "13"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ptp_profile.test", "interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_to", "6"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("C8000") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("iosxr_ptp_profile.test", "monitor_sender", "true"))
+		}
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("C8000") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("iosxr_ptp_profile.test", "monitor_receiver", "true"))
+		}
+	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrPTPProfilePrerequisitesConfig + testAccIosxrPTPProfileConfig_minimum(),
+			Config: testAccIosxrPTPProfilePrerequisitesConfig() + testAccIosxrPTPProfileConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrPTPProfilePrerequisitesConfig + testAccIosxrPTPProfileConfig_all(),
+		Config: testAccIosxrPTPProfilePrerequisitesConfig() + testAccIosxrPTPProfileConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -151,7 +161,7 @@ func iosxrPTPProfileImportStateIdFunc(resourceName string) resource.ImportStateI
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrPTPProfilePrerequisitesConfig = `
+const testAccIosxrPTPProfilePrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-ptp-cfg:/ptp"
 	attributes = {
@@ -160,6 +170,15 @@ resource "iosxr_yang" "PreReq0" {
 
 `
 
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccIosxrPTPProfilePrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccIosxrPTPProfilePrerequisitesConfig_V24_4,
+		},
+	)
+}
+
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
@@ -167,7 +186,9 @@ resource "iosxr_yang" "PreReq0" {
 func testAccIosxrPTPProfileConfig_minimum() string {
 	config := `resource "iosxr_ptp_profile" "test" {` + "\n"
 	config += `	profile_name = "Profile-1"` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -268,7 +289,19 @@ func testAccIosxrPTPProfileConfig_all() string {
 	config += `		clock_class_to_map_from = 13` + "\n"
 	config += `		clock_class_to_map_to = 6` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("C8000") != "" {
+			config += `	monitor_sender = true` + "\n"
+		}
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("C8000") != "" {
+			config += `	monitor_receiver = true` + "\n"
+		}
+	}
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }

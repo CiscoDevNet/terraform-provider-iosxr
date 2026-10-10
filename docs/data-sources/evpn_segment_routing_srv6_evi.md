@@ -10,6 +10,14 @@ description: |-
 
 This data source can read the EVPN Segment Routing SRv6 EVI configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `locators` | `25.4` |
+
 ## Example Usage
 
 ```terraform
@@ -60,7 +68,12 @@ data "iosxr_evpn_segment_routing_srv6_evi" "example" {
 - `id` (String) The path of the retrieved object.
 - `ignore_mtu_mismatch` (Boolean) Ignore mismatch of local and remote MTUs
 - `ignore_mtu_mismatch_disable_deprecated` (Boolean) Disables ingoring mismatch of local and remote MTUs (deprecated)
-- `locators` (Attributes List) EVI locator to use for EVPN SID allocation (see [below for nested schema](#nestedatt--locators))
+- `locator_name` (String) EVI locator to use for EVPN SID allocation
+  - Supported from version: `25.4`
+- `locator_usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function knob for the locator
+  - Supported from version: `25.4`
+- `locators` (Attributes List) EVI locator to use for EVPN SID allocation
+  - **Not supported from version `25.4` and above** (see [below for nested schema](#nestedatt--locators))
 - `preferred_nexthop_highest_ip` (Boolean) Highest nexthop IP is active
 - `preferred_nexthop_lowest_ip` (Boolean) Lowest nexthop IP is active
 - `preferred_nexthop_modulo` (Boolean) EVI modulo of nexthops cardinality is active

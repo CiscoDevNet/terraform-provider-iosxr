@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
@@ -80,7 +81,7 @@ func (data TagSetData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data TagSet) toBody(ctx context.Context) string {
+func (data TagSet) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.SetName.IsNull() && !data.SetName.IsUnknown() {
 		body, _ = sjson.Set(body, "set-name", data.SetName.ValueString())
@@ -93,10 +94,59 @@ func (data TagSet) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *TagSet) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("rpl-tag-set"); value.Exists() && !data.Rpl.IsNull() {
+// GetVersionConstraints returns the version constraints for all fields
+func (data TagSet) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data TagSet) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data TagSet) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data TagSet) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data TagSet) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *TagSet) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "rpl-tag-set"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Rpl.IsNull() {
 		data.Rpl = types.StringValue(value.String())
 	} else if data.Rpl.IsNull() {
 		data.Rpl = types.StringNull()
@@ -104,6 +154,60 @@ func (data *TagSet) updateFromBody(ctx context.Context, res gjson.Result) {
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *TagSet) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "rpl-tag-set"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Rpl = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *TagSetData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "rpl-tag-set"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Rpl = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *TagSet) getDeletedItems(ctx context.Context, state TagSet, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "rpl-tag-set"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *TagSet) getEmptyLeafsDelete(ctx context.Context, state *TagSet, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *TagSet) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.Rpl.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "rpl-tag-set"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data TagSet) toBodyXML(ctx context.Context, stateArg ...*TagSet) string {
@@ -137,7 +241,7 @@ func (data TagSet) toBodyXML(ctx context.Context, stateArg ...*TagSet) string {
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -145,6 +249,7 @@ func (data TagSet) toBodyXML(ctx context.Context, stateArg ...*TagSet) string {
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *TagSet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -161,41 +266,7 @@ func (data *TagSet) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *TagSet) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "rpl-tag-set"); value.Exists() {
-		data.Rpl = types.StringValue(value.String())
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *TagSetData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "rpl-tag-set"); value.Exists() {
-		data.Rpl = types.StringValue(value.String())
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *TagSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -210,6 +281,7 @@ func (data *TagSet) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *TagSetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -224,37 +296,7 @@ func (data *TagSetData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *TagSet) getDeletedItems(ctx context.Context, state TagSet) []string {
-	deletedItems := make([]string, 0)
-	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/rpl-tag-set", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *TagSet) getEmptyLeafsDelete(ctx context.Context, state *TagSet) []string {
-	emptyLeafsDelete := make([]string, 0)
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *TagSet) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.Rpl.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/rpl-tag-set", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *TagSet) addDeletedItemsXML(ctx context.Context, state TagSet, body string) string {
@@ -283,6 +325,7 @@ func (data *TagSet) addDeletedItemsXML(ctx context.Context, state TagSet, body s
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *TagSet) addDeletePathsXML(ctx context.Context, body string) string {

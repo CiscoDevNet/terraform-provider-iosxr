@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -321,7 +320,23 @@ func (d *CryptoDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 							Computed:            true,
 						},
 						"method_est_credential_certificate": schema.StringAttribute{
-							MarkdownDescription: "Certificate based authentication in TLS handshake during bootstrap",
+							MarkdownDescription: "Certificate based authentication in TLS handshake during bootstrap" + "\n  - **Not supported from version `25.4` and above**",
+							Computed:            true,
+						},
+						"enrollment_authentication_profile": schema.StringAttribute{
+							MarkdownDescription: "Authentication profile used during certificate enrollment" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"re_enrollment_authentication_profile": schema.StringAttribute{
+							MarkdownDescription: "Authentication profile used during certificate re-enrollment" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"ssl_profile": schema.StringAttribute{
+							MarkdownDescription: "SSL profile parameters used during TLS/mTLS handshake" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"enrollment_local": schema.BoolAttribute{
+							MarkdownDescription: "Enroll via file present on local filesystem" + "\n  - Supported from version: `25.4`",
 							Computed:            true,
 						},
 					},
@@ -375,6 +390,10 @@ func (d *CryptoDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "Enable FIPS mode",
 				Computed:            true,
 			},
+			"ca_trustpoint_system_enrollment_local": schema.BoolAttribute{
+				MarkdownDescription: "Enroll via file present on local filesystem" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
 		},
 	}
 }
@@ -422,7 +441,6 @@ func (d *CryptoDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -442,7 +460,7 @@ func (d *CryptoDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

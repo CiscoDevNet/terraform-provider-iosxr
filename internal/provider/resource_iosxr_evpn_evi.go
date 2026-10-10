@@ -41,11 +41,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
-	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
-
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewEVPNEVIResource() resource.Resource {
@@ -85,11 +83,12 @@ func (r *EVPNEVIResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"vpn_id": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure EVPN Instance VPN ID").AddIntegerRangeDescription(1, 65534).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure EVPN Instance VPN ID").String + "\n  - Range: `1`-`65534` (v24.4), `1`-`16777215` (v26.2)",
 				Required:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(1, 65534),
+					int64validator.Between(1, 16777215),
 				},
+				// Precise per-version range validation still done at runtime in Create/Update.
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplace(),
 				},
@@ -493,7 +492,10 @@ func (r *EVPNEVIResource) Create(ctx context.Context, req resource.CreateRequest
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
-
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
@@ -511,10 +513,10 @@ func (r *EVPNEVIResource) Create(ctx context.Context, req resource.CreateRequest
 			var ops []gnmi.SetOperation
 
 			// Create object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("gNMI Set body for path %s: %s", plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -569,7 +571,6 @@ func (r *EVPNEVIResource) Create(ctx context.Context, req resource.CreateRequest
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-
 func (r *EVPNEVIResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state EVPNEVI
 
@@ -634,10 +635,10 @@ func (r *EVPNEVIResource) Read(ctx context.Context, req resource.ReadRequest, re
 				if imp {
 					// After `terraform import` we switch to a full read so all device
 					// attributes are populated in state (fromBody overwrites everything).
-					state.fromBody(ctx, gjson.ParseBytes(respBody))
+					state.fromBody(ctx, respBody, device.Version)
 				} else {
 					// Normal read: preserve config-only fields not returned by the device.
-					state.updateFromBody(ctx, gjson.ParseBytes(respBody))
+					state.updateFromBody(ctx, respBody, device.Version)
 				}
 			}
 		} else {
@@ -678,7 +679,6 @@ func (r *EVPNEVIResource) Read(ctx context.Context, req resource.ReadRequest, re
 			}
 		}
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
@@ -690,7 +690,6 @@ func (r *EVPNEVIResource) Read(ctx context.Context, req resource.ReadRequest, re
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-
 func (r *EVPNEVIResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state EVPNEVI
 
@@ -713,6 +712,10 @@ func (r *EVPNEVIResource) Update(ctx context.Context, req resource.UpdateRequest
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -731,16 +734,16 @@ func (r *EVPNEVIResource) Update(ctx context.Context, req resource.UpdateRequest
 			var ops []gnmi.SetOperation
 
 			// Update object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 
-			deletedListItems := plan.getDeletedItems(ctx, state)
+			deletedListItems := plan.getDeletedItems(ctx, state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
 
 			for _, i := range deletedListItems {
 				ops = append(ops, gnmi.Delete(i))
 			}
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -783,7 +786,6 @@ func (r *EVPNEVIResource) Update(ctx context.Context, req resource.UpdateRequest
 			}
 		}
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
@@ -793,7 +795,6 @@ func (r *EVPNEVIResource) Update(ctx context.Context, req resource.UpdateRequest
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-
 func (r *EVPNEVIResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state EVPNEVI
 
@@ -808,6 +809,14 @@ func (r *EVPNEVIResource) Delete(ctx context.Context, req resource.DeleteRequest
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
@@ -884,7 +893,7 @@ func (r *EVPNEVIResource) Delete(ctx context.Context, req resource.DeleteRequest
 				}
 
 				var ops []gnmi.SetOperation
-				deletePaths := state.getDeletePaths(ctx)
+				deletePaths := state.getDeletePaths(ctx, device.Version)
 				tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
 
 				for _, i := range deletePaths {
@@ -932,7 +941,6 @@ func (r *EVPNEVIResource) Delete(ctx context.Context, req resource.DeleteRequest
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-
 func (r *EVPNEVIResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)

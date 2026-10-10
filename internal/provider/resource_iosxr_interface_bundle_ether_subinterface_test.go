@@ -374,14 +374,30 @@ func TestAccIosxrInterfaceBundleEtherSubinterface(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ptp_interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_from", "13"))
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ptp_interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_to", "6"))
 	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv6_nd_solicited_ra", "unicast"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ipv6_nd_unsolicited_ra_disable", "true"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ptp_monitor_sender", "true"))
+		}
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface_bundle_ether_subinterface.test", "ptp_monitor_receiver", "true"))
+		}
+	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig + testAccIosxrInterfaceBundleEtherSubinterfaceConfig_minimum(),
+			Config: testAccIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig() + testAccIosxrInterfaceBundleEtherSubinterfaceConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig + testAccIosxrInterfaceBundleEtherSubinterfaceConfig_all(),
+		Config: testAccIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig() + testAccIosxrInterfaceBundleEtherSubinterfaceConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -413,7 +429,7 @@ func iosxrInterfaceBundleEtherSubinterfaceImportStateIdFunc(resourceName string)
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig = `
+const testAccIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=Bundle-Ether100]"
 	delete = false
@@ -506,6 +522,15 @@ resource "iosxr_yang" "PreReq4" {
 
 `
 
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccIosxrInterfaceBundleEtherSubinterfacePrerequisitesConfig_V24_4,
+		},
+	)
+}
+
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
@@ -515,7 +540,9 @@ func testAccIosxrInterfaceBundleEtherSubinterfaceConfig_minimum() string {
 	config += `	name = "100.100"` + "\n"
 	config += `	shutdown = false` + "\n"
 	config += `	load_interval = 30` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -903,7 +930,25 @@ func testAccIosxrInterfaceBundleEtherSubinterfaceConfig_all() string {
 		config += `		clock_class_to_map_to = 6` + "\n"
 		config += `		}]` + "\n"
 	}
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, ]` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	ipv6_nd_solicited_ra = "unicast"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	ipv6_nd_unsolicited_ra_disable = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+			config += `	ptp_monitor_sender = true` + "\n"
+		}
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
+			config += `	ptp_monitor_receiver = true` + "\n"
+		}
+	}
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }

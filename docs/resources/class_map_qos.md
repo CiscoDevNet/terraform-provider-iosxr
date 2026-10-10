@@ -15,8 +15,8 @@ This resource can manage the Class Map QoS configuration.
 ```terraform
 resource "iosxr_class_map_qos" "example" {
   class_map_name                  = "CM-QOS"
-  match_any                       = true
   description                     = "QoS Class Map"
+  match_any                       = true
   match_cos_inner                 = [4]
   match_discard_class             = [1]
   match_dscp                      = ["46"]

@@ -102,7 +102,7 @@ func TestAccDataSourceIosxrInterfaceTunnelIP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrInterfaceTunnelIPPrerequisitesConfig + testAccDataSourceIosxrInterfaceTunnelIPConfig(),
+				Config: testAccDataSourceIosxrInterfaceTunnelIPPrerequisitesConfig() + testAccDataSourceIosxrInterfaceTunnelIPConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -112,7 +112,7 @@ func TestAccDataSourceIosxrInterfaceTunnelIP(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrInterfaceTunnelIPPrerequisitesConfig = `
+const testAccDataSourceIosxrInterfaceTunnelIPPrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
 	attributes = {
@@ -163,6 +163,15 @@ resource "iosxr_yang" "PreReq2" {
 }
 
 `
+
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccDataSourceIosxrInterfaceTunnelIPPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccDataSourceIosxrInterfaceTunnelIPPrerequisitesConfig_V24_4,
+		},
+	)
+}
 
 // End of section. //template:end testPrerequisites
 
@@ -234,7 +243,9 @@ func testAccDataSourceIosxrInterfaceTunnelIPConfig() string {
 		config += `	tunnel_key = 100` + "\n"
 	}
 	config += `	tunnel_vrf = "VRF1"` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 
 	config += `

@@ -62,7 +62,9 @@ func TestAccDataSourceIosxrL2VPN(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "load_balancing_flow_src_dst_ip", "true"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "capability_high_mode", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "pw_oam_refresh_transmit", "20"))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "pw_oam_refresh_transmit", "20"))
+	}
 	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "tcn_propagation", "true"))
 	}
@@ -146,7 +148,9 @@ func testAccDataSourceIosxrL2VPNConfig() string {
 		config += `	load_balancing_flow_src_dst_ip = true` + "\n"
 	}
 	config += `	capability_high_mode = true` + "\n"
-	config += `	pw_oam_refresh_transmit = 20` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	pw_oam_refresh_transmit = 20` + "\n"
+	}
 	if os.Getenv("XRD") != "" || os.Getenv("NCS") != "" {
 		config += `	tcn_propagation = true` + "\n"
 	}

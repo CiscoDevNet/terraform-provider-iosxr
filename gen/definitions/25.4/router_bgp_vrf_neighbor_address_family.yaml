@@ -1,0 +1,48 @@
+---
+name: Router BGP VRF Neighbor Address Family
+path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/neighbors/neighbor[address=%s]/address-families/address-family[af-name=%s]
+doc_category: BGP
+attributes:
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: default-policy-action/in
+    example: accept
+  - yang_name: default-policy-action/out
+    example: accept
+  - yang_name: bandwidth-grp/outbound/OUTBOUND/BANDWIDTH-GROUP-NAME/bandwidth-group-name
+    xpath: bandwidth-grp/outbound/bandwidth-group-name
+    tf_name: bandwidth_grp_outbound_name
+    delete_parent: true
+    exclude_test: true
+    example: BWG1
+  - yang_name: bandwidth-grp/outbound/OUTBOUND/INHERITANCE-DISABLE/inheritance-disable
+    xpath: bandwidth-grp/outbound/inheritance-disable
+    tf_name: bandwidth_grp_outbound_inheritance_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: bandwidth-grp/inbound/INBOUND/BANDWIDTH-GROUP-NAME/bandwidth-group-name
+    xpath: bandwidth-grp/inbound/bandwidth-group-name
+    tf_name: bandwidth_grp_inbound_name
+    delete_parent: true
+    exclude_test: true
+    example: BWG1
+  - yang_name: bandwidth-grp/inbound/INBOUND/INHERITANCE-DISABLE/inheritance-disable
+    xpath: bandwidth-grp/inbound/inheritance-disable
+    tf_name: bandwidth_grp_inbound_inheritance_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: fast-reroute/per-link/multipath-backup/address/ADDRESS/IP-ADDRESS/ip-address
+    xpath: fast-reroute/per-link/multipath-backup/address/ip-address
+    tf_name: fast_reroute_per_link_multipath_backup_address
+    delete_parent: true
+    exclude_test: true
+    example: 192.168.1.1
+  - yang_name: fast-reroute/per-link/multipath-backup/address/ADDRESS/INHERITANCE-DISABLE/inheritance-disable
+    xpath: fast-reroute/per-link/multipath-backup/address/inheritance-disable
+    tf_name: fast_reroute_per_link_multipath_backup_address_inheritance_disable
+    delete_parent: true
+    exclude_test: true
+    example: true

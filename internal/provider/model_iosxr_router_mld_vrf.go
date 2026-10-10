@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"sort"
 	"strconv"
@@ -124,7 +125,7 @@ func (data RouterMLDVRFData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RouterMLDVRF) toBody(ctx context.Context) string {
+func (data RouterMLDVRF) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.VrfName.IsNull() && !data.VrfName.IsUnknown() {
 		body, _ = sjson.Set(body, "vrf-name", data.VrfName.ValueString())
@@ -205,82 +206,129 @@ func (data RouterMLDVRF) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *RouterMLDVRF) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("robustness-variable"); value.Exists() && !data.RobustnessVariable.IsNull() {
+// GetVersionConstraints returns the version constraints for all fields
+func (data RouterMLDVRF) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data RouterMLDVRF) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data RouterMLDVRF) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data RouterMLDVRF) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data RouterMLDVRF) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *RouterMLDVRF) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "robustness-variable"); value.Exists() && !data.RobustnessVariable.IsNull() {
 		data.RobustnessVariable = types.Int64Value(value.Int())
 	} else if data.RobustnessVariable.IsNull() {
 		data.RobustnessVariable = types.Int64Null()
 	}
-	if value := res.Get("maximum.groups"); value.Exists() && !data.MaximumGroups.IsNull() {
+	if value := gjson.GetBytes(res, "maximum.groups"); value.Exists() && !data.MaximumGroups.IsNull() {
 		data.MaximumGroups = types.Int64Value(value.Int())
 	} else if data.MaximumGroups.IsNull() {
 		data.MaximumGroups = types.Int64Null()
 	}
-	if value := res.Get("maximum.groups-per-interface.maximum-number"); value.Exists() && !data.MaximumGroupsPerInterface.IsNull() {
+	if value := gjson.GetBytes(res, "maximum.groups-per-interface.maximum-number"); value.Exists() && !data.MaximumGroupsPerInterface.IsNull() {
 		data.MaximumGroupsPerInterface = types.Int64Value(value.Int())
 	} else if data.MaximumGroupsPerInterface.IsNull() {
 		data.MaximumGroupsPerInterface = types.Int64Null()
 	}
-	if value := res.Get("maximum.groups-per-interface.threshold"); value.Exists() && !data.MaximumGroupsPerInterfaceThreshold.IsNull() {
+	if value := gjson.GetBytes(res, "maximum.groups-per-interface.threshold"); value.Exists() && !data.MaximumGroupsPerInterfaceThreshold.IsNull() {
 		data.MaximumGroupsPerInterfaceThreshold = types.Int64Value(value.Int())
 	} else if data.MaximumGroupsPerInterfaceThreshold.IsNull() {
 		data.MaximumGroupsPerInterfaceThreshold = types.Int64Null()
 	}
-	if value := res.Get("maximum.groups-per-interface.access-list"); value.Exists() && !data.MaximumGroupsPerInterfaceAcl.IsNull() {
+	if value := gjson.GetBytes(res, "maximum.groups-per-interface.access-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MaximumGroupsPerInterfaceAcl.IsNull() {
 		data.MaximumGroupsPerInterfaceAcl = types.StringValue(value.String())
 	} else if data.MaximumGroupsPerInterfaceAcl.IsNull() {
 		data.MaximumGroupsPerInterfaceAcl = types.StringNull()
 	}
-	if value := res.Get("version"); value.Exists() && !data.Version.IsNull() {
+	if value := gjson.GetBytes(res, "version"); value.Exists() && !data.Version.IsNull() {
 		data.Version = types.Int64Value(value.Int())
 	} else if data.Version.IsNull() {
 		data.Version = types.Int64Null()
 	}
-	if value := res.Get("query-interval"); value.Exists() && !data.QueryInterval.IsNull() {
+	if value := gjson.GetBytes(res, "query-interval"); value.Exists() && !data.QueryInterval.IsNull() {
 		data.QueryInterval = types.Int64Value(value.Int())
 	} else if data.QueryInterval.IsNull() {
 		data.QueryInterval = types.Int64Null()
 	}
-	if value := res.Get("query-timeout"); value.Exists() && !data.QueryTimeout.IsNull() {
+	if value := gjson.GetBytes(res, "query-timeout"); value.Exists() && !data.QueryTimeout.IsNull() {
 		data.QueryTimeout = types.Int64Value(value.Int())
 	} else if data.QueryTimeout.IsNull() {
 		data.QueryTimeout = types.Int64Null()
 	}
-	if value := res.Get("query-max-response-time"); value.Exists() && !data.QueryMaxResponseTime.IsNull() {
+	if value := gjson.GetBytes(res, "query-max-response-time"); value.Exists() && !data.QueryMaxResponseTime.IsNull() {
 		data.QueryMaxResponseTime = types.Int64Value(value.Int())
 	} else if data.QueryMaxResponseTime.IsNull() {
 		data.QueryMaxResponseTime = types.Int64Null()
 	}
-	if value := res.Get("explicit-tracking"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ExplicitTracking.IsNull() {
+	if value := gjson.GetBytes(res, "explicit-tracking"); !data.ExplicitTracking.IsNull() {
+		if value.Exists() {
 			data.ExplicitTracking = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ExplicitTracking = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ExplicitTracking.IsNull() {
-			data.ExplicitTracking = types.BoolNull()
-		}
+	} else if data.ExplicitTracking.IsNull() {
+		data.ExplicitTracking = types.BoolNull()
 	}
-	if value := res.Get("explicit-tracking.access-list"); value.Exists() && !data.ExplicitTrackingAcl.IsNull() {
+	if value := gjson.GetBytes(res, "explicit-tracking.access-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ExplicitTrackingAcl.IsNull() {
 		data.ExplicitTrackingAcl = types.StringValue(value.String())
 	} else if data.ExplicitTrackingAcl.IsNull() {
 		data.ExplicitTrackingAcl = types.StringNull()
 	}
-	if value := res.Get("explicit-tracking.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ExplicitTrackingDisable.IsNull() {
+	if value := gjson.GetBytes(res, "explicit-tracking.disable"); !data.ExplicitTrackingDisable.IsNull() {
+		if value.Exists() {
 			data.ExplicitTrackingDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ExplicitTrackingDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ExplicitTrackingDisable.IsNull() {
-			data.ExplicitTrackingDisable = types.BoolNull()
-		}
+	} else if data.ExplicitTrackingDisable.IsNull() {
+		data.ExplicitTrackingDisable = types.BoolNull()
 	}
-	if value := res.Get("access-group"); value.Exists() && !data.AccessGroup.IsNull() {
+	if value := gjson.GetBytes(res, "access-group"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AccessGroup.IsNull() {
 		data.AccessGroup = types.StringValue(value.String())
 	} else if data.AccessGroup.IsNull() {
 		data.AccessGroup = types.StringNull()
@@ -290,7 +338,7 @@ func (data *RouterMLDVRF) updateFromBody(ctx context.Context, res gjson.Result) 
 		keyValues := [...]string{data.SsmMapStatics[i].Address.ValueString()}
 
 		var r gjson.Result
-		res.Get("ssm.map.statics.static").ForEach(
+		gjson.GetBytes(res, "ssm.map.statics.static").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -308,44 +356,43 @@ func (data *RouterMLDVRF) updateFromBody(ctx context.Context, res gjson.Result) 
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() && !data.SsmMapStatics[i].Address.IsNull() {
+		if value := r.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SsmMapStatics[i].Address.IsNull() {
 			data.SsmMapStatics[i].Address = types.StringValue(value.String())
 		} else {
 			data.SsmMapStatics[i].Address = types.StringNull()
 		}
-		if value := r.Get("access-list"); value.Exists() && !data.SsmMapStatics[i].AccessList.IsNull() {
+		if value := r.Get("access-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SsmMapStatics[i].AccessList.IsNull() {
 			data.SsmMapStatics[i].AccessList = types.StringValue(value.String())
 		} else {
 			data.SsmMapStatics[i].AccessList = types.StringNull()
 		}
 	}
-	if value := res.Get("ssm.map.query.dns"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SsmMapQueryDns.IsNull() {
+	if value := gjson.GetBytes(res, "ssm.map.query.dns"); !data.SsmMapQueryDns.IsNull() {
+		if value.Exists() {
 			data.SsmMapQueryDns = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SsmMapQueryDns = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SsmMapQueryDns.IsNull() {
-			data.SsmMapQueryDns = types.BoolNull()
-		}
+	} else if data.SsmMapQueryDns.IsNull() {
+		data.SsmMapQueryDns = types.BoolNull()
 	}
-	if value := res.Get("missed-packets.gen-query"); value.Exists() && !data.MissedPacketsGenQuery.IsNull() {
+	if value := gjson.GetBytes(res, "missed-packets.gen-query"); value.Exists() && !data.MissedPacketsGenQuery.IsNull() {
 		data.MissedPacketsGenQuery = types.Int64Value(value.Int())
 	} else if data.MissedPacketsGenQuery.IsNull() {
 		data.MissedPacketsGenQuery = types.Int64Null()
 	}
-	if value := res.Get("missed-packets.grp-spec-query"); value.Exists() && !data.MissedPacketsGrpSpecQuery.IsNull() {
+	if value := gjson.GetBytes(res, "missed-packets.grp-spec-query"); value.Exists() && !data.MissedPacketsGrpSpecQuery.IsNull() {
 		data.MissedPacketsGrpSpecQuery = types.Int64Value(value.Int())
 	} else if data.MissedPacketsGrpSpecQuery.IsNull() {
 		data.MissedPacketsGrpSpecQuery = types.Int64Null()
 	}
-	if value := res.Get("missed-packets.ssm-query"); value.Exists() && !data.MissedPacketsSsmQuery.IsNull() {
+	if value := gjson.GetBytes(res, "missed-packets.ssm-query"); value.Exists() && !data.MissedPacketsSsmQuery.IsNull() {
 		data.MissedPacketsSsmQuery = types.Int64Value(value.Int())
 	} else if data.MissedPacketsSsmQuery.IsNull() {
 		data.MissedPacketsSsmQuery = types.Int64Null()
 	}
-	if value := res.Get("missed-packets.member-report"); value.Exists() && !data.MissedPacketsMemberReport.IsNull() {
+	if value := gjson.GetBytes(res, "missed-packets.member-report"); value.Exists() && !data.MissedPacketsMemberReport.IsNull() {
 		data.MissedPacketsMemberReport = types.Int64Value(value.Int())
 	} else if data.MissedPacketsMemberReport.IsNull() {
 		data.MissedPacketsMemberReport = types.Int64Null()
@@ -353,6 +400,381 @@ func (data *RouterMLDVRF) updateFromBody(ctx context.Context, res gjson.Result) 
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *RouterMLDVRF) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "robustness-variable"); value.Exists() {
+		data.RobustnessVariable = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "maximum.groups"); value.Exists() {
+		data.MaximumGroups = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "maximum.groups-per-interface.maximum-number"); value.Exists() {
+		data.MaximumGroupsPerInterface = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "maximum.groups-per-interface.threshold"); value.Exists() {
+		data.MaximumGroupsPerInterfaceThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "maximum.groups-per-interface.access-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.MaximumGroupsPerInterfaceAcl = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "version"); value.Exists() {
+		data.Version = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "query-interval"); value.Exists() {
+		data.QueryInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "query-timeout"); value.Exists() {
+		data.QueryTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "query-max-response-time"); value.Exists() {
+		data.QueryMaxResponseTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "explicit-tracking"); value.Exists() {
+		data.ExplicitTracking = types.BoolValue(true)
+	} else if !data.ExplicitTracking.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ExplicitTracking = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "explicit-tracking.access-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ExplicitTrackingAcl = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "explicit-tracking.disable"); value.Exists() {
+		data.ExplicitTrackingDisable = types.BoolValue(true)
+	} else if !data.ExplicitTrackingDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ExplicitTrackingDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "access-group"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AccessGroup = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ssm.map.statics.static"); value.Exists() {
+		data.SsmMapStatics = make([]RouterMLDVRFSsmMapStatics, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterMLDVRFSsmMapStatics{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("access-list"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.AccessList = types.StringValue(cValue.String())
+			}
+			data.SsmMapStatics = append(data.SsmMapStatics, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "ssm.map.query.dns"); value.Exists() {
+		data.SsmMapQueryDns = types.BoolValue(true)
+	} else if !data.SsmMapQueryDns.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SsmMapQueryDns = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "missed-packets.gen-query"); value.Exists() {
+		data.MissedPacketsGenQuery = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "missed-packets.grp-spec-query"); value.Exists() {
+		data.MissedPacketsGrpSpecQuery = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "missed-packets.ssm-query"); value.Exists() {
+		data.MissedPacketsSsmQuery = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "missed-packets.member-report"); value.Exists() {
+		data.MissedPacketsMemberReport = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *RouterMLDVRFData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "robustness-variable"); value.Exists() {
+		data.RobustnessVariable = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "maximum.groups"); value.Exists() {
+		data.MaximumGroups = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "maximum.groups-per-interface.maximum-number"); value.Exists() {
+		data.MaximumGroupsPerInterface = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "maximum.groups-per-interface.threshold"); value.Exists() {
+		data.MaximumGroupsPerInterfaceThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "maximum.groups-per-interface.access-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.MaximumGroupsPerInterfaceAcl = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "version"); value.Exists() {
+		data.Version = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "query-interval"); value.Exists() {
+		data.QueryInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "query-timeout"); value.Exists() {
+		data.QueryTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "query-max-response-time"); value.Exists() {
+		data.QueryMaxResponseTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "explicit-tracking"); value.Exists() {
+		data.ExplicitTracking = types.BoolValue(true)
+	} else {
+		data.ExplicitTracking = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "explicit-tracking.access-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ExplicitTrackingAcl = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "explicit-tracking.disable"); value.Exists() {
+		data.ExplicitTrackingDisable = types.BoolValue(true)
+	} else {
+		data.ExplicitTrackingDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "access-group"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AccessGroup = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ssm.map.statics.static"); value.Exists() {
+		data.SsmMapStatics = make([]RouterMLDVRFSsmMapStatics, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterMLDVRFSsmMapStatics{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("access-list"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.AccessList = types.StringValue(cValue.String())
+			}
+			data.SsmMapStatics = append(data.SsmMapStatics, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "ssm.map.query.dns"); value.Exists() {
+		data.SsmMapQueryDns = types.BoolValue(true)
+	} else {
+		data.SsmMapQueryDns = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "missed-packets.gen-query"); value.Exists() {
+		data.MissedPacketsGenQuery = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "missed-packets.grp-spec-query"); value.Exists() {
+		data.MissedPacketsGrpSpecQuery = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "missed-packets.ssm-query"); value.Exists() {
+		data.MissedPacketsSsmQuery = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "missed-packets.member-report"); value.Exists() {
+		data.MissedPacketsMemberReport = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *RouterMLDVRF) getDeletedItems(ctx context.Context, state RouterMLDVRF, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.MissedPacketsMemberReport.IsNull() && data.MissedPacketsMemberReport.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "missed-packets/member-report"))
+	}
+	if !state.MissedPacketsSsmQuery.IsNull() && data.MissedPacketsSsmQuery.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "missed-packets/ssm-query"))
+	}
+	if !state.MissedPacketsGrpSpecQuery.IsNull() && data.MissedPacketsGrpSpecQuery.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "missed-packets/grp-spec-query"))
+	}
+	if !state.MissedPacketsGenQuery.IsNull() && data.MissedPacketsGenQuery.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "missed-packets/gen-query"))
+	}
+	if !state.SsmMapQueryDns.IsNull() && data.SsmMapQueryDns.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ssm/map/query/dns"))
+	}
+	for i := range state.SsmMapStatics {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.SsmMapStatics[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SsmMapStatics[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SsmMapStatics {
+			found = true
+			if state.SsmMapStatics[i].Address.ValueString() != data.SsmMapStatics[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.SsmMapStatics[i].AccessList.IsNull() && data.SsmMapStatics[j].AccessList.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ssm/map/statics/static", keyString), "access-list"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "ssm/map/statics/static", keyString))
+		}
+	}
+	if !state.AccessGroup.IsNull() && data.AccessGroup.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "access-group"))
+	}
+	if !state.ExplicitTrackingDisable.IsNull() && data.ExplicitTrackingDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "explicit-tracking/disable"))
+	}
+	if !state.ExplicitTrackingAcl.IsNull() && data.ExplicitTrackingAcl.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "explicit-tracking/access-list"))
+	}
+	if !state.ExplicitTracking.IsNull() && data.ExplicitTracking.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "explicit-tracking"))
+	}
+	if !state.QueryMaxResponseTime.IsNull() && data.QueryMaxResponseTime.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "query-max-response-time"))
+	}
+	if !state.QueryTimeout.IsNull() && data.QueryTimeout.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "query-timeout"))
+	}
+	if !state.QueryInterval.IsNull() && data.QueryInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "query-interval"))
+	}
+	if !state.Version.IsNull() && data.Version.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "version"))
+	}
+	if !state.MaximumGroupsPerInterfaceAcl.IsNull() && data.MaximumGroupsPerInterfaceAcl.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "maximum/groups-per-interface"))
+	}
+	if !state.MaximumGroupsPerInterfaceThreshold.IsNull() && data.MaximumGroupsPerInterfaceThreshold.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "maximum/groups-per-interface"))
+	}
+	if !state.MaximumGroupsPerInterface.IsNull() && data.MaximumGroupsPerInterface.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "maximum/groups-per-interface"))
+	}
+	if !state.MaximumGroups.IsNull() && data.MaximumGroups.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "maximum/groups"))
+	}
+	if !state.RobustnessVariable.IsNull() && data.RobustnessVariable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "robustness-variable"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *RouterMLDVRF) getEmptyLeafsDelete(ctx context.Context, state *RouterMLDVRF, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if !data.SsmMapQueryDns.IsNull() && !data.SsmMapQueryDns.ValueBool() {
+		if state == nil || state.SsmMapQueryDns.IsNull() || state.SsmMapQueryDns.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ssm/map/query/dns"))
+		}
+	}
+	for i := range data.SsmMapStatics {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.SsmMapStatics[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	if !data.ExplicitTrackingDisable.IsNull() && !data.ExplicitTrackingDisable.ValueBool() {
+		if state == nil || state.ExplicitTrackingDisable.IsNull() || state.ExplicitTrackingDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "explicit-tracking/disable"))
+		}
+	}
+	if !data.ExplicitTracking.IsNull() && !data.ExplicitTracking.ValueBool() {
+		if state == nil || state.ExplicitTracking.IsNull() || state.ExplicitTracking.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "explicit-tracking"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *RouterMLDVRF) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.MissedPacketsMemberReport.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "missed-packets/member-report"))
+	}
+	if !data.MissedPacketsSsmQuery.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "missed-packets/ssm-query"))
+	}
+	if !data.MissedPacketsGrpSpecQuery.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "missed-packets/grp-spec-query"))
+	}
+	if !data.MissedPacketsGenQuery.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "missed-packets/gen-query"))
+	}
+	if !data.SsmMapQueryDns.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ssm/map/query/dns"))
+	}
+	for i := range data.SsmMapStatics {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.SsmMapStatics[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.SsmMapStatics[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "ssm/map/statics/static", keyString))
+	}
+	if !data.AccessGroup.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "access-group"))
+	}
+	if !data.ExplicitTrackingDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "explicit-tracking/disable"))
+	}
+	if !data.ExplicitTrackingAcl.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "explicit-tracking/access-list"))
+	}
+	if !data.ExplicitTracking.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "explicit-tracking"))
+	}
+	if !data.QueryMaxResponseTime.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "query-max-response-time"))
+	}
+	if !data.QueryTimeout.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "query-timeout"))
+	}
+	if !data.QueryInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "query-interval"))
+	}
+	if !data.Version.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "version"))
+	}
+	if !data.MaximumGroupsPerInterfaceAcl.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "maximum/groups-per-interface"))
+	}
+	if !data.MaximumGroupsPerInterfaceThreshold.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "maximum/groups-per-interface"))
+	}
+	if !data.MaximumGroupsPerInterface.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "maximum/groups-per-interface"))
+	}
+	if !data.MaximumGroups.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "maximum/groups"))
+	}
+	if !data.RobustnessVariable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "robustness-variable"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data RouterMLDVRF) toBodyXML(ctx context.Context, stateArg ...*RouterMLDVRF) string {
@@ -454,7 +876,7 @@ func (data RouterMLDVRF) toBodyXML(ctx context.Context, stateArg ...*RouterMLDVR
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -462,6 +884,7 @@ func (data RouterMLDVRF) toBodyXML(ctx context.Context, stateArg ...*RouterMLDVR
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RouterMLDVRF) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -610,186 +1033,7 @@ func (data *RouterMLDVRF) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *RouterMLDVRF) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "robustness-variable"); value.Exists() {
-		data.RobustnessVariable = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "maximum.groups"); value.Exists() {
-		data.MaximumGroups = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "maximum.groups-per-interface.maximum-number"); value.Exists() {
-		data.MaximumGroupsPerInterface = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "maximum.groups-per-interface.threshold"); value.Exists() {
-		data.MaximumGroupsPerInterfaceThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "maximum.groups-per-interface.access-list"); value.Exists() {
-		data.MaximumGroupsPerInterfaceAcl = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "version"); value.Exists() {
-		data.Version = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "query-interval"); value.Exists() {
-		data.QueryInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "query-timeout"); value.Exists() {
-		data.QueryTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "query-max-response-time"); value.Exists() {
-		data.QueryMaxResponseTime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "explicit-tracking"); value.Exists() {
-		data.ExplicitTracking = types.BoolValue(true)
-	} else if !data.ExplicitTracking.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ExplicitTracking = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "explicit-tracking.access-list"); value.Exists() {
-		data.ExplicitTrackingAcl = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "explicit-tracking.disable"); value.Exists() {
-		data.ExplicitTrackingDisable = types.BoolValue(true)
-	} else if !data.ExplicitTrackingDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ExplicitTrackingDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "access-group"); value.Exists() {
-		data.AccessGroup = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ssm.map.statics.static"); value.Exists() {
-		data.SsmMapStatics = make([]RouterMLDVRFSsmMapStatics, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterMLDVRFSsmMapStatics{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("access-list"); cValue.Exists() {
-				item.AccessList = types.StringValue(cValue.String())
-			}
-			data.SsmMapStatics = append(data.SsmMapStatics, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "ssm.map.query.dns"); value.Exists() {
-		data.SsmMapQueryDns = types.BoolValue(true)
-	} else if !data.SsmMapQueryDns.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SsmMapQueryDns = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "missed-packets.gen-query"); value.Exists() {
-		data.MissedPacketsGenQuery = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "missed-packets.grp-spec-query"); value.Exists() {
-		data.MissedPacketsGrpSpecQuery = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "missed-packets.ssm-query"); value.Exists() {
-		data.MissedPacketsSsmQuery = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "missed-packets.member-report"); value.Exists() {
-		data.MissedPacketsMemberReport = types.Int64Value(value.Int())
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *RouterMLDVRFData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "robustness-variable"); value.Exists() {
-		data.RobustnessVariable = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "maximum.groups"); value.Exists() {
-		data.MaximumGroups = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "maximum.groups-per-interface.maximum-number"); value.Exists() {
-		data.MaximumGroupsPerInterface = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "maximum.groups-per-interface.threshold"); value.Exists() {
-		data.MaximumGroupsPerInterfaceThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "maximum.groups-per-interface.access-list"); value.Exists() {
-		data.MaximumGroupsPerInterfaceAcl = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "version"); value.Exists() {
-		data.Version = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "query-interval"); value.Exists() {
-		data.QueryInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "query-timeout"); value.Exists() {
-		data.QueryTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "query-max-response-time"); value.Exists() {
-		data.QueryMaxResponseTime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "explicit-tracking"); value.Exists() {
-		data.ExplicitTracking = types.BoolValue(true)
-	} else {
-		data.ExplicitTracking = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "explicit-tracking.access-list"); value.Exists() {
-		data.ExplicitTrackingAcl = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "explicit-tracking.disable"); value.Exists() {
-		data.ExplicitTrackingDisable = types.BoolValue(true)
-	} else {
-		data.ExplicitTrackingDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "access-group"); value.Exists() {
-		data.AccessGroup = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ssm.map.statics.static"); value.Exists() {
-		data.SsmMapStatics = make([]RouterMLDVRFSsmMapStatics, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterMLDVRFSsmMapStatics{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("access-list"); cValue.Exists() {
-				item.AccessList = types.StringValue(cValue.String())
-			}
-			data.SsmMapStatics = append(data.SsmMapStatics, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "ssm.map.query.dns"); value.Exists() {
-		data.SsmMapQueryDns = types.BoolValue(true)
-	} else {
-		data.SsmMapQueryDns = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "missed-packets.gen-query"); value.Exists() {
-		data.MissedPacketsGenQuery = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "missed-packets.grp-spec-query"); value.Exists() {
-		data.MissedPacketsGrpSpecQuery = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "missed-packets.ssm-query"); value.Exists() {
-		data.MissedPacketsSsmQuery = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "missed-packets.member-report"); value.Exists() {
-		data.MissedPacketsMemberReport = types.Int64Value(value.Int())
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RouterMLDVRF) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -870,6 +1114,7 @@ func (data *RouterMLDVRF) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RouterMLDVRFData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -950,204 +1195,7 @@ func (data *RouterMLDVRFData) fromBodyXML(ctx context.Context, res xmldot.Result
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *RouterMLDVRF) getDeletedItems(ctx context.Context, state RouterMLDVRF) []string {
-	deletedItems := make([]string, 0)
-	if !state.MissedPacketsMemberReport.IsNull() && data.MissedPacketsMemberReport.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/missed-packets/member-report", state.getPath()))
-	}
-	if !state.MissedPacketsSsmQuery.IsNull() && data.MissedPacketsSsmQuery.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/missed-packets/ssm-query", state.getPath()))
-	}
-	if !state.MissedPacketsGrpSpecQuery.IsNull() && data.MissedPacketsGrpSpecQuery.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/missed-packets/grp-spec-query", state.getPath()))
-	}
-	if !state.MissedPacketsGenQuery.IsNull() && data.MissedPacketsGenQuery.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/missed-packets/gen-query", state.getPath()))
-	}
-	if !state.SsmMapQueryDns.IsNull() && data.SsmMapQueryDns.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ssm/map/query/dns", state.getPath()))
-	}
-	for i := range state.SsmMapStatics {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.SsmMapStatics[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SsmMapStatics[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SsmMapStatics {
-			found = true
-			if state.SsmMapStatics[i].Address.ValueString() != data.SsmMapStatics[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.SsmMapStatics[i].AccessList.IsNull() && data.SsmMapStatics[j].AccessList.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ssm/map/statics/static%v/access-list", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/ssm/map/statics/static%v", state.getPath(), keyString))
-		}
-	}
-	if !state.AccessGroup.IsNull() && data.AccessGroup.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/access-group", state.getPath()))
-	}
-	if !state.ExplicitTrackingDisable.IsNull() && data.ExplicitTrackingDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/explicit-tracking/disable", state.getPath()))
-	}
-	if !state.ExplicitTrackingAcl.IsNull() && data.ExplicitTrackingAcl.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/explicit-tracking/access-list", state.getPath()))
-	}
-	if !state.ExplicitTracking.IsNull() && data.ExplicitTracking.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/explicit-tracking", state.getPath()))
-	}
-	if !state.QueryMaxResponseTime.IsNull() && data.QueryMaxResponseTime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/query-max-response-time", state.getPath()))
-	}
-	if !state.QueryTimeout.IsNull() && data.QueryTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/query-timeout", state.getPath()))
-	}
-	if !state.QueryInterval.IsNull() && data.QueryInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/query-interval", state.getPath()))
-	}
-	if !state.Version.IsNull() && data.Version.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/version", state.getPath()))
-	}
-	if !state.MaximumGroupsPerInterfaceAcl.IsNull() && data.MaximumGroupsPerInterfaceAcl.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum/groups-per-interface", state.getPath()))
-	}
-	if !state.MaximumGroupsPerInterfaceThreshold.IsNull() && data.MaximumGroupsPerInterfaceThreshold.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum/groups-per-interface", state.getPath()))
-	}
-	if !state.MaximumGroupsPerInterface.IsNull() && data.MaximumGroupsPerInterface.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum/groups-per-interface", state.getPath()))
-	}
-	if !state.MaximumGroups.IsNull() && data.MaximumGroups.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum/groups", state.getPath()))
-	}
-	if !state.RobustnessVariable.IsNull() && data.RobustnessVariable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/robustness-variable", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *RouterMLDVRF) getEmptyLeafsDelete(ctx context.Context, state *RouterMLDVRF) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.SsmMapQueryDns.IsNull() && !data.SsmMapQueryDns.ValueBool() {
-		if state != nil && !state.SsmMapQueryDns.IsNull() && state.SsmMapQueryDns.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ssm/map/query/dns", data.getXPath()))
-		}
-	}
-	for i := range data.SsmMapStatics {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.SsmMapStatics[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ExplicitTrackingDisable.IsNull() && !data.ExplicitTrackingDisable.ValueBool() {
-		if state != nil && !state.ExplicitTrackingDisable.IsNull() && state.ExplicitTrackingDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/explicit-tracking/disable", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ExplicitTracking.IsNull() && !data.ExplicitTracking.ValueBool() {
-		if state != nil && !state.ExplicitTracking.IsNull() && state.ExplicitTracking.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/explicit-tracking", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *RouterMLDVRF) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.MissedPacketsMemberReport.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/missed-packets/member-report", data.getPath()))
-	}
-	if !data.MissedPacketsSsmQuery.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/missed-packets/ssm-query", data.getPath()))
-	}
-	if !data.MissedPacketsGrpSpecQuery.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/missed-packets/grp-spec-query", data.getPath()))
-	}
-	if !data.MissedPacketsGenQuery.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/missed-packets/gen-query", data.getPath()))
-	}
-	if !data.SsmMapQueryDns.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ssm/map/query/dns", data.getPath()))
-	}
-	for i := range data.SsmMapStatics {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.SsmMapStatics[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ssm/map/statics/static%v", data.getPath(), keyPath))
-	}
-	if !data.AccessGroup.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/access-group", data.getPath()))
-	}
-	if !data.ExplicitTrackingDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/explicit-tracking/disable", data.getPath()))
-	}
-	if !data.ExplicitTrackingAcl.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/explicit-tracking/access-list", data.getPath()))
-	}
-	if !data.ExplicitTracking.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/explicit-tracking", data.getPath()))
-	}
-	if !data.QueryMaxResponseTime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/query-max-response-time", data.getPath()))
-	}
-	if !data.QueryTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/query-timeout", data.getPath()))
-	}
-	if !data.QueryInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/query-interval", data.getPath()))
-	}
-	if !data.Version.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/version", data.getPath()))
-	}
-	if !data.MaximumGroupsPerInterfaceAcl.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum/groups-per-interface", data.getPath()))
-	}
-	if !data.MaximumGroupsPerInterfaceThreshold.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum/groups-per-interface", data.getPath()))
-	}
-	if !data.MaximumGroupsPerInterface.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum/groups-per-interface", data.getPath()))
-	}
-	if !data.MaximumGroups.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum/groups", data.getPath()))
-	}
-	if !data.RobustnessVariable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/robustness-variable", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *RouterMLDVRF) addDeletedItemsXML(ctx context.Context, state RouterMLDVRF, body string) string {
@@ -1497,6 +1545,7 @@ func (data *RouterMLDVRF) addDeletedItemsXML(ctx context.Context, state RouterML
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *RouterMLDVRF) addDeletePathsXML(ctx context.Context, body string) string {

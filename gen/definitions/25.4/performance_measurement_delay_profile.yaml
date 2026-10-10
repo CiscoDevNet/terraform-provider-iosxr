@@ -1,0 +1,49 @@
+---
+name: Performance Measurement Delay Profile
+path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/delay-profile
+doc_category: Performance Monitoring
+attributes:
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: endpoint/default/histogram/delay-bins/explicit
+    tf_name: endpoint_default_histogram_delay_bins_explicit
+    exclude_test: true
+    example: "100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700"
+    # Platform dependent
+  - yang_name: endpoint/default/probe/collect-hbh
+    tf_name: endpoint_default_probe_collect_hbh
+    example: true
+    exclude_test: true
+    # Platform dependent
+  - yang_name: sr-policy/default/probe/collect-hbh
+    tf_name: sr_policy_default_probe_collect_hbh
+    example: true
+    exclude_test: true
+    # 25.4.2 device rejects this YANG node: "Cannot set scalar data 'null' to non-leaf node 'delay-profile'".
+    # Device yang path wrong - per cli
+  - yang_name: endpoint/default/probe/measurement-mode/timestamp-format/ntp
+    tf_name: endpoint_default_probe_timestamp_format_ntp
+    exclude_test: true
+    example: true
+  - yang_name: interfaces/default/probe/timestamp-format/ntp
+    tf_name: interfaces_default_probe_timestamp_format_ntp
+    example: true
+  - yang_name: rsvp-te/default/probe/timestamp-format/ntp
+    tf_name: rsvp_te_default_probe_timestamp_format_ntp
+    example: true
+  - yang_name: sr-policy/default/probe/timestamp-format/ntp
+    tf_name: sr_policy_default_probe_timestamp_format_ntp
+    example: true
+  - yang_name: names/name
+    tf_name: profiles
+    type: List
+    attributes:
+        # Platform dependent
+      - yang_name: probe/collect-hbh
+        tf_name: probe_collect_hbh
+        exclude_test: true
+        example: true
+      - yang_name: probe/timestamp-format/ntp
+        tf_name: probe_timestamp_format_ntp
+        example: true

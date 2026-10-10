@@ -1,0 +1,89 @@
+---
+name: Logging VRF
+path: Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=%s]
+doc_category: Management
+attributes:
+  # ===========================================================
+  # hostnames/hostname: list rename + key rename + non-key attr rename
+  # 24.4: host-names/host-name, key "name", attr "hostname-source-address"
+  # 25.4: hostnames/hostname, key "host" (tf_name preserved as "name"),
+  #        attr "source-address" (tf_name preserved as "hostname_source_address")
+  # ===========================================================
+  - yang_name: hostnames/hostname
+    tf_name: hostnames
+    type: List
+    replaces_yang_name: host-names/host-name
+    attributes:
+      - yang_name: host
+        id: true
+        tf_name: name
+        replaces_yang_name: name
+      - yang_name: source-address
+        tf_name: hostname_source_address
+        replaces_yang_name: hostname-source-address
+        # severity: enum value renamed: "info" → "informational"
+      - yang_name: severity
+        minimum_test_value: '"informational"'
+        example: informational
+        # port int -> enum union (type change), use new `udp_port` enum
+      - yang_name: port
+        legacy: true
+      - yang_name: port
+        tf_name: udp_port
+        yang_type_change: true
+        type: String
+        description: Set UDP port for this remote host/vrf
+        example: "510"
+  # ===========================================================
+  # ipv4-hostnames/ipv4-hostname: list rename + non-key attr rename
+  # 24.4: host-ipv4-addresses/host-ipv4-address, attr "ipv4-source-address"
+  # 25.4: ipv4-hostnames/ipv4-hostname, attr "source-address"
+  #        (tf_name preserved as "ipv4_source_address")
+  # ===========================================================
+  - yang_name: ipv4-hostnames/ipv4-hostname
+    tf_name: host_ipv4_addresses
+    type: List
+    replaces_yang_name: host-ipv4-addresses/host-ipv4-address
+    attributes:
+      - yang_name: source-address
+        tf_name: ipv4_source_address
+        replaces_yang_name: ipv4-source-address
+        # severity: enum value renamed: "info" → "informational"
+      - yang_name: severity
+        minimum_test_value: '"informational"'
+        example: informational
+        # port int -> enum union (type change), use new `udp_port` enum
+      - yang_name: port
+        legacy: true
+      - yang_name: port
+        tf_name: udp_port
+        yang_type_change: true
+        type: String
+        description: Set UDP port for this remote host/vrf
+        example: "510"
+  # ===========================================================
+  # ipv6-hostnames/ipv6-hostname: list rename + non-key attr rename
+  # 24.4: host-ipv6-addresses/host-ipv6-address, attr "ipv6-source-address"
+  # 25.4: ipv6-hostnames/ipv6-hostname, attr "source-address"
+  #        (tf_name preserved as "ipv6_source_address")
+  # ===========================================================
+  - yang_name: ipv6-hostnames/ipv6-hostname
+    tf_name: host_ipv6_addresses
+    type: List
+    replaces_yang_name: host-ipv6-addresses/host-ipv6-address
+    attributes:
+      - yang_name: source-address
+        tf_name: ipv6_source_address
+        replaces_yang_name: ipv6-source-address
+        # severity: enum value renamed: "info" → "informational"
+      - yang_name: severity
+        example: informational
+        # port int -> enum union (type change), use new `udp_port` enum
+      - yang_name: port
+        legacy: true
+      - yang_name: port
+        tf_name: udp_port
+        yang_type_change: true
+        type: String
+        description: Set UDP port for this remote host/vrf
+        example: "510"

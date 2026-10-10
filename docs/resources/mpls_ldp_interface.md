@@ -14,12 +14,6 @@ This resource can manage the MPLS LDP Interface configuration.
 
 ```terraform
 resource "iosxr_mpls_ldp_interface" "example" {
-  interface_name                 = "GigabitEthernet0/0/0/1"
-  discovery_hello_holdtime       = 30
-  discovery_hello_interval       = 3
-  discovery_hello_dual_stack_tlv = "ipv4"
-  discovery_quick_start_disable  = true
-  igp_sync_delay_on_session_up   = 20
   address_family = [
     {
       af_name                        = "ipv4"
@@ -28,6 +22,12 @@ resource "iosxr_mpls_ldp_interface" "example" {
       mldp_disable                   = true
     }
   ]
+  discovery_hello_dual_stack_tlv = "ipv4"
+  discovery_hello_holdtime       = 30
+  discovery_hello_interval       = 3
+  discovery_quick_start_disable  = true
+  igp_sync_delay_on_session_up   = 20
+  interface_name                 = "GigabitEthernet0/0/0/1"
 }
 ```
 

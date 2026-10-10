@@ -1,0 +1,20 @@
+---
+name: CLI Alias
+path: Cisco-IOS-XR-um-cli-alias-cfg:/alias
+doc_category: General
+attributes:
+  # ===========================================================
+  # CONSTRAINT CHANGES - range/length widened in 26.2
+  # ===========================================================
+  - yang_name: exec/alias
+    tf_name: exec_aliases
+    type: List
+    attributes:
+      - yang_name: aliased-exec-command
+        tf_name: command
+  - yang_name: config/alias
+    tf_name: config_aliases
+    type: List
+    attributes:
+      - yang_name: aliased-config-command
+        tf_name: command

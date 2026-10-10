@@ -24,7 +24,8 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strings"
+	"regexp"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -41,30 +42,32 @@ import (
 
 // End of section. //template:end imports
 
+{{- $versionSuffix := versionSuffix .Version}}
+
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &{{camelCase .Name}}DataSource{}
-	_ datasource.DataSourceWithConfigure = &{{camelCase .Name}}DataSource{}
+	_ datasource.DataSource              = &{{camelCase .Name}}{{$versionSuffix}}DataSource{}
+	_ datasource.DataSourceWithConfigure = &{{camelCase .Name}}{{$versionSuffix}}DataSource{}
 )
 
-func New{{camelCase .Name}}DataSource() datasource.DataSource {
-	return &{{camelCase .Name}}DataSource{}
+func New{{camelCase .Name}}{{$versionSuffix}}DataSource() datasource.DataSource {
+	return &{{camelCase .Name}}{{$versionSuffix}}DataSource{}
 }
 
-type {{camelCase .Name}}DataSource struct{
+type {{camelCase .Name}}{{$versionSuffix}}DataSource struct{
 	data *IosxrProviderData
 }
 
-func (d *{{camelCase .Name}}DataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+func (d *{{camelCase .Name}}{{$versionSuffix}}DataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_{{snakeCase .Name}}"
 }
 
-func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *{{camelCase .Name}}{{$versionSuffix}}DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "{{.DsDescription}}",
+             MarkdownDescription: "{{.DsDescription}}{{if ne .IntroducedInVersion ""}}\n\n> **Note:** This data source is only supported from IOS-XR version {{formatVersionDisplay .IntroducedInVersion}} and above.{{end}}{{if ne .RemovedInVersion ""}}\n\n> **Warning:** This data source is not supported from IOS-XR version {{formatVersionDisplay .RemovedInVersion}} and above.{{end}}",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -77,7 +80,7 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 			},
 			{{- range  .Attributes}}
 			"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if eq .Type "Set"}}SetNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
-				MarkdownDescription: "{{.Description}}",
+				MarkdownDescription: "{{.Description}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 				{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
 				ElementType:         types.StringType,
 				{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
@@ -96,7 +99,7 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 					Attributes: map[string]schema.Attribute{
 						{{- range  .Attributes}}
 						"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if eq .Type "Set"}}SetNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
-							MarkdownDescription: "{{.Description}}",
+							MarkdownDescription: "{{.Description}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 							{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
 							ElementType:         types.StringType,
 							{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
@@ -111,7 +114,7 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 								Attributes: map[string]schema.Attribute{
 									{{- range  .Attributes}}
 									"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if eq .Type "Set"}}SetNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
-										MarkdownDescription: "{{.Description}}",
+										MarkdownDescription: "{{.Description}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 										{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
 										ElementType:         types.StringType,
 										{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
@@ -126,7 +129,7 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 											Attributes: map[string]schema.Attribute{
 												{{- range  .Attributes}}
 												"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if eq .Type "Set"}}SetNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
-													MarkdownDescription: "{{.Description}}",
+													MarkdownDescription: "{{.Description}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 													{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
 													ElementType:         types.StringType,
 													{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
@@ -141,7 +144,7 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 														Attributes: map[string]schema.Attribute{
 															{{- range  .Attributes}}
 															"{{.TfName}}": schema.{{if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
-																MarkdownDescription: "{{.Description}}",
+																MarkdownDescription: "{{.Description}}"{{- if .AddedInVersion}} + "\n  - Supported from version: `{{formatVersionDisplay .AddedInVersion}}`"{{end}}{{- if .RemovedInVersion}} + "\n  - **Not supported from version `{{formatVersionDisplay .RemovedInVersion}}` and above**"{{end}},
 																{{- if or (eq .Type "StringList") (eq .Type "StringSet")}}
 																ElementType:         types.StringType,
 																{{- else if or (eq .Type "Int64List") (eq .Type "Int64Set")}}
@@ -177,7 +180,9 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 	}
 }
 
-func (d *{{camelCase .Name}}DataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+{{- $versionSuffix := versionSuffix .Version}}
+
+func (d *{{camelCase .Name}}{{$versionSuffix}}DataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -189,8 +194,8 @@ func (d *{{camelCase .Name}}DataSource) Configure(_ context.Context, req datasou
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
 
-func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config {{camelCase .Name}}Data
+func (d *{{camelCase .Name}}{{$versionSuffix}}DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config {{camelCase .Name}}{{$versionSuffix}}Data
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -205,23 +210,22 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", {{if .HasPathVersion}}config.getPathForVersion(device.Version){{else}}config.getPath(){{end}}))
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
-				// Ensure connection is healthy (reconnect if stale)
-				locked := helpers.AcquireGnmiLock(device.GetOpMutex(), device.ReuseConnection, false)
-				defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
-				if locked {
-					defer device.GetOpMutex().Unlock()
-				}
-				if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection, device.MaxRetries); err != nil {
-					resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
-					return
-				}
+			// Ensure connection is healthy (reconnect if stale)
+			locked := helpers.AcquireGnmiLock(device.GetOpMutex(), device.ReuseConnection, false)
+			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
+			if locked {
+				defer device.GetOpMutex().Unlock()
+			}
+			if err := helpers.EnsureGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection, device.MaxRetries); err != nil {
+				resp.Diagnostics.AddError("gNMI Connection Error", fmt.Sprintf("Failed to ensure connection: %s", err))
+				return
+			}
 
-				defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
-				getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
+			getResp, err := device.GnmiClient.Get(ctx, []string{ {{if .HasPathVersion}}config.getPathForVersion(device.Version){{else}}config.getPath(){{end}}})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
 				return
@@ -240,7 +244,7 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)
@@ -266,9 +270,9 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 		}
 	}
 
-	config.Id = types.StringValue(config.getPath())
+	config.Id = types.StringValue({{if .HasPathVersion}}config.getPathForVersion(device.Version){{else}}config.getPath(){{end}})
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", {{if .HasPathVersion}}config.getPathForVersion(device.Version){{else}}config.getPath(){{end}}))
 
 	diags = resp.State.Set(ctx, &config)
 	resp.Diagnostics.Append(diags...)

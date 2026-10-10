@@ -51,8 +51,6 @@ func TestAccIosxrIPSLA(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "operations.0.udp_echo_source_port", "1024"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "operations.0.udp_echo_destination_ipv4", "10.1.1.2"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "operations.0.udp_echo_destination_port", "7"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "operations.0.udp_echo_control_disable", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "operations.0.udp_echo_verify_data", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "operations.0.udp_echo_tos", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "operations.0.udp_echo_vrf", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "operations.0.udp_echo_statistics_hourly_buckets", "2"))
@@ -63,17 +61,6 @@ func TestAccIosxrIPSLA(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "operations.0.udp_echo_history_buckets", "15"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "operations.0.udp_echo_history_filter_all", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "operations.0.udp_echo_history_lives", "2"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "schedules.0.operation_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "schedules.0.life_time", "86200"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "schedules.0.start_hour", "12"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "schedules.0.start_minute", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "schedules.0.start_second", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "schedules.0.start_month", "january"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "schedules.0.start_day_of_month", "15"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "schedules.0.start_year", "2032"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "schedules.0.start_pending", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "schedules.0.recurring", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "schedules.0.ageout", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "server_twamp", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "server_twamp_port", "862"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipsla.test", "server_twamp_timer_inactivity", "600"))
@@ -151,8 +138,6 @@ func testAccIosxrIPSLAConfig_all() string {
 	config += `		udp_echo_source_port = 1024` + "\n"
 	config += `		udp_echo_destination_ipv4 = "10.1.1.2"` + "\n"
 	config += `		udp_echo_destination_port = 7` + "\n"
-	config += `		udp_echo_control_disable = false` + "\n"
-	config += `		udp_echo_verify_data = false` + "\n"
 	config += `		udp_echo_tos = 0` + "\n"
 	config += `		udp_echo_vrf = "VRF1"` + "\n"
 	config += `		udp_echo_statistics_hourly_buckets = 2` + "\n"
@@ -165,19 +150,6 @@ func testAccIosxrIPSLAConfig_all() string {
 	config += `		udp_echo_history_buckets = 15` + "\n"
 	config += `		udp_echo_history_filter_all = true` + "\n"
 	config += `		udp_echo_history_lives = 2` + "\n"
-	config += `		}]` + "\n"
-	config += `	schedules = [{` + "\n"
-	config += `		operation_number = 1` + "\n"
-	config += `		life_time = 86200` + "\n"
-	config += `		start_hour = 12` + "\n"
-	config += `		start_minute = 0` + "\n"
-	config += `		start_second = 0` + "\n"
-	config += `		start_month = "january"` + "\n"
-	config += `		start_day_of_month = 15` + "\n"
-	config += `		start_year = 2032` + "\n"
-	config += `		start_pending = false` + "\n"
-	config += `		recurring = true` + "\n"
-	config += `		ageout = 300` + "\n"
 	config += `		}]` + "\n"
 	config += `	server_twamp = true` + "\n"
 	config += `	server_twamp_port = 862` + "\n"

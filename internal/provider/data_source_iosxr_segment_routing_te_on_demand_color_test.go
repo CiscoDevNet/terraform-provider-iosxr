@@ -74,7 +74,7 @@ func TestAccDataSourceIosxrSegmentRoutingTEOnDemandColor(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrSegmentRoutingTEOnDemandColorPrerequisitesConfig + testAccDataSourceIosxrSegmentRoutingTEOnDemandColorConfig(),
+				Config: testAccDataSourceIosxrSegmentRoutingTEOnDemandColorPrerequisitesConfig() + testAccDataSourceIosxrSegmentRoutingTEOnDemandColorConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -84,12 +84,23 @@ func TestAccDataSourceIosxrSegmentRoutingTEOnDemandColor(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrSegmentRoutingTEOnDemandColorPrerequisitesConfig = `
+const testAccDataSourceIosxrSegmentRoutingTEOnDemandColorPrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering"
+	attributes = {
+	}
 }
 
 `
+
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccDataSourceIosxrSegmentRoutingTEOnDemandColorPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccDataSourceIosxrSegmentRoutingTEOnDemandColorPrerequisitesConfig_V24_4,
+		},
+	)
+}
 
 // End of section. //template:end testPrerequisites
 
@@ -141,7 +152,9 @@ func testAccDataSourceIosxrSegmentRoutingTEOnDemandColorConfig() string {
 	config += `	srv6_locator_name = "LOC1"` + "\n"
 	config += `	srv6_locator_binding_sid_type = "srv6-dynamic"` + "\n"
 	config += `	srv6_locator_behavior = "ub6-insert-reduced"` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 
 	config += `

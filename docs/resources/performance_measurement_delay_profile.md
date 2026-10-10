@@ -10,112 +10,124 @@ description: |-
 
 This resource can manage the Performance Measurement Delay Profile configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `endpoint_default_histogram_delay_bins_explicit` | `26.2` |
+
 ## Example Usage
 
 ```terraform
 resource "iosxr_performance_measurement_delay_profile" "example" {
-  interfaces_default                                            = true
-  interfaces_default_probe_computation_interval                 = 60
-  interfaces_default_probe_tx_interval                          = 30000
-  interfaces_default_probe_protocol_twamp_light                 = true
-  interfaces_default_probe_tos_dscp                             = 48
-  interfaces_default_probe_measurement_mode_one_way             = true
-  interfaces_default_probe_measurement_mode_two_way             = false
-  interfaces_default_advertisement_periodic_disabled            = false
-  interfaces_default_advertisement_periodic_interval            = 120
-  interfaces_default_advertisement_periodic_threshold           = 10
-  interfaces_default_advertisement_periodic_minimum_change      = 100
-  interfaces_default_advertisement_logging_delay_exceeded       = true
-  interfaces_default_advertisement_accelerated                  = true
-  interfaces_default_advertisement_accelerated_threshold        = 20
-  interfaces_default_advertisement_accelerated_minimum_change   = 500
-  interfaces_default_advertisement_anomaly_loss_upper_bound     = 50
-  interfaces_default_advertisement_anomaly_loss_lower_bound     = 10
-  sr_policy_default                                             = true
-  sr_policy_default_probe_computation_interval                  = 120
-  sr_policy_default_probe_tx_interval                           = 30000
-  sr_policy_default_probe_static_delay                          = 1000
-  sr_policy_default_probe_sweep_destination_ipv4                = "127.0.0.1"
-  sr_policy_default_probe_sweep_destination_range               = 10
-  sr_policy_default_probe_protocol_twamp_light                  = true
-  sr_policy_default_probe_tos_dscp                              = 48
-  sr_policy_default_probe_measurement_mode_one_way              = true
-  sr_policy_default_probe_measurement_mode_two_way              = false
-  sr_policy_default_probe_measurement_mode_loopback             = false
-  sr_policy_default_advertisement_logging_delay_exceeded        = true
-  sr_policy_default_advertisement_threshold_check_average_delay = true
-  sr_policy_default_advertisement_threshold_check_minimum_delay = false
-  sr_policy_default_advertisement_threshold_check_maximum_delay = false
-  sr_policy_default_advertisement_periodic_disabled             = false
-  sr_policy_default_advertisement_periodic_interval             = 120
-  sr_policy_default_advertisement_periodic_threshold            = 10
-  sr_policy_default_advertisement_periodic_minimum_change       = 100
-  sr_policy_default_advertisement_accelerated                   = true
-  sr_policy_default_advertisement_accelerated_threshold         = 20
-  sr_policy_default_advertisement_accelerated_minimum_change    = 500
-  sr_policy_default_advertisement_anomaly_check_upper_bound     = 10000
-  sr_policy_default_advertisement_anomaly_check_lower_bound     = 100
-  sr_policy_default_advertisement_anomaly_loss_upper_bound      = 50
-  sr_policy_default_advertisement_anomaly_loss_lower_bound      = 10
-  endpoint_default                                              = true
-  endpoint_default_probe_tx_interval                            = 30000
-  endpoint_default_probe_computation_interval                   = 60
-  endpoint_default_probe_flow_label_from                        = 100
-  endpoint_default_probe_flow_label_to                          = 500
-  endpoint_default_probe_flow_label_increment                   = 50
-  endpoint_default_probe_sweep_destination_ipv4                 = "127.0.0.1"
-  endpoint_default_probe_sweep_destination_range                = 10
-  endpoint_default_probe_measurement_mode_one_way               = true
-  endpoint_default_probe_measurement_mode_two_way               = false
-  endpoint_default_probe_measurement_mode_loopback              = false
-  endpoint_default_probe_tos_dscp                               = 48
-  endpoint_default_advertisement_logging_delay_exceeded         = true
-  endpoint_default_advertisement_threshold_check_average_delay  = true
-  endpoint_default_advertisement_threshold_check_minimum_delay  = false
-  endpoint_default_advertisement_threshold_check_maximum_delay  = false
-  endpoint_default_advertisement_periodic_disabled              = false
-  endpoint_default_advertisement_periodic_interval              = 120
-  endpoint_default_advertisement_periodic_threshold             = 10
-  endpoint_default_advertisement_periodic_minimum_change        = 100
-  endpoint_default_advertisement_accelerated                    = true
-  endpoint_default_advertisement_accelerated_threshold          = 20
-  endpoint_default_advertisement_accelerated_minimum_change     = 500
-  endpoint_default_advertisement_anomaly_check_upper_bound      = 10000
-  endpoint_default_advertisement_anomaly_check_lower_bound      = 100
-  endpoint_default_advertisement_anomaly_loss_upper_bound       = 50
+  endpoint_default                                             = true
+  endpoint_default_advertisement_accelerated                   = true
+  endpoint_default_advertisement_accelerated_minimum_change    = 500
+  endpoint_default_advertisement_accelerated_threshold         = 20
+  endpoint_default_advertisement_anomaly_check_lower_bound     = 100
+  endpoint_default_advertisement_anomaly_check_upper_bound     = 10000
+  endpoint_default_advertisement_anomaly_loss_upper_bound      = 50
+  endpoint_default_advertisement_logging_delay_exceeded        = true
+  endpoint_default_advertisement_periodic_disabled             = false
+  endpoint_default_advertisement_periodic_interval             = 120
+  endpoint_default_advertisement_periodic_minimum_change       = 100
+  endpoint_default_advertisement_periodic_threshold            = 10
+  endpoint_default_advertisement_threshold_check_average_delay = true
+  endpoint_default_advertisement_threshold_check_maximum_delay = false
+  endpoint_default_advertisement_threshold_check_minimum_delay = false
+  endpoint_default_probe_computation_interval                  = 60
+  endpoint_default_probe_flow_label_from                       = 100
+  endpoint_default_probe_flow_label_increment                  = 50
+  endpoint_default_probe_flow_label_to                         = 500
+  endpoint_default_probe_measurement_mode_loopback             = false
+  endpoint_default_probe_measurement_mode_one_way              = true
+  endpoint_default_probe_measurement_mode_two_way              = false
+  endpoint_default_probe_sweep_destination_ipv4                = "127.0.0.1"
+  endpoint_default_probe_sweep_destination_range               = 10
+  endpoint_default_probe_tos_dscp                              = 48
+  endpoint_default_probe_tx_interval                           = 30000
+  interfaces_default                                           = true
+  interfaces_default_advertisement_accelerated                 = true
+  interfaces_default_advertisement_accelerated_minimum_change  = 500
+  interfaces_default_advertisement_accelerated_threshold       = 20
+  interfaces_default_advertisement_anomaly_loss_lower_bound    = 10
+  interfaces_default_advertisement_anomaly_loss_upper_bound    = 50
+  interfaces_default_advertisement_logging_delay_exceeded      = true
+  interfaces_default_advertisement_periodic_disabled           = false
+  interfaces_default_advertisement_periodic_interval           = 120
+  interfaces_default_advertisement_periodic_minimum_change     = 100
+  interfaces_default_advertisement_periodic_threshold          = 10
+  interfaces_default_probe_computation_interval                = 60
+  interfaces_default_probe_measurement_mode_one_way            = true
+  interfaces_default_probe_measurement_mode_two_way            = false
+  interfaces_default_probe_protocol_twamp_light                = true
+  interfaces_default_probe_timestamp_format_ntp                = true
+  interfaces_default_probe_tos_dscp                            = 48
+  interfaces_default_probe_tx_interval                         = 30000
   profiles = [
     {
-      profile_name                            = "DELAY_PROFILE_1"
+      advertise_accelerated                   = true
+      advertise_accelerated_minimum_change    = 500
+      advertise_accelerated_threshold         = 20
+      advertise_anomaly_check_lower_bound     = 100
+      advertise_anomaly_check_upper_bound     = 10000
+      advertise_anomaly_loss_lower_bound      = 10
+      advertise_anomaly_loss_upper_bound      = 50
+      advertise_logging_delay_exceeded        = true
+      advertise_periodic_disabled             = false
+      advertise_periodic_interval             = 120
+      advertise_periodic_minimum_change       = 100
+      advertise_periodic_threshold            = 10
+      advertise_threshold_check_average_delay = true
+      advertise_threshold_check_maximum_delay = false
+      advertise_threshold_check_minimum_delay = false
       probe_computation_interval              = 60
-      probe_tx_interval                       = 30000
+      probe_flow_label_from                   = 100
+      probe_flow_label_increment              = 50
+      probe_flow_label_to                     = 500
+      probe_measurement_mode_loopback         = false
+      probe_measurement_mode_one_way          = false
+      probe_measurement_mode_two_way          = true
+      probe_protocol_twamp_light              = true
       probe_static_delay                      = 1000
       probe_sweep_destination_ipv4            = "127.0.0.1"
       probe_sweep_destination_range           = 10
-      probe_flow_label_from                   = 100
-      probe_flow_label_to                     = 500
-      probe_flow_label_increment              = 50
-      probe_protocol_twamp_light              = true
+      probe_timestamp_format_ntp              = true
       probe_tos_dscp                          = 48
-      probe_measurement_mode_one_way          = false
-      probe_measurement_mode_two_way          = true
-      probe_measurement_mode_loopback         = false
-      advertise_logging_delay_exceeded        = true
-      advertise_threshold_check_average_delay = true
-      advertise_threshold_check_minimum_delay = false
-      advertise_threshold_check_maximum_delay = false
-      advertise_periodic_disabled             = false
-      advertise_periodic_interval             = 120
-      advertise_periodic_threshold            = 10
-      advertise_periodic_minimum_change       = 100
-      advertise_accelerated                   = true
-      advertise_accelerated_threshold         = 20
-      advertise_accelerated_minimum_change    = 500
-      advertise_anomaly_check_upper_bound     = 10000
-      advertise_anomaly_check_lower_bound     = 100
-      advertise_anomaly_loss_upper_bound      = 50
-      advertise_anomaly_loss_lower_bound      = 10
+      probe_tx_interval                       = 30000
+      profile_name                            = "DELAY_PROFILE_1"
     }
   ]
+  rsvp_te_default_probe_timestamp_format_ntp                    = true
+  sr_policy_default                                             = true
+  sr_policy_default_advertisement_accelerated                   = true
+  sr_policy_default_advertisement_accelerated_minimum_change    = 500
+  sr_policy_default_advertisement_accelerated_threshold         = 20
+  sr_policy_default_advertisement_anomaly_check_lower_bound     = 100
+  sr_policy_default_advertisement_anomaly_check_upper_bound     = 10000
+  sr_policy_default_advertisement_anomaly_loss_lower_bound      = 10
+  sr_policy_default_advertisement_anomaly_loss_upper_bound      = 50
+  sr_policy_default_advertisement_logging_delay_exceeded        = true
+  sr_policy_default_advertisement_periodic_disabled             = false
+  sr_policy_default_advertisement_periodic_interval             = 120
+  sr_policy_default_advertisement_periodic_minimum_change       = 100
+  sr_policy_default_advertisement_periodic_threshold            = 10
+  sr_policy_default_advertisement_threshold_check_average_delay = true
+  sr_policy_default_advertisement_threshold_check_maximum_delay = false
+  sr_policy_default_advertisement_threshold_check_minimum_delay = false
+  sr_policy_default_probe_computation_interval                  = 120
+  sr_policy_default_probe_measurement_mode_loopback             = false
+  sr_policy_default_probe_measurement_mode_one_way              = true
+  sr_policy_default_probe_measurement_mode_two_way              = false
+  sr_policy_default_probe_protocol_twamp_light                  = true
+  sr_policy_default_probe_static_delay                          = 1000
+  sr_policy_default_probe_sweep_destination_ipv4                = "127.0.0.1"
+  sr_policy_default_probe_sweep_destination_range               = 10
+  sr_policy_default_probe_timestamp_format_ntp                  = true
+  sr_policy_default_probe_tos_dscp                              = 48
+  sr_policy_default_probe_tx_interval                           = 30000
 }
 ```
 
@@ -150,6 +162,11 @@ resource "iosxr_performance_measurement_delay_profile" "example" {
 - `endpoint_default_advertisement_threshold_check_average_delay` (Boolean) Enable average-delay threshold-check
 - `endpoint_default_advertisement_threshold_check_maximum_delay` (Boolean) Enable maximum-delay threshold-check
 - `endpoint_default_advertisement_threshold_check_minimum_delay` (Boolean) Enable minimum-delay threshold-check
+- `endpoint_default_histogram_delay_bins_explicit` (List of Number) explicit list of 27 numbers to split 28 bins. All 27 entries must be configured
+  - Supported from version: `25.4`
+  - **Not supported from version `26.2` and above**
+- `endpoint_default_probe_collect_hbh` (Boolean) Collect hop by hop data for delay sessions
+  - Supported from version: `25.4`
 - `endpoint_default_probe_computation_interval` (Number) Interval for metric computation
   - Range: `1`-`3600`
 - `endpoint_default_probe_flow_label_explicit` (Boolean) explicit list of flow labels
@@ -166,6 +183,8 @@ resource "iosxr_performance_measurement_delay_profile" "example" {
 - `endpoint_default_probe_sweep_destination_ipv4` (String) Start of the IPv4 address range
 - `endpoint_default_probe_sweep_destination_range` (Number) Number of IP addresses to sweep 
   - Range: `0`-`128`
+- `endpoint_default_probe_timestamp_format_ntp` (Boolean) Network Time Protocol timestamp format
+  - Supported from version: `25.4`
 - `endpoint_default_probe_tos_dscp` (Number) DSCP value indicating TOS level used by protocol twamp-light
   - Range: `0`-`63`
 - `endpoint_default_probe_tx_interval` (Number) TX interval
@@ -194,6 +213,8 @@ resource "iosxr_performance_measurement_delay_profile" "example" {
 - `interfaces_default_probe_measurement_mode_two_way` (Boolean) Measure one way delay with timestamp 1, 2, 3 and 4 without clock synchronization
 - `interfaces_default_probe_protocol_pm_mpls` (Boolean) Interface delay measurement using RFC6374 with MPLS encap
 - `interfaces_default_probe_protocol_twamp_light` (Boolean) Interface delay measurement using RFC5357
+- `interfaces_default_probe_timestamp_format_ntp` (Boolean) Network Time Protocol timestamp format
+  - Supported from version: `25.4`
 - `interfaces_default_probe_tos_dscp` (Number) DSCP value indicating TOS level used by protocol twamp-light
   - Range: `0`-`63`
 - `interfaces_default_probe_tos_traffic_class` (Number) Traffic Class value indicating TOS level used by protocol pm-mpls
@@ -201,6 +222,8 @@ resource "iosxr_performance_measurement_delay_profile" "example" {
 - `interfaces_default_probe_tx_interval` (Number) TX interval
   - Range: `30000`-`15000000`
 - `profiles` (Attributes List) Delay profile name (see [below for nested schema](#nestedatt--profiles))
+- `rsvp_te_default_probe_timestamp_format_ntp` (Boolean) Network Time Protocol timestamp format
+  - Supported from version: `25.4`
 - `sr_policy_default` (Boolean) Default profile
 - `sr_policy_default_advertisement_accelerated` (Boolean) SR Policy delay profile advertisement accelerated
 - `sr_policy_default_advertisement_accelerated_minimum_change` (Number) Accelerated advertisement minimum change
@@ -226,6 +249,8 @@ resource "iosxr_performance_measurement_delay_profile" "example" {
 - `sr_policy_default_advertisement_threshold_check_average_delay` (Boolean) Enable average-delay threshold-check
 - `sr_policy_default_advertisement_threshold_check_maximum_delay` (Boolean) Enable maximum-delay threshold-check
 - `sr_policy_default_advertisement_threshold_check_minimum_delay` (Boolean) Enable minimum-delay threshold-check
+- `sr_policy_default_probe_collect_hbh` (Boolean) Collect hop by hop data for delay sessions
+  - Supported from version: `25.4`
 - `sr_policy_default_probe_computation_interval` (Number) Interval for metric computation
   - Range: `1`-`3600`
 - `sr_policy_default_probe_measurement_mode_loopback` (Boolean) Loopback the probe packet collecting only timestamp 1 and 4
@@ -238,6 +263,8 @@ resource "iosxr_performance_measurement_delay_profile" "example" {
 - `sr_policy_default_probe_sweep_destination_ipv4` (String) Start of the IPv4 address range, used by IPv4, IPv6 and NULL endpoint SR Policy
 - `sr_policy_default_probe_sweep_destination_range` (Number) Number of IP addresses to sweep 
   - Range: `0`-`128`
+- `sr_policy_default_probe_timestamp_format_ntp` (Boolean) Network Time Protocol timestamp format
+  - Supported from version: `25.4`
 - `sr_policy_default_probe_tos_dscp` (Number) DSCP value indicating TOS level used by protocol twamp-light
   - Range: `0`-`63`
 - `sr_policy_default_probe_tos_traffic_class` (Number) Traffic Class value indicating TOS level used by protocol pm-mpls
@@ -282,6 +309,8 @@ Optional:
 - `advertise_threshold_check_average_delay` (Boolean) Enable average-delay threshold-check
 - `advertise_threshold_check_maximum_delay` (Boolean) Enable maximum-delay threshold-check
 - `advertise_threshold_check_minimum_delay` (Boolean) Enable minimum-delay threshold-check
+- `probe_collect_hbh` (Boolean) Collect hop by hop data for delay sessions
+  - Supported from version: `25.4`
 - `probe_computation_interval` (Number) Interval for metric computation
   - Range: `1`-`3600`
 - `probe_flow_label_explicit` (Boolean) explicit list of flow labels
@@ -302,6 +331,8 @@ Optional:
 - `probe_sweep_destination_ipv4` (String) Start of the IPv4 address range, used by IPv4, IPv6 and NULL endpoint SR Policy
 - `probe_sweep_destination_range` (Number) Number of IP addresses to sweep 
   - Range: `0`-`128`
+- `probe_timestamp_format_ntp` (Boolean) Network Time Protocol timestamp format
+  - Supported from version: `25.4`
 - `probe_tos_dscp` (Number) DSCP value indicating TOS level used by protocol twamp-light
   - Range: `0`-`63`
 - `probe_tos_traffic_class` (Number) Traffic Class value indicating TOS level used by protocol pm-mpls

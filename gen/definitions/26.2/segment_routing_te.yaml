@@ -1,0 +1,9 @@
+---
+name: Segment Routing TE
+path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering
+doc_category: Segment Routing
+attributes:
+  # ===========================================================
+  # CONSTRAINT CHANGES — range/length widened in 26.2
+  # ===========================================================
+  - yang_name: srv6/locator/behavior

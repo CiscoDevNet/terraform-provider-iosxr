@@ -117,7 +117,7 @@ func testAccDataSourceIosxrKeyChainConfig() string {
 	config += `	}]` + "\n"
 	config += `	keys = [{` + "\n"
 	config += `		key_name = "1"` + "\n"
-	config += `		key_string_password6 = "00071A150754"` + "\n"
+	config += `		key_string_password = "03075218050061"` + "\n"
 	config += `		cryptographic_algorithm = "hmac-md5"` + "\n"
 	config += `		accept_lifetime_start_time_hour = 11` + "\n"
 	config += `		accept_lifetime_start_time_minute = 52` + "\n"

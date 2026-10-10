@@ -37,7 +37,6 @@ func TestAccDataSourceIosxrVRF(t *testing.T) {
 	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "fallback_vrf", "VRF2"))
 	}
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "evpn_route_sync", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_import_route_policy", "VRF_IMPORT_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_export_route_policy", "VRF_EXPORT_POLICY_1"))
@@ -45,13 +44,11 @@ func TestAccDataSourceIosxrVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_import_from_vrf_advertise_as_vpn", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_import_from_vrf_allow_backup", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_import_from_vrf_allow_best_external", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_import_from_default_vrf_advertise_as_vpn", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_import_from_default_vrf_route_policy", "VRF_IMPORT_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_export_to_vrf_allow_imported_vpn", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_export_to_vrf_allow_backup", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_export_to_vrf_allow_best_external", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_export_to_default_vrf_route_policy", "VRF_EXPORT_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_export_to_default_vrf_allow_imported_vpn", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_max_prefix_limit", "1000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_max_prefix_threshold", "75"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_multicast", "true"))
@@ -61,13 +58,11 @@ func TestAccDataSourceIosxrVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_multicast_import_from_vrf_advertise_as_vpn", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_multicast_import_from_vrf_allow_backup", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_multicast_import_from_vrf_allow_best_external", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_multicast_import_from_default_vrf_advertise_as_vpn", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_multicast_import_from_default_vrf_route_policy", "VRF_IMPORT_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_multicast_export_to_vrf_allow_imported_vpn", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_multicast_export_to_vrf_allow_backup", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_multicast_export_to_vrf_allow_best_external", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_multicast_export_to_default_vrf_route_policy", "VRF_EXPORT_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_multicast_export_to_default_vrf_allow_imported_vpn", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_multicast_max_prefix_limit", "1000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_multicast_max_prefix_threshold", "75"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_flowspec", "true"))
@@ -78,13 +73,11 @@ func TestAccDataSourceIosxrVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_import_from_vrf_advertise_as_vpn", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_import_from_vrf_allow_backup", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_import_from_vrf_allow_best_external", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_import_from_default_vrf_advertise_as_vpn", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_import_from_default_vrf_route_policy", "VRF_IMPORT_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_export_to_vrf_allow_imported_vpn", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_export_to_vrf_allow_backup", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_export_to_vrf_allow_best_external", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_export_to_default_vrf_route_policy", "VRF_EXPORT_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_export_to_default_vrf_allow_imported_vpn", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_max_prefix_limit", "1000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_max_prefix_threshold", "75"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_multicast", "true"))
@@ -94,13 +87,11 @@ func TestAccDataSourceIosxrVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_multicast_import_from_vrf_advertise_as_vpn", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_multicast_import_from_vrf_allow_backup", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_multicast_import_from_vrf_allow_best_external", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_multicast_import_from_default_vrf_advertise_as_vpn", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_multicast_import_from_default_vrf_route_policy", "VRF_IMPORT_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_multicast_export_to_vrf_allow_imported_vpn", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_multicast_export_to_vrf_allow_backup", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_multicast_export_to_vrf_allow_best_external", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_multicast_export_to_default_vrf_route_policy", "VRF_EXPORT_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_multicast_export_to_default_vrf_allow_imported_vpn", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_multicast_max_prefix_limit", "1000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_multicast_max_prefix_threshold", "75"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_flowspec", "true"))
@@ -185,7 +176,7 @@ func TestAccDataSourceIosxrVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrVRFPrerequisitesConfig + testAccDataSourceIosxrVRFConfig(),
+				Config: testAccDataSourceIosxrVRFPrerequisitesConfig() + testAccDataSourceIosxrVRFConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -195,7 +186,7 @@ func TestAccDataSourceIosxrVRF(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrVRFPrerequisitesConfig = `
+const testAccDataSourceIosxrVRFPrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=VRF_IMPORT_POLICY_1]"
 	attributes = {
@@ -214,6 +205,15 @@ resource "iosxr_yang" "PreReq1" {
 
 `
 
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccDataSourceIosxrVRFPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccDataSourceIosxrVRFPrerequisitesConfig_V24_4,
+		},
+	)
+}
+
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
@@ -226,7 +226,6 @@ func testAccDataSourceIosxrVRFConfig() string {
 	if os.Getenv("XRV9K") != "" || os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		config += `	fallback_vrf = "VRF2"` + "\n"
 	}
-	config += `	evpn_route_sync = 100` + "\n"
 	config += `	ipv4_unicast = true` + "\n"
 	config += `	ipv4_unicast_import_route_policy = "VRF_IMPORT_POLICY_1"` + "\n"
 	config += `	ipv4_unicast_export_route_policy = "VRF_EXPORT_POLICY_1"` + "\n"
@@ -234,13 +233,11 @@ func testAccDataSourceIosxrVRFConfig() string {
 	config += `	ipv4_unicast_import_from_vrf_advertise_as_vpn = true` + "\n"
 	config += `	ipv4_unicast_import_from_vrf_allow_backup = true` + "\n"
 	config += `	ipv4_unicast_import_from_vrf_allow_best_external = true` + "\n"
-	config += `	ipv4_unicast_import_from_default_vrf_advertise_as_vpn = true` + "\n"
 	config += `	ipv4_unicast_import_from_default_vrf_route_policy = "VRF_IMPORT_POLICY_1"` + "\n"
 	config += `	ipv4_unicast_export_to_vrf_allow_imported_vpn = true` + "\n"
 	config += `	ipv4_unicast_export_to_vrf_allow_backup = true` + "\n"
 	config += `	ipv4_unicast_export_to_vrf_allow_best_external = true` + "\n"
 	config += `	ipv4_unicast_export_to_default_vrf_route_policy = "VRF_EXPORT_POLICY_1"` + "\n"
-	config += `	ipv4_unicast_export_to_default_vrf_allow_imported_vpn = true` + "\n"
 	config += `	ipv4_unicast_max_prefix_limit = 1000` + "\n"
 	config += `	ipv4_unicast_max_prefix_threshold = 75` + "\n"
 	config += `	ipv4_multicast = true` + "\n"
@@ -250,13 +247,11 @@ func testAccDataSourceIosxrVRFConfig() string {
 	config += `	ipv4_multicast_import_from_vrf_advertise_as_vpn = true` + "\n"
 	config += `	ipv4_multicast_import_from_vrf_allow_backup = true` + "\n"
 	config += `	ipv4_multicast_import_from_vrf_allow_best_external = true` + "\n"
-	config += `	ipv4_multicast_import_from_default_vrf_advertise_as_vpn = true` + "\n"
 	config += `	ipv4_multicast_import_from_default_vrf_route_policy = "VRF_IMPORT_POLICY_1"` + "\n"
 	config += `	ipv4_multicast_export_to_vrf_allow_imported_vpn = true` + "\n"
 	config += `	ipv4_multicast_export_to_vrf_allow_backup = true` + "\n"
 	config += `	ipv4_multicast_export_to_vrf_allow_best_external = true` + "\n"
 	config += `	ipv4_multicast_export_to_default_vrf_route_policy = "VRF_EXPORT_POLICY_1"` + "\n"
-	config += `	ipv4_multicast_export_to_default_vrf_allow_imported_vpn = true` + "\n"
 	config += `	ipv4_multicast_max_prefix_limit = 1000` + "\n"
 	config += `	ipv4_multicast_max_prefix_threshold = 75` + "\n"
 	config += `	ipv4_flowspec = true` + "\n"
@@ -267,13 +262,11 @@ func testAccDataSourceIosxrVRFConfig() string {
 	config += `	ipv6_unicast_import_from_vrf_advertise_as_vpn = true` + "\n"
 	config += `	ipv6_unicast_import_from_vrf_allow_backup = true` + "\n"
 	config += `	ipv6_unicast_import_from_vrf_allow_best_external = true` + "\n"
-	config += `	ipv6_unicast_import_from_default_vrf_advertise_as_vpn = true` + "\n"
 	config += `	ipv6_unicast_import_from_default_vrf_route_policy = "VRF_IMPORT_POLICY_1"` + "\n"
 	config += `	ipv6_unicast_export_to_vrf_allow_imported_vpn = true` + "\n"
 	config += `	ipv6_unicast_export_to_vrf_allow_backup = true` + "\n"
 	config += `	ipv6_unicast_export_to_vrf_allow_best_external = true` + "\n"
 	config += `	ipv6_unicast_export_to_default_vrf_route_policy = "VRF_EXPORT_POLICY_1"` + "\n"
-	config += `	ipv6_unicast_export_to_default_vrf_allow_imported_vpn = true` + "\n"
 	config += `	ipv6_unicast_max_prefix_limit = 1000` + "\n"
 	config += `	ipv6_unicast_max_prefix_threshold = 75` + "\n"
 	config += `	ipv6_multicast = true` + "\n"
@@ -283,13 +276,11 @@ func testAccDataSourceIosxrVRFConfig() string {
 	config += `	ipv6_multicast_import_from_vrf_advertise_as_vpn = true` + "\n"
 	config += `	ipv6_multicast_import_from_vrf_allow_backup = true` + "\n"
 	config += `	ipv6_multicast_import_from_vrf_allow_best_external = true` + "\n"
-	config += `	ipv6_multicast_import_from_default_vrf_advertise_as_vpn = true` + "\n"
 	config += `	ipv6_multicast_import_from_default_vrf_route_policy = "VRF_IMPORT_POLICY_1"` + "\n"
 	config += `	ipv6_multicast_export_to_vrf_allow_imported_vpn = true` + "\n"
 	config += `	ipv6_multicast_export_to_vrf_allow_backup = true` + "\n"
 	config += `	ipv6_multicast_export_to_vrf_allow_best_external = true` + "\n"
 	config += `	ipv6_multicast_export_to_default_vrf_route_policy = "VRF_EXPORT_POLICY_1"` + "\n"
-	config += `	ipv6_multicast_export_to_default_vrf_allow_imported_vpn = true` + "\n"
 	config += `	ipv6_multicast_max_prefix_limit = 1000` + "\n"
 	config += `	ipv6_multicast_max_prefix_threshold = 75` + "\n"
 	config += `	ipv6_flowspec = true` + "\n"
@@ -417,7 +408,9 @@ func testAccDataSourceIosxrVRFConfig() string {
 	config += `	}]` + "\n"
 	config += `	vpn_id = "1000:1000"` + "\n"
 	config += `	remote_route_filtering_disable = true` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 
 	config += `

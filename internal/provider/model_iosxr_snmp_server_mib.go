@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -137,7 +138,7 @@ func (data SNMPServerMIBData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data SNMPServerMIB) toBody(ctx context.Context) string {
+func (data SNMPServerMIB) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.CbqosmibCache.IsNull() && !data.CbqosmibCache.IsUnknown() {
 		if data.CbqosmibCache.ValueBool() {
@@ -273,69 +274,114 @@ func (data SNMPServerMIB) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.CbqosmibCache.IsNull() {
-			data.CbqosmibCache = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.CbqosmibCache.IsNull() {
-			data.CbqosmibCache = types.BoolNull()
-		}
+// GetVersionConstraints returns the version constraints for all fields
+func (data SNMPServerMIB) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
 	}
-	if value := res.Get("Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache.refresh.time"); value.Exists() && !data.CbqosmibCacheRefreshTime.IsNull() {
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data SNMPServerMIB) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data SNMPServerMIB) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data SNMPServerMIB) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data SNMPServerMIB) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache"); !data.CbqosmibCache.IsNull() {
+		if value.Exists() {
+			data.CbqosmibCache = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CbqosmibCache = types.BoolValue(false)
+		}
+	} else if data.CbqosmibCache.IsNull() {
+		data.CbqosmibCache = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache.refresh.time"); value.Exists() && !data.CbqosmibCacheRefreshTime.IsNull() {
 		data.CbqosmibCacheRefreshTime = types.Int64Value(value.Int())
 	} else if data.CbqosmibCacheRefreshTime.IsNull() {
 		data.CbqosmibCacheRefreshTime = types.Int64Null()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache.service-policy.count"); value.Exists() && !data.CbqosmibCacheServicePolicyCount.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache.service-policy.count"); value.Exists() && !data.CbqosmibCacheServicePolicyCount.IsNull() {
 		data.CbqosmibCacheServicePolicyCount = types.Int64Value(value.Int())
 	} else if data.CbqosmibCacheServicePolicyCount.IsNull() {
 		data.CbqosmibCacheServicePolicyCount = types.Int64Null()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.persist"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.CbqosmibPersist.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.persist"); !data.CbqosmibPersist.IsNull() {
+		if value.Exists() {
 			data.CbqosmibPersist = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CbqosmibPersist = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.CbqosmibPersist.IsNull() {
-			data.CbqosmibPersist = types.BoolNull()
-		}
+	} else if data.CbqosmibPersist.IsNull() {
+		data.CbqosmibPersist = types.BoolNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.member-stats"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.CbqosmibMemberStats.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.member-stats"); !data.CbqosmibMemberStats.IsNull() {
+		if value.Exists() {
 			data.CbqosmibMemberStats = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CbqosmibMemberStats = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.CbqosmibMemberStats.IsNull() {
-			data.CbqosmibMemberStats = types.BoolNull()
-		}
+	} else if data.CbqosmibMemberStats.IsNull() {
+		data.CbqosmibMemberStats = types.BoolNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex.persist"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.IfindexPersist.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex.persist"); !data.IfindexPersist.IsNull() {
+		if value.Exists() {
 			data.IfindexPersist = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.IfindexPersist = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.IfindexPersist.IsNull() {
-			data.IfindexPersist = types.BoolNull()
-		}
+	} else if data.IfindexPersist.IsNull() {
+		data.IfindexPersist = types.BoolNull()
 	}
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		res.Get("Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces.interface").ForEach(
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces.interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -353,7 +399,7 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res gjson.Result)
 				return true
 			},
 		)
-		if value := r.Get("interface-name"); value.Exists() && !data.Interfaces[i].InterfaceName.IsNull() {
+		if value := r.Get("interface-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Interfaces[i].InterfaceName.IsNull() {
 			data.Interfaces[i].InterfaceName = types.StringValue(value.String())
 		} else {
 			data.Interfaces[i].InterfaceName = types.StringNull()
@@ -395,169 +441,788 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res gjson.Result)
 			}
 		}
 	}
-	if value := res.Get("Cisco-IOS-XR-um-mibs-ifmib-cfg:trap.link.ietf"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TrapLinkIetf.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:trap.link.ietf"); !data.TrapLinkIetf.IsNull() {
+		if value.Exists() {
 			data.TrapLinkIetf = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TrapLinkIetf = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TrapLinkIetf.IsNull() {
-			data.TrapLinkIetf = types.BoolNull()
-		}
+	} else if data.TrapLinkIetf.IsNull() {
+		data.TrapLinkIetf = types.BoolNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.IfmibIfaliasLong.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); !data.IfmibIfaliasLong.IsNull() {
+		if value.Exists() {
 			data.IfmibIfaliasLong = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.IfmibIfaliasLong = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.IfmibIfaliasLong.IsNull() {
-			data.IfmibIfaliasLong = types.BoolNull()
-		}
+	} else if data.IfmibIfaliasLong.IsNull() {
+		data.IfmibIfaliasLong = types.BoolNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.stats.cache"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.IfmibStatsCache.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.stats.cache"); !data.IfmibStatsCache.IsNull() {
+		if value.Exists() {
 			data.IfmibStatsCache = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.IfmibStatsCache = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.IfmibStatsCache.IsNull() {
-			data.IfmibStatsCache = types.BoolNull()
-		}
+	} else if data.IfmibStatsCache.IsNull() {
+		data.IfmibStatsCache = types.BoolNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ipsubscriber"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.IfmibIpsubscriber.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ipsubscriber"); !data.IfmibIpsubscriber.IsNull() {
+		if value.Exists() {
 			data.IfmibIpsubscriber = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.IfmibIpsubscriber = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.IfmibIpsubscriber.IsNull() {
-			data.IfmibIpsubscriber = types.BoolNull()
-		}
+	} else if data.IfmibIpsubscriber.IsNull() {
+		data.IfmibIpsubscriber = types.BoolNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.internal.cache.max-duration"); value.Exists() && !data.IfmibInternalCacheMaxDuration.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.internal.cache.max-duration"); value.Exists() && !data.IfmibInternalCacheMaxDuration.IsNull() {
 		data.IfmibInternalCacheMaxDuration = types.Int64Value(value.Int())
 	} else if data.IfmibInternalCacheMaxDuration.IsNull() {
 		data.IfmibInternalCacheMaxDuration = types.Int64Null()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-mibs-rfmib-cfg:rfmib.entphyindex"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.RfmibEntphyindex.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-rfmib-cfg:rfmib.entphyindex"); !data.RfmibEntphyindex.IsNull() {
+		if value.Exists() {
 			data.RfmibEntphyindex = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.RfmibEntphyindex = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.RfmibEntphyindex.IsNull() {
-			data.RfmibEntphyindex = types.BoolNull()
-		}
+	} else if data.RfmibEntphyindex.IsNull() {
+		data.RfmibEntphyindex = types.BoolNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-mibs-sensormib-cfg:sensormib.cache"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SensormibCache.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-sensormib-cfg:sensormib.cache"); !data.SensormibCache.IsNull() {
+		if value.Exists() {
 			data.SensormibCache = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SensormibCache = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SensormibCache.IsNull() {
-			data.SensormibCache = types.BoolNull()
-		}
+	} else if data.SensormibCache.IsNull() {
+		data.SensormibCache = types.BoolNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-mpls-te-cfg:mplstemib.cache.timers.garbage-collect"); value.Exists() && !data.MplstemibCacheTimersGarbageCollect.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:mplstemib.cache.timers.garbage-collect"); value.Exists() && !data.MplstemibCacheTimersGarbageCollect.IsNull() {
 		data.MplstemibCacheTimersGarbageCollect = types.Int64Value(value.Int())
 	} else if data.MplstemibCacheTimersGarbageCollect.IsNull() {
 		data.MplstemibCacheTimersGarbageCollect = types.Int64Null()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-mpls-te-cfg:mplstemib.cache.timers.refresh"); value.Exists() && !data.MplstemibCacheTimersRefresh.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:mplstemib.cache.timers.refresh"); value.Exists() && !data.MplstemibCacheTimersRefresh.IsNull() {
 		data.MplstemibCacheTimersRefresh = types.Int64Value(value.Int())
 	} else if data.MplstemibCacheTimersRefresh.IsNull() {
 		data.MplstemibCacheTimersRefresh = types.Int64Null()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-mpls-te-cfg:mplsp2mpmib.cache.timer"); value.Exists() && !data.Mplsp2mpmibCacheTimer.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:mplsp2mpmib.cache.timer"); value.Exists() && !data.Mplsp2mpmibCacheTimer.IsNull() {
 		data.Mplsp2mpmibCacheTimer = types.Int64Value(value.Int())
 	} else if data.Mplsp2mpmibCacheTimer.IsNull() {
 		data.Mplsp2mpmibCacheTimer = types.Int64Null()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-mpls-te-cfg:frrmib.cache.timer"); value.Exists() && !data.FrrmibCacheTimer.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:frrmib.cache.timer"); value.Exists() && !data.FrrmibCacheTimer.IsNull() {
 		data.FrrmibCacheTimer = types.Int64Value(value.Int())
 	} else if data.FrrmibCacheTimer.IsNull() {
 		data.FrrmibCacheTimer = types.Int64Null()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextmib.cache.timer"); value.Exists() && !data.CmplsteextmibCacheTimer.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextmib.cache.timer"); value.Exists() && !data.CmplsteextmibCacheTimer.IsNull() {
 		data.CmplsteextmibCacheTimer = types.Int64Value(value.Int())
 	} else if data.CmplsteextmibCacheTimer.IsNull() {
 		data.CmplsteextmibCacheTimer = types.Int64Null()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextstdmib.cache.timer"); value.Exists() && !data.CmplsteextstdmibCacheTimer.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextstdmib.cache.timer"); value.Exists() && !data.CmplsteextstdmibCacheTimer.IsNull() {
 		data.CmplsteextstdmibCacheTimer = types.Int64Value(value.Int())
 	} else if data.CmplsteextstdmibCacheTimer.IsNull() {
 		data.CmplsteextstdmibCacheTimer = types.Int64Null()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-snmp-server-mroutemib-cfg:mroutemib.send-all-vrf"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MroutemibSendAllVrf.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-mroutemib-cfg:mroutemib.send-all-vrf"); !data.MroutemibSendAllVrf.IsNull() {
+		if value.Exists() {
 			data.MroutemibSendAllVrf = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MroutemibSendAllVrf = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MroutemibSendAllVrf.IsNull() {
-			data.MroutemibSendAllVrf = types.BoolNull()
-		}
+	} else if data.MroutemibSendAllVrf.IsNull() {
+		data.MroutemibSendAllVrf = types.BoolNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.default"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.NotificationLogMibDefault.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.default"); !data.NotificationLogMibDefault.IsNull() {
+		if value.Exists() {
 			data.NotificationLogMibDefault = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.NotificationLogMibDefault = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.NotificationLogMibDefault.IsNull() {
-			data.NotificationLogMibDefault = types.BoolNull()
-		}
+	} else if data.NotificationLogMibDefault.IsNull() {
+		data.NotificationLogMibDefault = types.BoolNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.global-age-out"); value.Exists() && !data.NotificationLogMibGlobalAgeOut.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.global-age-out"); value.Exists() && !data.NotificationLogMibGlobalAgeOut.IsNull() {
 		data.NotificationLogMibGlobalAgeOut = types.Int64Value(value.Int())
 	} else if data.NotificationLogMibGlobalAgeOut.IsNull() {
 		data.NotificationLogMibGlobalAgeOut = types.Int64Null()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.global-size"); value.Exists() && !data.NotificationLogMibGlobalSize.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.global-size"); value.Exists() && !data.NotificationLogMibGlobalSize.IsNull() {
 		data.NotificationLogMibGlobalSize = types.Int64Value(value.Int())
 	} else if data.NotificationLogMibGlobalSize.IsNull() {
 		data.NotificationLogMibGlobalSize = types.Int64Null()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.NotificationLogMibDisable.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.disable"); !data.NotificationLogMibDisable.IsNull() {
+		if value.Exists() {
 			data.NotificationLogMibDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.NotificationLogMibDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.NotificationLogMibDisable.IsNull() {
-			data.NotificationLogMibDisable = types.BoolNull()
-		}
+	} else if data.NotificationLogMibDisable.IsNull() {
+		data.NotificationLogMibDisable = types.BoolNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.size"); value.Exists() && !data.NotificationLogMibSize.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.size"); value.Exists() && !data.NotificationLogMibSize.IsNull() {
 		data.NotificationLogMibSize = types.Int64Value(value.Int())
 	} else if data.NotificationLogMibSize.IsNull() {
 		data.NotificationLogMibSize = types.Int64Null()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-traps-entity-cfg:entityindex.persist"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.EntityindexPersist.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-traps-entity-cfg:entityindex.persist"); !data.EntityindexPersist.IsNull() {
+		if value.Exists() {
 			data.EntityindexPersist = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EntityindexPersist = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.EntityindexPersist.IsNull() {
-			data.EntityindexPersist = types.BoolNull()
-		}
+	} else if data.EntityindexPersist.IsNull() {
+		data.EntityindexPersist = types.BoolNull()
 	}
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *SNMPServerMIB) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache"); value.Exists() {
+		data.CbqosmibCache = types.BoolValue(true)
+	} else if !data.CbqosmibCache.IsNull() {
+		// Only set to false if it was previously set in state
+		data.CbqosmibCache = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache.refresh.time"); value.Exists() {
+		data.CbqosmibCacheRefreshTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache.service-policy.count"); value.Exists() {
+		data.CbqosmibCacheServicePolicyCount = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.persist"); value.Exists() {
+		data.CbqosmibPersist = types.BoolValue(true)
+	} else if !data.CbqosmibPersist.IsNull() {
+		// Only set to false if it was previously set in state
+		data.CbqosmibPersist = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.member-stats"); value.Exists() {
+		data.CbqosmibMemberStats = types.BoolValue(true)
+	} else if !data.CbqosmibMemberStats.IsNull() {
+		// Only set to false if it was previously set in state
+		data.CbqosmibMemberStats = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex.persist"); value.Exists() {
+		data.IfindexPersist = types.BoolValue(true)
+	} else if !data.IfindexPersist.IsNull() {
+		// Only set to false if it was previously set in state
+		data.IfindexPersist = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces.interface"); value.Exists() {
+		data.Interfaces = make([]SNMPServerMIBInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SNMPServerMIBInterfaces{}
+			if cValue := v.Get("interface-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("notification.linkupdown.enable"); cValue.Exists() {
+				item.NotificationLinkupdownEnable = types.BoolValue(true)
+			} else if !item.NotificationLinkupdownEnable.IsNull() {
+				// Only set to false if it was previously set
+				item.NotificationLinkupdownEnable = types.BoolValue(false)
+			}
+			if cValue := v.Get("notification.linkupdown.disable"); cValue.Exists() {
+				item.NotificationLinkupdownDisable = types.BoolValue(true)
+			} else if !item.NotificationLinkupdownDisable.IsNull() {
+				// Only set to false if it was previously set
+				item.NotificationLinkupdownDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("index.persistence"); cValue.Exists() {
+				item.IndexPersistence = types.BoolValue(true)
+			} else if !item.IndexPersistence.IsNull() {
+				// Only set to false if it was previously set
+				item.IndexPersistence = types.BoolValue(false)
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:trap.link.ietf"); value.Exists() {
+		data.TrapLinkIetf = types.BoolValue(true)
+	} else if !data.TrapLinkIetf.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TrapLinkIetf = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); value.Exists() {
+		data.IfmibIfaliasLong = types.BoolValue(true)
+	} else if !data.IfmibIfaliasLong.IsNull() {
+		// Only set to false if it was previously set in state
+		data.IfmibIfaliasLong = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.stats.cache"); value.Exists() {
+		data.IfmibStatsCache = types.BoolValue(true)
+	} else if !data.IfmibStatsCache.IsNull() {
+		// Only set to false if it was previously set in state
+		data.IfmibStatsCache = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ipsubscriber"); value.Exists() {
+		data.IfmibIpsubscriber = types.BoolValue(true)
+	} else if !data.IfmibIpsubscriber.IsNull() {
+		// Only set to false if it was previously set in state
+		data.IfmibIpsubscriber = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.internal.cache.max-duration"); value.Exists() {
+		data.IfmibInternalCacheMaxDuration = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-rfmib-cfg:rfmib.entphyindex"); value.Exists() {
+		data.RfmibEntphyindex = types.BoolValue(true)
+	} else if !data.RfmibEntphyindex.IsNull() {
+		// Only set to false if it was previously set in state
+		data.RfmibEntphyindex = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-sensormib-cfg:sensormib.cache"); value.Exists() {
+		data.SensormibCache = types.BoolValue(true)
+	} else if !data.SensormibCache.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SensormibCache = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:mplstemib.cache.timers.garbage-collect"); value.Exists() {
+		data.MplstemibCacheTimersGarbageCollect = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:mplstemib.cache.timers.refresh"); value.Exists() {
+		data.MplstemibCacheTimersRefresh = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:mplsp2mpmib.cache.timer"); value.Exists() {
+		data.Mplsp2mpmibCacheTimer = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:frrmib.cache.timer"); value.Exists() {
+		data.FrrmibCacheTimer = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextmib.cache.timer"); value.Exists() {
+		data.CmplsteextmibCacheTimer = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextstdmib.cache.timer"); value.Exists() {
+		data.CmplsteextstdmibCacheTimer = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-mroutemib-cfg:mroutemib.send-all-vrf"); value.Exists() {
+		data.MroutemibSendAllVrf = types.BoolValue(true)
+	} else if !data.MroutemibSendAllVrf.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MroutemibSendAllVrf = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.default"); value.Exists() {
+		data.NotificationLogMibDefault = types.BoolValue(true)
+	} else if !data.NotificationLogMibDefault.IsNull() {
+		// Only set to false if it was previously set in state
+		data.NotificationLogMibDefault = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.global-age-out"); value.Exists() {
+		data.NotificationLogMibGlobalAgeOut = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.global-size"); value.Exists() {
+		data.NotificationLogMibGlobalSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.disable"); value.Exists() {
+		data.NotificationLogMibDisable = types.BoolValue(true)
+	} else if !data.NotificationLogMibDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.NotificationLogMibDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.size"); value.Exists() {
+		data.NotificationLogMibSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-traps-entity-cfg:entityindex.persist"); value.Exists() {
+		data.EntityindexPersist = types.BoolValue(true)
+	} else if !data.EntityindexPersist.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EntityindexPersist = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *SNMPServerMIBData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache"); value.Exists() {
+		data.CbqosmibCache = types.BoolValue(true)
+	} else {
+		data.CbqosmibCache = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache.refresh.time"); value.Exists() {
+		data.CbqosmibCacheRefreshTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache.service-policy.count"); value.Exists() {
+		data.CbqosmibCacheServicePolicyCount = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.persist"); value.Exists() {
+		data.CbqosmibPersist = types.BoolValue(true)
+	} else {
+		data.CbqosmibPersist = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.member-stats"); value.Exists() {
+		data.CbqosmibMemberStats = types.BoolValue(true)
+	} else {
+		data.CbqosmibMemberStats = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex.persist"); value.Exists() {
+		data.IfindexPersist = types.BoolValue(true)
+	} else {
+		data.IfindexPersist = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces.interface"); value.Exists() {
+		data.Interfaces = make([]SNMPServerMIBInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SNMPServerMIBInterfaces{}
+			if cValue := v.Get("interface-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("notification.linkupdown.enable"); cValue.Exists() {
+				item.NotificationLinkupdownEnable = types.BoolValue(true)
+			} else {
+				item.NotificationLinkupdownEnable = types.BoolValue(false)
+			}
+			if cValue := v.Get("notification.linkupdown.disable"); cValue.Exists() {
+				item.NotificationLinkupdownDisable = types.BoolValue(true)
+			} else {
+				item.NotificationLinkupdownDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("index.persistence"); cValue.Exists() {
+				item.IndexPersistence = types.BoolValue(true)
+			} else {
+				item.IndexPersistence = types.BoolValue(false)
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:trap.link.ietf"); value.Exists() {
+		data.TrapLinkIetf = types.BoolValue(true)
+	} else {
+		data.TrapLinkIetf = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); value.Exists() {
+		data.IfmibIfaliasLong = types.BoolValue(true)
+	} else {
+		data.IfmibIfaliasLong = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.stats.cache"); value.Exists() {
+		data.IfmibStatsCache = types.BoolValue(true)
+	} else {
+		data.IfmibStatsCache = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ipsubscriber"); value.Exists() {
+		data.IfmibIpsubscriber = types.BoolValue(true)
+	} else {
+		data.IfmibIpsubscriber = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.internal.cache.max-duration"); value.Exists() {
+		data.IfmibInternalCacheMaxDuration = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-rfmib-cfg:rfmib.entphyindex"); value.Exists() {
+		data.RfmibEntphyindex = types.BoolValue(true)
+	} else {
+		data.RfmibEntphyindex = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-sensormib-cfg:sensormib.cache"); value.Exists() {
+		data.SensormibCache = types.BoolValue(true)
+	} else {
+		data.SensormibCache = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:mplstemib.cache.timers.garbage-collect"); value.Exists() {
+		data.MplstemibCacheTimersGarbageCollect = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:mplstemib.cache.timers.refresh"); value.Exists() {
+		data.MplstemibCacheTimersRefresh = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:mplsp2mpmib.cache.timer"); value.Exists() {
+		data.Mplsp2mpmibCacheTimer = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:frrmib.cache.timer"); value.Exists() {
+		data.FrrmibCacheTimer = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextmib.cache.timer"); value.Exists() {
+		data.CmplsteextmibCacheTimer = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextstdmib.cache.timer"); value.Exists() {
+		data.CmplsteextstdmibCacheTimer = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-mroutemib-cfg:mroutemib.send-all-vrf"); value.Exists() {
+		data.MroutemibSendAllVrf = types.BoolValue(true)
+	} else {
+		data.MroutemibSendAllVrf = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.default"); value.Exists() {
+		data.NotificationLogMibDefault = types.BoolValue(true)
+	} else {
+		data.NotificationLogMibDefault = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.global-age-out"); value.Exists() {
+		data.NotificationLogMibGlobalAgeOut = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.global-size"); value.Exists() {
+		data.NotificationLogMibGlobalSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.disable"); value.Exists() {
+		data.NotificationLogMibDisable = types.BoolValue(true)
+	} else {
+		data.NotificationLogMibDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.size"); value.Exists() {
+		data.NotificationLogMibSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-traps-entity-cfg:entityindex.persist"); value.Exists() {
+		data.EntityindexPersist = types.BoolValue(true)
+	} else {
+		data.EntityindexPersist = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *SNMPServerMIB) getDeletedItems(ctx context.Context, state SNMPServerMIB, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.EntityindexPersist.IsNull() && data.EntityindexPersist.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-traps-entity-cfg:entityindex/persist"))
+	}
+	if !state.NotificationLogMibSize.IsNull() && data.NotificationLogMibSize.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/size"))
+	}
+	if !state.NotificationLogMibDisable.IsNull() && data.NotificationLogMibDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/disable"))
+	}
+	if !state.NotificationLogMibGlobalSize.IsNull() && data.NotificationLogMibGlobalSize.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/global-size"))
+	}
+	if !state.NotificationLogMibGlobalAgeOut.IsNull() && data.NotificationLogMibGlobalAgeOut.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/global-age-out"))
+	}
+	if !state.NotificationLogMibDefault.IsNull() && data.NotificationLogMibDefault.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/default"))
+	}
+	if !state.MroutemibSendAllVrf.IsNull() && data.MroutemibSendAllVrf.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-snmp-server-mroutemib-cfg:mroutemib/send-all-vrf"))
+	}
+	if !state.CmplsteextstdmibCacheTimer.IsNull() && data.CmplsteextstdmibCacheTimer.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextstdmib/cache/timer"))
+	}
+	if !state.CmplsteextmibCacheTimer.IsNull() && data.CmplsteextmibCacheTimer.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextmib/cache/timer"))
+	}
+	if !state.FrrmibCacheTimer.IsNull() && data.FrrmibCacheTimer.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mpls-te-cfg:frrmib/cache/timer"))
+	}
+	if !state.Mplsp2mpmibCacheTimer.IsNull() && data.Mplsp2mpmibCacheTimer.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mpls-te-cfg:mplsp2mpmib/cache/timer"))
+	}
+	if !state.MplstemibCacheTimersRefresh.IsNull() && data.MplstemibCacheTimersRefresh.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mpls-te-cfg:mplstemib/cache/timers/refresh"))
+	}
+	if !state.MplstemibCacheTimersGarbageCollect.IsNull() && data.MplstemibCacheTimersGarbageCollect.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mpls-te-cfg:mplstemib/cache/timers/garbage-collect"))
+	}
+	if !state.SensormibCache.IsNull() && data.SensormibCache.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mibs-sensormib-cfg:sensormib/cache"))
+	}
+	if !state.RfmibEntphyindex.IsNull() && data.RfmibEntphyindex.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mibs-rfmib-cfg:rfmib/entphyindex"))
+	}
+	if !state.IfmibInternalCacheMaxDuration.IsNull() && data.IfmibInternalCacheMaxDuration.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/internal/cache/max-duration"))
+	}
+	if !state.IfmibIpsubscriber.IsNull() && data.IfmibIpsubscriber.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ipsubscriber"))
+	}
+	if !state.IfmibStatsCache.IsNull() && data.IfmibStatsCache.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/stats/cache"))
+	}
+	if !state.IfmibIfaliasLong.IsNull() && data.IfmibIfaliasLong.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long"))
+	}
+	if !state.TrapLinkIetf.IsNull() && data.TrapLinkIetf.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:trap/link/ietf"))
+	}
+	for i := range state.Interfaces {
+		keys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Interfaces {
+			found = true
+			if state.Interfaces[i].InterfaceName.ValueString() != data.Interfaces[j].InterfaceName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Interfaces[i].IndexPersistence.IsNull() && data.Interfaces[j].IndexPersistence.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface", keyString), "index/persistence"))
+				}
+				if !state.Interfaces[i].NotificationLinkupdownDisable.IsNull() && data.Interfaces[j].NotificationLinkupdownDisable.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface", keyString), "notification/linkupdown/disable"))
+				}
+				if !state.Interfaces[i].NotificationLinkupdownEnable.IsNull() && data.Interfaces[j].NotificationLinkupdownEnable.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface", keyString), "notification/linkupdown/enable"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface", keyString))
+		}
+	}
+	if !state.IfindexPersist.IsNull() && data.IfindexPersist.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist"))
+	}
+	if !state.CbqosmibMemberStats.IsNull() && data.CbqosmibMemberStats.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/member-stats"))
+	}
+	if !state.CbqosmibPersist.IsNull() && data.CbqosmibPersist.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/persist"))
+	}
+	if !state.CbqosmibCacheServicePolicyCount.IsNull() && data.CbqosmibCacheServicePolicyCount.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/cache/service-policy/count"))
+	}
+	if !state.CbqosmibCacheRefreshTime.IsNull() && data.CbqosmibCacheRefreshTime.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/cache/refresh/time"))
+	}
+	if !state.CbqosmibCache.IsNull() && data.CbqosmibCache.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/cache"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *SNMPServerMIB) getEmptyLeafsDelete(ctx context.Context, state *SNMPServerMIB, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if !data.EntityindexPersist.IsNull() && !data.EntityindexPersist.ValueBool() {
+		if state == nil || state.EntityindexPersist.IsNull() || state.EntityindexPersist.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-traps-entity-cfg:entityindex/persist"))
+		}
+	}
+	if !data.NotificationLogMibDisable.IsNull() && !data.NotificationLogMibDisable.ValueBool() {
+		if state == nil || state.NotificationLogMibDisable.IsNull() || state.NotificationLogMibDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/disable"))
+		}
+	}
+	if !data.NotificationLogMibDefault.IsNull() && !data.NotificationLogMibDefault.ValueBool() {
+		if state == nil || state.NotificationLogMibDefault.IsNull() || state.NotificationLogMibDefault.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/default"))
+		}
+	}
+	if !data.MroutemibSendAllVrf.IsNull() && !data.MroutemibSendAllVrf.ValueBool() {
+		if state == nil || state.MroutemibSendAllVrf.IsNull() || state.MroutemibSendAllVrf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-snmp-server-mroutemib-cfg:mroutemib/send-all-vrf"))
+		}
+	}
+	if !data.SensormibCache.IsNull() && !data.SensormibCache.ValueBool() {
+		if state == nil || state.SensormibCache.IsNull() || state.SensormibCache.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-sensormib-cfg:sensormib/cache"))
+		}
+	}
+	if !data.RfmibEntphyindex.IsNull() && !data.RfmibEntphyindex.ValueBool() {
+		if state == nil || state.RfmibEntphyindex.IsNull() || state.RfmibEntphyindex.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-rfmib-cfg:rfmib/entphyindex"))
+		}
+	}
+	if !data.IfmibIpsubscriber.IsNull() && !data.IfmibIpsubscriber.ValueBool() {
+		if state == nil || state.IfmibIpsubscriber.IsNull() || state.IfmibIpsubscriber.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ipsubscriber"))
+		}
+	}
+	if !data.IfmibStatsCache.IsNull() && !data.IfmibStatsCache.ValueBool() {
+		if state == nil || state.IfmibStatsCache.IsNull() || state.IfmibStatsCache.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/stats/cache"))
+		}
+	}
+	if !data.IfmibIfaliasLong.IsNull() && !data.IfmibIfaliasLong.ValueBool() {
+		if state == nil || state.IfmibIfaliasLong.IsNull() || state.IfmibIfaliasLong.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long"))
+		}
+	}
+	if !data.TrapLinkIetf.IsNull() && !data.TrapLinkIetf.ValueBool() {
+		if state == nil || state.TrapLinkIetf.IsNull() || state.TrapLinkIetf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:trap/link/ietf"))
+		}
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Interfaces[i].IndexPersistence.IsNull() && !data.Interfaces[i].IndexPersistence.ValueBool() {
+			if state == nil || i >= len(state.Interfaces) || state.Interfaces[i].IndexPersistence.IsNull() || state.Interfaces[i].IndexPersistence.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface", keyString), "index/persistence"))
+			}
+		}
+		if !data.Interfaces[i].NotificationLinkupdownDisable.IsNull() && !data.Interfaces[i].NotificationLinkupdownDisable.ValueBool() {
+			if state == nil || i >= len(state.Interfaces) || state.Interfaces[i].NotificationLinkupdownDisable.IsNull() || state.Interfaces[i].NotificationLinkupdownDisable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface", keyString), "notification/linkupdown/disable"))
+			}
+		}
+		if !data.Interfaces[i].NotificationLinkupdownEnable.IsNull() && !data.Interfaces[i].NotificationLinkupdownEnable.ValueBool() {
+			if state == nil || i >= len(state.Interfaces) || state.Interfaces[i].NotificationLinkupdownEnable.IsNull() || state.Interfaces[i].NotificationLinkupdownEnable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface", keyString), "notification/linkupdown/enable"))
+			}
+		}
+	}
+	if !data.IfindexPersist.IsNull() && !data.IfindexPersist.ValueBool() {
+		if state == nil || state.IfindexPersist.IsNull() || state.IfindexPersist.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist"))
+		}
+	}
+	if !data.CbqosmibMemberStats.IsNull() && !data.CbqosmibMemberStats.ValueBool() {
+		if state == nil || state.CbqosmibMemberStats.IsNull() || state.CbqosmibMemberStats.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/member-stats"))
+		}
+	}
+	if !data.CbqosmibPersist.IsNull() && !data.CbqosmibPersist.ValueBool() {
+		if state == nil || state.CbqosmibPersist.IsNull() || state.CbqosmibPersist.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/persist"))
+		}
+	}
+	if !data.CbqosmibCache.IsNull() && !data.CbqosmibCache.ValueBool() {
+		if state == nil || state.CbqosmibCache.IsNull() || state.CbqosmibCache.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/cache"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *SNMPServerMIB) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.EntityindexPersist.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-traps-entity-cfg:entityindex/persist"))
+	}
+	if !data.NotificationLogMibSize.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/size"))
+	}
+	if !data.NotificationLogMibDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/disable"))
+	}
+	if !data.NotificationLogMibGlobalSize.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/global-size"))
+	}
+	if !data.NotificationLogMibGlobalAgeOut.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/global-age-out"))
+	}
+	if !data.NotificationLogMibDefault.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/default"))
+	}
+	if !data.MroutemibSendAllVrf.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-snmp-server-mroutemib-cfg:mroutemib/send-all-vrf"))
+	}
+	if !data.CmplsteextstdmibCacheTimer.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextstdmib/cache/timer"))
+	}
+	if !data.CmplsteextmibCacheTimer.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextmib/cache/timer"))
+	}
+	if !data.FrrmibCacheTimer.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mpls-te-cfg:frrmib/cache/timer"))
+	}
+	if !data.Mplsp2mpmibCacheTimer.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mpls-te-cfg:mplsp2mpmib/cache/timer"))
+	}
+	if !data.MplstemibCacheTimersRefresh.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mpls-te-cfg:mplstemib/cache/timers/refresh"))
+	}
+	if !data.MplstemibCacheTimersGarbageCollect.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mpls-te-cfg:mplstemib/cache/timers/garbage-collect"))
+	}
+	if !data.SensormibCache.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-sensormib-cfg:sensormib/cache"))
+	}
+	if !data.RfmibEntphyindex.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-rfmib-cfg:rfmib/entphyindex"))
+	}
+	if !data.IfmibInternalCacheMaxDuration.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/internal/cache/max-duration"))
+	}
+	if !data.IfmibIpsubscriber.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ipsubscriber"))
+	}
+	if !data.IfmibStatsCache.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/stats/cache"))
+	}
+	if !data.IfmibIfaliasLong.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long"))
+	}
+	if !data.TrapLinkIetf.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:trap/link/ietf"))
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.Interfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface", keyString))
+	}
+	if !data.IfindexPersist.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist"))
+	}
+	if !data.CbqosmibMemberStats.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/member-stats"))
+	}
+	if !data.CbqosmibPersist.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/persist"))
+	}
+	if !data.CbqosmibCacheServicePolicyCount.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/cache/service-policy/count"))
+	}
+	if !data.CbqosmibCacheRefreshTime.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/cache/refresh/time"))
+	}
+	if !data.CbqosmibCache.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/cache"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data SNMPServerMIB) toBodyXML(ctx context.Context, stateArg ...*SNMPServerMIB) string {
@@ -781,7 +1446,7 @@ func (data SNMPServerMIB) toBodyXML(ctx context.Context, stateArg ...*SNMPServer
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -789,6 +1454,7 @@ func (data SNMPServerMIB) toBodyXML(ctx context.Context, stateArg ...*SNMPServer
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *SNMPServerMIB) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1074,316 +1740,7 @@ func (data *SNMPServerMIB) updateFromBodyXML(ctx context.Context, res xmldot.Res
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *SNMPServerMIB) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache"); value.Exists() {
-		data.CbqosmibCache = types.BoolValue(true)
-	} else if !data.CbqosmibCache.IsNull() {
-		// Only set to false if it was previously set in state
-		data.CbqosmibCache = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache.refresh.time"); value.Exists() {
-		data.CbqosmibCacheRefreshTime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache.service-policy.count"); value.Exists() {
-		data.CbqosmibCacheServicePolicyCount = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.persist"); value.Exists() {
-		data.CbqosmibPersist = types.BoolValue(true)
-	} else if !data.CbqosmibPersist.IsNull() {
-		// Only set to false if it was previously set in state
-		data.CbqosmibPersist = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.member-stats"); value.Exists() {
-		data.CbqosmibMemberStats = types.BoolValue(true)
-	} else if !data.CbqosmibMemberStats.IsNull() {
-		// Only set to false if it was previously set in state
-		data.CbqosmibMemberStats = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex.persist"); value.Exists() {
-		data.IfindexPersist = types.BoolValue(true)
-	} else if !data.IfindexPersist.IsNull() {
-		// Only set to false if it was previously set in state
-		data.IfindexPersist = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces.interface"); value.Exists() {
-		data.Interfaces = make([]SNMPServerMIBInterfaces, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := SNMPServerMIBInterfaces{}
-			if cValue := v.Get("interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("notification.linkupdown.enable"); cValue.Exists() {
-				item.NotificationLinkupdownEnable = types.BoolValue(true)
-			} else if !item.NotificationLinkupdownEnable.IsNull() {
-				// Only set to false if it was previously set
-				item.NotificationLinkupdownEnable = types.BoolValue(false)
-			}
-			if cValue := v.Get("notification.linkupdown.disable"); cValue.Exists() {
-				item.NotificationLinkupdownDisable = types.BoolValue(true)
-			} else if !item.NotificationLinkupdownDisable.IsNull() {
-				// Only set to false if it was previously set
-				item.NotificationLinkupdownDisable = types.BoolValue(false)
-			}
-			if cValue := v.Get("index.persistence"); cValue.Exists() {
-				item.IndexPersistence = types.BoolValue(true)
-			} else if !item.IndexPersistence.IsNull() {
-				// Only set to false if it was previously set
-				item.IndexPersistence = types.BoolValue(false)
-			}
-			data.Interfaces = append(data.Interfaces, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-ifmib-cfg:trap.link.ietf"); value.Exists() {
-		data.TrapLinkIetf = types.BoolValue(true)
-	} else if !data.TrapLinkIetf.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TrapLinkIetf = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); value.Exists() {
-		data.IfmibIfaliasLong = types.BoolValue(true)
-	} else if !data.IfmibIfaliasLong.IsNull() {
-		// Only set to false if it was previously set in state
-		data.IfmibIfaliasLong = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.stats.cache"); value.Exists() {
-		data.IfmibStatsCache = types.BoolValue(true)
-	} else if !data.IfmibStatsCache.IsNull() {
-		// Only set to false if it was previously set in state
-		data.IfmibStatsCache = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ipsubscriber"); value.Exists() {
-		data.IfmibIpsubscriber = types.BoolValue(true)
-	} else if !data.IfmibIpsubscriber.IsNull() {
-		// Only set to false if it was previously set in state
-		data.IfmibIpsubscriber = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.internal.cache.max-duration"); value.Exists() {
-		data.IfmibInternalCacheMaxDuration = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-rfmib-cfg:rfmib.entphyindex"); value.Exists() {
-		data.RfmibEntphyindex = types.BoolValue(true)
-	} else if !data.RfmibEntphyindex.IsNull() {
-		// Only set to false if it was previously set in state
-		data.RfmibEntphyindex = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-sensormib-cfg:sensormib.cache"); value.Exists() {
-		data.SensormibCache = types.BoolValue(true)
-	} else if !data.SensormibCache.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SensormibCache = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:mplstemib.cache.timers.garbage-collect"); value.Exists() {
-		data.MplstemibCacheTimersGarbageCollect = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:mplstemib.cache.timers.refresh"); value.Exists() {
-		data.MplstemibCacheTimersRefresh = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:mplsp2mpmib.cache.timer"); value.Exists() {
-		data.Mplsp2mpmibCacheTimer = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:frrmib.cache.timer"); value.Exists() {
-		data.FrrmibCacheTimer = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextmib.cache.timer"); value.Exists() {
-		data.CmplsteextmibCacheTimer = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextstdmib.cache.timer"); value.Exists() {
-		data.CmplsteextstdmibCacheTimer = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-snmp-server-mroutemib-cfg:mroutemib.send-all-vrf"); value.Exists() {
-		data.MroutemibSendAllVrf = types.BoolValue(true)
-	} else if !data.MroutemibSendAllVrf.IsNull() {
-		// Only set to false if it was previously set in state
-		data.MroutemibSendAllVrf = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.default"); value.Exists() {
-		data.NotificationLogMibDefault = types.BoolValue(true)
-	} else if !data.NotificationLogMibDefault.IsNull() {
-		// Only set to false if it was previously set in state
-		data.NotificationLogMibDefault = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.global-age-out"); value.Exists() {
-		data.NotificationLogMibGlobalAgeOut = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.global-size"); value.Exists() {
-		data.NotificationLogMibGlobalSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.disable"); value.Exists() {
-		data.NotificationLogMibDisable = types.BoolValue(true)
-	} else if !data.NotificationLogMibDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.NotificationLogMibDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.size"); value.Exists() {
-		data.NotificationLogMibSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-traps-entity-cfg:entityindex.persist"); value.Exists() {
-		data.EntityindexPersist = types.BoolValue(true)
-	} else if !data.EntityindexPersist.IsNull() {
-		// Only set to false if it was previously set in state
-		data.EntityindexPersist = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *SNMPServerMIBData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache"); value.Exists() {
-		data.CbqosmibCache = types.BoolValue(true)
-	} else {
-		data.CbqosmibCache = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache.refresh.time"); value.Exists() {
-		data.CbqosmibCacheRefreshTime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.cache.service-policy.count"); value.Exists() {
-		data.CbqosmibCacheServicePolicyCount = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.persist"); value.Exists() {
-		data.CbqosmibPersist = types.BoolValue(true)
-	} else {
-		data.CbqosmibPersist = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib.member-stats"); value.Exists() {
-		data.CbqosmibMemberStats = types.BoolValue(true)
-	} else {
-		data.CbqosmibMemberStats = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex.persist"); value.Exists() {
-		data.IfindexPersist = types.BoolValue(true)
-	} else {
-		data.IfindexPersist = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces.interface"); value.Exists() {
-		data.Interfaces = make([]SNMPServerMIBInterfaces, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := SNMPServerMIBInterfaces{}
-			if cValue := v.Get("interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("notification.linkupdown.enable"); cValue.Exists() {
-				item.NotificationLinkupdownEnable = types.BoolValue(true)
-			} else {
-				item.NotificationLinkupdownEnable = types.BoolValue(false)
-			}
-			if cValue := v.Get("notification.linkupdown.disable"); cValue.Exists() {
-				item.NotificationLinkupdownDisable = types.BoolValue(true)
-			} else {
-				item.NotificationLinkupdownDisable = types.BoolValue(false)
-			}
-			if cValue := v.Get("index.persistence"); cValue.Exists() {
-				item.IndexPersistence = types.BoolValue(true)
-			} else {
-				item.IndexPersistence = types.BoolValue(false)
-			}
-			data.Interfaces = append(data.Interfaces, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-ifmib-cfg:trap.link.ietf"); value.Exists() {
-		data.TrapLinkIetf = types.BoolValue(true)
-	} else {
-		data.TrapLinkIetf = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); value.Exists() {
-		data.IfmibIfaliasLong = types.BoolValue(true)
-	} else {
-		data.IfmibIfaliasLong = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.stats.cache"); value.Exists() {
-		data.IfmibStatsCache = types.BoolValue(true)
-	} else {
-		data.IfmibStatsCache = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ipsubscriber"); value.Exists() {
-		data.IfmibIpsubscriber = types.BoolValue(true)
-	} else {
-		data.IfmibIpsubscriber = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.internal.cache.max-duration"); value.Exists() {
-		data.IfmibInternalCacheMaxDuration = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-rfmib-cfg:rfmib.entphyindex"); value.Exists() {
-		data.RfmibEntphyindex = types.BoolValue(true)
-	} else {
-		data.RfmibEntphyindex = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mibs-sensormib-cfg:sensormib.cache"); value.Exists() {
-		data.SensormibCache = types.BoolValue(true)
-	} else {
-		data.SensormibCache = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:mplstemib.cache.timers.garbage-collect"); value.Exists() {
-		data.MplstemibCacheTimersGarbageCollect = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:mplstemib.cache.timers.refresh"); value.Exists() {
-		data.MplstemibCacheTimersRefresh = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:mplsp2mpmib.cache.timer"); value.Exists() {
-		data.Mplsp2mpmibCacheTimer = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:frrmib.cache.timer"); value.Exists() {
-		data.FrrmibCacheTimer = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextmib.cache.timer"); value.Exists() {
-		data.CmplsteextmibCacheTimer = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextstdmib.cache.timer"); value.Exists() {
-		data.CmplsteextstdmibCacheTimer = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-snmp-server-mroutemib-cfg:mroutemib.send-all-vrf"); value.Exists() {
-		data.MroutemibSendAllVrf = types.BoolValue(true)
-	} else {
-		data.MroutemibSendAllVrf = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.default"); value.Exists() {
-		data.NotificationLogMibDefault = types.BoolValue(true)
-	} else {
-		data.NotificationLogMibDefault = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.global-age-out"); value.Exists() {
-		data.NotificationLogMibGlobalAgeOut = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.global-size"); value.Exists() {
-		data.NotificationLogMibGlobalSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.disable"); value.Exists() {
-		data.NotificationLogMibDisable = types.BoolValue(true)
-	} else {
-		data.NotificationLogMibDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib.size"); value.Exists() {
-		data.NotificationLogMibSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-traps-entity-cfg:entityindex.persist"); value.Exists() {
-		data.EntityindexPersist = types.BoolValue(true)
-	} else {
-		data.EntityindexPersist = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *SNMPServerMIB) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1522,6 +1879,7 @@ func (data *SNMPServerMIB) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *SNMPServerMIBData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1660,345 +2018,7 @@ func (data *SNMPServerMIBData) fromBodyXML(ctx context.Context, res xmldot.Resul
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *SNMPServerMIB) getDeletedItems(ctx context.Context, state SNMPServerMIB) []string {
-	deletedItems := make([]string, 0)
-	if !state.EntityindexPersist.IsNull() && data.EntityindexPersist.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-traps-entity-cfg:entityindex/persist", state.getPath()))
-	}
-	if !state.NotificationLogMibSize.IsNull() && data.NotificationLogMibSize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/size", state.getPath()))
-	}
-	if !state.NotificationLogMibDisable.IsNull() && data.NotificationLogMibDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/disable", state.getPath()))
-	}
-	if !state.NotificationLogMibGlobalSize.IsNull() && data.NotificationLogMibGlobalSize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/global-size", state.getPath()))
-	}
-	if !state.NotificationLogMibGlobalAgeOut.IsNull() && data.NotificationLogMibGlobalAgeOut.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/global-age-out", state.getPath()))
-	}
-	if !state.NotificationLogMibDefault.IsNull() && data.NotificationLogMibDefault.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/default", state.getPath()))
-	}
-	if !state.MroutemibSendAllVrf.IsNull() && data.MroutemibSendAllVrf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-snmp-server-mroutemib-cfg:mroutemib/send-all-vrf", state.getPath()))
-	}
-	if !state.CmplsteextstdmibCacheTimer.IsNull() && data.CmplsteextstdmibCacheTimer.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextstdmib/cache/timer", state.getPath()))
-	}
-	if !state.CmplsteextmibCacheTimer.IsNull() && data.CmplsteextmibCacheTimer.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextmib/cache/timer", state.getPath()))
-	}
-	if !state.FrrmibCacheTimer.IsNull() && data.FrrmibCacheTimer.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:frrmib/cache/timer", state.getPath()))
-	}
-	if !state.Mplsp2mpmibCacheTimer.IsNull() && data.Mplsp2mpmibCacheTimer.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:mplsp2mpmib/cache/timer", state.getPath()))
-	}
-	if !state.MplstemibCacheTimersRefresh.IsNull() && data.MplstemibCacheTimersRefresh.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:mplstemib/cache/timers/refresh", state.getPath()))
-	}
-	if !state.MplstemibCacheTimersGarbageCollect.IsNull() && data.MplstemibCacheTimersGarbageCollect.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:mplstemib/cache/timers/garbage-collect", state.getPath()))
-	}
-	if !state.SensormibCache.IsNull() && data.SensormibCache.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-sensormib-cfg:sensormib/cache", state.getPath()))
-	}
-	if !state.RfmibEntphyindex.IsNull() && data.RfmibEntphyindex.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-rfmib-cfg:rfmib/entphyindex", state.getPath()))
-	}
-	if !state.IfmibInternalCacheMaxDuration.IsNull() && data.IfmibInternalCacheMaxDuration.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/internal/cache/max-duration", state.getPath()))
-	}
-	if !state.IfmibIpsubscriber.IsNull() && data.IfmibIpsubscriber.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ipsubscriber", state.getPath()))
-	}
-	if !state.IfmibStatsCache.IsNull() && data.IfmibStatsCache.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/stats/cache", state.getPath()))
-	}
-	if !state.IfmibIfaliasLong.IsNull() && data.IfmibIfaliasLong.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long", state.getPath()))
-	}
-	if !state.TrapLinkIetf.IsNull() && data.TrapLinkIetf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:trap/link/ietf", state.getPath()))
-	}
-	for i := range state.Interfaces {
-		keys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Interfaces {
-			found = true
-			if state.Interfaces[i].InterfaceName.ValueString() != data.Interfaces[j].InterfaceName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.Interfaces[i].IndexPersistence.IsNull() && data.Interfaces[j].IndexPersistence.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface%v/index/persistence", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].NotificationLinkupdownDisable.IsNull() && data.Interfaces[j].NotificationLinkupdownDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface%v/notification/linkupdown/disable", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].NotificationLinkupdownEnable.IsNull() && data.Interfaces[j].NotificationLinkupdownEnable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface%v/notification/linkupdown/enable", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface%v", state.getPath(), keyString))
-		}
-	}
-	if !state.IfindexPersist.IsNull() && data.IfindexPersist.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist", state.getPath()))
-	}
-	if !state.CbqosmibMemberStats.IsNull() && data.CbqosmibMemberStats.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/member-stats", state.getPath()))
-	}
-	if !state.CbqosmibPersist.IsNull() && data.CbqosmibPersist.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/persist", state.getPath()))
-	}
-	if !state.CbqosmibCacheServicePolicyCount.IsNull() && data.CbqosmibCacheServicePolicyCount.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/cache/service-policy/count", state.getPath()))
-	}
-	if !state.CbqosmibCacheRefreshTime.IsNull() && data.CbqosmibCacheRefreshTime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/cache/refresh/time", state.getPath()))
-	}
-	if !state.CbqosmibCache.IsNull() && data.CbqosmibCache.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/cache", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *SNMPServerMIB) getEmptyLeafsDelete(ctx context.Context, state *SNMPServerMIB) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.EntityindexPersist.IsNull() && !data.EntityindexPersist.ValueBool() {
-		if state != nil && !state.EntityindexPersist.IsNull() && state.EntityindexPersist.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-traps-entity-cfg:entityindex/persist", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.NotificationLogMibDisable.IsNull() && !data.NotificationLogMibDisable.ValueBool() {
-		if state != nil && !state.NotificationLogMibDisable.IsNull() && state.NotificationLogMibDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/disable", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.NotificationLogMibDefault.IsNull() && !data.NotificationLogMibDefault.ValueBool() {
-		if state != nil && !state.NotificationLogMibDefault.IsNull() && state.NotificationLogMibDefault.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/default", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.MroutemibSendAllVrf.IsNull() && !data.MroutemibSendAllVrf.ValueBool() {
-		if state != nil && !state.MroutemibSendAllVrf.IsNull() && state.MroutemibSendAllVrf.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-snmp-server-mroutemib-cfg:mroutemib/send-all-vrf", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SensormibCache.IsNull() && !data.SensormibCache.ValueBool() {
-		if state != nil && !state.SensormibCache.IsNull() && state.SensormibCache.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-sensormib-cfg:sensormib/cache", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.RfmibEntphyindex.IsNull() && !data.RfmibEntphyindex.ValueBool() {
-		if state != nil && !state.RfmibEntphyindex.IsNull() && state.RfmibEntphyindex.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-rfmib-cfg:rfmib/entphyindex", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.IfmibIpsubscriber.IsNull() && !data.IfmibIpsubscriber.ValueBool() {
-		if state != nil && !state.IfmibIpsubscriber.IsNull() && state.IfmibIpsubscriber.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ipsubscriber", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.IfmibStatsCache.IsNull() && !data.IfmibStatsCache.ValueBool() {
-		if state != nil && !state.IfmibStatsCache.IsNull() && state.IfmibStatsCache.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/stats/cache", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.IfmibIfaliasLong.IsNull() && !data.IfmibIfaliasLong.ValueBool() {
-		if state != nil && !state.IfmibIfaliasLong.IsNull() && state.IfmibIfaliasLong.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TrapLinkIetf.IsNull() && !data.TrapLinkIetf.ValueBool() {
-		if state != nil && !state.TrapLinkIetf.IsNull() && state.TrapLinkIetf.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:trap/link/ietf", data.getXPath()))
-		}
-	}
-	for i := range data.Interfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.Interfaces[i].IndexPersistence.IsNull() && !data.Interfaces[i].IndexPersistence.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].IndexPersistence.IsNull() && state.Interfaces[i].IndexPersistence.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface%v/index/persistence", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Interfaces[i].NotificationLinkupdownDisable.IsNull() && !data.Interfaces[i].NotificationLinkupdownDisable.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].NotificationLinkupdownDisable.IsNull() && state.Interfaces[i].NotificationLinkupdownDisable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface%v/notification/linkupdown/disable", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Interfaces[i].NotificationLinkupdownEnable.IsNull() && !data.Interfaces[i].NotificationLinkupdownEnable.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Interfaces) && !state.Interfaces[i].NotificationLinkupdownEnable.IsNull() && state.Interfaces[i].NotificationLinkupdownEnable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface%v/notification/linkupdown/enable", data.getXPath(), keyString))
-			}
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.IfindexPersist.IsNull() && !data.IfindexPersist.ValueBool() {
-		if state != nil && !state.IfindexPersist.IsNull() && state.IfindexPersist.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.CbqosmibMemberStats.IsNull() && !data.CbqosmibMemberStats.ValueBool() {
-		if state != nil && !state.CbqosmibMemberStats.IsNull() && state.CbqosmibMemberStats.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/member-stats", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.CbqosmibPersist.IsNull() && !data.CbqosmibPersist.ValueBool() {
-		if state != nil && !state.CbqosmibPersist.IsNull() && state.CbqosmibPersist.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/persist", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.CbqosmibCache.IsNull() && !data.CbqosmibCache.ValueBool() {
-		if state != nil && !state.CbqosmibCache.IsNull() && state.CbqosmibCache.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/cache", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *SNMPServerMIB) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.EntityindexPersist.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-traps-entity-cfg:entityindex/persist", data.getPath()))
-	}
-	if !data.NotificationLogMibSize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/size", data.getPath()))
-	}
-	if !data.NotificationLogMibDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/disable", data.getPath()))
-	}
-	if !data.NotificationLogMibGlobalSize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/global-size", data.getPath()))
-	}
-	if !data.NotificationLogMibGlobalAgeOut.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/global-age-out", data.getPath()))
-	}
-	if !data.NotificationLogMibDefault.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/default", data.getPath()))
-	}
-	if !data.MroutemibSendAllVrf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-snmp-server-mroutemib-cfg:mroutemib/send-all-vrf", data.getPath()))
-	}
-	if !data.CmplsteextstdmibCacheTimer.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextstdmib/cache/timer", data.getPath()))
-	}
-	if !data.CmplsteextmibCacheTimer.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextmib/cache/timer", data.getPath()))
-	}
-	if !data.FrrmibCacheTimer.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:frrmib/cache/timer", data.getPath()))
-	}
-	if !data.Mplsp2mpmibCacheTimer.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:mplsp2mpmib/cache/timer", data.getPath()))
-	}
-	if !data.MplstemibCacheTimersRefresh.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:mplstemib/cache/timers/refresh", data.getPath()))
-	}
-	if !data.MplstemibCacheTimersGarbageCollect.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mpls-te-cfg:mplstemib/cache/timers/garbage-collect", data.getPath()))
-	}
-	if !data.SensormibCache.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-sensormib-cfg:sensormib/cache", data.getPath()))
-	}
-	if !data.RfmibEntphyindex.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-rfmib-cfg:rfmib/entphyindex", data.getPath()))
-	}
-	if !data.IfmibInternalCacheMaxDuration.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/internal/cache/max-duration", data.getPath()))
-	}
-	if !data.IfmibIpsubscriber.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ipsubscriber", data.getPath()))
-	}
-	if !data.IfmibStatsCache.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/stats/cache", data.getPath()))
-	}
-	if !data.IfmibIfaliasLong.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long", data.getPath()))
-	}
-	if !data.TrapLinkIetf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:trap/link/ietf", data.getPath()))
-	}
-	for i := range data.Interfaces {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[interface-name=" + data.Interfaces[i].InterfaceName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface%v", data.getPath(), keyPath))
-	}
-	if !data.IfindexPersist.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist", data.getPath()))
-	}
-	if !data.CbqosmibMemberStats.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/member-stats", data.getPath()))
-	}
-	if !data.CbqosmibPersist.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/persist", data.getPath()))
-	}
-	if !data.CbqosmibCacheServicePolicyCount.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/cache/service-policy/count", data.getPath()))
-	}
-	if !data.CbqosmibCacheRefreshTime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/cache/refresh/time", data.getPath()))
-	}
-	if !data.CbqosmibCache.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/cache", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *SNMPServerMIB) addDeletedItemsXML(ctx context.Context, state SNMPServerMIB, body string) string {
@@ -2458,6 +2478,7 @@ func (data *SNMPServerMIB) addDeletedItemsXML(ctx context.Context, state SNMPSer
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *SNMPServerMIB) addDeletePathsXML(ctx context.Context, body string) string {

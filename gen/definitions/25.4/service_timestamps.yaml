@@ -1,0 +1,30 @@
+---
+name: Service Timestamps
+path: Cisco-IOS-XR-um-service-timestamps-cfg:/service/timestamps
+no_delete_attributes: true
+doc_category: Management
+path_version:
+  "24.4": "Cisco-IOS-XR-um-service-timestamps-cfg:/service/timestamps"
+  "25.4": "Cisco-IOS-XR-um-service-cfg:/service/Cisco-IOS-XR-um-logging-cfg:timestamps"
+attributes:
+  # ===========================================================
+  # REMOVALS - removed between 24.4 and 25.4 (no replacement)
+  # ===========================================================
+  - yang_name: debug/datetime/localtime-only
+    legacy: true
+  - yang_name: log/datetime/localtime-only
+    legacy: true
+
+  # ===========================================================
+  # ADDITIONS - new attributes in 25.4
+  # ===========================================================
+  # debug/datetime/msec and usec are mutually exclusive via
+  # choice INCLUDE-MILLISECOND-TIMESTAMP in the 25.4 YANG model.
+  - yang_name: debug/datetime/INCLUDE-MILLISECOND-TIMESTAMP/USEC/usec
+    xpath: debug/datetime/usec
+    tf_name: debug_datetime_usec
+    example: true
+  - yang_name: log/datetime/INCLUDE-MILLISECOND-TIMESTAMP/USEC/usec
+    xpath: log/datetime/usec
+    tf_name: log_datetime_usec
+    example: true

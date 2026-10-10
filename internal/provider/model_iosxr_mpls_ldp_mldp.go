@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -111,7 +112,7 @@ func (data MPLSLDPMLDPData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data MPLSLDPMLDP) toBody(ctx context.Context) string {
+func (data MPLSLDPMLDP) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.LoggingNotifications.IsNull() && !data.LoggingNotifications.IsUnknown() {
 		if data.LoggingNotifications.ValueBool() {
@@ -179,6 +180,7 @@ func (data MPLSLDPMLDP) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.Statics) > 0 {
+				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"statics.static", []interface{}{})
 				for cindex, citem := range item.Statics {
 					if !citem.LspAddress.IsNull() && !citem.LspAddress.IsUnknown() {
 						body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"statics.static"+"."+strconv.Itoa(cindex)+"."+"lsp-address", citem.LspAddress.ValueString())
@@ -192,6 +194,7 @@ func (data MPLSLDPMLDP) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.Neighbors) > 0 {
+				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"neighbors.neighbor", []interface{}{})
 				for cindex, citem := range item.Neighbors {
 					if !citem.NeighborAddress.IsNull() && !citem.NeighborAddress.IsUnknown() {
 						body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"neighbors.neighbor"+"."+strconv.Itoa(cindex)+"."+"neighbor-address", citem.NeighborAddress.ValueString())
@@ -211,37 +214,84 @@ func (data MPLSLDPMLDP) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("logging.notifications"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LoggingNotifications.IsNull() {
-			data.LoggingNotifications = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LoggingNotifications.IsNull() {
-			data.LoggingNotifications = types.BoolNull()
-		}
+// GetVersionConstraints returns the version constraints for all fields
+func (data MPLSLDPMLDP) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
 	}
-	if value := res.Get("logging.internal"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LoggingInternal.IsNull() {
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data MPLSLDPMLDP) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data MPLSLDPMLDP) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data MPLSLDPMLDP) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data MPLSLDPMLDP) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "logging.notifications"); !data.LoggingNotifications.IsNull() {
+		if value.Exists() {
+			data.LoggingNotifications = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LoggingNotifications = types.BoolValue(false)
+		}
+	} else if data.LoggingNotifications.IsNull() {
+		data.LoggingNotifications = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "logging.internal"); !data.LoggingInternal.IsNull() {
+		if value.Exists() {
 			data.LoggingInternal = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LoggingInternal = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LoggingInternal.IsNull() {
-			data.LoggingInternal = types.BoolNull()
-		}
+	} else if data.LoggingInternal.IsNull() {
+		data.LoggingInternal = types.BoolNull()
 	}
 	for i := range data.AddressFamily {
 		keys := [...]string{"af-name"}
 		keyValues := [...]string{data.AddressFamily[i].Name.ValueString()}
 
 		var r gjson.Result
-		res.Get("address-families.address-family").ForEach(
+		gjson.GetBytes(res, "address-families.address-family").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -259,7 +309,7 @@ func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res gjson.Result) {
 				return true
 			},
 		)
-		if value := r.Get("af-name"); value.Exists() && !data.AddressFamily[i].Name.IsNull() {
+		if value := r.Get("af-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AddressFamily[i].Name.IsNull() {
 			data.AddressFamily[i].Name = types.StringValue(value.String())
 		} else {
 			data.AddressFamily[i].Name = types.StringNull()
@@ -287,7 +337,7 @@ func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res gjson.Result) {
 					return true
 				},
 			)
-			if value := cr.Get("lsp-address"); value.Exists() && !data.AddressFamily[i].Statics[ci].LspAddress.IsNull() {
+			if value := cr.Get("lsp-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AddressFamily[i].Statics[ci].LspAddress.IsNull() {
 				data.AddressFamily[i].Statics[ci].LspAddress = types.StringValue(value.String())
 			} else {
 				data.AddressFamily[i].Statics[ci].LspAddress = types.StringNull()
@@ -313,7 +363,7 @@ func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res gjson.Result) {
 		} else {
 			data.AddressFamily[i].MakeBeforeBreakDeleteDelay = types.Int64Null()
 		}
-		if value := r.Get("make-before-break.route-policy"); value.Exists() && !data.AddressFamily[i].MakeBeforeBreakRoutePolicy.IsNull() {
+		if value := r.Get("make-before-break.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AddressFamily[i].MakeBeforeBreakRoutePolicy.IsNull() {
 			data.AddressFamily[i].MakeBeforeBreakRoutePolicy = types.StringValue(value.String())
 		} else {
 			data.AddressFamily[i].MakeBeforeBreakRoutePolicy = types.StringNull()
@@ -342,7 +392,7 @@ func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res gjson.Result) {
 				data.AddressFamily[i].MofrrEnable = types.BoolNull()
 			}
 		}
-		if value := r.Get("mofrr.route-policy"); value.Exists() && !data.AddressFamily[i].MofrrRoutePolicy.IsNull() {
+		if value := r.Get("mofrr.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AddressFamily[i].MofrrRoutePolicy.IsNull() {
 			data.AddressFamily[i].MofrrRoutePolicy = types.StringValue(value.String())
 		} else {
 			data.AddressFamily[i].MofrrRoutePolicy = types.StringNull()
@@ -359,17 +409,17 @@ func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res gjson.Result) {
 				data.AddressFamily[i].RecursiveFecEnable = types.BoolNull()
 			}
 		}
-		if value := r.Get("recursive-fec.route-policy"); value.Exists() && !data.AddressFamily[i].RecursiveFecRoutePolicy.IsNull() {
+		if value := r.Get("recursive-fec.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AddressFamily[i].RecursiveFecRoutePolicy.IsNull() {
 			data.AddressFamily[i].RecursiveFecRoutePolicy = types.StringValue(value.String())
 		} else {
 			data.AddressFamily[i].RecursiveFecRoutePolicy = types.StringNull()
 		}
-		if value := r.Get("neighbors.in.route-policy"); value.Exists() && !data.AddressFamily[i].NeighborsRoutePolicyIn.IsNull() {
+		if value := r.Get("neighbors.in.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AddressFamily[i].NeighborsRoutePolicyIn.IsNull() {
 			data.AddressFamily[i].NeighborsRoutePolicyIn = types.StringValue(value.String())
 		} else {
 			data.AddressFamily[i].NeighborsRoutePolicyIn = types.StringNull()
 		}
-		if value := r.Get("neighbors.out.route-policy"); value.Exists() && !data.AddressFamily[i].NeighborsRoutePolicyOut.IsNull() {
+		if value := r.Get("neighbors.out.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AddressFamily[i].NeighborsRoutePolicyOut.IsNull() {
 			data.AddressFamily[i].NeighborsRoutePolicyOut = types.StringValue(value.String())
 		} else {
 			data.AddressFamily[i].NeighborsRoutePolicyOut = types.StringNull()
@@ -397,17 +447,17 @@ func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res gjson.Result) {
 					return true
 				},
 			)
-			if value := cr.Get("neighbor-address"); value.Exists() && !data.AddressFamily[i].Neighbors[ci].NeighborAddress.IsNull() {
+			if value := cr.Get("neighbor-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AddressFamily[i].Neighbors[ci].NeighborAddress.IsNull() {
 				data.AddressFamily[i].Neighbors[ci].NeighborAddress = types.StringValue(value.String())
 			} else {
 				data.AddressFamily[i].Neighbors[ci].NeighborAddress = types.StringNull()
 			}
-			if value := cr.Get("in.route-policy"); value.Exists() && !data.AddressFamily[i].Neighbors[ci].NeighborRoutePolicyIn.IsNull() {
+			if value := cr.Get("in.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AddressFamily[i].Neighbors[ci].NeighborRoutePolicyIn.IsNull() {
 				data.AddressFamily[i].Neighbors[ci].NeighborRoutePolicyIn = types.StringValue(value.String())
 			} else {
 				data.AddressFamily[i].Neighbors[ci].NeighborRoutePolicyIn = types.StringNull()
 			}
-			if value := cr.Get("out.route-policy"); value.Exists() && !data.AddressFamily[i].Neighbors[ci].NeighborRoutePolicyOut.IsNull() {
+			if value := cr.Get("out.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AddressFamily[i].Neighbors[ci].NeighborRoutePolicyOut.IsNull() {
 				data.AddressFamily[i].Neighbors[ci].NeighborRoutePolicyOut = types.StringValue(value.String())
 			} else {
 				data.AddressFamily[i].Neighbors[ci].NeighborRoutePolicyOut = types.StringNull()
@@ -425,7 +475,7 @@ func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res gjson.Result) {
 				data.AddressFamily[i].ForwardingRecursive = types.BoolNull()
 			}
 		}
-		if value := r.Get("forwarding.recursive.route-policy"); value.Exists() && !data.AddressFamily[i].ForwardingRecursiveRoutePolicy.IsNull() {
+		if value := r.Get("forwarding.recursive.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AddressFamily[i].ForwardingRecursiveRoutePolicy.IsNull() {
 			data.AddressFamily[i].ForwardingRecursiveRoutePolicy = types.StringValue(value.String())
 		} else {
 			data.AddressFamily[i].ForwardingRecursiveRoutePolicy = types.StringNull()
@@ -446,6 +496,493 @@ func (data *MPLSLDPMLDP) updateFromBody(ctx context.Context, res gjson.Result) {
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *MPLSLDPMLDP) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "logging.notifications"); value.Exists() {
+		data.LoggingNotifications = types.BoolValue(true)
+	} else if !data.LoggingNotifications.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingNotifications = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "logging.internal"); value.Exists() {
+		data.LoggingInternal = types.BoolValue(true)
+	} else if !data.LoggingInternal.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingInternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-families.address-family"); value.Exists() {
+		data.AddressFamily = make([]MPLSLDPMLDPAddressFamily, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := MPLSLDPMLDPAddressFamily{}
+			if cValue := v.Get("af-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("statics.static"); cValue.Exists() {
+				item.Statics = make([]MPLSLDPMLDPAddressFamilyStatics, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := MPLSLDPMLDPAddressFamilyStatics{}
+					if ccValue := cv.Get("lsp-address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.LspAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("p2mp"); ccValue.Exists() {
+						cItem.P2mp = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("mp2mp"); ccValue.Exists() {
+						cItem.Mp2mp = types.Int64Value(ccValue.Int())
+					}
+					item.Statics = append(item.Statics, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("make-before-break.delay.forwarding-delay"); cValue.Exists() {
+				item.MakeBeforeBreakDelay = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("make-before-break.delay.delete-delay"); cValue.Exists() {
+				item.MakeBeforeBreakDeleteDelay = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("make-before-break.route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.MakeBeforeBreakRoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("carrier-supporting-carrier"); cValue.Exists() {
+				item.CarrierSupportingCarrier = types.BoolValue(true)
+			} else if !item.CarrierSupportingCarrier.IsNull() {
+				// Only set to false if it was previously set
+				item.CarrierSupportingCarrier = types.BoolValue(false)
+			}
+			if cValue := v.Get("mofrr"); cValue.Exists() {
+				item.MofrrEnable = types.BoolValue(true)
+			} else if !item.MofrrEnable.IsNull() {
+				// Only set to false if it was previously set
+				item.MofrrEnable = types.BoolValue(false)
+			}
+			if cValue := v.Get("mofrr.route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.MofrrRoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("recursive-fec.enable"); cValue.Exists() {
+				item.RecursiveFecEnable = types.BoolValue(true)
+			} else if !item.RecursiveFecEnable.IsNull() {
+				// Only set to false if it was previously set
+				item.RecursiveFecEnable = types.BoolValue(false)
+			}
+			if cValue := v.Get("recursive-fec.route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RecursiveFecRoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("neighbors.in.route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.NeighborsRoutePolicyIn = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("neighbors.out.route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.NeighborsRoutePolicyOut = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("neighbors.neighbor"); cValue.Exists() {
+				item.Neighbors = make([]MPLSLDPMLDPAddressFamilyNeighbors, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := MPLSLDPMLDPAddressFamilyNeighbors{}
+					if ccValue := cv.Get("neighbor-address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.NeighborAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("in.route-policy"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.NeighborRoutePolicyIn = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("out.route-policy"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.NeighborRoutePolicyOut = types.StringValue(ccValue.String())
+					}
+					item.Neighbors = append(item.Neighbors, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("forwarding.recursive"); cValue.Exists() {
+				item.ForwardingRecursive = types.BoolValue(true)
+			} else if !item.ForwardingRecursive.IsNull() {
+				// Only set to false if it was previously set
+				item.ForwardingRecursive = types.BoolValue(false)
+			}
+			if cValue := v.Get("forwarding.recursive.route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.ForwardingRecursiveRoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("rib.unicast-always"); cValue.Exists() {
+				item.RibUnicastAlways = types.BoolValue(true)
+			} else if !item.RibUnicastAlways.IsNull() {
+				// Only set to false if it was previously set
+				item.RibUnicastAlways = types.BoolValue(false)
+			}
+			data.AddressFamily = append(data.AddressFamily, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *MPLSLDPMLDPData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "logging.notifications"); value.Exists() {
+		data.LoggingNotifications = types.BoolValue(true)
+	} else {
+		data.LoggingNotifications = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "logging.internal"); value.Exists() {
+		data.LoggingInternal = types.BoolValue(true)
+	} else {
+		data.LoggingInternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-families.address-family"); value.Exists() {
+		data.AddressFamily = make([]MPLSLDPMLDPAddressFamily, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := MPLSLDPMLDPAddressFamily{}
+			if cValue := v.Get("af-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("statics.static"); cValue.Exists() {
+				item.Statics = make([]MPLSLDPMLDPAddressFamilyStatics, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := MPLSLDPMLDPAddressFamilyStatics{}
+					if ccValue := cv.Get("lsp-address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.LspAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("p2mp"); ccValue.Exists() {
+						cItem.P2mp = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("mp2mp"); ccValue.Exists() {
+						cItem.Mp2mp = types.Int64Value(ccValue.Int())
+					}
+					item.Statics = append(item.Statics, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("make-before-break.delay.forwarding-delay"); cValue.Exists() {
+				item.MakeBeforeBreakDelay = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("make-before-break.delay.delete-delay"); cValue.Exists() {
+				item.MakeBeforeBreakDeleteDelay = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("make-before-break.route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.MakeBeforeBreakRoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("carrier-supporting-carrier"); cValue.Exists() {
+				item.CarrierSupportingCarrier = types.BoolValue(true)
+			} else {
+				item.CarrierSupportingCarrier = types.BoolValue(false)
+			}
+			if cValue := v.Get("mofrr"); cValue.Exists() {
+				item.MofrrEnable = types.BoolValue(true)
+			} else {
+				item.MofrrEnable = types.BoolValue(false)
+			}
+			if cValue := v.Get("mofrr.route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.MofrrRoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("recursive-fec.enable"); cValue.Exists() {
+				item.RecursiveFecEnable = types.BoolValue(true)
+			} else {
+				item.RecursiveFecEnable = types.BoolValue(false)
+			}
+			if cValue := v.Get("recursive-fec.route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RecursiveFecRoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("neighbors.in.route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.NeighborsRoutePolicyIn = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("neighbors.out.route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.NeighborsRoutePolicyOut = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("neighbors.neighbor"); cValue.Exists() {
+				item.Neighbors = make([]MPLSLDPMLDPAddressFamilyNeighbors, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := MPLSLDPMLDPAddressFamilyNeighbors{}
+					if ccValue := cv.Get("neighbor-address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.NeighborAddress = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("in.route-policy"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.NeighborRoutePolicyIn = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("out.route-policy"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.NeighborRoutePolicyOut = types.StringValue(ccValue.String())
+					}
+					item.Neighbors = append(item.Neighbors, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("forwarding.recursive"); cValue.Exists() {
+				item.ForwardingRecursive = types.BoolValue(true)
+			} else {
+				item.ForwardingRecursive = types.BoolValue(false)
+			}
+			if cValue := v.Get("forwarding.recursive.route-policy"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.ForwardingRecursiveRoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("rib.unicast-always"); cValue.Exists() {
+				item.RibUnicastAlways = types.BoolValue(true)
+			} else {
+				item.RibUnicastAlways = types.BoolValue(false)
+			}
+			data.AddressFamily = append(data.AddressFamily, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *MPLSLDPMLDP) getDeletedItems(ctx context.Context, state MPLSLDPMLDP, version string) []string {
+	deletedItems := make([]string, 0)
+	for i := range state.AddressFamily {
+		keys := [...]string{"af-name"}
+		stateKeyValues := [...]string{state.AddressFamily[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.AddressFamily[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.AddressFamily {
+			found = true
+			if state.AddressFamily[i].Name.ValueString() != data.AddressFamily[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.AddressFamily[i].RibUnicastAlways.IsNull() && data.AddressFamily[j].RibUnicastAlways.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "rib/unicast-always"))
+				}
+				if !state.AddressFamily[i].ForwardingRecursiveRoutePolicy.IsNull() && data.AddressFamily[j].ForwardingRecursiveRoutePolicy.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "forwarding/recursive/route-policy"))
+				}
+				if !state.AddressFamily[i].ForwardingRecursive.IsNull() && data.AddressFamily[j].ForwardingRecursive.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "forwarding/recursive"))
+				}
+				for ci := range state.AddressFamily[i].Neighbors {
+					ckeys := [...]string{"neighbor-address"}
+					cstateKeyValues := [...]string{state.AddressFamily[i].Neighbors[ci].NeighborAddress.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.AddressFamily[i].Neighbors[ci].NeighborAddress.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.AddressFamily[j].Neighbors {
+						found = true
+						if state.AddressFamily[i].Neighbors[ci].NeighborAddress.ValueString() != data.AddressFamily[j].Neighbors[cj].NeighborAddress.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.AddressFamily[i].Neighbors[ci].NeighborRoutePolicyOut.IsNull() && data.AddressFamily[j].Neighbors[cj].NeighborRoutePolicyOut.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "address-families/address-family", keyString, "neighbors/neighbor", ckeyString), "out/route-policy"))
+							}
+							if !state.AddressFamily[i].Neighbors[ci].NeighborRoutePolicyIn.IsNull() && data.AddressFamily[j].Neighbors[cj].NeighborRoutePolicyIn.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "address-families/address-family", keyString, "neighbors/neighbor", ckeyString), "in/route-policy"))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "address-families/address-family", keyString, "neighbors/neighbor", ckeyString))
+					}
+				}
+				if !state.AddressFamily[i].NeighborsRoutePolicyOut.IsNull() && data.AddressFamily[j].NeighborsRoutePolicyOut.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "neighbors/out/route-policy"))
+				}
+				if !state.AddressFamily[i].NeighborsRoutePolicyIn.IsNull() && data.AddressFamily[j].NeighborsRoutePolicyIn.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "neighbors/in/route-policy"))
+				}
+				if !state.AddressFamily[i].RecursiveFecRoutePolicy.IsNull() && data.AddressFamily[j].RecursiveFecRoutePolicy.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "recursive-fec/route-policy"))
+				}
+				if !state.AddressFamily[i].RecursiveFecEnable.IsNull() && data.AddressFamily[j].RecursiveFecEnable.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "recursive-fec/enable"))
+				}
+				if !state.AddressFamily[i].MofrrRoutePolicy.IsNull() && data.AddressFamily[j].MofrrRoutePolicy.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "mofrr/route-policy"))
+				}
+				if !state.AddressFamily[i].MofrrEnable.IsNull() && data.AddressFamily[j].MofrrEnable.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "mofrr"))
+				}
+				if !state.AddressFamily[i].CarrierSupportingCarrier.IsNull() && data.AddressFamily[j].CarrierSupportingCarrier.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "carrier-supporting-carrier"))
+				}
+				if !state.AddressFamily[i].MakeBeforeBreakRoutePolicy.IsNull() && data.AddressFamily[j].MakeBeforeBreakRoutePolicy.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "make-before-break/route-policy"))
+				}
+				if !state.AddressFamily[i].MakeBeforeBreakDeleteDelay.IsNull() && data.AddressFamily[j].MakeBeforeBreakDeleteDelay.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "make-before-break/delay/delete-delay"))
+				}
+				if !state.AddressFamily[i].MakeBeforeBreakDelay.IsNull() && data.AddressFamily[j].MakeBeforeBreakDelay.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "make-before-break/delay/forwarding-delay"))
+				}
+				for ci := range state.AddressFamily[i].Statics {
+					ckeys := [...]string{"lsp-address"}
+					cstateKeyValues := [...]string{state.AddressFamily[i].Statics[ci].LspAddress.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.AddressFamily[i].Statics[ci].LspAddress.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.AddressFamily[j].Statics {
+						found = true
+						if state.AddressFamily[i].Statics[ci].LspAddress.ValueString() != data.AddressFamily[j].Statics[cj].LspAddress.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.AddressFamily[i].Statics[ci].Mp2mp.IsNull() && data.AddressFamily[j].Statics[cj].Mp2mp.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "address-families/address-family", keyString, "statics/static", ckeyString), "mp2mp"))
+							}
+							if !state.AddressFamily[i].Statics[ci].P2mp.IsNull() && data.AddressFamily[j].Statics[cj].P2mp.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "address-families/address-family", keyString, "statics/static", ckeyString), "p2mp"))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "address-families/address-family", keyString, "statics/static", ckeyString))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString))
+		}
+	}
+	if !state.LoggingInternal.IsNull() && data.LoggingInternal.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "logging/internal"))
+	}
+	if !state.LoggingNotifications.IsNull() && data.LoggingNotifications.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "logging/notifications"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *MPLSLDPMLDP) getEmptyLeafsDelete(ctx context.Context, state *MPLSLDPMLDP, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	for i := range data.AddressFamily {
+		keys := [...]string{"af-name"}
+		keyValues := [...]string{data.AddressFamily[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.AddressFamily[i].RibUnicastAlways.IsNull() && !data.AddressFamily[i].RibUnicastAlways.ValueBool() {
+			if state == nil || i >= len(state.AddressFamily) || state.AddressFamily[i].RibUnicastAlways.IsNull() || state.AddressFamily[i].RibUnicastAlways.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "rib/unicast-always"))
+			}
+		}
+		if !data.AddressFamily[i].ForwardingRecursive.IsNull() && !data.AddressFamily[i].ForwardingRecursive.ValueBool() {
+			if state == nil || i >= len(state.AddressFamily) || state.AddressFamily[i].ForwardingRecursive.IsNull() || state.AddressFamily[i].ForwardingRecursive.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "forwarding/recursive"))
+			}
+		}
+		for ci := range data.AddressFamily[i].Neighbors {
+			ckeys := [...]string{"neighbor-address"}
+			ckeyValues := [...]string{data.AddressFamily[i].Neighbors[ci].NeighborAddress.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+		if !data.AddressFamily[i].RecursiveFecEnable.IsNull() && !data.AddressFamily[i].RecursiveFecEnable.ValueBool() {
+			if state == nil || i >= len(state.AddressFamily) || state.AddressFamily[i].RecursiveFecEnable.IsNull() || state.AddressFamily[i].RecursiveFecEnable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "recursive-fec/enable"))
+			}
+		}
+		if !data.AddressFamily[i].MofrrEnable.IsNull() && !data.AddressFamily[i].MofrrEnable.ValueBool() {
+			if state == nil || i >= len(state.AddressFamily) || state.AddressFamily[i].MofrrEnable.IsNull() || state.AddressFamily[i].MofrrEnable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "mofrr"))
+			}
+		}
+		if !data.AddressFamily[i].CarrierSupportingCarrier.IsNull() && !data.AddressFamily[i].CarrierSupportingCarrier.ValueBool() {
+			if state == nil || i >= len(state.AddressFamily) || state.AddressFamily[i].CarrierSupportingCarrier.IsNull() || state.AddressFamily[i].CarrierSupportingCarrier.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "carrier-supporting-carrier"))
+			}
+		}
+		for ci := range data.AddressFamily[i].Statics {
+			ckeys := [...]string{"lsp-address"}
+			ckeyValues := [...]string{data.AddressFamily[i].Statics[ci].LspAddress.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+	}
+	if !data.LoggingInternal.IsNull() && !data.LoggingInternal.ValueBool() {
+		if state == nil || state.LoggingInternal.IsNull() || state.LoggingInternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/internal"))
+		}
+	}
+	if !data.LoggingNotifications.IsNull() && !data.LoggingNotifications.ValueBool() {
+		if state == nil || state.LoggingNotifications.IsNull() || state.LoggingNotifications.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/notifications"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *MPLSLDPMLDP) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	for i := range data.AddressFamily {
+		keys := [...]string{"af-name"}
+		keyValues := [...]string{data.AddressFamily[i].Name.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.AddressFamily[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString))
+	}
+	if !data.LoggingInternal.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "logging/internal"))
+	}
+	if !data.LoggingNotifications.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "logging/notifications"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data MPLSLDPMLDP) toBodyXML(ctx context.Context, stateArg ...*MPLSLDPMLDP) string {
@@ -571,7 +1108,7 @@ func (data MPLSLDPMLDP) toBodyXML(ctx context.Context, stateArg ...*MPLSLDPMLDP)
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -579,6 +1116,7 @@ func (data MPLSLDPMLDP) toBodyXML(ctx context.Context, stateArg ...*MPLSLDPMLDP)
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *MPLSLDPMLDP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -814,250 +1352,7 @@ func (data *MPLSLDPMLDP) updateFromBodyXML(ctx context.Context, res xmldot.Resul
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *MPLSLDPMLDP) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "logging.notifications"); value.Exists() {
-		data.LoggingNotifications = types.BoolValue(true)
-	} else if !data.LoggingNotifications.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LoggingNotifications = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.internal"); value.Exists() {
-		data.LoggingInternal = types.BoolValue(true)
-	} else if !data.LoggingInternal.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LoggingInternal = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "address-families.address-family"); value.Exists() {
-		data.AddressFamily = make([]MPLSLDPMLDPAddressFamily, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := MPLSLDPMLDPAddressFamily{}
-			if cValue := v.Get("af-name"); cValue.Exists() {
-				item.Name = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("statics.static"); cValue.Exists() {
-				item.Statics = make([]MPLSLDPMLDPAddressFamilyStatics, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := MPLSLDPMLDPAddressFamilyStatics{}
-					if ccValue := cv.Get("lsp-address"); ccValue.Exists() {
-						cItem.LspAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("p2mp"); ccValue.Exists() {
-						cItem.P2mp = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("mp2mp"); ccValue.Exists() {
-						cItem.Mp2mp = types.Int64Value(ccValue.Int())
-					}
-					item.Statics = append(item.Statics, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("make-before-break.delay.forwarding-delay"); cValue.Exists() {
-				item.MakeBeforeBreakDelay = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("make-before-break.delay.delete-delay"); cValue.Exists() {
-				item.MakeBeforeBreakDeleteDelay = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("make-before-break.route-policy"); cValue.Exists() {
-				item.MakeBeforeBreakRoutePolicy = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("carrier-supporting-carrier"); cValue.Exists() {
-				item.CarrierSupportingCarrier = types.BoolValue(true)
-			} else if !item.CarrierSupportingCarrier.IsNull() {
-				// Only set to false if it was previously set
-				item.CarrierSupportingCarrier = types.BoolValue(false)
-			}
-			if cValue := v.Get("mofrr"); cValue.Exists() {
-				item.MofrrEnable = types.BoolValue(true)
-			} else if !item.MofrrEnable.IsNull() {
-				// Only set to false if it was previously set
-				item.MofrrEnable = types.BoolValue(false)
-			}
-			if cValue := v.Get("mofrr.route-policy"); cValue.Exists() {
-				item.MofrrRoutePolicy = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("recursive-fec.enable"); cValue.Exists() {
-				item.RecursiveFecEnable = types.BoolValue(true)
-			} else if !item.RecursiveFecEnable.IsNull() {
-				// Only set to false if it was previously set
-				item.RecursiveFecEnable = types.BoolValue(false)
-			}
-			if cValue := v.Get("recursive-fec.route-policy"); cValue.Exists() {
-				item.RecursiveFecRoutePolicy = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("neighbors.in.route-policy"); cValue.Exists() {
-				item.NeighborsRoutePolicyIn = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("neighbors.out.route-policy"); cValue.Exists() {
-				item.NeighborsRoutePolicyOut = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("neighbors.neighbor"); cValue.Exists() {
-				item.Neighbors = make([]MPLSLDPMLDPAddressFamilyNeighbors, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := MPLSLDPMLDPAddressFamilyNeighbors{}
-					if ccValue := cv.Get("neighbor-address"); ccValue.Exists() {
-						cItem.NeighborAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("in.route-policy"); ccValue.Exists() {
-						cItem.NeighborRoutePolicyIn = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("out.route-policy"); ccValue.Exists() {
-						cItem.NeighborRoutePolicyOut = types.StringValue(ccValue.String())
-					}
-					item.Neighbors = append(item.Neighbors, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("forwarding.recursive"); cValue.Exists() {
-				item.ForwardingRecursive = types.BoolValue(true)
-			} else if !item.ForwardingRecursive.IsNull() {
-				// Only set to false if it was previously set
-				item.ForwardingRecursive = types.BoolValue(false)
-			}
-			if cValue := v.Get("forwarding.recursive.route-policy"); cValue.Exists() {
-				item.ForwardingRecursiveRoutePolicy = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("rib.unicast-always"); cValue.Exists() {
-				item.RibUnicastAlways = types.BoolValue(true)
-			} else if !item.RibUnicastAlways.IsNull() {
-				// Only set to false if it was previously set
-				item.RibUnicastAlways = types.BoolValue(false)
-			}
-			data.AddressFamily = append(data.AddressFamily, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *MPLSLDPMLDPData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "logging.notifications"); value.Exists() {
-		data.LoggingNotifications = types.BoolValue(true)
-	} else {
-		data.LoggingNotifications = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.internal"); value.Exists() {
-		data.LoggingInternal = types.BoolValue(true)
-	} else {
-		data.LoggingInternal = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "address-families.address-family"); value.Exists() {
-		data.AddressFamily = make([]MPLSLDPMLDPAddressFamily, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := MPLSLDPMLDPAddressFamily{}
-			if cValue := v.Get("af-name"); cValue.Exists() {
-				item.Name = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("statics.static"); cValue.Exists() {
-				item.Statics = make([]MPLSLDPMLDPAddressFamilyStatics, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := MPLSLDPMLDPAddressFamilyStatics{}
-					if ccValue := cv.Get("lsp-address"); ccValue.Exists() {
-						cItem.LspAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("p2mp"); ccValue.Exists() {
-						cItem.P2mp = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("mp2mp"); ccValue.Exists() {
-						cItem.Mp2mp = types.Int64Value(ccValue.Int())
-					}
-					item.Statics = append(item.Statics, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("make-before-break.delay.forwarding-delay"); cValue.Exists() {
-				item.MakeBeforeBreakDelay = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("make-before-break.delay.delete-delay"); cValue.Exists() {
-				item.MakeBeforeBreakDeleteDelay = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("make-before-break.route-policy"); cValue.Exists() {
-				item.MakeBeforeBreakRoutePolicy = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("carrier-supporting-carrier"); cValue.Exists() {
-				item.CarrierSupportingCarrier = types.BoolValue(true)
-			} else {
-				item.CarrierSupportingCarrier = types.BoolValue(false)
-			}
-			if cValue := v.Get("mofrr"); cValue.Exists() {
-				item.MofrrEnable = types.BoolValue(true)
-			} else {
-				item.MofrrEnable = types.BoolValue(false)
-			}
-			if cValue := v.Get("mofrr.route-policy"); cValue.Exists() {
-				item.MofrrRoutePolicy = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("recursive-fec.enable"); cValue.Exists() {
-				item.RecursiveFecEnable = types.BoolValue(true)
-			} else {
-				item.RecursiveFecEnable = types.BoolValue(false)
-			}
-			if cValue := v.Get("recursive-fec.route-policy"); cValue.Exists() {
-				item.RecursiveFecRoutePolicy = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("neighbors.in.route-policy"); cValue.Exists() {
-				item.NeighborsRoutePolicyIn = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("neighbors.out.route-policy"); cValue.Exists() {
-				item.NeighborsRoutePolicyOut = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("neighbors.neighbor"); cValue.Exists() {
-				item.Neighbors = make([]MPLSLDPMLDPAddressFamilyNeighbors, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := MPLSLDPMLDPAddressFamilyNeighbors{}
-					if ccValue := cv.Get("neighbor-address"); ccValue.Exists() {
-						cItem.NeighborAddress = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("in.route-policy"); ccValue.Exists() {
-						cItem.NeighborRoutePolicyIn = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("out.route-policy"); ccValue.Exists() {
-						cItem.NeighborRoutePolicyOut = types.StringValue(ccValue.String())
-					}
-					item.Neighbors = append(item.Neighbors, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("forwarding.recursive"); cValue.Exists() {
-				item.ForwardingRecursive = types.BoolValue(true)
-			} else {
-				item.ForwardingRecursive = types.BoolValue(false)
-			}
-			if cValue := v.Get("forwarding.recursive.route-policy"); cValue.Exists() {
-				item.ForwardingRecursiveRoutePolicy = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("rib.unicast-always"); cValue.Exists() {
-				item.RibUnicastAlways = types.BoolValue(true)
-			} else {
-				item.RibUnicastAlways = types.BoolValue(false)
-			}
-			data.AddressFamily = append(data.AddressFamily, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *MPLSLDPMLDP) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1168,6 +1463,7 @@ func (data *MPLSLDPMLDP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *MPLSLDPMLDPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1278,261 +1574,7 @@ func (data *MPLSLDPMLDPData) fromBodyXML(ctx context.Context, res xmldot.Result)
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *MPLSLDPMLDP) getDeletedItems(ctx context.Context, state MPLSLDPMLDP) []string {
-	deletedItems := make([]string, 0)
-	for i := range state.AddressFamily {
-		keys := [...]string{"af-name"}
-		stateKeyValues := [...]string{state.AddressFamily[i].Name.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamily[i].Name.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.AddressFamily {
-			found = true
-			if state.AddressFamily[i].Name.ValueString() != data.AddressFamily[j].Name.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.AddressFamily[i].RibUnicastAlways.IsNull() && data.AddressFamily[j].RibUnicastAlways.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/rib/unicast-always", state.getPath(), keyString))
-				}
-				if !state.AddressFamily[i].ForwardingRecursiveRoutePolicy.IsNull() && data.AddressFamily[j].ForwardingRecursiveRoutePolicy.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/forwarding/recursive/route-policy", state.getPath(), keyString))
-				}
-				if !state.AddressFamily[i].ForwardingRecursive.IsNull() && data.AddressFamily[j].ForwardingRecursive.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/forwarding/recursive", state.getPath(), keyString))
-				}
-				for ci := range state.AddressFamily[i].Neighbors {
-					ckeys := [...]string{"neighbor-address"}
-					cstateKeyValues := [...]string{state.AddressFamily[i].Neighbors[ci].NeighborAddress.ValueString()}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.AddressFamily[i].Neighbors[ci].NeighborAddress.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.AddressFamily[j].Neighbors {
-						found = true
-						if state.AddressFamily[i].Neighbors[ci].NeighborAddress.ValueString() != data.AddressFamily[j].Neighbors[cj].NeighborAddress.ValueString() {
-							found = false
-						}
-						if found {
-							if !state.AddressFamily[i].Neighbors[ci].NeighborRoutePolicyOut.IsNull() && data.AddressFamily[j].Neighbors[cj].NeighborRoutePolicyOut.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/neighbors/neighbor%v/out/route-policy", state.getPath(), keyString, ckeyString))
-							}
-							if !state.AddressFamily[i].Neighbors[ci].NeighborRoutePolicyIn.IsNull() && data.AddressFamily[j].Neighbors[cj].NeighborRoutePolicyIn.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/neighbors/neighbor%v/in/route-policy", state.getPath(), keyString, ckeyString))
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/neighbors/neighbor%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				if !state.AddressFamily[i].NeighborsRoutePolicyOut.IsNull() && data.AddressFamily[j].NeighborsRoutePolicyOut.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/neighbors/out/route-policy", state.getPath(), keyString))
-				}
-				if !state.AddressFamily[i].NeighborsRoutePolicyIn.IsNull() && data.AddressFamily[j].NeighborsRoutePolicyIn.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/neighbors/in/route-policy", state.getPath(), keyString))
-				}
-				if !state.AddressFamily[i].RecursiveFecRoutePolicy.IsNull() && data.AddressFamily[j].RecursiveFecRoutePolicy.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/recursive-fec/route-policy", state.getPath(), keyString))
-				}
-				if !state.AddressFamily[i].RecursiveFecEnable.IsNull() && data.AddressFamily[j].RecursiveFecEnable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/recursive-fec/enable", state.getPath(), keyString))
-				}
-				if !state.AddressFamily[i].MofrrRoutePolicy.IsNull() && data.AddressFamily[j].MofrrRoutePolicy.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/mofrr/route-policy", state.getPath(), keyString))
-				}
-				if !state.AddressFamily[i].MofrrEnable.IsNull() && data.AddressFamily[j].MofrrEnable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/mofrr", state.getPath(), keyString))
-				}
-				if !state.AddressFamily[i].CarrierSupportingCarrier.IsNull() && data.AddressFamily[j].CarrierSupportingCarrier.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/carrier-supporting-carrier", state.getPath(), keyString))
-				}
-				if !state.AddressFamily[i].MakeBeforeBreakRoutePolicy.IsNull() && data.AddressFamily[j].MakeBeforeBreakRoutePolicy.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/make-before-break/route-policy", state.getPath(), keyString))
-				}
-				if !state.AddressFamily[i].MakeBeforeBreakDeleteDelay.IsNull() && data.AddressFamily[j].MakeBeforeBreakDeleteDelay.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/make-before-break/delay/delete-delay", state.getPath(), keyString))
-				}
-				if !state.AddressFamily[i].MakeBeforeBreakDelay.IsNull() && data.AddressFamily[j].MakeBeforeBreakDelay.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/make-before-break/delay/forwarding-delay", state.getPath(), keyString))
-				}
-				for ci := range state.AddressFamily[i].Statics {
-					ckeys := [...]string{"lsp-address"}
-					cstateKeyValues := [...]string{state.AddressFamily[i].Statics[ci].LspAddress.ValueString()}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.AddressFamily[i].Statics[ci].LspAddress.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.AddressFamily[j].Statics {
-						found = true
-						if state.AddressFamily[i].Statics[ci].LspAddress.ValueString() != data.AddressFamily[j].Statics[cj].LspAddress.ValueString() {
-							found = false
-						}
-						if found {
-							if !state.AddressFamily[i].Statics[ci].Mp2mp.IsNull() && data.AddressFamily[j].Statics[cj].Mp2mp.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/statics/static%v/mp2mp", state.getPath(), keyString, ckeyString))
-							}
-							if !state.AddressFamily[i].Statics[ci].P2mp.IsNull() && data.AddressFamily[j].Statics[cj].P2mp.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/statics/static%v/p2mp", state.getPath(), keyString, ckeyString))
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/statics/static%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v", state.getPath(), keyString))
-		}
-	}
-	if !state.LoggingInternal.IsNull() && data.LoggingInternal.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/internal", state.getPath()))
-	}
-	if !state.LoggingNotifications.IsNull() && data.LoggingNotifications.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/notifications", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *MPLSLDPMLDP) getEmptyLeafsDelete(ctx context.Context, state *MPLSLDPMLDP) []string {
-	emptyLeafsDelete := make([]string, 0)
-	for i := range data.AddressFamily {
-		keys := [...]string{"af-name"}
-		keyValues := [...]string{data.AddressFamily[i].Name.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.AddressFamily[i].RibUnicastAlways.IsNull() && !data.AddressFamily[i].RibUnicastAlways.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].RibUnicastAlways.IsNull() && state.AddressFamily[i].RibUnicastAlways.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/rib/unicast-always", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.AddressFamily[i].ForwardingRecursive.IsNull() && !data.AddressFamily[i].ForwardingRecursive.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].ForwardingRecursive.IsNull() && state.AddressFamily[i].ForwardingRecursive.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/forwarding/recursive", data.getXPath(), keyString))
-			}
-		}
-		for ci := range data.AddressFamily[i].Neighbors {
-			ckeys := [...]string{"neighbor-address"}
-			ckeyValues := [...]string{data.AddressFamily[i].Neighbors[ci].NeighborAddress.ValueString()}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.AddressFamily[i].RecursiveFecEnable.IsNull() && !data.AddressFamily[i].RecursiveFecEnable.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].RecursiveFecEnable.IsNull() && state.AddressFamily[i].RecursiveFecEnable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/recursive-fec/enable", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.AddressFamily[i].MofrrEnable.IsNull() && !data.AddressFamily[i].MofrrEnable.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].MofrrEnable.IsNull() && state.AddressFamily[i].MofrrEnable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/mofrr", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.AddressFamily[i].CarrierSupportingCarrier.IsNull() && !data.AddressFamily[i].CarrierSupportingCarrier.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].CarrierSupportingCarrier.IsNull() && state.AddressFamily[i].CarrierSupportingCarrier.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/carrier-supporting-carrier", data.getXPath(), keyString))
-			}
-		}
-		for ci := range data.AddressFamily[i].Statics {
-			ckeys := [...]string{"lsp-address"}
-			ckeyValues := [...]string{data.AddressFamily[i].Statics[ci].LspAddress.ValueString()}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LoggingInternal.IsNull() && !data.LoggingInternal.ValueBool() {
-		if state != nil && !state.LoggingInternal.IsNull() && state.LoggingInternal.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/internal", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LoggingNotifications.IsNull() && !data.LoggingNotifications.ValueBool() {
-		if state != nil && !state.LoggingNotifications.IsNull() && state.LoggingNotifications.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/notifications", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *MPLSLDPMLDP) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	for i := range data.AddressFamily {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[af-name=" + data.AddressFamily[i].Name.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-families/address-family%v", data.getPath(), keyPath))
-	}
-	if !data.LoggingInternal.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/internal", data.getPath()))
-	}
-	if !data.LoggingNotifications.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/notifications", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *MPLSLDPMLDP) addDeletedItemsXML(ctx context.Context, state MPLSLDPMLDP, body string) string {
@@ -1724,6 +1766,7 @@ func (data *MPLSLDPMLDP) addDeletedItemsXML(ctx context.Context, state MPLSLDPML
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *MPLSLDPMLDP) addDeletePathsXML(ctx context.Context, body string) string {

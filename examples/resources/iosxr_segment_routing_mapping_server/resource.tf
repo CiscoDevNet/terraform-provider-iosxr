@@ -1,16 +1,16 @@
 resource "iosxr_segment_routing_mapping_server" "example" {
   mapping_prefix_sid_address_family = [
     {
-      af_name = "ipv4"
-      prefix_addresses = [
+      addresses = [
         {
-          address   = "10.1.1.0"
-          length    = "24"
-          sid_index = 500
-          range     = 10
-          attached  = true
+          attached              = true
+          ip_address            = "10.1.1.0"
+          prefix                = 24
+          range                 = 10
+          start_sid_index_range = 500
         }
       ]
+      af_name = "ipv4"
     }
   ]
 }

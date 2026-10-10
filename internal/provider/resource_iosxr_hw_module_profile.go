@@ -39,11 +39,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
-	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
-
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewHWModuleProfileResource() resource.Resource {
@@ -481,6 +479,63 @@ func (r *HWModuleProfileResource) Schema(ctx context.Context, req resource.Schem
 				MarkdownDescription: helpers.NewAttributeDescription("Enable pic core in forwarding chain").String,
 				Optional:            true,
 			},
+			"profile_qos_ingress_fadt_set": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Change the adaptive drop threshold parameter for VoQs (specific to Jericho/Jericho+ ASIC only").AddStringEnumDescription("disable", "high", "low", "medium").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "high", "low", "medium"),
+				},
+			},
+			"profile_qos_ingress_fadt_set_locations": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Location of QoS config").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"location_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Location of QoS config").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`([a-zA-Z0-9_]*\d+/){1,2}([a-zA-Z0-9_]*\d*)`), ""),
+							},
+						},
+						"ingress_fadt_set": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("set ingress fadt").AddStringEnumDescription("disable", "high", "low", "medium").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "high", "low", "medium"),
+							},
+						},
+					},
+				},
+			},
+			"profile_qos_egress_exp_mark_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable egress EXP marking").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"fib_bgp_pic_level_3_l2services": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable BGP-PIC for l2services over BGP Labelled Unicast (only EVPN is supported)").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"fib_mpls_php_dscp_preserve": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Preserve IPv4.DSCP and IPv6.TC in MPLS PHP flow with TTL being propagated").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_mdb_l3max_srv6": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("l3max-srv6 profile for router containing non-TCAM cards").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_mdb_l3max_se_srv6": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("l3max-se-srv6 profile for router containing only TCAM cards").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_mdb_l2max_srv6": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("l2max-srv6 profile for router containing non-TCAM cards").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_mdb_l2max_se_srv6": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("l2max-se-srv6 profile for router containing only TCAM cards").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
 		},
 	}
 }
@@ -512,7 +567,10 @@ func (r *HWModuleProfileResource) Create(ctx context.Context, req resource.Creat
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
-
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
@@ -530,10 +588,10 @@ func (r *HWModuleProfileResource) Create(ctx context.Context, req resource.Creat
 			var ops []gnmi.SetOperation
 
 			// Create object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("gNMI Set body for path %s: %s", plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -588,7 +646,6 @@ func (r *HWModuleProfileResource) Create(ctx context.Context, req resource.Creat
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-
 func (r *HWModuleProfileResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state HWModuleProfile
 
@@ -653,10 +710,10 @@ func (r *HWModuleProfileResource) Read(ctx context.Context, req resource.ReadReq
 				if imp {
 					// After `terraform import` we switch to a full read so all device
 					// attributes are populated in state (fromBody overwrites everything).
-					state.fromBody(ctx, gjson.ParseBytes(respBody))
+					state.fromBody(ctx, respBody, device.Version)
 				} else {
 					// Normal read: preserve config-only fields not returned by the device.
-					state.updateFromBody(ctx, gjson.ParseBytes(respBody))
+					state.updateFromBody(ctx, respBody, device.Version)
 				}
 			}
 		} else {
@@ -697,7 +754,6 @@ func (r *HWModuleProfileResource) Read(ctx context.Context, req resource.ReadReq
 			}
 		}
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
@@ -709,7 +765,6 @@ func (r *HWModuleProfileResource) Read(ctx context.Context, req resource.ReadReq
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-
 func (r *HWModuleProfileResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state HWModuleProfile
 
@@ -732,6 +787,10 @@ func (r *HWModuleProfileResource) Update(ctx context.Context, req resource.Updat
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -750,16 +809,16 @@ func (r *HWModuleProfileResource) Update(ctx context.Context, req resource.Updat
 			var ops []gnmi.SetOperation
 
 			// Update object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 
-			deletedListItems := plan.getDeletedItems(ctx, state)
+			deletedListItems := plan.getDeletedItems(ctx, state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
 
 			for _, i := range deletedListItems {
 				ops = append(ops, gnmi.Delete(i))
 			}
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -802,7 +861,6 @@ func (r *HWModuleProfileResource) Update(ctx context.Context, req resource.Updat
 			}
 		}
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
@@ -812,7 +870,6 @@ func (r *HWModuleProfileResource) Update(ctx context.Context, req resource.Updat
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-
 func (r *HWModuleProfileResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state HWModuleProfile
 
@@ -827,6 +884,14 @@ func (r *HWModuleProfileResource) Delete(ctx context.Context, req resource.Delet
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
@@ -903,7 +968,7 @@ func (r *HWModuleProfileResource) Delete(ctx context.Context, req resource.Delet
 				}
 
 				var ops []gnmi.SetOperation
-				deletePaths := state.getDeletePaths(ctx)
+				deletePaths := state.getDeletePaths(ctx, device.Version)
 				tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
 
 				for _, i := range deletePaths {
@@ -951,7 +1016,6 @@ func (r *HWModuleProfileResource) Delete(ctx context.Context, req resource.Delet
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-
 func (r *HWModuleProfileResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)

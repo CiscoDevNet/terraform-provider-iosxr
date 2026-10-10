@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -111,7 +112,7 @@ func (data DomainData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data Domain) toBody(ctx context.Context) string {
+func (data Domain) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.LookupDisable.IsNull() && !data.LookupDisable.IsUnknown() {
 		if data.LookupDisable.ValueBool() {
@@ -184,6 +185,722 @@ func (data Domain) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
+
+// GetVersionConstraints returns the version constraints for all fields
+func (data Domain) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data Domain) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data Domain) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data Domain) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data Domain) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *Domain) updateFromBody(ctx context.Context, res []byte, version string) {
+	for i := range data.Domains {
+		keys := [...]string{"domain-name", "order"}
+		keyValues := [...]string{data.Domains[i].DomainName.ValueString(), strconv.FormatInt(data.Domains[i].Order.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "list.domain").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("domain-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].DomainName.IsNull() {
+			data.Domains[i].DomainName = types.StringValue(value.String())
+		} else {
+			data.Domains[i].DomainName = types.StringNull()
+		}
+		if value := r.Get("order"); value.Exists() && !data.Domains[i].Order.IsNull() {
+			data.Domains[i].Order = types.Int64Value(value.Int())
+		} else {
+			data.Domains[i].Order = types.Int64Null()
+		}
+	}
+	if value := gjson.GetBytes(res, "lookup.disable"); !data.LookupDisable.IsNull() {
+		if value.Exists() {
+			data.LookupDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LookupDisable = types.BoolValue(false)
+		}
+	} else if data.LookupDisable.IsNull() {
+		data.LookupDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "lookup.source-interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.LookupSourceInterface.IsNull() {
+		data.LookupSourceInterface = types.StringValue(value.String())
+	} else if data.LookupSourceInterface.IsNull() {
+		data.LookupSourceInterface = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Name.IsNull() {
+		data.Name = types.StringValue(value.String())
+	} else if data.Name.IsNull() {
+		data.Name = types.StringNull()
+	}
+	for i := range data.Ipv4Hosts {
+		keys := [...]string{"host-name"}
+		keyValues := [...]string{data.Ipv4Hosts[i].HostName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "ipv4.hosts.host").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("host-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Ipv4Hosts[i].HostName.IsNull() {
+			data.Ipv4Hosts[i].HostName = types.StringValue(value.String())
+		} else {
+			data.Ipv4Hosts[i].HostName = types.StringNull()
+		}
+		if value := r.Get("ip-address"); value.Exists() && !data.Ipv4Hosts[i].IpAddress.IsNull() {
+			data.Ipv4Hosts[i].IpAddress = helpers.GetStringList(value.Array())
+		} else {
+			data.Ipv4Hosts[i].IpAddress = types.ListNull(types.StringType)
+		}
+	}
+	for i := range data.NameServers {
+		keys := [...]string{"address", "order"}
+		keyValues := [...]string{data.NameServers[i].Address.ValueString(), strconv.FormatInt(data.NameServers[i].Order.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "name-servers.name-server").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.NameServers[i].Address.IsNull() {
+			data.NameServers[i].Address = types.StringValue(value.String())
+		} else {
+			data.NameServers[i].Address = types.StringNull()
+		}
+		if value := r.Get("order"); value.Exists() && !data.NameServers[i].Order.IsNull() {
+			data.NameServers[i].Order = types.Int64Value(value.Int())
+		} else {
+			data.NameServers[i].Order = types.Int64Null()
+		}
+	}
+	for i := range data.Ipv6Hosts {
+		keys := [...]string{"host-name"}
+		keyValues := [...]string{data.Ipv6Hosts[i].HostName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "ipv6.host.host").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("host-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Ipv6Hosts[i].HostName.IsNull() {
+			data.Ipv6Hosts[i].HostName = types.StringValue(value.String())
+		} else {
+			data.Ipv6Hosts[i].HostName = types.StringNull()
+		}
+		if value := r.Get("ipv6-address"); value.Exists() && !data.Ipv6Hosts[i].Ipv6Address.IsNull() {
+			data.Ipv6Hosts[i].Ipv6Address = helpers.GetStringList(value.Array())
+		} else {
+			data.Ipv6Hosts[i].Ipv6Address = types.ListNull(types.StringType)
+		}
+	}
+	if value := gjson.GetBytes(res, "multicast"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Multicast.IsNull() {
+		data.Multicast = types.StringValue(value.String())
+	} else if data.Multicast.IsNull() {
+		data.Multicast = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "default-flows.disable"); !data.DefaultFlowsDisable.IsNull() {
+		if value.Exists() {
+			data.DefaultFlowsDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.DefaultFlowsDisable = types.BoolValue(false)
+		}
+	} else if data.DefaultFlowsDisable.IsNull() {
+		data.DefaultFlowsDisable = types.BoolNull()
+	}
+}
+
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *Domain) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "list.domain"); value.Exists() {
+		data.Domains = make([]DomainDomains, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := DomainDomains{}
+			if cValue := v.Get("domain-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.DomainName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("order"); cValue.Exists() {
+				item.Order = types.Int64Value(cValue.Int())
+			}
+			data.Domains = append(data.Domains, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "lookup.disable"); value.Exists() {
+		data.LookupDisable = types.BoolValue(true)
+	} else if !data.LookupDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LookupDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "lookup.source-interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.LookupSourceInterface = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Name = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ipv4.hosts.host"); value.Exists() {
+		data.Ipv4Hosts = make([]DomainIpv4Hosts, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := DomainIpv4Hosts{}
+			if cValue := v.Get("host-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.HostName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ip-address"); cValue.Exists() {
+				item.IpAddress = helpers.GetStringList(cValue.Array())
+			} else {
+				item.IpAddress = types.ListNull(types.StringType)
+			}
+			data.Ipv4Hosts = append(data.Ipv4Hosts, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "name-servers.name-server"); value.Exists() {
+		data.NameServers = make([]DomainNameServers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := DomainNameServers{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("order"); cValue.Exists() {
+				item.Order = types.Int64Value(cValue.Int())
+			}
+			data.NameServers = append(data.NameServers, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "ipv6.host.host"); value.Exists() {
+		data.Ipv6Hosts = make([]DomainIpv6Hosts, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := DomainIpv6Hosts{}
+			if cValue := v.Get("host-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.HostName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv6-address"); cValue.Exists() {
+				item.Ipv6Address = helpers.GetStringList(cValue.Array())
+			} else {
+				item.Ipv6Address = types.ListNull(types.StringType)
+			}
+			data.Ipv6Hosts = append(data.Ipv6Hosts, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "multicast"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Multicast = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "default-flows.disable"); value.Exists() {
+		data.DefaultFlowsDisable = types.BoolValue(true)
+	} else if !data.DefaultFlowsDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DefaultFlowsDisable = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *DomainData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "list.domain"); value.Exists() {
+		data.Domains = make([]DomainDomains, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := DomainDomains{}
+			if cValue := v.Get("domain-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.DomainName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("order"); cValue.Exists() {
+				item.Order = types.Int64Value(cValue.Int())
+			}
+			data.Domains = append(data.Domains, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "lookup.disable"); value.Exists() {
+		data.LookupDisable = types.BoolValue(true)
+	} else {
+		data.LookupDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "lookup.source-interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.LookupSourceInterface = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Name = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ipv4.hosts.host"); value.Exists() {
+		data.Ipv4Hosts = make([]DomainIpv4Hosts, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := DomainIpv4Hosts{}
+			if cValue := v.Get("host-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.HostName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ip-address"); cValue.Exists() {
+				item.IpAddress = helpers.GetStringList(cValue.Array())
+			} else {
+				item.IpAddress = types.ListNull(types.StringType)
+			}
+			data.Ipv4Hosts = append(data.Ipv4Hosts, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "name-servers.name-server"); value.Exists() {
+		data.NameServers = make([]DomainNameServers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := DomainNameServers{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("order"); cValue.Exists() {
+				item.Order = types.Int64Value(cValue.Int())
+			}
+			data.NameServers = append(data.NameServers, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "ipv6.host.host"); value.Exists() {
+		data.Ipv6Hosts = make([]DomainIpv6Hosts, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := DomainIpv6Hosts{}
+			if cValue := v.Get("host-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.HostName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv6-address"); cValue.Exists() {
+				item.Ipv6Address = helpers.GetStringList(cValue.Array())
+			} else {
+				item.Ipv6Address = types.ListNull(types.StringType)
+			}
+			data.Ipv6Hosts = append(data.Ipv6Hosts, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "multicast"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Multicast = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "default-flows.disable"); value.Exists() {
+		data.DefaultFlowsDisable = types.BoolValue(true)
+	} else {
+		data.DefaultFlowsDisable = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *Domain) getDeletedItems(ctx context.Context, state Domain, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.DefaultFlowsDisable.IsNull() && data.DefaultFlowsDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "default-flows/disable"))
+	}
+	if !state.Multicast.IsNull() && data.Multicast.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "multicast"))
+	}
+	for i := range state.Ipv6Hosts {
+		keys := [...]string{"host-name"}
+		stateKeyValues := [...]string{state.Ipv6Hosts[i].HostName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv6Hosts[i].HostName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv6Hosts {
+			found = true
+			if state.Ipv6Hosts[i].HostName.ValueString() != data.Ipv6Hosts[j].HostName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Ipv6Hosts[i].Ipv6Address.IsNull() && data.Ipv6Hosts[j].Ipv6Address.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ipv6/host/host", keyString), "ipv6-address"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "ipv6/host/host", keyString))
+		}
+	}
+	for i := range state.NameServers {
+		keys := [...]string{"address", "order"}
+		stateKeyValues := [...]string{state.NameServers[i].Address.ValueString(), strconv.FormatInt(state.NameServers[i].Order.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.NameServers[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.NameServers[i].Order.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.NameServers {
+			found = true
+			if state.NameServers[i].Address.ValueString() != data.NameServers[j].Address.ValueString() {
+				found = false
+			}
+			if state.NameServers[i].Order.ValueInt64() != data.NameServers[j].Order.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "name-servers/name-server", keyString))
+		}
+	}
+	for i := range state.Ipv4Hosts {
+		keys := [...]string{"host-name"}
+		stateKeyValues := [...]string{state.Ipv4Hosts[i].HostName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv4Hosts[i].HostName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv4Hosts {
+			found = true
+			if state.Ipv4Hosts[i].HostName.ValueString() != data.Ipv4Hosts[j].HostName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Ipv4Hosts[i].IpAddress.IsNull() && data.Ipv4Hosts[j].IpAddress.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ipv4/hosts/host", keyString), "ip-address"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "ipv4/hosts/host", keyString))
+		}
+	}
+	if !state.Name.IsNull() && data.Name.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "name"))
+	}
+	if !state.LookupSourceInterface.IsNull() && data.LookupSourceInterface.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lookup/source-interface"))
+	}
+	if !state.LookupDisable.IsNull() && data.LookupDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lookup/disable"))
+	}
+	for i := range state.Domains {
+		keys := [...]string{"domain-name", "order"}
+		stateKeyValues := [...]string{state.Domains[i].DomainName.ValueString(), strconv.FormatInt(state.Domains[i].Order.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Domains[i].DomainName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Domains[i].Order.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Domains {
+			found = true
+			if state.Domains[i].DomainName.ValueString() != data.Domains[j].DomainName.ValueString() {
+				found = false
+			}
+			if state.Domains[i].Order.ValueInt64() != data.Domains[j].Order.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "list/domain", keyString))
+		}
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *Domain) getEmptyLeafsDelete(ctx context.Context, state *Domain, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if !data.DefaultFlowsDisable.IsNull() && !data.DefaultFlowsDisable.ValueBool() {
+		if state == nil || state.DefaultFlowsDisable.IsNull() || state.DefaultFlowsDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "default-flows/disable"))
+		}
+	}
+	for i := range data.Ipv6Hosts {
+		keys := [...]string{"host-name"}
+		keyValues := [...]string{data.Ipv6Hosts[i].HostName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.NameServers {
+		keys := [...]string{"address", "order"}
+		keyValues := [...]string{data.NameServers[i].Address.ValueString(), strconv.FormatInt(data.NameServers[i].Order.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.Ipv4Hosts {
+		keys := [...]string{"host-name"}
+		keyValues := [...]string{data.Ipv4Hosts[i].HostName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	if !data.LookupDisable.IsNull() && !data.LookupDisable.ValueBool() {
+		if state == nil || state.LookupDisable.IsNull() || state.LookupDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "lookup/disable"))
+		}
+	}
+	for i := range data.Domains {
+		keys := [...]string{"domain-name", "order"}
+		keyValues := [...]string{data.Domains[i].DomainName.ValueString(), strconv.FormatInt(data.Domains[i].Order.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *Domain) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.DefaultFlowsDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "default-flows/disable"))
+	}
+	if !data.Multicast.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "multicast"))
+	}
+	for i := range data.Ipv6Hosts {
+		keys := [...]string{"host-name"}
+		keyValues := [...]string{data.Ipv6Hosts[i].HostName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.Ipv6Hosts[i].HostName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "ipv6/host/host", keyString))
+	}
+	for i := range data.NameServers {
+		keys := [...]string{"address", "order"}
+		keyValues := [...]string{data.NameServers[i].Address.ValueString(), strconv.FormatInt(data.NameServers[i].Order.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.NameServers[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(data.NameServers[i].Order.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "name-servers/name-server", keyString))
+	}
+	for i := range data.Ipv4Hosts {
+		keys := [...]string{"host-name"}
+		keyValues := [...]string{data.Ipv4Hosts[i].HostName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.Ipv4Hosts[i].HostName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "ipv4/hosts/host", keyString))
+	}
+	if !data.Name.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "name"))
+	}
+	if !data.LookupSourceInterface.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lookup/source-interface"))
+	}
+	if !data.LookupDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lookup/disable"))
+	}
+	for i := range data.Domains {
+		keys := [...]string{"domain-name", "order"}
+		keyValues := [...]string{data.Domains[i].DomainName.ValueString(), strconv.FormatInt(data.Domains[i].Order.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.Domains[i].DomainName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(data.Domains[i].Order.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "list/domain", keyString))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
@@ -286,7 +1003,7 @@ func (data Domain) toBodyXML(ctx context.Context, stateArg ...*Domain) string {
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -294,186 +1011,6 @@ func (data Domain) toBodyXML(ctx context.Context, stateArg ...*Domain) string {
 }
 
 // End of section. //template:end toBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
-
-func (data *Domain) updateFromBody(ctx context.Context, res gjson.Result) {
-	for i := range data.Domains {
-		keys := [...]string{"domain-name", "order"}
-		keyValues := [...]string{data.Domains[i].DomainName.ValueString(), strconv.FormatInt(data.Domains[i].Order.ValueInt64(), 10)}
-
-		var r gjson.Result
-		res.Get("list.domain").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("domain-name"); value.Exists() && !data.Domains[i].DomainName.IsNull() {
-			data.Domains[i].DomainName = types.StringValue(value.String())
-		} else {
-			data.Domains[i].DomainName = types.StringNull()
-		}
-		if value := r.Get("order"); value.Exists() && !data.Domains[i].Order.IsNull() {
-			data.Domains[i].Order = types.Int64Value(value.Int())
-		} else {
-			data.Domains[i].Order = types.Int64Null()
-		}
-	}
-	if value := res.Get("lookup.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LookupDisable.IsNull() {
-			data.LookupDisable = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LookupDisable.IsNull() {
-			data.LookupDisable = types.BoolNull()
-		}
-	}
-	if value := res.Get("lookup.source-interface"); value.Exists() && !data.LookupSourceInterface.IsNull() {
-		data.LookupSourceInterface = types.StringValue(value.String())
-	} else if data.LookupSourceInterface.IsNull() {
-		data.LookupSourceInterface = types.StringNull()
-	}
-	if value := res.Get("name"); value.Exists() && !data.Name.IsNull() {
-		data.Name = types.StringValue(value.String())
-	} else if data.Name.IsNull() {
-		data.Name = types.StringNull()
-	}
-	for i := range data.Ipv4Hosts {
-		keys := [...]string{"host-name"}
-		keyValues := [...]string{data.Ipv4Hosts[i].HostName.ValueString()}
-
-		var r gjson.Result
-		res.Get("ipv4.hosts.host").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("host-name"); value.Exists() && !data.Ipv4Hosts[i].HostName.IsNull() {
-			data.Ipv4Hosts[i].HostName = types.StringValue(value.String())
-		} else {
-			data.Ipv4Hosts[i].HostName = types.StringNull()
-		}
-		if value := r.Get("ip-address"); value.Exists() && !data.Ipv4Hosts[i].IpAddress.IsNull() {
-			data.Ipv4Hosts[i].IpAddress = helpers.GetStringList(value.Array())
-		} else {
-			data.Ipv4Hosts[i].IpAddress = types.ListNull(types.StringType)
-		}
-	}
-	for i := range data.NameServers {
-		keys := [...]string{"address", "order"}
-		keyValues := [...]string{data.NameServers[i].Address.ValueString(), strconv.FormatInt(data.NameServers[i].Order.ValueInt64(), 10)}
-
-		var r gjson.Result
-		res.Get("name-servers.name-server").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("address"); value.Exists() && !data.NameServers[i].Address.IsNull() {
-			data.NameServers[i].Address = types.StringValue(value.String())
-		} else {
-			data.NameServers[i].Address = types.StringNull()
-		}
-		if value := r.Get("order"); value.Exists() && !data.NameServers[i].Order.IsNull() {
-			data.NameServers[i].Order = types.Int64Value(value.Int())
-		} else {
-			data.NameServers[i].Order = types.Int64Null()
-		}
-	}
-	for i := range data.Ipv6Hosts {
-		keys := [...]string{"host-name"}
-		keyValues := [...]string{data.Ipv6Hosts[i].HostName.ValueString()}
-
-		var r gjson.Result
-		res.Get("ipv6.host.host").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("host-name"); value.Exists() && !data.Ipv6Hosts[i].HostName.IsNull() {
-			data.Ipv6Hosts[i].HostName = types.StringValue(value.String())
-		} else {
-			data.Ipv6Hosts[i].HostName = types.StringNull()
-		}
-		if value := r.Get("ipv6-address"); value.Exists() && !data.Ipv6Hosts[i].Ipv6Address.IsNull() {
-			data.Ipv6Hosts[i].Ipv6Address = helpers.GetStringList(value.Array())
-		} else {
-			data.Ipv6Hosts[i].Ipv6Address = types.ListNull(types.StringType)
-		}
-	}
-	if value := res.Get("multicast"); value.Exists() && !data.Multicast.IsNull() {
-		data.Multicast = types.StringValue(value.String())
-	} else if data.Multicast.IsNull() {
-		data.Multicast = types.StringNull()
-	}
-	if value := res.Get("default-flows.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.DefaultFlowsDisable.IsNull() {
-			data.DefaultFlowsDisable = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.DefaultFlowsDisable.IsNull() {
-			data.DefaultFlowsDisable = types.BoolNull()
-		}
-	}
-}
-
-// End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
@@ -655,197 +1192,6 @@ func (data *Domain) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 
 // End of section. //template:end updateFromBodyXML
 
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
-
-func (data *Domain) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "list.domain"); value.Exists() {
-		data.Domains = make([]DomainDomains, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := DomainDomains{}
-			if cValue := v.Get("domain-name"); cValue.Exists() {
-				item.DomainName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("order"); cValue.Exists() {
-				item.Order = types.Int64Value(cValue.Int())
-			}
-			data.Domains = append(data.Domains, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "lookup.disable"); value.Exists() {
-		data.LookupDisable = types.BoolValue(true)
-	} else if !data.LookupDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LookupDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "lookup.source-interface"); value.Exists() {
-		data.LookupSourceInterface = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "name"); value.Exists() {
-		data.Name = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ipv4.hosts.host"); value.Exists() {
-		data.Ipv4Hosts = make([]DomainIpv4Hosts, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := DomainIpv4Hosts{}
-			if cValue := v.Get("host-name"); cValue.Exists() {
-				item.HostName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ip-address"); cValue.Exists() {
-				item.IpAddress = helpers.GetStringList(cValue.Array())
-			} else {
-				item.IpAddress = types.ListNull(types.StringType)
-			}
-			data.Ipv4Hosts = append(data.Ipv4Hosts, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "name-servers.name-server"); value.Exists() {
-		data.NameServers = make([]DomainNameServers, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := DomainNameServers{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("order"); cValue.Exists() {
-				item.Order = types.Int64Value(cValue.Int())
-			}
-			data.NameServers = append(data.NameServers, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "ipv6.host.host"); value.Exists() {
-		data.Ipv6Hosts = make([]DomainIpv6Hosts, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := DomainIpv6Hosts{}
-			if cValue := v.Get("host-name"); cValue.Exists() {
-				item.HostName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ipv6-address"); cValue.Exists() {
-				item.Ipv6Address = helpers.GetStringList(cValue.Array())
-			} else {
-				item.Ipv6Address = types.ListNull(types.StringType)
-			}
-			data.Ipv6Hosts = append(data.Ipv6Hosts, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "multicast"); value.Exists() {
-		data.Multicast = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "default-flows.disable"); value.Exists() {
-		data.DefaultFlowsDisable = types.BoolValue(true)
-	} else if !data.DefaultFlowsDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.DefaultFlowsDisable = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *DomainData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "list.domain"); value.Exists() {
-		data.Domains = make([]DomainDomains, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := DomainDomains{}
-			if cValue := v.Get("domain-name"); cValue.Exists() {
-				item.DomainName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("order"); cValue.Exists() {
-				item.Order = types.Int64Value(cValue.Int())
-			}
-			data.Domains = append(data.Domains, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "lookup.disable"); value.Exists() {
-		data.LookupDisable = types.BoolValue(true)
-	} else {
-		data.LookupDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "lookup.source-interface"); value.Exists() {
-		data.LookupSourceInterface = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "name"); value.Exists() {
-		data.Name = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ipv4.hosts.host"); value.Exists() {
-		data.Ipv4Hosts = make([]DomainIpv4Hosts, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := DomainIpv4Hosts{}
-			if cValue := v.Get("host-name"); cValue.Exists() {
-				item.HostName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ip-address"); cValue.Exists() {
-				item.IpAddress = helpers.GetStringList(cValue.Array())
-			} else {
-				item.IpAddress = types.ListNull(types.StringType)
-			}
-			data.Ipv4Hosts = append(data.Ipv4Hosts, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "name-servers.name-server"); value.Exists() {
-		data.NameServers = make([]DomainNameServers, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := DomainNameServers{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("order"); cValue.Exists() {
-				item.Order = types.Int64Value(cValue.Int())
-			}
-			data.NameServers = append(data.NameServers, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "ipv6.host.host"); value.Exists() {
-		data.Ipv6Hosts = make([]DomainIpv6Hosts, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := DomainIpv6Hosts{}
-			if cValue := v.Get("host-name"); cValue.Exists() {
-				item.HostName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ipv6-address"); cValue.Exists() {
-				item.Ipv6Address = helpers.GetStringList(cValue.Array())
-			} else {
-				item.Ipv6Address = types.ListNull(types.StringType)
-			}
-			data.Ipv6Hosts = append(data.Ipv6Hosts, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "multicast"); value.Exists() {
-		data.Multicast = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "default-flows.disable"); value.Exists() {
-		data.DefaultFlowsDisable = types.BoolValue(true)
-	} else {
-		data.DefaultFlowsDisable = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBodyData
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *Domain) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1017,272 +1363,6 @@ func (data *DomainData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyDataXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data *Domain) getDeletedItems(ctx context.Context, state Domain) []string {
-	deletedItems := make([]string, 0)
-	if !state.DefaultFlowsDisable.IsNull() && data.DefaultFlowsDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-flows/disable", state.getPath()))
-	}
-	if !state.Multicast.IsNull() && data.Multicast.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/multicast", state.getPath()))
-	}
-	for i := range state.Ipv6Hosts {
-		keys := [...]string{"host-name"}
-		stateKeyValues := [...]string{state.Ipv6Hosts[i].HostName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Ipv6Hosts[i].HostName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Ipv6Hosts {
-			found = true
-			if state.Ipv6Hosts[i].HostName.ValueString() != data.Ipv6Hosts[j].HostName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.Ipv6Hosts[i].Ipv6Address.IsNull() && data.Ipv6Hosts[j].Ipv6Address.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/host/host%v/ipv6-address", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/host/host%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.NameServers {
-		keys := [...]string{"address", "order"}
-		stateKeyValues := [...]string{state.NameServers[i].Address.ValueString(), strconv.FormatInt(state.NameServers[i].Order.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.NameServers[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if !reflect.ValueOf(state.NameServers[i].Order.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.NameServers {
-			found = true
-			if state.NameServers[i].Address.ValueString() != data.NameServers[j].Address.ValueString() {
-				found = false
-			}
-			if state.NameServers[i].Order.ValueInt64() != data.NameServers[j].Order.ValueInt64() {
-				found = false
-			}
-			if found {
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/name-servers/name-server%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.Ipv4Hosts {
-		keys := [...]string{"host-name"}
-		stateKeyValues := [...]string{state.Ipv4Hosts[i].HostName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Ipv4Hosts[i].HostName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Ipv4Hosts {
-			found = true
-			if state.Ipv4Hosts[i].HostName.ValueString() != data.Ipv4Hosts[j].HostName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.Ipv4Hosts[i].IpAddress.IsNull() && data.Ipv4Hosts[j].IpAddress.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/hosts/host%v/ip-address", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/hosts/host%v", state.getPath(), keyString))
-		}
-	}
-	if !state.Name.IsNull() && data.Name.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/name", state.getPath()))
-	}
-	if !state.LookupSourceInterface.IsNull() && data.LookupSourceInterface.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lookup/source-interface", state.getPath()))
-	}
-	if !state.LookupDisable.IsNull() && data.LookupDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lookup/disable", state.getPath()))
-	}
-	for i := range state.Domains {
-		keys := [...]string{"domain-name", "order"}
-		stateKeyValues := [...]string{state.Domains[i].DomainName.ValueString(), strconv.FormatInt(state.Domains[i].Order.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Domains[i].DomainName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if !reflect.ValueOf(state.Domains[i].Order.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Domains {
-			found = true
-			if state.Domains[i].DomainName.ValueString() != data.Domains[j].DomainName.ValueString() {
-				found = false
-			}
-			if state.Domains[i].Order.ValueInt64() != data.Domains[j].Order.ValueInt64() {
-				found = false
-			}
-			if found {
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/list/domain%v", state.getPath(), keyString))
-		}
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *Domain) getEmptyLeafsDelete(ctx context.Context, state *Domain) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.DefaultFlowsDisable.IsNull() && !data.DefaultFlowsDisable.ValueBool() {
-		if state != nil && !state.DefaultFlowsDisable.IsNull() && state.DefaultFlowsDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-flows/disable", data.getXPath()))
-		}
-	}
-	for i := range data.Ipv6Hosts {
-		keys := [...]string{"host-name"}
-		keyValues := [...]string{data.Ipv6Hosts[i].HostName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	for i := range data.NameServers {
-		keys := [...]string{"address", "order"}
-		keyValues := [...]string{data.NameServers[i].Address.ValueString(), strconv.FormatInt(data.NameServers[i].Order.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	for i := range data.Ipv4Hosts {
-		keys := [...]string{"host-name"}
-		keyValues := [...]string{data.Ipv4Hosts[i].HostName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LookupDisable.IsNull() && !data.LookupDisable.ValueBool() {
-		if state != nil && !state.LookupDisable.IsNull() && state.LookupDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lookup/disable", data.getXPath()))
-		}
-	}
-	for i := range data.Domains {
-		keys := [...]string{"domain-name", "order"}
-		keyValues := [...]string{data.Domains[i].DomainName.ValueString(), strconv.FormatInt(data.Domains[i].Order.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *Domain) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.DefaultFlowsDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-flows/disable", data.getPath()))
-	}
-	if !data.Multicast.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/multicast", data.getPath()))
-	}
-	for i := range data.Ipv6Hosts {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[host-name=" + data.Ipv6Hosts[i].HostName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/host/host%v", data.getPath(), keyPath))
-	}
-	for i := range data.NameServers {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.NameServers[i].Address.ValueString() + "]"
-		keyPath += "[order=" + strconv.FormatInt(data.NameServers[i].Order.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/name-servers/name-server%v", data.getPath(), keyPath))
-	}
-	for i := range data.Ipv4Hosts {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[host-name=" + data.Ipv4Hosts[i].HostName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/hosts/host%v", data.getPath(), keyPath))
-	}
-	if !data.Name.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/name", data.getPath()))
-	}
-	if !data.LookupSourceInterface.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lookup/source-interface", data.getPath()))
-	}
-	if !data.LookupDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lookup/disable", data.getPath()))
-	}
-	for i := range data.Domains {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[domain-name=" + data.Domains[i].DomainName.ValueString() + "]"
-		keyPath += "[order=" + strconv.FormatInt(data.Domains[i].Order.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/list/domain%v", data.getPath(), keyPath))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 

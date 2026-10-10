@@ -1,0 +1,34 @@
+---
+name: Crypto
+path: Cisco-IOS-XR-um-crypto-cfg:/crypto
+doc_category: Crypto
+attributes:
+  # ===========================================================
+  # ca/trustpoint/trustpoints/trustpoint: profile leaves and local enrollment added,
+  # est credential/certificate removed
+  # 24.4: method/est/credential/certificate
+  # 25.4: enrollment/{local,authentication-profile}, re-enrollment/authentication-profile, ssl-profile
+  # ===========================================================
+  - yang_name: ca/trustpoint/trustpoints/trustpoint
+    tf_name: ca_trustpoints
+    type: List
+    attributes:
+      - yang_name: enrollment/authentication-profile
+        example: EAP_PROFILE
+      - yang_name: re-enrollment/authentication-profile
+        example: EAP_PROFILE
+      - yang_name: ssl-profile
+        example: MTLS_PROFILE
+      - yang_name: enrollment/local
+        exclude_test: true
+        example: true
+      - yang_name: method/est/credential/certificate
+        legacy: true
+
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: ca/trustpoint/system-trustpoint/enrollment/local
+    tf_name: ca_trustpoint_system_enrollment_local
+    exclude_test: true
+    example: true

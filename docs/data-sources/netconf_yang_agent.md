@@ -10,6 +10,14 @@ description: |-
 
 This data source can read the Netconf Yang Agent configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `session_absolute_timeout` | `25.4` |
+
 ## Example Usage
 
 ```terraform
@@ -31,6 +39,7 @@ data "iosxr_netconf_yang_agent" "example" {
 - `netconf_v1_streaming_disabled` (Boolean) Disable rpc-reply data streaming
 - `rate_limit` (Number) Number of bytes to process per second
 - `session_absolute_timeout` (Number) Absolute timeout in minutes
+  - **Not supported from version `25.4` and above**
 - `session_idle_timeout` (Number) Idle timeout in minutes
 - `session_limit` (Number) Maximum count of concurrent sessions (default = 50)
 - `ssh` (Boolean) Enable NETCONF-YANG agent over SSH connection

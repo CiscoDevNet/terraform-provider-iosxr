@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"sort"
 	"strconv"
@@ -159,7 +160,7 @@ func (data LineConsoleData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data LineConsole) toBody(ctx context.Context) string {
+func (data LineConsole) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.AccessClassIngress.IsNull() && !data.AccessClassIngress.IsUnknown() {
 		body, _ = sjson.Set(body, "access-class.ingress", data.AccessClassIngress.ValueString())
@@ -322,235 +323,269 @@ func (data LineConsole) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *LineConsole) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("access-class.ingress"); value.Exists() && !data.AccessClassIngress.IsNull() {
+// GetVersionConstraints returns the version constraints for all fields
+func (data LineConsole) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data LineConsole) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data LineConsole) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data LineConsole) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data LineConsole) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *LineConsole) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "access-class.ingress"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AccessClassIngress.IsNull() {
 		data.AccessClassIngress = types.StringValue(value.String())
 	} else if data.AccessClassIngress.IsNull() {
 		data.AccessClassIngress = types.StringNull()
 	}
-	if value := res.Get("access-class.egress"); value.Exists() && !data.AccessClassEgress.IsNull() {
+	if value := gjson.GetBytes(res, "access-class.egress"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AccessClassEgress.IsNull() {
 		data.AccessClassEgress = types.StringValue(value.String())
 	} else if data.AccessClassEgress.IsNull() {
 		data.AccessClassEgress = types.StringNull()
 	}
-	if value := res.Get("disconnect-character"); value.Exists() && !data.DisconnectCharacter.IsNull() {
+	if value := gjson.GetBytes(res, "disconnect-character"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DisconnectCharacter.IsNull() {
 		data.DisconnectCharacter = types.StringValue(value.String())
 	} else if data.DisconnectCharacter.IsNull() {
 		data.DisconnectCharacter = types.StringNull()
 	}
-	if value := res.Get("escape-character"); value.Exists() && !data.EscapeCharacter.IsNull() {
+	if value := gjson.GetBytes(res, "escape-character"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.EscapeCharacter.IsNull() {
 		data.EscapeCharacter = types.StringValue(value.String())
 	} else if data.EscapeCharacter.IsNull() {
 		data.EscapeCharacter = types.StringNull()
 	}
-	if value := res.Get("session-timeout.timeout-interval"); value.Exists() && !data.SessionTimeout.IsNull() {
+	if value := gjson.GetBytes(res, "session-timeout.timeout-interval"); value.Exists() && !data.SessionTimeout.IsNull() {
 		data.SessionTimeout = types.Int64Value(value.Int())
 	} else if data.SessionTimeout.IsNull() {
 		data.SessionTimeout = types.Int64Null()
 	}
-	if value := res.Get("session-timeout.output"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SessionTimeoutOutput.IsNull() {
+	if value := gjson.GetBytes(res, "session-timeout.output"); !data.SessionTimeoutOutput.IsNull() {
+		if value.Exists() {
 			data.SessionTimeoutOutput = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SessionTimeoutOutput = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SessionTimeoutOutput.IsNull() {
-			data.SessionTimeoutOutput = types.BoolNull()
-		}
+	} else if data.SessionTimeoutOutput.IsNull() {
+		data.SessionTimeoutOutput = types.BoolNull()
 	}
-	if value := res.Get("transport.input.none"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TransportInputNone.IsNull() {
+	if value := gjson.GetBytes(res, "transport.input.none"); !data.TransportInputNone.IsNull() {
+		if value.Exists() {
 			data.TransportInputNone = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TransportInputNone = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TransportInputNone.IsNull() {
-			data.TransportInputNone = types.BoolNull()
-		}
+	} else if data.TransportInputNone.IsNull() {
+		data.TransportInputNone = types.BoolNull()
 	}
-	if value := res.Get("transport.input.ssh"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TransportInputSsh.IsNull() {
+	if value := gjson.GetBytes(res, "transport.input.ssh"); !data.TransportInputSsh.IsNull() {
+		if value.Exists() {
 			data.TransportInputSsh = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TransportInputSsh = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TransportInputSsh.IsNull() {
-			data.TransportInputSsh = types.BoolNull()
-		}
+	} else if data.TransportInputSsh.IsNull() {
+		data.TransportInputSsh = types.BoolNull()
 	}
-	if value := res.Get("transport.input.ssh.telnet"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TransportInputSshTelnet.IsNull() {
+	if value := gjson.GetBytes(res, "transport.input.ssh.telnet"); !data.TransportInputSshTelnet.IsNull() {
+		if value.Exists() {
 			data.TransportInputSshTelnet = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TransportInputSshTelnet = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TransportInputSshTelnet.IsNull() {
-			data.TransportInputSshTelnet = types.BoolNull()
-		}
+	} else if data.TransportInputSshTelnet.IsNull() {
+		data.TransportInputSshTelnet = types.BoolNull()
 	}
-	if value := res.Get("transport.input.telnet"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TransportInputTelnet.IsNull() {
+	if value := gjson.GetBytes(res, "transport.input.telnet"); !data.TransportInputTelnet.IsNull() {
+		if value.Exists() {
 			data.TransportInputTelnet = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TransportInputTelnet = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TransportInputTelnet.IsNull() {
-			data.TransportInputTelnet = types.BoolNull()
-		}
+	} else if data.TransportInputTelnet.IsNull() {
+		data.TransportInputTelnet = types.BoolNull()
 	}
-	if value := res.Get("transport.input.all"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TransportInputAll.IsNull() {
+	if value := gjson.GetBytes(res, "transport.input.all"); !data.TransportInputAll.IsNull() {
+		if value.Exists() {
 			data.TransportInputAll = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TransportInputAll = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TransportInputAll.IsNull() {
-			data.TransportInputAll = types.BoolNull()
-		}
+	} else if data.TransportInputAll.IsNull() {
+		data.TransportInputAll = types.BoolNull()
 	}
-	if value := res.Get("transport.output.all"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TransportOutputAll.IsNull() {
+	if value := gjson.GetBytes(res, "transport.output.all"); !data.TransportOutputAll.IsNull() {
+		if value.Exists() {
 			data.TransportOutputAll = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TransportOutputAll = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TransportOutputAll.IsNull() {
-			data.TransportOutputAll = types.BoolNull()
-		}
+	} else if data.TransportOutputAll.IsNull() {
+		data.TransportOutputAll = types.BoolNull()
 	}
-	if value := res.Get("transport.output.none"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TransportOutputNone.IsNull() {
+	if value := gjson.GetBytes(res, "transport.output.none"); !data.TransportOutputNone.IsNull() {
+		if value.Exists() {
 			data.TransportOutputNone = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TransportOutputNone = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TransportOutputNone.IsNull() {
-			data.TransportOutputNone = types.BoolNull()
-		}
+	} else if data.TransportOutputNone.IsNull() {
+		data.TransportOutputNone = types.BoolNull()
 	}
-	if value := res.Get("transport.output.ssh"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TransportOutputSsh.IsNull() {
+	if value := gjson.GetBytes(res, "transport.output.ssh"); !data.TransportOutputSsh.IsNull() {
+		if value.Exists() {
 			data.TransportOutputSsh = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TransportOutputSsh = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TransportOutputSsh.IsNull() {
-			data.TransportOutputSsh = types.BoolNull()
-		}
+	} else if data.TransportOutputSsh.IsNull() {
+		data.TransportOutputSsh = types.BoolNull()
 	}
-	if value := res.Get("transport.output.ssh.telnet"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TransportOutputSshTelnet.IsNull() {
+	if value := gjson.GetBytes(res, "transport.output.ssh.telnet"); !data.TransportOutputSshTelnet.IsNull() {
+		if value.Exists() {
 			data.TransportOutputSshTelnet = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TransportOutputSshTelnet = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TransportOutputSshTelnet.IsNull() {
-			data.TransportOutputSshTelnet = types.BoolNull()
-		}
+	} else if data.TransportOutputSshTelnet.IsNull() {
+		data.TransportOutputSshTelnet = types.BoolNull()
 	}
-	if value := res.Get("transport.output.telnet"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TransportOutputTelnet.IsNull() {
+	if value := gjson.GetBytes(res, "transport.output.telnet"); !data.TransportOutputTelnet.IsNull() {
+		if value.Exists() {
 			data.TransportOutputTelnet = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TransportOutputTelnet = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TransportOutputTelnet.IsNull() {
-			data.TransportOutputTelnet = types.BoolNull()
-		}
+	} else if data.TransportOutputTelnet.IsNull() {
+		data.TransportOutputTelnet = types.BoolNull()
 	}
-	if value := res.Get("transport.preferred.none"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TransportPreferredNone.IsNull() {
+	if value := gjson.GetBytes(res, "transport.preferred.none"); !data.TransportPreferredNone.IsNull() {
+		if value.Exists() {
 			data.TransportPreferredNone = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TransportPreferredNone = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TransportPreferredNone.IsNull() {
-			data.TransportPreferredNone = types.BoolNull()
-		}
+	} else if data.TransportPreferredNone.IsNull() {
+		data.TransportPreferredNone = types.BoolNull()
 	}
-	if value := res.Get("transport.preferred.telnet"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TransportPreferredTelnet.IsNull() {
+	if value := gjson.GetBytes(res, "transport.preferred.telnet"); !data.TransportPreferredTelnet.IsNull() {
+		if value.Exists() {
 			data.TransportPreferredTelnet = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TransportPreferredTelnet = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TransportPreferredTelnet.IsNull() {
-			data.TransportPreferredTelnet = types.BoolNull()
-		}
+	} else if data.TransportPreferredTelnet.IsNull() {
+		data.TransportPreferredTelnet = types.BoolNull()
 	}
-	if value := res.Get("transport.preferred.ssh"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TransportPreferredSsh.IsNull() {
+	if value := gjson.GetBytes(res, "transport.preferred.ssh"); !data.TransportPreferredSsh.IsNull() {
+		if value.Exists() {
 			data.TransportPreferredSsh = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TransportPreferredSsh = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TransportPreferredSsh.IsNull() {
-			data.TransportPreferredSsh = types.BoolNull()
-		}
+	} else if data.TransportPreferredSsh.IsNull() {
+		data.TransportPreferredSsh = types.BoolNull()
 	}
-	if value := res.Get("session-limit"); value.Exists() && !data.SessionLimit.IsNull() {
+	if value := gjson.GetBytes(res, "session-limit"); value.Exists() && !data.SessionLimit.IsNull() {
 		data.SessionLimit = types.Int64Value(value.Int())
 	} else if data.SessionLimit.IsNull() {
 		data.SessionLimit = types.Int64Null()
 	}
-	if value := res.Get("cli.whitespace.completion"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.CliWhitespaceCompletion.IsNull() {
+	if value := gjson.GetBytes(res, "cli.whitespace.completion"); !data.CliWhitespaceCompletion.IsNull() {
+		if value.Exists() {
 			data.CliWhitespaceCompletion = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CliWhitespaceCompletion = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.CliWhitespaceCompletion.IsNull() {
-			data.CliWhitespaceCompletion = types.BoolNull()
-		}
+	} else if data.CliWhitespaceCompletion.IsNull() {
+		data.CliWhitespaceCompletion = types.BoolNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:login.authentication"); value.Exists() && !data.LoginAuthentication.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:login.authentication"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.LoginAuthentication.IsNull() {
 		data.LoginAuthentication = types.StringValue(value.String())
 	} else if data.LoginAuthentication.IsNull() {
 		data.LoginAuthentication = types.StringNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.exec"); value.Exists() && !data.AuthorizationExec.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.exec"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AuthorizationExec.IsNull() {
 		data.AuthorizationExec = types.StringValue(value.String())
 	} else if data.AuthorizationExec.IsNull() {
 		data.AuthorizationExec = types.StringNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.eventmanager"); value.Exists() && !data.AuthorizationEventmanager.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.eventmanager"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AuthorizationEventmanager.IsNull() {
 		data.AuthorizationEventmanager = types.StringValue(value.String())
 	} else if data.AuthorizationEventmanager.IsNull() {
 		data.AuthorizationEventmanager = types.StringNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.commands"); value.Exists() && !data.AuthorizationCommands.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.commands"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AuthorizationCommands.IsNull() {
 		data.AuthorizationCommands = types.StringValue(value.String())
 	} else if data.AuthorizationCommands.IsNull() {
 		data.AuthorizationCommands = types.StringNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.exec"); value.Exists() && !data.AccountingExec.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.exec"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AccountingExec.IsNull() {
 		data.AccountingExec = types.StringValue(value.String())
 	} else if data.AccountingExec.IsNull() {
 		data.AccountingExec = types.StringNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.commands"); value.Exists() && !data.AccountingCommands.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.commands"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AccountingCommands.IsNull() {
 		data.AccountingCommands = types.StringValue(value.String())
 	} else if data.AccountingCommands.IsNull() {
 		data.AccountingCommands = types.StringNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:timeout.login.response"); value.Exists() && !data.TimeoutLoginResponse.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:timeout.login.response"); value.Exists() && !data.TimeoutLoginResponse.IsNull() {
 		data.TimeoutLoginResponse = types.Int64Value(value.Int())
 	} else if data.TimeoutLoginResponse.IsNull() {
 		data.TimeoutLoginResponse = types.Int64Null()
@@ -560,7 +595,7 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{data.UsersGroup[i].GroupName.ValueString()}
 
 		var r gjson.Result
-		res.Get("Cisco-IOS-XR-um-aaa-task-user-cfg:users.group").ForEach(
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:users.group").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -578,67 +613,799 @@ func (data *LineConsole) updateFromBody(ctx context.Context, res gjson.Result) {
 				return true
 			},
 		)
-		if value := r.Get("group-name"); value.Exists() && !data.UsersGroup[i].GroupName.IsNull() {
+		if value := r.Get("group-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.UsersGroup[i].GroupName.IsNull() {
 			data.UsersGroup[i].GroupName = types.StringValue(value.String())
 		} else {
 			data.UsersGroup[i].GroupName = types.StringNull()
 		}
 	}
-	if value := res.Get("Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-minutes"); value.Exists() && !data.ExecTimeoutMinutes.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-minutes"); value.Exists() && !data.ExecTimeoutMinutes.IsNull() {
 		data.ExecTimeoutMinutes = types.Int64Value(value.Int())
 	} else if data.ExecTimeoutMinutes.IsNull() {
 		data.ExecTimeoutMinutes = types.Int64Null()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-seconds"); value.Exists() && !data.ExecTimeoutSeconds.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-seconds"); value.Exists() && !data.ExecTimeoutSeconds.IsNull() {
 		data.ExecTimeoutSeconds = types.Int64Value(value.Int())
 	} else if data.ExecTimeoutSeconds.IsNull() {
 		data.ExecTimeoutSeconds = types.Int64Null()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() && !data.AbsoluteTimeout.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() && !data.AbsoluteTimeout.IsNull() {
 		data.AbsoluteTimeout = types.Int64Value(value.Int())
 	} else if data.AbsoluteTimeout.IsNull() {
 		data.AbsoluteTimeout = types.Int64Null()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() && !data.Width.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() && !data.Width.IsNull() {
 		data.Width = types.Int64Value(value.Int())
 	} else if data.Width.IsNull() {
 		data.Width = types.Int64Null()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() && !data.Length.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() && !data.Length.IsNull() {
 		data.Length = types.Int64Value(value.Int())
 	} else if data.Length.IsNull() {
 		data.Length = types.Int64Null()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TimestampDisable.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); !data.TimestampDisable.IsNull() {
+		if value.Exists() {
 			data.TimestampDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TimestampDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TimestampDisable.IsNull() {
-			data.TimestampDisable = types.BoolNull()
-		}
+	} else if data.TimestampDisable.IsNull() {
+		data.TimestampDisable = types.BoolNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() && !data.Pager.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Pager.IsNull() {
 		data.Pager = types.StringValue(value.String())
 	} else if data.Pager.IsNull() {
 		data.Pager = types.StringNull()
 	}
-	if value := res.Get("Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TelnetTransparent.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); !data.TelnetTransparent.IsNull() {
+		if value.Exists() {
 			data.TelnetTransparent = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TelnetTransparent = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TelnetTransparent.IsNull() {
-			data.TelnetTransparent = types.BoolNull()
-		}
+	} else if data.TelnetTransparent.IsNull() {
+		data.TelnetTransparent = types.BoolNull()
 	}
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *LineConsole) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "access-class.ingress"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AccessClassIngress = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "access-class.egress"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AccessClassEgress = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "disconnect-character"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.DisconnectCharacter = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "escape-character"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.EscapeCharacter = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "session-timeout.timeout-interval"); value.Exists() {
+		data.SessionTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "session-timeout.output"); value.Exists() {
+		data.SessionTimeoutOutput = types.BoolValue(true)
+	} else if !data.SessionTimeoutOutput.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SessionTimeoutOutput = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.input.none"); value.Exists() {
+		data.TransportInputNone = types.BoolValue(true)
+	} else if !data.TransportInputNone.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportInputNone = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.input.ssh"); value.Exists() {
+		data.TransportInputSsh = types.BoolValue(true)
+	} else if !data.TransportInputSsh.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportInputSsh = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.input.ssh.telnet"); value.Exists() {
+		data.TransportInputSshTelnet = types.BoolValue(true)
+	} else if !data.TransportInputSshTelnet.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportInputSshTelnet = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.input.telnet"); value.Exists() {
+		data.TransportInputTelnet = types.BoolValue(true)
+	} else if !data.TransportInputTelnet.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportInputTelnet = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.input.all"); value.Exists() {
+		data.TransportInputAll = types.BoolValue(true)
+	} else if !data.TransportInputAll.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportInputAll = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.output.all"); value.Exists() {
+		data.TransportOutputAll = types.BoolValue(true)
+	} else if !data.TransportOutputAll.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportOutputAll = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.output.none"); value.Exists() {
+		data.TransportOutputNone = types.BoolValue(true)
+	} else if !data.TransportOutputNone.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportOutputNone = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.output.ssh"); value.Exists() {
+		data.TransportOutputSsh = types.BoolValue(true)
+	} else if !data.TransportOutputSsh.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportOutputSsh = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.output.ssh.telnet"); value.Exists() {
+		data.TransportOutputSshTelnet = types.BoolValue(true)
+	} else if !data.TransportOutputSshTelnet.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportOutputSshTelnet = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.output.telnet"); value.Exists() {
+		data.TransportOutputTelnet = types.BoolValue(true)
+	} else if !data.TransportOutputTelnet.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportOutputTelnet = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.preferred.none"); value.Exists() {
+		data.TransportPreferredNone = types.BoolValue(true)
+	} else if !data.TransportPreferredNone.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportPreferredNone = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.preferred.telnet"); value.Exists() {
+		data.TransportPreferredTelnet = types.BoolValue(true)
+	} else if !data.TransportPreferredTelnet.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportPreferredTelnet = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.preferred.ssh"); value.Exists() {
+		data.TransportPreferredSsh = types.BoolValue(true)
+	} else if !data.TransportPreferredSsh.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportPreferredSsh = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "session-limit"); value.Exists() {
+		data.SessionLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "cli.whitespace.completion"); value.Exists() {
+		data.CliWhitespaceCompletion = types.BoolValue(true)
+	} else if !data.CliWhitespaceCompletion.IsNull() {
+		// Only set to false if it was previously set in state
+		data.CliWhitespaceCompletion = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:login.authentication"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.LoginAuthentication = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.exec"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AuthorizationExec = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.eventmanager"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AuthorizationEventmanager = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.commands"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AuthorizationCommands = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.exec"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AccountingExec = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.commands"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AccountingCommands = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:timeout.login.response"); value.Exists() {
+		data.TimeoutLoginResponse = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:users.group"); value.Exists() {
+		data.UsersGroup = make([]LineConsoleUsersGroup, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := LineConsoleUsersGroup{}
+			if cValue := v.Get("group-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.GroupName = types.StringValue(cValue.String())
+			}
+			data.UsersGroup = append(data.UsersGroup, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-minutes"); value.Exists() {
+		data.ExecTimeoutMinutes = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-seconds"); value.Exists() {
+		data.ExecTimeoutSeconds = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
+		data.AbsoluteTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
+		data.Width = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
+		data.Length = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); value.Exists() {
+		data.TimestampDisable = types.BoolValue(true)
+	} else if !data.TimestampDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TimestampDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Pager = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); value.Exists() {
+		data.TelnetTransparent = types.BoolValue(true)
+	} else if !data.TelnetTransparent.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TelnetTransparent = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *LineConsoleData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "access-class.ingress"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AccessClassIngress = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "access-class.egress"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AccessClassEgress = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "disconnect-character"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.DisconnectCharacter = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "escape-character"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.EscapeCharacter = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "session-timeout.timeout-interval"); value.Exists() {
+		data.SessionTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "session-timeout.output"); value.Exists() {
+		data.SessionTimeoutOutput = types.BoolValue(true)
+	} else {
+		data.SessionTimeoutOutput = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.input.none"); value.Exists() {
+		data.TransportInputNone = types.BoolValue(true)
+	} else {
+		data.TransportInputNone = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.input.ssh"); value.Exists() {
+		data.TransportInputSsh = types.BoolValue(true)
+	} else {
+		data.TransportInputSsh = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.input.ssh.telnet"); value.Exists() {
+		data.TransportInputSshTelnet = types.BoolValue(true)
+	} else {
+		data.TransportInputSshTelnet = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.input.telnet"); value.Exists() {
+		data.TransportInputTelnet = types.BoolValue(true)
+	} else {
+		data.TransportInputTelnet = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.input.all"); value.Exists() {
+		data.TransportInputAll = types.BoolValue(true)
+	} else {
+		data.TransportInputAll = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.output.all"); value.Exists() {
+		data.TransportOutputAll = types.BoolValue(true)
+	} else {
+		data.TransportOutputAll = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.output.none"); value.Exists() {
+		data.TransportOutputNone = types.BoolValue(true)
+	} else {
+		data.TransportOutputNone = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.output.ssh"); value.Exists() {
+		data.TransportOutputSsh = types.BoolValue(true)
+	} else {
+		data.TransportOutputSsh = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.output.ssh.telnet"); value.Exists() {
+		data.TransportOutputSshTelnet = types.BoolValue(true)
+	} else {
+		data.TransportOutputSshTelnet = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.output.telnet"); value.Exists() {
+		data.TransportOutputTelnet = types.BoolValue(true)
+	} else {
+		data.TransportOutputTelnet = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.preferred.none"); value.Exists() {
+		data.TransportPreferredNone = types.BoolValue(true)
+	} else {
+		data.TransportPreferredNone = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.preferred.telnet"); value.Exists() {
+		data.TransportPreferredTelnet = types.BoolValue(true)
+	} else {
+		data.TransportPreferredTelnet = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.preferred.ssh"); value.Exists() {
+		data.TransportPreferredSsh = types.BoolValue(true)
+	} else {
+		data.TransportPreferredSsh = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "session-limit"); value.Exists() {
+		data.SessionLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "cli.whitespace.completion"); value.Exists() {
+		data.CliWhitespaceCompletion = types.BoolValue(true)
+	} else {
+		data.CliWhitespaceCompletion = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:login.authentication"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.LoginAuthentication = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.exec"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AuthorizationExec = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.eventmanager"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AuthorizationEventmanager = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.commands"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AuthorizationCommands = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.exec"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AccountingExec = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.commands"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AccountingCommands = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:timeout.login.response"); value.Exists() {
+		data.TimeoutLoginResponse = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-aaa-task-user-cfg:users.group"); value.Exists() {
+		data.UsersGroup = make([]LineConsoleUsersGroup, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := LineConsoleUsersGroup{}
+			if cValue := v.Get("group-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.GroupName = types.StringValue(cValue.String())
+			}
+			data.UsersGroup = append(data.UsersGroup, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-minutes"); value.Exists() {
+		data.ExecTimeoutMinutes = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-seconds"); value.Exists() {
+		data.ExecTimeoutSeconds = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
+		data.AbsoluteTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
+		data.Width = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
+		data.Length = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); value.Exists() {
+		data.TimestampDisable = types.BoolValue(true)
+	} else {
+		data.TimestampDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Pager = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); value.Exists() {
+		data.TelnetTransparent = types.BoolValue(true)
+	} else {
+		data.TelnetTransparent = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *LineConsole) getDeletedItems(ctx context.Context, state LineConsole, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.TelnetTransparent.IsNull() && data.TelnetTransparent.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-telnet-cfg:telnet/transparent"))
+	}
+	if !state.Pager.IsNull() && data.Pager.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-line-timestamp-cfg:pager"))
+	}
+	if !state.TimestampDisable.IsNull() && data.TimestampDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp"))
+	}
+	if !state.Length.IsNull() && data.Length.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-line-general-cfg:length"))
+	}
+	if !state.Width.IsNull() && data.Width.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-line-general-cfg:width"))
+	}
+	if !state.AbsoluteTimeout.IsNull() && data.AbsoluteTimeout.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"))
+	}
+	if !state.ExecTimeoutSeconds.IsNull() && data.ExecTimeoutSeconds.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout"))
+	}
+	if !state.ExecTimeoutMinutes.IsNull() && data.ExecTimeoutMinutes.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout"))
+	}
+	for i := range state.UsersGroup {
+		keys := [...]string{"group-name"}
+		stateKeyValues := [...]string{state.UsersGroup[i].GroupName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.UsersGroup[i].GroupName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.UsersGroup {
+			found = true
+			if state.UsersGroup[i].GroupName.ValueString() != data.UsersGroup[j].GroupName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:users/group", keyString))
+		}
+	}
+	if !state.TimeoutLoginResponse.IsNull() && data.TimeoutLoginResponse.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response"))
+	}
+	if !state.SecretEncrypted.IsNull() && data.SecretEncrypted.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:secret/five"))
+	}
+	if !state.PasswordEncrypted.IsNull() && data.PasswordEncrypted.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:password/seven"))
+	}
+	if !state.AccountingCommands.IsNull() && data.AccountingCommands.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands"))
+	}
+	if !state.AccountingExec.IsNull() && data.AccountingExec.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec"))
+	}
+	if !state.AuthorizationCommands.IsNull() && data.AuthorizationCommands.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands"))
+	}
+	if !state.AuthorizationEventmanager.IsNull() && data.AuthorizationEventmanager.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager"))
+	}
+	if !state.AuthorizationExec.IsNull() && data.AuthorizationExec.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec"))
+	}
+	if !state.LoginAuthentication.IsNull() && data.LoginAuthentication.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication"))
+	}
+	if !state.CliWhitespaceCompletion.IsNull() && data.CliWhitespaceCompletion.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "cli/whitespace/completion"))
+	}
+	if !state.SessionLimit.IsNull() && data.SessionLimit.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "session-limit"))
+	}
+	if !state.TransportPreferredSsh.IsNull() && data.TransportPreferredSsh.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "transport/preferred/ssh"))
+	}
+	if !state.TransportPreferredTelnet.IsNull() && data.TransportPreferredTelnet.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "transport/preferred/telnet"))
+	}
+	if !state.TransportPreferredNone.IsNull() && data.TransportPreferredNone.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "transport/preferred/none"))
+	}
+	if !state.TransportOutputTelnet.IsNull() && data.TransportOutputTelnet.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "transport/output/telnet"))
+	}
+	if !state.TransportOutputSshTelnet.IsNull() && data.TransportOutputSshTelnet.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "transport/output/ssh"))
+	}
+	if !state.TransportOutputSsh.IsNull() && data.TransportOutputSsh.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "transport/output/ssh"))
+	}
+	if !state.TransportOutputNone.IsNull() && data.TransportOutputNone.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "transport/output/none"))
+	}
+	if !state.TransportOutputAll.IsNull() && data.TransportOutputAll.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "transport/output/all"))
+	}
+	if !state.TransportInputAll.IsNull() && data.TransportInputAll.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "transport/input/all"))
+	}
+	if !state.TransportInputTelnet.IsNull() && data.TransportInputTelnet.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "transport/input/telnet"))
+	}
+	if !state.TransportInputSshTelnet.IsNull() && data.TransportInputSshTelnet.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "transport/input/ssh"))
+	}
+	if !state.TransportInputSsh.IsNull() && data.TransportInputSsh.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "transport/input/ssh"))
+	}
+	if !state.TransportInputNone.IsNull() && data.TransportInputNone.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "transport/input/none"))
+	}
+	if !state.SessionTimeoutOutput.IsNull() && data.SessionTimeoutOutput.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "session-timeout"))
+	}
+	if !state.SessionTimeout.IsNull() && data.SessionTimeout.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "session-timeout"))
+	}
+	if !state.EscapeCharacter.IsNull() && data.EscapeCharacter.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "escape-character"))
+	}
+	if !state.DisconnectCharacter.IsNull() && data.DisconnectCharacter.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "disconnect-character"))
+	}
+	if !state.AccessClassEgress.IsNull() && data.AccessClassEgress.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "access-class/egress"))
+	}
+	if !state.AccessClassIngress.IsNull() && data.AccessClassIngress.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "access-class/ingress"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *LineConsole) getEmptyLeafsDelete(ctx context.Context, state *LineConsole, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if !data.TelnetTransparent.IsNull() && !data.TelnetTransparent.ValueBool() {
+		if state == nil || state.TelnetTransparent.IsNull() || state.TelnetTransparent.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-telnet-cfg:telnet/transparent"))
+		}
+	}
+	if !data.TimestampDisable.IsNull() && !data.TimestampDisable.ValueBool() {
+		if state == nil || state.TimestampDisable.IsNull() || state.TimestampDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp"))
+		}
+	}
+	for i := range data.UsersGroup {
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.UsersGroup[i].GroupName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	if !data.CliWhitespaceCompletion.IsNull() && !data.CliWhitespaceCompletion.ValueBool() {
+		if state == nil || state.CliWhitespaceCompletion.IsNull() || state.CliWhitespaceCompletion.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "cli/whitespace/completion"))
+		}
+	}
+	if !data.TransportPreferredSsh.IsNull() && !data.TransportPreferredSsh.ValueBool() {
+		if state == nil || state.TransportPreferredSsh.IsNull() || state.TransportPreferredSsh.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/preferred/ssh"))
+		}
+	}
+	if !data.TransportPreferredTelnet.IsNull() && !data.TransportPreferredTelnet.ValueBool() {
+		if state == nil || state.TransportPreferredTelnet.IsNull() || state.TransportPreferredTelnet.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/preferred/telnet"))
+		}
+	}
+	if !data.TransportPreferredNone.IsNull() && !data.TransportPreferredNone.ValueBool() {
+		if state == nil || state.TransportPreferredNone.IsNull() || state.TransportPreferredNone.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/preferred/none"))
+		}
+	}
+	if !data.TransportOutputTelnet.IsNull() && !data.TransportOutputTelnet.ValueBool() {
+		if state == nil || state.TransportOutputTelnet.IsNull() || state.TransportOutputTelnet.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/output/telnet"))
+		}
+	}
+	if !data.TransportOutputSshTelnet.IsNull() && !data.TransportOutputSshTelnet.ValueBool() {
+		if state == nil || state.TransportOutputSshTelnet.IsNull() || state.TransportOutputSshTelnet.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/output/ssh"))
+		}
+	}
+	if !data.TransportOutputSsh.IsNull() && !data.TransportOutputSsh.ValueBool() {
+		if state == nil || state.TransportOutputSsh.IsNull() || state.TransportOutputSsh.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/output/ssh"))
+		}
+	}
+	if !data.TransportOutputNone.IsNull() && !data.TransportOutputNone.ValueBool() {
+		if state == nil || state.TransportOutputNone.IsNull() || state.TransportOutputNone.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/output/none"))
+		}
+	}
+	if !data.TransportOutputAll.IsNull() && !data.TransportOutputAll.ValueBool() {
+		if state == nil || state.TransportOutputAll.IsNull() || state.TransportOutputAll.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/output/all"))
+		}
+	}
+	if !data.TransportInputAll.IsNull() && !data.TransportInputAll.ValueBool() {
+		if state == nil || state.TransportInputAll.IsNull() || state.TransportInputAll.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/input/all"))
+		}
+	}
+	if !data.TransportInputTelnet.IsNull() && !data.TransportInputTelnet.ValueBool() {
+		if state == nil || state.TransportInputTelnet.IsNull() || state.TransportInputTelnet.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/input/telnet"))
+		}
+	}
+	if !data.TransportInputSshTelnet.IsNull() && !data.TransportInputSshTelnet.ValueBool() {
+		if state == nil || state.TransportInputSshTelnet.IsNull() || state.TransportInputSshTelnet.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/input/ssh"))
+		}
+	}
+	if !data.TransportInputSsh.IsNull() && !data.TransportInputSsh.ValueBool() {
+		if state == nil || state.TransportInputSsh.IsNull() || state.TransportInputSsh.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/input/ssh"))
+		}
+	}
+	if !data.TransportInputNone.IsNull() && !data.TransportInputNone.ValueBool() {
+		if state == nil || state.TransportInputNone.IsNull() || state.TransportInputNone.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/input/none"))
+		}
+	}
+	if !data.SessionTimeoutOutput.IsNull() && !data.SessionTimeoutOutput.ValueBool() {
+		if state == nil || state.SessionTimeoutOutput.IsNull() || state.SessionTimeoutOutput.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "session-timeout"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *LineConsole) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.TelnetTransparent.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-telnet-cfg:telnet/transparent"))
+	}
+	if !data.Pager.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-line-timestamp-cfg:pager"))
+	}
+	if !data.TimestampDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp"))
+	}
+	if !data.Length.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-line-general-cfg:length"))
+	}
+	if !data.Width.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-line-general-cfg:width"))
+	}
+	if !data.AbsoluteTimeout.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"))
+	}
+	if !data.ExecTimeoutSeconds.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout"))
+	}
+	if !data.ExecTimeoutMinutes.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout"))
+	}
+	for i := range data.UsersGroup {
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.UsersGroup[i].GroupName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.UsersGroup[i].GroupName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:users/group", keyString))
+	}
+	if !data.TimeoutLoginResponse.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response"))
+	}
+	if !data.SecretEncrypted.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:secret/five"))
+	}
+	if !data.PasswordEncrypted.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:password/seven"))
+	}
+	if !data.AccountingCommands.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands"))
+	}
+	if !data.AccountingExec.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec"))
+	}
+	if !data.AuthorizationCommands.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands"))
+	}
+	if !data.AuthorizationEventmanager.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager"))
+	}
+	if !data.AuthorizationExec.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec"))
+	}
+	if !data.LoginAuthentication.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication"))
+	}
+	if !data.CliWhitespaceCompletion.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "cli/whitespace/completion"))
+	}
+	if !data.SessionLimit.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "session-limit"))
+	}
+	if !data.TransportPreferredSsh.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "transport/preferred/ssh"))
+	}
+	if !data.TransportPreferredTelnet.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "transport/preferred/telnet"))
+	}
+	if !data.TransportPreferredNone.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "transport/preferred/none"))
+	}
+	if !data.TransportOutputTelnet.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "transport/output/telnet"))
+	}
+	if !data.TransportOutputSshTelnet.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "transport/output/ssh"))
+	}
+	if !data.TransportOutputSsh.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "transport/output/ssh"))
+	}
+	if !data.TransportOutputNone.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "transport/output/none"))
+	}
+	if !data.TransportOutputAll.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "transport/output/all"))
+	}
+	if !data.TransportInputAll.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "transport/input/all"))
+	}
+	if !data.TransportInputTelnet.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "transport/input/telnet"))
+	}
+	if !data.TransportInputSshTelnet.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "transport/input/ssh"))
+	}
+	if !data.TransportInputSsh.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "transport/input/ssh"))
+	}
+	if !data.TransportInputNone.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "transport/input/none"))
+	}
+	if !data.SessionTimeoutOutput.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "session-timeout"))
+	}
+	if !data.SessionTimeout.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "session-timeout"))
+	}
+	if !data.EscapeCharacter.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "escape-character"))
+	}
+	if !data.DisconnectCharacter.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "disconnect-character"))
+	}
+	if !data.AccessClassEgress.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "access-class/egress"))
+	}
+	if !data.AccessClassIngress.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "access-class/ingress"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data LineConsole) toBodyXML(ctx context.Context, stateArg ...*LineConsole) string {
@@ -874,7 +1641,7 @@ func (data LineConsole) toBodyXML(ctx context.Context, stateArg ...*LineConsole)
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -882,6 +1649,7 @@ func (data LineConsole) toBodyXML(ctx context.Context, stateArg ...*LineConsole)
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *LineConsole) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1199,364 +1967,7 @@ func (data *LineConsole) updateFromBodyXML(ctx context.Context, res xmldot.Resul
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *LineConsole) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "access-class.ingress"); value.Exists() {
-		data.AccessClassIngress = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "access-class.egress"); value.Exists() {
-		data.AccessClassEgress = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "disconnect-character"); value.Exists() {
-		data.DisconnectCharacter = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "escape-character"); value.Exists() {
-		data.EscapeCharacter = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "session-timeout.timeout-interval"); value.Exists() {
-		data.SessionTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "session-timeout.output"); value.Exists() {
-		data.SessionTimeoutOutput = types.BoolValue(true)
-	} else if !data.SessionTimeoutOutput.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SessionTimeoutOutput = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.input.none"); value.Exists() {
-		data.TransportInputNone = types.BoolValue(true)
-	} else if !data.TransportInputNone.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TransportInputNone = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.input.ssh"); value.Exists() {
-		data.TransportInputSsh = types.BoolValue(true)
-	} else if !data.TransportInputSsh.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TransportInputSsh = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.input.ssh.telnet"); value.Exists() {
-		data.TransportInputSshTelnet = types.BoolValue(true)
-	} else if !data.TransportInputSshTelnet.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TransportInputSshTelnet = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.input.telnet"); value.Exists() {
-		data.TransportInputTelnet = types.BoolValue(true)
-	} else if !data.TransportInputTelnet.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TransportInputTelnet = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.input.all"); value.Exists() {
-		data.TransportInputAll = types.BoolValue(true)
-	} else if !data.TransportInputAll.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TransportInputAll = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.output.all"); value.Exists() {
-		data.TransportOutputAll = types.BoolValue(true)
-	} else if !data.TransportOutputAll.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TransportOutputAll = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.output.none"); value.Exists() {
-		data.TransportOutputNone = types.BoolValue(true)
-	} else if !data.TransportOutputNone.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TransportOutputNone = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.output.ssh"); value.Exists() {
-		data.TransportOutputSsh = types.BoolValue(true)
-	} else if !data.TransportOutputSsh.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TransportOutputSsh = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.output.ssh.telnet"); value.Exists() {
-		data.TransportOutputSshTelnet = types.BoolValue(true)
-	} else if !data.TransportOutputSshTelnet.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TransportOutputSshTelnet = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.output.telnet"); value.Exists() {
-		data.TransportOutputTelnet = types.BoolValue(true)
-	} else if !data.TransportOutputTelnet.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TransportOutputTelnet = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.preferred.none"); value.Exists() {
-		data.TransportPreferredNone = types.BoolValue(true)
-	} else if !data.TransportPreferredNone.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TransportPreferredNone = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.preferred.telnet"); value.Exists() {
-		data.TransportPreferredTelnet = types.BoolValue(true)
-	} else if !data.TransportPreferredTelnet.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TransportPreferredTelnet = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.preferred.ssh"); value.Exists() {
-		data.TransportPreferredSsh = types.BoolValue(true)
-	} else if !data.TransportPreferredSsh.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TransportPreferredSsh = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "session-limit"); value.Exists() {
-		data.SessionLimit = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "cli.whitespace.completion"); value.Exists() {
-		data.CliWhitespaceCompletion = types.BoolValue(true)
-	} else if !data.CliWhitespaceCompletion.IsNull() {
-		// Only set to false if it was previously set in state
-		data.CliWhitespaceCompletion = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:login.authentication"); value.Exists() {
-		data.LoginAuthentication = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.exec"); value.Exists() {
-		data.AuthorizationExec = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.eventmanager"); value.Exists() {
-		data.AuthorizationEventmanager = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.commands"); value.Exists() {
-		data.AuthorizationCommands = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.exec"); value.Exists() {
-		data.AccountingExec = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.commands"); value.Exists() {
-		data.AccountingCommands = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:timeout.login.response"); value.Exists() {
-		data.TimeoutLoginResponse = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:users.group"); value.Exists() {
-		data.UsersGroup = make([]LineConsoleUsersGroup, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := LineConsoleUsersGroup{}
-			if cValue := v.Get("group-name"); cValue.Exists() {
-				item.GroupName = types.StringValue(cValue.String())
-			}
-			data.UsersGroup = append(data.UsersGroup, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-minutes"); value.Exists() {
-		data.ExecTimeoutMinutes = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-seconds"); value.Exists() {
-		data.ExecTimeoutSeconds = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
-		data.AbsoluteTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
-		data.Width = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
-		data.Length = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); value.Exists() {
-		data.TimestampDisable = types.BoolValue(true)
-	} else if !data.TimestampDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TimestampDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
-		data.Pager = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); value.Exists() {
-		data.TelnetTransparent = types.BoolValue(true)
-	} else if !data.TelnetTransparent.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TelnetTransparent = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *LineConsoleData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "access-class.ingress"); value.Exists() {
-		data.AccessClassIngress = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "access-class.egress"); value.Exists() {
-		data.AccessClassEgress = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "disconnect-character"); value.Exists() {
-		data.DisconnectCharacter = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "escape-character"); value.Exists() {
-		data.EscapeCharacter = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "session-timeout.timeout-interval"); value.Exists() {
-		data.SessionTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "session-timeout.output"); value.Exists() {
-		data.SessionTimeoutOutput = types.BoolValue(true)
-	} else {
-		data.SessionTimeoutOutput = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.input.none"); value.Exists() {
-		data.TransportInputNone = types.BoolValue(true)
-	} else {
-		data.TransportInputNone = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.input.ssh"); value.Exists() {
-		data.TransportInputSsh = types.BoolValue(true)
-	} else {
-		data.TransportInputSsh = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.input.ssh.telnet"); value.Exists() {
-		data.TransportInputSshTelnet = types.BoolValue(true)
-	} else {
-		data.TransportInputSshTelnet = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.input.telnet"); value.Exists() {
-		data.TransportInputTelnet = types.BoolValue(true)
-	} else {
-		data.TransportInputTelnet = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.input.all"); value.Exists() {
-		data.TransportInputAll = types.BoolValue(true)
-	} else {
-		data.TransportInputAll = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.output.all"); value.Exists() {
-		data.TransportOutputAll = types.BoolValue(true)
-	} else {
-		data.TransportOutputAll = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.output.none"); value.Exists() {
-		data.TransportOutputNone = types.BoolValue(true)
-	} else {
-		data.TransportOutputNone = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.output.ssh"); value.Exists() {
-		data.TransportOutputSsh = types.BoolValue(true)
-	} else {
-		data.TransportOutputSsh = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.output.ssh.telnet"); value.Exists() {
-		data.TransportOutputSshTelnet = types.BoolValue(true)
-	} else {
-		data.TransportOutputSshTelnet = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.output.telnet"); value.Exists() {
-		data.TransportOutputTelnet = types.BoolValue(true)
-	} else {
-		data.TransportOutputTelnet = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.preferred.none"); value.Exists() {
-		data.TransportPreferredNone = types.BoolValue(true)
-	} else {
-		data.TransportPreferredNone = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.preferred.telnet"); value.Exists() {
-		data.TransportPreferredTelnet = types.BoolValue(true)
-	} else {
-		data.TransportPreferredTelnet = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.preferred.ssh"); value.Exists() {
-		data.TransportPreferredSsh = types.BoolValue(true)
-	} else {
-		data.TransportPreferredSsh = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "session-limit"); value.Exists() {
-		data.SessionLimit = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "cli.whitespace.completion"); value.Exists() {
-		data.CliWhitespaceCompletion = types.BoolValue(true)
-	} else {
-		data.CliWhitespaceCompletion = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:login.authentication"); value.Exists() {
-		data.LoginAuthentication = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.exec"); value.Exists() {
-		data.AuthorizationExec = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.eventmanager"); value.Exists() {
-		data.AuthorizationEventmanager = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:authorization.commands"); value.Exists() {
-		data.AuthorizationCommands = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.exec"); value.Exists() {
-		data.AccountingExec = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:accounting.commands"); value.Exists() {
-		data.AccountingCommands = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:password.seven"); value.Exists() {
-		data.PasswordEncrypted = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:secret.five"); value.Exists() {
-		data.SecretEncrypted = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:timeout.login.response"); value.Exists() {
-		data.TimeoutLoginResponse = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-aaa-task-user-cfg:users.group"); value.Exists() {
-		data.UsersGroup = make([]LineConsoleUsersGroup, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := LineConsoleUsersGroup{}
-			if cValue := v.Get("group-name"); cValue.Exists() {
-				item.GroupName = types.StringValue(cValue.String())
-			}
-			data.UsersGroup = append(data.UsersGroup, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-minutes"); value.Exists() {
-		data.ExecTimeoutMinutes = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout.timeout-in-seconds"); value.Exists() {
-		data.ExecTimeoutSeconds = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-general-cfg:absolute-timeout"); value.Exists() {
-		data.AbsoluteTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-general-cfg:width"); value.Exists() {
-		data.Width = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-general-cfg:length"); value.Exists() {
-		data.Length = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-timestamp-cfg:timestamp.disable"); value.Exists() {
-		data.TimestampDisable = types.BoolValue(true)
-	} else {
-		data.TimestampDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-line-timestamp-cfg:pager"); value.Exists() {
-		data.Pager = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "Cisco-IOS-XR-um-telnet-cfg:telnet.transparent"); value.Exists() {
-		data.TelnetTransparent = types.BoolValue(true)
-	} else {
-		data.TelnetTransparent = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *LineConsole) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1722,6 +2133,7 @@ func (data *LineConsole) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *LineConsoleData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1887,405 +2299,7 @@ func (data *LineConsoleData) fromBodyXML(ctx context.Context, res xmldot.Result)
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *LineConsole) getDeletedItems(ctx context.Context, state LineConsole) []string {
-	deletedItems := make([]string, 0)
-	if !state.TelnetTransparent.IsNull() && data.TelnetTransparent.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent", state.getPath()))
-	}
-	if !state.Pager.IsNull() && data.Pager.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-timestamp-cfg:pager", state.getPath()))
-	}
-	if !state.TimestampDisable.IsNull() && data.TimestampDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp", state.getPath()))
-	}
-	if !state.Length.IsNull() && data.Length.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-general-cfg:length", state.getPath()))
-	}
-	if !state.Width.IsNull() && data.Width.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-general-cfg:width", state.getPath()))
-	}
-	if !state.AbsoluteTimeout.IsNull() && data.AbsoluteTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-general-cfg:absolute-timeout", state.getPath()))
-	}
-	if !state.ExecTimeoutSeconds.IsNull() && data.ExecTimeoutSeconds.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout", state.getPath()))
-	}
-	if !state.ExecTimeoutMinutes.IsNull() && data.ExecTimeoutMinutes.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout", state.getPath()))
-	}
-	for i := range state.UsersGroup {
-		keys := [...]string{"group-name"}
-		stateKeyValues := [...]string{state.UsersGroup[i].GroupName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.UsersGroup[i].GroupName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.UsersGroup {
-			found = true
-			if state.UsersGroup[i].GroupName.ValueString() != data.UsersGroup[j].GroupName.ValueString() {
-				found = false
-			}
-			if found {
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group%v", state.getPath(), keyString))
-		}
-	}
-	if !state.TimeoutLoginResponse.IsNull() && data.TimeoutLoginResponse.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response", state.getPath()))
-	}
-	if !state.SecretEncrypted.IsNull() && data.SecretEncrypted.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:secret/five", state.getPath()))
-	}
-	if !state.PasswordEncrypted.IsNull() && data.PasswordEncrypted.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:password/seven", state.getPath()))
-	}
-	if !state.AccountingCommands.IsNull() && data.AccountingCommands.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands", state.getPath()))
-	}
-	if !state.AccountingExec.IsNull() && data.AccountingExec.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec", state.getPath()))
-	}
-	if !state.AuthorizationCommands.IsNull() && data.AuthorizationCommands.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands", state.getPath()))
-	}
-	if !state.AuthorizationEventmanager.IsNull() && data.AuthorizationEventmanager.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager", state.getPath()))
-	}
-	if !state.AuthorizationExec.IsNull() && data.AuthorizationExec.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec", state.getPath()))
-	}
-	if !state.LoginAuthentication.IsNull() && data.LoginAuthentication.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication", state.getPath()))
-	}
-	if !state.CliWhitespaceCompletion.IsNull() && data.CliWhitespaceCompletion.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/cli/whitespace/completion", state.getPath()))
-	}
-	if !state.SessionLimit.IsNull() && data.SessionLimit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/session-limit", state.getPath()))
-	}
-	if !state.TransportPreferredSsh.IsNull() && data.TransportPreferredSsh.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/preferred/ssh", state.getPath()))
-	}
-	if !state.TransportPreferredTelnet.IsNull() && data.TransportPreferredTelnet.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/preferred/telnet", state.getPath()))
-	}
-	if !state.TransportPreferredNone.IsNull() && data.TransportPreferredNone.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/preferred/none", state.getPath()))
-	}
-	if !state.TransportOutputTelnet.IsNull() && data.TransportOutputTelnet.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/output/telnet", state.getPath()))
-	}
-	if !state.TransportOutputSshTelnet.IsNull() && data.TransportOutputSshTelnet.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/output/ssh", state.getPath()))
-	}
-	if !state.TransportOutputSsh.IsNull() && data.TransportOutputSsh.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/output/ssh", state.getPath()))
-	}
-	if !state.TransportOutputNone.IsNull() && data.TransportOutputNone.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/output/none", state.getPath()))
-	}
-	if !state.TransportOutputAll.IsNull() && data.TransportOutputAll.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/output/all", state.getPath()))
-	}
-	if !state.TransportInputAll.IsNull() && data.TransportInputAll.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/input/all", state.getPath()))
-	}
-	if !state.TransportInputTelnet.IsNull() && data.TransportInputTelnet.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/input/telnet", state.getPath()))
-	}
-	if !state.TransportInputSshTelnet.IsNull() && data.TransportInputSshTelnet.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/input/ssh", state.getPath()))
-	}
-	if !state.TransportInputSsh.IsNull() && data.TransportInputSsh.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/input/ssh", state.getPath()))
-	}
-	if !state.TransportInputNone.IsNull() && data.TransportInputNone.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/input/none", state.getPath()))
-	}
-	if !state.SessionTimeoutOutput.IsNull() && data.SessionTimeoutOutput.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/session-timeout", state.getPath()))
-	}
-	if !state.SessionTimeout.IsNull() && data.SessionTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/session-timeout", state.getPath()))
-	}
-	if !state.EscapeCharacter.IsNull() && data.EscapeCharacter.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/escape-character", state.getPath()))
-	}
-	if !state.DisconnectCharacter.IsNull() && data.DisconnectCharacter.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/disconnect-character", state.getPath()))
-	}
-	if !state.AccessClassEgress.IsNull() && data.AccessClassEgress.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/access-class/egress", state.getPath()))
-	}
-	if !state.AccessClassIngress.IsNull() && data.AccessClassIngress.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/access-class/ingress", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *LineConsole) getEmptyLeafsDelete(ctx context.Context, state *LineConsole) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.TelnetTransparent.IsNull() && !data.TelnetTransparent.ValueBool() {
-		if state != nil && !state.TelnetTransparent.IsNull() && state.TelnetTransparent.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TimestampDisable.IsNull() && !data.TimestampDisable.ValueBool() {
-		if state != nil && !state.TimestampDisable.IsNull() && state.TimestampDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp", data.getXPath()))
-		}
-	}
-	for i := range data.UsersGroup {
-		keys := [...]string{"group-name"}
-		keyValues := [...]string{data.UsersGroup[i].GroupName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.CliWhitespaceCompletion.IsNull() && !data.CliWhitespaceCompletion.ValueBool() {
-		if state != nil && !state.CliWhitespaceCompletion.IsNull() && state.CliWhitespaceCompletion.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/cli/whitespace/completion", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TransportPreferredSsh.IsNull() && !data.TransportPreferredSsh.ValueBool() {
-		if state != nil && !state.TransportPreferredSsh.IsNull() && state.TransportPreferredSsh.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/preferred/ssh", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TransportPreferredTelnet.IsNull() && !data.TransportPreferredTelnet.ValueBool() {
-		if state != nil && !state.TransportPreferredTelnet.IsNull() && state.TransportPreferredTelnet.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/preferred/telnet", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TransportPreferredNone.IsNull() && !data.TransportPreferredNone.ValueBool() {
-		if state != nil && !state.TransportPreferredNone.IsNull() && state.TransportPreferredNone.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/preferred/none", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TransportOutputTelnet.IsNull() && !data.TransportOutputTelnet.ValueBool() {
-		if state != nil && !state.TransportOutputTelnet.IsNull() && state.TransportOutputTelnet.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/output/telnet", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TransportOutputSshTelnet.IsNull() && !data.TransportOutputSshTelnet.ValueBool() {
-		if state != nil && !state.TransportOutputSshTelnet.IsNull() && state.TransportOutputSshTelnet.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/output/ssh", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TransportOutputSsh.IsNull() && !data.TransportOutputSsh.ValueBool() {
-		if state != nil && !state.TransportOutputSsh.IsNull() && state.TransportOutputSsh.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/output/ssh", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TransportOutputNone.IsNull() && !data.TransportOutputNone.ValueBool() {
-		if state != nil && !state.TransportOutputNone.IsNull() && state.TransportOutputNone.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/output/none", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TransportOutputAll.IsNull() && !data.TransportOutputAll.ValueBool() {
-		if state != nil && !state.TransportOutputAll.IsNull() && state.TransportOutputAll.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/output/all", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TransportInputAll.IsNull() && !data.TransportInputAll.ValueBool() {
-		if state != nil && !state.TransportInputAll.IsNull() && state.TransportInputAll.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/input/all", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TransportInputTelnet.IsNull() && !data.TransportInputTelnet.ValueBool() {
-		if state != nil && !state.TransportInputTelnet.IsNull() && state.TransportInputTelnet.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/input/telnet", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TransportInputSshTelnet.IsNull() && !data.TransportInputSshTelnet.ValueBool() {
-		if state != nil && !state.TransportInputSshTelnet.IsNull() && state.TransportInputSshTelnet.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/input/ssh", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TransportInputSsh.IsNull() && !data.TransportInputSsh.ValueBool() {
-		if state != nil && !state.TransportInputSsh.IsNull() && state.TransportInputSsh.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/input/ssh", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TransportInputNone.IsNull() && !data.TransportInputNone.ValueBool() {
-		if state != nil && !state.TransportInputNone.IsNull() && state.TransportInputNone.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/input/none", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SessionTimeoutOutput.IsNull() && !data.SessionTimeoutOutput.ValueBool() {
-		if state != nil && !state.SessionTimeoutOutput.IsNull() && state.SessionTimeoutOutput.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/session-timeout", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *LineConsole) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.TelnetTransparent.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-telnet-cfg:telnet/transparent", data.getPath()))
-	}
-	if !data.Pager.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-timestamp-cfg:pager", data.getPath()))
-	}
-	if !data.TimestampDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-timestamp-cfg:timestamp", data.getPath()))
-	}
-	if !data.Length.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-general-cfg:length", data.getPath()))
-	}
-	if !data.Width.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-general-cfg:width", data.getPath()))
-	}
-	if !data.AbsoluteTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-general-cfg:absolute-timeout", data.getPath()))
-	}
-	if !data.ExecTimeoutSeconds.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout", data.getPath()))
-	}
-	if !data.ExecTimeoutMinutes.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-line-exec-timeout-cfg:exec-timeout", data.getPath()))
-	}
-	for i := range data.UsersGroup {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[group-name=" + data.UsersGroup[i].GroupName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:users/group%v", data.getPath(), keyPath))
-	}
-	if !data.TimeoutLoginResponse.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:timeout/login/response", data.getPath()))
-	}
-	if !data.SecretEncrypted.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:secret/five", data.getPath()))
-	}
-	if !data.PasswordEncrypted.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:password/seven", data.getPath()))
-	}
-	if !data.AccountingCommands.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/commands", data.getPath()))
-	}
-	if !data.AccountingExec.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:accounting/exec", data.getPath()))
-	}
-	if !data.AuthorizationCommands.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/commands", data.getPath()))
-	}
-	if !data.AuthorizationEventmanager.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/eventmanager", data.getPath()))
-	}
-	if !data.AuthorizationExec.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:authorization/exec", data.getPath()))
-	}
-	if !data.LoginAuthentication.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-aaa-task-user-cfg:login/authentication", data.getPath()))
-	}
-	if !data.CliWhitespaceCompletion.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/cli/whitespace/completion", data.getPath()))
-	}
-	if !data.SessionLimit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/session-limit", data.getPath()))
-	}
-	if !data.TransportPreferredSsh.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/preferred/ssh", data.getPath()))
-	}
-	if !data.TransportPreferredTelnet.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/preferred/telnet", data.getPath()))
-	}
-	if !data.TransportPreferredNone.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/preferred/none", data.getPath()))
-	}
-	if !data.TransportOutputTelnet.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/output/telnet", data.getPath()))
-	}
-	if !data.TransportOutputSshTelnet.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/output/ssh", data.getPath()))
-	}
-	if !data.TransportOutputSsh.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/output/ssh", data.getPath()))
-	}
-	if !data.TransportOutputNone.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/output/none", data.getPath()))
-	}
-	if !data.TransportOutputAll.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/output/all", data.getPath()))
-	}
-	if !data.TransportInputAll.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/input/all", data.getPath()))
-	}
-	if !data.TransportInputTelnet.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/input/telnet", data.getPath()))
-	}
-	if !data.TransportInputSshTelnet.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/input/ssh", data.getPath()))
-	}
-	if !data.TransportInputSsh.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/input/ssh", data.getPath()))
-	}
-	if !data.TransportInputNone.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/input/none", data.getPath()))
-	}
-	if !data.SessionTimeoutOutput.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/session-timeout", data.getPath()))
-	}
-	if !data.SessionTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/session-timeout", data.getPath()))
-	}
-	if !data.EscapeCharacter.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/escape-character", data.getPath()))
-	}
-	if !data.DisconnectCharacter.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/disconnect-character", data.getPath()))
-	}
-	if !data.AccessClassEgress.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/access-class/egress", data.getPath()))
-	}
-	if !data.AccessClassIngress.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/access-class/ingress", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *LineConsole) addDeletedItemsXML(ctx context.Context, state LineConsole, body string) string {
@@ -2956,6 +2970,7 @@ func (data *LineConsole) addDeletedItemsXML(ctx context.Context, state LineConso
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *LineConsole) addDeletePathsXML(ctx context.Context, body string) string {

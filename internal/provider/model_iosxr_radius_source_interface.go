@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
@@ -80,7 +81,7 @@ func (data RadiusSourceInterfaceData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RadiusSourceInterface) toBody(ctx context.Context) string {
+func (data RadiusSourceInterface) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.Vrf.IsNull() && !data.Vrf.IsUnknown() {
 		body, _ = sjson.Set(body, "vrf-name", data.Vrf.ValueString())
@@ -93,10 +94,59 @@ func (data RadiusSourceInterface) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *RadiusSourceInterface) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("source-interface"); value.Exists() && !data.SourceInterface.IsNull() {
+// GetVersionConstraints returns the version constraints for all fields
+func (data RadiusSourceInterface) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data RadiusSourceInterface) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data RadiusSourceInterface) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data RadiusSourceInterface) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data RadiusSourceInterface) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *RadiusSourceInterface) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "source-interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringValue(value.String())
 	} else if data.SourceInterface.IsNull() {
 		data.SourceInterface = types.StringNull()
@@ -104,6 +154,60 @@ func (data *RadiusSourceInterface) updateFromBody(ctx context.Context, res gjson
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *RadiusSourceInterface) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "source-interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SourceInterface = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *RadiusSourceInterfaceData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "source-interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SourceInterface = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *RadiusSourceInterface) getDeletedItems(ctx context.Context, state RadiusSourceInterface, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.SourceInterface.IsNull() && data.SourceInterface.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "source-interface"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *RadiusSourceInterface) getEmptyLeafsDelete(ctx context.Context, state *RadiusSourceInterface, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *RadiusSourceInterface) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.SourceInterface.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "source-interface"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data RadiusSourceInterface) toBodyXML(ctx context.Context, stateArg ...*RadiusSourceInterface) string {
@@ -137,7 +241,7 @@ func (data RadiusSourceInterface) toBodyXML(ctx context.Context, stateArg ...*Ra
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -145,6 +249,7 @@ func (data RadiusSourceInterface) toBodyXML(ctx context.Context, stateArg ...*Ra
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RadiusSourceInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -156,41 +261,7 @@ func (data *RadiusSourceInterface) updateFromBodyXML(ctx context.Context, res xm
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *RadiusSourceInterface) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "source-interface"); value.Exists() {
-		data.SourceInterface = types.StringValue(value.String())
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *RadiusSourceInterfaceData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "source-interface"); value.Exists() {
-		data.SourceInterface = types.StringValue(value.String())
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RadiusSourceInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -200,6 +271,7 @@ func (data *RadiusSourceInterface) fromBodyXML(ctx context.Context, res xmldot.R
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RadiusSourceInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -209,37 +281,7 @@ func (data *RadiusSourceInterfaceData) fromBodyXML(ctx context.Context, res xmld
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *RadiusSourceInterface) getDeletedItems(ctx context.Context, state RadiusSourceInterface) []string {
-	deletedItems := make([]string, 0)
-	if !state.SourceInterface.IsNull() && data.SourceInterface.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/source-interface", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *RadiusSourceInterface) getEmptyLeafsDelete(ctx context.Context, state *RadiusSourceInterface) []string {
-	emptyLeafsDelete := make([]string, 0)
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *RadiusSourceInterface) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.SourceInterface.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-interface", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *RadiusSourceInterface) addDeletedItemsXML(ctx context.Context, state RadiusSourceInterface, body string) string {
@@ -268,6 +310,7 @@ func (data *RadiusSourceInterface) addDeletedItemsXML(ctx context.Context, state
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *RadiusSourceInterface) addDeletePathsXML(ctx context.Context, body string) string {

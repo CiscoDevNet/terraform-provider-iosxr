@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
@@ -79,7 +80,7 @@ func (data LoggingEventsLinkStatusData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data LoggingEventsLinkStatus) toBody(ctx context.Context) string {
+func (data LoggingEventsLinkStatus) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.SoftwareInterfaces.IsNull() && !data.SoftwareInterfaces.IsUnknown() {
 		if data.SoftwareInterfaces.ValueBool() {
@@ -97,29 +98,26 @@ func (data LoggingEventsLinkStatus) toBody(ctx context.Context) string {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
-
-func (data *LoggingEventsLinkStatus) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("software-interfaces"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SoftwareInterfaces.IsNull() {
+func (data *LoggingEventsLinkStatus) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "software-interfaces"); !data.SoftwareInterfaces.IsNull() {
+		if value.Exists() {
 			data.SoftwareInterfaces = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SoftwareInterfaces = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SoftwareInterfaces.IsNull() {
-			data.SoftwareInterfaces = types.BoolNull()
-		}
+	} else if data.SoftwareInterfaces.IsNull() {
+		data.SoftwareInterfaces = types.BoolNull()
 	}
-	if value := res.Get("disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Disable.IsNull() {
+	if value := gjson.GetBytes(res, "disable"); !data.Disable.IsNull() {
+		if value.Exists() {
 			data.Disable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Disable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Disable.IsNull() {
-			data.Disable = types.BoolNull()
-		}
+	} else if data.Disable.IsNull() {
+		data.Disable = types.BoolNull()
 	}
 }
 
@@ -127,22 +125,14 @@ func (data *LoggingEventsLinkStatus) updateFromBody(ctx context.Context, res gjs
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *LoggingEventsLinkStatus) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "software-interfaces"); value.Exists() {
+func (data *LoggingEventsLinkStatus) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "software-interfaces"); value.Exists() {
 		data.SoftwareInterfaces = types.BoolValue(true)
 	} else if !data.SoftwareInterfaces.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SoftwareInterfaces = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "disable"); value.Exists() {
 		data.Disable = types.BoolValue(true)
 	} else if !data.Disable.IsNull() {
 		// Only set to false if it was previously set in state
@@ -154,22 +144,13 @@ func (data *LoggingEventsLinkStatus) fromBody(ctx context.Context, res gjson.Res
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *LoggingEventsLinkStatusData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "software-interfaces"); value.Exists() {
+func (data *LoggingEventsLinkStatusData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "software-interfaces"); value.Exists() {
 		data.SoftwareInterfaces = types.BoolValue(true)
 	} else {
 		data.SoftwareInterfaces = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "disable"); value.Exists() {
 		data.Disable = types.BoolValue(true)
 	} else {
 		data.Disable = types.BoolValue(false)
@@ -180,13 +161,13 @@ func (data *LoggingEventsLinkStatusData) fromBody(ctx context.Context, res gjson
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *LoggingEventsLinkStatus) getDeletedItems(ctx context.Context, state LoggingEventsLinkStatus) []string {
+func (data *LoggingEventsLinkStatus) getDeletedItems(ctx context.Context, state LoggingEventsLinkStatus, version string) []string {
 	deletedItems := make([]string, 0)
 	if !state.Disable.IsNull() && data.Disable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/disable", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "disable"))
 	}
 	if !state.SoftwareInterfaces.IsNull() && data.SoftwareInterfaces.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/software-interfaces", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "software-interfaces"))
 	}
 	return deletedItems
 }
@@ -195,18 +176,16 @@ func (data *LoggingEventsLinkStatus) getDeletedItems(ctx context.Context, state 
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *LoggingEventsLinkStatus) getEmptyLeafsDelete(ctx context.Context, state *LoggingEventsLinkStatus) []string {
+func (data *LoggingEventsLinkStatus) getEmptyLeafsDelete(ctx context.Context, state *LoggingEventsLinkStatus, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
 	if !data.Disable.IsNull() && !data.Disable.ValueBool() {
-		if state != nil && !state.Disable.IsNull() && state.Disable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disable", data.getXPath()))
+		if state == nil || state.Disable.IsNull() || state.Disable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "disable"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SoftwareInterfaces.IsNull() && !data.SoftwareInterfaces.ValueBool() {
-		if state != nil && !state.SoftwareInterfaces.IsNull() && state.SoftwareInterfaces.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/software-interfaces", data.getXPath()))
+		if state == nil || state.SoftwareInterfaces.IsNull() || state.SoftwareInterfaces.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "software-interfaces"))
 		}
 	}
 	return emptyLeafsDelete
@@ -215,14 +194,13 @@ func (data *LoggingEventsLinkStatus) getEmptyLeafsDelete(ctx context.Context, st
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *LoggingEventsLinkStatus) getDeletePaths(ctx context.Context) []string {
+func (data *LoggingEventsLinkStatus) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
 	if !data.Disable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/disable", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "disable"))
 	}
 	if !data.SoftwareInterfaces.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/software-interfaces", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "software-interfaces"))
 	}
 
 	return deletePaths
@@ -270,7 +248,7 @@ func (data LoggingEventsLinkStatus) toBodyXML(ctx context.Context, stateArg ...*
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))

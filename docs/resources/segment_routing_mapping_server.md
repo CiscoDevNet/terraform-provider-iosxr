@@ -10,22 +10,30 @@ description: |-
 
 This resource can manage the Segment Routing Mapping Server configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `mapping_prefix_sid_address_family.prefix_addresses` | `25.4` |
+
 ## Example Usage
 
 ```terraform
 resource "iosxr_segment_routing_mapping_server" "example" {
   mapping_prefix_sid_address_family = [
     {
-      af_name = "ipv4"
-      prefix_addresses = [
+      addresses = [
         {
-          address   = "10.1.1.0"
-          length    = "24"
-          sid_index = 500
-          range     = 10
-          attached  = true
+          attached              = true
+          ip_address            = "10.1.1.0"
+          prefix                = 24
+          range                 = 10
+          start_sid_index_range = 500
         }
       ]
+      af_name = "ipv4"
     }
   ]
 }
@@ -55,7 +63,30 @@ Required:
 
 Optional:
 
-- `prefix_addresses` (Attributes List) SID index range (see [below for nested schema](#nestedatt--mapping_prefix_sid_address_family--prefix_addresses))
+- `addresses` (Attributes List) IPaddress
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--mapping_prefix_sid_address_family--addresses))
+- `prefix_addresses` (Attributes List) SID index range
+  - **Not supported from version `25.4` and above** (see [below for nested schema](#nestedatt--mapping_prefix_sid_address_family--prefix_addresses))
+
+<a id="nestedatt--mapping_prefix_sid_address_family--addresses"></a>
+### Nested Schema for `mapping_prefix_sid_address_family.addresses`
+
+Optional:
+
+- `attached` (Boolean) Attached entry advertised via the A-flag
+  - Supported from version: `25.4`
+- `ip_address` (String) IPaddress
+  - Supported from version: `25.4`
+- `prefix` (Number) IP address prefix
+  - Range: `0`-`128`
+  - Supported from version: `25.4`
+- `range` (Number) Number of allocated SIDs
+  - Range: `0`-`65535`
+  - Supported from version: `25.4`
+- `start_sid_index_range` (Number) Start of SID index range
+  - Range: `0`-`1048575`
+  - Supported from version: `25.4`
+
 
 <a id="nestedatt--mapping_prefix_sid_address_family--prefix_addresses"></a>
 ### Nested Schema for `mapping_prefix_sid_address_family.prefix_addresses`

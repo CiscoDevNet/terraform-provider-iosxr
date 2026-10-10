@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -120,7 +121,7 @@ func (data IPSLAResponderData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data IPSLAResponder) toBody(ctx context.Context) string {
+func (data IPSLAResponder) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.Twamp.IsNull() && !data.Twamp.IsUnknown() {
 		if data.Twamp.ValueBool() {
@@ -137,6 +138,7 @@ func (data IPSLAResponder) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "type.udp.ipv4.address"+"."+strconv.Itoa(index)+"."+"address", item.Address.ValueString())
 			}
 			if len(item.Ports) > 0 {
+				body, _ = sjson.Set(body, "type.udp.ipv4.address"+"."+strconv.Itoa(index)+"."+"port", []interface{}{})
 				for cindex, citem := range item.Ports {
 					if !citem.PortNumber.IsNull() && !citem.PortNumber.IsUnknown() {
 						body, _ = sjson.Set(body, "type.udp.ipv4.address"+"."+strconv.Itoa(index)+"."+"port"+"."+strconv.Itoa(cindex)+"."+"port-number", strconv.FormatInt(citem.PortNumber.ValueInt64(), 10))
@@ -165,6 +167,7 @@ func (data IPSLAResponder) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"timeout", strconv.FormatInt(item.Timeout.ValueInt64(), 10))
 			}
 			if len(item.LocalIpv4Addresses) > 0 {
+				body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv4-addresses.ipv4-address", []interface{}{})
 				for cindex, citem := range item.LocalIpv4Addresses {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -173,6 +176,7 @@ func (data IPSLAResponder) toBody(ctx context.Context) string {
 						body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"local-port", strconv.FormatInt(citem.LocalPort.ValueInt64(), 10))
 					}
 					if len(citem.RemoteIpv4Addresses) > 0 {
+						body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"remote-ip.ipv4-addresses.ipv4-address", []interface{}{})
 						for ccindex, ccitem := range citem.RemoteIpv4Addresses {
 							if !ccitem.Address.IsNull() && !ccitem.Address.IsUnknown() {
 								body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"remote-ip.ipv4-addresses.ipv4-address"+"."+strconv.Itoa(ccindex)+"."+"address", ccitem.Address.ValueString())
@@ -188,6 +192,7 @@ func (data IPSLAResponder) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.LocalIpv6Addresses) > 0 {
+				body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv6-addresses.ipv6-address", []interface{}{})
 				for cindex, citem := range item.LocalIpv6Addresses {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -196,6 +201,7 @@ func (data IPSLAResponder) toBody(ctx context.Context) string {
 						body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"local-port", strconv.FormatInt(citem.LocalPort.ValueInt64(), 10))
 					}
 					if len(citem.RemoteIpv6Addresses) > 0 {
+						body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"remote-ip.ipv6-addresses.ipv6-address", []interface{}{})
 						for ccindex, ccitem := range citem.RemoteIpv6Addresses {
 							if !ccitem.Address.IsNull() && !ccitem.Address.IsUnknown() {
 								body, _ = sjson.Set(body, "twamp-light.test-session.session"+"."+strconv.Itoa(index)+"."+"local-ip.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"remote-ip.ipv6-addresses.ipv6-address"+"."+strconv.Itoa(ccindex)+"."+"address", ccitem.Address.ValueString())
@@ -217,15 +223,64 @@ func (data IPSLAResponder) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *IPSLAResponder) updateFromBody(ctx context.Context, res gjson.Result) {
+// GetVersionConstraints returns the version constraints for all fields
+func (data IPSLAResponder) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data IPSLAResponder) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data IPSLAResponder) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data IPSLAResponder) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data IPSLAResponder) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *IPSLAResponder) updateFromBody(ctx context.Context, res []byte, version string) {
 	for i := range data.TypeUdpIpv4 {
 		keys := [...]string{"address"}
 		keyValues := [...]string{data.TypeUdpIpv4[i].Address.ValueString()}
 
 		var r gjson.Result
-		res.Get("type.udp.ipv4.address").ForEach(
+		gjson.GetBytes(res, "type.udp.ipv4.address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -243,7 +298,7 @@ func (data *IPSLAResponder) updateFromBody(ctx context.Context, res gjson.Result
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() && !data.TypeUdpIpv4[i].Address.IsNull() {
+		if value := r.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.TypeUdpIpv4[i].Address.IsNull() {
 			data.TypeUdpIpv4[i].Address = types.StringValue(value.String())
 		} else {
 			data.TypeUdpIpv4[i].Address = types.StringNull()
@@ -278,18 +333,17 @@ func (data *IPSLAResponder) updateFromBody(ctx context.Context, res gjson.Result
 			}
 		}
 	}
-	if value := res.Get("twamp"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Twamp.IsNull() {
+	if value := gjson.GetBytes(res, "twamp"); !data.Twamp.IsNull() {
+		if value.Exists() {
 			data.Twamp = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Twamp = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Twamp.IsNull() {
-			data.Twamp = types.BoolNull()
-		}
+	} else if data.Twamp.IsNull() {
+		data.Twamp = types.BoolNull()
 	}
-	if value := res.Get("twamp.timeout"); value.Exists() && !data.TwampTimeout.IsNull() {
+	if value := gjson.GetBytes(res, "twamp.timeout"); value.Exists() && !data.TwampTimeout.IsNull() {
 		data.TwampTimeout = types.Int64Value(value.Int())
 	} else if data.TwampTimeout.IsNull() {
 		data.TwampTimeout = types.Int64Null()
@@ -299,7 +353,7 @@ func (data *IPSLAResponder) updateFromBody(ctx context.Context, res gjson.Result
 		keyValues := [...]string{strconv.FormatInt(data.TwampLightSessions[i].SessionId.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("twamp-light.test-session.session").ForEach(
+		gjson.GetBytes(res, "twamp-light.test-session.session").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -345,7 +399,7 @@ func (data *IPSLAResponder) updateFromBody(ctx context.Context, res gjson.Result
 					return true
 				},
 			)
-			if value := cr.Get("address"); value.Exists() && !data.TwampLightSessions[i].LocalIpv4Addresses[ci].Address.IsNull() {
+			if value := cr.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.TwampLightSessions[i].LocalIpv4Addresses[ci].Address.IsNull() {
 				data.TwampLightSessions[i].LocalIpv4Addresses[ci].Address = types.StringValue(value.String())
 			} else {
 				data.TwampLightSessions[i].LocalIpv4Addresses[ci].Address = types.StringNull()
@@ -378,17 +432,17 @@ func (data *IPSLAResponder) updateFromBody(ctx context.Context, res gjson.Result
 						return true
 					},
 				)
-				if value := ccr.Get("address"); value.Exists() && !data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Address.IsNull() {
+				if value := ccr.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Address.IsNull() {
 					data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Address = types.StringValue(value.String())
 				} else {
 					data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Address = types.StringNull()
 				}
-				if value := ccr.Get("remote-port"); value.Exists() && !data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].RemotePort.IsNull() {
+				if value := ccr.Get("remote-port"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].RemotePort.IsNull() {
 					data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].RemotePort = types.StringValue(value.String())
 				} else {
 					data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].RemotePort = types.StringNull()
 				}
-				if value := ccr.Get("vrf"); value.Exists() && !data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Vrf.IsNull() {
+				if value := ccr.Get("vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Vrf.IsNull() {
 					data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Vrf = types.StringValue(value.String())
 				} else {
 					data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Vrf = types.StringNull()
@@ -418,7 +472,7 @@ func (data *IPSLAResponder) updateFromBody(ctx context.Context, res gjson.Result
 					return true
 				},
 			)
-			if value := cr.Get("address"); value.Exists() && !data.TwampLightSessions[i].LocalIpv6Addresses[ci].Address.IsNull() {
+			if value := cr.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.TwampLightSessions[i].LocalIpv6Addresses[ci].Address.IsNull() {
 				data.TwampLightSessions[i].LocalIpv6Addresses[ci].Address = types.StringValue(value.String())
 			} else {
 				data.TwampLightSessions[i].LocalIpv6Addresses[ci].Address = types.StringNull()
@@ -451,17 +505,17 @@ func (data *IPSLAResponder) updateFromBody(ctx context.Context, res gjson.Result
 						return true
 					},
 				)
-				if value := ccr.Get("address"); value.Exists() && !data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Address.IsNull() {
+				if value := ccr.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Address.IsNull() {
 					data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Address = types.StringValue(value.String())
 				} else {
 					data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Address = types.StringNull()
 				}
-				if value := ccr.Get("remote-port"); value.Exists() && !data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].RemotePort.IsNull() {
+				if value := ccr.Get("remote-port"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].RemotePort.IsNull() {
 					data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].RemotePort = types.StringValue(value.String())
 				} else {
 					data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].RemotePort = types.StringNull()
 				}
-				if value := ccr.Get("vrf"); value.Exists() && !data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Vrf.IsNull() {
+				if value := ccr.Get("vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Vrf.IsNull() {
 					data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Vrf = types.StringValue(value.String())
 				} else {
 					data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Vrf = types.StringNull()
@@ -501,6 +555,657 @@ func (data *IPSLAResponder) updateFromBody(ctx context.Context, res gjson.Result
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *IPSLAResponder) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "type.udp.ipv4.address"); value.Exists() {
+		data.TypeUdpIpv4 = make([]IPSLAResponderTypeUdpIpv4, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := IPSLAResponderTypeUdpIpv4{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("port"); cValue.Exists() {
+				item.Ports = make([]IPSLAResponderTypeUdpIpv4Ports, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := IPSLAResponderTypeUdpIpv4Ports{}
+					if ccValue := cv.Get("port-number"); ccValue.Exists() {
+						cItem.PortNumber = types.Int64Value(ccValue.Int())
+					}
+					item.Ports = append(item.Ports, cItem)
+					return true
+				})
+			}
+			data.TypeUdpIpv4 = append(data.TypeUdpIpv4, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "twamp"); value.Exists() {
+		data.Twamp = types.BoolValue(true)
+	} else if !data.Twamp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Twamp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "twamp.timeout"); value.Exists() {
+		data.TwampTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "twamp-light.test-session.session"); value.Exists() {
+		data.TwampLightSessions = make([]IPSLAResponderTwampLightSessions, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := IPSLAResponderTwampLightSessions{}
+			if cValue := v.Get("session-id"); cValue.Exists() {
+				item.SessionId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("local-ip.ipv4-addresses.ipv4-address"); cValue.Exists() {
+				item.LocalIpv4Addresses = make([]IPSLAResponderTwampLightSessionsLocalIpv4Addresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := IPSLAResponderTwampLightSessionsLocalIpv4Addresses{}
+					if ccValue := cv.Get("address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("local-port"); ccValue.Exists() {
+						cItem.LocalPort = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("remote-ip.ipv4-addresses.ipv4-address"); ccValue.Exists() {
+						cItem.RemoteIpv4Addresses = make([]IPSLAResponderTwampLightSessionsLocalIpv4AddressesRemoteIpv4Addresses, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := IPSLAResponderTwampLightSessionsLocalIpv4AddressesRemoteIpv4Addresses{}
+							if cccValue := ccv.Get("address"); cccValue.Exists() && (cccValue.Type == gjson.String || cccValue.Type == gjson.Number) {
+								ccItem.Address = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("remote-port"); cccValue.Exists() && (cccValue.Type == gjson.String || cccValue.Type == gjson.Number) {
+								ccItem.RemotePort = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("vrf"); cccValue.Exists() && (cccValue.Type == gjson.String || cccValue.Type == gjson.Number) {
+								ccItem.Vrf = types.StringValue(cccValue.String())
+							}
+							cItem.RemoteIpv4Addresses = append(cItem.RemoteIpv4Addresses, ccItem)
+							return true
+						})
+					}
+					item.LocalIpv4Addresses = append(item.LocalIpv4Addresses, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("local-ip.ipv6-addresses.ipv6-address"); cValue.Exists() {
+				item.LocalIpv6Addresses = make([]IPSLAResponderTwampLightSessionsLocalIpv6Addresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := IPSLAResponderTwampLightSessionsLocalIpv6Addresses{}
+					if ccValue := cv.Get("address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("local-port"); ccValue.Exists() {
+						cItem.LocalPort = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("remote-ip.ipv6-addresses.ipv6-address"); ccValue.Exists() {
+						cItem.RemoteIpv6Addresses = make([]IPSLAResponderTwampLightSessionsLocalIpv6AddressesRemoteIpv6Addresses, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := IPSLAResponderTwampLightSessionsLocalIpv6AddressesRemoteIpv6Addresses{}
+							if cccValue := ccv.Get("address"); cccValue.Exists() && (cccValue.Type == gjson.String || cccValue.Type == gjson.Number) {
+								ccItem.Address = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("remote-port"); cccValue.Exists() && (cccValue.Type == gjson.String || cccValue.Type == gjson.Number) {
+								ccItem.RemotePort = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("vrf"); cccValue.Exists() && (cccValue.Type == gjson.String || cccValue.Type == gjson.Number) {
+								ccItem.Vrf = types.StringValue(cccValue.String())
+							}
+							cItem.RemoteIpv6Addresses = append(cItem.RemoteIpv6Addresses, ccItem)
+							return true
+						})
+					}
+					item.LocalIpv6Addresses = append(item.LocalIpv6Addresses, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("authentication"); cValue.Exists() {
+				item.Authentication = types.BoolValue(true)
+			} else if !item.Authentication.IsNull() {
+				// Only set to false if it was previously set
+				item.Authentication = types.BoolValue(false)
+			}
+			if cValue := v.Get("encryption"); cValue.Exists() {
+				item.Encryption = types.BoolValue(true)
+			} else if !item.Encryption.IsNull() {
+				// Only set to false if it was previously set
+				item.Encryption = types.BoolValue(false)
+			}
+			if cValue := v.Get("timeout"); cValue.Exists() {
+				item.Timeout = types.Int64Value(cValue.Int())
+			}
+			data.TwampLightSessions = append(data.TwampLightSessions, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *IPSLAResponderData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "type.udp.ipv4.address"); value.Exists() {
+		data.TypeUdpIpv4 = make([]IPSLAResponderTypeUdpIpv4, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := IPSLAResponderTypeUdpIpv4{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("port"); cValue.Exists() {
+				item.Ports = make([]IPSLAResponderTypeUdpIpv4Ports, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := IPSLAResponderTypeUdpIpv4Ports{}
+					if ccValue := cv.Get("port-number"); ccValue.Exists() {
+						cItem.PortNumber = types.Int64Value(ccValue.Int())
+					}
+					item.Ports = append(item.Ports, cItem)
+					return true
+				})
+			}
+			data.TypeUdpIpv4 = append(data.TypeUdpIpv4, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "twamp"); value.Exists() {
+		data.Twamp = types.BoolValue(true)
+	} else {
+		data.Twamp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "twamp.timeout"); value.Exists() {
+		data.TwampTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "twamp-light.test-session.session"); value.Exists() {
+		data.TwampLightSessions = make([]IPSLAResponderTwampLightSessions, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := IPSLAResponderTwampLightSessions{}
+			if cValue := v.Get("session-id"); cValue.Exists() {
+				item.SessionId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("local-ip.ipv4-addresses.ipv4-address"); cValue.Exists() {
+				item.LocalIpv4Addresses = make([]IPSLAResponderTwampLightSessionsLocalIpv4Addresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := IPSLAResponderTwampLightSessionsLocalIpv4Addresses{}
+					if ccValue := cv.Get("address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("local-port"); ccValue.Exists() {
+						cItem.LocalPort = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("remote-ip.ipv4-addresses.ipv4-address"); ccValue.Exists() {
+						cItem.RemoteIpv4Addresses = make([]IPSLAResponderTwampLightSessionsLocalIpv4AddressesRemoteIpv4Addresses, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := IPSLAResponderTwampLightSessionsLocalIpv4AddressesRemoteIpv4Addresses{}
+							if cccValue := ccv.Get("address"); cccValue.Exists() && (cccValue.Type == gjson.String || cccValue.Type == gjson.Number) {
+								ccItem.Address = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("remote-port"); cccValue.Exists() && (cccValue.Type == gjson.String || cccValue.Type == gjson.Number) {
+								ccItem.RemotePort = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("vrf"); cccValue.Exists() && (cccValue.Type == gjson.String || cccValue.Type == gjson.Number) {
+								ccItem.Vrf = types.StringValue(cccValue.String())
+							}
+							cItem.RemoteIpv4Addresses = append(cItem.RemoteIpv4Addresses, ccItem)
+							return true
+						})
+					}
+					item.LocalIpv4Addresses = append(item.LocalIpv4Addresses, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("local-ip.ipv6-addresses.ipv6-address"); cValue.Exists() {
+				item.LocalIpv6Addresses = make([]IPSLAResponderTwampLightSessionsLocalIpv6Addresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := IPSLAResponderTwampLightSessionsLocalIpv6Addresses{}
+					if ccValue := cv.Get("address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("local-port"); ccValue.Exists() {
+						cItem.LocalPort = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("remote-ip.ipv6-addresses.ipv6-address"); ccValue.Exists() {
+						cItem.RemoteIpv6Addresses = make([]IPSLAResponderTwampLightSessionsLocalIpv6AddressesRemoteIpv6Addresses, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := IPSLAResponderTwampLightSessionsLocalIpv6AddressesRemoteIpv6Addresses{}
+							if cccValue := ccv.Get("address"); cccValue.Exists() && (cccValue.Type == gjson.String || cccValue.Type == gjson.Number) {
+								ccItem.Address = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("remote-port"); cccValue.Exists() && (cccValue.Type == gjson.String || cccValue.Type == gjson.Number) {
+								ccItem.RemotePort = types.StringValue(cccValue.String())
+							}
+							if cccValue := ccv.Get("vrf"); cccValue.Exists() && (cccValue.Type == gjson.String || cccValue.Type == gjson.Number) {
+								ccItem.Vrf = types.StringValue(cccValue.String())
+							}
+							cItem.RemoteIpv6Addresses = append(cItem.RemoteIpv6Addresses, ccItem)
+							return true
+						})
+					}
+					item.LocalIpv6Addresses = append(item.LocalIpv6Addresses, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("authentication"); cValue.Exists() {
+				item.Authentication = types.BoolValue(true)
+			} else {
+				item.Authentication = types.BoolValue(false)
+			}
+			if cValue := v.Get("encryption"); cValue.Exists() {
+				item.Encryption = types.BoolValue(true)
+			} else {
+				item.Encryption = types.BoolValue(false)
+			}
+			if cValue := v.Get("timeout"); cValue.Exists() {
+				item.Timeout = types.Int64Value(cValue.Int())
+			}
+			data.TwampLightSessions = append(data.TwampLightSessions, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *IPSLAResponder) getDeletedItems(ctx context.Context, state IPSLAResponder, version string) []string {
+	deletedItems := make([]string, 0)
+	for i := range state.TwampLightSessions {
+		keys := [...]string{"session-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.TwampLightSessions[i].SessionId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.TwampLightSessions[i].SessionId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.TwampLightSessions {
+			found = true
+			if state.TwampLightSessions[i].SessionId.ValueInt64() != data.TwampLightSessions[j].SessionId.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.TwampLightSessions[i].Timeout.IsNull() && data.TwampLightSessions[j].Timeout.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "twamp-light/test-session/session", keyString), "timeout"))
+				}
+				if !state.TwampLightSessions[i].Encryption.IsNull() && data.TwampLightSessions[j].Encryption.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "twamp-light/test-session/session", keyString), "encryption"))
+				}
+				if !state.TwampLightSessions[i].Authentication.IsNull() && data.TwampLightSessions[j].Authentication.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "twamp-light/test-session/session", keyString), "authentication"))
+				}
+				for ci := range state.TwampLightSessions[i].LocalIpv6Addresses {
+					ckeys := [...]string{"address", "local-port"}
+					cstateKeyValues := [...]string{state.TwampLightSessions[i].LocalIpv6Addresses[ci].Address.ValueString(), strconv.FormatInt(state.TwampLightSessions[i].LocalIpv6Addresses[ci].LocalPort.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv6Addresses[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv6Addresses[ci].LocalPort.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.TwampLightSessions[j].LocalIpv6Addresses {
+						found = true
+						if state.TwampLightSessions[i].LocalIpv6Addresses[ci].Address.ValueString() != data.TwampLightSessions[j].LocalIpv6Addresses[cj].Address.ValueString() {
+							found = false
+						}
+						if state.TwampLightSessions[i].LocalIpv6Addresses[ci].LocalPort.ValueInt64() != data.TwampLightSessions[j].LocalIpv6Addresses[cj].LocalPort.ValueInt64() {
+							found = false
+						}
+						if found {
+							for cci := range state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses {
+								cckeys := [...]string{"address", "remote-port", "vrf"}
+								ccstateKeyValues := [...]string{state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Address.ValueString(), state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].RemotePort.ValueString(), state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Vrf.ValueString()}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Address.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].RemotePort.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Vrf.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.TwampLightSessions[j].LocalIpv6Addresses[cj].RemoteIpv6Addresses {
+									found = true
+									if state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Address.ValueString() != data.TwampLightSessions[j].LocalIpv6Addresses[cj].RemoteIpv6Addresses[ccj].Address.ValueString() {
+										found = false
+									}
+									if state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].RemotePort.ValueString() != data.TwampLightSessions[j].LocalIpv6Addresses[cj].RemoteIpv6Addresses[ccj].RemotePort.ValueString() {
+										found = false
+									}
+									if state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Vrf.ValueString() != data.TwampLightSessions[j].LocalIpv6Addresses[cj].RemoteIpv6Addresses[ccj].Vrf.ValueString() {
+										found = false
+									}
+									if found {
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v/%v%v", state.getPath(), "twamp-light/test-session/session", keyString, "local-ip/ipv6-addresses/ipv6-address", ckeyString, "remote-ip/ipv6-addresses/ipv6-address", cckeyString))
+								}
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "twamp-light/test-session/session", keyString, "local-ip/ipv6-addresses/ipv6-address", ckeyString))
+					}
+				}
+				for ci := range state.TwampLightSessions[i].LocalIpv4Addresses {
+					ckeys := [...]string{"address", "local-port"}
+					cstateKeyValues := [...]string{state.TwampLightSessions[i].LocalIpv4Addresses[ci].Address.ValueString(), strconv.FormatInt(state.TwampLightSessions[i].LocalIpv4Addresses[ci].LocalPort.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv4Addresses[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv4Addresses[ci].LocalPort.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.TwampLightSessions[j].LocalIpv4Addresses {
+						found = true
+						if state.TwampLightSessions[i].LocalIpv4Addresses[ci].Address.ValueString() != data.TwampLightSessions[j].LocalIpv4Addresses[cj].Address.ValueString() {
+							found = false
+						}
+						if state.TwampLightSessions[i].LocalIpv4Addresses[ci].LocalPort.ValueInt64() != data.TwampLightSessions[j].LocalIpv4Addresses[cj].LocalPort.ValueInt64() {
+							found = false
+						}
+						if found {
+							for cci := range state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses {
+								cckeys := [...]string{"address", "remote-port", "vrf"}
+								ccstateKeyValues := [...]string{state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Address.ValueString(), state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].RemotePort.ValueString(), state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Vrf.ValueString()}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Address.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].RemotePort.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Vrf.ValueString()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.TwampLightSessions[j].LocalIpv4Addresses[cj].RemoteIpv4Addresses {
+									found = true
+									if state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Address.ValueString() != data.TwampLightSessions[j].LocalIpv4Addresses[cj].RemoteIpv4Addresses[ccj].Address.ValueString() {
+										found = false
+									}
+									if state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].RemotePort.ValueString() != data.TwampLightSessions[j].LocalIpv4Addresses[cj].RemoteIpv4Addresses[ccj].RemotePort.ValueString() {
+										found = false
+									}
+									if state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Vrf.ValueString() != data.TwampLightSessions[j].LocalIpv4Addresses[cj].RemoteIpv4Addresses[ccj].Vrf.ValueString() {
+										found = false
+									}
+									if found {
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v/%v%v", state.getPath(), "twamp-light/test-session/session", keyString, "local-ip/ipv4-addresses/ipv4-address", ckeyString, "remote-ip/ipv4-addresses/ipv4-address", cckeyString))
+								}
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "twamp-light/test-session/session", keyString, "local-ip/ipv4-addresses/ipv4-address", ckeyString))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "twamp-light/test-session/session", keyString))
+		}
+	}
+	if !state.TwampTimeout.IsNull() && data.TwampTimeout.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "twamp/timeout"))
+	}
+	if !state.Twamp.IsNull() && data.Twamp.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "twamp"))
+	}
+	for i := range state.TypeUdpIpv4 {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.TypeUdpIpv4[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.TypeUdpIpv4[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.TypeUdpIpv4 {
+			found = true
+			if state.TypeUdpIpv4[i].Address.ValueString() != data.TypeUdpIpv4[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.TypeUdpIpv4[i].Ports {
+					ckeys := [...]string{"port-number"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.TypeUdpIpv4[i].Ports[ci].PortNumber.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.TypeUdpIpv4[i].Ports[ci].PortNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.TypeUdpIpv4[j].Ports {
+						found = true
+						if state.TypeUdpIpv4[i].Ports[ci].PortNumber.ValueInt64() != data.TypeUdpIpv4[j].Ports[cj].PortNumber.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "type/udp/ipv4/address", keyString, "port", ckeyString))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "type/udp/ipv4/address", keyString))
+		}
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *IPSLAResponder) getEmptyLeafsDelete(ctx context.Context, state *IPSLAResponder, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	for i := range data.TwampLightSessions {
+		keys := [...]string{"session-id"}
+		keyValues := [...]string{strconv.FormatInt(data.TwampLightSessions[i].SessionId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.TwampLightSessions[i].Encryption.IsNull() && !data.TwampLightSessions[i].Encryption.ValueBool() {
+			if state == nil || i >= len(state.TwampLightSessions) || state.TwampLightSessions[i].Encryption.IsNull() || state.TwampLightSessions[i].Encryption.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "twamp-light/test-session/session", keyString), "encryption"))
+			}
+		}
+		if !data.TwampLightSessions[i].Authentication.IsNull() && !data.TwampLightSessions[i].Authentication.ValueBool() {
+			if state == nil || i >= len(state.TwampLightSessions) || state.TwampLightSessions[i].Authentication.IsNull() || state.TwampLightSessions[i].Authentication.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "twamp-light/test-session/session", keyString), "authentication"))
+			}
+		}
+		for ci := range data.TwampLightSessions[i].LocalIpv6Addresses {
+			ckeys := [...]string{"address", "local-port"}
+			ckeyValues := [...]string{data.TwampLightSessions[i].LocalIpv6Addresses[ci].Address.ValueString(), strconv.FormatInt(data.TwampLightSessions[i].LocalIpv6Addresses[ci].LocalPort.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			for cci := range data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses {
+				cckeys := [...]string{"address", "remote-port", "vrf"}
+				cckeyValues := [...]string{data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Address.ValueString(), data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].RemotePort.ValueString(), data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Vrf.ValueString()}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+			}
+		}
+		for ci := range data.TwampLightSessions[i].LocalIpv4Addresses {
+			ckeys := [...]string{"address", "local-port"}
+			ckeyValues := [...]string{data.TwampLightSessions[i].LocalIpv4Addresses[ci].Address.ValueString(), strconv.FormatInt(data.TwampLightSessions[i].LocalIpv4Addresses[ci].LocalPort.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			for cci := range data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses {
+				cckeys := [...]string{"address", "remote-port", "vrf"}
+				cckeyValues := [...]string{data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Address.ValueString(), data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].RemotePort.ValueString(), data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Vrf.ValueString()}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+			}
+		}
+	}
+	if !data.Twamp.IsNull() && !data.Twamp.ValueBool() {
+		if state == nil || state.Twamp.IsNull() || state.Twamp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "twamp"))
+		}
+	}
+	for i := range data.TypeUdpIpv4 {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.TypeUdpIpv4[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.TypeUdpIpv4[i].Ports {
+			ckeys := [...]string{"port-number"}
+			ckeyValues := [...]string{strconv.FormatInt(data.TypeUdpIpv4[i].Ports[ci].PortNumber.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *IPSLAResponder) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	for i := range data.TwampLightSessions {
+		keys := [...]string{"session-id"}
+		keyValues := [...]string{strconv.FormatInt(data.TwampLightSessions[i].SessionId.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.TwampLightSessions[i].SessionId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "twamp-light/test-session/session", keyString))
+	}
+	if !data.TwampTimeout.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "twamp/timeout"))
+	}
+	if !data.Twamp.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "twamp"))
+	}
+	for i := range data.TypeUdpIpv4 {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.TypeUdpIpv4[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.TypeUdpIpv4[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "type/udp/ipv4/address", keyString))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data IPSLAResponder) toBodyXML(ctx context.Context, stateArg ...*IPSLAResponder) string {
@@ -626,7 +1331,7 @@ func (data IPSLAResponder) toBodyXML(ctx context.Context, stateArg ...*IPSLAResp
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -634,6 +1339,7 @@ func (data IPSLAResponder) toBodyXML(ctx context.Context, stateArg ...*IPSLAResp
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *IPSLAResponder) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -840,270 +1546,7 @@ func (data *IPSLAResponder) updateFromBodyXML(ctx context.Context, res xmldot.Re
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *IPSLAResponder) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "type.udp.ipv4.address"); value.Exists() {
-		data.TypeUdpIpv4 = make([]IPSLAResponderTypeUdpIpv4, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := IPSLAResponderTypeUdpIpv4{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("port"); cValue.Exists() {
-				item.Ports = make([]IPSLAResponderTypeUdpIpv4Ports, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := IPSLAResponderTypeUdpIpv4Ports{}
-					if ccValue := cv.Get("port-number"); ccValue.Exists() {
-						cItem.PortNumber = types.Int64Value(ccValue.Int())
-					}
-					item.Ports = append(item.Ports, cItem)
-					return true
-				})
-			}
-			data.TypeUdpIpv4 = append(data.TypeUdpIpv4, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "twamp"); value.Exists() {
-		data.Twamp = types.BoolValue(true)
-	} else if !data.Twamp.IsNull() {
-		// Only set to false if it was previously set in state
-		data.Twamp = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "twamp.timeout"); value.Exists() {
-		data.TwampTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "twamp-light.test-session.session"); value.Exists() {
-		data.TwampLightSessions = make([]IPSLAResponderTwampLightSessions, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := IPSLAResponderTwampLightSessions{}
-			if cValue := v.Get("session-id"); cValue.Exists() {
-				item.SessionId = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("local-ip.ipv4-addresses.ipv4-address"); cValue.Exists() {
-				item.LocalIpv4Addresses = make([]IPSLAResponderTwampLightSessionsLocalIpv4Addresses, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := IPSLAResponderTwampLightSessionsLocalIpv4Addresses{}
-					if ccValue := cv.Get("address"); ccValue.Exists() {
-						cItem.Address = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("local-port"); ccValue.Exists() {
-						cItem.LocalPort = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("remote-ip.ipv4-addresses.ipv4-address"); ccValue.Exists() {
-						cItem.RemoteIpv4Addresses = make([]IPSLAResponderTwampLightSessionsLocalIpv4AddressesRemoteIpv4Addresses, 0)
-						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
-							ccItem := IPSLAResponderTwampLightSessionsLocalIpv4AddressesRemoteIpv4Addresses{}
-							if cccValue := ccv.Get("address"); cccValue.Exists() {
-								ccItem.Address = types.StringValue(cccValue.String())
-							}
-							if cccValue := ccv.Get("remote-port"); cccValue.Exists() {
-								ccItem.RemotePort = types.StringValue(cccValue.String())
-							}
-							if cccValue := ccv.Get("vrf"); cccValue.Exists() {
-								ccItem.Vrf = types.StringValue(cccValue.String())
-							}
-							cItem.RemoteIpv4Addresses = append(cItem.RemoteIpv4Addresses, ccItem)
-							return true
-						})
-					}
-					item.LocalIpv4Addresses = append(item.LocalIpv4Addresses, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("local-ip.ipv6-addresses.ipv6-address"); cValue.Exists() {
-				item.LocalIpv6Addresses = make([]IPSLAResponderTwampLightSessionsLocalIpv6Addresses, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := IPSLAResponderTwampLightSessionsLocalIpv6Addresses{}
-					if ccValue := cv.Get("address"); ccValue.Exists() {
-						cItem.Address = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("local-port"); ccValue.Exists() {
-						cItem.LocalPort = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("remote-ip.ipv6-addresses.ipv6-address"); ccValue.Exists() {
-						cItem.RemoteIpv6Addresses = make([]IPSLAResponderTwampLightSessionsLocalIpv6AddressesRemoteIpv6Addresses, 0)
-						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
-							ccItem := IPSLAResponderTwampLightSessionsLocalIpv6AddressesRemoteIpv6Addresses{}
-							if cccValue := ccv.Get("address"); cccValue.Exists() {
-								ccItem.Address = types.StringValue(cccValue.String())
-							}
-							if cccValue := ccv.Get("remote-port"); cccValue.Exists() {
-								ccItem.RemotePort = types.StringValue(cccValue.String())
-							}
-							if cccValue := ccv.Get("vrf"); cccValue.Exists() {
-								ccItem.Vrf = types.StringValue(cccValue.String())
-							}
-							cItem.RemoteIpv6Addresses = append(cItem.RemoteIpv6Addresses, ccItem)
-							return true
-						})
-					}
-					item.LocalIpv6Addresses = append(item.LocalIpv6Addresses, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("authentication"); cValue.Exists() {
-				item.Authentication = types.BoolValue(true)
-			} else if !item.Authentication.IsNull() {
-				// Only set to false if it was previously set
-				item.Authentication = types.BoolValue(false)
-			}
-			if cValue := v.Get("encryption"); cValue.Exists() {
-				item.Encryption = types.BoolValue(true)
-			} else if !item.Encryption.IsNull() {
-				// Only set to false if it was previously set
-				item.Encryption = types.BoolValue(false)
-			}
-			if cValue := v.Get("timeout"); cValue.Exists() {
-				item.Timeout = types.Int64Value(cValue.Int())
-			}
-			data.TwampLightSessions = append(data.TwampLightSessions, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *IPSLAResponderData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "type.udp.ipv4.address"); value.Exists() {
-		data.TypeUdpIpv4 = make([]IPSLAResponderTypeUdpIpv4, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := IPSLAResponderTypeUdpIpv4{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("port"); cValue.Exists() {
-				item.Ports = make([]IPSLAResponderTypeUdpIpv4Ports, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := IPSLAResponderTypeUdpIpv4Ports{}
-					if ccValue := cv.Get("port-number"); ccValue.Exists() {
-						cItem.PortNumber = types.Int64Value(ccValue.Int())
-					}
-					item.Ports = append(item.Ports, cItem)
-					return true
-				})
-			}
-			data.TypeUdpIpv4 = append(data.TypeUdpIpv4, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "twamp"); value.Exists() {
-		data.Twamp = types.BoolValue(true)
-	} else {
-		data.Twamp = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "twamp.timeout"); value.Exists() {
-		data.TwampTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "twamp-light.test-session.session"); value.Exists() {
-		data.TwampLightSessions = make([]IPSLAResponderTwampLightSessions, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := IPSLAResponderTwampLightSessions{}
-			if cValue := v.Get("session-id"); cValue.Exists() {
-				item.SessionId = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("local-ip.ipv4-addresses.ipv4-address"); cValue.Exists() {
-				item.LocalIpv4Addresses = make([]IPSLAResponderTwampLightSessionsLocalIpv4Addresses, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := IPSLAResponderTwampLightSessionsLocalIpv4Addresses{}
-					if ccValue := cv.Get("address"); ccValue.Exists() {
-						cItem.Address = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("local-port"); ccValue.Exists() {
-						cItem.LocalPort = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("remote-ip.ipv4-addresses.ipv4-address"); ccValue.Exists() {
-						cItem.RemoteIpv4Addresses = make([]IPSLAResponderTwampLightSessionsLocalIpv4AddressesRemoteIpv4Addresses, 0)
-						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
-							ccItem := IPSLAResponderTwampLightSessionsLocalIpv4AddressesRemoteIpv4Addresses{}
-							if cccValue := ccv.Get("address"); cccValue.Exists() {
-								ccItem.Address = types.StringValue(cccValue.String())
-							}
-							if cccValue := ccv.Get("remote-port"); cccValue.Exists() {
-								ccItem.RemotePort = types.StringValue(cccValue.String())
-							}
-							if cccValue := ccv.Get("vrf"); cccValue.Exists() {
-								ccItem.Vrf = types.StringValue(cccValue.String())
-							}
-							cItem.RemoteIpv4Addresses = append(cItem.RemoteIpv4Addresses, ccItem)
-							return true
-						})
-					}
-					item.LocalIpv4Addresses = append(item.LocalIpv4Addresses, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("local-ip.ipv6-addresses.ipv6-address"); cValue.Exists() {
-				item.LocalIpv6Addresses = make([]IPSLAResponderTwampLightSessionsLocalIpv6Addresses, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := IPSLAResponderTwampLightSessionsLocalIpv6Addresses{}
-					if ccValue := cv.Get("address"); ccValue.Exists() {
-						cItem.Address = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("local-port"); ccValue.Exists() {
-						cItem.LocalPort = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("remote-ip.ipv6-addresses.ipv6-address"); ccValue.Exists() {
-						cItem.RemoteIpv6Addresses = make([]IPSLAResponderTwampLightSessionsLocalIpv6AddressesRemoteIpv6Addresses, 0)
-						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
-							ccItem := IPSLAResponderTwampLightSessionsLocalIpv6AddressesRemoteIpv6Addresses{}
-							if cccValue := ccv.Get("address"); cccValue.Exists() {
-								ccItem.Address = types.StringValue(cccValue.String())
-							}
-							if cccValue := ccv.Get("remote-port"); cccValue.Exists() {
-								ccItem.RemotePort = types.StringValue(cccValue.String())
-							}
-							if cccValue := ccv.Get("vrf"); cccValue.Exists() {
-								ccItem.Vrf = types.StringValue(cccValue.String())
-							}
-							cItem.RemoteIpv6Addresses = append(cItem.RemoteIpv6Addresses, ccItem)
-							return true
-						})
-					}
-					item.LocalIpv6Addresses = append(item.LocalIpv6Addresses, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("authentication"); cValue.Exists() {
-				item.Authentication = types.BoolValue(true)
-			} else {
-				item.Authentication = types.BoolValue(false)
-			}
-			if cValue := v.Get("encryption"); cValue.Exists() {
-				item.Encryption = types.BoolValue(true)
-			} else {
-				item.Encryption = types.BoolValue(false)
-			}
-			if cValue := v.Get("timeout"); cValue.Exists() {
-				item.Timeout = types.Int64Value(cValue.Int())
-			}
-			data.TwampLightSessions = append(data.TwampLightSessions, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *IPSLAResponder) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1226,6 +1669,7 @@ func (data *IPSLAResponder) fromBodyXML(ctx context.Context, res xmldot.Result) 
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *IPSLAResponderData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1348,386 +1792,7 @@ func (data *IPSLAResponderData) fromBodyXML(ctx context.Context, res xmldot.Resu
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *IPSLAResponder) getDeletedItems(ctx context.Context, state IPSLAResponder) []string {
-	deletedItems := make([]string, 0)
-	for i := range state.TwampLightSessions {
-		keys := [...]string{"session-id"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.TwampLightSessions[i].SessionId.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.TwampLightSessions[i].SessionId.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.TwampLightSessions {
-			found = true
-			if state.TwampLightSessions[i].SessionId.ValueInt64() != data.TwampLightSessions[j].SessionId.ValueInt64() {
-				found = false
-			}
-			if found {
-				if !state.TwampLightSessions[i].Timeout.IsNull() && data.TwampLightSessions[j].Timeout.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/twamp-light/test-session/session%v/timeout", state.getPath(), keyString))
-				}
-				if !state.TwampLightSessions[i].Encryption.IsNull() && data.TwampLightSessions[j].Encryption.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/twamp-light/test-session/session%v/encryption", state.getPath(), keyString))
-				}
-				if !state.TwampLightSessions[i].Authentication.IsNull() && data.TwampLightSessions[j].Authentication.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/twamp-light/test-session/session%v/authentication", state.getPath(), keyString))
-				}
-				for ci := range state.TwampLightSessions[i].LocalIpv6Addresses {
-					ckeys := [...]string{"address", "local-port"}
-					cstateKeyValues := [...]string{state.TwampLightSessions[i].LocalIpv6Addresses[ci].Address.ValueString(), strconv.FormatInt(state.TwampLightSessions[i].LocalIpv6Addresses[ci].LocalPort.ValueInt64(), 10)}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv6Addresses[ci].Address.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv6Addresses[ci].LocalPort.ValueInt64()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.TwampLightSessions[j].LocalIpv6Addresses {
-						found = true
-						if state.TwampLightSessions[i].LocalIpv6Addresses[ci].Address.ValueString() != data.TwampLightSessions[j].LocalIpv6Addresses[cj].Address.ValueString() {
-							found = false
-						}
-						if state.TwampLightSessions[i].LocalIpv6Addresses[ci].LocalPort.ValueInt64() != data.TwampLightSessions[j].LocalIpv6Addresses[cj].LocalPort.ValueInt64() {
-							found = false
-						}
-						if found {
-							for cci := range state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses {
-								cckeys := [...]string{"address", "remote-port", "vrf"}
-								ccstateKeyValues := [...]string{state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Address.ValueString(), state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].RemotePort.ValueString(), state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Vrf.ValueString()}
-								cckeyString := ""
-								for ccki := range cckeys {
-									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
-								}
-
-								ccemptyKeys := true
-								if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Address.ValueString()).IsZero() {
-									ccemptyKeys = false
-								}
-								if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].RemotePort.ValueString()).IsZero() {
-									ccemptyKeys = false
-								}
-								if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Vrf.ValueString()).IsZero() {
-									ccemptyKeys = false
-								}
-								if ccemptyKeys {
-									continue
-								}
-
-								found := false
-								for ccj := range data.TwampLightSessions[j].LocalIpv6Addresses[cj].RemoteIpv6Addresses {
-									found = true
-									if state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Address.ValueString() != data.TwampLightSessions[j].LocalIpv6Addresses[cj].RemoteIpv6Addresses[ccj].Address.ValueString() {
-										found = false
-									}
-									if state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].RemotePort.ValueString() != data.TwampLightSessions[j].LocalIpv6Addresses[cj].RemoteIpv6Addresses[ccj].RemotePort.ValueString() {
-										found = false
-									}
-									if state.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Vrf.ValueString() != data.TwampLightSessions[j].LocalIpv6Addresses[cj].RemoteIpv6Addresses[ccj].Vrf.ValueString() {
-										found = false
-									}
-									if found {
-										break
-									}
-								}
-								if !found {
-									deletedItems = append(deletedItems, fmt.Sprintf("%v/twamp-light/test-session/session%v/local-ip/ipv6-addresses/ipv6-address%v/remote-ip/ipv6-addresses/ipv6-address%v", state.getPath(), keyString, ckeyString, cckeyString))
-								}
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/twamp-light/test-session/session%v/local-ip/ipv6-addresses/ipv6-address%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				for ci := range state.TwampLightSessions[i].LocalIpv4Addresses {
-					ckeys := [...]string{"address", "local-port"}
-					cstateKeyValues := [...]string{state.TwampLightSessions[i].LocalIpv4Addresses[ci].Address.ValueString(), strconv.FormatInt(state.TwampLightSessions[i].LocalIpv4Addresses[ci].LocalPort.ValueInt64(), 10)}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv4Addresses[ci].Address.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv4Addresses[ci].LocalPort.ValueInt64()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.TwampLightSessions[j].LocalIpv4Addresses {
-						found = true
-						if state.TwampLightSessions[i].LocalIpv4Addresses[ci].Address.ValueString() != data.TwampLightSessions[j].LocalIpv4Addresses[cj].Address.ValueString() {
-							found = false
-						}
-						if state.TwampLightSessions[i].LocalIpv4Addresses[ci].LocalPort.ValueInt64() != data.TwampLightSessions[j].LocalIpv4Addresses[cj].LocalPort.ValueInt64() {
-							found = false
-						}
-						if found {
-							for cci := range state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses {
-								cckeys := [...]string{"address", "remote-port", "vrf"}
-								ccstateKeyValues := [...]string{state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Address.ValueString(), state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].RemotePort.ValueString(), state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Vrf.ValueString()}
-								cckeyString := ""
-								for ccki := range cckeys {
-									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
-								}
-
-								ccemptyKeys := true
-								if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Address.ValueString()).IsZero() {
-									ccemptyKeys = false
-								}
-								if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].RemotePort.ValueString()).IsZero() {
-									ccemptyKeys = false
-								}
-								if !reflect.ValueOf(state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Vrf.ValueString()).IsZero() {
-									ccemptyKeys = false
-								}
-								if ccemptyKeys {
-									continue
-								}
-
-								found := false
-								for ccj := range data.TwampLightSessions[j].LocalIpv4Addresses[cj].RemoteIpv4Addresses {
-									found = true
-									if state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Address.ValueString() != data.TwampLightSessions[j].LocalIpv4Addresses[cj].RemoteIpv4Addresses[ccj].Address.ValueString() {
-										found = false
-									}
-									if state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].RemotePort.ValueString() != data.TwampLightSessions[j].LocalIpv4Addresses[cj].RemoteIpv4Addresses[ccj].RemotePort.ValueString() {
-										found = false
-									}
-									if state.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Vrf.ValueString() != data.TwampLightSessions[j].LocalIpv4Addresses[cj].RemoteIpv4Addresses[ccj].Vrf.ValueString() {
-										found = false
-									}
-									if found {
-										break
-									}
-								}
-								if !found {
-									deletedItems = append(deletedItems, fmt.Sprintf("%v/twamp-light/test-session/session%v/local-ip/ipv4-addresses/ipv4-address%v/remote-ip/ipv4-addresses/ipv4-address%v", state.getPath(), keyString, ckeyString, cckeyString))
-								}
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/twamp-light/test-session/session%v/local-ip/ipv4-addresses/ipv4-address%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/twamp-light/test-session/session%v", state.getPath(), keyString))
-		}
-	}
-	if !state.TwampTimeout.IsNull() && data.TwampTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/twamp/timeout", state.getPath()))
-	}
-	if !state.Twamp.IsNull() && data.Twamp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/twamp", state.getPath()))
-	}
-	for i := range state.TypeUdpIpv4 {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.TypeUdpIpv4[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.TypeUdpIpv4[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.TypeUdpIpv4 {
-			found = true
-			if state.TypeUdpIpv4[i].Address.ValueString() != data.TypeUdpIpv4[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				for ci := range state.TypeUdpIpv4[i].Ports {
-					ckeys := [...]string{"port-number"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.TypeUdpIpv4[i].Ports[ci].PortNumber.ValueInt64(), 10)}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.TypeUdpIpv4[i].Ports[ci].PortNumber.ValueInt64()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.TypeUdpIpv4[j].Ports {
-						found = true
-						if state.TypeUdpIpv4[i].Ports[ci].PortNumber.ValueInt64() != data.TypeUdpIpv4[j].Ports[cj].PortNumber.ValueInt64() {
-							found = false
-						}
-						if found {
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/type/udp/ipv4/address%v/port%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/type/udp/ipv4/address%v", state.getPath(), keyString))
-		}
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *IPSLAResponder) getEmptyLeafsDelete(ctx context.Context, state *IPSLAResponder) []string {
-	emptyLeafsDelete := make([]string, 0)
-	for i := range data.TwampLightSessions {
-		keys := [...]string{"session-id"}
-		keyValues := [...]string{strconv.FormatInt(data.TwampLightSessions[i].SessionId.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.TwampLightSessions[i].Encryption.IsNull() && !data.TwampLightSessions[i].Encryption.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.TwampLightSessions) && !state.TwampLightSessions[i].Encryption.IsNull() && state.TwampLightSessions[i].Encryption.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/twamp-light/test-session/session%v/encryption", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.TwampLightSessions[i].Authentication.IsNull() && !data.TwampLightSessions[i].Authentication.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.TwampLightSessions) && !state.TwampLightSessions[i].Authentication.IsNull() && state.TwampLightSessions[i].Authentication.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/twamp-light/test-session/session%v/authentication", data.getXPath(), keyString))
-			}
-		}
-		for ci := range data.TwampLightSessions[i].LocalIpv6Addresses {
-			ckeys := [...]string{"address", "local-port"}
-			ckeyValues := [...]string{data.TwampLightSessions[i].LocalIpv6Addresses[ci].Address.ValueString(), strconv.FormatInt(data.TwampLightSessions[i].LocalIpv6Addresses[ci].LocalPort.ValueInt64(), 10)}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-			for cci := range data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses {
-				cckeys := [...]string{"address", "remote-port", "vrf"}
-				cckeyValues := [...]string{data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Address.ValueString(), data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].RemotePort.ValueString(), data.TwampLightSessions[i].LocalIpv6Addresses[ci].RemoteIpv6Addresses[cci].Vrf.ValueString()}
-				cckeyString := ""
-				for ccki := range cckeys {
-					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
-				}
-			}
-		}
-		for ci := range data.TwampLightSessions[i].LocalIpv4Addresses {
-			ckeys := [...]string{"address", "local-port"}
-			ckeyValues := [...]string{data.TwampLightSessions[i].LocalIpv4Addresses[ci].Address.ValueString(), strconv.FormatInt(data.TwampLightSessions[i].LocalIpv4Addresses[ci].LocalPort.ValueInt64(), 10)}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-			for cci := range data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses {
-				cckeys := [...]string{"address", "remote-port", "vrf"}
-				cckeyValues := [...]string{data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Address.ValueString(), data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].RemotePort.ValueString(), data.TwampLightSessions[i].LocalIpv4Addresses[ci].RemoteIpv4Addresses[cci].Vrf.ValueString()}
-				cckeyString := ""
-				for ccki := range cckeys {
-					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
-				}
-			}
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.Twamp.IsNull() && !data.Twamp.ValueBool() {
-		if state != nil && !state.Twamp.IsNull() && state.Twamp.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/twamp", data.getXPath()))
-		}
-	}
-	for i := range data.TypeUdpIpv4 {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.TypeUdpIpv4[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		for ci := range data.TypeUdpIpv4[i].Ports {
-			ckeys := [...]string{"port-number"}
-			ckeyValues := [...]string{strconv.FormatInt(data.TypeUdpIpv4[i].Ports[ci].PortNumber.ValueInt64(), 10)}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *IPSLAResponder) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	for i := range data.TwampLightSessions {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[session-id=" + strconv.FormatInt(data.TwampLightSessions[i].SessionId.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/twamp-light/test-session/session%v", data.getPath(), keyPath))
-	}
-	if !data.TwampTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/twamp/timeout", data.getPath()))
-	}
-	if !data.Twamp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/twamp", data.getPath()))
-	}
-	for i := range data.TypeUdpIpv4 {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.TypeUdpIpv4[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/type/udp/ipv4/address%v", data.getPath(), keyPath))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *IPSLAResponder) addDeletedItemsXML(ctx context.Context, state IPSLAResponder, body string) string {
@@ -1945,6 +2010,7 @@ func (data *IPSLAResponder) addDeletedItemsXML(ctx context.Context, state IPSLAR
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *IPSLAResponder) addDeletePathsXML(ctx context.Context, body string) string {

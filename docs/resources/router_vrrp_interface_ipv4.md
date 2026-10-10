@@ -14,24 +14,22 @@ This resource can manage the Router VRRP Interface IPv4 configuration.
 
 ```terraform
 resource "iosxr_router_vrrp_interface_ipv4" "example" {
-  interface_name      = "GigabitEthernet0/0/0/1"
-  vrrp_id             = 123
-  version             = 2
-  address             = "1.1.1.1"
-  priority            = 250
-  name                = "TEST"
-  text_authentication = "password"
-  unicast_peer        = "1.1.1.2"
+  accept_mode_disable       = false
+  address                   = "1.1.1.1"
+  bfd_fast_detect_peer_ipv4 = "33.33.33.3"
+  interface_name            = "GigabitEthernet0/0/0/1"
+  name                      = "TEST"
+  preempt_delay             = 255
+  preempt_disable           = false
+  priority                  = 250
   secondary_addresses = [
     {
       address = "2.2.2.2"
     }
   ]
+  text_authentication         = "password"
   timer_advertisement_seconds = 123
   timer_force                 = false
-  preempt_disable             = false
-  preempt_delay               = 255
-  accept_mode_disable         = false
   track_interfaces = [
     {
       interface_name     = "GigabitEthernet0/0/0/4"
@@ -44,7 +42,9 @@ resource "iosxr_router_vrrp_interface_ipv4" "example" {
       priority_decrement = 22
     }
   ]
-  bfd_fast_detect_peer_ipv4 = "33.33.33.3"
+  unicast_peer = "1.1.1.2"
+  version      = 2
+  vrrp_id      = 123
 }
 ```
 

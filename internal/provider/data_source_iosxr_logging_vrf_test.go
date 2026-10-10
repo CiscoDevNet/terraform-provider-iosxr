@@ -21,6 +21,8 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -33,29 +35,53 @@ import (
 func TestAccDataSourceIosxrLoggingVRF(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "hostnames.0.name", "server.cisco.com"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "hostnames.0.severity", "info"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "hostnames.0.port", "514"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test",
+		"hostnames.0.severity", selectVersionExample(map[string]string{
+			"24.4": "info", "25.4": "informational",
+		}, "informational")))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "hostnames.0.port", "514"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "hostnames.0.operator", "equals"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "hostnames.0.facility", "local0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "hostnames.0.hostname_source_address", "1.1.1.2"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "hostnames.0.udp_port", "510"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv4_addresses.0.ipv4_address", "1.1.1.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv4_addresses.0.severity", "info"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv4_addresses.0.port", "514"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test",
+		"host_ipv4_addresses.0.severity", selectVersionExample(map[string]string{
+			"24.4": "info", "25.4": "informational",
+		}, "informational")))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv4_addresses.0.port", "514"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv4_addresses.0.operator", "equals"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv4_addresses.0.facility", "local0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv4_addresses.0.ipv4_source_address", "1.1.1.2"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv4_addresses.0.udp_port", "510"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv6_addresses.0.ipv6_address", "2001:db8::1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv6_addresses.0.severity", "info"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv6_addresses.0.port", "514"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test",
+		"host_ipv6_addresses.0.severity", selectVersionExample(map[string]string{
+			"24.4": "info", "25.4": "informational",
+		}, "informational")))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv6_addresses.0.port", "514"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv6_addresses.0.operator", "equals-or-higher"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv6_addresses.0.facility", "local0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv6_addresses.0.ipv6_source_address", "2001:db8::2"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv6_addresses.0.udp_port", "510"))
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrLoggingVRFPrerequisitesConfig + testAccDataSourceIosxrLoggingVRFConfig(),
+				Config: testAccDataSourceIosxrLoggingVRFPrerequisitesConfig() + testAccDataSourceIosxrLoggingVRFConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -65,7 +91,7 @@ func TestAccDataSourceIosxrLoggingVRF(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrLoggingVRFPrerequisitesConfig = `
+const testAccDataSourceIosxrLoggingVRFPrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=server.cisco.com]"
 	attributes = {
@@ -74,12 +100,22 @@ resource "iosxr_yang" "PreReq0" {
 	lists = [
 		{
 			name = "ip-address"
+			
 			values = ["1.1.1.1", ]
 		},
 	]
 }
 
 `
+
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccDataSourceIosxrLoggingVRFPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccDataSourceIosxrLoggingVRFPrerequisitesConfig_V24_4,
+		},
+	)
+}
 
 // End of section. //template:end testPrerequisites
 
@@ -91,29 +127,52 @@ func testAccDataSourceIosxrLoggingVRFConfig() string {
 	config += `	vrf_name = "default"` + "\n"
 	config += `	hostnames = [{` + "\n"
 	config += `		name = "server.cisco.com"` + "\n"
-	config += `		severity = "info"` + "\n"
-	config += `		port = 514` + "\n"
+	config += `		severity = ` + fmt.Sprintf("%q", selectVersionExample(map[string]string{
+		"24.4": "info", "25.4": "informational",
+	}, "informational")) + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		port = 514` + "\n"
+	}
 	config += `		operator = "equals"` + "\n"
 	config += `		facility = "local0"` + "\n"
 	config += `		hostname_source_address = "1.1.1.2"` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		udp_port = "510"` + "\n"
+	}
 	config += `	}]` + "\n"
 	config += `	host_ipv4_addresses = [{` + "\n"
 	config += `		ipv4_address = "1.1.1.1"` + "\n"
-	config += `		severity = "info"` + "\n"
-	config += `		port = 514` + "\n"
+	config += `		severity = ` + fmt.Sprintf("%q", selectVersionExample(map[string]string{
+		"24.4": "info", "25.4": "informational",
+	}, "informational")) + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		port = 514` + "\n"
+	}
 	config += `		operator = "equals"` + "\n"
 	config += `		facility = "local0"` + "\n"
 	config += `		ipv4_source_address = "1.1.1.2"` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		udp_port = "510"` + "\n"
+	}
 	config += `	}]` + "\n"
 	config += `	host_ipv6_addresses = [{` + "\n"
 	config += `		ipv6_address = "2001:db8::1"` + "\n"
-	config += `		severity = "info"` + "\n"
-	config += `		port = 514` + "\n"
+	config += `		severity = ` + fmt.Sprintf("%q", selectVersionExample(map[string]string{
+		"24.4": "info", "25.4": "informational",
+	}, "informational")) + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		port = 514` + "\n"
+	}
 	config += `		operator = "equals-or-higher"` + "\n"
 	config += `		facility = "local0"` + "\n"
 	config += `		ipv6_source_address = "2001:db8::2"` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		udp_port = "510"` + "\n"
+	}
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 
 	config += `

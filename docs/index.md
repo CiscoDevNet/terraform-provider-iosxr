@@ -92,6 +92,7 @@ provider "iosxr" {
 - `client_cache` (Boolean) Enable or disable client-side caching of device connections. This can improve performance by reusing existing connections. Defaults to `true`.
 - `devices` (Attributes List) This can be used to manage a list of devices from a single provider. All devices must use the same credentials. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list. (see [below for nested schema](#nestedatt--devices))
 - `host` (String) Hostname or IP address of the Cisco IOS-XR device. Optionally a port can be added with `:port`. Default port is `57400` for gNMI and `830` for NETCONF. This can also be set as the IOSXR_HOST environment variable.
+- `iosxr_version` (String) IOS-XR version (major.minor). Accepts formats like `24.4`, `24.4.2`, or `25.1` — the patch component is ignored. If not specified, the provider will attempt to auto-detect the version from each device. This can also be set as the IOSXR_VERSION environment variable.
 - `key` (String) Path to the TLS private key file. This can also be set as the IOSXR_KEY environment variable.
 - `lock_release_timeout` (Number) Number of seconds to wait for the device database lock to be released. This can also be set as the IOSXR_LOCK_RELEASE_TIMEOUT environment variable. Defaults to `120`.
 - `password` (String, Sensitive) Password for the IOS-XR device. This can also be set as the IOSXR_PASSWORD environment variable.
@@ -99,6 +100,7 @@ provider "iosxr" {
 - `retries` (Number) Number of retries for API calls. This can also be set as the IOSXR_RETRIES environment variable. Defaults to `3`.
 - `reuse_connection` (Boolean) Keep connections open between operations for better performance. When disabled, connections are closed and reopened for each operation. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.
 - `selected_devices` (List of String) This can be used to select a list of devices to manage from the `devices` list. Selected devices will be managed while other devices will be skipped and their state will be frozen. This can be used to deploy changes to a subset of devices. Defaults to all devices.
+- `timeout` (Number) Operation timeout in seconds for gNMI calls. The total deadline per call is this value plus the retry backoff time. This can also be set as the IOSXR_TIMEOUT environment variable. Only applies to the `gnmi` protocol. Defaults to `30`.
 - `tls` (Boolean) Use TLS. This can also be set as the IOSXR_TLS environment variable. Defaults to `true`.
 - `username` (String) Username for the IOS-XR device. This can also be set as the IOSXR_USERNAME environment variable.
 - `verify_certificate` (Boolean) Verify target certificate. This can also be set as the IOSXR_VERIFY_CERTIFICATE environment variable. Defaults to `false`.

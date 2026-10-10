@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"sort"
 	"strconv"
 	"strings"
@@ -92,7 +93,7 @@ func (data NetconfYangAgentData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data NetconfYangAgent) toBody(ctx context.Context) string {
+func (data NetconfYangAgent) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.Ssh.IsNull() && !data.Ssh.IsUnknown() {
 		if data.Ssh.ValueBool() {
@@ -113,8 +114,10 @@ func (data NetconfYangAgent) toBody(ctx context.Context) string {
 	if !data.SessionIdleTimeout.IsNull() && !data.SessionIdleTimeout.IsUnknown() {
 		body, _ = sjson.Set(body, "session.idle-timeout", strconv.FormatInt(data.SessionIdleTimeout.ValueInt64(), 10))
 	}
-	if !data.SessionAbsoluteTimeout.IsNull() && !data.SessionAbsoluteTimeout.IsUnknown() {
-		body, _ = sjson.Set(body, "session.absolute-timeout", strconv.FormatInt(data.SessionAbsoluteTimeout.ValueInt64(), 10))
+	if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.SessionAbsoluteTimeout.IsNull() && !data.SessionAbsoluteTimeout.IsUnknown() {
+			body, _ = sjson.Set(body, "session.absolute-timeout", strconv.FormatInt(data.SessionAbsoluteTimeout.ValueInt64(), 10))
+		}
 	}
 	if !data.NetconfV1.IsNull() && !data.NetconfV1.IsUnknown() {
 		body, _ = sjson.Set(body, "netconf1\\.0.support", data.NetconfV1.ValueString())
@@ -129,70 +132,299 @@ func (data NetconfYangAgent) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *NetconfYangAgent) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("ssh"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Ssh.IsNull() {
+// GetVersionConstraints returns the version constraints for all fields
+func (data NetconfYangAgent) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath: "session_absolute_timeout",
+
+			RemovedInVersion: "25.4",
+		},
+	}...)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data NetconfYangAgent) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data NetconfYangAgent) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data NetconfYangAgent) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data NetconfYangAgent) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *NetconfYangAgent) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "ssh"); !data.Ssh.IsNull() {
+		if value.Exists() {
 			data.Ssh = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Ssh = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Ssh.IsNull() {
-			data.Ssh = types.BoolNull()
-		}
+	} else if data.Ssh.IsNull() {
+		data.Ssh = types.BoolNull()
 	}
-	if value := res.Get("with-defaults-support.enable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.WithDefaultsSupport.IsNull() {
+	if value := gjson.GetBytes(res, "with-defaults-support.enable"); !data.WithDefaultsSupport.IsNull() {
+		if value.Exists() {
 			data.WithDefaultsSupport = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.WithDefaultsSupport = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.WithDefaultsSupport.IsNull() {
-			data.WithDefaultsSupport = types.BoolNull()
-		}
+	} else if data.WithDefaultsSupport.IsNull() {
+		data.WithDefaultsSupport = types.BoolNull()
 	}
-	if value := res.Get("rate-limit"); value.Exists() && !data.RateLimit.IsNull() {
+	if value := gjson.GetBytes(res, "rate-limit"); value.Exists() && !data.RateLimit.IsNull() {
 		data.RateLimit = types.Int64Value(value.Int())
 	} else if data.RateLimit.IsNull() {
 		data.RateLimit = types.Int64Null()
 	}
-	if value := res.Get("session.limit"); value.Exists() && !data.SessionLimit.IsNull() {
+	if value := gjson.GetBytes(res, "session.limit"); value.Exists() && !data.SessionLimit.IsNull() {
 		data.SessionLimit = types.Int64Value(value.Int())
 	} else if data.SessionLimit.IsNull() {
 		data.SessionLimit = types.Int64Null()
 	}
-	if value := res.Get("session.idle-timeout"); value.Exists() && !data.SessionIdleTimeout.IsNull() {
+	if value := gjson.GetBytes(res, "session.idle-timeout"); value.Exists() && !data.SessionIdleTimeout.IsNull() {
 		data.SessionIdleTimeout = types.Int64Value(value.Int())
 	} else if data.SessionIdleTimeout.IsNull() {
 		data.SessionIdleTimeout = types.Int64Null()
 	}
-	if value := res.Get("session.absolute-timeout"); value.Exists() && !data.SessionAbsoluteTimeout.IsNull() {
+	if value := gjson.GetBytes(res, "session.absolute-timeout"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && !data.SessionAbsoluteTimeout.IsNull() {
 		data.SessionAbsoluteTimeout = types.Int64Value(value.Int())
 	} else if data.SessionAbsoluteTimeout.IsNull() {
 		data.SessionAbsoluteTimeout = types.Int64Null()
 	}
-	if value := res.Get("netconf1\\.0.support"); value.Exists() && !data.NetconfV1.IsNull() {
+	if value := gjson.GetBytes(res, "netconf1\\.0.support"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.NetconfV1.IsNull() {
 		data.NetconfV1 = types.StringValue(value.String())
 	} else if data.NetconfV1.IsNull() {
 		data.NetconfV1 = types.StringNull()
 	}
-	if value := res.Get("netconf1\\.0.streaming-disabled"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.NetconfV1StreamingDisabled.IsNull() {
+	if value := gjson.GetBytes(res, "netconf1\\.0.streaming-disabled"); !data.NetconfV1StreamingDisabled.IsNull() {
+		if value.Exists() {
 			data.NetconfV1StreamingDisabled = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.NetconfV1StreamingDisabled = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.NetconfV1StreamingDisabled.IsNull() {
-			data.NetconfV1StreamingDisabled = types.BoolNull()
-		}
+	} else if data.NetconfV1StreamingDisabled.IsNull() {
+		data.NetconfV1StreamingDisabled = types.BoolNull()
 	}
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *NetconfYangAgent) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "ssh"); value.Exists() {
+		data.Ssh = types.BoolValue(true)
+	} else if !data.Ssh.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ssh = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "with-defaults-support.enable"); value.Exists() {
+		data.WithDefaultsSupport = types.BoolValue(true)
+	} else if !data.WithDefaultsSupport.IsNull() {
+		// Only set to false if it was previously set in state
+		data.WithDefaultsSupport = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "rate-limit"); value.Exists() {
+		data.RateLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "session.limit"); value.Exists() {
+		data.SessionLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "session.idle-timeout"); value.Exists() {
+		data.SessionIdleTimeout = types.Int64Value(value.Int())
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "session.absolute-timeout"); value.Exists() {
+			data.SessionAbsoluteTimeout = types.Int64Value(value.Int())
+		}
+	} else {
+		data.SessionAbsoluteTimeout = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "netconf1\\.0.support"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.NetconfV1 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "netconf1\\.0.streaming-disabled"); value.Exists() {
+		data.NetconfV1StreamingDisabled = types.BoolValue(true)
+	} else if !data.NetconfV1StreamingDisabled.IsNull() {
+		// Only set to false if it was previously set in state
+		data.NetconfV1StreamingDisabled = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *NetconfYangAgentData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "ssh"); value.Exists() {
+		data.Ssh = types.BoolValue(true)
+	} else {
+		data.Ssh = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "with-defaults-support.enable"); value.Exists() {
+		data.WithDefaultsSupport = types.BoolValue(true)
+	} else {
+		data.WithDefaultsSupport = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "rate-limit"); value.Exists() {
+		data.RateLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "session.limit"); value.Exists() {
+		data.SessionLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "session.idle-timeout"); value.Exists() {
+		data.SessionIdleTimeout = types.Int64Value(value.Int())
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "session.absolute-timeout"); value.Exists() {
+			data.SessionAbsoluteTimeout = types.Int64Value(value.Int())
+		}
+	} else {
+		data.SessionAbsoluteTimeout = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "netconf1\\.0.support"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.NetconfV1 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "netconf1\\.0.streaming-disabled"); value.Exists() {
+		data.NetconfV1StreamingDisabled = types.BoolValue(true)
+	} else {
+		data.NetconfV1StreamingDisabled = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *NetconfYangAgent) getDeletedItems(ctx context.Context, state NetconfYangAgent, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.NetconfV1StreamingDisabled.IsNull() && data.NetconfV1StreamingDisabled.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "netconf1.0"))
+	}
+	if !state.NetconfV1.IsNull() && data.NetconfV1.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "netconf1.0"))
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.SessionAbsoluteTimeout.IsNull() && data.SessionAbsoluteTimeout.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "session/absolute-timeout"))
+	}
+	if !state.SessionIdleTimeout.IsNull() && data.SessionIdleTimeout.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "session/idle-timeout"))
+	}
+	if !state.SessionLimit.IsNull() && data.SessionLimit.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "session/limit"))
+	}
+	if !state.RateLimit.IsNull() && data.RateLimit.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "rate-limit"))
+	}
+	if !state.WithDefaultsSupport.IsNull() && data.WithDefaultsSupport.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "with-defaults-support/enable"))
+	}
+	if !state.Ssh.IsNull() && data.Ssh.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ssh"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *NetconfYangAgent) getEmptyLeafsDelete(ctx context.Context, state *NetconfYangAgent, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if !data.NetconfV1StreamingDisabled.IsNull() && !data.NetconfV1StreamingDisabled.ValueBool() {
+		if state == nil || state.NetconfV1StreamingDisabled.IsNull() || state.NetconfV1StreamingDisabled.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "netconf1.0"))
+		}
+	}
+	if !data.WithDefaultsSupport.IsNull() && !data.WithDefaultsSupport.ValueBool() {
+		if state == nil || state.WithDefaultsSupport.IsNull() || state.WithDefaultsSupport.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "with-defaults-support/enable"))
+		}
+	}
+	if !data.Ssh.IsNull() && !data.Ssh.ValueBool() {
+		if state == nil || state.Ssh.IsNull() || state.Ssh.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ssh"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *NetconfYangAgent) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.NetconfV1StreamingDisabled.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "netconf1.0"))
+	}
+	if !data.NetconfV1.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "netconf1.0"))
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.SessionAbsoluteTimeout.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "session/absolute-timeout"))
+	}
+	if !data.SessionIdleTimeout.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "session/idle-timeout"))
+	}
+	if !data.SessionLimit.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "session/limit"))
+	}
+	if !data.RateLimit.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "rate-limit"))
+	}
+	if !data.WithDefaultsSupport.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "with-defaults-support/enable"))
+	}
+	if !data.Ssh.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ssh"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data NetconfYangAgent) toBodyXML(ctx context.Context, stateArg ...*NetconfYangAgent) string {
@@ -253,7 +485,7 @@ func (data NetconfYangAgent) toBodyXML(ctx context.Context, stateArg ...*Netconf
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -261,6 +493,7 @@ func (data NetconfYangAgent) toBodyXML(ctx context.Context, stateArg ...*Netconf
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *NetconfYangAgent) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -325,98 +558,7 @@ func (data *NetconfYangAgent) updateFromBodyXML(ctx context.Context, res xmldot.
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *NetconfYangAgent) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "ssh"); value.Exists() {
-		data.Ssh = types.BoolValue(true)
-	} else if !data.Ssh.IsNull() {
-		// Only set to false if it was previously set in state
-		data.Ssh = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "with-defaults-support.enable"); value.Exists() {
-		data.WithDefaultsSupport = types.BoolValue(true)
-	} else if !data.WithDefaultsSupport.IsNull() {
-		// Only set to false if it was previously set in state
-		data.WithDefaultsSupport = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "rate-limit"); value.Exists() {
-		data.RateLimit = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "session.limit"); value.Exists() {
-		data.SessionLimit = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "session.idle-timeout"); value.Exists() {
-		data.SessionIdleTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "session.absolute-timeout"); value.Exists() {
-		data.SessionAbsoluteTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "netconf1\\.0.support"); value.Exists() {
-		data.NetconfV1 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "netconf1\\.0.streaming-disabled"); value.Exists() {
-		data.NetconfV1StreamingDisabled = types.BoolValue(true)
-	} else if !data.NetconfV1StreamingDisabled.IsNull() {
-		// Only set to false if it was previously set in state
-		data.NetconfV1StreamingDisabled = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *NetconfYangAgentData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "ssh"); value.Exists() {
-		data.Ssh = types.BoolValue(true)
-	} else {
-		data.Ssh = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "with-defaults-support.enable"); value.Exists() {
-		data.WithDefaultsSupport = types.BoolValue(true)
-	} else {
-		data.WithDefaultsSupport = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "rate-limit"); value.Exists() {
-		data.RateLimit = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "session.limit"); value.Exists() {
-		data.SessionLimit = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "session.idle-timeout"); value.Exists() {
-		data.SessionIdleTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "session.absolute-timeout"); value.Exists() {
-		data.SessionAbsoluteTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "netconf1\\.0.support"); value.Exists() {
-		data.NetconfV1 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "netconf1\\.0.streaming-disabled"); value.Exists() {
-		data.NetconfV1StreamingDisabled = types.BoolValue(true)
-	} else {
-		data.NetconfV1StreamingDisabled = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *NetconfYangAgent) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -453,6 +595,7 @@ func (data *NetconfYangAgent) fromBodyXML(ctx context.Context, res xmldot.Result
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *NetconfYangAgentData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -489,97 +632,7 @@ func (data *NetconfYangAgentData) fromBodyXML(ctx context.Context, res xmldot.Re
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *NetconfYangAgent) getDeletedItems(ctx context.Context, state NetconfYangAgent) []string {
-	deletedItems := make([]string, 0)
-	if !state.NetconfV1StreamingDisabled.IsNull() && data.NetconfV1StreamingDisabled.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/netconf1.0", state.getPath()))
-	}
-	if !state.NetconfV1.IsNull() && data.NetconfV1.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/netconf1.0", state.getPath()))
-	}
-	if !state.SessionAbsoluteTimeout.IsNull() && data.SessionAbsoluteTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/session/absolute-timeout", state.getPath()))
-	}
-	if !state.SessionIdleTimeout.IsNull() && data.SessionIdleTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/session/idle-timeout", state.getPath()))
-	}
-	if !state.SessionLimit.IsNull() && data.SessionLimit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/session/limit", state.getPath()))
-	}
-	if !state.RateLimit.IsNull() && data.RateLimit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/rate-limit", state.getPath()))
-	}
-	if !state.WithDefaultsSupport.IsNull() && data.WithDefaultsSupport.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/with-defaults-support/enable", state.getPath()))
-	}
-	if !state.Ssh.IsNull() && data.Ssh.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ssh", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *NetconfYangAgent) getEmptyLeafsDelete(ctx context.Context, state *NetconfYangAgent) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.NetconfV1StreamingDisabled.IsNull() && !data.NetconfV1StreamingDisabled.ValueBool() {
-		if state != nil && !state.NetconfV1StreamingDisabled.IsNull() && state.NetconfV1StreamingDisabled.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/netconf1.0", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.WithDefaultsSupport.IsNull() && !data.WithDefaultsSupport.ValueBool() {
-		if state != nil && !state.WithDefaultsSupport.IsNull() && state.WithDefaultsSupport.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/with-defaults-support/enable", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.Ssh.IsNull() && !data.Ssh.ValueBool() {
-		if state != nil && !state.Ssh.IsNull() && state.Ssh.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ssh", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *NetconfYangAgent) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.NetconfV1StreamingDisabled.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/netconf1.0", data.getPath()))
-	}
-	if !data.NetconfV1.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/netconf1.0", data.getPath()))
-	}
-	if !data.SessionAbsoluteTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/session/absolute-timeout", data.getPath()))
-	}
-	if !data.SessionIdleTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/session/idle-timeout", data.getPath()))
-	}
-	if !data.SessionLimit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/session/limit", data.getPath()))
-	}
-	if !data.RateLimit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/rate-limit", data.getPath()))
-	}
-	if !data.WithDefaultsSupport.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/with-defaults-support/enable", data.getPath()))
-	}
-	if !data.Ssh.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ssh", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *NetconfYangAgent) addDeletedItemsXML(ctx context.Context, state NetconfYangAgent, body string) string {
@@ -730,6 +783,7 @@ func (data *NetconfYangAgent) addDeletedItemsXML(ctx context.Context, state Netc
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *NetconfYangAgent) addDeletePathsXML(ctx context.Context, body string) string {

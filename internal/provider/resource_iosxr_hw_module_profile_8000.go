@@ -39,11 +39,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
-	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
-
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewHWModuleProfile8000Resource() resource.Resource {
@@ -87,14 +85,14 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 				Optional:            true,
 			},
 			"profile_tcam_fib_ipv4_unicast_percent": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("percent to configure").AddIntegerRangeDescription(1, 100).String,
+				MarkdownDescription: helpers.NewAttributeDescription("percent to configure").AddIntegerRangeDescription(1, 100).String + "\n  - **Not supported from version `25.4` and above**",
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 100),
 				},
 			},
 			"profile_tcam_fib_ipv6_unicast_percent": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("percent to configure").AddIntegerRangeDescription(0, 100).String,
+				MarkdownDescription: helpers.NewAttributeDescription("percent to configure").AddIntegerRangeDescription(0, 100).String + "\n  - **Not supported from version `25.4` and above**",
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 100),
@@ -428,7 +426,7 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 				Optional:            true,
 			},
 			"profile_cef_mplsoudp_scale": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable mplsoudp scale").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Enable mplsoudp scale").String + "\n  - **Not supported from version `25.4` and above**",
 				Optional:            true,
 			},
 			"profile_cef_stats_label_app_default": schema.StringAttribute{
@@ -632,32 +630,36 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 										},
 									},
 									"pause_threshold": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("configure pause-threshold").AddIntegerRangeDescription(307200, 1574400).String,
+										MarkdownDescription: helpers.NewAttributeDescription("configure pause-threshold").String + "\n  - Range: `307200`-`1574400` (v24.4), `307200`-`5760000` (v25.4)",
 										Required:            true,
 										Validators: []validator.Int64{
-											int64validator.Between(307200, 1574400),
+											int64validator.Between(307200, 5760000),
 										},
+										// Precise per-version range validation still done at runtime in Create/Update.
 									},
 									"headroom": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("configure headroom").AddIntegerRangeDescription(345600, 1651200).String,
+										MarkdownDescription: helpers.NewAttributeDescription("configure headroom").String + "\n  - Range: `345600`-`1651200` (v24.4), `201600`-`1651200` (v25.4)",
 										Required:            true,
 										Validators: []validator.Int64{
-											int64validator.Between(345600, 1651200),
+											int64validator.Between(201600, 1651200),
 										},
+										// Precise per-version range validation still done at runtime in Create/Update.
 									},
 									"ecn": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("configure ecn").AddIntegerRangeDescription(153600, 897408).String,
+										MarkdownDescription: helpers.NewAttributeDescription("configure ecn").String + "\n  - Range: `153600`-`897408` (v24.4), `153600`-`5749376` (v25.4)",
 										Optional:            true,
 										Validators: []validator.Int64{
-											int64validator.Between(153600, 897408),
+											int64validator.Between(153600, 5749376),
 										},
+										// Precise per-version range validation still done at runtime in Create/Update.
 									},
 									"max_threshold": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("ecn max threshold").AddIntegerRangeDescription(153600, 1495680).String,
+										MarkdownDescription: helpers.NewAttributeDescription("ecn max threshold").String + "\n  - Range: `153600`-`1495680` (v24.4), `153600`-`5759616` (v25.4)",
 										Optional:            true,
 										Validators: []validator.Int64{
-											int64validator.Between(153600, 1495680),
+											int64validator.Between(153600, 5759616),
 										},
+										// Precise per-version range validation still done at runtime in Create/Update.
 									},
 									"probability_percentage": schema.Int64Attribute{
 										MarkdownDescription: helpers.NewAttributeDescription("maximum probability percentage").AddIntegerRangeDescription(1, 100).String,
@@ -669,25 +671,43 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 								},
 							},
 						},
+						"non_pfc_tcs": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("configure to allow lossy TCs to evict.").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
+						"non_pfc_tcs_max_non_pfc_voqs_number_of_evict_voqs": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("number of evict voqs").AddIntegerRangeDescription(1, 3800).String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 3800),
+							},
+						},
+						"non_pfc_tcs_max_non_pfc_voqs_hbm_buffers_percentage": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("configure hbm-buffers-percentage for non-pfc-tcs").AddIntegerRangeDescription(50, 80).String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(50, 80),
+							},
+						},
 					},
 				},
 			},
 			"profile_gue_udp_dest_port_ipv4": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure unreserved udp port number for ipv4 payload").AddIntegerRangeDescription(1000, 64000).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure unreserved udp port number for ipv4 payload").AddIntegerRangeDescription(1000, 64000).String + "\n  - **Not supported from version `25.4` and above**",
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1000, 64000),
 				},
 			},
 			"profile_gue_udp_dest_port_ipv6": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure unreserved udp port number for ipv6 payload").AddIntegerRangeDescription(1000, 64000).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure unreserved udp port number for ipv6 payload").AddIntegerRangeDescription(1000, 64000).String + "\n  - **Not supported from version `25.4` and above**",
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1000, 64000),
 				},
 			},
 			"profile_gue_udp_dest_port_mpls": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure unreserved udp port number for mpls payload").AddIntegerRangeDescription(1000, 64000).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configure unreserved udp port number for mpls payload").AddIntegerRangeDescription(1000, 64000).String + "\n  - **Not supported from version `25.4` and above**",
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1000, 64000),
@@ -751,6 +771,45 @@ func (r *HWModuleProfile8000Resource) Schema(ctx context.Context, req resource.S
 				MarkdownDescription: helpers.NewAttributeDescription("Configure BVI throughput-optimized mode").String,
 				Optional:            true,
 			},
+			"profile_tcam_format_og_compr_id_extension": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable wide compression result of OG ACL").String + "\n  - Supported from version: `25.4`" + "\n  - **Not supported from version `26.2` and above**",
+				Optional:            true,
+			},
+			"profile_qos_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure QOS Mode").AddStringEnumDescription("l3vpn-short-pipe").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("l3vpn-short-pipe"),
+				},
+			},
+			"profile_cef_iptunnel_scale": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable iptunnel scale").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_cef_hash_ip_field_duplication": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable IP field duplication for hash").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_l2fib_evpn_aging": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure evpn-aging profile").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_route_scale_host_route": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable host route scale for ARP/ND").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_route_scale_lpm_full_scale": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable full scale for LPM").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"profile_tcam_format_og_compr_id_extension_ingress": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable wide compression result of ingress OG ACL").String + "\n  - Supported from version: `26.2`",
+				Optional:            true,
+			},
+			"profile_tcam_format_og_compr_id_extension_egress": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable wide compression result of egress OG ACL").String + "\n  - Supported from version: `26.2`",
+				Optional:            true,
+			},
 		},
 	}
 }
@@ -782,7 +841,10 @@ func (r *HWModuleProfile8000Resource) Create(ctx context.Context, req resource.C
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
-
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
@@ -800,10 +862,10 @@ func (r *HWModuleProfile8000Resource) Create(ctx context.Context, req resource.C
 			var ops []gnmi.SetOperation
 
 			// Create object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("gNMI Set body for path %s: %s", plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -858,7 +920,6 @@ func (r *HWModuleProfile8000Resource) Create(ctx context.Context, req resource.C
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-
 func (r *HWModuleProfile8000Resource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state HWModuleProfile8000
 
@@ -923,10 +984,10 @@ func (r *HWModuleProfile8000Resource) Read(ctx context.Context, req resource.Rea
 				if imp {
 					// After `terraform import` we switch to a full read so all device
 					// attributes are populated in state (fromBody overwrites everything).
-					state.fromBody(ctx, gjson.ParseBytes(respBody))
+					state.fromBody(ctx, respBody, device.Version)
 				} else {
 					// Normal read: preserve config-only fields not returned by the device.
-					state.updateFromBody(ctx, gjson.ParseBytes(respBody))
+					state.updateFromBody(ctx, respBody, device.Version)
 				}
 			}
 		} else {
@@ -967,7 +1028,6 @@ func (r *HWModuleProfile8000Resource) Read(ctx context.Context, req resource.Rea
 			}
 		}
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
@@ -979,7 +1039,6 @@ func (r *HWModuleProfile8000Resource) Read(ctx context.Context, req resource.Rea
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-
 func (r *HWModuleProfile8000Resource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state HWModuleProfile8000
 
@@ -1002,6 +1061,10 @@ func (r *HWModuleProfile8000Resource) Update(ctx context.Context, req resource.U
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -1020,16 +1083,16 @@ func (r *HWModuleProfile8000Resource) Update(ctx context.Context, req resource.U
 			var ops []gnmi.SetOperation
 
 			// Update object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 
-			deletedListItems := plan.getDeletedItems(ctx, state)
+			deletedListItems := plan.getDeletedItems(ctx, state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
 
 			for _, i := range deletedListItems {
 				ops = append(ops, gnmi.Delete(i))
 			}
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -1072,7 +1135,6 @@ func (r *HWModuleProfile8000Resource) Update(ctx context.Context, req resource.U
 			}
 		}
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
@@ -1082,7 +1144,6 @@ func (r *HWModuleProfile8000Resource) Update(ctx context.Context, req resource.U
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-
 func (r *HWModuleProfile8000Resource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state HWModuleProfile8000
 
@@ -1097,6 +1158,14 @@ func (r *HWModuleProfile8000Resource) Delete(ctx context.Context, req resource.D
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
@@ -1173,7 +1242,7 @@ func (r *HWModuleProfile8000Resource) Delete(ctx context.Context, req resource.D
 				}
 
 				var ops []gnmi.SetOperation
-				deletePaths := state.getDeletePaths(ctx)
+				deletePaths := state.getDeletePaths(ctx, device.Version)
 				tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
 
 				for _, i := range deletePaths {
@@ -1221,7 +1290,6 @@ func (r *HWModuleProfile8000Resource) Delete(ctx context.Context, req resource.D
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-
 func (r *HWModuleProfile8000Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)

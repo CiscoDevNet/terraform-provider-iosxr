@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"sort"
 	"strconv"
 	"strings"
@@ -129,7 +130,7 @@ func (data MACSecPolicyData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data MACSecPolicy) toBody(ctx context.Context) string {
+func (data MACSecPolicy) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.PolicyName.IsNull() && !data.PolicyName.IsUnknown() {
 		body, _ = sjson.Set(body, "policy-name", data.PolicyName.ValueString())
@@ -237,203 +238,239 @@ func (data MACSecPolicy) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *MACSecPolicy) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("key-server-priority"); value.Exists() && !data.KeyServerPriority.IsNull() {
+// GetVersionConstraints returns the version constraints for all fields
+func (data MACSecPolicy) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data MACSecPolicy) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data MACSecPolicy) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data MACSecPolicy) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data MACSecPolicy) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "key-server-priority"); value.Exists() && !data.KeyServerPriority.IsNull() {
 		data.KeyServerPriority = types.Int64Value(value.Int())
 	} else if data.KeyServerPriority.IsNull() {
 		data.KeyServerPriority = types.Int64Null()
 	}
-	if value := res.Get("cipher-suite"); value.Exists() && !data.CipherSuite.IsNull() {
+	if value := gjson.GetBytes(res, "cipher-suite"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CipherSuite.IsNull() {
 		data.CipherSuite = types.StringValue(value.String())
 	} else if data.CipherSuite.IsNull() {
 		data.CipherSuite = types.StringNull()
 	}
-	if value := res.Get("window-size"); value.Exists() && !data.WindowSize.IsNull() {
+	if value := gjson.GetBytes(res, "window-size"); value.Exists() && !data.WindowSize.IsNull() {
 		data.WindowSize = types.Int64Value(value.Int())
 	} else if data.WindowSize.IsNull() {
 		data.WindowSize = types.Int64Null()
 	}
-	if value := res.Get("conf-offset"); value.Exists() && !data.ConfOffset.IsNull() {
+	if value := gjson.GetBytes(res, "conf-offset"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ConfOffset.IsNull() {
 		data.ConfOffset = types.StringValue(value.String())
 	} else if data.ConfOffset.IsNull() {
 		data.ConfOffset = types.StringNull()
 	}
-	if value := res.Get("security-policy"); value.Exists() && !data.SecurityPolicy.IsNull() {
+	if value := gjson.GetBytes(res, "security-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SecurityPolicy.IsNull() {
 		data.SecurityPolicy = types.StringValue(value.String())
 	} else if data.SecurityPolicy.IsNull() {
 		data.SecurityPolicy = types.StringNull()
 	}
-	if value := res.Get("vlan-tags-in-clear"); value.Exists() && !data.VlanTagsInClear.IsNull() {
+	if value := gjson.GetBytes(res, "vlan-tags-in-clear"); value.Exists() && !data.VlanTagsInClear.IsNull() {
 		data.VlanTagsInClear = types.Int64Value(value.Int())
 	} else if data.VlanTagsInClear.IsNull() {
 		data.VlanTagsInClear = types.Int64Null()
 	}
-	if value := res.Get("policy-exception"); value.Exists() && !data.PolicyException.IsNull() {
+	if value := gjson.GetBytes(res, "policy-exception"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PolicyException.IsNull() {
 		data.PolicyException = types.StringValue(value.String())
 	} else if data.PolicyException.IsNull() {
 		data.PolicyException = types.StringNull()
 	}
-	if value := res.Get("sak-rekey-interval.seconds"); value.Exists() && !data.SakRekeyIntervalSeconds.IsNull() {
+	if value := gjson.GetBytes(res, "sak-rekey-interval.seconds"); value.Exists() && !data.SakRekeyIntervalSeconds.IsNull() {
 		data.SakRekeyIntervalSeconds = types.Int64Value(value.Int())
 	} else if data.SakRekeyIntervalSeconds.IsNull() {
 		data.SakRekeyIntervalSeconds = types.Int64Null()
 	}
-	if value := res.Get("include-icv-indicator"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.IncludeIcvIndicator.IsNull() {
+	if value := gjson.GetBytes(res, "include-icv-indicator"); !data.IncludeIcvIndicator.IsNull() {
+		if value.Exists() {
 			data.IncludeIcvIndicator = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.IncludeIcvIndicator = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.IncludeIcvIndicator.IsNull() {
-			data.IncludeIcvIndicator = types.BoolNull()
-		}
+	} else if data.IncludeIcvIndicator.IsNull() {
+		data.IncludeIcvIndicator = types.BoolNull()
 	}
-	if value := res.Get("delay-protection"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.DelayProtection.IsNull() {
+	if value := gjson.GetBytes(res, "delay-protection"); !data.DelayProtection.IsNull() {
+		if value.Exists() {
 			data.DelayProtection = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.DelayProtection = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.DelayProtection.IsNull() {
-			data.DelayProtection = types.BoolNull()
-		}
+	} else if data.DelayProtection.IsNull() {
+		data.DelayProtection = types.BoolNull()
 	}
-	if value := res.Get("use-eapol-pae-in-icv"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.UseEapolPaeInIcv.IsNull() {
+	if value := gjson.GetBytes(res, "use-eapol-pae-in-icv"); !data.UseEapolPaeInIcv.IsNull() {
+		if value.Exists() {
 			data.UseEapolPaeInIcv = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.UseEapolPaeInIcv = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.UseEapolPaeInIcv.IsNull() {
-			data.UseEapolPaeInIcv = types.BoolNull()
-		}
+	} else if data.UseEapolPaeInIcv.IsNull() {
+		data.UseEapolPaeInIcv = types.BoolNull()
 	}
-	if value := res.Get("suspend-on-request.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SuspendOnRequestDisable.IsNull() {
+	if value := gjson.GetBytes(res, "suspend-on-request.disable"); !data.SuspendOnRequestDisable.IsNull() {
+		if value.Exists() {
 			data.SuspendOnRequestDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SuspendOnRequestDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SuspendOnRequestDisable.IsNull() {
-			data.SuspendOnRequestDisable = types.BoolNull()
-		}
+	} else if data.SuspendOnRequestDisable.IsNull() {
+		data.SuspendOnRequestDisable = types.BoolNull()
 	}
-	if value := res.Get("suspend-for.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SuspendForDisable.IsNull() {
+	if value := gjson.GetBytes(res, "suspend-for.disable"); !data.SuspendForDisable.IsNull() {
+		if value.Exists() {
 			data.SuspendForDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SuspendForDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SuspendForDisable.IsNull() {
-			data.SuspendForDisable = types.BoolNull()
-		}
+	} else if data.SuspendForDisable.IsNull() {
+		data.SuspendForDisable = types.BoolNull()
 	}
-	if value := res.Get("enable-legacy-fallback"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.EnableLegacyFallback.IsNull() {
+	if value := gjson.GetBytes(res, "enable-legacy-fallback"); !data.EnableLegacyFallback.IsNull() {
+		if value.Exists() {
 			data.EnableLegacyFallback = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EnableLegacyFallback = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.EnableLegacyFallback.IsNull() {
-			data.EnableLegacyFallback = types.BoolNull()
-		}
+	} else if data.EnableLegacyFallback.IsNull() {
+		data.EnableLegacyFallback = types.BoolNull()
 	}
-	if value := res.Get("enable-legacy-sak-write"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.EnableLegacySakWrite.IsNull() {
+	if value := gjson.GetBytes(res, "enable-legacy-sak-write"); !data.EnableLegacySakWrite.IsNull() {
+		if value.Exists() {
 			data.EnableLegacySakWrite = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EnableLegacySakWrite = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.EnableLegacySakWrite.IsNull() {
-			data.EnableLegacySakWrite = types.BoolNull()
-		}
+	} else if data.EnableLegacySakWrite.IsNull() {
+		data.EnableLegacySakWrite = types.BoolNull()
 	}
-	if value := res.Get("impose-overhead-on-bundle"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ImposeOverheadOnBundle.IsNull() {
+	if value := gjson.GetBytes(res, "impose-overhead-on-bundle"); !data.ImposeOverheadOnBundle.IsNull() {
+		if value.Exists() {
 			data.ImposeOverheadOnBundle = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ImposeOverheadOnBundle = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ImposeOverheadOnBundle.IsNull() {
-			data.ImposeOverheadOnBundle = types.BoolNull()
-		}
+	} else if data.ImposeOverheadOnBundle.IsNull() {
+		data.ImposeOverheadOnBundle = types.BoolNull()
 	}
-	if value := res.Get("max-an"); value.Exists() && !data.MaxAn.IsNull() {
+	if value := gjson.GetBytes(res, "max-an"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MaxAn.IsNull() {
 		data.MaxAn = types.StringValue(value.String())
 	} else if data.MaxAn.IsNull() {
 		data.MaxAn = types.StringNull()
 	}
-	if value := res.Get("allow.lacp-in-clear"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.AllowLacpInClear.IsNull() {
+	if value := gjson.GetBytes(res, "allow.lacp-in-clear"); !data.AllowLacpInClear.IsNull() {
+		if value.Exists() {
 			data.AllowLacpInClear = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.AllowLacpInClear = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.AllowLacpInClear.IsNull() {
-			data.AllowLacpInClear = types.BoolNull()
-		}
+	} else if data.AllowLacpInClear.IsNull() {
+		data.AllowLacpInClear = types.BoolNull()
 	}
-	if value := res.Get("allow.pause-frame-in-clear"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.AllowPauseFrameInClear.IsNull() {
+	if value := gjson.GetBytes(res, "allow.pause-frame-in-clear"); !data.AllowPauseFrameInClear.IsNull() {
+		if value.Exists() {
 			data.AllowPauseFrameInClear = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.AllowPauseFrameInClear = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.AllowPauseFrameInClear.IsNull() {
-			data.AllowPauseFrameInClear = types.BoolNull()
-		}
+	} else if data.AllowPauseFrameInClear.IsNull() {
+		data.AllowPauseFrameInClear = types.BoolNull()
 	}
-	if value := res.Get("allow.lldp-in-clear"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.AllowLldpInClear.IsNull() {
+	if value := gjson.GetBytes(res, "allow.lldp-in-clear"); !data.AllowLldpInClear.IsNull() {
+		if value.Exists() {
 			data.AllowLldpInClear = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.AllowLldpInClear = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.AllowLldpInClear.IsNull() {
-			data.AllowLldpInClear = types.BoolNull()
-		}
+	} else if data.AllowLldpInClear.IsNull() {
+		data.AllowLldpInClear = types.BoolNull()
 	}
-	if value := res.Get("ppk"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Ppk.IsNull() {
+	if value := gjson.GetBytes(res, "ppk"); !data.Ppk.IsNull() {
+		if value.Exists() {
 			data.Ppk = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Ppk = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Ppk.IsNull() {
-			data.Ppk = types.BoolNull()
-		}
+	} else if data.Ppk.IsNull() {
+		data.Ppk = types.BoolNull()
 	}
-	if value := res.Get("ppk.sks-profile"); value.Exists() && !data.PpkSksProfile.IsNull() {
+	if value := gjson.GetBytes(res, "ppk.sks-profile"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PpkSksProfile.IsNull() {
 		data.PpkSksProfile = types.StringValue(value.String())
 	} else if data.PpkSksProfile.IsNull() {
 		data.PpkSksProfile = types.StringNull()
 	}
-	if value := res.Get("logging.sak-rekey.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LoggingSakRekeyDisable.IsNull() {
+	if value := gjson.GetBytes(res, "logging.sak-rekey.disable"); !data.LoggingSakRekeyDisable.IsNull() {
+		if value.Exists() {
 			data.LoggingSakRekeyDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LoggingSakRekeyDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LoggingSakRekeyDisable.IsNull() {
-			data.LoggingSakRekeyDisable = types.BoolNull()
-		}
+	} else if data.LoggingSakRekeyDisable.IsNull() {
+		data.LoggingSakRekeyDisable = types.BoolNull()
 	}
-	if value := res.Get("logging.sak-rekey.summary-interval"); value.Exists() && !data.LoggingSakRekeySummaryInterval.IsNull() {
+	if value := gjson.GetBytes(res, "logging.sak-rekey.summary-interval"); value.Exists() && !data.LoggingSakRekeySummaryInterval.IsNull() {
 		data.LoggingSakRekeySummaryInterval = types.Int64Value(value.Int())
 	} else if data.LoggingSakRekeySummaryInterval.IsNull() {
 		data.LoggingSakRekeySummaryInterval = types.Int64Null()
@@ -441,6 +478,466 @@ func (data *MACSecPolicy) updateFromBody(ctx context.Context, res gjson.Result) 
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *MACSecPolicy) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "key-server-priority"); value.Exists() {
+		data.KeyServerPriority = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "cipher-suite"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CipherSuite = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "window-size"); value.Exists() {
+		data.WindowSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "conf-offset"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ConfOffset = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "security-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SecurityPolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "vlan-tags-in-clear"); value.Exists() {
+		data.VlanTagsInClear = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "policy-exception"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.PolicyException = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "sak-rekey-interval.seconds"); value.Exists() {
+		data.SakRekeyIntervalSeconds = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "include-icv-indicator"); value.Exists() {
+		data.IncludeIcvIndicator = types.BoolValue(true)
+	} else if !data.IncludeIcvIndicator.IsNull() {
+		// Only set to false if it was previously set in state
+		data.IncludeIcvIndicator = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "delay-protection"); value.Exists() {
+		data.DelayProtection = types.BoolValue(true)
+	} else if !data.DelayProtection.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DelayProtection = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "use-eapol-pae-in-icv"); value.Exists() {
+		data.UseEapolPaeInIcv = types.BoolValue(true)
+	} else if !data.UseEapolPaeInIcv.IsNull() {
+		// Only set to false if it was previously set in state
+		data.UseEapolPaeInIcv = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "suspend-on-request.disable"); value.Exists() {
+		data.SuspendOnRequestDisable = types.BoolValue(true)
+	} else if !data.SuspendOnRequestDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SuspendOnRequestDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "suspend-for.disable"); value.Exists() {
+		data.SuspendForDisable = types.BoolValue(true)
+	} else if !data.SuspendForDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SuspendForDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "enable-legacy-fallback"); value.Exists() {
+		data.EnableLegacyFallback = types.BoolValue(true)
+	} else if !data.EnableLegacyFallback.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EnableLegacyFallback = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "enable-legacy-sak-write"); value.Exists() {
+		data.EnableLegacySakWrite = types.BoolValue(true)
+	} else if !data.EnableLegacySakWrite.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EnableLegacySakWrite = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "impose-overhead-on-bundle"); value.Exists() {
+		data.ImposeOverheadOnBundle = types.BoolValue(true)
+	} else if !data.ImposeOverheadOnBundle.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ImposeOverheadOnBundle = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "max-an"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.MaxAn = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "allow.lacp-in-clear"); value.Exists() {
+		data.AllowLacpInClear = types.BoolValue(true)
+	} else if !data.AllowLacpInClear.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AllowLacpInClear = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "allow.pause-frame-in-clear"); value.Exists() {
+		data.AllowPauseFrameInClear = types.BoolValue(true)
+	} else if !data.AllowPauseFrameInClear.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AllowPauseFrameInClear = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "allow.lldp-in-clear"); value.Exists() {
+		data.AllowLldpInClear = types.BoolValue(true)
+	} else if !data.AllowLldpInClear.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AllowLldpInClear = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ppk"); value.Exists() {
+		data.Ppk = types.BoolValue(true)
+	} else if !data.Ppk.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ppk = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ppk.sks-profile"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.PpkSksProfile = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "logging.sak-rekey.disable"); value.Exists() {
+		data.LoggingSakRekeyDisable = types.BoolValue(true)
+	} else if !data.LoggingSakRekeyDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingSakRekeyDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "logging.sak-rekey.summary-interval"); value.Exists() {
+		data.LoggingSakRekeySummaryInterval = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *MACSecPolicyData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "key-server-priority"); value.Exists() {
+		data.KeyServerPriority = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "cipher-suite"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CipherSuite = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "window-size"); value.Exists() {
+		data.WindowSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "conf-offset"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ConfOffset = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "security-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SecurityPolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "vlan-tags-in-clear"); value.Exists() {
+		data.VlanTagsInClear = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "policy-exception"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.PolicyException = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "sak-rekey-interval.seconds"); value.Exists() {
+		data.SakRekeyIntervalSeconds = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "include-icv-indicator"); value.Exists() {
+		data.IncludeIcvIndicator = types.BoolValue(true)
+	} else {
+		data.IncludeIcvIndicator = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "delay-protection"); value.Exists() {
+		data.DelayProtection = types.BoolValue(true)
+	} else {
+		data.DelayProtection = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "use-eapol-pae-in-icv"); value.Exists() {
+		data.UseEapolPaeInIcv = types.BoolValue(true)
+	} else {
+		data.UseEapolPaeInIcv = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "suspend-on-request.disable"); value.Exists() {
+		data.SuspendOnRequestDisable = types.BoolValue(true)
+	} else {
+		data.SuspendOnRequestDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "suspend-for.disable"); value.Exists() {
+		data.SuspendForDisable = types.BoolValue(true)
+	} else {
+		data.SuspendForDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "enable-legacy-fallback"); value.Exists() {
+		data.EnableLegacyFallback = types.BoolValue(true)
+	} else {
+		data.EnableLegacyFallback = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "enable-legacy-sak-write"); value.Exists() {
+		data.EnableLegacySakWrite = types.BoolValue(true)
+	} else {
+		data.EnableLegacySakWrite = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "impose-overhead-on-bundle"); value.Exists() {
+		data.ImposeOverheadOnBundle = types.BoolValue(true)
+	} else {
+		data.ImposeOverheadOnBundle = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "max-an"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.MaxAn = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "allow.lacp-in-clear"); value.Exists() {
+		data.AllowLacpInClear = types.BoolValue(true)
+	} else {
+		data.AllowLacpInClear = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "allow.pause-frame-in-clear"); value.Exists() {
+		data.AllowPauseFrameInClear = types.BoolValue(true)
+	} else {
+		data.AllowPauseFrameInClear = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "allow.lldp-in-clear"); value.Exists() {
+		data.AllowLldpInClear = types.BoolValue(true)
+	} else {
+		data.AllowLldpInClear = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ppk"); value.Exists() {
+		data.Ppk = types.BoolValue(true)
+	} else {
+		data.Ppk = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ppk.sks-profile"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.PpkSksProfile = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "logging.sak-rekey.disable"); value.Exists() {
+		data.LoggingSakRekeyDisable = types.BoolValue(true)
+	} else {
+		data.LoggingSakRekeyDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "logging.sak-rekey.summary-interval"); value.Exists() {
+		data.LoggingSakRekeySummaryInterval = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *MACSecPolicy) getDeletedItems(ctx context.Context, state MACSecPolicy, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.LoggingSakRekeySummaryInterval.IsNull() && data.LoggingSakRekeySummaryInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "logging/sak-rekey/summary-interval"))
+	}
+	if !state.LoggingSakRekeyDisable.IsNull() && data.LoggingSakRekeyDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "logging/sak-rekey"))
+	}
+	if !state.PpkSksProfile.IsNull() && data.PpkSksProfile.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ppk/sks-profile"))
+	}
+	if !state.Ppk.IsNull() && data.Ppk.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ppk"))
+	}
+	if !state.AllowLldpInClear.IsNull() && data.AllowLldpInClear.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "allow/lldp-in-clear"))
+	}
+	if !state.AllowPauseFrameInClear.IsNull() && data.AllowPauseFrameInClear.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "allow/pause-frame-in-clear"))
+	}
+	if !state.AllowLacpInClear.IsNull() && data.AllowLacpInClear.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "allow/lacp-in-clear"))
+	}
+	if !state.MaxAn.IsNull() && data.MaxAn.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "max-an"))
+	}
+	if !state.ImposeOverheadOnBundle.IsNull() && data.ImposeOverheadOnBundle.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "impose-overhead-on-bundle"))
+	}
+	if !state.EnableLegacySakWrite.IsNull() && data.EnableLegacySakWrite.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "enable-legacy-sak-write"))
+	}
+	if !state.EnableLegacyFallback.IsNull() && data.EnableLegacyFallback.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "enable-legacy-fallback"))
+	}
+	if !state.SuspendForDisable.IsNull() && data.SuspendForDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "suspend-for"))
+	}
+	if !state.SuspendOnRequestDisable.IsNull() && data.SuspendOnRequestDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "suspend-on-request"))
+	}
+	if !state.UseEapolPaeInIcv.IsNull() && data.UseEapolPaeInIcv.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "use-eapol-pae-in-icv"))
+	}
+	if !state.DelayProtection.IsNull() && data.DelayProtection.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "delay-protection"))
+	}
+	if !state.IncludeIcvIndicator.IsNull() && data.IncludeIcvIndicator.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "include-icv-indicator"))
+	}
+	if !state.SakRekeyIntervalSeconds.IsNull() && data.SakRekeyIntervalSeconds.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sak-rekey-interval/seconds"))
+	}
+	if !state.PolicyException.IsNull() && data.PolicyException.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "policy-exception"))
+	}
+	if !state.VlanTagsInClear.IsNull() && data.VlanTagsInClear.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "vlan-tags-in-clear"))
+	}
+	if !state.SecurityPolicy.IsNull() && data.SecurityPolicy.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "security-policy"))
+	}
+	if !state.ConfOffset.IsNull() && data.ConfOffset.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "conf-offset"))
+	}
+	if !state.WindowSize.IsNull() && data.WindowSize.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "window-size"))
+	}
+	if !state.CipherSuite.IsNull() && data.CipherSuite.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "cipher-suite"))
+	}
+	if !state.KeyServerPriority.IsNull() && data.KeyServerPriority.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "key-server-priority"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *MACSecPolicy) getEmptyLeafsDelete(ctx context.Context, state *MACSecPolicy, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if !data.LoggingSakRekeyDisable.IsNull() && !data.LoggingSakRekeyDisable.ValueBool() {
+		if state == nil || state.LoggingSakRekeyDisable.IsNull() || state.LoggingSakRekeyDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/sak-rekey"))
+		}
+	}
+	if !data.Ppk.IsNull() && !data.Ppk.ValueBool() {
+		if state == nil || state.Ppk.IsNull() || state.Ppk.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ppk"))
+		}
+	}
+	if !data.AllowLldpInClear.IsNull() && !data.AllowLldpInClear.ValueBool() {
+		if state == nil || state.AllowLldpInClear.IsNull() || state.AllowLldpInClear.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "allow/lldp-in-clear"))
+		}
+	}
+	if !data.AllowPauseFrameInClear.IsNull() && !data.AllowPauseFrameInClear.ValueBool() {
+		if state == nil || state.AllowPauseFrameInClear.IsNull() || state.AllowPauseFrameInClear.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "allow/pause-frame-in-clear"))
+		}
+	}
+	if !data.AllowLacpInClear.IsNull() && !data.AllowLacpInClear.ValueBool() {
+		if state == nil || state.AllowLacpInClear.IsNull() || state.AllowLacpInClear.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "allow/lacp-in-clear"))
+		}
+	}
+	if !data.ImposeOverheadOnBundle.IsNull() && !data.ImposeOverheadOnBundle.ValueBool() {
+		if state == nil || state.ImposeOverheadOnBundle.IsNull() || state.ImposeOverheadOnBundle.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "impose-overhead-on-bundle"))
+		}
+	}
+	if !data.EnableLegacySakWrite.IsNull() && !data.EnableLegacySakWrite.ValueBool() {
+		if state == nil || state.EnableLegacySakWrite.IsNull() || state.EnableLegacySakWrite.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "enable-legacy-sak-write"))
+		}
+	}
+	if !data.EnableLegacyFallback.IsNull() && !data.EnableLegacyFallback.ValueBool() {
+		if state == nil || state.EnableLegacyFallback.IsNull() || state.EnableLegacyFallback.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "enable-legacy-fallback"))
+		}
+	}
+	if !data.SuspendForDisable.IsNull() && !data.SuspendForDisable.ValueBool() {
+		if state == nil || state.SuspendForDisable.IsNull() || state.SuspendForDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "suspend-for"))
+		}
+	}
+	if !data.SuspendOnRequestDisable.IsNull() && !data.SuspendOnRequestDisable.ValueBool() {
+		if state == nil || state.SuspendOnRequestDisable.IsNull() || state.SuspendOnRequestDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "suspend-on-request"))
+		}
+	}
+	if !data.UseEapolPaeInIcv.IsNull() && !data.UseEapolPaeInIcv.ValueBool() {
+		if state == nil || state.UseEapolPaeInIcv.IsNull() || state.UseEapolPaeInIcv.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "use-eapol-pae-in-icv"))
+		}
+	}
+	if !data.DelayProtection.IsNull() && !data.DelayProtection.ValueBool() {
+		if state == nil || state.DelayProtection.IsNull() || state.DelayProtection.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "delay-protection"))
+		}
+	}
+	if !data.IncludeIcvIndicator.IsNull() && !data.IncludeIcvIndicator.ValueBool() {
+		if state == nil || state.IncludeIcvIndicator.IsNull() || state.IncludeIcvIndicator.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "include-icv-indicator"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *MACSecPolicy) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.LoggingSakRekeySummaryInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "logging/sak-rekey/summary-interval"))
+	}
+	if !data.LoggingSakRekeyDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "logging/sak-rekey"))
+	}
+	if !data.PpkSksProfile.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ppk/sks-profile"))
+	}
+	if !data.Ppk.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ppk"))
+	}
+	if !data.AllowLldpInClear.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "allow/lldp-in-clear"))
+	}
+	if !data.AllowPauseFrameInClear.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "allow/pause-frame-in-clear"))
+	}
+	if !data.AllowLacpInClear.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "allow/lacp-in-clear"))
+	}
+	if !data.MaxAn.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "max-an"))
+	}
+	if !data.ImposeOverheadOnBundle.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "impose-overhead-on-bundle"))
+	}
+	if !data.EnableLegacySakWrite.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "enable-legacy-sak-write"))
+	}
+	if !data.EnableLegacyFallback.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "enable-legacy-fallback"))
+	}
+	if !data.SuspendForDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "suspend-for"))
+	}
+	if !data.SuspendOnRequestDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "suspend-on-request"))
+	}
+	if !data.UseEapolPaeInIcv.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "use-eapol-pae-in-icv"))
+	}
+	if !data.DelayProtection.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "delay-protection"))
+	}
+	if !data.IncludeIcvIndicator.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "include-icv-indicator"))
+	}
+	if !data.SakRekeyIntervalSeconds.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sak-rekey-interval/seconds"))
+	}
+	if !data.PolicyException.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "policy-exception"))
+	}
+	if !data.VlanTagsInClear.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "vlan-tags-in-clear"))
+	}
+	if !data.SecurityPolicy.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "security-policy"))
+	}
+	if !data.ConfOffset.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "conf-offset"))
+	}
+	if !data.WindowSize.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "window-size"))
+	}
+	if !data.CipherSuite.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "cipher-suite"))
+	}
+	if !data.KeyServerPriority.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "key-server-priority"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data MACSecPolicy) toBodyXML(ctx context.Context, stateArg ...*MACSecPolicy) string {
@@ -569,7 +1066,7 @@ func (data MACSecPolicy) toBodyXML(ctx context.Context, stateArg ...*MACSecPolic
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -577,6 +1074,7 @@ func (data MACSecPolicy) toBodyXML(ctx context.Context, stateArg ...*MACSecPolic
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *MACSecPolicy) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -781,244 +1279,7 @@ func (data *MACSecPolicy) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *MACSecPolicy) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "key-server-priority"); value.Exists() {
-		data.KeyServerPriority = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "cipher-suite"); value.Exists() {
-		data.CipherSuite = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "window-size"); value.Exists() {
-		data.WindowSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "conf-offset"); value.Exists() {
-		data.ConfOffset = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "security-policy"); value.Exists() {
-		data.SecurityPolicy = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "vlan-tags-in-clear"); value.Exists() {
-		data.VlanTagsInClear = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "policy-exception"); value.Exists() {
-		data.PolicyException = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "sak-rekey-interval.seconds"); value.Exists() {
-		data.SakRekeyIntervalSeconds = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "include-icv-indicator"); value.Exists() {
-		data.IncludeIcvIndicator = types.BoolValue(true)
-	} else if !data.IncludeIcvIndicator.IsNull() {
-		// Only set to false if it was previously set in state
-		data.IncludeIcvIndicator = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "delay-protection"); value.Exists() {
-		data.DelayProtection = types.BoolValue(true)
-	} else if !data.DelayProtection.IsNull() {
-		// Only set to false if it was previously set in state
-		data.DelayProtection = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "use-eapol-pae-in-icv"); value.Exists() {
-		data.UseEapolPaeInIcv = types.BoolValue(true)
-	} else if !data.UseEapolPaeInIcv.IsNull() {
-		// Only set to false if it was previously set in state
-		data.UseEapolPaeInIcv = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "suspend-on-request.disable"); value.Exists() {
-		data.SuspendOnRequestDisable = types.BoolValue(true)
-	} else if !data.SuspendOnRequestDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SuspendOnRequestDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "suspend-for.disable"); value.Exists() {
-		data.SuspendForDisable = types.BoolValue(true)
-	} else if !data.SuspendForDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SuspendForDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "enable-legacy-fallback"); value.Exists() {
-		data.EnableLegacyFallback = types.BoolValue(true)
-	} else if !data.EnableLegacyFallback.IsNull() {
-		// Only set to false if it was previously set in state
-		data.EnableLegacyFallback = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "enable-legacy-sak-write"); value.Exists() {
-		data.EnableLegacySakWrite = types.BoolValue(true)
-	} else if !data.EnableLegacySakWrite.IsNull() {
-		// Only set to false if it was previously set in state
-		data.EnableLegacySakWrite = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "impose-overhead-on-bundle"); value.Exists() {
-		data.ImposeOverheadOnBundle = types.BoolValue(true)
-	} else if !data.ImposeOverheadOnBundle.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ImposeOverheadOnBundle = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "max-an"); value.Exists() {
-		data.MaxAn = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "allow.lacp-in-clear"); value.Exists() {
-		data.AllowLacpInClear = types.BoolValue(true)
-	} else if !data.AllowLacpInClear.IsNull() {
-		// Only set to false if it was previously set in state
-		data.AllowLacpInClear = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "allow.pause-frame-in-clear"); value.Exists() {
-		data.AllowPauseFrameInClear = types.BoolValue(true)
-	} else if !data.AllowPauseFrameInClear.IsNull() {
-		// Only set to false if it was previously set in state
-		data.AllowPauseFrameInClear = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "allow.lldp-in-clear"); value.Exists() {
-		data.AllowLldpInClear = types.BoolValue(true)
-	} else if !data.AllowLldpInClear.IsNull() {
-		// Only set to false if it was previously set in state
-		data.AllowLldpInClear = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ppk"); value.Exists() {
-		data.Ppk = types.BoolValue(true)
-	} else if !data.Ppk.IsNull() {
-		// Only set to false if it was previously set in state
-		data.Ppk = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ppk.sks-profile"); value.Exists() {
-		data.PpkSksProfile = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "logging.sak-rekey.disable"); value.Exists() {
-		data.LoggingSakRekeyDisable = types.BoolValue(true)
-	} else if !data.LoggingSakRekeyDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LoggingSakRekeyDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.sak-rekey.summary-interval"); value.Exists() {
-		data.LoggingSakRekeySummaryInterval = types.Int64Value(value.Int())
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *MACSecPolicyData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "key-server-priority"); value.Exists() {
-		data.KeyServerPriority = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "cipher-suite"); value.Exists() {
-		data.CipherSuite = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "window-size"); value.Exists() {
-		data.WindowSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "conf-offset"); value.Exists() {
-		data.ConfOffset = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "security-policy"); value.Exists() {
-		data.SecurityPolicy = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "vlan-tags-in-clear"); value.Exists() {
-		data.VlanTagsInClear = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "policy-exception"); value.Exists() {
-		data.PolicyException = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "sak-rekey-interval.seconds"); value.Exists() {
-		data.SakRekeyIntervalSeconds = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "include-icv-indicator"); value.Exists() {
-		data.IncludeIcvIndicator = types.BoolValue(true)
-	} else {
-		data.IncludeIcvIndicator = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "delay-protection"); value.Exists() {
-		data.DelayProtection = types.BoolValue(true)
-	} else {
-		data.DelayProtection = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "use-eapol-pae-in-icv"); value.Exists() {
-		data.UseEapolPaeInIcv = types.BoolValue(true)
-	} else {
-		data.UseEapolPaeInIcv = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "suspend-on-request.disable"); value.Exists() {
-		data.SuspendOnRequestDisable = types.BoolValue(true)
-	} else {
-		data.SuspendOnRequestDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "suspend-for.disable"); value.Exists() {
-		data.SuspendForDisable = types.BoolValue(true)
-	} else {
-		data.SuspendForDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "enable-legacy-fallback"); value.Exists() {
-		data.EnableLegacyFallback = types.BoolValue(true)
-	} else {
-		data.EnableLegacyFallback = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "enable-legacy-sak-write"); value.Exists() {
-		data.EnableLegacySakWrite = types.BoolValue(true)
-	} else {
-		data.EnableLegacySakWrite = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "impose-overhead-on-bundle"); value.Exists() {
-		data.ImposeOverheadOnBundle = types.BoolValue(true)
-	} else {
-		data.ImposeOverheadOnBundle = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "max-an"); value.Exists() {
-		data.MaxAn = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "allow.lacp-in-clear"); value.Exists() {
-		data.AllowLacpInClear = types.BoolValue(true)
-	} else {
-		data.AllowLacpInClear = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "allow.pause-frame-in-clear"); value.Exists() {
-		data.AllowPauseFrameInClear = types.BoolValue(true)
-	} else {
-		data.AllowPauseFrameInClear = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "allow.lldp-in-clear"); value.Exists() {
-		data.AllowLldpInClear = types.BoolValue(true)
-	} else {
-		data.AllowLldpInClear = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ppk"); value.Exists() {
-		data.Ppk = types.BoolValue(true)
-	} else {
-		data.Ppk = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ppk.sks-profile"); value.Exists() {
-		data.PpkSksProfile = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "logging.sak-rekey.disable"); value.Exists() {
-		data.LoggingSakRekeyDisable = types.BoolValue(true)
-	} else {
-		data.LoggingSakRekeyDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.sak-rekey.summary-interval"); value.Exists() {
-		data.LoggingSakRekeySummaryInterval = types.Int64Value(value.Int())
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *MACSecPolicy) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1123,6 +1384,7 @@ func (data *MACSecPolicy) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *MACSecPolicyData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1227,253 +1489,7 @@ func (data *MACSecPolicyData) fromBodyXML(ctx context.Context, res xmldot.Result
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *MACSecPolicy) getDeletedItems(ctx context.Context, state MACSecPolicy) []string {
-	deletedItems := make([]string, 0)
-	if !state.LoggingSakRekeySummaryInterval.IsNull() && data.LoggingSakRekeySummaryInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/sak-rekey/summary-interval", state.getPath()))
-	}
-	if !state.LoggingSakRekeyDisable.IsNull() && data.LoggingSakRekeyDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/sak-rekey", state.getPath()))
-	}
-	if !state.PpkSksProfile.IsNull() && data.PpkSksProfile.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ppk/sks-profile", state.getPath()))
-	}
-	if !state.Ppk.IsNull() && data.Ppk.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ppk", state.getPath()))
-	}
-	if !state.AllowLldpInClear.IsNull() && data.AllowLldpInClear.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/allow/lldp-in-clear", state.getPath()))
-	}
-	if !state.AllowPauseFrameInClear.IsNull() && data.AllowPauseFrameInClear.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/allow/pause-frame-in-clear", state.getPath()))
-	}
-	if !state.AllowLacpInClear.IsNull() && data.AllowLacpInClear.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/allow/lacp-in-clear", state.getPath()))
-	}
-	if !state.MaxAn.IsNull() && data.MaxAn.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/max-an", state.getPath()))
-	}
-	if !state.ImposeOverheadOnBundle.IsNull() && data.ImposeOverheadOnBundle.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/impose-overhead-on-bundle", state.getPath()))
-	}
-	if !state.EnableLegacySakWrite.IsNull() && data.EnableLegacySakWrite.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/enable-legacy-sak-write", state.getPath()))
-	}
-	if !state.EnableLegacyFallback.IsNull() && data.EnableLegacyFallback.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/enable-legacy-fallback", state.getPath()))
-	}
-	if !state.SuspendForDisable.IsNull() && data.SuspendForDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/suspend-for", state.getPath()))
-	}
-	if !state.SuspendOnRequestDisable.IsNull() && data.SuspendOnRequestDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/suspend-on-request", state.getPath()))
-	}
-	if !state.UseEapolPaeInIcv.IsNull() && data.UseEapolPaeInIcv.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/use-eapol-pae-in-icv", state.getPath()))
-	}
-	if !state.DelayProtection.IsNull() && data.DelayProtection.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/delay-protection", state.getPath()))
-	}
-	if !state.IncludeIcvIndicator.IsNull() && data.IncludeIcvIndicator.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/include-icv-indicator", state.getPath()))
-	}
-	if !state.SakRekeyIntervalSeconds.IsNull() && data.SakRekeyIntervalSeconds.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sak-rekey-interval/seconds", state.getPath()))
-	}
-	if !state.PolicyException.IsNull() && data.PolicyException.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/policy-exception", state.getPath()))
-	}
-	if !state.VlanTagsInClear.IsNull() && data.VlanTagsInClear.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/vlan-tags-in-clear", state.getPath()))
-	}
-	if !state.SecurityPolicy.IsNull() && data.SecurityPolicy.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/security-policy", state.getPath()))
-	}
-	if !state.ConfOffset.IsNull() && data.ConfOffset.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/conf-offset", state.getPath()))
-	}
-	if !state.WindowSize.IsNull() && data.WindowSize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/window-size", state.getPath()))
-	}
-	if !state.CipherSuite.IsNull() && data.CipherSuite.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/cipher-suite", state.getPath()))
-	}
-	if !state.KeyServerPriority.IsNull() && data.KeyServerPriority.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/key-server-priority", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *MACSecPolicy) getEmptyLeafsDelete(ctx context.Context, state *MACSecPolicy) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.LoggingSakRekeyDisable.IsNull() && !data.LoggingSakRekeyDisable.ValueBool() {
-		if state != nil && !state.LoggingSakRekeyDisable.IsNull() && state.LoggingSakRekeyDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/sak-rekey", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.Ppk.IsNull() && !data.Ppk.ValueBool() {
-		if state != nil && !state.Ppk.IsNull() && state.Ppk.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ppk", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.AllowLldpInClear.IsNull() && !data.AllowLldpInClear.ValueBool() {
-		if state != nil && !state.AllowLldpInClear.IsNull() && state.AllowLldpInClear.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/allow/lldp-in-clear", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.AllowPauseFrameInClear.IsNull() && !data.AllowPauseFrameInClear.ValueBool() {
-		if state != nil && !state.AllowPauseFrameInClear.IsNull() && state.AllowPauseFrameInClear.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/allow/pause-frame-in-clear", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.AllowLacpInClear.IsNull() && !data.AllowLacpInClear.ValueBool() {
-		if state != nil && !state.AllowLacpInClear.IsNull() && state.AllowLacpInClear.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/allow/lacp-in-clear", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ImposeOverheadOnBundle.IsNull() && !data.ImposeOverheadOnBundle.ValueBool() {
-		if state != nil && !state.ImposeOverheadOnBundle.IsNull() && state.ImposeOverheadOnBundle.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/impose-overhead-on-bundle", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.EnableLegacySakWrite.IsNull() && !data.EnableLegacySakWrite.ValueBool() {
-		if state != nil && !state.EnableLegacySakWrite.IsNull() && state.EnableLegacySakWrite.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/enable-legacy-sak-write", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.EnableLegacyFallback.IsNull() && !data.EnableLegacyFallback.ValueBool() {
-		if state != nil && !state.EnableLegacyFallback.IsNull() && state.EnableLegacyFallback.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/enable-legacy-fallback", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SuspendForDisable.IsNull() && !data.SuspendForDisable.ValueBool() {
-		if state != nil && !state.SuspendForDisable.IsNull() && state.SuspendForDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/suspend-for", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SuspendOnRequestDisable.IsNull() && !data.SuspendOnRequestDisable.ValueBool() {
-		if state != nil && !state.SuspendOnRequestDisable.IsNull() && state.SuspendOnRequestDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/suspend-on-request", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.UseEapolPaeInIcv.IsNull() && !data.UseEapolPaeInIcv.ValueBool() {
-		if state != nil && !state.UseEapolPaeInIcv.IsNull() && state.UseEapolPaeInIcv.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/use-eapol-pae-in-icv", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.DelayProtection.IsNull() && !data.DelayProtection.ValueBool() {
-		if state != nil && !state.DelayProtection.IsNull() && state.DelayProtection.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/delay-protection", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.IncludeIcvIndicator.IsNull() && !data.IncludeIcvIndicator.ValueBool() {
-		if state != nil && !state.IncludeIcvIndicator.IsNull() && state.IncludeIcvIndicator.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/include-icv-indicator", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *MACSecPolicy) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.LoggingSakRekeySummaryInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/sak-rekey/summary-interval", data.getPath()))
-	}
-	if !data.LoggingSakRekeyDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/sak-rekey", data.getPath()))
-	}
-	if !data.PpkSksProfile.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ppk/sks-profile", data.getPath()))
-	}
-	if !data.Ppk.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ppk", data.getPath()))
-	}
-	if !data.AllowLldpInClear.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/allow/lldp-in-clear", data.getPath()))
-	}
-	if !data.AllowPauseFrameInClear.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/allow/pause-frame-in-clear", data.getPath()))
-	}
-	if !data.AllowLacpInClear.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/allow/lacp-in-clear", data.getPath()))
-	}
-	if !data.MaxAn.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-an", data.getPath()))
-	}
-	if !data.ImposeOverheadOnBundle.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/impose-overhead-on-bundle", data.getPath()))
-	}
-	if !data.EnableLegacySakWrite.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/enable-legacy-sak-write", data.getPath()))
-	}
-	if !data.EnableLegacyFallback.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/enable-legacy-fallback", data.getPath()))
-	}
-	if !data.SuspendForDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/suspend-for", data.getPath()))
-	}
-	if !data.SuspendOnRequestDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/suspend-on-request", data.getPath()))
-	}
-	if !data.UseEapolPaeInIcv.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/use-eapol-pae-in-icv", data.getPath()))
-	}
-	if !data.DelayProtection.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/delay-protection", data.getPath()))
-	}
-	if !data.IncludeIcvIndicator.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/include-icv-indicator", data.getPath()))
-	}
-	if !data.SakRekeyIntervalSeconds.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sak-rekey-interval/seconds", data.getPath()))
-	}
-	if !data.PolicyException.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/policy-exception", data.getPath()))
-	}
-	if !data.VlanTagsInClear.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/vlan-tags-in-clear", data.getPath()))
-	}
-	if !data.SecurityPolicy.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/security-policy", data.getPath()))
-	}
-	if !data.ConfOffset.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/conf-offset", data.getPath()))
-	}
-	if !data.WindowSize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/window-size", data.getPath()))
-	}
-	if !data.CipherSuite.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/cipher-suite", data.getPath()))
-	}
-	if !data.KeyServerPriority.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/key-server-priority", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *MACSecPolicy) addDeletedItemsXML(ctx context.Context, state MACSecPolicy, body string) string {
@@ -1872,6 +1888,7 @@ func (data *MACSecPolicy) addDeletedItemsXML(ctx context.Context, state MACSecPo
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *MACSecPolicy) addDeletePathsXML(ctx context.Context, body string) string {

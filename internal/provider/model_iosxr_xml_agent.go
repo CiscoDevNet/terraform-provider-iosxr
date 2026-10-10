@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -132,7 +133,7 @@ func (data XMLAgentData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data XMLAgent) toBody(ctx context.Context) string {
+func (data XMLAgent) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.Enable.IsNull() && !data.Enable.IsUnknown() {
 		if data.Enable.ValueBool() {
@@ -244,88 +245,134 @@ func (data XMLAgent) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *XMLAgent) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("enable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Enable.IsNull() {
+// GetVersionConstraints returns the version constraints for all fields
+func (data XMLAgent) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data XMLAgent) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data XMLAgent) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data XMLAgent) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data XMLAgent) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *XMLAgent) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "enable"); !data.Enable.IsNull() {
+		if value.Exists() {
 			data.Enable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Enable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Enable.IsNull() {
-			data.Enable = types.BoolNull()
-		}
+	} else if data.Enable.IsNull() {
+		data.Enable = types.BoolNull()
 	}
-	if value := res.Get("tty"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TtyEnable.IsNull() {
+	if value := gjson.GetBytes(res, "tty"); !data.TtyEnable.IsNull() {
+		if value.Exists() {
 			data.TtyEnable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TtyEnable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TtyEnable.IsNull() {
-			data.TtyEnable = types.BoolNull()
-		}
+	} else if data.TtyEnable.IsNull() {
+		data.TtyEnable = types.BoolNull()
 	}
-	if value := res.Get("tty.streaming.on.size"); value.Exists() && !data.TtyStreamingSize.IsNull() {
+	if value := gjson.GetBytes(res, "tty.streaming.on.size"); value.Exists() && !data.TtyStreamingSize.IsNull() {
 		data.TtyStreamingSize = types.Int64Value(value.Int())
 	} else if data.TtyStreamingSize.IsNull() {
 		data.TtyStreamingSize = types.Int64Null()
 	}
-	if value := res.Get("tty.iteration.size"); value.Exists() && !data.TtyIterationSize.IsNull() {
+	if value := gjson.GetBytes(res, "tty.iteration.size"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.TtyIterationSize.IsNull() {
 		data.TtyIterationSize = types.StringValue(value.String())
 	} else if data.TtyIterationSize.IsNull() {
 		data.TtyIterationSize = types.StringNull()
 	}
-	if value := res.Get("tty.throttle.process-rate"); value.Exists() && !data.TtyThrottleProcessRate.IsNull() {
+	if value := gjson.GetBytes(res, "tty.throttle.process-rate"); value.Exists() && !data.TtyThrottleProcessRate.IsNull() {
 		data.TtyThrottleProcessRate = types.Int64Value(value.Int())
 	} else if data.TtyThrottleProcessRate.IsNull() {
 		data.TtyThrottleProcessRate = types.Int64Null()
 	}
-	if value := res.Get("tty.throttle.memory"); value.Exists() && !data.TtyThrottleMemory.IsNull() {
+	if value := gjson.GetBytes(res, "tty.throttle.memory"); value.Exists() && !data.TtyThrottleMemory.IsNull() {
 		data.TtyThrottleMemory = types.Int64Value(value.Int())
 	} else if data.TtyThrottleMemory.IsNull() {
 		data.TtyThrottleMemory = types.Int64Null()
 	}
-	if value := res.Get("tty.session.timeout"); value.Exists() && !data.TtySessionTimeout.IsNull() {
+	if value := gjson.GetBytes(res, "tty.session.timeout"); value.Exists() && !data.TtySessionTimeout.IsNull() {
 		data.TtySessionTimeout = types.Int64Value(value.Int())
 	} else if data.TtySessionTimeout.IsNull() {
 		data.TtySessionTimeout = types.Int64Null()
 	}
-	if value := res.Get("ssl"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SslEnable.IsNull() {
+	if value := gjson.GetBytes(res, "ssl"); !data.SslEnable.IsNull() {
+		if value.Exists() {
 			data.SslEnable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SslEnable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SslEnable.IsNull() {
-			data.SslEnable = types.BoolNull()
-		}
+	} else if data.SslEnable.IsNull() {
+		data.SslEnable = types.BoolNull()
 	}
-	if value := res.Get("ssl.streaming.on.size"); value.Exists() && !data.SslStreamingSize.IsNull() {
+	if value := gjson.GetBytes(res, "ssl.streaming.on.size"); value.Exists() && !data.SslStreamingSize.IsNull() {
 		data.SslStreamingSize = types.Int64Value(value.Int())
 	} else if data.SslStreamingSize.IsNull() {
 		data.SslStreamingSize = types.Int64Null()
 	}
-	if value := res.Get("ssl.iteration.size"); value.Exists() && !data.SslIterationSize.IsNull() {
+	if value := gjson.GetBytes(res, "ssl.iteration.size"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SslIterationSize.IsNull() {
 		data.SslIterationSize = types.StringValue(value.String())
 	} else if data.SslIterationSize.IsNull() {
 		data.SslIterationSize = types.StringNull()
 	}
-	if value := res.Get("ssl.throttle.process-rate"); value.Exists() && !data.SslThrottleProcessRate.IsNull() {
+	if value := gjson.GetBytes(res, "ssl.throttle.process-rate"); value.Exists() && !data.SslThrottleProcessRate.IsNull() {
 		data.SslThrottleProcessRate = types.Int64Value(value.Int())
 	} else if data.SslThrottleProcessRate.IsNull() {
 		data.SslThrottleProcessRate = types.Int64Null()
 	}
-	if value := res.Get("ssl.throttle.memory"); value.Exists() && !data.SslThrottleMemory.IsNull() {
+	if value := gjson.GetBytes(res, "ssl.throttle.memory"); value.Exists() && !data.SslThrottleMemory.IsNull() {
 		data.SslThrottleMemory = types.Int64Value(value.Int())
 	} else if data.SslThrottleMemory.IsNull() {
 		data.SslThrottleMemory = types.Int64Null()
 	}
-	if value := res.Get("ssl.session.timeout"); value.Exists() && !data.SslSessionTimeout.IsNull() {
+	if value := gjson.GetBytes(res, "ssl.session.timeout"); value.Exists() && !data.SslSessionTimeout.IsNull() {
 		data.SslSessionTimeout = types.Int64Value(value.Int())
 	} else if data.SslSessionTimeout.IsNull() {
 		data.SslSessionTimeout = types.Int64Null()
@@ -335,7 +382,7 @@ func (data *XMLAgent) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{data.SslVrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
-		res.Get("ssl.vrfs.vrf").ForEach(
+		gjson.GetBytes(res, "ssl.vrfs.vrf").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -353,7 +400,7 @@ func (data *XMLAgent) updateFromBody(ctx context.Context, res gjson.Result) {
 				return true
 			},
 		)
-		if value := r.Get("vrf-name"); value.Exists() && !data.SslVrfs[i].VrfName.IsNull() {
+		if value := r.Get("vrf-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SslVrfs[i].VrfName.IsNull() {
 			data.SslVrfs[i].VrfName = types.StringValue(value.String())
 		} else {
 			data.SslVrfs[i].VrfName = types.StringNull()
@@ -370,55 +417,53 @@ func (data *XMLAgent) updateFromBody(ctx context.Context, res gjson.Result) {
 				data.SslVrfs[i].Shutdown = types.BoolNull()
 			}
 		}
-		if value := r.Get("ipv4.access-list"); value.Exists() && !data.SslVrfs[i].Ipv4AccessList.IsNull() {
+		if value := r.Get("ipv4.access-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SslVrfs[i].Ipv4AccessList.IsNull() {
 			data.SslVrfs[i].Ipv4AccessList = types.StringValue(value.String())
 		} else {
 			data.SslVrfs[i].Ipv4AccessList = types.StringNull()
 		}
 	}
-	if value := res.Get("ipv6.enable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Ipv6Enable.IsNull() {
+	if value := gjson.GetBytes(res, "ipv6.enable"); !data.Ipv6Enable.IsNull() {
+		if value.Exists() {
 			data.Ipv6Enable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Ipv6Enable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Ipv6Enable.IsNull() {
-			data.Ipv6Enable = types.BoolNull()
-		}
+	} else if data.Ipv6Enable.IsNull() {
+		data.Ipv6Enable = types.BoolNull()
 	}
-	if value := res.Get("ipv4.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Ipv4Disable.IsNull() {
+	if value := gjson.GetBytes(res, "ipv4.disable"); !data.Ipv4Disable.IsNull() {
+		if value.Exists() {
 			data.Ipv4Disable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Ipv4Disable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Ipv4Disable.IsNull() {
-			data.Ipv4Disable = types.BoolNull()
-		}
+	} else if data.Ipv4Disable.IsNull() {
+		data.Ipv4Disable = types.BoolNull()
 	}
-	if value := res.Get("streaming.on.size"); value.Exists() && !data.StreamingSize.IsNull() {
+	if value := gjson.GetBytes(res, "streaming.on.size"); value.Exists() && !data.StreamingSize.IsNull() {
 		data.StreamingSize = types.Int64Value(value.Int())
 	} else if data.StreamingSize.IsNull() {
 		data.StreamingSize = types.Int64Null()
 	}
-	if value := res.Get("iteration.size"); value.Exists() && !data.IterationSize.IsNull() {
+	if value := gjson.GetBytes(res, "iteration.size"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.IterationSize.IsNull() {
 		data.IterationSize = types.StringValue(value.String())
 	} else if data.IterationSize.IsNull() {
 		data.IterationSize = types.StringNull()
 	}
-	if value := res.Get("throttle.process-rate"); value.Exists() && !data.ThrottleProcessRate.IsNull() {
+	if value := gjson.GetBytes(res, "throttle.process-rate"); value.Exists() && !data.ThrottleProcessRate.IsNull() {
 		data.ThrottleProcessRate = types.Int64Value(value.Int())
 	} else if data.ThrottleProcessRate.IsNull() {
 		data.ThrottleProcessRate = types.Int64Null()
 	}
-	if value := res.Get("throttle.memory"); value.Exists() && !data.ThrottleMemory.IsNull() {
+	if value := gjson.GetBytes(res, "throttle.memory"); value.Exists() && !data.ThrottleMemory.IsNull() {
 		data.ThrottleMemory = types.Int64Value(value.Int())
 	} else if data.ThrottleMemory.IsNull() {
 		data.ThrottleMemory = types.Int64Null()
 	}
-	if value := res.Get("session.timeout"); value.Exists() && !data.SessionTimeout.IsNull() {
+	if value := gjson.GetBytes(res, "session.timeout"); value.Exists() && !data.SessionTimeout.IsNull() {
 		data.SessionTimeout = types.Int64Value(value.Int())
 	} else if data.SessionTimeout.IsNull() {
 		data.SessionTimeout = types.Int64Null()
@@ -428,7 +473,7 @@ func (data *XMLAgent) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
-		res.Get("vrfs.vrf").ForEach(
+		gjson.GetBytes(res, "vrfs.vrf").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -446,7 +491,7 @@ func (data *XMLAgent) updateFromBody(ctx context.Context, res gjson.Result) {
 				return true
 			},
 		)
-		if value := r.Get("vrf-name"); value.Exists() && !data.Vrfs[i].VrfName.IsNull() {
+		if value := r.Get("vrf-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Vrfs[i].VrfName.IsNull() {
 			data.Vrfs[i].VrfName = types.StringValue(value.String())
 		} else {
 			data.Vrfs[i].VrfName = types.StringNull()
@@ -463,12 +508,12 @@ func (data *XMLAgent) updateFromBody(ctx context.Context, res gjson.Result) {
 				data.Vrfs[i].Shutdown = types.BoolNull()
 			}
 		}
-		if value := r.Get("ipv6.access-list"); value.Exists() && !data.Vrfs[i].Ipv6AccessList.IsNull() {
+		if value := r.Get("ipv6.access-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Vrfs[i].Ipv6AccessList.IsNull() {
 			data.Vrfs[i].Ipv6AccessList = types.StringValue(value.String())
 		} else {
 			data.Vrfs[i].Ipv6AccessList = types.StringNull()
 		}
-		if value := r.Get("ipv4.access-list"); value.Exists() && !data.Vrfs[i].Ipv4AccessList.IsNull() {
+		if value := r.Get("ipv4.access-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Vrfs[i].Ipv4AccessList.IsNull() {
 			data.Vrfs[i].Ipv4AccessList = types.StringValue(value.String())
 		} else {
 			data.Vrfs[i].Ipv4AccessList = types.StringNull()
@@ -477,6 +522,559 @@ func (data *XMLAgent) updateFromBody(ctx context.Context, res gjson.Result) {
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *XMLAgent) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "enable"); value.Exists() {
+		data.Enable = types.BoolValue(true)
+	} else if !data.Enable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Enable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "tty"); value.Exists() {
+		data.TtyEnable = types.BoolValue(true)
+	} else if !data.TtyEnable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TtyEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "tty.streaming.on.size"); value.Exists() {
+		data.TtyStreamingSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "tty.iteration.size"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.TtyIterationSize = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "tty.throttle.process-rate"); value.Exists() {
+		data.TtyThrottleProcessRate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "tty.throttle.memory"); value.Exists() {
+		data.TtyThrottleMemory = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "tty.session.timeout"); value.Exists() {
+		data.TtySessionTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ssl"); value.Exists() {
+		data.SslEnable = types.BoolValue(true)
+	} else if !data.SslEnable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SslEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ssl.streaming.on.size"); value.Exists() {
+		data.SslStreamingSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ssl.iteration.size"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SslIterationSize = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ssl.throttle.process-rate"); value.Exists() {
+		data.SslThrottleProcessRate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ssl.throttle.memory"); value.Exists() {
+		data.SslThrottleMemory = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ssl.session.timeout"); value.Exists() {
+		data.SslSessionTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ssl.vrfs.vrf"); value.Exists() {
+		data.SslVrfs = make([]XMLAgentSslVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := XMLAgentSslVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("shutdown"); cValue.Exists() {
+				item.Shutdown = types.BoolValue(true)
+			} else if !item.Shutdown.IsNull() {
+				// Only set to false if it was previously set
+				item.Shutdown = types.BoolValue(false)
+			}
+			if cValue := v.Get("ipv4.access-list"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Ipv4AccessList = types.StringValue(cValue.String())
+			}
+			data.SslVrfs = append(data.SslVrfs, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "ipv6.enable"); value.Exists() {
+		data.Ipv6Enable = types.BoolValue(true)
+	} else if !data.Ipv6Enable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv6Enable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.disable"); value.Exists() {
+		data.Ipv4Disable = types.BoolValue(true)
+	} else if !data.Ipv4Disable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv4Disable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "streaming.on.size"); value.Exists() {
+		data.StreamingSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "iteration.size"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.IterationSize = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "throttle.process-rate"); value.Exists() {
+		data.ThrottleProcessRate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "throttle.memory"); value.Exists() {
+		data.ThrottleMemory = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "session.timeout"); value.Exists() {
+		data.SessionTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
+		data.Vrfs = make([]XMLAgentVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := XMLAgentVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("shutdown"); cValue.Exists() {
+				item.Shutdown = types.BoolValue(true)
+			} else if !item.Shutdown.IsNull() {
+				// Only set to false if it was previously set
+				item.Shutdown = types.BoolValue(false)
+			}
+			if cValue := v.Get("ipv6.access-list"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Ipv6AccessList = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4.access-list"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Ipv4AccessList = types.StringValue(cValue.String())
+			}
+			data.Vrfs = append(data.Vrfs, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *XMLAgentData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "enable"); value.Exists() {
+		data.Enable = types.BoolValue(true)
+	} else {
+		data.Enable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "tty"); value.Exists() {
+		data.TtyEnable = types.BoolValue(true)
+	} else {
+		data.TtyEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "tty.streaming.on.size"); value.Exists() {
+		data.TtyStreamingSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "tty.iteration.size"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.TtyIterationSize = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "tty.throttle.process-rate"); value.Exists() {
+		data.TtyThrottleProcessRate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "tty.throttle.memory"); value.Exists() {
+		data.TtyThrottleMemory = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "tty.session.timeout"); value.Exists() {
+		data.TtySessionTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ssl"); value.Exists() {
+		data.SslEnable = types.BoolValue(true)
+	} else {
+		data.SslEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ssl.streaming.on.size"); value.Exists() {
+		data.SslStreamingSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ssl.iteration.size"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SslIterationSize = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ssl.throttle.process-rate"); value.Exists() {
+		data.SslThrottleProcessRate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ssl.throttle.memory"); value.Exists() {
+		data.SslThrottleMemory = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ssl.session.timeout"); value.Exists() {
+		data.SslSessionTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ssl.vrfs.vrf"); value.Exists() {
+		data.SslVrfs = make([]XMLAgentSslVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := XMLAgentSslVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("shutdown"); cValue.Exists() {
+				item.Shutdown = types.BoolValue(true)
+			} else {
+				item.Shutdown = types.BoolValue(false)
+			}
+			if cValue := v.Get("ipv4.access-list"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Ipv4AccessList = types.StringValue(cValue.String())
+			}
+			data.SslVrfs = append(data.SslVrfs, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "ipv6.enable"); value.Exists() {
+		data.Ipv6Enable = types.BoolValue(true)
+	} else {
+		data.Ipv6Enable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.disable"); value.Exists() {
+		data.Ipv4Disable = types.BoolValue(true)
+	} else {
+		data.Ipv4Disable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "streaming.on.size"); value.Exists() {
+		data.StreamingSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "iteration.size"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.IterationSize = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "throttle.process-rate"); value.Exists() {
+		data.ThrottleProcessRate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "throttle.memory"); value.Exists() {
+		data.ThrottleMemory = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "session.timeout"); value.Exists() {
+		data.SessionTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
+		data.Vrfs = make([]XMLAgentVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := XMLAgentVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("shutdown"); cValue.Exists() {
+				item.Shutdown = types.BoolValue(true)
+			} else {
+				item.Shutdown = types.BoolValue(false)
+			}
+			if cValue := v.Get("ipv6.access-list"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Ipv6AccessList = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4.access-list"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Ipv4AccessList = types.StringValue(cValue.String())
+			}
+			data.Vrfs = append(data.Vrfs, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *XMLAgent) getDeletedItems(ctx context.Context, state XMLAgent, version string) []string {
+	deletedItems := make([]string, 0)
+	for i := range state.Vrfs {
+		keys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.Vrfs[i].VrfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Vrfs[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Vrfs {
+			found = true
+			if state.Vrfs[i].VrfName.ValueString() != data.Vrfs[j].VrfName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Vrfs[i].Ipv4AccessList.IsNull() && data.Vrfs[j].Ipv4AccessList.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "vrfs/vrf", keyString), "ipv4/access-list"))
+				}
+				if !state.Vrfs[i].Ipv6AccessList.IsNull() && data.Vrfs[j].Ipv6AccessList.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "vrfs/vrf", keyString), "ipv6/access-list"))
+				}
+				if !state.Vrfs[i].Shutdown.IsNull() && data.Vrfs[j].Shutdown.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "vrfs/vrf", keyString), "shutdown"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "vrfs/vrf", keyString))
+		}
+	}
+	if !state.SessionTimeout.IsNull() && data.SessionTimeout.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "session/timeout"))
+	}
+	if !state.ThrottleMemory.IsNull() && data.ThrottleMemory.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "throttle/memory"))
+	}
+	if !state.ThrottleProcessRate.IsNull() && data.ThrottleProcessRate.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "throttle/process-rate"))
+	}
+	if !state.IterationSize.IsNull() && data.IterationSize.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "iteration/size"))
+	}
+	if !state.StreamingSize.IsNull() && data.StreamingSize.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "streaming/on/size"))
+	}
+	if !state.Ipv4Disable.IsNull() && data.Ipv4Disable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv4/disable"))
+	}
+	if !state.Ipv6Enable.IsNull() && data.Ipv6Enable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv6/enable"))
+	}
+	for i := range state.SslVrfs {
+		keys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.SslVrfs[i].VrfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SslVrfs[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SslVrfs {
+			found = true
+			if state.SslVrfs[i].VrfName.ValueString() != data.SslVrfs[j].VrfName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.SslVrfs[i].Ipv4AccessList.IsNull() && data.SslVrfs[j].Ipv4AccessList.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ssl/vrfs/vrf", keyString), "ipv4/access-list"))
+				}
+				if !state.SslVrfs[i].Shutdown.IsNull() && data.SslVrfs[j].Shutdown.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ssl/vrfs/vrf", keyString), "shutdown"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "ssl/vrfs/vrf", keyString))
+		}
+	}
+	if !state.SslSessionTimeout.IsNull() && data.SslSessionTimeout.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ssl/session/timeout"))
+	}
+	if !state.SslThrottleMemory.IsNull() && data.SslThrottleMemory.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ssl/throttle/memory"))
+	}
+	if !state.SslThrottleProcessRate.IsNull() && data.SslThrottleProcessRate.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ssl/throttle/process-rate"))
+	}
+	if !state.SslIterationSize.IsNull() && data.SslIterationSize.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ssl/iteration/size"))
+	}
+	if !state.SslStreamingSize.IsNull() && data.SslStreamingSize.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ssl/streaming/on/size"))
+	}
+	if !state.SslEnable.IsNull() && data.SslEnable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ssl"))
+	}
+	if !state.TtySessionTimeout.IsNull() && data.TtySessionTimeout.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "tty/session/timeout"))
+	}
+	if !state.TtyThrottleMemory.IsNull() && data.TtyThrottleMemory.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "tty/throttle/memory"))
+	}
+	if !state.TtyThrottleProcessRate.IsNull() && data.TtyThrottleProcessRate.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "tty/throttle/process-rate"))
+	}
+	if !state.TtyIterationSize.IsNull() && data.TtyIterationSize.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "tty/iteration/size"))
+	}
+	if !state.TtyStreamingSize.IsNull() && data.TtyStreamingSize.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "tty/streaming/on/size"))
+	}
+	if !state.TtyEnable.IsNull() && data.TtyEnable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "tty"))
+	}
+	if !state.Enable.IsNull() && data.Enable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "enable"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *XMLAgent) getEmptyLeafsDelete(ctx context.Context, state *XMLAgent, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	for i := range data.Vrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Vrfs[i].Shutdown.IsNull() && !data.Vrfs[i].Shutdown.ValueBool() {
+			if state == nil || i >= len(state.Vrfs) || state.Vrfs[i].Shutdown.IsNull() || state.Vrfs[i].Shutdown.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "vrfs/vrf", keyString), "shutdown"))
+			}
+		}
+	}
+	if !data.Ipv4Disable.IsNull() && !data.Ipv4Disable.ValueBool() {
+		if state == nil || state.Ipv4Disable.IsNull() || state.Ipv4Disable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/disable"))
+		}
+	}
+	if !data.Ipv6Enable.IsNull() && !data.Ipv6Enable.ValueBool() {
+		if state == nil || state.Ipv6Enable.IsNull() || state.Ipv6Enable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/enable"))
+		}
+	}
+	for i := range data.SslVrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.SslVrfs[i].VrfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.SslVrfs[i].Shutdown.IsNull() && !data.SslVrfs[i].Shutdown.ValueBool() {
+			if state == nil || i >= len(state.SslVrfs) || state.SslVrfs[i].Shutdown.IsNull() || state.SslVrfs[i].Shutdown.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ssl/vrfs/vrf", keyString), "shutdown"))
+			}
+		}
+	}
+	if !data.SslEnable.IsNull() && !data.SslEnable.ValueBool() {
+		if state == nil || state.SslEnable.IsNull() || state.SslEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ssl"))
+		}
+	}
+	if !data.TtyEnable.IsNull() && !data.TtyEnable.ValueBool() {
+		if state == nil || state.TtyEnable.IsNull() || state.TtyEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "tty"))
+		}
+	}
+	if !data.Enable.IsNull() && !data.Enable.ValueBool() {
+		if state == nil || state.Enable.IsNull() || state.Enable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "enable"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *XMLAgent) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	for i := range data.Vrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.Vrfs[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "vrfs/vrf", keyString))
+	}
+	if !data.SessionTimeout.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "session/timeout"))
+	}
+	if !data.ThrottleMemory.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "throttle/memory"))
+	}
+	if !data.ThrottleProcessRate.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "throttle/process-rate"))
+	}
+	if !data.IterationSize.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "iteration/size"))
+	}
+	if !data.StreamingSize.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "streaming/on/size"))
+	}
+	if !data.Ipv4Disable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv4/disable"))
+	}
+	if !data.Ipv6Enable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv6/enable"))
+	}
+	for i := range data.SslVrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.SslVrfs[i].VrfName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.SslVrfs[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "ssl/vrfs/vrf", keyString))
+	}
+	if !data.SslSessionTimeout.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ssl/session/timeout"))
+	}
+	if !data.SslThrottleMemory.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ssl/throttle/memory"))
+	}
+	if !data.SslThrottleProcessRate.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ssl/throttle/process-rate"))
+	}
+	if !data.SslIterationSize.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ssl/iteration/size"))
+	}
+	if !data.SslStreamingSize.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ssl/streaming/on/size"))
+	}
+	if !data.SslEnable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ssl"))
+	}
+	if !data.TtySessionTimeout.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "tty/session/timeout"))
+	}
+	if !data.TtyThrottleMemory.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "tty/throttle/memory"))
+	}
+	if !data.TtyThrottleProcessRate.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "tty/throttle/process-rate"))
+	}
+	if !data.TtyIterationSize.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "tty/iteration/size"))
+	}
+	if !data.TtyStreamingSize.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "tty/streaming/on/size"))
+	}
+	if !data.TtyEnable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "tty"))
+	}
+	if !data.Enable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "enable"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data XMLAgent) toBodyXML(ctx context.Context, stateArg ...*XMLAgent) string {
@@ -612,7 +1210,7 @@ func (data XMLAgent) toBodyXML(ctx context.Context, stateArg ...*XMLAgent) strin
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -620,6 +1218,7 @@ func (data XMLAgent) toBodyXML(ctx context.Context, stateArg ...*XMLAgent) strin
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *XMLAgent) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -853,264 +1452,7 @@ func (data *XMLAgent) updateFromBodyXML(ctx context.Context, res xmldot.Result) 
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *XMLAgent) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "enable"); value.Exists() {
-		data.Enable = types.BoolValue(true)
-	} else if !data.Enable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.Enable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "tty"); value.Exists() {
-		data.TtyEnable = types.BoolValue(true)
-	} else if !data.TtyEnable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TtyEnable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "tty.streaming.on.size"); value.Exists() {
-		data.TtyStreamingSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "tty.iteration.size"); value.Exists() {
-		data.TtyIterationSize = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "tty.throttle.process-rate"); value.Exists() {
-		data.TtyThrottleProcessRate = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "tty.throttle.memory"); value.Exists() {
-		data.TtyThrottleMemory = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "tty.session.timeout"); value.Exists() {
-		data.TtySessionTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ssl"); value.Exists() {
-		data.SslEnable = types.BoolValue(true)
-	} else if !data.SslEnable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SslEnable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ssl.streaming.on.size"); value.Exists() {
-		data.SslStreamingSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ssl.iteration.size"); value.Exists() {
-		data.SslIterationSize = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ssl.throttle.process-rate"); value.Exists() {
-		data.SslThrottleProcessRate = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ssl.throttle.memory"); value.Exists() {
-		data.SslThrottleMemory = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ssl.session.timeout"); value.Exists() {
-		data.SslSessionTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ssl.vrfs.vrf"); value.Exists() {
-		data.SslVrfs = make([]XMLAgentSslVrfs, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := XMLAgentSslVrfs{}
-			if cValue := v.Get("vrf-name"); cValue.Exists() {
-				item.VrfName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("shutdown"); cValue.Exists() {
-				item.Shutdown = types.BoolValue(true)
-			} else if !item.Shutdown.IsNull() {
-				// Only set to false if it was previously set
-				item.Shutdown = types.BoolValue(false)
-			}
-			if cValue := v.Get("ipv4.access-list"); cValue.Exists() {
-				item.Ipv4AccessList = types.StringValue(cValue.String())
-			}
-			data.SslVrfs = append(data.SslVrfs, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "ipv6.enable"); value.Exists() {
-		data.Ipv6Enable = types.BoolValue(true)
-	} else if !data.Ipv6Enable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.Ipv6Enable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ipv4.disable"); value.Exists() {
-		data.Ipv4Disable = types.BoolValue(true)
-	} else if !data.Ipv4Disable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.Ipv4Disable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "streaming.on.size"); value.Exists() {
-		data.StreamingSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "iteration.size"); value.Exists() {
-		data.IterationSize = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "throttle.process-rate"); value.Exists() {
-		data.ThrottleProcessRate = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "throttle.memory"); value.Exists() {
-		data.ThrottleMemory = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "session.timeout"); value.Exists() {
-		data.SessionTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "vrfs.vrf"); value.Exists() {
-		data.Vrfs = make([]XMLAgentVrfs, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := XMLAgentVrfs{}
-			if cValue := v.Get("vrf-name"); cValue.Exists() {
-				item.VrfName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("shutdown"); cValue.Exists() {
-				item.Shutdown = types.BoolValue(true)
-			} else if !item.Shutdown.IsNull() {
-				// Only set to false if it was previously set
-				item.Shutdown = types.BoolValue(false)
-			}
-			if cValue := v.Get("ipv6.access-list"); cValue.Exists() {
-				item.Ipv6AccessList = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ipv4.access-list"); cValue.Exists() {
-				item.Ipv4AccessList = types.StringValue(cValue.String())
-			}
-			data.Vrfs = append(data.Vrfs, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *XMLAgentData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "enable"); value.Exists() {
-		data.Enable = types.BoolValue(true)
-	} else {
-		data.Enable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "tty"); value.Exists() {
-		data.TtyEnable = types.BoolValue(true)
-	} else {
-		data.TtyEnable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "tty.streaming.on.size"); value.Exists() {
-		data.TtyStreamingSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "tty.iteration.size"); value.Exists() {
-		data.TtyIterationSize = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "tty.throttle.process-rate"); value.Exists() {
-		data.TtyThrottleProcessRate = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "tty.throttle.memory"); value.Exists() {
-		data.TtyThrottleMemory = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "tty.session.timeout"); value.Exists() {
-		data.TtySessionTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ssl"); value.Exists() {
-		data.SslEnable = types.BoolValue(true)
-	} else {
-		data.SslEnable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ssl.streaming.on.size"); value.Exists() {
-		data.SslStreamingSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ssl.iteration.size"); value.Exists() {
-		data.SslIterationSize = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ssl.throttle.process-rate"); value.Exists() {
-		data.SslThrottleProcessRate = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ssl.throttle.memory"); value.Exists() {
-		data.SslThrottleMemory = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ssl.session.timeout"); value.Exists() {
-		data.SslSessionTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ssl.vrfs.vrf"); value.Exists() {
-		data.SslVrfs = make([]XMLAgentSslVrfs, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := XMLAgentSslVrfs{}
-			if cValue := v.Get("vrf-name"); cValue.Exists() {
-				item.VrfName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("shutdown"); cValue.Exists() {
-				item.Shutdown = types.BoolValue(true)
-			} else {
-				item.Shutdown = types.BoolValue(false)
-			}
-			if cValue := v.Get("ipv4.access-list"); cValue.Exists() {
-				item.Ipv4AccessList = types.StringValue(cValue.String())
-			}
-			data.SslVrfs = append(data.SslVrfs, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "ipv6.enable"); value.Exists() {
-		data.Ipv6Enable = types.BoolValue(true)
-	} else {
-		data.Ipv6Enable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ipv4.disable"); value.Exists() {
-		data.Ipv4Disable = types.BoolValue(true)
-	} else {
-		data.Ipv4Disable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "streaming.on.size"); value.Exists() {
-		data.StreamingSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "iteration.size"); value.Exists() {
-		data.IterationSize = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "throttle.process-rate"); value.Exists() {
-		data.ThrottleProcessRate = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "throttle.memory"); value.Exists() {
-		data.ThrottleMemory = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "session.timeout"); value.Exists() {
-		data.SessionTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "vrfs.vrf"); value.Exists() {
-		data.Vrfs = make([]XMLAgentVrfs, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := XMLAgentVrfs{}
-			if cValue := v.Get("vrf-name"); cValue.Exists() {
-				item.VrfName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("shutdown"); cValue.Exists() {
-				item.Shutdown = types.BoolValue(true)
-			} else {
-				item.Shutdown = types.BoolValue(false)
-			}
-			if cValue := v.Get("ipv6.access-list"); cValue.Exists() {
-				item.Ipv6AccessList = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ipv4.access-list"); cValue.Exists() {
-				item.Ipv4AccessList = types.StringValue(cValue.String())
-			}
-			data.Vrfs = append(data.Vrfs, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *XMLAgent) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1228,6 +1570,7 @@ func (data *XMLAgent) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *XMLAgentData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1345,298 +1688,7 @@ func (data *XMLAgentData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *XMLAgent) getDeletedItems(ctx context.Context, state XMLAgent) []string {
-	deletedItems := make([]string, 0)
-	for i := range state.Vrfs {
-		keys := [...]string{"vrf-name"}
-		stateKeyValues := [...]string{state.Vrfs[i].VrfName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Vrfs[i].VrfName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Vrfs {
-			found = true
-			if state.Vrfs[i].VrfName.ValueString() != data.Vrfs[j].VrfName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.Vrfs[i].Ipv4AccessList.IsNull() && data.Vrfs[j].Ipv4AccessList.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/ipv4/access-list", state.getPath(), keyString))
-				}
-				if !state.Vrfs[i].Ipv6AccessList.IsNull() && data.Vrfs[j].Ipv6AccessList.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/ipv6/access-list", state.getPath(), keyString))
-				}
-				if !state.Vrfs[i].Shutdown.IsNull() && data.Vrfs[j].Shutdown.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/shutdown", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v", state.getPath(), keyString))
-		}
-	}
-	if !state.SessionTimeout.IsNull() && data.SessionTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/session/timeout", state.getPath()))
-	}
-	if !state.ThrottleMemory.IsNull() && data.ThrottleMemory.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/throttle/memory", state.getPath()))
-	}
-	if !state.ThrottleProcessRate.IsNull() && data.ThrottleProcessRate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/throttle/process-rate", state.getPath()))
-	}
-	if !state.IterationSize.IsNull() && data.IterationSize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/iteration/size", state.getPath()))
-	}
-	if !state.StreamingSize.IsNull() && data.StreamingSize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/streaming/on/size", state.getPath()))
-	}
-	if !state.Ipv4Disable.IsNull() && data.Ipv4Disable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/disable", state.getPath()))
-	}
-	if !state.Ipv6Enable.IsNull() && data.Ipv6Enable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/enable", state.getPath()))
-	}
-	for i := range state.SslVrfs {
-		keys := [...]string{"vrf-name"}
-		stateKeyValues := [...]string{state.SslVrfs[i].VrfName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SslVrfs[i].VrfName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SslVrfs {
-			found = true
-			if state.SslVrfs[i].VrfName.ValueString() != data.SslVrfs[j].VrfName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.SslVrfs[i].Ipv4AccessList.IsNull() && data.SslVrfs[j].Ipv4AccessList.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ssl/vrfs/vrf%v/ipv4/access-list", state.getPath(), keyString))
-				}
-				if !state.SslVrfs[i].Shutdown.IsNull() && data.SslVrfs[j].Shutdown.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ssl/vrfs/vrf%v/shutdown", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/ssl/vrfs/vrf%v", state.getPath(), keyString))
-		}
-	}
-	if !state.SslSessionTimeout.IsNull() && data.SslSessionTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ssl/session/timeout", state.getPath()))
-	}
-	if !state.SslThrottleMemory.IsNull() && data.SslThrottleMemory.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ssl/throttle/memory", state.getPath()))
-	}
-	if !state.SslThrottleProcessRate.IsNull() && data.SslThrottleProcessRate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ssl/throttle/process-rate", state.getPath()))
-	}
-	if !state.SslIterationSize.IsNull() && data.SslIterationSize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ssl/iteration/size", state.getPath()))
-	}
-	if !state.SslStreamingSize.IsNull() && data.SslStreamingSize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ssl/streaming/on/size", state.getPath()))
-	}
-	if !state.SslEnable.IsNull() && data.SslEnable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ssl", state.getPath()))
-	}
-	if !state.TtySessionTimeout.IsNull() && data.TtySessionTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/tty/session/timeout", state.getPath()))
-	}
-	if !state.TtyThrottleMemory.IsNull() && data.TtyThrottleMemory.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/tty/throttle/memory", state.getPath()))
-	}
-	if !state.TtyThrottleProcessRate.IsNull() && data.TtyThrottleProcessRate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/tty/throttle/process-rate", state.getPath()))
-	}
-	if !state.TtyIterationSize.IsNull() && data.TtyIterationSize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/tty/iteration/size", state.getPath()))
-	}
-	if !state.TtyStreamingSize.IsNull() && data.TtyStreamingSize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/tty/streaming/on/size", state.getPath()))
-	}
-	if !state.TtyEnable.IsNull() && data.TtyEnable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/tty", state.getPath()))
-	}
-	if !state.Enable.IsNull() && data.Enable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/enable", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *XMLAgent) getEmptyLeafsDelete(ctx context.Context, state *XMLAgent) []string {
-	emptyLeafsDelete := make([]string, 0)
-	for i := range data.Vrfs {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.Vrfs[i].Shutdown.IsNull() && !data.Vrfs[i].Shutdown.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Vrfs) && !state.Vrfs[i].Shutdown.IsNull() && state.Vrfs[i].Shutdown.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/shutdown", data.getXPath(), keyString))
-			}
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.Ipv4Disable.IsNull() && !data.Ipv4Disable.ValueBool() {
-		if state != nil && !state.Ipv4Disable.IsNull() && state.Ipv4Disable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/disable", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.Ipv6Enable.IsNull() && !data.Ipv6Enable.ValueBool() {
-		if state != nil && !state.Ipv6Enable.IsNull() && state.Ipv6Enable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/enable", data.getXPath()))
-		}
-	}
-	for i := range data.SslVrfs {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.SslVrfs[i].VrfName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.SslVrfs[i].Shutdown.IsNull() && !data.SslVrfs[i].Shutdown.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SslVrfs) && !state.SslVrfs[i].Shutdown.IsNull() && state.SslVrfs[i].Shutdown.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ssl/vrfs/vrf%v/shutdown", data.getXPath(), keyString))
-			}
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SslEnable.IsNull() && !data.SslEnable.ValueBool() {
-		if state != nil && !state.SslEnable.IsNull() && state.SslEnable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ssl", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TtyEnable.IsNull() && !data.TtyEnable.ValueBool() {
-		if state != nil && !state.TtyEnable.IsNull() && state.TtyEnable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/tty", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.Enable.IsNull() && !data.Enable.ValueBool() {
-		if state != nil && !state.Enable.IsNull() && state.Enable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/enable", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *XMLAgent) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	for i := range data.Vrfs {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[vrf-name=" + data.Vrfs[i].VrfName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/vrfs/vrf%v", data.getPath(), keyPath))
-	}
-	if !data.SessionTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/session/timeout", data.getPath()))
-	}
-	if !data.ThrottleMemory.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/throttle/memory", data.getPath()))
-	}
-	if !data.ThrottleProcessRate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/throttle/process-rate", data.getPath()))
-	}
-	if !data.IterationSize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/iteration/size", data.getPath()))
-	}
-	if !data.StreamingSize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/streaming/on/size", data.getPath()))
-	}
-	if !data.Ipv4Disable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/disable", data.getPath()))
-	}
-	if !data.Ipv6Enable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/enable", data.getPath()))
-	}
-	for i := range data.SslVrfs {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[vrf-name=" + data.SslVrfs[i].VrfName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ssl/vrfs/vrf%v", data.getPath(), keyPath))
-	}
-	if !data.SslSessionTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ssl/session/timeout", data.getPath()))
-	}
-	if !data.SslThrottleMemory.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ssl/throttle/memory", data.getPath()))
-	}
-	if !data.SslThrottleProcessRate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ssl/throttle/process-rate", data.getPath()))
-	}
-	if !data.SslIterationSize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ssl/iteration/size", data.getPath()))
-	}
-	if !data.SslStreamingSize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ssl/streaming/on/size", data.getPath()))
-	}
-	if !data.SslEnable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ssl", data.getPath()))
-	}
-	if !data.TtySessionTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/tty/session/timeout", data.getPath()))
-	}
-	if !data.TtyThrottleMemory.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/tty/throttle/memory", data.getPath()))
-	}
-	if !data.TtyThrottleProcessRate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/tty/throttle/process-rate", data.getPath()))
-	}
-	if !data.TtyIterationSize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/tty/iteration/size", data.getPath()))
-	}
-	if !data.TtyStreamingSize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/tty/streaming/on/size", data.getPath()))
-	}
-	if !data.TtyEnable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/tty", data.getPath()))
-	}
-	if !data.Enable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/enable", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *XMLAgent) addDeletedItemsXML(ctx context.Context, state XMLAgent, body string) string {
@@ -2032,6 +2084,7 @@ func (data *XMLAgent) addDeletedItemsXML(ctx context.Context, state XMLAgent, bo
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *XMLAgent) addDeletePathsXML(ctx context.Context, body string) string {

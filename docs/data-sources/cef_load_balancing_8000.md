@@ -35,6 +35,8 @@ data "iosxr_cef_load_balancing_8000" "example" {
 - `platform_load_balance_fields_userdata_ipv6_udp` (Attributes List) none (see [below for nested schema](#nestedatt--platform_load_balance_fields_userdata_ipv6_udp))
 - `platform_load_balance_hash_rotate` (Number) Router-ID is bypassed when hash rotate count is used
 - `platform_load_balance_mpls_hashing_inner_non_ip_label_only` (Boolean) MPLS label stack and non-IP payload hash method to use labels only
+- `platform_load_balance_nvgre_payload_exclude` (Boolean) Exclude NVGRE payload from hash calculation (overlay hashing disabled)
+  - Supported from version: `26.2`
 
 <a id="nestedatt--platform_load_balance_fields_userdata_ipv4_non_tcp_udp"></a>
 ### Nested Schema for `platform_load_balance_fields_userdata_ipv4_non_tcp_udp`

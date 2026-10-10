@@ -49,11 +49,11 @@ func TestAccIosxrPerformanceMeasurementEndpointIPv6(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrPerformanceMeasurementEndpointIPv6PrerequisitesConfig + testAccIosxrPerformanceMeasurementEndpointIPv6Config_minimum(),
+			Config: testAccIosxrPerformanceMeasurementEndpointIPv6PrerequisitesConfig() + testAccIosxrPerformanceMeasurementEndpointIPv6Config_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrPerformanceMeasurementEndpointIPv6PrerequisitesConfig + testAccIosxrPerformanceMeasurementEndpointIPv6Config_all(),
+		Config: testAccIosxrPerformanceMeasurementEndpointIPv6PrerequisitesConfig() + testAccIosxrPerformanceMeasurementEndpointIPv6Config_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -86,7 +86,7 @@ func iosxrPerformanceMeasurementEndpointIPv6ImportStateIdFunc(resourceName strin
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrPerformanceMeasurementEndpointIPv6PrerequisitesConfig = `
+const testAccIosxrPerformanceMeasurementEndpointIPv6PrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
 	attributes = {
@@ -103,6 +103,15 @@ resource "iosxr_yang" "PreReq1" {
 
 `
 
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccIosxrPerformanceMeasurementEndpointIPv6PrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccIosxrPerformanceMeasurementEndpointIPv6PrerequisitesConfig_V24_4,
+		},
+	)
+}
+
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
@@ -111,7 +120,9 @@ func testAccIosxrPerformanceMeasurementEndpointIPv6Config_minimum() string {
 	config := `resource "iosxr_performance_measurement_endpoint_ipv6" "test" {` + "\n"
 	config += `	address = "2001:db8::1"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -138,7 +149,9 @@ func testAccIosxrPerformanceMeasurementEndpointIPv6Config_all() string {
 	config += `		insert_srh_sl_zero = true` + "\n"
 	config += `		}]` + "\n"
 	config += `	segment_routing_te_explicit_reverse_path_list = "SEG_LIST_GLOBAL_REVERSE"` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }

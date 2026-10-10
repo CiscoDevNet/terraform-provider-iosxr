@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -51,6 +52,7 @@ type CEFLoadBalancing8000 struct {
 	PlatformLoadBalanceFieldsUserdataIpv4Tcp          []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp       `tfsdk:"platform_load_balance_fields_userdata_ipv4_tcp"`
 	PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp    []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp `tfsdk:"platform_load_balance_fields_userdata_ipv4_non_tcp_udp"`
 	PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly types.Bool                                                           `tfsdk:"platform_load_balance_mpls_hashing_inner_non_ip_label_only"`
+	PlatformLoadBalanceNvgrePayloadExclude            types.Bool                                                           `tfsdk:"platform_load_balance_nvgre_payload_exclude"`
 }
 
 type CEFLoadBalancing8000Data struct {
@@ -64,6 +66,7 @@ type CEFLoadBalancing8000Data struct {
 	PlatformLoadBalanceFieldsUserdataIpv4Tcp          []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp       `tfsdk:"platform_load_balance_fields_userdata_ipv4_tcp"`
 	PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp    []CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp `tfsdk:"platform_load_balance_fields_userdata_ipv4_non_tcp_udp"`
 	PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly types.Bool                                                           `tfsdk:"platform_load_balance_mpls_hashing_inner_non_ip_label_only"`
+	PlatformLoadBalanceNvgrePayloadExclude            types.Bool                                                           `tfsdk:"platform_load_balance_nvgre_payload_exclude"`
 }
 type CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp struct {
 	LocationString    types.String `tfsdk:"location_string"`
@@ -123,7 +126,7 @@ func (data CEFLoadBalancing8000Data) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data CEFLoadBalancing8000) toBody(ctx context.Context) string {
+func (data CEFLoadBalancing8000) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.PlatformLoadBalanceHashRotate.IsNull() && !data.PlatformLoadBalanceHashRotate.IsUnknown() {
 		body, _ = sjson.Set(body, "platform.load-balance.hash.rotate", strconv.FormatInt(data.PlatformLoadBalanceHashRotate.ValueInt64(), 10))
@@ -131,6 +134,13 @@ func (data CEFLoadBalancing8000) toBody(ctx context.Context) string {
 	if !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() && !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsUnknown() {
 		if data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.ValueBool() {
 			body, _ = sjson.Set(body, "platform-load-balance.mpls-hash-non-ip-lbl-only", []interface{}{nil})
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "26.2") {
+		if !data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() && !data.PlatformLoadBalanceNvgrePayloadExclude.IsUnknown() {
+			if data.PlatformLoadBalanceNvgrePayloadExclude.ValueBool() {
+				body, _ = sjson.Set(body, "platform-load-balance.nvgre-payload-exclude", []interface{}{nil})
+			}
 		}
 	}
 	if len(data.PlatformLoadBalanceFieldsUserdataIpv6Udp) > 0 {
@@ -221,6 +231,1008 @@ func (data CEFLoadBalancing8000) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
+
+// GetVersionConstraints returns the version constraints for all fields
+func (data CEFLoadBalancing8000) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "platform_load_balance_nvgre_payload_exclude",
+			AddedInVersion: "26.2",
+		},
+	}...)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data CEFLoadBalancing8000) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data CEFLoadBalancing8000) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data CEFLoadBalancing8000) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data CEFLoadBalancing8000) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "platform.load-balance.hash.rotate"); value.Exists() && !data.PlatformLoadBalanceHashRotate.IsNull() {
+		data.PlatformLoadBalanceHashRotate = types.Int64Value(value.Int())
+	} else if data.PlatformLoadBalanceHashRotate.IsNull() {
+		data.PlatformLoadBalanceHashRotate = types.Int64Null()
+	}
+	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Udp {
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv6-udps.ipv6-udp").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("location-string"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.IsNull() {
+			data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString = types.StringValue(value.String())
+		} else {
+			data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString = types.StringNull()
+		}
+		if value := r.Get("ipv6-udp-hash.offset"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashOffset.IsNull() {
+			data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashOffset = types.Int64Value(value.Int())
+		} else {
+			data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashOffset = types.Int64Null()
+		}
+		if value := r.Get("ipv6-udp-hash.size"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashSize.IsNull() {
+			data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashSize = types.Int64Value(value.Int())
+		} else {
+			data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashSize = types.Int64Null()
+		}
+	}
+	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Tcp {
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv6-tcps.ipv6-tcp").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("location-string"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.IsNull() {
+			data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString = types.StringValue(value.String())
+		} else {
+			data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString = types.StringNull()
+		}
+		if value := r.Get("ipv6-tcp-hash.offset"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashOffset.IsNull() {
+			data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashOffset = types.Int64Value(value.Int())
+		} else {
+			data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashOffset = types.Int64Null()
+		}
+		if value := r.Get("ipv6-tcp-hash.size"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashSize.IsNull() {
+			data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashSize = types.Int64Value(value.Int())
+		} else {
+			data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashSize = types.Int64Null()
+		}
+	}
+	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp {
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv6-nontcpudps.ipv6-nontcpudp").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("location-string"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.IsNull() {
+			data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString = types.StringValue(value.String())
+		} else {
+			data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString = types.StringNull()
+		}
+		if value := r.Get("ipv6-hash.offset"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashOffset.IsNull() {
+			data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashOffset = types.Int64Value(value.Int())
+		} else {
+			data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashOffset = types.Int64Null()
+		}
+		if value := r.Get("ipv6-hash.size"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashSize.IsNull() {
+			data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashSize = types.Int64Value(value.Int())
+		} else {
+			data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashSize = types.Int64Null()
+		}
+	}
+	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Udp {
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv4-udps.ipv4-udp").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("location-string"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.IsNull() {
+			data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString = types.StringValue(value.String())
+		} else {
+			data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString = types.StringNull()
+		}
+		if value := r.Get("ipv4-udp-hash.offset"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashOffset.IsNull() {
+			data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashOffset = types.Int64Value(value.Int())
+		} else {
+			data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashOffset = types.Int64Null()
+		}
+		if value := r.Get("ipv4-udp-hash.size"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashSize.IsNull() {
+			data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashSize = types.Int64Value(value.Int())
+		} else {
+			data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashSize = types.Int64Null()
+		}
+	}
+	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Tcp {
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv4-tcps.ipv4-tcp").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("location-string"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.IsNull() {
+			data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString = types.StringValue(value.String())
+		} else {
+			data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString = types.StringNull()
+		}
+		if value := r.Get("ipv4-tcp-hash.offset"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashOffset.IsNull() {
+			data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashOffset = types.Int64Value(value.Int())
+		} else {
+			data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashOffset = types.Int64Null()
+		}
+		if value := r.Get("ipv4-tcp-hash.size"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashSize.IsNull() {
+			data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashSize = types.Int64Value(value.Int())
+		} else {
+			data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashSize = types.Int64Null()
+		}
+	}
+	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp {
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv4-nontcpudps.ipv4-nontcpudp").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("location-string"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.IsNull() {
+			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString = types.StringValue(value.String())
+		} else {
+			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString = types.StringNull()
+		}
+		if value := r.Get("ipv4-hash.offset"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashOffset.IsNull() {
+			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashOffset = types.Int64Value(value.Int())
+		} else {
+			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashOffset = types.Int64Null()
+		}
+		if value := r.Get("ipv4-hash.size"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashSize.IsNull() {
+			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashSize = types.Int64Value(value.Int())
+		} else {
+			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashSize = types.Int64Null()
+		}
+	}
+	if value := gjson.GetBytes(res, "platform-load-balance.mpls-hash-non-ip-lbl-only"); !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
+		if value.Exists() {
+			data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(false)
+		}
+	} else if data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
+		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "platform-load-balance.nvgre-payload-exclude"); helpers.VersionAtLeast(version, "26.2") && !data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() {
+		if value.Exists() {
+			data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(false)
+		}
+	} else if data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() {
+		data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolNull()
+	}
+}
+
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *CEFLoadBalancing8000) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "platform.load-balance.hash.rotate"); value.Exists() {
+		data.PlatformLoadBalanceHashRotate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv6-udps.ipv6-udp"); value.Exists() {
+		data.PlatformLoadBalanceFieldsUserdataIpv6Udp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp{}
+			if cValue := v.Get("location-string"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LocationString = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv6-udp-hash.offset"); cValue.Exists() {
+				item.Ipv6UdpHashOffset = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ipv6-udp-hash.size"); cValue.Exists() {
+				item.Ipv6UdpHashSize = types.Int64Value(cValue.Int())
+			}
+			data.PlatformLoadBalanceFieldsUserdataIpv6Udp = append(data.PlatformLoadBalanceFieldsUserdataIpv6Udp, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv6-tcps.ipv6-tcp"); value.Exists() {
+		data.PlatformLoadBalanceFieldsUserdataIpv6Tcp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp{}
+			if cValue := v.Get("location-string"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LocationString = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv6-tcp-hash.offset"); cValue.Exists() {
+				item.Ipv6TcpHashOffset = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ipv6-tcp-hash.size"); cValue.Exists() {
+				item.Ipv6TcpHashSize = types.Int64Value(cValue.Int())
+			}
+			data.PlatformLoadBalanceFieldsUserdataIpv6Tcp = append(data.PlatformLoadBalanceFieldsUserdataIpv6Tcp, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv6-nontcpudps.ipv6-nontcpudp"); value.Exists() {
+		data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp{}
+			if cValue := v.Get("location-string"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LocationString = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv6-hash.offset"); cValue.Exists() {
+				item.Ipv6HashOffset = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ipv6-hash.size"); cValue.Exists() {
+				item.Ipv6HashSize = types.Int64Value(cValue.Int())
+			}
+			data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp = append(data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv4-udps.ipv4-udp"); value.Exists() {
+		data.PlatformLoadBalanceFieldsUserdataIpv4Udp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp{}
+			if cValue := v.Get("location-string"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LocationString = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4-udp-hash.offset"); cValue.Exists() {
+				item.Ipv4UdpHashOffset = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ipv4-udp-hash.size"); cValue.Exists() {
+				item.Ipv4UdpHashSize = types.Int64Value(cValue.Int())
+			}
+			data.PlatformLoadBalanceFieldsUserdataIpv4Udp = append(data.PlatformLoadBalanceFieldsUserdataIpv4Udp, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv4-tcps.ipv4-tcp"); value.Exists() {
+		data.PlatformLoadBalanceFieldsUserdataIpv4Tcp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp{}
+			if cValue := v.Get("location-string"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LocationString = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4-tcp-hash.offset"); cValue.Exists() {
+				item.Ipv4TcpHashOffset = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ipv4-tcp-hash.size"); cValue.Exists() {
+				item.Ipv4TcpHashSize = types.Int64Value(cValue.Int())
+			}
+			data.PlatformLoadBalanceFieldsUserdataIpv4Tcp = append(data.PlatformLoadBalanceFieldsUserdataIpv4Tcp, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv4-nontcpudps.ipv4-nontcpudp"); value.Exists() {
+		data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp{}
+			if cValue := v.Get("location-string"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LocationString = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4-hash.offset"); cValue.Exists() {
+				item.Ipv4HashOffset = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ipv4-hash.size"); cValue.Exists() {
+				item.Ipv4HashSize = types.Int64Value(cValue.Int())
+			}
+			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp = append(data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "platform-load-balance.mpls-hash-non-ip-lbl-only"); value.Exists() {
+		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(true)
+	} else if !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(false)
+	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "platform-load-balance.nvgre-payload-exclude"); value.Exists() {
+			data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(true)
+		} else if !data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() {
+			// Only set to false if it was previously set in state
+			data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(false)
+		}
+	} else {
+		data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolNull()
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *CEFLoadBalancing8000Data) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "platform.load-balance.hash.rotate"); value.Exists() {
+		data.PlatformLoadBalanceHashRotate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv6-udps.ipv6-udp"); value.Exists() {
+		data.PlatformLoadBalanceFieldsUserdataIpv6Udp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp{}
+			if cValue := v.Get("location-string"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LocationString = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv6-udp-hash.offset"); cValue.Exists() {
+				item.Ipv6UdpHashOffset = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ipv6-udp-hash.size"); cValue.Exists() {
+				item.Ipv6UdpHashSize = types.Int64Value(cValue.Int())
+			}
+			data.PlatformLoadBalanceFieldsUserdataIpv6Udp = append(data.PlatformLoadBalanceFieldsUserdataIpv6Udp, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv6-tcps.ipv6-tcp"); value.Exists() {
+		data.PlatformLoadBalanceFieldsUserdataIpv6Tcp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp{}
+			if cValue := v.Get("location-string"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LocationString = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv6-tcp-hash.offset"); cValue.Exists() {
+				item.Ipv6TcpHashOffset = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ipv6-tcp-hash.size"); cValue.Exists() {
+				item.Ipv6TcpHashSize = types.Int64Value(cValue.Int())
+			}
+			data.PlatformLoadBalanceFieldsUserdataIpv6Tcp = append(data.PlatformLoadBalanceFieldsUserdataIpv6Tcp, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv6-nontcpudps.ipv6-nontcpudp"); value.Exists() {
+		data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp{}
+			if cValue := v.Get("location-string"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LocationString = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv6-hash.offset"); cValue.Exists() {
+				item.Ipv6HashOffset = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ipv6-hash.size"); cValue.Exists() {
+				item.Ipv6HashSize = types.Int64Value(cValue.Int())
+			}
+			data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp = append(data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv4-udps.ipv4-udp"); value.Exists() {
+		data.PlatformLoadBalanceFieldsUserdataIpv4Udp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp{}
+			if cValue := v.Get("location-string"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LocationString = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4-udp-hash.offset"); cValue.Exists() {
+				item.Ipv4UdpHashOffset = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ipv4-udp-hash.size"); cValue.Exists() {
+				item.Ipv4UdpHashSize = types.Int64Value(cValue.Int())
+			}
+			data.PlatformLoadBalanceFieldsUserdataIpv4Udp = append(data.PlatformLoadBalanceFieldsUserdataIpv4Udp, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv4-tcps.ipv4-tcp"); value.Exists() {
+		data.PlatformLoadBalanceFieldsUserdataIpv4Tcp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp{}
+			if cValue := v.Get("location-string"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LocationString = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4-tcp-hash.offset"); cValue.Exists() {
+				item.Ipv4TcpHashOffset = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ipv4-tcp-hash.size"); cValue.Exists() {
+				item.Ipv4TcpHashSize = types.Int64Value(cValue.Int())
+			}
+			data.PlatformLoadBalanceFieldsUserdataIpv4Tcp = append(data.PlatformLoadBalanceFieldsUserdataIpv4Tcp, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "platform.load-balance.fields.userdata.ipv4-nontcpudps.ipv4-nontcpudp"); value.Exists() {
+		data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp{}
+			if cValue := v.Get("location-string"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LocationString = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4-hash.offset"); cValue.Exists() {
+				item.Ipv4HashOffset = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ipv4-hash.size"); cValue.Exists() {
+				item.Ipv4HashSize = types.Int64Value(cValue.Int())
+			}
+			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp = append(data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "platform-load-balance.mpls-hash-non-ip-lbl-only"); value.Exists() {
+		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(true)
+	} else {
+		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(false)
+	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "platform-load-balance.nvgre-payload-exclude"); value.Exists() {
+			data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(true)
+		} else {
+			data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(false)
+		}
+	} else {
+		data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolNull()
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *CEFLoadBalancing8000) getDeletedItems(ctx context.Context, state CEFLoadBalancing8000, version string) []string {
+	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "26.2") && !state.PlatformLoadBalanceNvgrePayloadExclude.IsNull() && data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "platform-load-balance/nvgre-payload-exclude"))
+	}
+	if !state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() && data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "platform-load-balance/mpls-hash-non-ip-lbl-only"))
+	}
+	for i := range state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp {
+		keys := [...]string{"location-string"}
+		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp {
+			found = true
+			if state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString() != data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[j].LocationString.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[j].Ipv4HashSize.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp", keyString), "ipv4-hash/size"))
+				}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[j].Ipv4HashOffset.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp", keyString), "ipv4-hash/offset"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp", keyString))
+		}
+	}
+	for i := range state.PlatformLoadBalanceFieldsUserdataIpv4Tcp {
+		keys := [...]string{"location-string"}
+		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.PlatformLoadBalanceFieldsUserdataIpv4Tcp {
+			found = true
+			if state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString() != data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[j].LocationString.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[j].Ipv4TcpHashSize.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp", keyString), "ipv4-tcp-hash/size"))
+				}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[j].Ipv4TcpHashOffset.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp", keyString), "ipv4-tcp-hash/offset"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp", keyString))
+		}
+	}
+	for i := range state.PlatformLoadBalanceFieldsUserdataIpv4Udp {
+		keys := [...]string{"location-string"}
+		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.PlatformLoadBalanceFieldsUserdataIpv4Udp {
+			found = true
+			if state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString() != data.PlatformLoadBalanceFieldsUserdataIpv4Udp[j].LocationString.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Udp[j].Ipv4UdpHashSize.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp", keyString), "ipv4-udp-hash/size"))
+				}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Udp[j].Ipv4UdpHashOffset.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp", keyString), "ipv4-udp-hash/offset"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp", keyString))
+		}
+	}
+	for i := range state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp {
+		keys := [...]string{"location-string"}
+		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp {
+			found = true
+			if state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString() != data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[j].LocationString.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[j].Ipv6HashSize.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp", keyString), "ipv6-hash/size"))
+				}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[j].Ipv6HashOffset.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp", keyString), "ipv6-hash/offset"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp", keyString))
+		}
+	}
+	for i := range state.PlatformLoadBalanceFieldsUserdataIpv6Tcp {
+		keys := [...]string{"location-string"}
+		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.PlatformLoadBalanceFieldsUserdataIpv6Tcp {
+			found = true
+			if state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString() != data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[j].LocationString.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[j].Ipv6TcpHashSize.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp", keyString), "ipv6-tcp-hash/size"))
+				}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[j].Ipv6TcpHashOffset.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp", keyString), "ipv6-tcp-hash/offset"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp", keyString))
+		}
+	}
+	for i := range state.PlatformLoadBalanceFieldsUserdataIpv6Udp {
+		keys := [...]string{"location-string"}
+		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.PlatformLoadBalanceFieldsUserdataIpv6Udp {
+			found = true
+			if state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString() != data.PlatformLoadBalanceFieldsUserdataIpv6Udp[j].LocationString.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Udp[j].Ipv6UdpHashSize.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp", keyString), "ipv6-udp-hash/size"))
+				}
+				if !state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Udp[j].Ipv6UdpHashOffset.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp", keyString), "ipv6-udp-hash/offset"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp", keyString))
+		}
+	}
+	if !state.PlatformLoadBalanceHashRotate.IsNull() && data.PlatformLoadBalanceHashRotate.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "platform/load-balance/hash/rotate"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *CEFLoadBalancing8000) getEmptyLeafsDelete(ctx context.Context, state *CEFLoadBalancing8000, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "26.2") && !data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() && !data.PlatformLoadBalanceNvgrePayloadExclude.ValueBool() {
+		if state == nil || state.PlatformLoadBalanceNvgrePayloadExclude.IsNull() || state.PlatformLoadBalanceNvgrePayloadExclude.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "platform-load-balance/nvgre-payload-exclude"))
+		}
+	}
+	if !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() && !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.ValueBool() {
+		if state == nil || state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() || state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "platform-load-balance/mpls-hash-non-ip-lbl-only"))
+		}
+	}
+	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp {
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Tcp {
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Udp {
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp {
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Tcp {
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Udp {
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *CEFLoadBalancing8000) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if helpers.VersionAtLeast(version, "26.2") && !data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "platform-load-balance/nvgre-payload-exclude"))
+	}
+	if !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "platform-load-balance/mpls-hash-non-ip-lbl-only"))
+	}
+	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp {
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp", keyString))
+	}
+	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Tcp {
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp", keyString))
+	}
+	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Udp {
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp", keyString))
+	}
+	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp {
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp", keyString))
+	}
+	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Tcp {
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp", keyString))
+	}
+	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Udp {
+		keys := [...]string{"location-string"}
+		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp", keyString))
+	}
+	if !data.PlatformLoadBalanceHashRotate.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "platform/load-balance/hash/rotate"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
@@ -322,6 +1334,11 @@ func (data CEFLoadBalancing8000) toBodyXML(ctx context.Context, stateArg ...*CEF
 			body = helpers.SetFromXPath(body, data.getXPath()+"/platform-load-balance/mpls-hash-non-ip-lbl-only", "")
 		}
 	}
+	if !data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() && !data.PlatformLoadBalanceNvgrePayloadExclude.IsUnknown() {
+		if data.PlatformLoadBalanceNvgrePayloadExclude.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/platform-load-balance/nvgre-payload-exclude", "")
+		}
+	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
 		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
@@ -344,7 +1361,7 @@ func (data CEFLoadBalancing8000) toBodyXML(ctx context.Context, stateArg ...*CEF
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -352,263 +1369,6 @@ func (data CEFLoadBalancing8000) toBodyXML(ctx context.Context, stateArg ...*CEF
 }
 
 // End of section. //template:end toBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
-
-func (data *CEFLoadBalancing8000) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("platform.load-balance.hash.rotate"); value.Exists() && !data.PlatformLoadBalanceHashRotate.IsNull() {
-		data.PlatformLoadBalanceHashRotate = types.Int64Value(value.Int())
-	} else if data.PlatformLoadBalanceHashRotate.IsNull() {
-		data.PlatformLoadBalanceHashRotate = types.Int64Null()
-	}
-	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Udp {
-		keys := [...]string{"location-string"}
-		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString()}
-
-		var r gjson.Result
-		res.Get("platform.load-balance.fields.userdata.ipv6-udps.ipv6-udp").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("location-string"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.IsNull() {
-			data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString = types.StringValue(value.String())
-		} else {
-			data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString = types.StringNull()
-		}
-		if value := r.Get("ipv6-udp-hash.offset"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashOffset.IsNull() {
-			data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashOffset = types.Int64Value(value.Int())
-		} else {
-			data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashOffset = types.Int64Null()
-		}
-		if value := r.Get("ipv6-udp-hash.size"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashSize.IsNull() {
-			data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashSize = types.Int64Value(value.Int())
-		} else {
-			data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashSize = types.Int64Null()
-		}
-	}
-	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Tcp {
-		keys := [...]string{"location-string"}
-		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString()}
-
-		var r gjson.Result
-		res.Get("platform.load-balance.fields.userdata.ipv6-tcps.ipv6-tcp").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("location-string"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.IsNull() {
-			data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString = types.StringValue(value.String())
-		} else {
-			data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString = types.StringNull()
-		}
-		if value := r.Get("ipv6-tcp-hash.offset"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashOffset.IsNull() {
-			data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashOffset = types.Int64Value(value.Int())
-		} else {
-			data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashOffset = types.Int64Null()
-		}
-		if value := r.Get("ipv6-tcp-hash.size"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashSize.IsNull() {
-			data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashSize = types.Int64Value(value.Int())
-		} else {
-			data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashSize = types.Int64Null()
-		}
-	}
-	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp {
-		keys := [...]string{"location-string"}
-		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString()}
-
-		var r gjson.Result
-		res.Get("platform.load-balance.fields.userdata.ipv6-nontcpudps.ipv6-nontcpudp").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("location-string"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.IsNull() {
-			data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString = types.StringValue(value.String())
-		} else {
-			data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString = types.StringNull()
-		}
-		if value := r.Get("ipv6-hash.offset"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashOffset.IsNull() {
-			data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashOffset = types.Int64Value(value.Int())
-		} else {
-			data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashOffset = types.Int64Null()
-		}
-		if value := r.Get("ipv6-hash.size"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashSize.IsNull() {
-			data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashSize = types.Int64Value(value.Int())
-		} else {
-			data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashSize = types.Int64Null()
-		}
-	}
-	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Udp {
-		keys := [...]string{"location-string"}
-		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString()}
-
-		var r gjson.Result
-		res.Get("platform.load-balance.fields.userdata.ipv4-udps.ipv4-udp").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("location-string"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.IsNull() {
-			data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString = types.StringValue(value.String())
-		} else {
-			data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString = types.StringNull()
-		}
-		if value := r.Get("ipv4-udp-hash.offset"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashOffset.IsNull() {
-			data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashOffset = types.Int64Value(value.Int())
-		} else {
-			data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashOffset = types.Int64Null()
-		}
-		if value := r.Get("ipv4-udp-hash.size"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashSize.IsNull() {
-			data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashSize = types.Int64Value(value.Int())
-		} else {
-			data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashSize = types.Int64Null()
-		}
-	}
-	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Tcp {
-		keys := [...]string{"location-string"}
-		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString()}
-
-		var r gjson.Result
-		res.Get("platform.load-balance.fields.userdata.ipv4-tcps.ipv4-tcp").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("location-string"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.IsNull() {
-			data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString = types.StringValue(value.String())
-		} else {
-			data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString = types.StringNull()
-		}
-		if value := r.Get("ipv4-tcp-hash.offset"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashOffset.IsNull() {
-			data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashOffset = types.Int64Value(value.Int())
-		} else {
-			data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashOffset = types.Int64Null()
-		}
-		if value := r.Get("ipv4-tcp-hash.size"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashSize.IsNull() {
-			data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashSize = types.Int64Value(value.Int())
-		} else {
-			data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashSize = types.Int64Null()
-		}
-	}
-	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp {
-		keys := [...]string{"location-string"}
-		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString()}
-
-		var r gjson.Result
-		res.Get("platform.load-balance.fields.userdata.ipv4-nontcpudps.ipv4-nontcpudp").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("location-string"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.IsNull() {
-			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString = types.StringValue(value.String())
-		} else {
-			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString = types.StringNull()
-		}
-		if value := r.Get("ipv4-hash.offset"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashOffset.IsNull() {
-			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashOffset = types.Int64Value(value.Int())
-		} else {
-			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashOffset = types.Int64Null()
-		}
-		if value := r.Get("ipv4-hash.size"); value.Exists() && !data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashSize.IsNull() {
-			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashSize = types.Int64Value(value.Int())
-		} else {
-			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashSize = types.Int64Null()
-		}
-	}
-	if value := res.Get("platform-load-balance.mpls-hash-non-ip-lbl-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
-			data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
-			data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolNull()
-		}
-	}
-}
-
-// End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
@@ -863,261 +1623,20 @@ func (data *CEFLoadBalancing8000) updateFromBodyXML(ctx context.Context, res xml
 			data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolNull()
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/platform-load-balance/nvgre-payload-exclude"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() {
+			data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() {
+			data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
-
-func (data *CEFLoadBalancing8000) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "platform.load-balance.hash.rotate"); value.Exists() {
-		data.PlatformLoadBalanceHashRotate = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv6-udps.ipv6-udp"); value.Exists() {
-		data.PlatformLoadBalanceFieldsUserdataIpv6Udp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp{}
-			if cValue := v.Get("location-string"); cValue.Exists() {
-				item.LocationString = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ipv6-udp-hash.offset"); cValue.Exists() {
-				item.Ipv6UdpHashOffset = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("ipv6-udp-hash.size"); cValue.Exists() {
-				item.Ipv6UdpHashSize = types.Int64Value(cValue.Int())
-			}
-			data.PlatformLoadBalanceFieldsUserdataIpv6Udp = append(data.PlatformLoadBalanceFieldsUserdataIpv6Udp, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv6-tcps.ipv6-tcp"); value.Exists() {
-		data.PlatformLoadBalanceFieldsUserdataIpv6Tcp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp{}
-			if cValue := v.Get("location-string"); cValue.Exists() {
-				item.LocationString = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ipv6-tcp-hash.offset"); cValue.Exists() {
-				item.Ipv6TcpHashOffset = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("ipv6-tcp-hash.size"); cValue.Exists() {
-				item.Ipv6TcpHashSize = types.Int64Value(cValue.Int())
-			}
-			data.PlatformLoadBalanceFieldsUserdataIpv6Tcp = append(data.PlatformLoadBalanceFieldsUserdataIpv6Tcp, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv6-nontcpudps.ipv6-nontcpudp"); value.Exists() {
-		data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp{}
-			if cValue := v.Get("location-string"); cValue.Exists() {
-				item.LocationString = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ipv6-hash.offset"); cValue.Exists() {
-				item.Ipv6HashOffset = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("ipv6-hash.size"); cValue.Exists() {
-				item.Ipv6HashSize = types.Int64Value(cValue.Int())
-			}
-			data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp = append(data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv4-udps.ipv4-udp"); value.Exists() {
-		data.PlatformLoadBalanceFieldsUserdataIpv4Udp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp{}
-			if cValue := v.Get("location-string"); cValue.Exists() {
-				item.LocationString = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ipv4-udp-hash.offset"); cValue.Exists() {
-				item.Ipv4UdpHashOffset = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("ipv4-udp-hash.size"); cValue.Exists() {
-				item.Ipv4UdpHashSize = types.Int64Value(cValue.Int())
-			}
-			data.PlatformLoadBalanceFieldsUserdataIpv4Udp = append(data.PlatformLoadBalanceFieldsUserdataIpv4Udp, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv4-tcps.ipv4-tcp"); value.Exists() {
-		data.PlatformLoadBalanceFieldsUserdataIpv4Tcp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp{}
-			if cValue := v.Get("location-string"); cValue.Exists() {
-				item.LocationString = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ipv4-tcp-hash.offset"); cValue.Exists() {
-				item.Ipv4TcpHashOffset = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("ipv4-tcp-hash.size"); cValue.Exists() {
-				item.Ipv4TcpHashSize = types.Int64Value(cValue.Int())
-			}
-			data.PlatformLoadBalanceFieldsUserdataIpv4Tcp = append(data.PlatformLoadBalanceFieldsUserdataIpv4Tcp, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv4-nontcpudps.ipv4-nontcpudp"); value.Exists() {
-		data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp{}
-			if cValue := v.Get("location-string"); cValue.Exists() {
-				item.LocationString = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ipv4-hash.offset"); cValue.Exists() {
-				item.Ipv4HashOffset = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("ipv4-hash.size"); cValue.Exists() {
-				item.Ipv4HashSize = types.Int64Value(cValue.Int())
-			}
-			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp = append(data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "platform-load-balance.mpls-hash-non-ip-lbl-only"); value.Exists() {
-		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(true)
-	} else if !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
-		// Only set to false if it was previously set in state
-		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *CEFLoadBalancing8000Data) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "platform.load-balance.hash.rotate"); value.Exists() {
-		data.PlatformLoadBalanceHashRotate = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv6-udps.ipv6-udp"); value.Exists() {
-		data.PlatformLoadBalanceFieldsUserdataIpv6Udp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Udp{}
-			if cValue := v.Get("location-string"); cValue.Exists() {
-				item.LocationString = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ipv6-udp-hash.offset"); cValue.Exists() {
-				item.Ipv6UdpHashOffset = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("ipv6-udp-hash.size"); cValue.Exists() {
-				item.Ipv6UdpHashSize = types.Int64Value(cValue.Int())
-			}
-			data.PlatformLoadBalanceFieldsUserdataIpv6Udp = append(data.PlatformLoadBalanceFieldsUserdataIpv6Udp, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv6-tcps.ipv6-tcp"); value.Exists() {
-		data.PlatformLoadBalanceFieldsUserdataIpv6Tcp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6Tcp{}
-			if cValue := v.Get("location-string"); cValue.Exists() {
-				item.LocationString = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ipv6-tcp-hash.offset"); cValue.Exists() {
-				item.Ipv6TcpHashOffset = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("ipv6-tcp-hash.size"); cValue.Exists() {
-				item.Ipv6TcpHashSize = types.Int64Value(cValue.Int())
-			}
-			data.PlatformLoadBalanceFieldsUserdataIpv6Tcp = append(data.PlatformLoadBalanceFieldsUserdataIpv6Tcp, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv6-nontcpudps.ipv6-nontcpudp"); value.Exists() {
-		data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp{}
-			if cValue := v.Get("location-string"); cValue.Exists() {
-				item.LocationString = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ipv6-hash.offset"); cValue.Exists() {
-				item.Ipv6HashOffset = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("ipv6-hash.size"); cValue.Exists() {
-				item.Ipv6HashSize = types.Int64Value(cValue.Int())
-			}
-			data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp = append(data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv4-udps.ipv4-udp"); value.Exists() {
-		data.PlatformLoadBalanceFieldsUserdataIpv4Udp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Udp{}
-			if cValue := v.Get("location-string"); cValue.Exists() {
-				item.LocationString = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ipv4-udp-hash.offset"); cValue.Exists() {
-				item.Ipv4UdpHashOffset = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("ipv4-udp-hash.size"); cValue.Exists() {
-				item.Ipv4UdpHashSize = types.Int64Value(cValue.Int())
-			}
-			data.PlatformLoadBalanceFieldsUserdataIpv4Udp = append(data.PlatformLoadBalanceFieldsUserdataIpv4Udp, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv4-tcps.ipv4-tcp"); value.Exists() {
-		data.PlatformLoadBalanceFieldsUserdataIpv4Tcp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4Tcp{}
-			if cValue := v.Get("location-string"); cValue.Exists() {
-				item.LocationString = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ipv4-tcp-hash.offset"); cValue.Exists() {
-				item.Ipv4TcpHashOffset = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("ipv4-tcp-hash.size"); cValue.Exists() {
-				item.Ipv4TcpHashSize = types.Int64Value(cValue.Int())
-			}
-			data.PlatformLoadBalanceFieldsUserdataIpv4Tcp = append(data.PlatformLoadBalanceFieldsUserdataIpv4Tcp, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "platform.load-balance.fields.userdata.ipv4-nontcpudps.ipv4-nontcpudp"); value.Exists() {
-		data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp = make([]CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := CEFLoadBalancing8000PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp{}
-			if cValue := v.Get("location-string"); cValue.Exists() {
-				item.LocationString = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ipv4-hash.offset"); cValue.Exists() {
-				item.Ipv4HashOffset = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("ipv4-hash.size"); cValue.Exists() {
-				item.Ipv4HashSize = types.Int64Value(cValue.Int())
-			}
-			data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp = append(data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "platform-load-balance.mpls-hash-non-ip-lbl-only"); value.Exists() {
-		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(true)
-	} else {
-		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBodyData
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
@@ -1231,6 +1750,11 @@ func (data *CEFLoadBalancing8000) fromBodyXML(ctx context.Context, res xmldot.Re
 		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(true)
 	} else {
 		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/platform-load-balance/nvgre-payload-exclude"); value.Exists() {
+		data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(true)
+	} else {
+		data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(false)
 	}
 }
 
@@ -1349,355 +1873,14 @@ func (data *CEFLoadBalancing8000Data) fromBodyXML(ctx context.Context, res xmldo
 	} else {
 		data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly = types.BoolValue(false)
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/platform-load-balance/nvgre-payload-exclude"); value.Exists() {
+		data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(true)
+	} else {
+		data.PlatformLoadBalanceNvgrePayloadExclude = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data *CEFLoadBalancing8000) getDeletedItems(ctx context.Context, state CEFLoadBalancing8000) []string {
-	deletedItems := make([]string, 0)
-	if !state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() && data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/platform-load-balance/mpls-hash-non-ip-lbl-only", state.getPath()))
-	}
-	for i := range state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp {
-		keys := [...]string{"location-string"}
-		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp {
-			found = true
-			if state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString() != data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[j].LocationString.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[j].Ipv4HashSize.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp%v/ipv4-hash/size", state.getPath(), keyString))
-				}
-				if !state.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].Ipv4HashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[j].Ipv4HashOffset.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp%v/ipv4-hash/offset", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.PlatformLoadBalanceFieldsUserdataIpv4Tcp {
-		keys := [...]string{"location-string"}
-		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.PlatformLoadBalanceFieldsUserdataIpv4Tcp {
-			found = true
-			if state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString() != data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[j].LocationString.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[j].Ipv4TcpHashSize.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp%v/ipv4-tcp-hash/size", state.getPath(), keyString))
-				}
-				if !state.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].Ipv4TcpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[j].Ipv4TcpHashOffset.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp%v/ipv4-tcp-hash/offset", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.PlatformLoadBalanceFieldsUserdataIpv4Udp {
-		keys := [...]string{"location-string"}
-		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.PlatformLoadBalanceFieldsUserdataIpv4Udp {
-			found = true
-			if state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString() != data.PlatformLoadBalanceFieldsUserdataIpv4Udp[j].LocationString.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Udp[j].Ipv4UdpHashSize.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp%v/ipv4-udp-hash/size", state.getPath(), keyString))
-				}
-				if !state.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].Ipv4UdpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv4Udp[j].Ipv4UdpHashOffset.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp%v/ipv4-udp-hash/offset", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp {
-		keys := [...]string{"location-string"}
-		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp {
-			found = true
-			if state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString() != data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[j].LocationString.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[j].Ipv6HashSize.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp%v/ipv6-hash/size", state.getPath(), keyString))
-				}
-				if !state.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].Ipv6HashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[j].Ipv6HashOffset.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp%v/ipv6-hash/offset", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.PlatformLoadBalanceFieldsUserdataIpv6Tcp {
-		keys := [...]string{"location-string"}
-		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.PlatformLoadBalanceFieldsUserdataIpv6Tcp {
-			found = true
-			if state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString() != data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[j].LocationString.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[j].Ipv6TcpHashSize.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp%v/ipv6-tcp-hash/size", state.getPath(), keyString))
-				}
-				if !state.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].Ipv6TcpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[j].Ipv6TcpHashOffset.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp%v/ipv6-tcp-hash/offset", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.PlatformLoadBalanceFieldsUserdataIpv6Udp {
-		keys := [...]string{"location-string"}
-		stateKeyValues := [...]string{state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.PlatformLoadBalanceFieldsUserdataIpv6Udp {
-			found = true
-			if state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString() != data.PlatformLoadBalanceFieldsUserdataIpv6Udp[j].LocationString.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashSize.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Udp[j].Ipv6UdpHashSize.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp%v/ipv6-udp-hash/size", state.getPath(), keyString))
-				}
-				if !state.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].Ipv6UdpHashOffset.IsNull() && data.PlatformLoadBalanceFieldsUserdataIpv6Udp[j].Ipv6UdpHashOffset.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp%v/ipv6-udp-hash/offset", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp%v", state.getPath(), keyString))
-		}
-	}
-	if !state.PlatformLoadBalanceHashRotate.IsNull() && data.PlatformLoadBalanceHashRotate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/platform/load-balance/hash/rotate", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *CEFLoadBalancing8000) getEmptyLeafsDelete(ctx context.Context, state *CEFLoadBalancing8000) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() && !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.ValueBool() {
-		if state != nil && !state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() && state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/platform-load-balance/mpls-hash-non-ip-lbl-only", data.getXPath()))
-		}
-	}
-	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp {
-		keys := [...]string{"location-string"}
-		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Tcp {
-		keys := [...]string{"location-string"}
-		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Udp {
-		keys := [...]string{"location-string"}
-		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp {
-		keys := [...]string{"location-string"}
-		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Tcp {
-		keys := [...]string{"location-string"}
-		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Udp {
-		keys := [...]string{"location-string"}
-		keyValues := [...]string{data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *CEFLoadBalancing8000) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/platform-load-balance/mpls-hash-non-ip-lbl-only", data.getPath()))
-	}
-	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[location-string=" + data.PlatformLoadBalanceFieldsUserdataIpv4NonTcpUdp[i].LocationString.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-nontcpudps/ipv4-nontcpudp%v", data.getPath(), keyPath))
-	}
-	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Tcp {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[location-string=" + data.PlatformLoadBalanceFieldsUserdataIpv4Tcp[i].LocationString.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-tcps/ipv4-tcp%v", data.getPath(), keyPath))
-	}
-	for i := range data.PlatformLoadBalanceFieldsUserdataIpv4Udp {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[location-string=" + data.PlatformLoadBalanceFieldsUserdataIpv4Udp[i].LocationString.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv4-udps/ipv4-udp%v", data.getPath(), keyPath))
-	}
-	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[location-string=" + data.PlatformLoadBalanceFieldsUserdataIpv6NonTcpUdp[i].LocationString.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-nontcpudps/ipv6-nontcpudp%v", data.getPath(), keyPath))
-	}
-	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Tcp {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[location-string=" + data.PlatformLoadBalanceFieldsUserdataIpv6Tcp[i].LocationString.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-tcps/ipv6-tcp%v", data.getPath(), keyPath))
-	}
-	for i := range data.PlatformLoadBalanceFieldsUserdataIpv6Udp {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[location-string=" + data.PlatformLoadBalanceFieldsUserdataIpv6Udp[i].LocationString.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/platform/load-balance/fields/userdata/ipv6-udps/ipv6-udp%v", data.getPath(), keyPath))
-	}
-	if !data.PlatformLoadBalanceHashRotate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/platform/load-balance/hash/rotate", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
@@ -1706,6 +1889,22 @@ func (data *CEFLoadBalancing8000) addDeletedItemsXML(ctx context.Context, state 
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.PlatformLoadBalanceNvgrePayloadExclude.IsNull() && state.PlatformLoadBalanceNvgrePayloadExclude.ValueBool() && data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() {
+		deletePath := state.getXPath() + "/platform-load-balance/nvgre-payload-exclude"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() && state.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.ValueBool() && data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
 		deletePath := state.getXPath() + "/platform-load-balance/mpls-hash-non-ip-lbl-only"
@@ -1964,6 +2163,9 @@ func (data *CEFLoadBalancing8000) addDeletedItemsXML(ctx context.Context, state 
 
 func (data *CEFLoadBalancing8000) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.PlatformLoadBalanceNvgrePayloadExclude.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/platform-load-balance/nvgre-payload-exclude")
+	}
 	if !data.PlatformLoadBalanceMplsHashingInnerNonIpLabelOnly.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/platform-load-balance/mpls-hash-non-ip-lbl-only")
 	}

@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -70,16 +71,25 @@ func TestAccDataSourceIosxrRouterBGPVRFAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_ospf.0.metric", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_ospf.0.multipath", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_ospf.0.route_policy", "ROUTE_POLICY_1"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_ospf.0.default_policy_action_in", "accept"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_eigrp.0.instance_name", "EIGRP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_eigrp.0.match_internal_external", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_eigrp.0.metric", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_eigrp.0.multipath", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_eigrp.0.route_policy", "ROUTE_POLICY_1"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_eigrp.0.default_policy_action_in", "accept"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_isis.0.instance_name", "ISIS1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_isis.0.level_1_level_2_level_1_inter_area", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_isis.0.metric", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_isis.0.multipath", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_isis.0.route_policy", "ROUTE_POLICY_1"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_isis.0.default_policy_action_in", "accept"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_connected", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_connected_metric", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_connected_multipath", "true"))
@@ -107,12 +117,27 @@ func TestAccDataSourceIosxrRouterBGPVRFAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "nexthop_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "as_path_loopcheck_out_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "mvpn_single_forwarder_selection", "highest-ip-address"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_connected_default_policy_action_in", "accept"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_static_default_policy_action_in", "accept"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_rip_default_policy_action_in", "accept"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "maximum_paths_ebgp_bestpath_only", "true"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "update_out_quick_withdraw", "enable"))
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig + testAccDataSourceIosxrRouterBGPVRFAddressFamilyConfig(),
+				Config: testAccDataSourceIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig() + testAccDataSourceIosxrRouterBGPVRFAddressFamilyConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -122,7 +147,7 @@ func TestAccDataSourceIosxrRouterBGPVRFAddressFamily(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig = `
+const testAccDataSourceIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
@@ -196,6 +221,15 @@ resource "iosxr_yang" "PreReq5" {
 
 `
 
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccDataSourceIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccDataSourceIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig_V24_4,
+		},
+	)
+}
+
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
@@ -249,6 +283,9 @@ func testAccDataSourceIosxrRouterBGPVRFAddressFamilyConfig() string {
 	config += `		metric = 100` + "\n"
 	config += `		multipath = true` + "\n"
 	config += `		route_policy = "ROUTE_POLICY_1"` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		default_policy_action_in = "accept"` + "\n"
+	}
 	config += `	}]` + "\n"
 	config += `	redistribute_eigrp = [{` + "\n"
 	config += `		instance_name = "EIGRP1"` + "\n"
@@ -256,6 +293,9 @@ func testAccDataSourceIosxrRouterBGPVRFAddressFamilyConfig() string {
 	config += `		metric = 100` + "\n"
 	config += `		multipath = true` + "\n"
 	config += `		route_policy = "ROUTE_POLICY_1"` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		default_policy_action_in = "accept"` + "\n"
+	}
 	config += `	}]` + "\n"
 	config += `	redistribute_isis = [{` + "\n"
 	config += `		instance_name = "ISIS1"` + "\n"
@@ -263,6 +303,9 @@ func testAccDataSourceIosxrRouterBGPVRFAddressFamilyConfig() string {
 	config += `		metric = 100` + "\n"
 	config += `		multipath = true` + "\n"
 	config += `		route_policy = "ROUTE_POLICY_1"` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		default_policy_action_in = "accept"` + "\n"
+	}
 	config += `	}]` + "\n"
 	config += `	redistribute_connected = true` + "\n"
 	config += `	redistribute_connected_metric = 100` + "\n"
@@ -291,7 +334,24 @@ func testAccDataSourceIosxrRouterBGPVRFAddressFamilyConfig() string {
 	config += `	nexthop_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	as_path_loopcheck_out_disable = true` + "\n"
 	config += `	mvpn_single_forwarder_selection = "highest-ip-address"` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, iosxr_yang.PreReq5, ]` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	redistribute_connected_default_policy_action_in = "accept"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	redistribute_static_default_policy_action_in = "accept"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	redistribute_rip_default_policy_action_in = "accept"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	maximum_paths_ebgp_bestpath_only = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	update_out_quick_withdraw = "enable"` + "\n"
+	}
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, iosxr_yang.PreReq4, iosxr_yang.PreReq5, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 
 	config += `

@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -102,6 +101,70 @@ func (d *ICMPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "Enable RFC compliance for source address selection",
 				Computed:            true,
 			},
+			"ipv4_mpls_extended_diagnostics": schema.BoolAttribute{
+				MarkdownDescription: "Enter the extended diagnostics submode" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"ipv6_mpls_extended_diagnostics": schema.BoolAttribute{
+				MarkdownDescription: "Enter the extended diagnostics submode" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"ipv4_vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "Configuration for a particular VRF" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: "Configuration for a particular VRF" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"extended_diagnostics_permitted_remote_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: "Permitted remote IPv4 prefix" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: "Permitted remote IPv4 prefix" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"length": schema.Int64Attribute{
+										MarkdownDescription: "Permitted remote IPv4 prefix" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"ipv6_vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "Configuration for a particular VRF" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: "Configuration for a particular VRF" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"extended_diagnostics_permitted_remote_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: "Permitted remote IPv6 prefix" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: "Permitted remote IPv6 prefix" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"length": schema.Int64Attribute{
+										MarkdownDescription: "Permitted remote IPv6 prefix" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -149,7 +212,6 @@ func (d *ICMPDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -169,7 +231,7 @@ func (d *ICMPDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

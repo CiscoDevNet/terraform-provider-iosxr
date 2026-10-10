@@ -15,8 +15,8 @@ This resource can manage the Flow Sampler Map configuration.
 ```terraform
 resource "iosxr_flow_sampler_map" "example" {
   name   = "sampler_map1"
-  random = 1
   out_of = 1
+  random = 1
 }
 ```
 
@@ -31,7 +31,7 @@ resource "iosxr_flow_sampler_map" "example" {
 
 - `device` (String) A device name from the provider configuration.
 - `out_of` (Number) Sample one packet out of
-  - Range: `1`-`262144`
+  - Range: `1`-`262144` (v24.4), `1`-`8000000` (v26.2)
 - `random` (Number) Use random mode for sampling packets
   - Range: `1`-`1`
 

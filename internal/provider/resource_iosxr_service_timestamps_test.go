@@ -36,17 +36,19 @@ import (
 func TestAccIosxrServiceTimestamps(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_datetime_localtime", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_datetime_msec", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_datetime_show_timezone", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_datetime_year", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_uptime", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_disable", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_datetime_localtime", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_datetime_msec", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_datetime_show_timezone", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_datetime_year", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_uptime", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_disable", "false"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_datetime_usec", "true"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_datetime_usec", "true"))
+	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -103,17 +105,19 @@ func testAccIosxrServiceTimestampsConfig_minimum() string {
 func testAccIosxrServiceTimestampsConfig_all() string {
 	config := `resource "iosxr_service_timestamps" "test" {` + "\n"
 	config += `	debug_datetime_localtime = true` + "\n"
-	config += `	debug_datetime_msec = true` + "\n"
 	config += `	debug_datetime_show_timezone = true` + "\n"
 	config += `	debug_datetime_year = true` + "\n"
 	config += `	debug_uptime = true` + "\n"
-	config += `	debug_disable = false` + "\n"
 	config += `	log_datetime_localtime = true` + "\n"
-	config += `	log_datetime_msec = true` + "\n"
 	config += `	log_datetime_show_timezone = true` + "\n"
 	config += `	log_datetime_year = true` + "\n"
 	config += `	log_uptime = true` + "\n"
-	config += `	log_disable = false` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	debug_datetime_usec = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	log_datetime_usec = true` + "\n"
+	}
 	config += `}` + "\n"
 	return config
 }

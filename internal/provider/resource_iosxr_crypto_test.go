@@ -76,7 +76,18 @@ func TestAccIosxrCrypto(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_crypto.test", "ca_trustpoints.0.serial_number", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_crypto.test", "ca_trustpoints.0.vrf", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_crypto.test", "ca_trustpoints.0.message_digest", "sha256"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_crypto.test", "ca_trustpoints.0.method_est_credential_certificate", "EST-BOOTSTRAP"))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_crypto.test", "ca_trustpoints.0.method_est_credential_certificate", "EST-BOOTSTRAP"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_crypto.test", "ca_trustpoints.0.enrollment_authentication_profile", "EAP_PROFILE"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_crypto.test", "ca_trustpoints.0.re_enrollment_authentication_profile", "EAP_PROFILE"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_crypto.test", "ca_trustpoints.0.ssl_profile", "MTLS_PROFILE"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_crypto.test", "ca_openssh_trustpoints.0.trustpoint_name", "OPENSSH-TP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_crypto.test", "ca_openssh_trustpoints.0.rsakeypair", "KEY1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_crypto.test", "ca_http_proxy", "proxy.example.com"))
@@ -89,11 +100,11 @@ func TestAccIosxrCrypto(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrCryptoPrerequisitesConfig + testAccIosxrCryptoConfig_minimum(),
+			Config: testAccIosxrCryptoPrerequisitesConfig() + testAccIosxrCryptoConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrCryptoPrerequisitesConfig + testAccIosxrCryptoConfig_all(),
+		Config: testAccIosxrCryptoPrerequisitesConfig() + testAccIosxrCryptoConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -123,7 +134,7 @@ func iosxrCryptoImportStateIdFunc(resourceName string) resource.ImportStateIdFun
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrCryptoPrerequisitesConfig = `
+const testAccIosxrCryptoPrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=proxy.example.com]"
 	attributes = {
@@ -140,6 +151,15 @@ resource "iosxr_yang" "PreReq0" {
 
 `
 
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccIosxrCryptoPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccIosxrCryptoPrerequisitesConfig_V24_4,
+		},
+	)
+}
+
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
@@ -154,7 +174,9 @@ func testAccIosxrCryptoConfig_minimum() string {
 	config += `	ca_openssh_trustpoints = [{` + "\n"
 	config += `		trustpoint_name = "OPENSSH-TP1"` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -207,7 +229,18 @@ func testAccIosxrCryptoConfig_all() string {
 	config += `		serial_number = true` + "\n"
 	config += `		vrf = "VRF1"` + "\n"
 	config += `		message_digest = "sha256"` + "\n"
-	config += `		method_est_credential_certificate = "EST-BOOTSTRAP"` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		method_est_credential_certificate = "EST-BOOTSTRAP"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		enrollment_authentication_profile = "EAP_PROFILE"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		re_enrollment_authentication_profile = "EAP_PROFILE"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		ssl_profile = "MTLS_PROFILE"` + "\n"
+	}
 	config += `		}]` + "\n"
 	config += `	ca_openssh_trustpoints = [{` + "\n"
 	config += `		trustpoint_name = "OPENSSH-TP1"` + "\n"
@@ -220,7 +253,9 @@ func testAccIosxrCryptoConfig_all() string {
 	config += `	ca_fqdn_check_ip_address_allow = true` + "\n"
 	config += `	ca_crl_curl_timeout = 10` + "\n"
 	config += `	fips_mode = true` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }

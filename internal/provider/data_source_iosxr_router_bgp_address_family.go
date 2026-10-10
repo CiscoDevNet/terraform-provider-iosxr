@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -319,7 +318,7 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 				},
 			},
 			"redistribute_ospf": schema.ListNestedAttribute{
-				MarkdownDescription: "Redistribute OSPF routes",
+				MarkdownDescription: "Open Shortest Path First (OSPF)",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -463,11 +462,15 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 							MarkdownDescription: "Route policy reference",
 							Computed:            true,
 						},
+						"default_policy_action_in": schema.StringAttribute{
+							MarkdownDescription: "Set a default action if a route does not satify the policy definition" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
 					},
 				},
 			},
 			"redistribute_ospfv3": schema.ListNestedAttribute{
-				MarkdownDescription: "Redistribute OSPFv3 routes",
+				MarkdownDescription: "IPv6 Open Shortest Path First (OSPFv3)",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -611,11 +614,15 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 							MarkdownDescription: "Route policy reference",
 							Computed:            true,
 						},
+						"default_policy_action_in": schema.StringAttribute{
+							MarkdownDescription: "Set a default action if a route does not satify the policy definition" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
 					},
 				},
 			},
 			"redistribute_eigrp": schema.ListNestedAttribute{
-				MarkdownDescription: "Redistribute EIGRP routes",
+				MarkdownDescription: "Enhanced Interior Gateway Routing Protocol (EIGRP)",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -647,11 +654,15 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 							MarkdownDescription: "Route policy reference",
 							Computed:            true,
 						},
+						"default_policy_action_in": schema.StringAttribute{
+							MarkdownDescription: "Set a default action if a route does not satify the policy definition" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
 					},
 				},
 			},
 			"redistribute_isis": schema.ListNestedAttribute{
-				MarkdownDescription: "Redistribute ISIS routes",
+				MarkdownDescription: "ISO IS-IS",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -697,6 +708,10 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 						},
 						"route_policy": schema.StringAttribute{
 							MarkdownDescription: "Route policy reference",
+							Computed:            true,
+						},
+						"default_policy_action_in": schema.StringAttribute{
+							MarkdownDescription: "Set a default action if a route does not satify the policy definition" + "\n  - Supported from version: `25.4`",
 							Computed:            true,
 						},
 					},
@@ -1054,6 +1069,58 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 					},
 				},
 			},
+			"ecmp_delay_as_based_as_list": schema.StringAttribute{
+				MarkdownDescription: "Enable ECMP delay for neighbor AS'es included in the AS list" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"ecmp_delay_as_based_delay": schema.Int64Attribute{
+				MarkdownDescription: "Provide a delay interval in msecs" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"ecmp_delay_fixed_delay": schema.Int64Attribute{
+				MarkdownDescription: "Provide a delay interval in msecs" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"ecmp_delay_platform_oor_based_delay": schema.Int64Attribute{
+				MarkdownDescription: "Provide a delay interval in msecs" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"ecmp_delay_platform_oor_based_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Delay only when platform resource usage is above specified threshold" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"redistribute_connected_default_policy_action_in": schema.StringAttribute{
+				MarkdownDescription: "Set a default action if a route does not satify the policy definition" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"redistribute_static_default_policy_action_in": schema.StringAttribute{
+				MarkdownDescription: "Set a default action if a route does not satify the policy definition" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"redistribute_rip_default_policy_action_in": schema.StringAttribute{
+				MarkdownDescription: "Set a default action if a route does not satify the policy definition" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"vrf_all_update_out_quick_withdraw_disable": schema.BoolAttribute{
+				MarkdownDescription: "Generation of quick withdraw messages" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"update_out_quick_withdraw_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"maximum_paths_ebgp_bestpath_only": schema.BoolAttribute{
+				MarkdownDescription: "Apply policy only for bestpath. This is needed if user doesnt want to deprefer any paths and apply certain attributes to bestpath only" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"delay_route_inbound": schema.Int64Attribute{
+				MarkdownDescription: "Delay the advertisement of the inbound routes by delaying the best path calculation" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"fast_reroute_per_link": schema.BoolAttribute{
+				MarkdownDescription: "Enable fast reroute per-link" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
 		},
 	}
 }
@@ -1101,7 +1168,6 @@ func (d *RouterBGPAddressFamilyDataSource) Read(ctx context.Context, req datasou
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -1121,7 +1187,7 @@ func (d *RouterBGPAddressFamilyDataSource) Read(ctx context.Context, req datasou
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

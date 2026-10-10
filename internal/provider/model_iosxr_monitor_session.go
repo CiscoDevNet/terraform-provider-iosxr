@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -91,6 +92,17 @@ type MonitorSessionMonitorSessions struct {
 	ProtocolCaptureFilter           types.String `tfsdk:"protocol_capture_filter"`
 	RateLimitRx                     types.Int64  `tfsdk:"rate_limit_rx"`
 	RateLimitTx                     types.Int64  `tfsdk:"rate_limit_tx"`
+	DestinationApplication          types.Bool   `tfsdk:"destination_application"`
+	DestinationRateLimit            types.Int64  `tfsdk:"destination_rate_limit"`
+	DestinationRateLimitUnits       types.String `tfsdk:"destination_rate_limit_units"`
+	RxApplication                   types.Bool   `tfsdk:"rx_application"`
+	RxRateLimit                     types.Int64  `tfsdk:"rx_rate_limit"`
+	RxRateLimitUnits                types.String `tfsdk:"rx_rate_limit_units"`
+	TxApplication                   types.Bool   `tfsdk:"tx_application"`
+	TxRateLimit                     types.Int64  `tfsdk:"tx_rate_limit"`
+	TxRateLimitUnits                types.String `tfsdk:"tx_rate_limit_units"`
+	DropsUniquePunt                 types.Bool   `tfsdk:"drops_unique_punt"`
+	DropsUniquePort                 types.Bool   `tfsdk:"drops_unique_port"`
 }
 
 // End of section. //template:end types
@@ -120,7 +132,7 @@ func (data MonitorSessionData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data MonitorSession) toBody(ctx context.Context) string {
+func (data MonitorSession) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.RouterId.IsNull() && !data.RouterId.IsUnknown() {
 		body, _ = sjson.Set(body, "router-id", strconv.FormatInt(data.RouterId.ValueInt64(), 10))
@@ -253,11 +265,80 @@ func (data MonitorSession) toBody(ctx context.Context) string {
 			if !item.ProtocolCaptureFilter.IsNull() && !item.ProtocolCaptureFilter.IsUnknown() {
 				body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"protocol-capture.filter", item.ProtocolCaptureFilter.ValueString())
 			}
-			if !item.RateLimitRx.IsNull() && !item.RateLimitRx.IsUnknown() {
-				body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"rate-limit.rx", strconv.FormatInt(item.RateLimitRx.ValueInt64(), 10))
+			if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.RateLimitRx.IsNull() && !item.RateLimitRx.IsUnknown() {
+					body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"rate-limit.rx", strconv.FormatInt(item.RateLimitRx.ValueInt64(), 10))
+				}
 			}
-			if !item.RateLimitTx.IsNull() && !item.RateLimitTx.IsUnknown() {
-				body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"rate-limit.tx", strconv.FormatInt(item.RateLimitTx.ValueInt64(), 10))
+			if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.RateLimitTx.IsNull() && !item.RateLimitTx.IsUnknown() {
+					body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"rate-limit.tx", strconv.FormatInt(item.RateLimitTx.ValueInt64(), 10))
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.DestinationApplication.IsNull() && !item.DestinationApplication.IsUnknown() {
+					if item.DestinationApplication.ValueBool() {
+						body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"destination.application", map[string]string{})
+					}
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.DestinationRateLimit.IsNull() && !item.DestinationRateLimit.IsUnknown() {
+					body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"destination.rate-limit", strconv.FormatInt(item.DestinationRateLimit.ValueInt64(), 10))
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.DestinationRateLimitUnits.IsNull() && !item.DestinationRateLimitUnits.IsUnknown() {
+					body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"destination.rate-limit-units", item.DestinationRateLimitUnits.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.RxApplication.IsNull() && !item.RxApplication.IsUnknown() {
+					if item.RxApplication.ValueBool() {
+						body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"rx.application", map[string]string{})
+					}
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.RxRateLimit.IsNull() && !item.RxRateLimit.IsUnknown() {
+					body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"rx.rate-limit", strconv.FormatInt(item.RxRateLimit.ValueInt64(), 10))
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.RxRateLimitUnits.IsNull() && !item.RxRateLimitUnits.IsUnknown() {
+					body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"rx.rate-limit-units", item.RxRateLimitUnits.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.TxApplication.IsNull() && !item.TxApplication.IsUnknown() {
+					if item.TxApplication.ValueBool() {
+						body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"tx.application", map[string]string{})
+					}
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.TxRateLimit.IsNull() && !item.TxRateLimit.IsUnknown() {
+					body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"tx.rate-limit", strconv.FormatInt(item.TxRateLimit.ValueInt64(), 10))
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.TxRateLimitUnits.IsNull() && !item.TxRateLimitUnits.IsUnknown() {
+					body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"tx.rate-limit-units", item.TxRateLimitUnits.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.DropsUniquePunt.IsNull() && !item.DropsUniquePunt.IsUnknown() {
+					if item.DropsUniquePunt.ValueBool() {
+						body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"drops.unique-punt", map[string]string{})
+					}
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.DropsUniquePort.IsNull() && !item.DropsUniquePort.IsUnknown() {
+					if item.DropsUniquePort.ValueBool() {
+						body, _ = sjson.Set(body, "monitor-session"+"."+strconv.Itoa(index)+"."+"drops.unique-port", map[string]string{})
+					}
+				}
 			}
 		}
 	}
@@ -266,15 +347,120 @@ func (data MonitorSession) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *MonitorSession) updateFromBody(ctx context.Context, res gjson.Result) {
+// GetVersionConstraints returns the version constraints for all fields
+func (data MonitorSession) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath: "monitor_sessions.rate_limit_rx",
+
+			RemovedInVersion: "25.4",
+		},
+		{
+			FieldPath: "monitor_sessions.rate_limit_tx",
+
+			RemovedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.destination_application",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.destination_rate_limit",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.destination_rate_limit_units",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.rx_application",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.rx_rate_limit",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.rx_rate_limit_units",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.tx_application",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.tx_rate_limit",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.tx_rate_limit_units",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.drops_unique_punt",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_sessions.drops_unique_port",
+			AddedInVersion: "25.4",
+		},
+	}...)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data MonitorSession) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data MonitorSession) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data MonitorSession) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data MonitorSession) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *MonitorSession) updateFromBody(ctx context.Context, res []byte, version string) {
 	for i := range data.MonitorSessions {
 		keys := [...]string{"session-name"}
 		keyValues := [...]string{data.MonitorSessions[i].SessionName.ValueString()}
 
 		var r gjson.Result
-		res.Get("monitor-session").ForEach(
+		gjson.GetBytes(res, "monitor-session").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -292,17 +478,17 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res gjson.Result
 				return true
 			},
 		)
-		if value := r.Get("session-name"); value.Exists() && !data.MonitorSessions[i].SessionName.IsNull() {
+		if value := r.Get("session-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MonitorSessions[i].SessionName.IsNull() {
 			data.MonitorSessions[i].SessionName = types.StringValue(value.String())
 		} else {
 			data.MonitorSessions[i].SessionName = types.StringNull()
 		}
-		if value := r.Get("traffic-type"); value.Exists() && !data.MonitorSessions[i].TrafficType.IsNull() {
+		if value := r.Get("traffic-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MonitorSessions[i].TrafficType.IsNull() {
 			data.MonitorSessions[i].TrafficType = types.StringValue(value.String())
 		} else {
 			data.MonitorSessions[i].TrafficType = types.StringNull()
 		}
-		if value := r.Get("destination.interface"); value.Exists() && !data.MonitorSessions[i].DestinationInterface.IsNull() {
+		if value := r.Get("destination.interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MonitorSessions[i].DestinationInterface.IsNull() {
 			data.MonitorSessions[i].DestinationInterface = types.StringValue(value.String())
 		} else {
 			data.MonitorSessions[i].DestinationInterface = types.StringNull()
@@ -348,7 +534,7 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res gjson.Result
 				data.MonitorSessions[i].DestinationFileFormatPcapng = types.BoolNull()
 			}
 		}
-		if value := r.Get("destination.file.filter"); value.Exists() && !data.MonitorSessions[i].DestinationFileFilter.IsNull() {
+		if value := r.Get("destination.file.filter"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MonitorSessions[i].DestinationFileFilter.IsNull() {
 			data.MonitorSessions[i].DestinationFileFilter = types.StringValue(value.String())
 		} else {
 			data.MonitorSessions[i].DestinationFileFilter = types.StringNull()
@@ -413,12 +599,12 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res gjson.Result
 				data.MonitorSessions[i].DropsTx = types.BoolNull()
 			}
 		}
-		if value := r.Get("drops.filter"); value.Exists() && !data.MonitorSessions[i].DropsFilter.IsNull() {
+		if value := r.Get("drops.filter"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MonitorSessions[i].DropsFilter.IsNull() {
 			data.MonitorSessions[i].DropsFilter = types.StringValue(value.String())
 		} else {
 			data.MonitorSessions[i].DropsFilter = types.StringNull()
 		}
-		if value := r.Get("rx.interface"); value.Exists() && !data.MonitorSessions[i].RxInterface.IsNull() {
+		if value := r.Get("rx.interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MonitorSessions[i].RxInterface.IsNull() {
 			data.MonitorSessions[i].RxInterface = types.StringValue(value.String())
 		} else {
 			data.MonitorSessions[i].RxInterface = types.StringNull()
@@ -435,7 +621,7 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res gjson.Result
 				data.MonitorSessions[i].RxPseudowire = types.BoolNull()
 			}
 		}
-		if value := r.Get("tx.interface"); value.Exists() && !data.MonitorSessions[i].TxInterface.IsNull() {
+		if value := r.Get("tx.interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MonitorSessions[i].TxInterface.IsNull() {
 			data.MonitorSessions[i].TxInterface = types.StringValue(value.String())
 		} else {
 			data.MonitorSessions[i].TxInterface = types.StringNull()
@@ -452,7 +638,7 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res gjson.Result
 				data.MonitorSessions[i].TxPseudowire = types.BoolNull()
 			}
 		}
-		if value := r.Get("inject-interface"); value.Exists() && !data.MonitorSessions[i].InjectInterface.IsNull() {
+		if value := r.Get("inject-interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MonitorSessions[i].InjectInterface.IsNull() {
 			data.MonitorSessions[i].InjectInterface = types.StringValue(value.String())
 		} else {
 			data.MonitorSessions[i].InjectInterface = types.StringNull()
@@ -472,7 +658,7 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res gjson.Result
 		} else {
 			data.MonitorSessions[i].MirrorFirst = types.Int64Null()
 		}
-		if value := r.Get("mirror.interval"); value.Exists() && !data.MonitorSessions[i].MirrorInterval.IsNull() {
+		if value := r.Get("mirror.interval"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MonitorSessions[i].MirrorInterval.IsNull() {
 			data.MonitorSessions[i].MirrorInterval = types.StringValue(value.String())
 		} else {
 			data.MonitorSessions[i].MirrorInterval = types.StringNull()
@@ -501,79 +687,1013 @@ func (data *MonitorSession) updateFromBody(ctx context.Context, res gjson.Result
 				data.MonitorSessions[i].ProtocolCaptureTx = types.BoolNull()
 			}
 		}
-		if value := r.Get("protocol-capture.filter"); value.Exists() && !data.MonitorSessions[i].ProtocolCaptureFilter.IsNull() {
+		if value := r.Get("protocol-capture.filter"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MonitorSessions[i].ProtocolCaptureFilter.IsNull() {
 			data.MonitorSessions[i].ProtocolCaptureFilter = types.StringValue(value.String())
 		} else {
 			data.MonitorSessions[i].ProtocolCaptureFilter = types.StringNull()
 		}
-		if value := r.Get("rate-limit.rx"); value.Exists() && !data.MonitorSessions[i].RateLimitRx.IsNull() {
+		if value := r.Get("rate-limit.rx"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && !data.MonitorSessions[i].RateLimitRx.IsNull() {
 			data.MonitorSessions[i].RateLimitRx = types.Int64Value(value.Int())
 		} else {
 			data.MonitorSessions[i].RateLimitRx = types.Int64Null()
 		}
-		if value := r.Get("rate-limit.tx"); value.Exists() && !data.MonitorSessions[i].RateLimitTx.IsNull() {
+		if value := r.Get("rate-limit.tx"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && !data.MonitorSessions[i].RateLimitTx.IsNull() {
 			data.MonitorSessions[i].RateLimitTx = types.Int64Value(value.Int())
 		} else {
 			data.MonitorSessions[i].RateLimitTx = types.Int64Null()
 		}
+		if value := r.Get("destination.application"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DestinationApplication.IsNull() {
+				data.MonitorSessions[i].DestinationApplication = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].DestinationApplication.IsNull() {
+				data.MonitorSessions[i].DestinationApplication = types.BoolNull()
+			}
+		}
+		if value := r.Get("destination.rate-limit"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.MonitorSessions[i].DestinationRateLimit.IsNull() {
+			data.MonitorSessions[i].DestinationRateLimit = types.Int64Value(value.Int())
+		} else {
+			data.MonitorSessions[i].DestinationRateLimit = types.Int64Null()
+		}
+		if value := r.Get("destination.rate-limit-units"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MonitorSessions[i].DestinationRateLimitUnits.IsNull() {
+			data.MonitorSessions[i].DestinationRateLimitUnits = types.StringValue(value.String())
+		} else {
+			data.MonitorSessions[i].DestinationRateLimitUnits = types.StringNull()
+		}
+		if value := r.Get("rx.application"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].RxApplication.IsNull() {
+				data.MonitorSessions[i].RxApplication = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].RxApplication.IsNull() {
+				data.MonitorSessions[i].RxApplication = types.BoolNull()
+			}
+		}
+		if value := r.Get("rx.rate-limit"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.MonitorSessions[i].RxRateLimit.IsNull() {
+			data.MonitorSessions[i].RxRateLimit = types.Int64Value(value.Int())
+		} else {
+			data.MonitorSessions[i].RxRateLimit = types.Int64Null()
+		}
+		if value := r.Get("rx.rate-limit-units"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MonitorSessions[i].RxRateLimitUnits.IsNull() {
+			data.MonitorSessions[i].RxRateLimitUnits = types.StringValue(value.String())
+		} else {
+			data.MonitorSessions[i].RxRateLimitUnits = types.StringNull()
+		}
+		if value := r.Get("tx.application"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].TxApplication.IsNull() {
+				data.MonitorSessions[i].TxApplication = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].TxApplication.IsNull() {
+				data.MonitorSessions[i].TxApplication = types.BoolNull()
+			}
+		}
+		if value := r.Get("tx.rate-limit"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.MonitorSessions[i].TxRateLimit.IsNull() {
+			data.MonitorSessions[i].TxRateLimit = types.Int64Value(value.Int())
+		} else {
+			data.MonitorSessions[i].TxRateLimit = types.Int64Null()
+		}
+		if value := r.Get("tx.rate-limit-units"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MonitorSessions[i].TxRateLimitUnits.IsNull() {
+			data.MonitorSessions[i].TxRateLimitUnits = types.StringValue(value.String())
+		} else {
+			data.MonitorSessions[i].TxRateLimitUnits = types.StringNull()
+		}
+		if value := r.Get("drops.unique-punt"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DropsUniquePunt.IsNull() {
+				data.MonitorSessions[i].DropsUniquePunt = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].DropsUniquePunt.IsNull() {
+				data.MonitorSessions[i].DropsUniquePunt = types.BoolNull()
+			}
+		}
+		if value := r.Get("drops.unique-port"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DropsUniquePort.IsNull() {
+				data.MonitorSessions[i].DropsUniquePort = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].DropsUniquePort.IsNull() {
+				data.MonitorSessions[i].DropsUniquePort = types.BoolNull()
+			}
+		}
 	}
-	if value := res.Get("router-id"); value.Exists() && !data.RouterId.IsNull() {
+	if value := gjson.GetBytes(res, "router-id"); value.Exists() && !data.RouterId.IsNull() {
 		data.RouterId = types.Int64Value(value.Int())
 	} else if data.RouterId.IsNull() {
 		data.RouterId = types.Int64Null()
 	}
-	if value := res.Get("default-capture-disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.DefaultCaptureDisable.IsNull() {
+	if value := gjson.GetBytes(res, "default-capture-disable"); !data.DefaultCaptureDisable.IsNull() {
+		if value.Exists() {
 			data.DefaultCaptureDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.DefaultCaptureDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.DefaultCaptureDisable.IsNull() {
-			data.DefaultCaptureDisable = types.BoolNull()
-		}
+	} else if data.DefaultCaptureDisable.IsNull() {
+		data.DefaultCaptureDisable = types.BoolNull()
 	}
-	if value := res.Get("local-capture-capacity"); value.Exists() && !data.LocalCaptureCapacitySize.IsNull() {
+	if value := gjson.GetBytes(res, "local-capture-capacity"); value.Exists() && !data.LocalCaptureCapacitySize.IsNull() {
 		data.LocalCaptureCapacitySize = types.Int64Value(value.Int())
 	} else if data.LocalCaptureCapacitySize.IsNull() {
 		data.LocalCaptureCapacitySize = types.Int64Null()
 	}
-	if value := res.Get("kb"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LocalCaptureUnitKb.IsNull() {
+	if value := gjson.GetBytes(res, "kb"); !data.LocalCaptureUnitKb.IsNull() {
+		if value.Exists() {
 			data.LocalCaptureUnitKb = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LocalCaptureUnitKb = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LocalCaptureUnitKb.IsNull() {
-			data.LocalCaptureUnitKb = types.BoolNull()
-		}
+	} else if data.LocalCaptureUnitKb.IsNull() {
+		data.LocalCaptureUnitKb = types.BoolNull()
 	}
-	if value := res.Get("mb"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LocalCaptureUnitMb.IsNull() {
+	if value := gjson.GetBytes(res, "mb"); !data.LocalCaptureUnitMb.IsNull() {
+		if value.Exists() {
 			data.LocalCaptureUnitMb = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LocalCaptureUnitMb = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LocalCaptureUnitMb.IsNull() {
-			data.LocalCaptureUnitMb = types.BoolNull()
-		}
+	} else if data.LocalCaptureUnitMb.IsNull() {
+		data.LocalCaptureUnitMb = types.BoolNull()
 	}
-	if value := res.Get("gb"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LocalCaptureUnitGb.IsNull() {
+	if value := gjson.GetBytes(res, "gb"); !data.LocalCaptureUnitGb.IsNull() {
+		if value.Exists() {
 			data.LocalCaptureUnitGb = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LocalCaptureUnitGb = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LocalCaptureUnitGb.IsNull() {
-			data.LocalCaptureUnitGb = types.BoolNull()
-		}
+	} else if data.LocalCaptureUnitGb.IsNull() {
+		data.LocalCaptureUnitGb = types.BoolNull()
 	}
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *MonitorSession) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "monitor-session"); value.Exists() {
+		data.MonitorSessions = make([]MonitorSessionMonitorSessions, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := MonitorSessionMonitorSessions{}
+			if cValue := v.Get("session-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.SessionName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("traffic-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.TrafficType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("destination.interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.DestinationInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("destination.pseudowire"); cValue.Exists() {
+				item.DestinationPseudowire = types.BoolValue(true)
+			} else if !item.DestinationPseudowire.IsNull() {
+				// Only set to false if it was previously set
+				item.DestinationPseudowire = types.BoolValue(false)
+			}
+			if cValue := v.Get("destination.file.size"); cValue.Exists() {
+				item.DestinationFileSize = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("destination.file.buffer-type.linear"); cValue.Exists() {
+				item.DestinationFileBufferTypeLinear = types.BoolValue(true)
+			} else if !item.DestinationFileBufferTypeLinear.IsNull() {
+				// Only set to false if it was previously set
+				item.DestinationFileBufferTypeLinear = types.BoolValue(false)
+			}
+			if cValue := v.Get("destination.file.format.pcapng"); cValue.Exists() {
+				item.DestinationFileFormatPcapng = types.BoolValue(true)
+			} else if !item.DestinationFileFormatPcapng.IsNull() {
+				// Only set to false if it was previously set
+				item.DestinationFileFormatPcapng = types.BoolValue(false)
+			}
+			if cValue := v.Get("destination.file.filter"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.DestinationFileFilter = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("destination.file.always-on"); cValue.Exists() {
+				item.DestinationFileAlwaysOn = types.BoolValue(true)
+			} else if !item.DestinationFileAlwaysOn.IsNull() {
+				// Only set to false if it was previously set
+				item.DestinationFileAlwaysOn = types.BoolValue(false)
+			}
+			if cValue := v.Get("drops.packet-processing"); cValue.Exists() {
+				item.DropsPacketProcessing = types.BoolValue(true)
+			} else if !item.DropsPacketProcessing.IsNull() {
+				// Only set to false if it was previously set
+				item.DropsPacketProcessing = types.BoolValue(false)
+			}
+			if cValue := v.Get("drops.traffic-management"); cValue.Exists() {
+				item.DropsTrafficManagement = types.BoolValue(true)
+			} else if !item.DropsTrafficManagement.IsNull() {
+				// Only set to false if it was previously set
+				item.DropsTrafficManagement = types.BoolValue(false)
+			}
+			if cValue := v.Get("drops.rx"); cValue.Exists() {
+				item.DropsRx = types.BoolValue(true)
+			} else if !item.DropsRx.IsNull() {
+				// Only set to false if it was previously set
+				item.DropsRx = types.BoolValue(false)
+			}
+			if cValue := v.Get("drops.tx"); cValue.Exists() {
+				item.DropsTx = types.BoolValue(true)
+			} else if !item.DropsTx.IsNull() {
+				// Only set to false if it was previously set
+				item.DropsTx = types.BoolValue(false)
+			}
+			if cValue := v.Get("drops.filter"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.DropsFilter = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("rx.interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RxInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("rx.pseudowire"); cValue.Exists() {
+				item.RxPseudowire = types.BoolValue(true)
+			} else if !item.RxPseudowire.IsNull() {
+				// Only set to false if it was previously set
+				item.RxPseudowire = types.BoolValue(false)
+			}
+			if cValue := v.Get("tx.interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.TxInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tx.pseudowire"); cValue.Exists() {
+				item.TxPseudowire = types.BoolValue(true)
+			} else if !item.TxPseudowire.IsNull() {
+				// Only set to false if it was previously set
+				item.TxPseudowire = types.BoolValue(false)
+			}
+			if cValue := v.Get("inject-interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.InjectInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("discard-class"); cValue.Exists() {
+				item.DiscardClass = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("traffic-class"); cValue.Exists() {
+				item.TrafficClass = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("mirror.first"); cValue.Exists() {
+				item.MirrorFirst = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("mirror.interval"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.MirrorInterval = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("protocol-capture.rx"); cValue.Exists() {
+				item.ProtocolCaptureRx = types.BoolValue(true)
+			} else if !item.ProtocolCaptureRx.IsNull() {
+				// Only set to false if it was previously set
+				item.ProtocolCaptureRx = types.BoolValue(false)
+			}
+			if cValue := v.Get("protocol-capture.tx"); cValue.Exists() {
+				item.ProtocolCaptureTx = types.BoolValue(true)
+			} else if !item.ProtocolCaptureTx.IsNull() {
+				// Only set to false if it was previously set
+				item.ProtocolCaptureTx = types.BoolValue(false)
+			}
+			if cValue := v.Get("protocol-capture.filter"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.ProtocolCaptureFilter = types.StringValue(cValue.String())
+			}
+			if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rate-limit.rx"); cValue.Exists() {
+					item.RateLimitRx = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.RateLimitRx = types.Int64Null()
+			}
+			if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rate-limit.tx"); cValue.Exists() {
+					item.RateLimitTx = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.RateLimitTx = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("destination.application"); cValue.Exists() {
+					item.DestinationApplication = types.BoolValue(true)
+				} else if !item.DestinationApplication.IsNull() {
+					// Only set to false if it was previously set
+					item.DestinationApplication = types.BoolValue(false)
+				}
+			} else {
+				item.DestinationApplication = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("destination.rate-limit"); cValue.Exists() {
+					item.DestinationRateLimit = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.DestinationRateLimit = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("destination.rate-limit-units"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.DestinationRateLimitUnits = types.StringValue(cValue.String())
+				}
+			} else {
+				item.DestinationRateLimitUnits = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rx.application"); cValue.Exists() {
+					item.RxApplication = types.BoolValue(true)
+				} else if !item.RxApplication.IsNull() {
+					// Only set to false if it was previously set
+					item.RxApplication = types.BoolValue(false)
+				}
+			} else {
+				item.RxApplication = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rx.rate-limit"); cValue.Exists() {
+					item.RxRateLimit = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.RxRateLimit = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rx.rate-limit-units"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.RxRateLimitUnits = types.StringValue(cValue.String())
+				}
+			} else {
+				item.RxRateLimitUnits = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tx.application"); cValue.Exists() {
+					item.TxApplication = types.BoolValue(true)
+				} else if !item.TxApplication.IsNull() {
+					// Only set to false if it was previously set
+					item.TxApplication = types.BoolValue(false)
+				}
+			} else {
+				item.TxApplication = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tx.rate-limit"); cValue.Exists() {
+					item.TxRateLimit = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.TxRateLimit = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tx.rate-limit-units"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.TxRateLimitUnits = types.StringValue(cValue.String())
+				}
+			} else {
+				item.TxRateLimitUnits = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("drops.unique-punt"); cValue.Exists() {
+					item.DropsUniquePunt = types.BoolValue(true)
+				} else if !item.DropsUniquePunt.IsNull() {
+					// Only set to false if it was previously set
+					item.DropsUniquePunt = types.BoolValue(false)
+				}
+			} else {
+				item.DropsUniquePunt = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("drops.unique-port"); cValue.Exists() {
+					item.DropsUniquePort = types.BoolValue(true)
+				} else if !item.DropsUniquePort.IsNull() {
+					// Only set to false if it was previously set
+					item.DropsUniquePort = types.BoolValue(false)
+				}
+			} else {
+				item.DropsUniquePort = types.BoolNull()
+			}
+			data.MonitorSessions = append(data.MonitorSessions, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
+		data.RouterId = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "default-capture-disable"); value.Exists() {
+		data.DefaultCaptureDisable = types.BoolValue(true)
+	} else if !data.DefaultCaptureDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DefaultCaptureDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "local-capture-capacity"); value.Exists() {
+		data.LocalCaptureCapacitySize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "kb"); value.Exists() {
+		data.LocalCaptureUnitKb = types.BoolValue(true)
+	} else if !data.LocalCaptureUnitKb.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LocalCaptureUnitKb = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mb"); value.Exists() {
+		data.LocalCaptureUnitMb = types.BoolValue(true)
+	} else if !data.LocalCaptureUnitMb.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LocalCaptureUnitMb = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "gb"); value.Exists() {
+		data.LocalCaptureUnitGb = types.BoolValue(true)
+	} else if !data.LocalCaptureUnitGb.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LocalCaptureUnitGb = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *MonitorSessionData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "monitor-session"); value.Exists() {
+		data.MonitorSessions = make([]MonitorSessionMonitorSessions, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := MonitorSessionMonitorSessions{}
+			if cValue := v.Get("session-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.SessionName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("traffic-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.TrafficType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("destination.interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.DestinationInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("destination.pseudowire"); cValue.Exists() {
+				item.DestinationPseudowire = types.BoolValue(true)
+			} else {
+				item.DestinationPseudowire = types.BoolValue(false)
+			}
+			if cValue := v.Get("destination.file.size"); cValue.Exists() {
+				item.DestinationFileSize = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("destination.file.buffer-type.linear"); cValue.Exists() {
+				item.DestinationFileBufferTypeLinear = types.BoolValue(true)
+			} else {
+				item.DestinationFileBufferTypeLinear = types.BoolValue(false)
+			}
+			if cValue := v.Get("destination.file.format.pcapng"); cValue.Exists() {
+				item.DestinationFileFormatPcapng = types.BoolValue(true)
+			} else {
+				item.DestinationFileFormatPcapng = types.BoolValue(false)
+			}
+			if cValue := v.Get("destination.file.filter"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.DestinationFileFilter = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("destination.file.always-on"); cValue.Exists() {
+				item.DestinationFileAlwaysOn = types.BoolValue(true)
+			} else {
+				item.DestinationFileAlwaysOn = types.BoolValue(false)
+			}
+			if cValue := v.Get("drops.packet-processing"); cValue.Exists() {
+				item.DropsPacketProcessing = types.BoolValue(true)
+			} else {
+				item.DropsPacketProcessing = types.BoolValue(false)
+			}
+			if cValue := v.Get("drops.traffic-management"); cValue.Exists() {
+				item.DropsTrafficManagement = types.BoolValue(true)
+			} else {
+				item.DropsTrafficManagement = types.BoolValue(false)
+			}
+			if cValue := v.Get("drops.rx"); cValue.Exists() {
+				item.DropsRx = types.BoolValue(true)
+			} else {
+				item.DropsRx = types.BoolValue(false)
+			}
+			if cValue := v.Get("drops.tx"); cValue.Exists() {
+				item.DropsTx = types.BoolValue(true)
+			} else {
+				item.DropsTx = types.BoolValue(false)
+			}
+			if cValue := v.Get("drops.filter"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.DropsFilter = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("rx.interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RxInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("rx.pseudowire"); cValue.Exists() {
+				item.RxPseudowire = types.BoolValue(true)
+			} else {
+				item.RxPseudowire = types.BoolValue(false)
+			}
+			if cValue := v.Get("tx.interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.TxInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tx.pseudowire"); cValue.Exists() {
+				item.TxPseudowire = types.BoolValue(true)
+			} else {
+				item.TxPseudowire = types.BoolValue(false)
+			}
+			if cValue := v.Get("inject-interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.InjectInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("discard-class"); cValue.Exists() {
+				item.DiscardClass = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("traffic-class"); cValue.Exists() {
+				item.TrafficClass = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("mirror.first"); cValue.Exists() {
+				item.MirrorFirst = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("mirror.interval"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.MirrorInterval = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("protocol-capture.rx"); cValue.Exists() {
+				item.ProtocolCaptureRx = types.BoolValue(true)
+			} else {
+				item.ProtocolCaptureRx = types.BoolValue(false)
+			}
+			if cValue := v.Get("protocol-capture.tx"); cValue.Exists() {
+				item.ProtocolCaptureTx = types.BoolValue(true)
+			} else {
+				item.ProtocolCaptureTx = types.BoolValue(false)
+			}
+			if cValue := v.Get("protocol-capture.filter"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.ProtocolCaptureFilter = types.StringValue(cValue.String())
+			}
+			if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rate-limit.rx"); cValue.Exists() {
+					item.RateLimitRx = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.RateLimitRx = types.Int64Null()
+			}
+			if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rate-limit.tx"); cValue.Exists() {
+					item.RateLimitTx = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.RateLimitTx = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("destination.application"); cValue.Exists() {
+					item.DestinationApplication = types.BoolValue(true)
+				} else {
+					item.DestinationApplication = types.BoolValue(false)
+				}
+			} else {
+				item.DestinationApplication = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("destination.rate-limit"); cValue.Exists() {
+					item.DestinationRateLimit = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.DestinationRateLimit = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("destination.rate-limit-units"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.DestinationRateLimitUnits = types.StringValue(cValue.String())
+				}
+			} else {
+				item.DestinationRateLimitUnits = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rx.application"); cValue.Exists() {
+					item.RxApplication = types.BoolValue(true)
+				} else {
+					item.RxApplication = types.BoolValue(false)
+				}
+			} else {
+				item.RxApplication = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rx.rate-limit"); cValue.Exists() {
+					item.RxRateLimit = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.RxRateLimit = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("rx.rate-limit-units"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.RxRateLimitUnits = types.StringValue(cValue.String())
+				}
+			} else {
+				item.RxRateLimitUnits = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tx.application"); cValue.Exists() {
+					item.TxApplication = types.BoolValue(true)
+				} else {
+					item.TxApplication = types.BoolValue(false)
+				}
+			} else {
+				item.TxApplication = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tx.rate-limit"); cValue.Exists() {
+					item.TxRateLimit = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.TxRateLimit = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("tx.rate-limit-units"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.TxRateLimitUnits = types.StringValue(cValue.String())
+				}
+			} else {
+				item.TxRateLimitUnits = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("drops.unique-punt"); cValue.Exists() {
+					item.DropsUniquePunt = types.BoolValue(true)
+				} else {
+					item.DropsUniquePunt = types.BoolValue(false)
+				}
+			} else {
+				item.DropsUniquePunt = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("drops.unique-port"); cValue.Exists() {
+					item.DropsUniquePort = types.BoolValue(true)
+				} else {
+					item.DropsUniquePort = types.BoolValue(false)
+				}
+			} else {
+				item.DropsUniquePort = types.BoolNull()
+			}
+			data.MonitorSessions = append(data.MonitorSessions, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
+		data.RouterId = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "default-capture-disable"); value.Exists() {
+		data.DefaultCaptureDisable = types.BoolValue(true)
+	} else {
+		data.DefaultCaptureDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "local-capture-capacity"); value.Exists() {
+		data.LocalCaptureCapacitySize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "kb"); value.Exists() {
+		data.LocalCaptureUnitKb = types.BoolValue(true)
+	} else {
+		data.LocalCaptureUnitKb = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mb"); value.Exists() {
+		data.LocalCaptureUnitMb = types.BoolValue(true)
+	} else {
+		data.LocalCaptureUnitMb = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "gb"); value.Exists() {
+		data.LocalCaptureUnitGb = types.BoolValue(true)
+	} else {
+		data.LocalCaptureUnitGb = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *MonitorSession) getDeletedItems(ctx context.Context, state MonitorSession, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.LocalCaptureUnitGb.IsNull() && data.LocalCaptureUnitGb.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "gb"))
+	}
+	if !state.LocalCaptureUnitMb.IsNull() && data.LocalCaptureUnitMb.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "mb"))
+	}
+	if !state.LocalCaptureUnitKb.IsNull() && data.LocalCaptureUnitKb.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "kb"))
+	}
+	if !state.LocalCaptureCapacitySize.IsNull() && data.LocalCaptureCapacitySize.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "local-capture-capacity"))
+	}
+	if !state.DefaultCaptureDisable.IsNull() && data.DefaultCaptureDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "default-capture-disable"))
+	}
+	if !state.RouterId.IsNull() && data.RouterId.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "router-id"))
+	}
+	for i := range state.MonitorSessions {
+		keys := [...]string{"session-name"}
+		stateKeyValues := [...]string{state.MonitorSessions[i].SessionName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MonitorSessions[i].SessionName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MonitorSessions {
+			found = true
+			if state.MonitorSessions[i].SessionName.ValueString() != data.MonitorSessions[j].SessionName.ValueString() {
+				found = false
+			}
+			if found {
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].DropsUniquePort.IsNull() && data.MonitorSessions[j].DropsUniquePort.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "drops/unique-port"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].DropsUniquePunt.IsNull() && data.MonitorSessions[j].DropsUniquePunt.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "drops/unique-punt"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].TxRateLimitUnits.IsNull() && data.MonitorSessions[j].TxRateLimitUnits.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "tx/rate-limit-units"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].TxRateLimit.IsNull() && data.MonitorSessions[j].TxRateLimit.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "tx/rate-limit"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].TxApplication.IsNull() && data.MonitorSessions[j].TxApplication.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "tx/application"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].RxRateLimitUnits.IsNull() && data.MonitorSessions[j].RxRateLimitUnits.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "rx/rate-limit-units"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].RxRateLimit.IsNull() && data.MonitorSessions[j].RxRateLimit.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "rx/rate-limit"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].RxApplication.IsNull() && data.MonitorSessions[j].RxApplication.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "rx/application"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].DestinationRateLimitUnits.IsNull() && data.MonitorSessions[j].DestinationRateLimitUnits.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "destination/rate-limit-units"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].DestinationRateLimit.IsNull() && data.MonitorSessions[j].DestinationRateLimit.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "destination/rate-limit"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSessions[i].DestinationApplication.IsNull() && data.MonitorSessions[j].DestinationApplication.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "destination/application"))
+				}
+				if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.MonitorSessions[i].RateLimitTx.IsNull() && data.MonitorSessions[j].RateLimitTx.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "rate-limit/tx"))
+				}
+				if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.MonitorSessions[i].RateLimitRx.IsNull() && data.MonitorSessions[j].RateLimitRx.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "rate-limit/rx"))
+				}
+				if !state.MonitorSessions[i].ProtocolCaptureFilter.IsNull() && data.MonitorSessions[j].ProtocolCaptureFilter.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "protocol-capture/filter"))
+				}
+				if !state.MonitorSessions[i].ProtocolCaptureTx.IsNull() && data.MonitorSessions[j].ProtocolCaptureTx.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "protocol-capture/tx"))
+				}
+				if !state.MonitorSessions[i].ProtocolCaptureRx.IsNull() && data.MonitorSessions[j].ProtocolCaptureRx.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "protocol-capture/rx"))
+				}
+				if !state.MonitorSessions[i].MirrorInterval.IsNull() && data.MonitorSessions[j].MirrorInterval.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "mirror/interval"))
+				}
+				if !state.MonitorSessions[i].MirrorFirst.IsNull() && data.MonitorSessions[j].MirrorFirst.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "mirror/first"))
+				}
+				if !state.MonitorSessions[i].TrafficClass.IsNull() && data.MonitorSessions[j].TrafficClass.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "traffic-class"))
+				}
+				if !state.MonitorSessions[i].DiscardClass.IsNull() && data.MonitorSessions[j].DiscardClass.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "discard-class"))
+				}
+				if !state.MonitorSessions[i].InjectInterface.IsNull() && data.MonitorSessions[j].InjectInterface.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "inject-interface"))
+				}
+				if !state.MonitorSessions[i].TxPseudowire.IsNull() && data.MonitorSessions[j].TxPseudowire.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "tx/pseudowire"))
+				}
+				if !state.MonitorSessions[i].TxInterface.IsNull() && data.MonitorSessions[j].TxInterface.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "tx/interface"))
+				}
+				if !state.MonitorSessions[i].RxPseudowire.IsNull() && data.MonitorSessions[j].RxPseudowire.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "rx/pseudowire"))
+				}
+				if !state.MonitorSessions[i].RxInterface.IsNull() && data.MonitorSessions[j].RxInterface.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "rx/interface"))
+				}
+				if !state.MonitorSessions[i].DropsFilter.IsNull() && data.MonitorSessions[j].DropsFilter.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "drops/filter"))
+				}
+				if !state.MonitorSessions[i].DropsTx.IsNull() && data.MonitorSessions[j].DropsTx.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "drops/tx"))
+				}
+				if !state.MonitorSessions[i].DropsRx.IsNull() && data.MonitorSessions[j].DropsRx.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "drops/rx"))
+				}
+				if !state.MonitorSessions[i].DropsTrafficManagement.IsNull() && data.MonitorSessions[j].DropsTrafficManagement.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "drops/traffic-management"))
+				}
+				if !state.MonitorSessions[i].DropsPacketProcessing.IsNull() && data.MonitorSessions[j].DropsPacketProcessing.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "drops/packet-processing"))
+				}
+				if !state.MonitorSessions[i].DestinationFileAlwaysOn.IsNull() && data.MonitorSessions[j].DestinationFileAlwaysOn.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "destination/file/always-on"))
+				}
+				if !state.MonitorSessions[i].DestinationFileFilter.IsNull() && data.MonitorSessions[j].DestinationFileFilter.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "destination/file/filter"))
+				}
+				if !state.MonitorSessions[i].DestinationFileFormatPcapng.IsNull() && data.MonitorSessions[j].DestinationFileFormatPcapng.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "destination/file/format/pcapng"))
+				}
+				if !state.MonitorSessions[i].DestinationFileBufferTypeLinear.IsNull() && data.MonitorSessions[j].DestinationFileBufferTypeLinear.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "destination/file/buffer-type/linear"))
+				}
+				if !state.MonitorSessions[i].DestinationFileSize.IsNull() && data.MonitorSessions[j].DestinationFileSize.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "destination/file/size"))
+				}
+				if !state.MonitorSessions[i].DestinationPseudowire.IsNull() && data.MonitorSessions[j].DestinationPseudowire.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "destination/pseudowire"))
+				}
+				if !state.MonitorSessions[i].DestinationInterface.IsNull() && data.MonitorSessions[j].DestinationInterface.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "destination"))
+				}
+				if !state.MonitorSessions[i].TrafficType.IsNull() && data.MonitorSessions[j].TrafficType.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString), "traffic-type"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "monitor-session", keyString))
+		}
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *MonitorSession) getEmptyLeafsDelete(ctx context.Context, state *MonitorSession, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if !data.LocalCaptureUnitGb.IsNull() && !data.LocalCaptureUnitGb.ValueBool() {
+		if state == nil || state.LocalCaptureUnitGb.IsNull() || state.LocalCaptureUnitGb.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "gb"))
+		}
+	}
+	if !data.LocalCaptureUnitMb.IsNull() && !data.LocalCaptureUnitMb.ValueBool() {
+		if state == nil || state.LocalCaptureUnitMb.IsNull() || state.LocalCaptureUnitMb.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "mb"))
+		}
+	}
+	if !data.LocalCaptureUnitKb.IsNull() && !data.LocalCaptureUnitKb.ValueBool() {
+		if state == nil || state.LocalCaptureUnitKb.IsNull() || state.LocalCaptureUnitKb.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "kb"))
+		}
+	}
+	if !data.DefaultCaptureDisable.IsNull() && !data.DefaultCaptureDisable.ValueBool() {
+		if state == nil || state.DefaultCaptureDisable.IsNull() || state.DefaultCaptureDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "default-capture-disable"))
+		}
+	}
+	for i := range data.MonitorSessions {
+		keys := [...]string{"session-name"}
+		keyValues := [...]string{data.MonitorSessions[i].SessionName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSessions[i].DropsUniquePort.IsNull() && !data.MonitorSessions[i].DropsUniquePort.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DropsUniquePort.IsNull() || state.MonitorSessions[i].DropsUniquePort.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "drops/unique-port"))
+			}
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSessions[i].DropsUniquePunt.IsNull() && !data.MonitorSessions[i].DropsUniquePunt.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DropsUniquePunt.IsNull() || state.MonitorSessions[i].DropsUniquePunt.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "drops/unique-punt"))
+			}
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSessions[i].TxApplication.IsNull() && !data.MonitorSessions[i].TxApplication.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].TxApplication.IsNull() || state.MonitorSessions[i].TxApplication.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "tx/application"))
+			}
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSessions[i].RxApplication.IsNull() && !data.MonitorSessions[i].RxApplication.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].RxApplication.IsNull() || state.MonitorSessions[i].RxApplication.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "rx/application"))
+			}
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSessions[i].DestinationApplication.IsNull() && !data.MonitorSessions[i].DestinationApplication.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DestinationApplication.IsNull() || state.MonitorSessions[i].DestinationApplication.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "destination/application"))
+			}
+		}
+		if !data.MonitorSessions[i].ProtocolCaptureTx.IsNull() && !data.MonitorSessions[i].ProtocolCaptureTx.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].ProtocolCaptureTx.IsNull() || state.MonitorSessions[i].ProtocolCaptureTx.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "protocol-capture/tx"))
+			}
+		}
+		if !data.MonitorSessions[i].ProtocolCaptureRx.IsNull() && !data.MonitorSessions[i].ProtocolCaptureRx.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].ProtocolCaptureRx.IsNull() || state.MonitorSessions[i].ProtocolCaptureRx.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "protocol-capture/rx"))
+			}
+		}
+		if !data.MonitorSessions[i].TxPseudowire.IsNull() && !data.MonitorSessions[i].TxPseudowire.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].TxPseudowire.IsNull() || state.MonitorSessions[i].TxPseudowire.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "tx/pseudowire"))
+			}
+		}
+		if !data.MonitorSessions[i].RxPseudowire.IsNull() && !data.MonitorSessions[i].RxPseudowire.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].RxPseudowire.IsNull() || state.MonitorSessions[i].RxPseudowire.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "rx/pseudowire"))
+			}
+		}
+		if !data.MonitorSessions[i].DropsTx.IsNull() && !data.MonitorSessions[i].DropsTx.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DropsTx.IsNull() || state.MonitorSessions[i].DropsTx.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "drops/tx"))
+			}
+		}
+		if !data.MonitorSessions[i].DropsRx.IsNull() && !data.MonitorSessions[i].DropsRx.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DropsRx.IsNull() || state.MonitorSessions[i].DropsRx.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "drops/rx"))
+			}
+		}
+		if !data.MonitorSessions[i].DropsTrafficManagement.IsNull() && !data.MonitorSessions[i].DropsTrafficManagement.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DropsTrafficManagement.IsNull() || state.MonitorSessions[i].DropsTrafficManagement.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "drops/traffic-management"))
+			}
+		}
+		if !data.MonitorSessions[i].DropsPacketProcessing.IsNull() && !data.MonitorSessions[i].DropsPacketProcessing.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DropsPacketProcessing.IsNull() || state.MonitorSessions[i].DropsPacketProcessing.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "drops/packet-processing"))
+			}
+		}
+		if !data.MonitorSessions[i].DestinationFileAlwaysOn.IsNull() && !data.MonitorSessions[i].DestinationFileAlwaysOn.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DestinationFileAlwaysOn.IsNull() || state.MonitorSessions[i].DestinationFileAlwaysOn.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "destination/file/always-on"))
+			}
+		}
+		if !data.MonitorSessions[i].DestinationFileFormatPcapng.IsNull() && !data.MonitorSessions[i].DestinationFileFormatPcapng.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DestinationFileFormatPcapng.IsNull() || state.MonitorSessions[i].DestinationFileFormatPcapng.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "destination/file/format/pcapng"))
+			}
+		}
+		if !data.MonitorSessions[i].DestinationFileBufferTypeLinear.IsNull() && !data.MonitorSessions[i].DestinationFileBufferTypeLinear.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DestinationFileBufferTypeLinear.IsNull() || state.MonitorSessions[i].DestinationFileBufferTypeLinear.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "destination/file/buffer-type/linear"))
+			}
+		}
+		if !data.MonitorSessions[i].DestinationPseudowire.IsNull() && !data.MonitorSessions[i].DestinationPseudowire.ValueBool() {
+			if state == nil || i >= len(state.MonitorSessions) || state.MonitorSessions[i].DestinationPseudowire.IsNull() || state.MonitorSessions[i].DestinationPseudowire.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString), "destination/pseudowire"))
+			}
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *MonitorSession) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.LocalCaptureUnitGb.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "gb"))
+	}
+	if !data.LocalCaptureUnitMb.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "mb"))
+	}
+	if !data.LocalCaptureUnitKb.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "kb"))
+	}
+	if !data.LocalCaptureCapacitySize.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "local-capture-capacity"))
+	}
+	if !data.DefaultCaptureDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "default-capture-disable"))
+	}
+	if !data.RouterId.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "router-id"))
+	}
+	for i := range data.MonitorSessions {
+		keys := [...]string{"session-name"}
+		keyValues := [...]string{data.MonitorSessions[i].SessionName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.MonitorSessions[i].SessionName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "monitor-session", keyString))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data MonitorSession) toBodyXML(ctx context.Context, stateArg ...*MonitorSession) string {
@@ -693,6 +1813,49 @@ func (data MonitorSession) toBodyXML(ctx context.Context, stateArg ...*MonitorSe
 			if !item.RateLimitTx.IsNull() && !item.RateLimitTx.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/rate-limit/tx", strconv.FormatInt(item.RateLimitTx.ValueInt64(), 10))
 			}
+			if !item.DestinationApplication.IsNull() && !item.DestinationApplication.IsUnknown() {
+				if item.DestinationApplication.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/destination/application", "")
+				}
+			}
+			if !item.DestinationRateLimit.IsNull() && !item.DestinationRateLimit.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/destination/rate-limit", strconv.FormatInt(item.DestinationRateLimit.ValueInt64(), 10))
+			}
+			if !item.DestinationRateLimitUnits.IsNull() && !item.DestinationRateLimitUnits.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/destination/rate-limit-units", item.DestinationRateLimitUnits.ValueString())
+			}
+			if !item.RxApplication.IsNull() && !item.RxApplication.IsUnknown() {
+				if item.RxApplication.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/rx/application", "")
+				}
+			}
+			if !item.RxRateLimit.IsNull() && !item.RxRateLimit.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/rx/rate-limit", strconv.FormatInt(item.RxRateLimit.ValueInt64(), 10))
+			}
+			if !item.RxRateLimitUnits.IsNull() && !item.RxRateLimitUnits.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/rx/rate-limit-units", item.RxRateLimitUnits.ValueString())
+			}
+			if !item.TxApplication.IsNull() && !item.TxApplication.IsUnknown() {
+				if item.TxApplication.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/tx/application", "")
+				}
+			}
+			if !item.TxRateLimit.IsNull() && !item.TxRateLimit.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/tx/rate-limit", strconv.FormatInt(item.TxRateLimit.ValueInt64(), 10))
+			}
+			if !item.TxRateLimitUnits.IsNull() && !item.TxRateLimitUnits.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/tx/rate-limit-units", item.TxRateLimitUnits.ValueString())
+			}
+			if !item.DropsUniquePunt.IsNull() && !item.DropsUniquePunt.IsUnknown() {
+				if item.DropsUniquePunt.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/drops/unique-punt", "")
+				}
+			}
+			if !item.DropsUniquePort.IsNull() && !item.DropsUniquePort.IsUnknown() {
+				if item.DropsUniquePort.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/drops/unique-port", "")
+				}
+			}
 		}
 	}
 	if !data.RouterId.IsNull() && !data.RouterId.IsUnknown() {
@@ -743,7 +1906,7 @@ func (data MonitorSession) toBodyXML(ctx context.Context, stateArg ...*MonitorSe
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -751,6 +1914,7 @@ func (data MonitorSession) toBodyXML(ctx context.Context, stateArg ...*MonitorSe
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *MonitorSession) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1001,6 +2165,96 @@ func (data *MonitorSession) updateFromBodyXML(ctx context.Context, res xmldot.Re
 		} else if data.MonitorSessions[i].RateLimitTx.IsNull() {
 			data.MonitorSessions[i].RateLimitTx = types.Int64Null()
 		}
+		if value := helpers.GetFromXPath(r, "destination/application"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DestinationApplication.IsNull() {
+				data.MonitorSessions[i].DestinationApplication = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].DestinationApplication.IsNull() {
+				data.MonitorSessions[i].DestinationApplication = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "destination/rate-limit"); value.Exists() && !data.MonitorSessions[i].DestinationRateLimit.IsNull() {
+			data.MonitorSessions[i].DestinationRateLimit = types.Int64Value(value.Int())
+		} else if data.MonitorSessions[i].DestinationRateLimit.IsNull() {
+			data.MonitorSessions[i].DestinationRateLimit = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "destination/rate-limit-units"); value.Exists() && !data.MonitorSessions[i].DestinationRateLimitUnits.IsNull() {
+			data.MonitorSessions[i].DestinationRateLimitUnits = types.StringValue(value.String())
+		} else if data.MonitorSessions[i].DestinationRateLimitUnits.IsNull() {
+			data.MonitorSessions[i].DestinationRateLimitUnits = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "rx/application"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].RxApplication.IsNull() {
+				data.MonitorSessions[i].RxApplication = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].RxApplication.IsNull() {
+				data.MonitorSessions[i].RxApplication = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "rx/rate-limit"); value.Exists() && !data.MonitorSessions[i].RxRateLimit.IsNull() {
+			data.MonitorSessions[i].RxRateLimit = types.Int64Value(value.Int())
+		} else if data.MonitorSessions[i].RxRateLimit.IsNull() {
+			data.MonitorSessions[i].RxRateLimit = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "rx/rate-limit-units"); value.Exists() && !data.MonitorSessions[i].RxRateLimitUnits.IsNull() {
+			data.MonitorSessions[i].RxRateLimitUnits = types.StringValue(value.String())
+		} else if data.MonitorSessions[i].RxRateLimitUnits.IsNull() {
+			data.MonitorSessions[i].RxRateLimitUnits = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "tx/application"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].TxApplication.IsNull() {
+				data.MonitorSessions[i].TxApplication = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].TxApplication.IsNull() {
+				data.MonitorSessions[i].TxApplication = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "tx/rate-limit"); value.Exists() && !data.MonitorSessions[i].TxRateLimit.IsNull() {
+			data.MonitorSessions[i].TxRateLimit = types.Int64Value(value.Int())
+		} else if data.MonitorSessions[i].TxRateLimit.IsNull() {
+			data.MonitorSessions[i].TxRateLimit = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "tx/rate-limit-units"); value.Exists() && !data.MonitorSessions[i].TxRateLimitUnits.IsNull() {
+			data.MonitorSessions[i].TxRateLimitUnits = types.StringValue(value.String())
+		} else if data.MonitorSessions[i].TxRateLimitUnits.IsNull() {
+			data.MonitorSessions[i].TxRateLimitUnits = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "drops/unique-punt"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DropsUniquePunt.IsNull() {
+				data.MonitorSessions[i].DropsUniquePunt = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].DropsUniquePunt.IsNull() {
+				data.MonitorSessions[i].DropsUniquePunt = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "drops/unique-port"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.MonitorSessions[i].DropsUniquePort.IsNull() {
+				data.MonitorSessions[i].DropsUniquePort = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.MonitorSessions[i].DropsUniquePort.IsNull() {
+				data.MonitorSessions[i].DropsUniquePort = types.BoolNull()
+			}
+		}
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/router-id"); value.Exists() && !data.RouterId.IsNull() {
 		data.RouterId = types.Int64Value(value.Int())
@@ -1059,335 +2313,7 @@ func (data *MonitorSession) updateFromBodyXML(ctx context.Context, res xmldot.Re
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *MonitorSession) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "monitor-session"); value.Exists() {
-		data.MonitorSessions = make([]MonitorSessionMonitorSessions, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := MonitorSessionMonitorSessions{}
-			if cValue := v.Get("session-name"); cValue.Exists() {
-				item.SessionName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("traffic-type"); cValue.Exists() {
-				item.TrafficType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("destination.interface"); cValue.Exists() {
-				item.DestinationInterface = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("destination.pseudowire"); cValue.Exists() {
-				item.DestinationPseudowire = types.BoolValue(true)
-			} else if !item.DestinationPseudowire.IsNull() {
-				// Only set to false if it was previously set
-				item.DestinationPseudowire = types.BoolValue(false)
-			}
-			if cValue := v.Get("destination.file.size"); cValue.Exists() {
-				item.DestinationFileSize = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("destination.file.buffer-type.linear"); cValue.Exists() {
-				item.DestinationFileBufferTypeLinear = types.BoolValue(true)
-			} else if !item.DestinationFileBufferTypeLinear.IsNull() {
-				// Only set to false if it was previously set
-				item.DestinationFileBufferTypeLinear = types.BoolValue(false)
-			}
-			if cValue := v.Get("destination.file.format.pcapng"); cValue.Exists() {
-				item.DestinationFileFormatPcapng = types.BoolValue(true)
-			} else if !item.DestinationFileFormatPcapng.IsNull() {
-				// Only set to false if it was previously set
-				item.DestinationFileFormatPcapng = types.BoolValue(false)
-			}
-			if cValue := v.Get("destination.file.filter"); cValue.Exists() {
-				item.DestinationFileFilter = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("destination.file.always-on"); cValue.Exists() {
-				item.DestinationFileAlwaysOn = types.BoolValue(true)
-			} else if !item.DestinationFileAlwaysOn.IsNull() {
-				// Only set to false if it was previously set
-				item.DestinationFileAlwaysOn = types.BoolValue(false)
-			}
-			if cValue := v.Get("drops.packet-processing"); cValue.Exists() {
-				item.DropsPacketProcessing = types.BoolValue(true)
-			} else if !item.DropsPacketProcessing.IsNull() {
-				// Only set to false if it was previously set
-				item.DropsPacketProcessing = types.BoolValue(false)
-			}
-			if cValue := v.Get("drops.traffic-management"); cValue.Exists() {
-				item.DropsTrafficManagement = types.BoolValue(true)
-			} else if !item.DropsTrafficManagement.IsNull() {
-				// Only set to false if it was previously set
-				item.DropsTrafficManagement = types.BoolValue(false)
-			}
-			if cValue := v.Get("drops.rx"); cValue.Exists() {
-				item.DropsRx = types.BoolValue(true)
-			} else if !item.DropsRx.IsNull() {
-				// Only set to false if it was previously set
-				item.DropsRx = types.BoolValue(false)
-			}
-			if cValue := v.Get("drops.tx"); cValue.Exists() {
-				item.DropsTx = types.BoolValue(true)
-			} else if !item.DropsTx.IsNull() {
-				// Only set to false if it was previously set
-				item.DropsTx = types.BoolValue(false)
-			}
-			if cValue := v.Get("drops.filter"); cValue.Exists() {
-				item.DropsFilter = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("rx.interface"); cValue.Exists() {
-				item.RxInterface = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("rx.pseudowire"); cValue.Exists() {
-				item.RxPseudowire = types.BoolValue(true)
-			} else if !item.RxPseudowire.IsNull() {
-				// Only set to false if it was previously set
-				item.RxPseudowire = types.BoolValue(false)
-			}
-			if cValue := v.Get("tx.interface"); cValue.Exists() {
-				item.TxInterface = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tx.pseudowire"); cValue.Exists() {
-				item.TxPseudowire = types.BoolValue(true)
-			} else if !item.TxPseudowire.IsNull() {
-				// Only set to false if it was previously set
-				item.TxPseudowire = types.BoolValue(false)
-			}
-			if cValue := v.Get("inject-interface"); cValue.Exists() {
-				item.InjectInterface = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("discard-class"); cValue.Exists() {
-				item.DiscardClass = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("traffic-class"); cValue.Exists() {
-				item.TrafficClass = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("mirror.first"); cValue.Exists() {
-				item.MirrorFirst = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("mirror.interval"); cValue.Exists() {
-				item.MirrorInterval = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("protocol-capture.rx"); cValue.Exists() {
-				item.ProtocolCaptureRx = types.BoolValue(true)
-			} else if !item.ProtocolCaptureRx.IsNull() {
-				// Only set to false if it was previously set
-				item.ProtocolCaptureRx = types.BoolValue(false)
-			}
-			if cValue := v.Get("protocol-capture.tx"); cValue.Exists() {
-				item.ProtocolCaptureTx = types.BoolValue(true)
-			} else if !item.ProtocolCaptureTx.IsNull() {
-				// Only set to false if it was previously set
-				item.ProtocolCaptureTx = types.BoolValue(false)
-			}
-			if cValue := v.Get("protocol-capture.filter"); cValue.Exists() {
-				item.ProtocolCaptureFilter = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("rate-limit.rx"); cValue.Exists() {
-				item.RateLimitRx = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("rate-limit.tx"); cValue.Exists() {
-				item.RateLimitTx = types.Int64Value(cValue.Int())
-			}
-			data.MonitorSessions = append(data.MonitorSessions, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "router-id"); value.Exists() {
-		data.RouterId = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "default-capture-disable"); value.Exists() {
-		data.DefaultCaptureDisable = types.BoolValue(true)
-	} else if !data.DefaultCaptureDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.DefaultCaptureDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "local-capture-capacity"); value.Exists() {
-		data.LocalCaptureCapacitySize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "kb"); value.Exists() {
-		data.LocalCaptureUnitKb = types.BoolValue(true)
-	} else if !data.LocalCaptureUnitKb.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LocalCaptureUnitKb = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "mb"); value.Exists() {
-		data.LocalCaptureUnitMb = types.BoolValue(true)
-	} else if !data.LocalCaptureUnitMb.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LocalCaptureUnitMb = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "gb"); value.Exists() {
-		data.LocalCaptureUnitGb = types.BoolValue(true)
-	} else if !data.LocalCaptureUnitGb.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LocalCaptureUnitGb = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *MonitorSessionData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "monitor-session"); value.Exists() {
-		data.MonitorSessions = make([]MonitorSessionMonitorSessions, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := MonitorSessionMonitorSessions{}
-			if cValue := v.Get("session-name"); cValue.Exists() {
-				item.SessionName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("traffic-type"); cValue.Exists() {
-				item.TrafficType = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("destination.interface"); cValue.Exists() {
-				item.DestinationInterface = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("destination.pseudowire"); cValue.Exists() {
-				item.DestinationPseudowire = types.BoolValue(true)
-			} else {
-				item.DestinationPseudowire = types.BoolValue(false)
-			}
-			if cValue := v.Get("destination.file.size"); cValue.Exists() {
-				item.DestinationFileSize = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("destination.file.buffer-type.linear"); cValue.Exists() {
-				item.DestinationFileBufferTypeLinear = types.BoolValue(true)
-			} else {
-				item.DestinationFileBufferTypeLinear = types.BoolValue(false)
-			}
-			if cValue := v.Get("destination.file.format.pcapng"); cValue.Exists() {
-				item.DestinationFileFormatPcapng = types.BoolValue(true)
-			} else {
-				item.DestinationFileFormatPcapng = types.BoolValue(false)
-			}
-			if cValue := v.Get("destination.file.filter"); cValue.Exists() {
-				item.DestinationFileFilter = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("destination.file.always-on"); cValue.Exists() {
-				item.DestinationFileAlwaysOn = types.BoolValue(true)
-			} else {
-				item.DestinationFileAlwaysOn = types.BoolValue(false)
-			}
-			if cValue := v.Get("drops.packet-processing"); cValue.Exists() {
-				item.DropsPacketProcessing = types.BoolValue(true)
-			} else {
-				item.DropsPacketProcessing = types.BoolValue(false)
-			}
-			if cValue := v.Get("drops.traffic-management"); cValue.Exists() {
-				item.DropsTrafficManagement = types.BoolValue(true)
-			} else {
-				item.DropsTrafficManagement = types.BoolValue(false)
-			}
-			if cValue := v.Get("drops.rx"); cValue.Exists() {
-				item.DropsRx = types.BoolValue(true)
-			} else {
-				item.DropsRx = types.BoolValue(false)
-			}
-			if cValue := v.Get("drops.tx"); cValue.Exists() {
-				item.DropsTx = types.BoolValue(true)
-			} else {
-				item.DropsTx = types.BoolValue(false)
-			}
-			if cValue := v.Get("drops.filter"); cValue.Exists() {
-				item.DropsFilter = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("rx.interface"); cValue.Exists() {
-				item.RxInterface = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("rx.pseudowire"); cValue.Exists() {
-				item.RxPseudowire = types.BoolValue(true)
-			} else {
-				item.RxPseudowire = types.BoolValue(false)
-			}
-			if cValue := v.Get("tx.interface"); cValue.Exists() {
-				item.TxInterface = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tx.pseudowire"); cValue.Exists() {
-				item.TxPseudowire = types.BoolValue(true)
-			} else {
-				item.TxPseudowire = types.BoolValue(false)
-			}
-			if cValue := v.Get("inject-interface"); cValue.Exists() {
-				item.InjectInterface = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("discard-class"); cValue.Exists() {
-				item.DiscardClass = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("traffic-class"); cValue.Exists() {
-				item.TrafficClass = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("mirror.first"); cValue.Exists() {
-				item.MirrorFirst = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("mirror.interval"); cValue.Exists() {
-				item.MirrorInterval = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("protocol-capture.rx"); cValue.Exists() {
-				item.ProtocolCaptureRx = types.BoolValue(true)
-			} else {
-				item.ProtocolCaptureRx = types.BoolValue(false)
-			}
-			if cValue := v.Get("protocol-capture.tx"); cValue.Exists() {
-				item.ProtocolCaptureTx = types.BoolValue(true)
-			} else {
-				item.ProtocolCaptureTx = types.BoolValue(false)
-			}
-			if cValue := v.Get("protocol-capture.filter"); cValue.Exists() {
-				item.ProtocolCaptureFilter = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("rate-limit.rx"); cValue.Exists() {
-				item.RateLimitRx = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("rate-limit.tx"); cValue.Exists() {
-				item.RateLimitTx = types.Int64Value(cValue.Int())
-			}
-			data.MonitorSessions = append(data.MonitorSessions, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "router-id"); value.Exists() {
-		data.RouterId = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "default-capture-disable"); value.Exists() {
-		data.DefaultCaptureDisable = types.BoolValue(true)
-	} else {
-		data.DefaultCaptureDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "local-capture-capacity"); value.Exists() {
-		data.LocalCaptureCapacitySize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "kb"); value.Exists() {
-		data.LocalCaptureUnitKb = types.BoolValue(true)
-	} else {
-		data.LocalCaptureUnitKb = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "mb"); value.Exists() {
-		data.LocalCaptureUnitMb = types.BoolValue(true)
-	} else {
-		data.LocalCaptureUnitMb = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "gb"); value.Exists() {
-		data.LocalCaptureUnitGb = types.BoolValue(true)
-	} else {
-		data.LocalCaptureUnitGb = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *MonitorSession) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1503,6 +2429,49 @@ func (data *MonitorSession) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			if cValue := helpers.GetFromXPath(v, "rate-limit/tx"); cValue.Exists() {
 				item.RateLimitTx = types.Int64Value(cValue.Int())
 			}
+			if cValue := helpers.GetFromXPath(v, "destination/application"); cValue.Exists() {
+				item.DestinationApplication = types.BoolValue(true)
+			} else {
+				item.DestinationApplication = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "destination/rate-limit"); cValue.Exists() {
+				item.DestinationRateLimit = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "destination/rate-limit-units"); cValue.Exists() {
+				item.DestinationRateLimitUnits = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "rx/application"); cValue.Exists() {
+				item.RxApplication = types.BoolValue(true)
+			} else {
+				item.RxApplication = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "rx/rate-limit"); cValue.Exists() {
+				item.RxRateLimit = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "rx/rate-limit-units"); cValue.Exists() {
+				item.RxRateLimitUnits = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "tx/application"); cValue.Exists() {
+				item.TxApplication = types.BoolValue(true)
+			} else {
+				item.TxApplication = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "tx/rate-limit"); cValue.Exists() {
+				item.TxRateLimit = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "tx/rate-limit-units"); cValue.Exists() {
+				item.TxRateLimitUnits = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "drops/unique-punt"); cValue.Exists() {
+				item.DropsUniquePunt = types.BoolValue(true)
+			} else {
+				item.DropsUniquePunt = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "drops/unique-port"); cValue.Exists() {
+				item.DropsUniquePort = types.BoolValue(true)
+			} else {
+				item.DropsUniquePort = types.BoolValue(false)
+			}
 			data.MonitorSessions = append(data.MonitorSessions, item)
 			return true
 		})
@@ -1536,6 +2505,7 @@ func (data *MonitorSession) fromBodyXML(ctx context.Context, res xmldot.Result) 
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *MonitorSessionData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1651,6 +2621,49 @@ func (data *MonitorSessionData) fromBodyXML(ctx context.Context, res xmldot.Resu
 			if cValue := helpers.GetFromXPath(v, "rate-limit/tx"); cValue.Exists() {
 				item.RateLimitTx = types.Int64Value(cValue.Int())
 			}
+			if cValue := helpers.GetFromXPath(v, "destination/application"); cValue.Exists() {
+				item.DestinationApplication = types.BoolValue(true)
+			} else {
+				item.DestinationApplication = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "destination/rate-limit"); cValue.Exists() {
+				item.DestinationRateLimit = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "destination/rate-limit-units"); cValue.Exists() {
+				item.DestinationRateLimitUnits = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "rx/application"); cValue.Exists() {
+				item.RxApplication = types.BoolValue(true)
+			} else {
+				item.RxApplication = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "rx/rate-limit"); cValue.Exists() {
+				item.RxRateLimit = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "rx/rate-limit-units"); cValue.Exists() {
+				item.RxRateLimitUnits = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "tx/application"); cValue.Exists() {
+				item.TxApplication = types.BoolValue(true)
+			} else {
+				item.TxApplication = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "tx/rate-limit"); cValue.Exists() {
+				item.TxRateLimit = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "tx/rate-limit-units"); cValue.Exists() {
+				item.TxRateLimitUnits = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "drops/unique-punt"); cValue.Exists() {
+				item.DropsUniquePunt = types.BoolValue(true)
+			} else {
+				item.DropsUniquePunt = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "drops/unique-port"); cValue.Exists() {
+				item.DropsUniquePort = types.BoolValue(true)
+			} else {
+				item.DropsUniquePort = types.BoolValue(false)
+			}
 			data.MonitorSessions = append(data.MonitorSessions, item)
 			return true
 		})
@@ -1684,300 +2697,7 @@ func (data *MonitorSessionData) fromBodyXML(ctx context.Context, res xmldot.Resu
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *MonitorSession) getDeletedItems(ctx context.Context, state MonitorSession) []string {
-	deletedItems := make([]string, 0)
-	if !state.LocalCaptureUnitGb.IsNull() && data.LocalCaptureUnitGb.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/gb", state.getPath()))
-	}
-	if !state.LocalCaptureUnitMb.IsNull() && data.LocalCaptureUnitMb.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mb", state.getPath()))
-	}
-	if !state.LocalCaptureUnitKb.IsNull() && data.LocalCaptureUnitKb.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/kb", state.getPath()))
-	}
-	if !state.LocalCaptureCapacitySize.IsNull() && data.LocalCaptureCapacitySize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-capture-capacity", state.getPath()))
-	}
-	if !state.DefaultCaptureDisable.IsNull() && data.DefaultCaptureDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-capture-disable", state.getPath()))
-	}
-	if !state.RouterId.IsNull() && data.RouterId.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id", state.getPath()))
-	}
-	for i := range state.MonitorSessions {
-		keys := [...]string{"session-name"}
-		stateKeyValues := [...]string{state.MonitorSessions[i].SessionName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.MonitorSessions[i].SessionName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.MonitorSessions {
-			found = true
-			if state.MonitorSessions[i].SessionName.ValueString() != data.MonitorSessions[j].SessionName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.MonitorSessions[i].RateLimitTx.IsNull() && data.MonitorSessions[j].RateLimitTx.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/rate-limit/tx", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].RateLimitRx.IsNull() && data.MonitorSessions[j].RateLimitRx.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/rate-limit/rx", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].ProtocolCaptureFilter.IsNull() && data.MonitorSessions[j].ProtocolCaptureFilter.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/protocol-capture/filter", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].ProtocolCaptureTx.IsNull() && data.MonitorSessions[j].ProtocolCaptureTx.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/protocol-capture/tx", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].ProtocolCaptureRx.IsNull() && data.MonitorSessions[j].ProtocolCaptureRx.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/protocol-capture/rx", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].MirrorInterval.IsNull() && data.MonitorSessions[j].MirrorInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/mirror/interval", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].MirrorFirst.IsNull() && data.MonitorSessions[j].MirrorFirst.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/mirror/first", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].TrafficClass.IsNull() && data.MonitorSessions[j].TrafficClass.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/traffic-class", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].DiscardClass.IsNull() && data.MonitorSessions[j].DiscardClass.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/discard-class", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].InjectInterface.IsNull() && data.MonitorSessions[j].InjectInterface.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/inject-interface", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].TxPseudowire.IsNull() && data.MonitorSessions[j].TxPseudowire.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/tx/pseudowire", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].TxInterface.IsNull() && data.MonitorSessions[j].TxInterface.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/tx/interface", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].RxPseudowire.IsNull() && data.MonitorSessions[j].RxPseudowire.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/rx/pseudowire", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].RxInterface.IsNull() && data.MonitorSessions[j].RxInterface.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/rx/interface", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].DropsFilter.IsNull() && data.MonitorSessions[j].DropsFilter.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/drops/filter", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].DropsTx.IsNull() && data.MonitorSessions[j].DropsTx.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/drops/tx", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].DropsRx.IsNull() && data.MonitorSessions[j].DropsRx.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/drops/rx", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].DropsTrafficManagement.IsNull() && data.MonitorSessions[j].DropsTrafficManagement.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/drops/traffic-management", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].DropsPacketProcessing.IsNull() && data.MonitorSessions[j].DropsPacketProcessing.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/drops/packet-processing", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].DestinationFileAlwaysOn.IsNull() && data.MonitorSessions[j].DestinationFileAlwaysOn.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/destination/file/always-on", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].DestinationFileFilter.IsNull() && data.MonitorSessions[j].DestinationFileFilter.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/destination/file/filter", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].DestinationFileFormatPcapng.IsNull() && data.MonitorSessions[j].DestinationFileFormatPcapng.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/destination/file/format/pcapng", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].DestinationFileBufferTypeLinear.IsNull() && data.MonitorSessions[j].DestinationFileBufferTypeLinear.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/destination/file/buffer-type/linear", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].DestinationFileSize.IsNull() && data.MonitorSessions[j].DestinationFileSize.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/destination/file/size", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].DestinationPseudowire.IsNull() && data.MonitorSessions[j].DestinationPseudowire.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/destination/pseudowire", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].DestinationInterface.IsNull() && data.MonitorSessions[j].DestinationInterface.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/destination", state.getPath(), keyString))
-				}
-				if !state.MonitorSessions[i].TrafficType.IsNull() && data.MonitorSessions[j].TrafficType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v/traffic-type", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor-session%v", state.getPath(), keyString))
-		}
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *MonitorSession) getEmptyLeafsDelete(ctx context.Context, state *MonitorSession) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.LocalCaptureUnitGb.IsNull() && !data.LocalCaptureUnitGb.ValueBool() {
-		if state != nil && !state.LocalCaptureUnitGb.IsNull() && state.LocalCaptureUnitGb.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/gb", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LocalCaptureUnitMb.IsNull() && !data.LocalCaptureUnitMb.ValueBool() {
-		if state != nil && !state.LocalCaptureUnitMb.IsNull() && state.LocalCaptureUnitMb.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mb", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LocalCaptureUnitKb.IsNull() && !data.LocalCaptureUnitKb.ValueBool() {
-		if state != nil && !state.LocalCaptureUnitKb.IsNull() && state.LocalCaptureUnitKb.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/kb", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.DefaultCaptureDisable.IsNull() && !data.DefaultCaptureDisable.ValueBool() {
-		if state != nil && !state.DefaultCaptureDisable.IsNull() && state.DefaultCaptureDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-capture-disable", data.getXPath()))
-		}
-	}
-	for i := range data.MonitorSessions {
-		keys := [...]string{"session-name"}
-		keyValues := [...]string{data.MonitorSessions[i].SessionName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.MonitorSessions[i].ProtocolCaptureTx.IsNull() && !data.MonitorSessions[i].ProtocolCaptureTx.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].ProtocolCaptureTx.IsNull() && state.MonitorSessions[i].ProtocolCaptureTx.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/monitor-session%v/protocol-capture/tx", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MonitorSessions[i].ProtocolCaptureRx.IsNull() && !data.MonitorSessions[i].ProtocolCaptureRx.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].ProtocolCaptureRx.IsNull() && state.MonitorSessions[i].ProtocolCaptureRx.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/monitor-session%v/protocol-capture/rx", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MonitorSessions[i].TxPseudowire.IsNull() && !data.MonitorSessions[i].TxPseudowire.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].TxPseudowire.IsNull() && state.MonitorSessions[i].TxPseudowire.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/monitor-session%v/tx/pseudowire", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MonitorSessions[i].RxPseudowire.IsNull() && !data.MonitorSessions[i].RxPseudowire.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].RxPseudowire.IsNull() && state.MonitorSessions[i].RxPseudowire.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/monitor-session%v/rx/pseudowire", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MonitorSessions[i].DropsTx.IsNull() && !data.MonitorSessions[i].DropsTx.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DropsTx.IsNull() && state.MonitorSessions[i].DropsTx.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/monitor-session%v/drops/tx", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MonitorSessions[i].DropsRx.IsNull() && !data.MonitorSessions[i].DropsRx.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DropsRx.IsNull() && state.MonitorSessions[i].DropsRx.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/monitor-session%v/drops/rx", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MonitorSessions[i].DropsTrafficManagement.IsNull() && !data.MonitorSessions[i].DropsTrafficManagement.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DropsTrafficManagement.IsNull() && state.MonitorSessions[i].DropsTrafficManagement.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/monitor-session%v/drops/traffic-management", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MonitorSessions[i].DropsPacketProcessing.IsNull() && !data.MonitorSessions[i].DropsPacketProcessing.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DropsPacketProcessing.IsNull() && state.MonitorSessions[i].DropsPacketProcessing.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/monitor-session%v/drops/packet-processing", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MonitorSessions[i].DestinationFileAlwaysOn.IsNull() && !data.MonitorSessions[i].DestinationFileAlwaysOn.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DestinationFileAlwaysOn.IsNull() && state.MonitorSessions[i].DestinationFileAlwaysOn.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/monitor-session%v/destination/file/always-on", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MonitorSessions[i].DestinationFileFormatPcapng.IsNull() && !data.MonitorSessions[i].DestinationFileFormatPcapng.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DestinationFileFormatPcapng.IsNull() && state.MonitorSessions[i].DestinationFileFormatPcapng.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/monitor-session%v/destination/file/format/pcapng", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MonitorSessions[i].DestinationFileBufferTypeLinear.IsNull() && !data.MonitorSessions[i].DestinationFileBufferTypeLinear.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DestinationFileBufferTypeLinear.IsNull() && state.MonitorSessions[i].DestinationFileBufferTypeLinear.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/monitor-session%v/destination/file/buffer-type/linear", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MonitorSessions[i].DestinationPseudowire.IsNull() && !data.MonitorSessions[i].DestinationPseudowire.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MonitorSessions) && !state.MonitorSessions[i].DestinationPseudowire.IsNull() && state.MonitorSessions[i].DestinationPseudowire.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/monitor-session%v/destination/pseudowire", data.getXPath(), keyString))
-			}
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *MonitorSession) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.LocalCaptureUnitGb.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/gb", data.getPath()))
-	}
-	if !data.LocalCaptureUnitMb.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mb", data.getPath()))
-	}
-	if !data.LocalCaptureUnitKb.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/kb", data.getPath()))
-	}
-	if !data.LocalCaptureCapacitySize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-capture-capacity", data.getPath()))
-	}
-	if !data.DefaultCaptureDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-capture-disable", data.getPath()))
-	}
-	if !data.RouterId.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id", data.getPath()))
-	}
-	for i := range data.MonitorSessions {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[session-name=" + data.MonitorSessions[i].SessionName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/monitor-session%v", data.getPath(), keyPath))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *MonitorSession) addDeletedItemsXML(ctx context.Context, state MonitorSession, body string) string {
@@ -2102,6 +2822,44 @@ func (data *MonitorSession) addDeletedItemsXML(ctx context.Context, state Monito
 				found = false
 			}
 			if found {
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MonitorSessions[i].DropsUniquePort.IsNull() && state.MonitorSessions[i].DropsUniquePort.ValueBool() && data.MonitorSessions[j].DropsUniquePort.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/drops/unique-port", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MonitorSessions[i].DropsUniquePunt.IsNull() && state.MonitorSessions[i].DropsUniquePunt.ValueBool() && data.MonitorSessions[j].DropsUniquePunt.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/drops/unique-punt", predicates))
+				}
+				if !state.MonitorSessions[i].TxRateLimitUnits.IsNull() && data.MonitorSessions[j].TxRateLimitUnits.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/tx/rate-limit-units", predicates))
+				}
+				if !state.MonitorSessions[i].TxRateLimit.IsNull() && data.MonitorSessions[j].TxRateLimit.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/tx/rate-limit", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MonitorSessions[i].TxApplication.IsNull() && state.MonitorSessions[i].TxApplication.ValueBool() && data.MonitorSessions[j].TxApplication.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/tx/application", predicates))
+				}
+				if !state.MonitorSessions[i].RxRateLimitUnits.IsNull() && data.MonitorSessions[j].RxRateLimitUnits.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/rx/rate-limit-units", predicates))
+				}
+				if !state.MonitorSessions[i].RxRateLimit.IsNull() && data.MonitorSessions[j].RxRateLimit.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/rx/rate-limit", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MonitorSessions[i].RxApplication.IsNull() && state.MonitorSessions[i].RxApplication.ValueBool() && data.MonitorSessions[j].RxApplication.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/rx/application", predicates))
+				}
+				if !state.MonitorSessions[i].DestinationRateLimitUnits.IsNull() && data.MonitorSessions[j].DestinationRateLimitUnits.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination/rate-limit-units", predicates))
+				}
+				if !state.MonitorSessions[i].DestinationRateLimit.IsNull() && data.MonitorSessions[j].DestinationRateLimit.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination/rate-limit", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.MonitorSessions[i].DestinationApplication.IsNull() && state.MonitorSessions[i].DestinationApplication.ValueBool() && data.MonitorSessions[j].DestinationApplication.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/destination/application", predicates))
+				}
 				if !state.MonitorSessions[i].RateLimitTx.IsNull() && data.MonitorSessions[j].RateLimitTx.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/monitor-session%v/rate-limit/tx", predicates))
 				}
@@ -2208,6 +2966,7 @@ func (data *MonitorSession) addDeletedItemsXML(ctx context.Context, state Monito
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *MonitorSession) addDeletePathsXML(ctx context.Context, body string) string {

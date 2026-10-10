@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -91,6 +92,7 @@ type Crypto struct {
 	CaFqdnCheckIpAddressAllow                      types.Bool                   `tfsdk:"ca_fqdn_check_ip_address_allow"`
 	CaCrlCurlTimeout                               types.Int64                  `tfsdk:"ca_crl_curl_timeout"`
 	FipsMode                                       types.Bool                   `tfsdk:"fips_mode"`
+	CaTrustpointSystemEnrollmentLocal              types.Bool                   `tfsdk:"ca_trustpoint_system_enrollment_local"`
 }
 
 type CryptoData struct {
@@ -144,32 +146,37 @@ type CryptoData struct {
 	CaFqdnCheckIpAddressAllow                      types.Bool                   `tfsdk:"ca_fqdn_check_ip_address_allow"`
 	CaCrlCurlTimeout                               types.Int64                  `tfsdk:"ca_crl_curl_timeout"`
 	FipsMode                                       types.Bool                   `tfsdk:"fips_mode"`
+	CaTrustpointSystemEnrollmentLocal              types.Bool                   `tfsdk:"ca_trustpoint_system_enrollment_local"`
 }
 type CryptoCaTrustpoints struct {
-	TrustpointName                 types.String `tfsdk:"trustpoint_name"`
-	Description                    types.String `tfsdk:"description"`
-	EnrollmentRetryCount           types.Int64  `tfsdk:"enrollment_retry_count"`
-	EnrollmentRetryPeriod          types.Int64  `tfsdk:"enrollment_retry_period"`
-	EnrollmentUrl                  types.String `tfsdk:"enrollment_url"`
-	EnrollmentTerminal             types.Bool   `tfsdk:"enrollment_terminal"`
-	SftpUsername                   types.String `tfsdk:"sftp_username"`
-	SftpPassword                   types.String `tfsdk:"sftp_password"`
-	AutoEnroll                     types.Int64  `tfsdk:"auto_enroll"`
-	RenewalMessageTypePkcsreq      types.Bool   `tfsdk:"renewal_message_type_pkcsreq"`
-	RenewalMessageTypeRenewalreq   types.Bool   `tfsdk:"renewal_message_type_renewalreq"`
-	SkipChallengePassword          types.Bool   `tfsdk:"skip_challenge_password"`
-	Rsakeypair                     types.String `tfsdk:"rsakeypair"`
-	CrlOptional                    types.Bool   `tfsdk:"crl_optional"`
-	QueryUrl                       types.String `tfsdk:"query_url"`
-	IpAddress                      types.String `tfsdk:"ip_address"`
-	IpAddressNone                  types.Bool   `tfsdk:"ip_address_none"`
-	SubjectName                    types.String `tfsdk:"subject_name"`
-	SubjectAlternativeName         types.String `tfsdk:"subject_alternative_name"`
-	SerialNumber                   types.Bool   `tfsdk:"serial_number"`
-	SerialNumberNone               types.Bool   `tfsdk:"serial_number_none"`
-	Vrf                            types.String `tfsdk:"vrf"`
-	MessageDigest                  types.String `tfsdk:"message_digest"`
-	MethodEstCredentialCertificate types.String `tfsdk:"method_est_credential_certificate"`
+	TrustpointName                    types.String `tfsdk:"trustpoint_name"`
+	Description                       types.String `tfsdk:"description"`
+	EnrollmentRetryCount              types.Int64  `tfsdk:"enrollment_retry_count"`
+	EnrollmentRetryPeriod             types.Int64  `tfsdk:"enrollment_retry_period"`
+	EnrollmentUrl                     types.String `tfsdk:"enrollment_url"`
+	EnrollmentTerminal                types.Bool   `tfsdk:"enrollment_terminal"`
+	SftpUsername                      types.String `tfsdk:"sftp_username"`
+	SftpPassword                      types.String `tfsdk:"sftp_password"`
+	AutoEnroll                        types.Int64  `tfsdk:"auto_enroll"`
+	RenewalMessageTypePkcsreq         types.Bool   `tfsdk:"renewal_message_type_pkcsreq"`
+	RenewalMessageTypeRenewalreq      types.Bool   `tfsdk:"renewal_message_type_renewalreq"`
+	SkipChallengePassword             types.Bool   `tfsdk:"skip_challenge_password"`
+	Rsakeypair                        types.String `tfsdk:"rsakeypair"`
+	CrlOptional                       types.Bool   `tfsdk:"crl_optional"`
+	QueryUrl                          types.String `tfsdk:"query_url"`
+	IpAddress                         types.String `tfsdk:"ip_address"`
+	IpAddressNone                     types.Bool   `tfsdk:"ip_address_none"`
+	SubjectName                       types.String `tfsdk:"subject_name"`
+	SubjectAlternativeName            types.String `tfsdk:"subject_alternative_name"`
+	SerialNumber                      types.Bool   `tfsdk:"serial_number"`
+	SerialNumberNone                  types.Bool   `tfsdk:"serial_number_none"`
+	Vrf                               types.String `tfsdk:"vrf"`
+	MessageDigest                     types.String `tfsdk:"message_digest"`
+	MethodEstCredentialCertificate    types.String `tfsdk:"method_est_credential_certificate"`
+	EnrollmentAuthenticationProfile   types.String `tfsdk:"enrollment_authentication_profile"`
+	ReEnrollmentAuthenticationProfile types.String `tfsdk:"re_enrollment_authentication_profile"`
+	SslProfile                        types.String `tfsdk:"ssl_profile"`
+	EnrollmentLocal                   types.Bool   `tfsdk:"enrollment_local"`
 }
 type CryptoCaOpensshTrustpoints struct {
 	TrustpointName types.String `tfsdk:"trustpoint_name"`
@@ -203,7 +210,7 @@ func (data CryptoData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data Crypto) toBody(ctx context.Context) string {
+func (data Crypto) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.CaTrustpointSystemDescription.IsNull() && !data.CaTrustpointSystemDescription.IsUnknown() {
 		body, _ = sjson.Set(body, "ca.trustpoint.system-trustpoint.description", data.CaTrustpointSystemDescription.ValueString())
@@ -367,6 +374,13 @@ func (data Crypto) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "fips-mode", map[string]string{})
 		}
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.CaTrustpointSystemEnrollmentLocal.IsNull() && !data.CaTrustpointSystemEnrollmentLocal.IsUnknown() {
+			if data.CaTrustpointSystemEnrollmentLocal.ValueBool() {
+				body, _ = sjson.Set(body, "ca.trustpoint.system-trustpoint.enrollment.local", map[string]string{})
+			}
+		}
+	}
 	if len(data.CaTrustpoints) > 0 {
 		body, _ = sjson.Set(body, "ca.trustpoint.trustpoints.trustpoint", []interface{}{})
 		for index, item := range data.CaTrustpoints {
@@ -455,8 +469,32 @@ func (data Crypto) toBody(ctx context.Context) string {
 			if !item.MessageDigest.IsNull() && !item.MessageDigest.IsUnknown() {
 				body, _ = sjson.Set(body, "ca.trustpoint.trustpoints.trustpoint"+"."+strconv.Itoa(index)+"."+"message-digest", item.MessageDigest.ValueString())
 			}
-			if !item.MethodEstCredentialCertificate.IsNull() && !item.MethodEstCredentialCertificate.IsUnknown() {
-				body, _ = sjson.Set(body, "ca.trustpoint.trustpoints.trustpoint"+"."+strconv.Itoa(index)+"."+"method.est.credential.certificate", item.MethodEstCredentialCertificate.ValueString())
+			if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.MethodEstCredentialCertificate.IsNull() && !item.MethodEstCredentialCertificate.IsUnknown() {
+					body, _ = sjson.Set(body, "ca.trustpoint.trustpoints.trustpoint"+"."+strconv.Itoa(index)+"."+"method.est.credential.certificate", item.MethodEstCredentialCertificate.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.EnrollmentAuthenticationProfile.IsNull() && !item.EnrollmentAuthenticationProfile.IsUnknown() {
+					body, _ = sjson.Set(body, "ca.trustpoint.trustpoints.trustpoint"+"."+strconv.Itoa(index)+"."+"enrollment.authentication-profile", item.EnrollmentAuthenticationProfile.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.ReEnrollmentAuthenticationProfile.IsNull() && !item.ReEnrollmentAuthenticationProfile.IsUnknown() {
+					body, _ = sjson.Set(body, "ca.trustpoint.trustpoints.trustpoint"+"."+strconv.Itoa(index)+"."+"re-enrollment.authentication-profile", item.ReEnrollmentAuthenticationProfile.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.SslProfile.IsNull() && !item.SslProfile.IsUnknown() {
+					body, _ = sjson.Set(body, "ca.trustpoint.trustpoints.trustpoint"+"."+strconv.Itoa(index)+"."+"ssl-profile", item.SslProfile.ValueString())
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.EnrollmentLocal.IsNull() && !item.EnrollmentLocal.IsUnknown() {
+					if item.EnrollmentLocal.ValueBool() {
+						body, _ = sjson.Set(body, "ca.trustpoint.trustpoints.trustpoint"+"."+strconv.Itoa(index)+"."+"enrollment.local", map[string]string{})
+					}
+				}
 			}
 		}
 	}
@@ -475,6 +513,1931 @@ func (data Crypto) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
+
+// GetVersionConstraints returns the version constraints for all fields
+func (data Crypto) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath: "ca_trustpoints.method_est_credential_certificate",
+
+			RemovedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ca_trustpoints.enrollment_authentication_profile",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ca_trustpoints.re_enrollment_authentication_profile",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ca_trustpoints.ssl_profile",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ca_trustpoints.enrollment_local",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ca_trustpoint_system_enrollment_local",
+			AddedInVersion: "25.4",
+		},
+	}...)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data Crypto) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data Crypto) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data Crypto) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data Crypto) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *Crypto) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemDescription.IsNull() {
+		data.CaTrustpointSystemDescription = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemDescription.IsNull() {
+		data.CaTrustpointSystemDescription = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.retry.count"); value.Exists() && !data.CaTrustpointSystemEnrollmentRetryCount.IsNull() {
+		data.CaTrustpointSystemEnrollmentRetryCount = types.Int64Value(value.Int())
+	} else if data.CaTrustpointSystemEnrollmentRetryCount.IsNull() {
+		data.CaTrustpointSystemEnrollmentRetryCount = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.retry.period"); value.Exists() && !data.CaTrustpointSystemEnrollmentRetryPeriod.IsNull() {
+		data.CaTrustpointSystemEnrollmentRetryPeriod = types.Int64Value(value.Int())
+	} else if data.CaTrustpointSystemEnrollmentRetryPeriod.IsNull() {
+		data.CaTrustpointSystemEnrollmentRetryPeriod = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.url"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemEnrollmentUrl.IsNull() {
+		data.CaTrustpointSystemEnrollmentUrl = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemEnrollmentUrl.IsNull() {
+		data.CaTrustpointSystemEnrollmentUrl = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.terminal"); !data.CaTrustpointSystemEnrollmentTerminal.IsNull() {
+		if value.Exists() {
+			data.CaTrustpointSystemEnrollmentTerminal = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CaTrustpointSystemEnrollmentTerminal = types.BoolValue(false)
+		}
+	} else if data.CaTrustpointSystemEnrollmentTerminal.IsNull() {
+		data.CaTrustpointSystemEnrollmentTerminal = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.self"); !data.CaTrustpointSystemEnrollmentSelf.IsNull() {
+		if value.Exists() {
+			data.CaTrustpointSystemEnrollmentSelf = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CaTrustpointSystemEnrollmentSelf = types.BoolValue(false)
+		}
+	} else if data.CaTrustpointSystemEnrollmentSelf.IsNull() {
+		data.CaTrustpointSystemEnrollmentSelf = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.sftp-username"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemSftpUsername.IsNull() {
+		data.CaTrustpointSystemSftpUsername = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemSftpUsername.IsNull() {
+		data.CaTrustpointSystemSftpUsername = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.sftp-password.password"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemSftpPassword.IsNull() {
+		data.CaTrustpointSystemSftpPassword = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemSftpPassword.IsNull() {
+		data.CaTrustpointSystemSftpPassword = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.auto-enroll"); value.Exists() && !data.CaTrustpointSystemAutoEnroll.IsNull() {
+		data.CaTrustpointSystemAutoEnroll = types.Int64Value(value.Int())
+	} else if data.CaTrustpointSystemAutoEnroll.IsNull() {
+		data.CaTrustpointSystemAutoEnroll = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.renewal-message-type.pkcsreq"); !data.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() {
+		if value.Exists() {
+			data.CaTrustpointSystemRenewalMessageTypePkcsreq = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CaTrustpointSystemRenewalMessageTypePkcsreq = types.BoolValue(false)
+		}
+	} else if data.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() {
+		data.CaTrustpointSystemRenewalMessageTypePkcsreq = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.renewal-message-type.renewalreq"); !data.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() {
+		if value.Exists() {
+			data.CaTrustpointSystemRenewalMessageTypeRenewalreq = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CaTrustpointSystemRenewalMessageTypeRenewalreq = types.BoolValue(false)
+		}
+	} else if data.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() {
+		data.CaTrustpointSystemRenewalMessageTypeRenewalreq = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.skip-challenge-password"); !data.CaTrustpointSystemSkipChallengePassword.IsNull() {
+		if value.Exists() {
+			data.CaTrustpointSystemSkipChallengePassword = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CaTrustpointSystemSkipChallengePassword = types.BoolValue(false)
+		}
+	} else if data.CaTrustpointSystemSkipChallengePassword.IsNull() {
+		data.CaTrustpointSystemSkipChallengePassword = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.rsakeypair"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemRsaKeypair.IsNull() {
+		data.CaTrustpointSystemRsaKeypair = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemRsaKeypair.IsNull() {
+		data.CaTrustpointSystemRsaKeypair = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.rsa"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemCaKeypairRsa.IsNull() {
+		data.CaTrustpointSystemCaKeypairRsa = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemCaKeypairRsa.IsNull() {
+		data.CaTrustpointSystemCaKeypairRsa = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp256"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemCaKeypairEcdsanistp256.IsNull() {
+		data.CaTrustpointSystemCaKeypairEcdsanistp256 = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemCaKeypairEcdsanistp256.IsNull() {
+		data.CaTrustpointSystemCaKeypairEcdsanistp256 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp384"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemCaKeypairEcdsanistp384.IsNull() {
+		data.CaTrustpointSystemCaKeypairEcdsanistp384 = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemCaKeypairEcdsanistp384.IsNull() {
+		data.CaTrustpointSystemCaKeypairEcdsanistp384 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp521"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemCaKeypairEcdsanistp521.IsNull() {
+		data.CaTrustpointSystemCaKeypairEcdsanistp521 = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemCaKeypairEcdsanistp521.IsNull() {
+		data.CaTrustpointSystemCaKeypairEcdsanistp521 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.dsa"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemCaKeypairDsa.IsNull() {
+		data.CaTrustpointSystemCaKeypairDsa = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemCaKeypairDsa.IsNull() {
+		data.CaTrustpointSystemCaKeypairDsa = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.ed25519"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemCaKeypairEd25519.IsNull() {
+		data.CaTrustpointSystemCaKeypairEd25519 = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemCaKeypairEd25519.IsNull() {
+		data.CaTrustpointSystemCaKeypairEd25519 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.rsa"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemKeypairRsa.IsNull() {
+		data.CaTrustpointSystemKeypairRsa = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemKeypairRsa.IsNull() {
+		data.CaTrustpointSystemKeypairRsa = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.ecdsanistp256"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemKeypairEcdsanistp256.IsNull() {
+		data.CaTrustpointSystemKeypairEcdsanistp256 = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemKeypairEcdsanistp256.IsNull() {
+		data.CaTrustpointSystemKeypairEcdsanistp256 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.ecdsanistp384"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemKeypairEcdsanistp384.IsNull() {
+		data.CaTrustpointSystemKeypairEcdsanistp384 = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemKeypairEcdsanistp384.IsNull() {
+		data.CaTrustpointSystemKeypairEcdsanistp384 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.ecdsanistp521"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemKeypairEcdsanistp521.IsNull() {
+		data.CaTrustpointSystemKeypairEcdsanistp521 = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemKeypairEcdsanistp521.IsNull() {
+		data.CaTrustpointSystemKeypairEcdsanistp521 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.dsa"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemKeypairDsa.IsNull() {
+		data.CaTrustpointSystemKeypairDsa = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemKeypairDsa.IsNull() {
+		data.CaTrustpointSystemKeypairDsa = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.ed25519"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemKeypairEd25519.IsNull() {
+		data.CaTrustpointSystemKeypairEd25519 = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemKeypairEd25519.IsNull() {
+		data.CaTrustpointSystemKeypairEd25519 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.crl.optional"); !data.CaTrustpointSystemCrlOptional.IsNull() {
+		if value.Exists() {
+			data.CaTrustpointSystemCrlOptional = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CaTrustpointSystemCrlOptional = types.BoolValue(false)
+		}
+	} else if data.CaTrustpointSystemCrlOptional.IsNull() {
+		data.CaTrustpointSystemCrlOptional = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.query.url"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemQueryUrl.IsNull() {
+		data.CaTrustpointSystemQueryUrl = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemQueryUrl.IsNull() {
+		data.CaTrustpointSystemQueryUrl = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ip-address.ipv4-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemIpAddress.IsNull() {
+		data.CaTrustpointSystemIpAddress = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemIpAddress.IsNull() {
+		data.CaTrustpointSystemIpAddress = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ip-address.none"); !data.CaTrustpointSystemIpAddressNone.IsNull() {
+		if value.Exists() {
+			data.CaTrustpointSystemIpAddressNone = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CaTrustpointSystemIpAddressNone = types.BoolValue(false)
+		}
+	} else if data.CaTrustpointSystemIpAddressNone.IsNull() {
+		data.CaTrustpointSystemIpAddressNone = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.subject-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemSubjectName.IsNull() {
+		data.CaTrustpointSystemSubjectName = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemSubjectName.IsNull() {
+		data.CaTrustpointSystemSubjectName = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.subject-name-ca-certificate"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemSubjectNameCaCertificate.IsNull() {
+		data.CaTrustpointSystemSubjectNameCaCertificate = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemSubjectNameCaCertificate.IsNull() {
+		data.CaTrustpointSystemSubjectNameCaCertificate = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.subject-alternative-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemSubjectAlternativeName.IsNull() {
+		data.CaTrustpointSystemSubjectAlternativeName = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemSubjectAlternativeName.IsNull() {
+		data.CaTrustpointSystemSubjectAlternativeName = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.serial-number"); !data.CaTrustpointSystemSerialNumber.IsNull() {
+		if value.Exists() {
+			data.CaTrustpointSystemSerialNumber = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CaTrustpointSystemSerialNumber = types.BoolValue(false)
+		}
+	} else if data.CaTrustpointSystemSerialNumber.IsNull() {
+		data.CaTrustpointSystemSerialNumber = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.serial-number.none"); !data.CaTrustpointSystemSerialNumberNone.IsNull() {
+		if value.Exists() {
+			data.CaTrustpointSystemSerialNumberNone = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CaTrustpointSystemSerialNumberNone = types.BoolValue(false)
+		}
+	} else if data.CaTrustpointSystemSerialNumberNone.IsNull() {
+		data.CaTrustpointSystemSerialNumberNone = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemVrf.IsNull() {
+		data.CaTrustpointSystemVrf = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemVrf.IsNull() {
+		data.CaTrustpointSystemVrf = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.lifetime.ca-certificate"); value.Exists() && !data.CaTrustpointSystemLifetimeCaCertificate.IsNull() {
+		data.CaTrustpointSystemLifetimeCaCertificate = types.Int64Value(value.Int())
+	} else if data.CaTrustpointSystemLifetimeCaCertificate.IsNull() {
+		data.CaTrustpointSystemLifetimeCaCertificate = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.lifetime.certificate"); value.Exists() && !data.CaTrustpointSystemLifetimeCertificate.IsNull() {
+		data.CaTrustpointSystemLifetimeCertificate = types.Int64Value(value.Int())
+	} else if data.CaTrustpointSystemLifetimeCertificate.IsNull() {
+		data.CaTrustpointSystemLifetimeCertificate = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.message-digest"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpointSystemMessageDigest.IsNull() {
+		data.CaTrustpointSystemMessageDigest = types.StringValue(value.String())
+	} else if data.CaTrustpointSystemMessageDigest.IsNull() {
+		data.CaTrustpointSystemMessageDigest = types.StringNull()
+	}
+	for i := range data.CaTrustpoints {
+		keys := [...]string{"trustpoint-name"}
+		keyValues := [...]string{data.CaTrustpoints[i].TrustpointName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "ca.trustpoint.trustpoints.trustpoint").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("trustpoint-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpoints[i].TrustpointName.IsNull() {
+			data.CaTrustpoints[i].TrustpointName = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].TrustpointName = types.StringNull()
+		}
+		if value := r.Get("description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpoints[i].Description.IsNull() {
+			data.CaTrustpoints[i].Description = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].Description = types.StringNull()
+		}
+		if value := r.Get("enrollment.retry.count"); value.Exists() && !data.CaTrustpoints[i].EnrollmentRetryCount.IsNull() {
+			data.CaTrustpoints[i].EnrollmentRetryCount = types.Int64Value(value.Int())
+		} else {
+			data.CaTrustpoints[i].EnrollmentRetryCount = types.Int64Null()
+		}
+		if value := r.Get("enrollment.retry.period"); value.Exists() && !data.CaTrustpoints[i].EnrollmentRetryPeriod.IsNull() {
+			data.CaTrustpoints[i].EnrollmentRetryPeriod = types.Int64Value(value.Int())
+		} else {
+			data.CaTrustpoints[i].EnrollmentRetryPeriod = types.Int64Null()
+		}
+		if value := r.Get("enrollment.url"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpoints[i].EnrollmentUrl.IsNull() {
+			data.CaTrustpoints[i].EnrollmentUrl = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].EnrollmentUrl = types.StringNull()
+		}
+		if value := r.Get("enrollment.terminal"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.CaTrustpoints[i].EnrollmentTerminal.IsNull() {
+				data.CaTrustpoints[i].EnrollmentTerminal = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.CaTrustpoints[i].EnrollmentTerminal.IsNull() {
+				data.CaTrustpoints[i].EnrollmentTerminal = types.BoolNull()
+			}
+		}
+		if value := r.Get("sftp-username"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpoints[i].SftpUsername.IsNull() {
+			data.CaTrustpoints[i].SftpUsername = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].SftpUsername = types.StringNull()
+		}
+		if value := r.Get("sftp-password.password"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpoints[i].SftpPassword.IsNull() {
+			data.CaTrustpoints[i].SftpPassword = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].SftpPassword = types.StringNull()
+		}
+		if value := r.Get("auto-enroll"); value.Exists() && !data.CaTrustpoints[i].AutoEnroll.IsNull() {
+			data.CaTrustpoints[i].AutoEnroll = types.Int64Value(value.Int())
+		} else {
+			data.CaTrustpoints[i].AutoEnroll = types.Int64Null()
+		}
+		if value := r.Get("renewal-message-type.pkcsreq"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.CaTrustpoints[i].RenewalMessageTypePkcsreq.IsNull() {
+				data.CaTrustpoints[i].RenewalMessageTypePkcsreq = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.CaTrustpoints[i].RenewalMessageTypePkcsreq.IsNull() {
+				data.CaTrustpoints[i].RenewalMessageTypePkcsreq = types.BoolNull()
+			}
+		}
+		if value := r.Get("renewal-message-type.renewalreq"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.CaTrustpoints[i].RenewalMessageTypeRenewalreq.IsNull() {
+				data.CaTrustpoints[i].RenewalMessageTypeRenewalreq = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.CaTrustpoints[i].RenewalMessageTypeRenewalreq.IsNull() {
+				data.CaTrustpoints[i].RenewalMessageTypeRenewalreq = types.BoolNull()
+			}
+		}
+		if value := r.Get("skip-challenge-password"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.CaTrustpoints[i].SkipChallengePassword.IsNull() {
+				data.CaTrustpoints[i].SkipChallengePassword = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.CaTrustpoints[i].SkipChallengePassword.IsNull() {
+				data.CaTrustpoints[i].SkipChallengePassword = types.BoolNull()
+			}
+		}
+		if value := r.Get("rsakeypair"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpoints[i].Rsakeypair.IsNull() {
+			data.CaTrustpoints[i].Rsakeypair = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].Rsakeypair = types.StringNull()
+		}
+		if value := r.Get("crl.optional"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.CaTrustpoints[i].CrlOptional.IsNull() {
+				data.CaTrustpoints[i].CrlOptional = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.CaTrustpoints[i].CrlOptional.IsNull() {
+				data.CaTrustpoints[i].CrlOptional = types.BoolNull()
+			}
+		}
+		if value := r.Get("query.url"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpoints[i].QueryUrl.IsNull() {
+			data.CaTrustpoints[i].QueryUrl = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].QueryUrl = types.StringNull()
+		}
+		if value := r.Get("ip-address.ipv4-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpoints[i].IpAddress.IsNull() {
+			data.CaTrustpoints[i].IpAddress = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].IpAddress = types.StringNull()
+		}
+		if value := r.Get("ip-address.none"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.CaTrustpoints[i].IpAddressNone.IsNull() {
+				data.CaTrustpoints[i].IpAddressNone = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.CaTrustpoints[i].IpAddressNone.IsNull() {
+				data.CaTrustpoints[i].IpAddressNone = types.BoolNull()
+			}
+		}
+		if value := r.Get("subject-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpoints[i].SubjectName.IsNull() {
+			data.CaTrustpoints[i].SubjectName = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].SubjectName = types.StringNull()
+		}
+		if value := r.Get("subject-alternative-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpoints[i].SubjectAlternativeName.IsNull() {
+			data.CaTrustpoints[i].SubjectAlternativeName = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].SubjectAlternativeName = types.StringNull()
+		}
+		if value := r.Get("serial-number"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.CaTrustpoints[i].SerialNumber.IsNull() {
+				data.CaTrustpoints[i].SerialNumber = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.CaTrustpoints[i].SerialNumber.IsNull() {
+				data.CaTrustpoints[i].SerialNumber = types.BoolNull()
+			}
+		}
+		if value := r.Get("serial-number.none"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.CaTrustpoints[i].SerialNumberNone.IsNull() {
+				data.CaTrustpoints[i].SerialNumberNone = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.CaTrustpoints[i].SerialNumberNone.IsNull() {
+				data.CaTrustpoints[i].SerialNumberNone = types.BoolNull()
+			}
+		}
+		if value := r.Get("vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpoints[i].Vrf.IsNull() {
+			data.CaTrustpoints[i].Vrf = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].Vrf = types.StringNull()
+		}
+		if value := r.Get("message-digest"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpoints[i].MessageDigest.IsNull() {
+			data.CaTrustpoints[i].MessageDigest = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].MessageDigest = types.StringNull()
+		}
+		if value := r.Get("method.est.credential.certificate"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpoints[i].MethodEstCredentialCertificate.IsNull() {
+			data.CaTrustpoints[i].MethodEstCredentialCertificate = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].MethodEstCredentialCertificate = types.StringNull()
+		}
+		if value := r.Get("enrollment.authentication-profile"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpoints[i].EnrollmentAuthenticationProfile.IsNull() {
+			data.CaTrustpoints[i].EnrollmentAuthenticationProfile = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].EnrollmentAuthenticationProfile = types.StringNull()
+		}
+		if value := r.Get("re-enrollment.authentication-profile"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpoints[i].ReEnrollmentAuthenticationProfile.IsNull() {
+			data.CaTrustpoints[i].ReEnrollmentAuthenticationProfile = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].ReEnrollmentAuthenticationProfile = types.StringNull()
+		}
+		if value := r.Get("ssl-profile"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaTrustpoints[i].SslProfile.IsNull() {
+			data.CaTrustpoints[i].SslProfile = types.StringValue(value.String())
+		} else {
+			data.CaTrustpoints[i].SslProfile = types.StringNull()
+		}
+		if value := r.Get("enrollment.local"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.CaTrustpoints[i].EnrollmentLocal.IsNull() {
+				data.CaTrustpoints[i].EnrollmentLocal = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.CaTrustpoints[i].EnrollmentLocal.IsNull() {
+				data.CaTrustpoints[i].EnrollmentLocal = types.BoolNull()
+			}
+		}
+	}
+	for i := range data.CaOpensshTrustpoints {
+		keys := [...]string{"trustpoint-name"}
+		keyValues := [...]string{data.CaOpensshTrustpoints[i].TrustpointName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "ca.openssh.trustpoints.trustpoint").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("trustpoint-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaOpensshTrustpoints[i].TrustpointName.IsNull() {
+			data.CaOpensshTrustpoints[i].TrustpointName = types.StringValue(value.String())
+		} else {
+			data.CaOpensshTrustpoints[i].TrustpointName = types.StringNull()
+		}
+		if value := r.Get("rsakeypair"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaOpensshTrustpoints[i].Rsakeypair.IsNull() {
+			data.CaOpensshTrustpoints[i].Rsakeypair = types.StringValue(value.String())
+		} else {
+			data.CaOpensshTrustpoints[i].Rsakeypair = types.StringNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "ca.http-proxy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaHttpProxy.IsNull() {
+		data.CaHttpProxy = types.StringValue(value.String())
+	} else if data.CaHttpProxy.IsNull() {
+		data.CaHttpProxy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.port"); value.Exists() && !data.CaHttpProxyPort.IsNull() {
+		data.CaHttpProxyPort = types.Int64Value(value.Int())
+	} else if data.CaHttpProxyPort.IsNull() {
+		data.CaHttpProxyPort = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "ca.source-interface.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaSourceInterfaceIpv4.IsNull() {
+		data.CaSourceInterfaceIpv4 = types.StringValue(value.String())
+	} else if data.CaSourceInterfaceIpv4.IsNull() {
+		data.CaSourceInterfaceIpv4 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.source-interface.ipv6"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CaSourceInterfaceIpv6.IsNull() {
+		data.CaSourceInterfaceIpv6 = types.StringValue(value.String())
+	} else if data.CaSourceInterfaceIpv6.IsNull() {
+		data.CaSourceInterfaceIpv6 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ca.rsa.one-thousand-twenty-four.disable"); !data.CaRsa1024Disable.IsNull() {
+		if value.Exists() {
+			data.CaRsa1024Disable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CaRsa1024Disable = types.BoolValue(false)
+		}
+	} else if data.CaRsa1024Disable.IsNull() {
+		data.CaRsa1024Disable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ca.fqdn-check.ip-address.allow"); !data.CaFqdnCheckIpAddressAllow.IsNull() {
+		if value.Exists() {
+			data.CaFqdnCheckIpAddressAllow = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CaFqdnCheckIpAddressAllow = types.BoolValue(false)
+		}
+	} else if data.CaFqdnCheckIpAddressAllow.IsNull() {
+		data.CaFqdnCheckIpAddressAllow = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ca.crl.curl-timeout"); value.Exists() && !data.CaCrlCurlTimeout.IsNull() {
+		data.CaCrlCurlTimeout = types.Int64Value(value.Int())
+	} else if data.CaCrlCurlTimeout.IsNull() {
+		data.CaCrlCurlTimeout = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "fips-mode"); !data.FipsMode.IsNull() {
+		if value.Exists() {
+			data.FipsMode = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.FipsMode = types.BoolValue(false)
+		}
+	} else if data.FipsMode.IsNull() {
+		data.FipsMode = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.local"); helpers.VersionAtLeast(version, "25.4") && !data.CaTrustpointSystemEnrollmentLocal.IsNull() {
+		if value.Exists() {
+			data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(false)
+		}
+	} else if data.CaTrustpointSystemEnrollmentLocal.IsNull() {
+		data.CaTrustpointSystemEnrollmentLocal = types.BoolNull()
+	}
+}
+
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *Crypto) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemDescription = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.retry.count"); value.Exists() {
+		data.CaTrustpointSystemEnrollmentRetryCount = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.retry.period"); value.Exists() {
+		data.CaTrustpointSystemEnrollmentRetryPeriod = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.url"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemEnrollmentUrl = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.terminal"); value.Exists() {
+		data.CaTrustpointSystemEnrollmentTerminal = types.BoolValue(true)
+	} else if !data.CaTrustpointSystemEnrollmentTerminal.IsNull() {
+		// Only set to false if it was previously set in state
+		data.CaTrustpointSystemEnrollmentTerminal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.self"); value.Exists() {
+		data.CaTrustpointSystemEnrollmentSelf = types.BoolValue(true)
+	} else if !data.CaTrustpointSystemEnrollmentSelf.IsNull() {
+		// Only set to false if it was previously set in state
+		data.CaTrustpointSystemEnrollmentSelf = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.sftp-username"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemSftpUsername = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.sftp-password.password"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemSftpPassword = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.auto-enroll"); value.Exists() {
+		data.CaTrustpointSystemAutoEnroll = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.renewal-message-type.pkcsreq"); value.Exists() {
+		data.CaTrustpointSystemRenewalMessageTypePkcsreq = types.BoolValue(true)
+	} else if !data.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() {
+		// Only set to false if it was previously set in state
+		data.CaTrustpointSystemRenewalMessageTypePkcsreq = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.renewal-message-type.renewalreq"); value.Exists() {
+		data.CaTrustpointSystemRenewalMessageTypeRenewalreq = types.BoolValue(true)
+	} else if !data.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() {
+		// Only set to false if it was previously set in state
+		data.CaTrustpointSystemRenewalMessageTypeRenewalreq = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.skip-challenge-password"); value.Exists() {
+		data.CaTrustpointSystemSkipChallengePassword = types.BoolValue(true)
+	} else if !data.CaTrustpointSystemSkipChallengePassword.IsNull() {
+		// Only set to false if it was previously set in state
+		data.CaTrustpointSystemSkipChallengePassword = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.rsakeypair"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemRsaKeypair = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.rsa"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemCaKeypairRsa = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp256"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemCaKeypairEcdsanistp256 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp384"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemCaKeypairEcdsanistp384 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp521"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemCaKeypairEcdsanistp521 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.dsa"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemCaKeypairDsa = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.ed25519"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemCaKeypairEd25519 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.rsa"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemKeypairRsa = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.ecdsanistp256"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemKeypairEcdsanistp256 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.ecdsanistp384"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemKeypairEcdsanistp384 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.ecdsanistp521"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemKeypairEcdsanistp521 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.dsa"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemKeypairDsa = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.ed25519"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemKeypairEd25519 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.crl.optional"); value.Exists() {
+		data.CaTrustpointSystemCrlOptional = types.BoolValue(true)
+	} else if !data.CaTrustpointSystemCrlOptional.IsNull() {
+		// Only set to false if it was previously set in state
+		data.CaTrustpointSystemCrlOptional = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.query.url"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemQueryUrl = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ip-address.ipv4-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemIpAddress = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ip-address.none"); value.Exists() {
+		data.CaTrustpointSystemIpAddressNone = types.BoolValue(true)
+	} else if !data.CaTrustpointSystemIpAddressNone.IsNull() {
+		// Only set to false if it was previously set in state
+		data.CaTrustpointSystemIpAddressNone = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.subject-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemSubjectName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.subject-name-ca-certificate"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemSubjectNameCaCertificate = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.subject-alternative-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemSubjectAlternativeName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.serial-number"); value.Exists() {
+		data.CaTrustpointSystemSerialNumber = types.BoolValue(true)
+	} else if !data.CaTrustpointSystemSerialNumber.IsNull() {
+		// Only set to false if it was previously set in state
+		data.CaTrustpointSystemSerialNumber = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.serial-number.none"); value.Exists() {
+		data.CaTrustpointSystemSerialNumberNone = types.BoolValue(true)
+	} else if !data.CaTrustpointSystemSerialNumberNone.IsNull() {
+		// Only set to false if it was previously set in state
+		data.CaTrustpointSystemSerialNumberNone = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemVrf = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.lifetime.ca-certificate"); value.Exists() {
+		data.CaTrustpointSystemLifetimeCaCertificate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.lifetime.certificate"); value.Exists() {
+		data.CaTrustpointSystemLifetimeCertificate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.message-digest"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemMessageDigest = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.trustpoints.trustpoint"); value.Exists() {
+		data.CaTrustpoints = make([]CryptoCaTrustpoints, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := CryptoCaTrustpoints{}
+			if cValue := v.Get("trustpoint-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.TrustpointName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("description"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Description = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("enrollment.retry.count"); cValue.Exists() {
+				item.EnrollmentRetryCount = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("enrollment.retry.period"); cValue.Exists() {
+				item.EnrollmentRetryPeriod = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("enrollment.url"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.EnrollmentUrl = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("enrollment.terminal"); cValue.Exists() {
+				item.EnrollmentTerminal = types.BoolValue(true)
+			} else if !item.EnrollmentTerminal.IsNull() {
+				// Only set to false if it was previously set
+				item.EnrollmentTerminal = types.BoolValue(false)
+			}
+			if cValue := v.Get("sftp-username"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.SftpUsername = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("sftp-password.password"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.SftpPassword = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("auto-enroll"); cValue.Exists() {
+				item.AutoEnroll = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("renewal-message-type.pkcsreq"); cValue.Exists() {
+				item.RenewalMessageTypePkcsreq = types.BoolValue(true)
+			} else if !item.RenewalMessageTypePkcsreq.IsNull() {
+				// Only set to false if it was previously set
+				item.RenewalMessageTypePkcsreq = types.BoolValue(false)
+			}
+			if cValue := v.Get("renewal-message-type.renewalreq"); cValue.Exists() {
+				item.RenewalMessageTypeRenewalreq = types.BoolValue(true)
+			} else if !item.RenewalMessageTypeRenewalreq.IsNull() {
+				// Only set to false if it was previously set
+				item.RenewalMessageTypeRenewalreq = types.BoolValue(false)
+			}
+			if cValue := v.Get("skip-challenge-password"); cValue.Exists() {
+				item.SkipChallengePassword = types.BoolValue(true)
+			} else if !item.SkipChallengePassword.IsNull() {
+				// Only set to false if it was previously set
+				item.SkipChallengePassword = types.BoolValue(false)
+			}
+			if cValue := v.Get("rsakeypair"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Rsakeypair = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("crl.optional"); cValue.Exists() {
+				item.CrlOptional = types.BoolValue(true)
+			} else if !item.CrlOptional.IsNull() {
+				// Only set to false if it was previously set
+				item.CrlOptional = types.BoolValue(false)
+			}
+			if cValue := v.Get("query.url"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.QueryUrl = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ip-address.ipv4-address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.IpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ip-address.none"); cValue.Exists() {
+				item.IpAddressNone = types.BoolValue(true)
+			} else if !item.IpAddressNone.IsNull() {
+				// Only set to false if it was previously set
+				item.IpAddressNone = types.BoolValue(false)
+			}
+			if cValue := v.Get("subject-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.SubjectName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("subject-alternative-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.SubjectAlternativeName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("serial-number"); cValue.Exists() {
+				item.SerialNumber = types.BoolValue(true)
+			} else if !item.SerialNumber.IsNull() {
+				// Only set to false if it was previously set
+				item.SerialNumber = types.BoolValue(false)
+			}
+			if cValue := v.Get("serial-number.none"); cValue.Exists() {
+				item.SerialNumberNone = types.BoolValue(true)
+			} else if !item.SerialNumberNone.IsNull() {
+				// Only set to false if it was previously set
+				item.SerialNumberNone = types.BoolValue(false)
+			}
+			if cValue := v.Get("vrf"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("message-digest"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.MessageDigest = types.StringValue(cValue.String())
+			}
+			if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("method.est.credential.certificate"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.MethodEstCredentialCertificate = types.StringValue(cValue.String())
+				}
+			} else {
+				item.MethodEstCredentialCertificate = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("enrollment.authentication-profile"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.EnrollmentAuthenticationProfile = types.StringValue(cValue.String())
+				}
+			} else {
+				item.EnrollmentAuthenticationProfile = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("re-enrollment.authentication-profile"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.ReEnrollmentAuthenticationProfile = types.StringValue(cValue.String())
+				}
+			} else {
+				item.ReEnrollmentAuthenticationProfile = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("ssl-profile"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.SslProfile = types.StringValue(cValue.String())
+				}
+			} else {
+				item.SslProfile = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("enrollment.local"); cValue.Exists() {
+					item.EnrollmentLocal = types.BoolValue(true)
+				} else if !item.EnrollmentLocal.IsNull() {
+					// Only set to false if it was previously set
+					item.EnrollmentLocal = types.BoolValue(false)
+				}
+			} else {
+				item.EnrollmentLocal = types.BoolNull()
+			}
+			data.CaTrustpoints = append(data.CaTrustpoints, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "ca.openssh.trustpoints.trustpoint"); value.Exists() {
+		data.CaOpensshTrustpoints = make([]CryptoCaOpensshTrustpoints, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := CryptoCaOpensshTrustpoints{}
+			if cValue := v.Get("trustpoint-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.TrustpointName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("rsakeypair"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Rsakeypair = types.StringValue(cValue.String())
+			}
+			data.CaOpensshTrustpoints = append(data.CaOpensshTrustpoints, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "ca.http-proxy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaHttpProxy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.port"); value.Exists() {
+		data.CaHttpProxyPort = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ca.source-interface.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaSourceInterfaceIpv4 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.source-interface.ipv6"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaSourceInterfaceIpv6 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.rsa.one-thousand-twenty-four.disable"); value.Exists() {
+		data.CaRsa1024Disable = types.BoolValue(true)
+	} else if !data.CaRsa1024Disable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.CaRsa1024Disable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.fqdn-check.ip-address.allow"); value.Exists() {
+		data.CaFqdnCheckIpAddressAllow = types.BoolValue(true)
+	} else if !data.CaFqdnCheckIpAddressAllow.IsNull() {
+		// Only set to false if it was previously set in state
+		data.CaFqdnCheckIpAddressAllow = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.crl.curl-timeout"); value.Exists() {
+		data.CaCrlCurlTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fips-mode"); value.Exists() {
+		data.FipsMode = types.BoolValue(true)
+	} else if !data.FipsMode.IsNull() {
+		// Only set to false if it was previously set in state
+		data.FipsMode = types.BoolValue(false)
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.local"); value.Exists() {
+			data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(true)
+		} else if !data.CaTrustpointSystemEnrollmentLocal.IsNull() {
+			// Only set to false if it was previously set in state
+			data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(false)
+		}
+	} else {
+		data.CaTrustpointSystemEnrollmentLocal = types.BoolNull()
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *CryptoData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemDescription = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.retry.count"); value.Exists() {
+		data.CaTrustpointSystemEnrollmentRetryCount = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.retry.period"); value.Exists() {
+		data.CaTrustpointSystemEnrollmentRetryPeriod = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.url"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemEnrollmentUrl = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.terminal"); value.Exists() {
+		data.CaTrustpointSystemEnrollmentTerminal = types.BoolValue(true)
+	} else {
+		data.CaTrustpointSystemEnrollmentTerminal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.self"); value.Exists() {
+		data.CaTrustpointSystemEnrollmentSelf = types.BoolValue(true)
+	} else {
+		data.CaTrustpointSystemEnrollmentSelf = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.sftp-username"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemSftpUsername = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.sftp-password.password"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemSftpPassword = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.auto-enroll"); value.Exists() {
+		data.CaTrustpointSystemAutoEnroll = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.renewal-message-type.pkcsreq"); value.Exists() {
+		data.CaTrustpointSystemRenewalMessageTypePkcsreq = types.BoolValue(true)
+	} else {
+		data.CaTrustpointSystemRenewalMessageTypePkcsreq = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.renewal-message-type.renewalreq"); value.Exists() {
+		data.CaTrustpointSystemRenewalMessageTypeRenewalreq = types.BoolValue(true)
+	} else {
+		data.CaTrustpointSystemRenewalMessageTypeRenewalreq = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.skip-challenge-password"); value.Exists() {
+		data.CaTrustpointSystemSkipChallengePassword = types.BoolValue(true)
+	} else {
+		data.CaTrustpointSystemSkipChallengePassword = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.rsakeypair"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemRsaKeypair = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.rsa"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemCaKeypairRsa = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp256"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemCaKeypairEcdsanistp256 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp384"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemCaKeypairEcdsanistp384 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp521"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemCaKeypairEcdsanistp521 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.dsa"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemCaKeypairDsa = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ca-keypair.ed25519"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemCaKeypairEd25519 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.rsa"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemKeypairRsa = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.ecdsanistp256"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemKeypairEcdsanistp256 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.ecdsanistp384"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemKeypairEcdsanistp384 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.ecdsanistp521"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemKeypairEcdsanistp521 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.dsa"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemKeypairDsa = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.keypair.ed25519"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemKeypairEd25519 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.crl.optional"); value.Exists() {
+		data.CaTrustpointSystemCrlOptional = types.BoolValue(true)
+	} else {
+		data.CaTrustpointSystemCrlOptional = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.query.url"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemQueryUrl = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ip-address.ipv4-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemIpAddress = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.ip-address.none"); value.Exists() {
+		data.CaTrustpointSystemIpAddressNone = types.BoolValue(true)
+	} else {
+		data.CaTrustpointSystemIpAddressNone = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.subject-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemSubjectName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.subject-name-ca-certificate"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemSubjectNameCaCertificate = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.subject-alternative-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemSubjectAlternativeName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.serial-number"); value.Exists() {
+		data.CaTrustpointSystemSerialNumber = types.BoolValue(true)
+	} else {
+		data.CaTrustpointSystemSerialNumber = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.serial-number.none"); value.Exists() {
+		data.CaTrustpointSystemSerialNumberNone = types.BoolValue(true)
+	} else {
+		data.CaTrustpointSystemSerialNumberNone = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemVrf = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.lifetime.ca-certificate"); value.Exists() {
+		data.CaTrustpointSystemLifetimeCaCertificate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.lifetime.certificate"); value.Exists() {
+		data.CaTrustpointSystemLifetimeCertificate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.message-digest"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaTrustpointSystemMessageDigest = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.trustpoint.trustpoints.trustpoint"); value.Exists() {
+		data.CaTrustpoints = make([]CryptoCaTrustpoints, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := CryptoCaTrustpoints{}
+			if cValue := v.Get("trustpoint-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.TrustpointName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("description"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Description = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("enrollment.retry.count"); cValue.Exists() {
+				item.EnrollmentRetryCount = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("enrollment.retry.period"); cValue.Exists() {
+				item.EnrollmentRetryPeriod = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("enrollment.url"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.EnrollmentUrl = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("enrollment.terminal"); cValue.Exists() {
+				item.EnrollmentTerminal = types.BoolValue(true)
+			} else {
+				item.EnrollmentTerminal = types.BoolValue(false)
+			}
+			if cValue := v.Get("sftp-username"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.SftpUsername = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("sftp-password.password"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.SftpPassword = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("auto-enroll"); cValue.Exists() {
+				item.AutoEnroll = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("renewal-message-type.pkcsreq"); cValue.Exists() {
+				item.RenewalMessageTypePkcsreq = types.BoolValue(true)
+			} else {
+				item.RenewalMessageTypePkcsreq = types.BoolValue(false)
+			}
+			if cValue := v.Get("renewal-message-type.renewalreq"); cValue.Exists() {
+				item.RenewalMessageTypeRenewalreq = types.BoolValue(true)
+			} else {
+				item.RenewalMessageTypeRenewalreq = types.BoolValue(false)
+			}
+			if cValue := v.Get("skip-challenge-password"); cValue.Exists() {
+				item.SkipChallengePassword = types.BoolValue(true)
+			} else {
+				item.SkipChallengePassword = types.BoolValue(false)
+			}
+			if cValue := v.Get("rsakeypair"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Rsakeypair = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("crl.optional"); cValue.Exists() {
+				item.CrlOptional = types.BoolValue(true)
+			} else {
+				item.CrlOptional = types.BoolValue(false)
+			}
+			if cValue := v.Get("query.url"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.QueryUrl = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ip-address.ipv4-address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.IpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ip-address.none"); cValue.Exists() {
+				item.IpAddressNone = types.BoolValue(true)
+			} else {
+				item.IpAddressNone = types.BoolValue(false)
+			}
+			if cValue := v.Get("subject-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.SubjectName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("subject-alternative-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.SubjectAlternativeName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("serial-number"); cValue.Exists() {
+				item.SerialNumber = types.BoolValue(true)
+			} else {
+				item.SerialNumber = types.BoolValue(false)
+			}
+			if cValue := v.Get("serial-number.none"); cValue.Exists() {
+				item.SerialNumberNone = types.BoolValue(true)
+			} else {
+				item.SerialNumberNone = types.BoolValue(false)
+			}
+			if cValue := v.Get("vrf"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("message-digest"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.MessageDigest = types.StringValue(cValue.String())
+			}
+			if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("method.est.credential.certificate"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.MethodEstCredentialCertificate = types.StringValue(cValue.String())
+				}
+			} else {
+				item.MethodEstCredentialCertificate = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("enrollment.authentication-profile"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.EnrollmentAuthenticationProfile = types.StringValue(cValue.String())
+				}
+			} else {
+				item.EnrollmentAuthenticationProfile = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("re-enrollment.authentication-profile"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.ReEnrollmentAuthenticationProfile = types.StringValue(cValue.String())
+				}
+			} else {
+				item.ReEnrollmentAuthenticationProfile = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("ssl-profile"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.SslProfile = types.StringValue(cValue.String())
+				}
+			} else {
+				item.SslProfile = types.StringNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("enrollment.local"); cValue.Exists() {
+					item.EnrollmentLocal = types.BoolValue(true)
+				} else {
+					item.EnrollmentLocal = types.BoolValue(false)
+				}
+			} else {
+				item.EnrollmentLocal = types.BoolNull()
+			}
+			data.CaTrustpoints = append(data.CaTrustpoints, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "ca.openssh.trustpoints.trustpoint"); value.Exists() {
+		data.CaOpensshTrustpoints = make([]CryptoCaOpensshTrustpoints, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := CryptoCaOpensshTrustpoints{}
+			if cValue := v.Get("trustpoint-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.TrustpointName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("rsakeypair"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Rsakeypair = types.StringValue(cValue.String())
+			}
+			data.CaOpensshTrustpoints = append(data.CaOpensshTrustpoints, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "ca.http-proxy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaHttpProxy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.port"); value.Exists() {
+		data.CaHttpProxyPort = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ca.source-interface.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaSourceInterfaceIpv4 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.source-interface.ipv6"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CaSourceInterfaceIpv6 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ca.rsa.one-thousand-twenty-four.disable"); value.Exists() {
+		data.CaRsa1024Disable = types.BoolValue(true)
+	} else {
+		data.CaRsa1024Disable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.fqdn-check.ip-address.allow"); value.Exists() {
+		data.CaFqdnCheckIpAddressAllow = types.BoolValue(true)
+	} else {
+		data.CaFqdnCheckIpAddressAllow = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ca.crl.curl-timeout"); value.Exists() {
+		data.CaCrlCurlTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fips-mode"); value.Exists() {
+		data.FipsMode = types.BoolValue(true)
+	} else {
+		data.FipsMode = types.BoolValue(false)
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "ca.trustpoint.system-trustpoint.enrollment.local"); value.Exists() {
+			data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(true)
+		} else {
+			data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(false)
+		}
+	} else {
+		data.CaTrustpointSystemEnrollmentLocal = types.BoolNull()
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *Crypto) getDeletedItems(ctx context.Context, state Crypto, version string) []string {
+	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !state.CaTrustpointSystemEnrollmentLocal.IsNull() && data.CaTrustpointSystemEnrollmentLocal.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/enrollment/local"))
+	}
+	if !state.FipsMode.IsNull() && data.FipsMode.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fips-mode"))
+	}
+	if !state.CaCrlCurlTimeout.IsNull() && data.CaCrlCurlTimeout.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/crl/curl-timeout"))
+	}
+	if !state.CaFqdnCheckIpAddressAllow.IsNull() && data.CaFqdnCheckIpAddressAllow.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/fqdn-check/ip-address/allow"))
+	}
+	if !state.CaRsa1024Disable.IsNull() && data.CaRsa1024Disable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/rsa/one-thousand-twenty-four/disable"))
+	}
+	if !state.CaSourceInterfaceIpv6.IsNull() && data.CaSourceInterfaceIpv6.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/source-interface/ipv6"))
+	}
+	if !state.CaSourceInterfaceIpv4.IsNull() && data.CaSourceInterfaceIpv4.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/source-interface/ipv4"))
+	}
+	if !state.CaHttpProxyPort.IsNull() && data.CaHttpProxyPort.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/port"))
+	}
+	if !state.CaHttpProxy.IsNull() && data.CaHttpProxy.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/http-proxy"))
+	}
+	for i := range state.CaOpensshTrustpoints {
+		keys := [...]string{"trustpoint-name"}
+		stateKeyValues := [...]string{state.CaOpensshTrustpoints[i].TrustpointName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.CaOpensshTrustpoints[i].TrustpointName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.CaOpensshTrustpoints {
+			found = true
+			if state.CaOpensshTrustpoints[i].TrustpointName.ValueString() != data.CaOpensshTrustpoints[j].TrustpointName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.CaOpensshTrustpoints[i].Rsakeypair.IsNull() && data.CaOpensshTrustpoints[j].Rsakeypair.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/openssh/trustpoints/trustpoint", keyString), "rsakeypair"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "ca/openssh/trustpoints/trustpoint", keyString))
+		}
+	}
+	for i := range state.CaTrustpoints {
+		keys := [...]string{"trustpoint-name"}
+		stateKeyValues := [...]string{state.CaTrustpoints[i].TrustpointName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.CaTrustpoints[i].TrustpointName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.CaTrustpoints {
+			found = true
+			if state.CaTrustpoints[i].TrustpointName.ValueString() != data.CaTrustpoints[j].TrustpointName.ValueString() {
+				found = false
+			}
+			if found {
+				if helpers.VersionAtLeast(version, "25.4") && !state.CaTrustpoints[i].EnrollmentLocal.IsNull() && data.CaTrustpoints[j].EnrollmentLocal.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "enrollment/local"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.CaTrustpoints[i].SslProfile.IsNull() && data.CaTrustpoints[j].SslProfile.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "ssl-profile"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.CaTrustpoints[i].ReEnrollmentAuthenticationProfile.IsNull() && data.CaTrustpoints[j].ReEnrollmentAuthenticationProfile.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "re-enrollment/authentication-profile"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.CaTrustpoints[i].EnrollmentAuthenticationProfile.IsNull() && data.CaTrustpoints[j].EnrollmentAuthenticationProfile.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "enrollment/authentication-profile"))
+				}
+				if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.CaTrustpoints[i].MethodEstCredentialCertificate.IsNull() && data.CaTrustpoints[j].MethodEstCredentialCertificate.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "method/est/credential/certificate"))
+				}
+				if !state.CaTrustpoints[i].MessageDigest.IsNull() && data.CaTrustpoints[j].MessageDigest.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "message-digest"))
+				}
+				if !state.CaTrustpoints[i].Vrf.IsNull() && data.CaTrustpoints[j].Vrf.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "vrf"))
+				}
+				if !state.CaTrustpoints[i].SerialNumberNone.IsNull() && data.CaTrustpoints[j].SerialNumberNone.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "serial-number/none"))
+				}
+				if !state.CaTrustpoints[i].SerialNumber.IsNull() && data.CaTrustpoints[j].SerialNumber.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "serial-number"))
+				}
+				if !state.CaTrustpoints[i].SubjectAlternativeName.IsNull() && data.CaTrustpoints[j].SubjectAlternativeName.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "subject-alternative-name"))
+				}
+				if !state.CaTrustpoints[i].SubjectName.IsNull() && data.CaTrustpoints[j].SubjectName.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "subject-name"))
+				}
+				if !state.CaTrustpoints[i].IpAddressNone.IsNull() && data.CaTrustpoints[j].IpAddressNone.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "ip-address/none"))
+				}
+				if !state.CaTrustpoints[i].IpAddress.IsNull() && data.CaTrustpoints[j].IpAddress.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "ip-address/ipv4-address"))
+				}
+				if !state.CaTrustpoints[i].QueryUrl.IsNull() && data.CaTrustpoints[j].QueryUrl.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "query/url"))
+				}
+				if !state.CaTrustpoints[i].CrlOptional.IsNull() && data.CaTrustpoints[j].CrlOptional.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "crl/optional"))
+				}
+				if !state.CaTrustpoints[i].Rsakeypair.IsNull() && data.CaTrustpoints[j].Rsakeypair.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "rsakeypair"))
+				}
+				if !state.CaTrustpoints[i].SkipChallengePassword.IsNull() && data.CaTrustpoints[j].SkipChallengePassword.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "skip-challenge-password"))
+				}
+				if !state.CaTrustpoints[i].RenewalMessageTypeRenewalreq.IsNull() && data.CaTrustpoints[j].RenewalMessageTypeRenewalreq.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "renewal-message-type/renewalreq"))
+				}
+				if !state.CaTrustpoints[i].RenewalMessageTypePkcsreq.IsNull() && data.CaTrustpoints[j].RenewalMessageTypePkcsreq.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "renewal-message-type/pkcsreq"))
+				}
+				if !state.CaTrustpoints[i].AutoEnroll.IsNull() && data.CaTrustpoints[j].AutoEnroll.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "auto-enroll"))
+				}
+				if !state.CaTrustpoints[i].SftpPassword.IsNull() && data.CaTrustpoints[j].SftpPassword.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "sftp-password/password"))
+				}
+				if !state.CaTrustpoints[i].SftpUsername.IsNull() && data.CaTrustpoints[j].SftpUsername.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "sftp-username"))
+				}
+				if !state.CaTrustpoints[i].EnrollmentTerminal.IsNull() && data.CaTrustpoints[j].EnrollmentTerminal.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "enrollment/terminal"))
+				}
+				if !state.CaTrustpoints[i].EnrollmentUrl.IsNull() && data.CaTrustpoints[j].EnrollmentUrl.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "enrollment/url"))
+				}
+				if !state.CaTrustpoints[i].EnrollmentRetryPeriod.IsNull() && data.CaTrustpoints[j].EnrollmentRetryPeriod.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "enrollment/retry/period"))
+				}
+				if !state.CaTrustpoints[i].EnrollmentRetryCount.IsNull() && data.CaTrustpoints[j].EnrollmentRetryCount.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "enrollment/retry/count"))
+				}
+				if !state.CaTrustpoints[i].Description.IsNull() && data.CaTrustpoints[j].Description.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "description"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString))
+		}
+	}
+	if !state.CaTrustpointSystemMessageDigest.IsNull() && data.CaTrustpointSystemMessageDigest.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/message-digest"))
+	}
+	if !state.CaTrustpointSystemLifetimeCertificate.IsNull() && data.CaTrustpointSystemLifetimeCertificate.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/lifetime/certificate"))
+	}
+	if !state.CaTrustpointSystemLifetimeCaCertificate.IsNull() && data.CaTrustpointSystemLifetimeCaCertificate.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/lifetime/ca-certificate"))
+	}
+	if !state.CaTrustpointSystemVrf.IsNull() && data.CaTrustpointSystemVrf.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/vrf"))
+	}
+	if !state.CaTrustpointSystemSerialNumberNone.IsNull() && data.CaTrustpointSystemSerialNumberNone.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/serial-number/none"))
+	}
+	if !state.CaTrustpointSystemSerialNumber.IsNull() && data.CaTrustpointSystemSerialNumber.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/serial-number"))
+	}
+	if !state.CaTrustpointSystemSubjectAlternativeName.IsNull() && data.CaTrustpointSystemSubjectAlternativeName.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/subject-alternative-name"))
+	}
+	if !state.CaTrustpointSystemSubjectNameCaCertificate.IsNull() && data.CaTrustpointSystemSubjectNameCaCertificate.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/subject-name-ca-certificate"))
+	}
+	if !state.CaTrustpointSystemSubjectName.IsNull() && data.CaTrustpointSystemSubjectName.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/subject-name"))
+	}
+	if !state.CaTrustpointSystemIpAddressNone.IsNull() && data.CaTrustpointSystemIpAddressNone.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/ip-address/none"))
+	}
+	if !state.CaTrustpointSystemIpAddress.IsNull() && data.CaTrustpointSystemIpAddress.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/ip-address/ipv4-address"))
+	}
+	if !state.CaTrustpointSystemQueryUrl.IsNull() && data.CaTrustpointSystemQueryUrl.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/query/url"))
+	}
+	if !state.CaTrustpointSystemCrlOptional.IsNull() && data.CaTrustpointSystemCrlOptional.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/crl/optional"))
+	}
+	if !state.CaTrustpointSystemKeypairEd25519.IsNull() && data.CaTrustpointSystemKeypairEd25519.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/keypair/ed25519"))
+	}
+	if !state.CaTrustpointSystemKeypairDsa.IsNull() && data.CaTrustpointSystemKeypairDsa.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/keypair/dsa"))
+	}
+	if !state.CaTrustpointSystemKeypairEcdsanistp521.IsNull() && data.CaTrustpointSystemKeypairEcdsanistp521.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/keypair/ecdsanistp521"))
+	}
+	if !state.CaTrustpointSystemKeypairEcdsanistp384.IsNull() && data.CaTrustpointSystemKeypairEcdsanistp384.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/keypair/ecdsanistp384"))
+	}
+	if !state.CaTrustpointSystemKeypairEcdsanistp256.IsNull() && data.CaTrustpointSystemKeypairEcdsanistp256.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/keypair/ecdsanistp256"))
+	}
+	if !state.CaTrustpointSystemKeypairRsa.IsNull() && data.CaTrustpointSystemKeypairRsa.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/keypair/rsa"))
+	}
+	if !state.CaTrustpointSystemCaKeypairEd25519.IsNull() && data.CaTrustpointSystemCaKeypairEd25519.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/ca-keypair/ed25519"))
+	}
+	if !state.CaTrustpointSystemCaKeypairDsa.IsNull() && data.CaTrustpointSystemCaKeypairDsa.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/ca-keypair/dsa"))
+	}
+	if !state.CaTrustpointSystemCaKeypairEcdsanistp521.IsNull() && data.CaTrustpointSystemCaKeypairEcdsanistp521.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/ca-keypair/ecdsanistp521"))
+	}
+	if !state.CaTrustpointSystemCaKeypairEcdsanistp384.IsNull() && data.CaTrustpointSystemCaKeypairEcdsanistp384.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/ca-keypair/ecdsanistp384"))
+	}
+	if !state.CaTrustpointSystemCaKeypairEcdsanistp256.IsNull() && data.CaTrustpointSystemCaKeypairEcdsanistp256.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/ca-keypair/ecdsanistp256"))
+	}
+	if !state.CaTrustpointSystemCaKeypairRsa.IsNull() && data.CaTrustpointSystemCaKeypairRsa.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/ca-keypair/rsa"))
+	}
+	if !state.CaTrustpointSystemRsaKeypair.IsNull() && data.CaTrustpointSystemRsaKeypair.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/rsakeypair"))
+	}
+	if !state.CaTrustpointSystemSkipChallengePassword.IsNull() && data.CaTrustpointSystemSkipChallengePassword.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/skip-challenge-password"))
+	}
+	if !state.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() && data.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/renewal-message-type/renewalreq"))
+	}
+	if !state.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() && data.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/renewal-message-type/pkcsreq"))
+	}
+	if !state.CaTrustpointSystemAutoEnroll.IsNull() && data.CaTrustpointSystemAutoEnroll.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/auto-enroll"))
+	}
+	if !state.CaTrustpointSystemSftpPassword.IsNull() && data.CaTrustpointSystemSftpPassword.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/sftp-password/password"))
+	}
+	if !state.CaTrustpointSystemSftpUsername.IsNull() && data.CaTrustpointSystemSftpUsername.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/sftp-username"))
+	}
+	if !state.CaTrustpointSystemEnrollmentSelf.IsNull() && data.CaTrustpointSystemEnrollmentSelf.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/enrollment/self"))
+	}
+	if !state.CaTrustpointSystemEnrollmentTerminal.IsNull() && data.CaTrustpointSystemEnrollmentTerminal.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/enrollment/terminal"))
+	}
+	if !state.CaTrustpointSystemEnrollmentUrl.IsNull() && data.CaTrustpointSystemEnrollmentUrl.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/enrollment/url"))
+	}
+	if !state.CaTrustpointSystemEnrollmentRetryPeriod.IsNull() && data.CaTrustpointSystemEnrollmentRetryPeriod.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/enrollment/retry/period"))
+	}
+	if !state.CaTrustpointSystemEnrollmentRetryCount.IsNull() && data.CaTrustpointSystemEnrollmentRetryCount.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/enrollment/retry/count"))
+	}
+	if !state.CaTrustpointSystemDescription.IsNull() && data.CaTrustpointSystemDescription.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ca/trustpoint/system-trustpoint/description"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *Crypto) getEmptyLeafsDelete(ctx context.Context, state *Crypto, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !data.CaTrustpointSystemEnrollmentLocal.IsNull() && !data.CaTrustpointSystemEnrollmentLocal.ValueBool() {
+		if state == nil || state.CaTrustpointSystemEnrollmentLocal.IsNull() || state.CaTrustpointSystemEnrollmentLocal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/enrollment/local"))
+		}
+	}
+	if !data.FipsMode.IsNull() && !data.FipsMode.ValueBool() {
+		if state == nil || state.FipsMode.IsNull() || state.FipsMode.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fips-mode"))
+		}
+	}
+	if !data.CaFqdnCheckIpAddressAllow.IsNull() && !data.CaFqdnCheckIpAddressAllow.ValueBool() {
+		if state == nil || state.CaFqdnCheckIpAddressAllow.IsNull() || state.CaFqdnCheckIpAddressAllow.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/fqdn-check/ip-address/allow"))
+		}
+	}
+	if !data.CaRsa1024Disable.IsNull() && !data.CaRsa1024Disable.ValueBool() {
+		if state == nil || state.CaRsa1024Disable.IsNull() || state.CaRsa1024Disable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/rsa/one-thousand-twenty-four/disable"))
+		}
+	}
+	for i := range data.CaOpensshTrustpoints {
+		keys := [...]string{"trustpoint-name"}
+		keyValues := [...]string{data.CaOpensshTrustpoints[i].TrustpointName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.CaTrustpoints {
+		keys := [...]string{"trustpoint-name"}
+		keyValues := [...]string{data.CaTrustpoints[i].TrustpointName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.CaTrustpoints[i].EnrollmentLocal.IsNull() && !data.CaTrustpoints[i].EnrollmentLocal.ValueBool() {
+			if state == nil || i >= len(state.CaTrustpoints) || state.CaTrustpoints[i].EnrollmentLocal.IsNull() || state.CaTrustpoints[i].EnrollmentLocal.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "enrollment/local"))
+			}
+		}
+		if !data.CaTrustpoints[i].SerialNumberNone.IsNull() && !data.CaTrustpoints[i].SerialNumberNone.ValueBool() {
+			if state == nil || i >= len(state.CaTrustpoints) || state.CaTrustpoints[i].SerialNumberNone.IsNull() || state.CaTrustpoints[i].SerialNumberNone.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "serial-number/none"))
+			}
+		}
+		if !data.CaTrustpoints[i].SerialNumber.IsNull() && !data.CaTrustpoints[i].SerialNumber.ValueBool() {
+			if state == nil || i >= len(state.CaTrustpoints) || state.CaTrustpoints[i].SerialNumber.IsNull() || state.CaTrustpoints[i].SerialNumber.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "serial-number"))
+			}
+		}
+		if !data.CaTrustpoints[i].IpAddressNone.IsNull() && !data.CaTrustpoints[i].IpAddressNone.ValueBool() {
+			if state == nil || i >= len(state.CaTrustpoints) || state.CaTrustpoints[i].IpAddressNone.IsNull() || state.CaTrustpoints[i].IpAddressNone.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "ip-address/none"))
+			}
+		}
+		if !data.CaTrustpoints[i].CrlOptional.IsNull() && !data.CaTrustpoints[i].CrlOptional.ValueBool() {
+			if state == nil || i >= len(state.CaTrustpoints) || state.CaTrustpoints[i].CrlOptional.IsNull() || state.CaTrustpoints[i].CrlOptional.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "crl/optional"))
+			}
+		}
+		if !data.CaTrustpoints[i].SkipChallengePassword.IsNull() && !data.CaTrustpoints[i].SkipChallengePassword.ValueBool() {
+			if state == nil || i >= len(state.CaTrustpoints) || state.CaTrustpoints[i].SkipChallengePassword.IsNull() || state.CaTrustpoints[i].SkipChallengePassword.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "skip-challenge-password"))
+			}
+		}
+		if !data.CaTrustpoints[i].RenewalMessageTypeRenewalreq.IsNull() && !data.CaTrustpoints[i].RenewalMessageTypeRenewalreq.ValueBool() {
+			if state == nil || i >= len(state.CaTrustpoints) || state.CaTrustpoints[i].RenewalMessageTypeRenewalreq.IsNull() || state.CaTrustpoints[i].RenewalMessageTypeRenewalreq.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "renewal-message-type/renewalreq"))
+			}
+		}
+		if !data.CaTrustpoints[i].RenewalMessageTypePkcsreq.IsNull() && !data.CaTrustpoints[i].RenewalMessageTypePkcsreq.ValueBool() {
+			if state == nil || i >= len(state.CaTrustpoints) || state.CaTrustpoints[i].RenewalMessageTypePkcsreq.IsNull() || state.CaTrustpoints[i].RenewalMessageTypePkcsreq.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "renewal-message-type/pkcsreq"))
+			}
+		}
+		if !data.CaTrustpoints[i].EnrollmentTerminal.IsNull() && !data.CaTrustpoints[i].EnrollmentTerminal.ValueBool() {
+			if state == nil || i >= len(state.CaTrustpoints) || state.CaTrustpoints[i].EnrollmentTerminal.IsNull() || state.CaTrustpoints[i].EnrollmentTerminal.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString), "enrollment/terminal"))
+			}
+		}
+	}
+	if !data.CaTrustpointSystemSerialNumberNone.IsNull() && !data.CaTrustpointSystemSerialNumberNone.ValueBool() {
+		if state == nil || state.CaTrustpointSystemSerialNumberNone.IsNull() || state.CaTrustpointSystemSerialNumberNone.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/serial-number/none"))
+		}
+	}
+	if !data.CaTrustpointSystemSerialNumber.IsNull() && !data.CaTrustpointSystemSerialNumber.ValueBool() {
+		if state == nil || state.CaTrustpointSystemSerialNumber.IsNull() || state.CaTrustpointSystemSerialNumber.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/serial-number"))
+		}
+	}
+	if !data.CaTrustpointSystemIpAddressNone.IsNull() && !data.CaTrustpointSystemIpAddressNone.ValueBool() {
+		if state == nil || state.CaTrustpointSystemIpAddressNone.IsNull() || state.CaTrustpointSystemIpAddressNone.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/ip-address/none"))
+		}
+	}
+	if !data.CaTrustpointSystemCrlOptional.IsNull() && !data.CaTrustpointSystemCrlOptional.ValueBool() {
+		if state == nil || state.CaTrustpointSystemCrlOptional.IsNull() || state.CaTrustpointSystemCrlOptional.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/crl/optional"))
+		}
+	}
+	if !data.CaTrustpointSystemSkipChallengePassword.IsNull() && !data.CaTrustpointSystemSkipChallengePassword.ValueBool() {
+		if state == nil || state.CaTrustpointSystemSkipChallengePassword.IsNull() || state.CaTrustpointSystemSkipChallengePassword.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/skip-challenge-password"))
+		}
+	}
+	if !data.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() && !data.CaTrustpointSystemRenewalMessageTypeRenewalreq.ValueBool() {
+		if state == nil || state.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() || state.CaTrustpointSystemRenewalMessageTypeRenewalreq.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/renewal-message-type/renewalreq"))
+		}
+	}
+	if !data.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() && !data.CaTrustpointSystemRenewalMessageTypePkcsreq.ValueBool() {
+		if state == nil || state.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() || state.CaTrustpointSystemRenewalMessageTypePkcsreq.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/renewal-message-type/pkcsreq"))
+		}
+	}
+	if !data.CaTrustpointSystemEnrollmentSelf.IsNull() && !data.CaTrustpointSystemEnrollmentSelf.ValueBool() {
+		if state == nil || state.CaTrustpointSystemEnrollmentSelf.IsNull() || state.CaTrustpointSystemEnrollmentSelf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/enrollment/self"))
+		}
+	}
+	if !data.CaTrustpointSystemEnrollmentTerminal.IsNull() && !data.CaTrustpointSystemEnrollmentTerminal.ValueBool() {
+		if state == nil || state.CaTrustpointSystemEnrollmentTerminal.IsNull() || state.CaTrustpointSystemEnrollmentTerminal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/enrollment/terminal"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *Crypto) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") && !data.CaTrustpointSystemEnrollmentLocal.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/enrollment/local"))
+	}
+	if !data.FipsMode.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fips-mode"))
+	}
+	if !data.CaCrlCurlTimeout.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/crl/curl-timeout"))
+	}
+	if !data.CaFqdnCheckIpAddressAllow.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/fqdn-check/ip-address/allow"))
+	}
+	if !data.CaRsa1024Disable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/rsa/one-thousand-twenty-four/disable"))
+	}
+	if !data.CaSourceInterfaceIpv6.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/source-interface/ipv6"))
+	}
+	if !data.CaSourceInterfaceIpv4.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/source-interface/ipv4"))
+	}
+	if !data.CaHttpProxyPort.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/port"))
+	}
+	if !data.CaHttpProxy.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/http-proxy"))
+	}
+	for i := range data.CaOpensshTrustpoints {
+		keys := [...]string{"trustpoint-name"}
+		keyValues := [...]string{data.CaOpensshTrustpoints[i].TrustpointName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.CaOpensshTrustpoints[i].TrustpointName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "ca/openssh/trustpoints/trustpoint", keyString))
+	}
+	for i := range data.CaTrustpoints {
+		keys := [...]string{"trustpoint-name"}
+		keyValues := [...]string{data.CaTrustpoints[i].TrustpointName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.CaTrustpoints[i].TrustpointName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "ca/trustpoint/trustpoints/trustpoint", keyString))
+	}
+	if !data.CaTrustpointSystemMessageDigest.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/message-digest"))
+	}
+	if !data.CaTrustpointSystemLifetimeCertificate.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/lifetime/certificate"))
+	}
+	if !data.CaTrustpointSystemLifetimeCaCertificate.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/lifetime/ca-certificate"))
+	}
+	if !data.CaTrustpointSystemVrf.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/vrf"))
+	}
+	if !data.CaTrustpointSystemSerialNumberNone.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/serial-number/none"))
+	}
+	if !data.CaTrustpointSystemSerialNumber.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/serial-number"))
+	}
+	if !data.CaTrustpointSystemSubjectAlternativeName.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/subject-alternative-name"))
+	}
+	if !data.CaTrustpointSystemSubjectNameCaCertificate.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/subject-name-ca-certificate"))
+	}
+	if !data.CaTrustpointSystemSubjectName.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/subject-name"))
+	}
+	if !data.CaTrustpointSystemIpAddressNone.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/ip-address/none"))
+	}
+	if !data.CaTrustpointSystemIpAddress.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/ip-address/ipv4-address"))
+	}
+	if !data.CaTrustpointSystemQueryUrl.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/query/url"))
+	}
+	if !data.CaTrustpointSystemCrlOptional.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/crl/optional"))
+	}
+	if !data.CaTrustpointSystemKeypairEd25519.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/keypair/ed25519"))
+	}
+	if !data.CaTrustpointSystemKeypairDsa.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/keypair/dsa"))
+	}
+	if !data.CaTrustpointSystemKeypairEcdsanistp521.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/keypair/ecdsanistp521"))
+	}
+	if !data.CaTrustpointSystemKeypairEcdsanistp384.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/keypair/ecdsanistp384"))
+	}
+	if !data.CaTrustpointSystemKeypairEcdsanistp256.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/keypair/ecdsanistp256"))
+	}
+	if !data.CaTrustpointSystemKeypairRsa.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/keypair/rsa"))
+	}
+	if !data.CaTrustpointSystemCaKeypairEd25519.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/ca-keypair/ed25519"))
+	}
+	if !data.CaTrustpointSystemCaKeypairDsa.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/ca-keypair/dsa"))
+	}
+	if !data.CaTrustpointSystemCaKeypairEcdsanistp521.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/ca-keypair/ecdsanistp521"))
+	}
+	if !data.CaTrustpointSystemCaKeypairEcdsanistp384.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/ca-keypair/ecdsanistp384"))
+	}
+	if !data.CaTrustpointSystemCaKeypairEcdsanistp256.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/ca-keypair/ecdsanistp256"))
+	}
+	if !data.CaTrustpointSystemCaKeypairRsa.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/ca-keypair/rsa"))
+	}
+	if !data.CaTrustpointSystemRsaKeypair.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/rsakeypair"))
+	}
+	if !data.CaTrustpointSystemSkipChallengePassword.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/skip-challenge-password"))
+	}
+	if !data.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/renewal-message-type/renewalreq"))
+	}
+	if !data.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/renewal-message-type/pkcsreq"))
+	}
+	if !data.CaTrustpointSystemAutoEnroll.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/auto-enroll"))
+	}
+	if !data.CaTrustpointSystemSftpPassword.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/sftp-password/password"))
+	}
+	if !data.CaTrustpointSystemSftpUsername.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/sftp-username"))
+	}
+	if !data.CaTrustpointSystemEnrollmentSelf.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/enrollment/self"))
+	}
+	if !data.CaTrustpointSystemEnrollmentTerminal.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/enrollment/terminal"))
+	}
+	if !data.CaTrustpointSystemEnrollmentUrl.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/enrollment/url"))
+	}
+	if !data.CaTrustpointSystemEnrollmentRetryPeriod.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/enrollment/retry/period"))
+	}
+	if !data.CaTrustpointSystemEnrollmentRetryCount.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/enrollment/retry/count"))
+	}
+	if !data.CaTrustpointSystemDescription.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ca/trustpoint/system-trustpoint/description"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
@@ -707,6 +2670,20 @@ func (data Crypto) toBodyXML(ctx context.Context, stateArg ...*Crypto) string {
 			if !item.MethodEstCredentialCertificate.IsNull() && !item.MethodEstCredentialCertificate.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/method/est/credential/certificate", item.MethodEstCredentialCertificate.ValueString())
 			}
+			if !item.EnrollmentAuthenticationProfile.IsNull() && !item.EnrollmentAuthenticationProfile.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/enrollment/authentication-profile", item.EnrollmentAuthenticationProfile.ValueString())
+			}
+			if !item.ReEnrollmentAuthenticationProfile.IsNull() && !item.ReEnrollmentAuthenticationProfile.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/re-enrollment/authentication-profile", item.ReEnrollmentAuthenticationProfile.ValueString())
+			}
+			if !item.SslProfile.IsNull() && !item.SslProfile.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/ssl-profile", item.SslProfile.ValueString())
+			}
+			if !item.EnrollmentLocal.IsNull() && !item.EnrollmentLocal.IsUnknown() {
+				if item.EnrollmentLocal.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/enrollment/local", "")
+				}
+			}
 		}
 	}
 	if len(data.CaOpensshTrustpoints) > 0 {
@@ -750,6 +2727,11 @@ func (data Crypto) toBodyXML(ctx context.Context, stateArg ...*Crypto) string {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/fips-mode", "")
 		}
 	}
+	if !data.CaTrustpointSystemEnrollmentLocal.IsNull() && !data.CaTrustpointSystemEnrollmentLocal.IsUnknown() {
+		if data.CaTrustpointSystemEnrollmentLocal.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ca/trustpoint/system-trustpoint/enrollment/local", "")
+		}
+	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
 		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
@@ -772,7 +2754,7 @@ func (data Crypto) toBodyXML(ctx context.Context, stateArg ...*Crypto) string {
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -780,549 +2762,6 @@ func (data Crypto) toBodyXML(ctx context.Context, stateArg ...*Crypto) string {
 }
 
 // End of section. //template:end toBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
-
-func (data *Crypto) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("ca.trustpoint.system-trustpoint.description"); value.Exists() && !data.CaTrustpointSystemDescription.IsNull() {
-		data.CaTrustpointSystemDescription = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemDescription.IsNull() {
-		data.CaTrustpointSystemDescription = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.enrollment.retry.count"); value.Exists() && !data.CaTrustpointSystemEnrollmentRetryCount.IsNull() {
-		data.CaTrustpointSystemEnrollmentRetryCount = types.Int64Value(value.Int())
-	} else if data.CaTrustpointSystemEnrollmentRetryCount.IsNull() {
-		data.CaTrustpointSystemEnrollmentRetryCount = types.Int64Null()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.enrollment.retry.period"); value.Exists() && !data.CaTrustpointSystemEnrollmentRetryPeriod.IsNull() {
-		data.CaTrustpointSystemEnrollmentRetryPeriod = types.Int64Value(value.Int())
-	} else if data.CaTrustpointSystemEnrollmentRetryPeriod.IsNull() {
-		data.CaTrustpointSystemEnrollmentRetryPeriod = types.Int64Null()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.enrollment.url"); value.Exists() && !data.CaTrustpointSystemEnrollmentUrl.IsNull() {
-		data.CaTrustpointSystemEnrollmentUrl = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemEnrollmentUrl.IsNull() {
-		data.CaTrustpointSystemEnrollmentUrl = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.enrollment.terminal"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.CaTrustpointSystemEnrollmentTerminal.IsNull() {
-			data.CaTrustpointSystemEnrollmentTerminal = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.CaTrustpointSystemEnrollmentTerminal.IsNull() {
-			data.CaTrustpointSystemEnrollmentTerminal = types.BoolNull()
-		}
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.enrollment.self"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.CaTrustpointSystemEnrollmentSelf.IsNull() {
-			data.CaTrustpointSystemEnrollmentSelf = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.CaTrustpointSystemEnrollmentSelf.IsNull() {
-			data.CaTrustpointSystemEnrollmentSelf = types.BoolNull()
-		}
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.sftp-username"); value.Exists() && !data.CaTrustpointSystemSftpUsername.IsNull() {
-		data.CaTrustpointSystemSftpUsername = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemSftpUsername.IsNull() {
-		data.CaTrustpointSystemSftpUsername = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.sftp-password.password"); value.Exists() && !data.CaTrustpointSystemSftpPassword.IsNull() {
-		data.CaTrustpointSystemSftpPassword = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemSftpPassword.IsNull() {
-		data.CaTrustpointSystemSftpPassword = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.auto-enroll"); value.Exists() && !data.CaTrustpointSystemAutoEnroll.IsNull() {
-		data.CaTrustpointSystemAutoEnroll = types.Int64Value(value.Int())
-	} else if data.CaTrustpointSystemAutoEnroll.IsNull() {
-		data.CaTrustpointSystemAutoEnroll = types.Int64Null()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.renewal-message-type.pkcsreq"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() {
-			data.CaTrustpointSystemRenewalMessageTypePkcsreq = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() {
-			data.CaTrustpointSystemRenewalMessageTypePkcsreq = types.BoolNull()
-		}
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.renewal-message-type.renewalreq"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() {
-			data.CaTrustpointSystemRenewalMessageTypeRenewalreq = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() {
-			data.CaTrustpointSystemRenewalMessageTypeRenewalreq = types.BoolNull()
-		}
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.skip-challenge-password"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.CaTrustpointSystemSkipChallengePassword.IsNull() {
-			data.CaTrustpointSystemSkipChallengePassword = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.CaTrustpointSystemSkipChallengePassword.IsNull() {
-			data.CaTrustpointSystemSkipChallengePassword = types.BoolNull()
-		}
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.rsakeypair"); value.Exists() && !data.CaTrustpointSystemRsaKeypair.IsNull() {
-		data.CaTrustpointSystemRsaKeypair = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemRsaKeypair.IsNull() {
-		data.CaTrustpointSystemRsaKeypair = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.ca-keypair.rsa"); value.Exists() && !data.CaTrustpointSystemCaKeypairRsa.IsNull() {
-		data.CaTrustpointSystemCaKeypairRsa = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemCaKeypairRsa.IsNull() {
-		data.CaTrustpointSystemCaKeypairRsa = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp256"); value.Exists() && !data.CaTrustpointSystemCaKeypairEcdsanistp256.IsNull() {
-		data.CaTrustpointSystemCaKeypairEcdsanistp256 = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemCaKeypairEcdsanistp256.IsNull() {
-		data.CaTrustpointSystemCaKeypairEcdsanistp256 = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp384"); value.Exists() && !data.CaTrustpointSystemCaKeypairEcdsanistp384.IsNull() {
-		data.CaTrustpointSystemCaKeypairEcdsanistp384 = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemCaKeypairEcdsanistp384.IsNull() {
-		data.CaTrustpointSystemCaKeypairEcdsanistp384 = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp521"); value.Exists() && !data.CaTrustpointSystemCaKeypairEcdsanistp521.IsNull() {
-		data.CaTrustpointSystemCaKeypairEcdsanistp521 = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemCaKeypairEcdsanistp521.IsNull() {
-		data.CaTrustpointSystemCaKeypairEcdsanistp521 = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.ca-keypair.dsa"); value.Exists() && !data.CaTrustpointSystemCaKeypairDsa.IsNull() {
-		data.CaTrustpointSystemCaKeypairDsa = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemCaKeypairDsa.IsNull() {
-		data.CaTrustpointSystemCaKeypairDsa = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.ca-keypair.ed25519"); value.Exists() && !data.CaTrustpointSystemCaKeypairEd25519.IsNull() {
-		data.CaTrustpointSystemCaKeypairEd25519 = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemCaKeypairEd25519.IsNull() {
-		data.CaTrustpointSystemCaKeypairEd25519 = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.keypair.rsa"); value.Exists() && !data.CaTrustpointSystemKeypairRsa.IsNull() {
-		data.CaTrustpointSystemKeypairRsa = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemKeypairRsa.IsNull() {
-		data.CaTrustpointSystemKeypairRsa = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.keypair.ecdsanistp256"); value.Exists() && !data.CaTrustpointSystemKeypairEcdsanistp256.IsNull() {
-		data.CaTrustpointSystemKeypairEcdsanistp256 = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemKeypairEcdsanistp256.IsNull() {
-		data.CaTrustpointSystemKeypairEcdsanistp256 = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.keypair.ecdsanistp384"); value.Exists() && !data.CaTrustpointSystemKeypairEcdsanistp384.IsNull() {
-		data.CaTrustpointSystemKeypairEcdsanistp384 = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemKeypairEcdsanistp384.IsNull() {
-		data.CaTrustpointSystemKeypairEcdsanistp384 = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.keypair.ecdsanistp521"); value.Exists() && !data.CaTrustpointSystemKeypairEcdsanistp521.IsNull() {
-		data.CaTrustpointSystemKeypairEcdsanistp521 = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemKeypairEcdsanistp521.IsNull() {
-		data.CaTrustpointSystemKeypairEcdsanistp521 = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.keypair.dsa"); value.Exists() && !data.CaTrustpointSystemKeypairDsa.IsNull() {
-		data.CaTrustpointSystemKeypairDsa = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemKeypairDsa.IsNull() {
-		data.CaTrustpointSystemKeypairDsa = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.keypair.ed25519"); value.Exists() && !data.CaTrustpointSystemKeypairEd25519.IsNull() {
-		data.CaTrustpointSystemKeypairEd25519 = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemKeypairEd25519.IsNull() {
-		data.CaTrustpointSystemKeypairEd25519 = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.crl.optional"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.CaTrustpointSystemCrlOptional.IsNull() {
-			data.CaTrustpointSystemCrlOptional = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.CaTrustpointSystemCrlOptional.IsNull() {
-			data.CaTrustpointSystemCrlOptional = types.BoolNull()
-		}
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.query.url"); value.Exists() && !data.CaTrustpointSystemQueryUrl.IsNull() {
-		data.CaTrustpointSystemQueryUrl = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemQueryUrl.IsNull() {
-		data.CaTrustpointSystemQueryUrl = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.ip-address.ipv4-address"); value.Exists() && !data.CaTrustpointSystemIpAddress.IsNull() {
-		data.CaTrustpointSystemIpAddress = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemIpAddress.IsNull() {
-		data.CaTrustpointSystemIpAddress = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.ip-address.none"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.CaTrustpointSystemIpAddressNone.IsNull() {
-			data.CaTrustpointSystemIpAddressNone = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.CaTrustpointSystemIpAddressNone.IsNull() {
-			data.CaTrustpointSystemIpAddressNone = types.BoolNull()
-		}
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.subject-name"); value.Exists() && !data.CaTrustpointSystemSubjectName.IsNull() {
-		data.CaTrustpointSystemSubjectName = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemSubjectName.IsNull() {
-		data.CaTrustpointSystemSubjectName = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.subject-name-ca-certificate"); value.Exists() && !data.CaTrustpointSystemSubjectNameCaCertificate.IsNull() {
-		data.CaTrustpointSystemSubjectNameCaCertificate = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemSubjectNameCaCertificate.IsNull() {
-		data.CaTrustpointSystemSubjectNameCaCertificate = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.subject-alternative-name"); value.Exists() && !data.CaTrustpointSystemSubjectAlternativeName.IsNull() {
-		data.CaTrustpointSystemSubjectAlternativeName = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemSubjectAlternativeName.IsNull() {
-		data.CaTrustpointSystemSubjectAlternativeName = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.serial-number"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.CaTrustpointSystemSerialNumber.IsNull() {
-			data.CaTrustpointSystemSerialNumber = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.CaTrustpointSystemSerialNumber.IsNull() {
-			data.CaTrustpointSystemSerialNumber = types.BoolNull()
-		}
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.serial-number.none"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.CaTrustpointSystemSerialNumberNone.IsNull() {
-			data.CaTrustpointSystemSerialNumberNone = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.CaTrustpointSystemSerialNumberNone.IsNull() {
-			data.CaTrustpointSystemSerialNumberNone = types.BoolNull()
-		}
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.vrf"); value.Exists() && !data.CaTrustpointSystemVrf.IsNull() {
-		data.CaTrustpointSystemVrf = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemVrf.IsNull() {
-		data.CaTrustpointSystemVrf = types.StringNull()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.lifetime.ca-certificate"); value.Exists() && !data.CaTrustpointSystemLifetimeCaCertificate.IsNull() {
-		data.CaTrustpointSystemLifetimeCaCertificate = types.Int64Value(value.Int())
-	} else if data.CaTrustpointSystemLifetimeCaCertificate.IsNull() {
-		data.CaTrustpointSystemLifetimeCaCertificate = types.Int64Null()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.lifetime.certificate"); value.Exists() && !data.CaTrustpointSystemLifetimeCertificate.IsNull() {
-		data.CaTrustpointSystemLifetimeCertificate = types.Int64Value(value.Int())
-	} else if data.CaTrustpointSystemLifetimeCertificate.IsNull() {
-		data.CaTrustpointSystemLifetimeCertificate = types.Int64Null()
-	}
-	if value := res.Get("ca.trustpoint.system-trustpoint.message-digest"); value.Exists() && !data.CaTrustpointSystemMessageDigest.IsNull() {
-		data.CaTrustpointSystemMessageDigest = types.StringValue(value.String())
-	} else if data.CaTrustpointSystemMessageDigest.IsNull() {
-		data.CaTrustpointSystemMessageDigest = types.StringNull()
-	}
-	for i := range data.CaTrustpoints {
-		keys := [...]string{"trustpoint-name"}
-		keyValues := [...]string{data.CaTrustpoints[i].TrustpointName.ValueString()}
-
-		var r gjson.Result
-		res.Get("ca.trustpoint.trustpoints.trustpoint").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("trustpoint-name"); value.Exists() && !data.CaTrustpoints[i].TrustpointName.IsNull() {
-			data.CaTrustpoints[i].TrustpointName = types.StringValue(value.String())
-		} else {
-			data.CaTrustpoints[i].TrustpointName = types.StringNull()
-		}
-		if value := r.Get("description"); value.Exists() && !data.CaTrustpoints[i].Description.IsNull() {
-			data.CaTrustpoints[i].Description = types.StringValue(value.String())
-		} else {
-			data.CaTrustpoints[i].Description = types.StringNull()
-		}
-		if value := r.Get("enrollment.retry.count"); value.Exists() && !data.CaTrustpoints[i].EnrollmentRetryCount.IsNull() {
-			data.CaTrustpoints[i].EnrollmentRetryCount = types.Int64Value(value.Int())
-		} else {
-			data.CaTrustpoints[i].EnrollmentRetryCount = types.Int64Null()
-		}
-		if value := r.Get("enrollment.retry.period"); value.Exists() && !data.CaTrustpoints[i].EnrollmentRetryPeriod.IsNull() {
-			data.CaTrustpoints[i].EnrollmentRetryPeriod = types.Int64Value(value.Int())
-		} else {
-			data.CaTrustpoints[i].EnrollmentRetryPeriod = types.Int64Null()
-		}
-		if value := r.Get("enrollment.url"); value.Exists() && !data.CaTrustpoints[i].EnrollmentUrl.IsNull() {
-			data.CaTrustpoints[i].EnrollmentUrl = types.StringValue(value.String())
-		} else {
-			data.CaTrustpoints[i].EnrollmentUrl = types.StringNull()
-		}
-		if value := r.Get("enrollment.terminal"); value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.CaTrustpoints[i].EnrollmentTerminal.IsNull() {
-				data.CaTrustpoints[i].EnrollmentTerminal = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.CaTrustpoints[i].EnrollmentTerminal.IsNull() {
-				data.CaTrustpoints[i].EnrollmentTerminal = types.BoolNull()
-			}
-		}
-		if value := r.Get("sftp-username"); value.Exists() && !data.CaTrustpoints[i].SftpUsername.IsNull() {
-			data.CaTrustpoints[i].SftpUsername = types.StringValue(value.String())
-		} else {
-			data.CaTrustpoints[i].SftpUsername = types.StringNull()
-		}
-		if value := r.Get("sftp-password.password"); value.Exists() && !data.CaTrustpoints[i].SftpPassword.IsNull() {
-			data.CaTrustpoints[i].SftpPassword = types.StringValue(value.String())
-		} else {
-			data.CaTrustpoints[i].SftpPassword = types.StringNull()
-		}
-		if value := r.Get("auto-enroll"); value.Exists() && !data.CaTrustpoints[i].AutoEnroll.IsNull() {
-			data.CaTrustpoints[i].AutoEnroll = types.Int64Value(value.Int())
-		} else {
-			data.CaTrustpoints[i].AutoEnroll = types.Int64Null()
-		}
-		if value := r.Get("renewal-message-type.pkcsreq"); value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.CaTrustpoints[i].RenewalMessageTypePkcsreq.IsNull() {
-				data.CaTrustpoints[i].RenewalMessageTypePkcsreq = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.CaTrustpoints[i].RenewalMessageTypePkcsreq.IsNull() {
-				data.CaTrustpoints[i].RenewalMessageTypePkcsreq = types.BoolNull()
-			}
-		}
-		if value := r.Get("renewal-message-type.renewalreq"); value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.CaTrustpoints[i].RenewalMessageTypeRenewalreq.IsNull() {
-				data.CaTrustpoints[i].RenewalMessageTypeRenewalreq = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.CaTrustpoints[i].RenewalMessageTypeRenewalreq.IsNull() {
-				data.CaTrustpoints[i].RenewalMessageTypeRenewalreq = types.BoolNull()
-			}
-		}
-		if value := r.Get("skip-challenge-password"); value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.CaTrustpoints[i].SkipChallengePassword.IsNull() {
-				data.CaTrustpoints[i].SkipChallengePassword = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.CaTrustpoints[i].SkipChallengePassword.IsNull() {
-				data.CaTrustpoints[i].SkipChallengePassword = types.BoolNull()
-			}
-		}
-		if value := r.Get("rsakeypair"); value.Exists() && !data.CaTrustpoints[i].Rsakeypair.IsNull() {
-			data.CaTrustpoints[i].Rsakeypair = types.StringValue(value.String())
-		} else {
-			data.CaTrustpoints[i].Rsakeypair = types.StringNull()
-		}
-		if value := r.Get("crl.optional"); value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.CaTrustpoints[i].CrlOptional.IsNull() {
-				data.CaTrustpoints[i].CrlOptional = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.CaTrustpoints[i].CrlOptional.IsNull() {
-				data.CaTrustpoints[i].CrlOptional = types.BoolNull()
-			}
-		}
-		if value := r.Get("query.url"); value.Exists() && !data.CaTrustpoints[i].QueryUrl.IsNull() {
-			data.CaTrustpoints[i].QueryUrl = types.StringValue(value.String())
-		} else {
-			data.CaTrustpoints[i].QueryUrl = types.StringNull()
-		}
-		if value := r.Get("ip-address.ipv4-address"); value.Exists() && !data.CaTrustpoints[i].IpAddress.IsNull() {
-			data.CaTrustpoints[i].IpAddress = types.StringValue(value.String())
-		} else {
-			data.CaTrustpoints[i].IpAddress = types.StringNull()
-		}
-		if value := r.Get("ip-address.none"); value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.CaTrustpoints[i].IpAddressNone.IsNull() {
-				data.CaTrustpoints[i].IpAddressNone = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.CaTrustpoints[i].IpAddressNone.IsNull() {
-				data.CaTrustpoints[i].IpAddressNone = types.BoolNull()
-			}
-		}
-		if value := r.Get("subject-name"); value.Exists() && !data.CaTrustpoints[i].SubjectName.IsNull() {
-			data.CaTrustpoints[i].SubjectName = types.StringValue(value.String())
-		} else {
-			data.CaTrustpoints[i].SubjectName = types.StringNull()
-		}
-		if value := r.Get("subject-alternative-name"); value.Exists() && !data.CaTrustpoints[i].SubjectAlternativeName.IsNull() {
-			data.CaTrustpoints[i].SubjectAlternativeName = types.StringValue(value.String())
-		} else {
-			data.CaTrustpoints[i].SubjectAlternativeName = types.StringNull()
-		}
-		if value := r.Get("serial-number"); value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.CaTrustpoints[i].SerialNumber.IsNull() {
-				data.CaTrustpoints[i].SerialNumber = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.CaTrustpoints[i].SerialNumber.IsNull() {
-				data.CaTrustpoints[i].SerialNumber = types.BoolNull()
-			}
-		}
-		if value := r.Get("serial-number.none"); value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.CaTrustpoints[i].SerialNumberNone.IsNull() {
-				data.CaTrustpoints[i].SerialNumberNone = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.CaTrustpoints[i].SerialNumberNone.IsNull() {
-				data.CaTrustpoints[i].SerialNumberNone = types.BoolNull()
-			}
-		}
-		if value := r.Get("vrf"); value.Exists() && !data.CaTrustpoints[i].Vrf.IsNull() {
-			data.CaTrustpoints[i].Vrf = types.StringValue(value.String())
-		} else {
-			data.CaTrustpoints[i].Vrf = types.StringNull()
-		}
-		if value := r.Get("message-digest"); value.Exists() && !data.CaTrustpoints[i].MessageDigest.IsNull() {
-			data.CaTrustpoints[i].MessageDigest = types.StringValue(value.String())
-		} else {
-			data.CaTrustpoints[i].MessageDigest = types.StringNull()
-		}
-		if value := r.Get("method.est.credential.certificate"); value.Exists() && !data.CaTrustpoints[i].MethodEstCredentialCertificate.IsNull() {
-			data.CaTrustpoints[i].MethodEstCredentialCertificate = types.StringValue(value.String())
-		} else {
-			data.CaTrustpoints[i].MethodEstCredentialCertificate = types.StringNull()
-		}
-	}
-	for i := range data.CaOpensshTrustpoints {
-		keys := [...]string{"trustpoint-name"}
-		keyValues := [...]string{data.CaOpensshTrustpoints[i].TrustpointName.ValueString()}
-
-		var r gjson.Result
-		res.Get("ca.openssh.trustpoints.trustpoint").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("trustpoint-name"); value.Exists() && !data.CaOpensshTrustpoints[i].TrustpointName.IsNull() {
-			data.CaOpensshTrustpoints[i].TrustpointName = types.StringValue(value.String())
-		} else {
-			data.CaOpensshTrustpoints[i].TrustpointName = types.StringNull()
-		}
-		if value := r.Get("rsakeypair"); value.Exists() && !data.CaOpensshTrustpoints[i].Rsakeypair.IsNull() {
-			data.CaOpensshTrustpoints[i].Rsakeypair = types.StringValue(value.String())
-		} else {
-			data.CaOpensshTrustpoints[i].Rsakeypair = types.StringNull()
-		}
-	}
-	if value := res.Get("ca.http-proxy"); value.Exists() && !data.CaHttpProxy.IsNull() {
-		data.CaHttpProxy = types.StringValue(value.String())
-	} else if data.CaHttpProxy.IsNull() {
-		data.CaHttpProxy = types.StringNull()
-	}
-	if value := res.Get("ca.port"); value.Exists() && !data.CaHttpProxyPort.IsNull() {
-		data.CaHttpProxyPort = types.Int64Value(value.Int())
-	} else if data.CaHttpProxyPort.IsNull() {
-		data.CaHttpProxyPort = types.Int64Null()
-	}
-	if value := res.Get("ca.source-interface.ipv4"); value.Exists() && !data.CaSourceInterfaceIpv4.IsNull() {
-		data.CaSourceInterfaceIpv4 = types.StringValue(value.String())
-	} else if data.CaSourceInterfaceIpv4.IsNull() {
-		data.CaSourceInterfaceIpv4 = types.StringNull()
-	}
-	if value := res.Get("ca.source-interface.ipv6"); value.Exists() && !data.CaSourceInterfaceIpv6.IsNull() {
-		data.CaSourceInterfaceIpv6 = types.StringValue(value.String())
-	} else if data.CaSourceInterfaceIpv6.IsNull() {
-		data.CaSourceInterfaceIpv6 = types.StringNull()
-	}
-	if value := res.Get("ca.rsa.one-thousand-twenty-four.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.CaRsa1024Disable.IsNull() {
-			data.CaRsa1024Disable = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.CaRsa1024Disable.IsNull() {
-			data.CaRsa1024Disable = types.BoolNull()
-		}
-	}
-	if value := res.Get("ca.fqdn-check.ip-address.allow"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.CaFqdnCheckIpAddressAllow.IsNull() {
-			data.CaFqdnCheckIpAddressAllow = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.CaFqdnCheckIpAddressAllow.IsNull() {
-			data.CaFqdnCheckIpAddressAllow = types.BoolNull()
-		}
-	}
-	if value := res.Get("ca.crl.curl-timeout"); value.Exists() && !data.CaCrlCurlTimeout.IsNull() {
-		data.CaCrlCurlTimeout = types.Int64Value(value.Int())
-	} else if data.CaCrlCurlTimeout.IsNull() {
-		data.CaCrlCurlTimeout = types.Int64Null()
-	}
-	if value := res.Get("fips-mode"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.FipsMode.IsNull() {
-			data.FipsMode = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.FipsMode.IsNull() {
-			data.FipsMode = types.BoolNull()
-		}
-	}
-}
-
-// End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
@@ -1770,6 +3209,33 @@ func (data *Crypto) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 		} else if data.CaTrustpoints[i].MethodEstCredentialCertificate.IsNull() {
 			data.CaTrustpoints[i].MethodEstCredentialCertificate = types.StringNull()
 		}
+		if value := helpers.GetFromXPath(r, "enrollment/authentication-profile"); value.Exists() && !data.CaTrustpoints[i].EnrollmentAuthenticationProfile.IsNull() {
+			data.CaTrustpoints[i].EnrollmentAuthenticationProfile = types.StringValue(value.String())
+		} else if data.CaTrustpoints[i].EnrollmentAuthenticationProfile.IsNull() {
+			data.CaTrustpoints[i].EnrollmentAuthenticationProfile = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "re-enrollment/authentication-profile"); value.Exists() && !data.CaTrustpoints[i].ReEnrollmentAuthenticationProfile.IsNull() {
+			data.CaTrustpoints[i].ReEnrollmentAuthenticationProfile = types.StringValue(value.String())
+		} else if data.CaTrustpoints[i].ReEnrollmentAuthenticationProfile.IsNull() {
+			data.CaTrustpoints[i].ReEnrollmentAuthenticationProfile = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "ssl-profile"); value.Exists() && !data.CaTrustpoints[i].SslProfile.IsNull() {
+			data.CaTrustpoints[i].SslProfile = types.StringValue(value.String())
+		} else if data.CaTrustpoints[i].SslProfile.IsNull() {
+			data.CaTrustpoints[i].SslProfile = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "enrollment/local"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.CaTrustpoints[i].EnrollmentLocal.IsNull() {
+				data.CaTrustpoints[i].EnrollmentLocal = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.CaTrustpoints[i].EnrollmentLocal.IsNull() {
+				data.CaTrustpoints[i].EnrollmentLocal = types.BoolNull()
+			}
+		}
 	}
 	for i := range data.CaOpensshTrustpoints {
 		keys := [...]string{"trustpoint-name"}
@@ -1863,604 +3329,20 @@ func (data *Crypto) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.FipsMode = types.BoolNull()
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ca/trustpoint/system-trustpoint/enrollment/local"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.CaTrustpointSystemEnrollmentLocal.IsNull() {
+			data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.CaTrustpointSystemEnrollmentLocal.IsNull() {
+			data.CaTrustpointSystemEnrollmentLocal = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
-
-func (data *Crypto) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.description"); value.Exists() {
-		data.CaTrustpointSystemDescription = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.enrollment.retry.count"); value.Exists() {
-		data.CaTrustpointSystemEnrollmentRetryCount = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.enrollment.retry.period"); value.Exists() {
-		data.CaTrustpointSystemEnrollmentRetryPeriod = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.enrollment.url"); value.Exists() {
-		data.CaTrustpointSystemEnrollmentUrl = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.enrollment.terminal"); value.Exists() {
-		data.CaTrustpointSystemEnrollmentTerminal = types.BoolValue(true)
-	} else if !data.CaTrustpointSystemEnrollmentTerminal.IsNull() {
-		// Only set to false if it was previously set in state
-		data.CaTrustpointSystemEnrollmentTerminal = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.enrollment.self"); value.Exists() {
-		data.CaTrustpointSystemEnrollmentSelf = types.BoolValue(true)
-	} else if !data.CaTrustpointSystemEnrollmentSelf.IsNull() {
-		// Only set to false if it was previously set in state
-		data.CaTrustpointSystemEnrollmentSelf = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.sftp-username"); value.Exists() {
-		data.CaTrustpointSystemSftpUsername = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.sftp-password.password"); value.Exists() {
-		data.CaTrustpointSystemSftpPassword = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.auto-enroll"); value.Exists() {
-		data.CaTrustpointSystemAutoEnroll = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.renewal-message-type.pkcsreq"); value.Exists() {
-		data.CaTrustpointSystemRenewalMessageTypePkcsreq = types.BoolValue(true)
-	} else if !data.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() {
-		// Only set to false if it was previously set in state
-		data.CaTrustpointSystemRenewalMessageTypePkcsreq = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.renewal-message-type.renewalreq"); value.Exists() {
-		data.CaTrustpointSystemRenewalMessageTypeRenewalreq = types.BoolValue(true)
-	} else if !data.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() {
-		// Only set to false if it was previously set in state
-		data.CaTrustpointSystemRenewalMessageTypeRenewalreq = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.skip-challenge-password"); value.Exists() {
-		data.CaTrustpointSystemSkipChallengePassword = types.BoolValue(true)
-	} else if !data.CaTrustpointSystemSkipChallengePassword.IsNull() {
-		// Only set to false if it was previously set in state
-		data.CaTrustpointSystemSkipChallengePassword = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.rsakeypair"); value.Exists() {
-		data.CaTrustpointSystemRsaKeypair = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.ca-keypair.rsa"); value.Exists() {
-		data.CaTrustpointSystemCaKeypairRsa = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp256"); value.Exists() {
-		data.CaTrustpointSystemCaKeypairEcdsanistp256 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp384"); value.Exists() {
-		data.CaTrustpointSystemCaKeypairEcdsanistp384 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp521"); value.Exists() {
-		data.CaTrustpointSystemCaKeypairEcdsanistp521 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.ca-keypair.dsa"); value.Exists() {
-		data.CaTrustpointSystemCaKeypairDsa = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.ca-keypair.ed25519"); value.Exists() {
-		data.CaTrustpointSystemCaKeypairEd25519 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.keypair.rsa"); value.Exists() {
-		data.CaTrustpointSystemKeypairRsa = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.keypair.ecdsanistp256"); value.Exists() {
-		data.CaTrustpointSystemKeypairEcdsanistp256 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.keypair.ecdsanistp384"); value.Exists() {
-		data.CaTrustpointSystemKeypairEcdsanistp384 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.keypair.ecdsanistp521"); value.Exists() {
-		data.CaTrustpointSystemKeypairEcdsanistp521 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.keypair.dsa"); value.Exists() {
-		data.CaTrustpointSystemKeypairDsa = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.keypair.ed25519"); value.Exists() {
-		data.CaTrustpointSystemKeypairEd25519 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.crl.optional"); value.Exists() {
-		data.CaTrustpointSystemCrlOptional = types.BoolValue(true)
-	} else if !data.CaTrustpointSystemCrlOptional.IsNull() {
-		// Only set to false if it was previously set in state
-		data.CaTrustpointSystemCrlOptional = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.query.url"); value.Exists() {
-		data.CaTrustpointSystemQueryUrl = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.ip-address.ipv4-address"); value.Exists() {
-		data.CaTrustpointSystemIpAddress = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.ip-address.none"); value.Exists() {
-		data.CaTrustpointSystemIpAddressNone = types.BoolValue(true)
-	} else if !data.CaTrustpointSystemIpAddressNone.IsNull() {
-		// Only set to false if it was previously set in state
-		data.CaTrustpointSystemIpAddressNone = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.subject-name"); value.Exists() {
-		data.CaTrustpointSystemSubjectName = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.subject-name-ca-certificate"); value.Exists() {
-		data.CaTrustpointSystemSubjectNameCaCertificate = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.subject-alternative-name"); value.Exists() {
-		data.CaTrustpointSystemSubjectAlternativeName = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.serial-number"); value.Exists() {
-		data.CaTrustpointSystemSerialNumber = types.BoolValue(true)
-	} else if !data.CaTrustpointSystemSerialNumber.IsNull() {
-		// Only set to false if it was previously set in state
-		data.CaTrustpointSystemSerialNumber = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.serial-number.none"); value.Exists() {
-		data.CaTrustpointSystemSerialNumberNone = types.BoolValue(true)
-	} else if !data.CaTrustpointSystemSerialNumberNone.IsNull() {
-		// Only set to false if it was previously set in state
-		data.CaTrustpointSystemSerialNumberNone = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.vrf"); value.Exists() {
-		data.CaTrustpointSystemVrf = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.lifetime.ca-certificate"); value.Exists() {
-		data.CaTrustpointSystemLifetimeCaCertificate = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.lifetime.certificate"); value.Exists() {
-		data.CaTrustpointSystemLifetimeCertificate = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.message-digest"); value.Exists() {
-		data.CaTrustpointSystemMessageDigest = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.trustpoints.trustpoint"); value.Exists() {
-		data.CaTrustpoints = make([]CryptoCaTrustpoints, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := CryptoCaTrustpoints{}
-			if cValue := v.Get("trustpoint-name"); cValue.Exists() {
-				item.TrustpointName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("description"); cValue.Exists() {
-				item.Description = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("enrollment.retry.count"); cValue.Exists() {
-				item.EnrollmentRetryCount = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("enrollment.retry.period"); cValue.Exists() {
-				item.EnrollmentRetryPeriod = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("enrollment.url"); cValue.Exists() {
-				item.EnrollmentUrl = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("enrollment.terminal"); cValue.Exists() {
-				item.EnrollmentTerminal = types.BoolValue(true)
-			} else if !item.EnrollmentTerminal.IsNull() {
-				// Only set to false if it was previously set
-				item.EnrollmentTerminal = types.BoolValue(false)
-			}
-			if cValue := v.Get("sftp-username"); cValue.Exists() {
-				item.SftpUsername = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("sftp-password.password"); cValue.Exists() {
-				item.SftpPassword = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("auto-enroll"); cValue.Exists() {
-				item.AutoEnroll = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("renewal-message-type.pkcsreq"); cValue.Exists() {
-				item.RenewalMessageTypePkcsreq = types.BoolValue(true)
-			} else if !item.RenewalMessageTypePkcsreq.IsNull() {
-				// Only set to false if it was previously set
-				item.RenewalMessageTypePkcsreq = types.BoolValue(false)
-			}
-			if cValue := v.Get("renewal-message-type.renewalreq"); cValue.Exists() {
-				item.RenewalMessageTypeRenewalreq = types.BoolValue(true)
-			} else if !item.RenewalMessageTypeRenewalreq.IsNull() {
-				// Only set to false if it was previously set
-				item.RenewalMessageTypeRenewalreq = types.BoolValue(false)
-			}
-			if cValue := v.Get("skip-challenge-password"); cValue.Exists() {
-				item.SkipChallengePassword = types.BoolValue(true)
-			} else if !item.SkipChallengePassword.IsNull() {
-				// Only set to false if it was previously set
-				item.SkipChallengePassword = types.BoolValue(false)
-			}
-			if cValue := v.Get("rsakeypair"); cValue.Exists() {
-				item.Rsakeypair = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("crl.optional"); cValue.Exists() {
-				item.CrlOptional = types.BoolValue(true)
-			} else if !item.CrlOptional.IsNull() {
-				// Only set to false if it was previously set
-				item.CrlOptional = types.BoolValue(false)
-			}
-			if cValue := v.Get("query.url"); cValue.Exists() {
-				item.QueryUrl = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ip-address.ipv4-address"); cValue.Exists() {
-				item.IpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ip-address.none"); cValue.Exists() {
-				item.IpAddressNone = types.BoolValue(true)
-			} else if !item.IpAddressNone.IsNull() {
-				// Only set to false if it was previously set
-				item.IpAddressNone = types.BoolValue(false)
-			}
-			if cValue := v.Get("subject-name"); cValue.Exists() {
-				item.SubjectName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("subject-alternative-name"); cValue.Exists() {
-				item.SubjectAlternativeName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("serial-number"); cValue.Exists() {
-				item.SerialNumber = types.BoolValue(true)
-			} else if !item.SerialNumber.IsNull() {
-				// Only set to false if it was previously set
-				item.SerialNumber = types.BoolValue(false)
-			}
-			if cValue := v.Get("serial-number.none"); cValue.Exists() {
-				item.SerialNumberNone = types.BoolValue(true)
-			} else if !item.SerialNumberNone.IsNull() {
-				// Only set to false if it was previously set
-				item.SerialNumberNone = types.BoolValue(false)
-			}
-			if cValue := v.Get("vrf"); cValue.Exists() {
-				item.Vrf = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("message-digest"); cValue.Exists() {
-				item.MessageDigest = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("method.est.credential.certificate"); cValue.Exists() {
-				item.MethodEstCredentialCertificate = types.StringValue(cValue.String())
-			}
-			data.CaTrustpoints = append(data.CaTrustpoints, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "ca.openssh.trustpoints.trustpoint"); value.Exists() {
-		data.CaOpensshTrustpoints = make([]CryptoCaOpensshTrustpoints, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := CryptoCaOpensshTrustpoints{}
-			if cValue := v.Get("trustpoint-name"); cValue.Exists() {
-				item.TrustpointName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("rsakeypair"); cValue.Exists() {
-				item.Rsakeypair = types.StringValue(cValue.String())
-			}
-			data.CaOpensshTrustpoints = append(data.CaOpensshTrustpoints, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "ca.http-proxy"); value.Exists() {
-		data.CaHttpProxy = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.port"); value.Exists() {
-		data.CaHttpProxyPort = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ca.source-interface.ipv4"); value.Exists() {
-		data.CaSourceInterfaceIpv4 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.source-interface.ipv6"); value.Exists() {
-		data.CaSourceInterfaceIpv6 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.rsa.one-thousand-twenty-four.disable"); value.Exists() {
-		data.CaRsa1024Disable = types.BoolValue(true)
-	} else if !data.CaRsa1024Disable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.CaRsa1024Disable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.fqdn-check.ip-address.allow"); value.Exists() {
-		data.CaFqdnCheckIpAddressAllow = types.BoolValue(true)
-	} else if !data.CaFqdnCheckIpAddressAllow.IsNull() {
-		// Only set to false if it was previously set in state
-		data.CaFqdnCheckIpAddressAllow = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.crl.curl-timeout"); value.Exists() {
-		data.CaCrlCurlTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "fips-mode"); value.Exists() {
-		data.FipsMode = types.BoolValue(true)
-	} else if !data.FipsMode.IsNull() {
-		// Only set to false if it was previously set in state
-		data.FipsMode = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *CryptoData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.description"); value.Exists() {
-		data.CaTrustpointSystemDescription = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.enrollment.retry.count"); value.Exists() {
-		data.CaTrustpointSystemEnrollmentRetryCount = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.enrollment.retry.period"); value.Exists() {
-		data.CaTrustpointSystemEnrollmentRetryPeriod = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.enrollment.url"); value.Exists() {
-		data.CaTrustpointSystemEnrollmentUrl = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.enrollment.terminal"); value.Exists() {
-		data.CaTrustpointSystemEnrollmentTerminal = types.BoolValue(true)
-	} else {
-		data.CaTrustpointSystemEnrollmentTerminal = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.enrollment.self"); value.Exists() {
-		data.CaTrustpointSystemEnrollmentSelf = types.BoolValue(true)
-	} else {
-		data.CaTrustpointSystemEnrollmentSelf = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.sftp-username"); value.Exists() {
-		data.CaTrustpointSystemSftpUsername = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.sftp-password.password"); value.Exists() {
-		data.CaTrustpointSystemSftpPassword = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.auto-enroll"); value.Exists() {
-		data.CaTrustpointSystemAutoEnroll = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.renewal-message-type.pkcsreq"); value.Exists() {
-		data.CaTrustpointSystemRenewalMessageTypePkcsreq = types.BoolValue(true)
-	} else {
-		data.CaTrustpointSystemRenewalMessageTypePkcsreq = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.renewal-message-type.renewalreq"); value.Exists() {
-		data.CaTrustpointSystemRenewalMessageTypeRenewalreq = types.BoolValue(true)
-	} else {
-		data.CaTrustpointSystemRenewalMessageTypeRenewalreq = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.skip-challenge-password"); value.Exists() {
-		data.CaTrustpointSystemSkipChallengePassword = types.BoolValue(true)
-	} else {
-		data.CaTrustpointSystemSkipChallengePassword = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.rsakeypair"); value.Exists() {
-		data.CaTrustpointSystemRsaKeypair = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.ca-keypair.rsa"); value.Exists() {
-		data.CaTrustpointSystemCaKeypairRsa = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp256"); value.Exists() {
-		data.CaTrustpointSystemCaKeypairEcdsanistp256 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp384"); value.Exists() {
-		data.CaTrustpointSystemCaKeypairEcdsanistp384 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.ca-keypair.ecdsanistp521"); value.Exists() {
-		data.CaTrustpointSystemCaKeypairEcdsanistp521 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.ca-keypair.dsa"); value.Exists() {
-		data.CaTrustpointSystemCaKeypairDsa = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.ca-keypair.ed25519"); value.Exists() {
-		data.CaTrustpointSystemCaKeypairEd25519 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.keypair.rsa"); value.Exists() {
-		data.CaTrustpointSystemKeypairRsa = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.keypair.ecdsanistp256"); value.Exists() {
-		data.CaTrustpointSystemKeypairEcdsanistp256 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.keypair.ecdsanistp384"); value.Exists() {
-		data.CaTrustpointSystemKeypairEcdsanistp384 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.keypair.ecdsanistp521"); value.Exists() {
-		data.CaTrustpointSystemKeypairEcdsanistp521 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.keypair.dsa"); value.Exists() {
-		data.CaTrustpointSystemKeypairDsa = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.keypair.ed25519"); value.Exists() {
-		data.CaTrustpointSystemKeypairEd25519 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.crl.optional"); value.Exists() {
-		data.CaTrustpointSystemCrlOptional = types.BoolValue(true)
-	} else {
-		data.CaTrustpointSystemCrlOptional = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.query.url"); value.Exists() {
-		data.CaTrustpointSystemQueryUrl = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.ip-address.ipv4-address"); value.Exists() {
-		data.CaTrustpointSystemIpAddress = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.ip-address.none"); value.Exists() {
-		data.CaTrustpointSystemIpAddressNone = types.BoolValue(true)
-	} else {
-		data.CaTrustpointSystemIpAddressNone = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.subject-name"); value.Exists() {
-		data.CaTrustpointSystemSubjectName = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.subject-name-ca-certificate"); value.Exists() {
-		data.CaTrustpointSystemSubjectNameCaCertificate = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.subject-alternative-name"); value.Exists() {
-		data.CaTrustpointSystemSubjectAlternativeName = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.serial-number"); value.Exists() {
-		data.CaTrustpointSystemSerialNumber = types.BoolValue(true)
-	} else {
-		data.CaTrustpointSystemSerialNumber = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.serial-number.none"); value.Exists() {
-		data.CaTrustpointSystemSerialNumberNone = types.BoolValue(true)
-	} else {
-		data.CaTrustpointSystemSerialNumberNone = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.vrf"); value.Exists() {
-		data.CaTrustpointSystemVrf = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.lifetime.ca-certificate"); value.Exists() {
-		data.CaTrustpointSystemLifetimeCaCertificate = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.lifetime.certificate"); value.Exists() {
-		data.CaTrustpointSystemLifetimeCertificate = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.system-trustpoint.message-digest"); value.Exists() {
-		data.CaTrustpointSystemMessageDigest = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.trustpoint.trustpoints.trustpoint"); value.Exists() {
-		data.CaTrustpoints = make([]CryptoCaTrustpoints, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := CryptoCaTrustpoints{}
-			if cValue := v.Get("trustpoint-name"); cValue.Exists() {
-				item.TrustpointName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("description"); cValue.Exists() {
-				item.Description = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("enrollment.retry.count"); cValue.Exists() {
-				item.EnrollmentRetryCount = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("enrollment.retry.period"); cValue.Exists() {
-				item.EnrollmentRetryPeriod = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("enrollment.url"); cValue.Exists() {
-				item.EnrollmentUrl = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("enrollment.terminal"); cValue.Exists() {
-				item.EnrollmentTerminal = types.BoolValue(true)
-			} else {
-				item.EnrollmentTerminal = types.BoolValue(false)
-			}
-			if cValue := v.Get("sftp-username"); cValue.Exists() {
-				item.SftpUsername = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("sftp-password.password"); cValue.Exists() {
-				item.SftpPassword = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("auto-enroll"); cValue.Exists() {
-				item.AutoEnroll = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("renewal-message-type.pkcsreq"); cValue.Exists() {
-				item.RenewalMessageTypePkcsreq = types.BoolValue(true)
-			} else {
-				item.RenewalMessageTypePkcsreq = types.BoolValue(false)
-			}
-			if cValue := v.Get("renewal-message-type.renewalreq"); cValue.Exists() {
-				item.RenewalMessageTypeRenewalreq = types.BoolValue(true)
-			} else {
-				item.RenewalMessageTypeRenewalreq = types.BoolValue(false)
-			}
-			if cValue := v.Get("skip-challenge-password"); cValue.Exists() {
-				item.SkipChallengePassword = types.BoolValue(true)
-			} else {
-				item.SkipChallengePassword = types.BoolValue(false)
-			}
-			if cValue := v.Get("rsakeypair"); cValue.Exists() {
-				item.Rsakeypair = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("crl.optional"); cValue.Exists() {
-				item.CrlOptional = types.BoolValue(true)
-			} else {
-				item.CrlOptional = types.BoolValue(false)
-			}
-			if cValue := v.Get("query.url"); cValue.Exists() {
-				item.QueryUrl = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ip-address.ipv4-address"); cValue.Exists() {
-				item.IpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("ip-address.none"); cValue.Exists() {
-				item.IpAddressNone = types.BoolValue(true)
-			} else {
-				item.IpAddressNone = types.BoolValue(false)
-			}
-			if cValue := v.Get("subject-name"); cValue.Exists() {
-				item.SubjectName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("subject-alternative-name"); cValue.Exists() {
-				item.SubjectAlternativeName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("serial-number"); cValue.Exists() {
-				item.SerialNumber = types.BoolValue(true)
-			} else {
-				item.SerialNumber = types.BoolValue(false)
-			}
-			if cValue := v.Get("serial-number.none"); cValue.Exists() {
-				item.SerialNumberNone = types.BoolValue(true)
-			} else {
-				item.SerialNumberNone = types.BoolValue(false)
-			}
-			if cValue := v.Get("vrf"); cValue.Exists() {
-				item.Vrf = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("message-digest"); cValue.Exists() {
-				item.MessageDigest = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("method.est.credential.certificate"); cValue.Exists() {
-				item.MethodEstCredentialCertificate = types.StringValue(cValue.String())
-			}
-			data.CaTrustpoints = append(data.CaTrustpoints, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "ca.openssh.trustpoints.trustpoint"); value.Exists() {
-		data.CaOpensshTrustpoints = make([]CryptoCaOpensshTrustpoints, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := CryptoCaOpensshTrustpoints{}
-			if cValue := v.Get("trustpoint-name"); cValue.Exists() {
-				item.TrustpointName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("rsakeypair"); cValue.Exists() {
-				item.Rsakeypair = types.StringValue(cValue.String())
-			}
-			data.CaOpensshTrustpoints = append(data.CaOpensshTrustpoints, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "ca.http-proxy"); value.Exists() {
-		data.CaHttpProxy = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.port"); value.Exists() {
-		data.CaHttpProxyPort = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ca.source-interface.ipv4"); value.Exists() {
-		data.CaSourceInterfaceIpv4 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.source-interface.ipv6"); value.Exists() {
-		data.CaSourceInterfaceIpv6 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ca.rsa.one-thousand-twenty-four.disable"); value.Exists() {
-		data.CaRsa1024Disable = types.BoolValue(true)
-	} else {
-		data.CaRsa1024Disable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.fqdn-check.ip-address.allow"); value.Exists() {
-		data.CaFqdnCheckIpAddressAllow = types.BoolValue(true)
-	} else {
-		data.CaFqdnCheckIpAddressAllow = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ca.crl.curl-timeout"); value.Exists() {
-		data.CaCrlCurlTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "fips-mode"); value.Exists() {
-		data.FipsMode = types.BoolValue(true)
-	} else {
-		data.FipsMode = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBodyData
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
@@ -2689,6 +3571,20 @@ func (data *Crypto) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "method/est/credential/certificate"); cValue.Exists() {
 				item.MethodEstCredentialCertificate = types.StringValue(cValue.String())
 			}
+			if cValue := helpers.GetFromXPath(v, "enrollment/authentication-profile"); cValue.Exists() {
+				item.EnrollmentAuthenticationProfile = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "re-enrollment/authentication-profile"); cValue.Exists() {
+				item.ReEnrollmentAuthenticationProfile = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ssl-profile"); cValue.Exists() {
+				item.SslProfile = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "enrollment/local"); cValue.Exists() {
+				item.EnrollmentLocal = types.BoolValue(true)
+			} else {
+				item.EnrollmentLocal = types.BoolValue(false)
+			}
 			data.CaTrustpoints = append(data.CaTrustpoints, item)
 			return true
 		})
@@ -2736,6 +3632,11 @@ func (data *Crypto) fromBodyXML(ctx context.Context, res xmldot.Result) {
 		data.FipsMode = types.BoolValue(true)
 	} else {
 		data.FipsMode = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ca/trustpoint/system-trustpoint/enrollment/local"); value.Exists() {
+		data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(true)
+	} else {
+		data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(false)
 	}
 }
 
@@ -2968,6 +3869,20 @@ func (data *CryptoData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "method/est/credential/certificate"); cValue.Exists() {
 				item.MethodEstCredentialCertificate = types.StringValue(cValue.String())
 			}
+			if cValue := helpers.GetFromXPath(v, "enrollment/authentication-profile"); cValue.Exists() {
+				item.EnrollmentAuthenticationProfile = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "re-enrollment/authentication-profile"); cValue.Exists() {
+				item.ReEnrollmentAuthenticationProfile = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "ssl-profile"); cValue.Exists() {
+				item.SslProfile = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "enrollment/local"); cValue.Exists() {
+				item.EnrollmentLocal = types.BoolValue(true)
+			} else {
+				item.EnrollmentLocal = types.BoolValue(false)
+			}
 			data.CaTrustpoints = append(data.CaTrustpoints, item)
 			return true
 		})
@@ -3016,601 +3931,14 @@ func (data *CryptoData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	} else {
 		data.FipsMode = types.BoolValue(false)
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ca/trustpoint/system-trustpoint/enrollment/local"); value.Exists() {
+		data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(true)
+	} else {
+		data.CaTrustpointSystemEnrollmentLocal = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data *Crypto) getDeletedItems(ctx context.Context, state Crypto) []string {
-	deletedItems := make([]string, 0)
-	if !state.FipsMode.IsNull() && data.FipsMode.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/fips-mode", state.getPath()))
-	}
-	if !state.CaCrlCurlTimeout.IsNull() && data.CaCrlCurlTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/crl/curl-timeout", state.getPath()))
-	}
-	if !state.CaFqdnCheckIpAddressAllow.IsNull() && data.CaFqdnCheckIpAddressAllow.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/fqdn-check/ip-address/allow", state.getPath()))
-	}
-	if !state.CaRsa1024Disable.IsNull() && data.CaRsa1024Disable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/rsa/one-thousand-twenty-four/disable", state.getPath()))
-	}
-	if !state.CaSourceInterfaceIpv6.IsNull() && data.CaSourceInterfaceIpv6.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/source-interface/ipv6", state.getPath()))
-	}
-	if !state.CaSourceInterfaceIpv4.IsNull() && data.CaSourceInterfaceIpv4.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/source-interface/ipv4", state.getPath()))
-	}
-	if !state.CaHttpProxyPort.IsNull() && data.CaHttpProxyPort.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/port", state.getPath()))
-	}
-	if !state.CaHttpProxy.IsNull() && data.CaHttpProxy.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/http-proxy", state.getPath()))
-	}
-	for i := range state.CaOpensshTrustpoints {
-		keys := [...]string{"trustpoint-name"}
-		stateKeyValues := [...]string{state.CaOpensshTrustpoints[i].TrustpointName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.CaOpensshTrustpoints[i].TrustpointName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.CaOpensshTrustpoints {
-			found = true
-			if state.CaOpensshTrustpoints[i].TrustpointName.ValueString() != data.CaOpensshTrustpoints[j].TrustpointName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.CaOpensshTrustpoints[i].Rsakeypair.IsNull() && data.CaOpensshTrustpoints[j].Rsakeypair.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/openssh/trustpoints/trustpoint%v/rsakeypair", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/openssh/trustpoints/trustpoint%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.CaTrustpoints {
-		keys := [...]string{"trustpoint-name"}
-		stateKeyValues := [...]string{state.CaTrustpoints[i].TrustpointName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.CaTrustpoints[i].TrustpointName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.CaTrustpoints {
-			found = true
-			if state.CaTrustpoints[i].TrustpointName.ValueString() != data.CaTrustpoints[j].TrustpointName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.CaTrustpoints[i].MethodEstCredentialCertificate.IsNull() && data.CaTrustpoints[j].MethodEstCredentialCertificate.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/method/est/credential/certificate", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].MessageDigest.IsNull() && data.CaTrustpoints[j].MessageDigest.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/message-digest", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].Vrf.IsNull() && data.CaTrustpoints[j].Vrf.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/vrf", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].SerialNumberNone.IsNull() && data.CaTrustpoints[j].SerialNumberNone.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/serial-number/none", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].SerialNumber.IsNull() && data.CaTrustpoints[j].SerialNumber.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/serial-number", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].SubjectAlternativeName.IsNull() && data.CaTrustpoints[j].SubjectAlternativeName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/subject-alternative-name", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].SubjectName.IsNull() && data.CaTrustpoints[j].SubjectName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/subject-name", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].IpAddressNone.IsNull() && data.CaTrustpoints[j].IpAddressNone.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/ip-address/none", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].IpAddress.IsNull() && data.CaTrustpoints[j].IpAddress.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/ip-address/ipv4-address", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].QueryUrl.IsNull() && data.CaTrustpoints[j].QueryUrl.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/query/url", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].CrlOptional.IsNull() && data.CaTrustpoints[j].CrlOptional.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/crl/optional", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].Rsakeypair.IsNull() && data.CaTrustpoints[j].Rsakeypair.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/rsakeypair", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].SkipChallengePassword.IsNull() && data.CaTrustpoints[j].SkipChallengePassword.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/skip-challenge-password", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].RenewalMessageTypeRenewalreq.IsNull() && data.CaTrustpoints[j].RenewalMessageTypeRenewalreq.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/renewal-message-type/renewalreq", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].RenewalMessageTypePkcsreq.IsNull() && data.CaTrustpoints[j].RenewalMessageTypePkcsreq.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/renewal-message-type/pkcsreq", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].AutoEnroll.IsNull() && data.CaTrustpoints[j].AutoEnroll.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/auto-enroll", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].SftpPassword.IsNull() && data.CaTrustpoints[j].SftpPassword.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/sftp-password/password", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].SftpUsername.IsNull() && data.CaTrustpoints[j].SftpUsername.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/sftp-username", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].EnrollmentTerminal.IsNull() && data.CaTrustpoints[j].EnrollmentTerminal.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/enrollment/terminal", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].EnrollmentUrl.IsNull() && data.CaTrustpoints[j].EnrollmentUrl.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/enrollment/url", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].EnrollmentRetryPeriod.IsNull() && data.CaTrustpoints[j].EnrollmentRetryPeriod.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/enrollment/retry/period", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].EnrollmentRetryCount.IsNull() && data.CaTrustpoints[j].EnrollmentRetryCount.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/enrollment/retry/count", state.getPath(), keyString))
-				}
-				if !state.CaTrustpoints[i].Description.IsNull() && data.CaTrustpoints[j].Description.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/description", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v", state.getPath(), keyString))
-		}
-	}
-	if !state.CaTrustpointSystemMessageDigest.IsNull() && data.CaTrustpointSystemMessageDigest.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/message-digest", state.getPath()))
-	}
-	if !state.CaTrustpointSystemLifetimeCertificate.IsNull() && data.CaTrustpointSystemLifetimeCertificate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/lifetime/certificate", state.getPath()))
-	}
-	if !state.CaTrustpointSystemLifetimeCaCertificate.IsNull() && data.CaTrustpointSystemLifetimeCaCertificate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/lifetime/ca-certificate", state.getPath()))
-	}
-	if !state.CaTrustpointSystemVrf.IsNull() && data.CaTrustpointSystemVrf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/vrf", state.getPath()))
-	}
-	if !state.CaTrustpointSystemSerialNumberNone.IsNull() && data.CaTrustpointSystemSerialNumberNone.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/serial-number/none", state.getPath()))
-	}
-	if !state.CaTrustpointSystemSerialNumber.IsNull() && data.CaTrustpointSystemSerialNumber.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/serial-number", state.getPath()))
-	}
-	if !state.CaTrustpointSystemSubjectAlternativeName.IsNull() && data.CaTrustpointSystemSubjectAlternativeName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/subject-alternative-name", state.getPath()))
-	}
-	if !state.CaTrustpointSystemSubjectNameCaCertificate.IsNull() && data.CaTrustpointSystemSubjectNameCaCertificate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/subject-name-ca-certificate", state.getPath()))
-	}
-	if !state.CaTrustpointSystemSubjectName.IsNull() && data.CaTrustpointSystemSubjectName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/subject-name", state.getPath()))
-	}
-	if !state.CaTrustpointSystemIpAddressNone.IsNull() && data.CaTrustpointSystemIpAddressNone.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/ip-address/none", state.getPath()))
-	}
-	if !state.CaTrustpointSystemIpAddress.IsNull() && data.CaTrustpointSystemIpAddress.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/ip-address/ipv4-address", state.getPath()))
-	}
-	if !state.CaTrustpointSystemQueryUrl.IsNull() && data.CaTrustpointSystemQueryUrl.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/query/url", state.getPath()))
-	}
-	if !state.CaTrustpointSystemCrlOptional.IsNull() && data.CaTrustpointSystemCrlOptional.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/crl/optional", state.getPath()))
-	}
-	if !state.CaTrustpointSystemKeypairEd25519.IsNull() && data.CaTrustpointSystemKeypairEd25519.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/keypair/ed25519", state.getPath()))
-	}
-	if !state.CaTrustpointSystemKeypairDsa.IsNull() && data.CaTrustpointSystemKeypairDsa.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/keypair/dsa", state.getPath()))
-	}
-	if !state.CaTrustpointSystemKeypairEcdsanistp521.IsNull() && data.CaTrustpointSystemKeypairEcdsanistp521.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/keypair/ecdsanistp521", state.getPath()))
-	}
-	if !state.CaTrustpointSystemKeypairEcdsanistp384.IsNull() && data.CaTrustpointSystemKeypairEcdsanistp384.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/keypair/ecdsanistp384", state.getPath()))
-	}
-	if !state.CaTrustpointSystemKeypairEcdsanistp256.IsNull() && data.CaTrustpointSystemKeypairEcdsanistp256.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/keypair/ecdsanistp256", state.getPath()))
-	}
-	if !state.CaTrustpointSystemKeypairRsa.IsNull() && data.CaTrustpointSystemKeypairRsa.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/keypair/rsa", state.getPath()))
-	}
-	if !state.CaTrustpointSystemCaKeypairEd25519.IsNull() && data.CaTrustpointSystemCaKeypairEd25519.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/ca-keypair/ed25519", state.getPath()))
-	}
-	if !state.CaTrustpointSystemCaKeypairDsa.IsNull() && data.CaTrustpointSystemCaKeypairDsa.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/ca-keypair/dsa", state.getPath()))
-	}
-	if !state.CaTrustpointSystemCaKeypairEcdsanistp521.IsNull() && data.CaTrustpointSystemCaKeypairEcdsanistp521.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/ca-keypair/ecdsanistp521", state.getPath()))
-	}
-	if !state.CaTrustpointSystemCaKeypairEcdsanistp384.IsNull() && data.CaTrustpointSystemCaKeypairEcdsanistp384.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/ca-keypair/ecdsanistp384", state.getPath()))
-	}
-	if !state.CaTrustpointSystemCaKeypairEcdsanistp256.IsNull() && data.CaTrustpointSystemCaKeypairEcdsanistp256.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/ca-keypair/ecdsanistp256", state.getPath()))
-	}
-	if !state.CaTrustpointSystemCaKeypairRsa.IsNull() && data.CaTrustpointSystemCaKeypairRsa.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/ca-keypair/rsa", state.getPath()))
-	}
-	if !state.CaTrustpointSystemRsaKeypair.IsNull() && data.CaTrustpointSystemRsaKeypair.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/rsakeypair", state.getPath()))
-	}
-	if !state.CaTrustpointSystemSkipChallengePassword.IsNull() && data.CaTrustpointSystemSkipChallengePassword.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/skip-challenge-password", state.getPath()))
-	}
-	if !state.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() && data.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/renewal-message-type/renewalreq", state.getPath()))
-	}
-	if !state.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() && data.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/renewal-message-type/pkcsreq", state.getPath()))
-	}
-	if !state.CaTrustpointSystemAutoEnroll.IsNull() && data.CaTrustpointSystemAutoEnroll.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/auto-enroll", state.getPath()))
-	}
-	if !state.CaTrustpointSystemSftpPassword.IsNull() && data.CaTrustpointSystemSftpPassword.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/sftp-password/password", state.getPath()))
-	}
-	if !state.CaTrustpointSystemSftpUsername.IsNull() && data.CaTrustpointSystemSftpUsername.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/sftp-username", state.getPath()))
-	}
-	if !state.CaTrustpointSystemEnrollmentSelf.IsNull() && data.CaTrustpointSystemEnrollmentSelf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/enrollment/self", state.getPath()))
-	}
-	if !state.CaTrustpointSystemEnrollmentTerminal.IsNull() && data.CaTrustpointSystemEnrollmentTerminal.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/enrollment/terminal", state.getPath()))
-	}
-	if !state.CaTrustpointSystemEnrollmentUrl.IsNull() && data.CaTrustpointSystemEnrollmentUrl.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/enrollment/url", state.getPath()))
-	}
-	if !state.CaTrustpointSystemEnrollmentRetryPeriod.IsNull() && data.CaTrustpointSystemEnrollmentRetryPeriod.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/enrollment/retry/period", state.getPath()))
-	}
-	if !state.CaTrustpointSystemEnrollmentRetryCount.IsNull() && data.CaTrustpointSystemEnrollmentRetryCount.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/enrollment/retry/count", state.getPath()))
-	}
-	if !state.CaTrustpointSystemDescription.IsNull() && data.CaTrustpointSystemDescription.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/description", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *Crypto) getEmptyLeafsDelete(ctx context.Context, state *Crypto) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.FipsMode.IsNull() && !data.FipsMode.ValueBool() {
-		if state != nil && !state.FipsMode.IsNull() && state.FipsMode.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fips-mode", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.CaFqdnCheckIpAddressAllow.IsNull() && !data.CaFqdnCheckIpAddressAllow.ValueBool() {
-		if state != nil && !state.CaFqdnCheckIpAddressAllow.IsNull() && state.CaFqdnCheckIpAddressAllow.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/fqdn-check/ip-address/allow", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.CaRsa1024Disable.IsNull() && !data.CaRsa1024Disable.ValueBool() {
-		if state != nil && !state.CaRsa1024Disable.IsNull() && state.CaRsa1024Disable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/rsa/one-thousand-twenty-four/disable", data.getXPath()))
-		}
-	}
-	for i := range data.CaOpensshTrustpoints {
-		keys := [...]string{"trustpoint-name"}
-		keyValues := [...]string{data.CaOpensshTrustpoints[i].TrustpointName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	for i := range data.CaTrustpoints {
-		keys := [...]string{"trustpoint-name"}
-		keyValues := [...]string{data.CaTrustpoints[i].TrustpointName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.CaTrustpoints[i].SerialNumberNone.IsNull() && !data.CaTrustpoints[i].SerialNumberNone.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].SerialNumberNone.IsNull() && state.CaTrustpoints[i].SerialNumberNone.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/serial-number/none", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.CaTrustpoints[i].SerialNumber.IsNull() && !data.CaTrustpoints[i].SerialNumber.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].SerialNumber.IsNull() && state.CaTrustpoints[i].SerialNumber.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/serial-number", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.CaTrustpoints[i].IpAddressNone.IsNull() && !data.CaTrustpoints[i].IpAddressNone.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].IpAddressNone.IsNull() && state.CaTrustpoints[i].IpAddressNone.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/ip-address/none", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.CaTrustpoints[i].CrlOptional.IsNull() && !data.CaTrustpoints[i].CrlOptional.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].CrlOptional.IsNull() && state.CaTrustpoints[i].CrlOptional.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/crl/optional", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.CaTrustpoints[i].SkipChallengePassword.IsNull() && !data.CaTrustpoints[i].SkipChallengePassword.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].SkipChallengePassword.IsNull() && state.CaTrustpoints[i].SkipChallengePassword.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/skip-challenge-password", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.CaTrustpoints[i].RenewalMessageTypeRenewalreq.IsNull() && !data.CaTrustpoints[i].RenewalMessageTypeRenewalreq.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].RenewalMessageTypeRenewalreq.IsNull() && state.CaTrustpoints[i].RenewalMessageTypeRenewalreq.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/renewal-message-type/renewalreq", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.CaTrustpoints[i].RenewalMessageTypePkcsreq.IsNull() && !data.CaTrustpoints[i].RenewalMessageTypePkcsreq.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].RenewalMessageTypePkcsreq.IsNull() && state.CaTrustpoints[i].RenewalMessageTypePkcsreq.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/renewal-message-type/pkcsreq", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.CaTrustpoints[i].EnrollmentTerminal.IsNull() && !data.CaTrustpoints[i].EnrollmentTerminal.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.CaTrustpoints) && !state.CaTrustpoints[i].EnrollmentTerminal.IsNull() && state.CaTrustpoints[i].EnrollmentTerminal.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v/enrollment/terminal", data.getXPath(), keyString))
-			}
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.CaTrustpointSystemSerialNumberNone.IsNull() && !data.CaTrustpointSystemSerialNumberNone.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemSerialNumberNone.IsNull() && state.CaTrustpointSystemSerialNumberNone.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/serial-number/none", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.CaTrustpointSystemSerialNumber.IsNull() && !data.CaTrustpointSystemSerialNumber.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemSerialNumber.IsNull() && state.CaTrustpointSystemSerialNumber.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/serial-number", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.CaTrustpointSystemIpAddressNone.IsNull() && !data.CaTrustpointSystemIpAddressNone.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemIpAddressNone.IsNull() && state.CaTrustpointSystemIpAddressNone.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/ip-address/none", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.CaTrustpointSystemCrlOptional.IsNull() && !data.CaTrustpointSystemCrlOptional.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemCrlOptional.IsNull() && state.CaTrustpointSystemCrlOptional.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/crl/optional", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.CaTrustpointSystemSkipChallengePassword.IsNull() && !data.CaTrustpointSystemSkipChallengePassword.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemSkipChallengePassword.IsNull() && state.CaTrustpointSystemSkipChallengePassword.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/skip-challenge-password", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() && !data.CaTrustpointSystemRenewalMessageTypeRenewalreq.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() && state.CaTrustpointSystemRenewalMessageTypeRenewalreq.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/renewal-message-type/renewalreq", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() && !data.CaTrustpointSystemRenewalMessageTypePkcsreq.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() && state.CaTrustpointSystemRenewalMessageTypePkcsreq.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/renewal-message-type/pkcsreq", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.CaTrustpointSystemEnrollmentSelf.IsNull() && !data.CaTrustpointSystemEnrollmentSelf.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemEnrollmentSelf.IsNull() && state.CaTrustpointSystemEnrollmentSelf.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/enrollment/self", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.CaTrustpointSystemEnrollmentTerminal.IsNull() && !data.CaTrustpointSystemEnrollmentTerminal.ValueBool() {
-		if state != nil && !state.CaTrustpointSystemEnrollmentTerminal.IsNull() && state.CaTrustpointSystemEnrollmentTerminal.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/enrollment/terminal", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *Crypto) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.FipsMode.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fips-mode", data.getPath()))
-	}
-	if !data.CaCrlCurlTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/crl/curl-timeout", data.getPath()))
-	}
-	if !data.CaFqdnCheckIpAddressAllow.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/fqdn-check/ip-address/allow", data.getPath()))
-	}
-	if !data.CaRsa1024Disable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/rsa/one-thousand-twenty-four/disable", data.getPath()))
-	}
-	if !data.CaSourceInterfaceIpv6.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/source-interface/ipv6", data.getPath()))
-	}
-	if !data.CaSourceInterfaceIpv4.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/source-interface/ipv4", data.getPath()))
-	}
-	if !data.CaHttpProxyPort.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/port", data.getPath()))
-	}
-	if !data.CaHttpProxy.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/http-proxy", data.getPath()))
-	}
-	for i := range data.CaOpensshTrustpoints {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[trustpoint-name=" + data.CaOpensshTrustpoints[i].TrustpointName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/openssh/trustpoints/trustpoint%v", data.getPath(), keyPath))
-	}
-	for i := range data.CaTrustpoints {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[trustpoint-name=" + data.CaTrustpoints[i].TrustpointName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/trustpoints/trustpoint%v", data.getPath(), keyPath))
-	}
-	if !data.CaTrustpointSystemMessageDigest.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/message-digest", data.getPath()))
-	}
-	if !data.CaTrustpointSystemLifetimeCertificate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/lifetime/certificate", data.getPath()))
-	}
-	if !data.CaTrustpointSystemLifetimeCaCertificate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/lifetime/ca-certificate", data.getPath()))
-	}
-	if !data.CaTrustpointSystemVrf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/vrf", data.getPath()))
-	}
-	if !data.CaTrustpointSystemSerialNumberNone.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/serial-number/none", data.getPath()))
-	}
-	if !data.CaTrustpointSystemSerialNumber.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/serial-number", data.getPath()))
-	}
-	if !data.CaTrustpointSystemSubjectAlternativeName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/subject-alternative-name", data.getPath()))
-	}
-	if !data.CaTrustpointSystemSubjectNameCaCertificate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/subject-name-ca-certificate", data.getPath()))
-	}
-	if !data.CaTrustpointSystemSubjectName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/subject-name", data.getPath()))
-	}
-	if !data.CaTrustpointSystemIpAddressNone.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/ip-address/none", data.getPath()))
-	}
-	if !data.CaTrustpointSystemIpAddress.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/ip-address/ipv4-address", data.getPath()))
-	}
-	if !data.CaTrustpointSystemQueryUrl.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/query/url", data.getPath()))
-	}
-	if !data.CaTrustpointSystemCrlOptional.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/crl/optional", data.getPath()))
-	}
-	if !data.CaTrustpointSystemKeypairEd25519.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/keypair/ed25519", data.getPath()))
-	}
-	if !data.CaTrustpointSystemKeypairDsa.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/keypair/dsa", data.getPath()))
-	}
-	if !data.CaTrustpointSystemKeypairEcdsanistp521.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/keypair/ecdsanistp521", data.getPath()))
-	}
-	if !data.CaTrustpointSystemKeypairEcdsanistp384.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/keypair/ecdsanistp384", data.getPath()))
-	}
-	if !data.CaTrustpointSystemKeypairEcdsanistp256.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/keypair/ecdsanistp256", data.getPath()))
-	}
-	if !data.CaTrustpointSystemKeypairRsa.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/keypair/rsa", data.getPath()))
-	}
-	if !data.CaTrustpointSystemCaKeypairEd25519.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/ca-keypair/ed25519", data.getPath()))
-	}
-	if !data.CaTrustpointSystemCaKeypairDsa.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/ca-keypair/dsa", data.getPath()))
-	}
-	if !data.CaTrustpointSystemCaKeypairEcdsanistp521.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/ca-keypair/ecdsanistp521", data.getPath()))
-	}
-	if !data.CaTrustpointSystemCaKeypairEcdsanistp384.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/ca-keypair/ecdsanistp384", data.getPath()))
-	}
-	if !data.CaTrustpointSystemCaKeypairEcdsanistp256.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/ca-keypair/ecdsanistp256", data.getPath()))
-	}
-	if !data.CaTrustpointSystemCaKeypairRsa.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/ca-keypair/rsa", data.getPath()))
-	}
-	if !data.CaTrustpointSystemRsaKeypair.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/rsakeypair", data.getPath()))
-	}
-	if !data.CaTrustpointSystemSkipChallengePassword.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/skip-challenge-password", data.getPath()))
-	}
-	if !data.CaTrustpointSystemRenewalMessageTypeRenewalreq.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/renewal-message-type/renewalreq", data.getPath()))
-	}
-	if !data.CaTrustpointSystemRenewalMessageTypePkcsreq.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/renewal-message-type/pkcsreq", data.getPath()))
-	}
-	if !data.CaTrustpointSystemAutoEnroll.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/auto-enroll", data.getPath()))
-	}
-	if !data.CaTrustpointSystemSftpPassword.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/sftp-password/password", data.getPath()))
-	}
-	if !data.CaTrustpointSystemSftpUsername.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/sftp-username", data.getPath()))
-	}
-	if !data.CaTrustpointSystemEnrollmentSelf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/enrollment/self", data.getPath()))
-	}
-	if !data.CaTrustpointSystemEnrollmentTerminal.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/enrollment/terminal", data.getPath()))
-	}
-	if !data.CaTrustpointSystemEnrollmentUrl.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/enrollment/url", data.getPath()))
-	}
-	if !data.CaTrustpointSystemEnrollmentRetryPeriod.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/enrollment/retry/period", data.getPath()))
-	}
-	if !data.CaTrustpointSystemEnrollmentRetryCount.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/enrollment/retry/count", data.getPath()))
-	}
-	if !data.CaTrustpointSystemDescription.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ca/trustpoint/system-trustpoint/description", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
@@ -3619,6 +3947,22 @@ func (data *Crypto) addDeletedItemsXML(ctx context.Context, state Crypto, body s
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.CaTrustpointSystemEnrollmentLocal.IsNull() && state.CaTrustpointSystemEnrollmentLocal.ValueBool() && data.CaTrustpointSystemEnrollmentLocal.IsNull() {
+		deletePath := state.getXPath() + "/ca/trustpoint/system-trustpoint/enrollment/local"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.FipsMode.IsNull() && state.FipsMode.ValueBool() && data.FipsMode.IsNull() {
 		deletePath := state.getXPath() + "/fips-mode"
@@ -3798,6 +4142,19 @@ func (data *Crypto) addDeletedItemsXML(ctx context.Context, state Crypto, body s
 				found = false
 			}
 			if found {
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.CaTrustpoints[i].EnrollmentLocal.IsNull() && state.CaTrustpoints[i].EnrollmentLocal.ValueBool() && data.CaTrustpoints[j].EnrollmentLocal.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ca/trustpoint/trustpoints/trustpoint%v/enrollment/local", predicates))
+				}
+				if !state.CaTrustpoints[i].SslProfile.IsNull() && data.CaTrustpoints[j].SslProfile.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ca/trustpoint/trustpoints/trustpoint%v/ssl-profile", predicates))
+				}
+				if !state.CaTrustpoints[i].ReEnrollmentAuthenticationProfile.IsNull() && data.CaTrustpoints[j].ReEnrollmentAuthenticationProfile.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ca/trustpoint/trustpoints/trustpoint%v/re-enrollment/authentication-profile", predicates))
+				}
+				if !state.CaTrustpoints[i].EnrollmentAuthenticationProfile.IsNull() && data.CaTrustpoints[j].EnrollmentAuthenticationProfile.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ca/trustpoint/trustpoints/trustpoint%v/enrollment/authentication-profile", predicates))
+				}
 				if !state.CaTrustpoints[i].MethodEstCredentialCertificate.IsNull() && data.CaTrustpoints[j].MethodEstCredentialCertificate.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ca/trustpoint/trustpoints/trustpoint%v/method/est/credential/certificate", predicates))
 				}
@@ -4472,6 +4829,9 @@ func (data *Crypto) addDeletedItemsXML(ctx context.Context, state Crypto, body s
 
 func (data *Crypto) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.CaTrustpointSystemEnrollmentLocal.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ca/trustpoint/system-trustpoint/enrollment/local")
+	}
 	if !data.FipsMode.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/fips-mode")
 	}

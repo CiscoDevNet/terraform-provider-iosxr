@@ -46,6 +46,9 @@ func TestAccDataSourceIosxrRadiusServer(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "hosts.0.idle_time", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "hosts.0.ignore_auth_port", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "hosts.0.ignore_acct_port", "true"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "hosts.0.attribute_message_authenticator_mandate", "true"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "timeout", "120"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "retransmit_retries", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "load_balance_method_least_outstanding_batch_size", "25"))
@@ -63,11 +66,24 @@ func TestAccDataSourceIosxrRadiusServer(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "disallow_null_username", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "attribute_lists.0.name", "ATTR-LIST-1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "attribute_lists.0.radius_attributes", "1,2,3,4,5"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "attribute_lists.0.attribute_vendor_ids.0.id", "9"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "attribute_lists.0.attribute_vendor_ids.0.vendor_types.0.vendor_type_id", "1"))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "attribute_lists.0.attribute_vendor_ids.0.id", "9"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "attribute_lists.0.attribute_vendor_ids.0.vendor_types.0.vendor_type_id", "1"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "attribute_lists.0.attribute_vendor_cisco_vendor_types.0.vendor_type_id", "1"))
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "attribute_lists.0.attribute_vendor_cisco_vendor_types.0.all_avpairs", "true"))
+		}
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "attribute_acct_session_id_prepend_nas_port_id", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "attribute_acct_multi_session_id_include_parent_session_id", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "attribute_filter_id_11_default_direction", "inbound"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_radius_server.test", "attribute_message_authenticator", "true"))
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -103,6 +119,9 @@ func testAccDataSourceIosxrRadiusServerConfig() string {
 	config += `		idle_time = 30` + "\n"
 	config += `		ignore_auth_port = true` + "\n"
 	config += `		ignore_acct_port = true` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `		attribute_message_authenticator_mandate = true` + "\n"
+	}
 	config += `	}]` + "\n"
 	config += `	key_type_7 = "060506324F41584B"` + "\n"
 	config += `	timeout = 120` + "\n"
@@ -123,16 +142,31 @@ func testAccDataSourceIosxrRadiusServerConfig() string {
 	config += `	attribute_lists = [{` + "\n"
 	config += `		name = "ATTR-LIST-1"` + "\n"
 	config += `		radius_attributes = "1,2,3,4,5"` + "\n"
-	config += `		attribute_vendor_ids = [{` + "\n"
-	config += `			id = 9` + "\n"
-	config += `			vendor_types = [{` + "\n"
-	config += `				vendor_type_id = 1` + "\n"
-	config += `			}]` + "\n"
-	config += `		}]` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+		config += `		attribute_vendor_ids = [{` + "\n"
+		config += `			id = 9` + "\n"
+		config += `			vendor_types = [{` + "\n"
+		config += `				vendor_type_id = 1` + "\n"
+		config += `			}]` + "\n"
+		config += `		}]` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+		config += `		attribute_vendor_cisco_vendor_types = [{` + "\n"
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+			config += `			vendor_type_id = 1` + "\n"
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+			config += `			all_avpairs = true` + "\n"
+		}
+		config += `		}]` + "\n"
+	}
 	config += `	}]` + "\n"
 	config += `	attribute_acct_session_id_prepend_nas_port_id = true` + "\n"
 	config += `	attribute_acct_multi_session_id_include_parent_session_id = true` + "\n"
 	config += `	attribute_filter_id_11_default_direction = "inbound"` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	attribute_message_authenticator = true` + "\n"
+	}
 	config += `}` + "\n"
 
 	config += `

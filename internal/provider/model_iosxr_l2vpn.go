@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -172,7 +173,7 @@ func (data L2VPNData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data L2VPN) toBody(ctx context.Context) string {
+func (data L2VPN) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.Description.IsNull() && !data.Description.IsUnknown() {
 		body, _ = sjson.Set(body, "description", data.Description.ValueString())
@@ -215,8 +216,10 @@ func (data L2VPN) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "capability.high-mode", map[string]string{})
 		}
 	}
-	if !data.PwOamRefreshTransmit.IsNull() && !data.PwOamRefreshTransmit.IsUnknown() {
-		body, _ = sjson.Set(body, "pw-oam.refresh.transmit", strconv.FormatInt(data.PwOamRefreshTransmit.ValueInt64(), 10))
+	if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.PwOamRefreshTransmit.IsNull() && !data.PwOamRefreshTransmit.IsUnknown() {
+			body, _ = sjson.Set(body, "pw-oam.refresh.transmit", strconv.FormatInt(data.PwOamRefreshTransmit.ValueInt64(), 10))
+		}
 	}
 	if !data.TcnPropagation.IsNull() && !data.TcnPropagation.IsUnknown() {
 		if data.TcnPropagation.ValueBool() {
@@ -307,6 +310,7 @@ func (data L2VPN) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "redundancy.iccp.groups.group"+"."+strconv.Itoa(index)+"."+"multi-homing.node-id", strconv.FormatInt(item.MultiHomingNodeId.ValueInt64(), 10))
 			}
 			if len(item.Interfaces) > 0 {
+				body, _ = sjson.Set(body, "redundancy.iccp.groups.group"+"."+strconv.Itoa(index)+"."+"interface", []interface{}{})
 				for cindex, citem := range item.Interfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "redundancy.iccp.groups.group"+"."+strconv.Itoa(index)+"."+"interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -336,6 +340,7 @@ func (data L2VPN) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-unawares.vlan-unaware"+"."+strconv.Itoa(index)+"."+"service-name", item.ServiceName.ValueString())
 			}
 			if len(item.Interfaces) > 0 {
+				body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-unawares.vlan-unaware"+"."+strconv.Itoa(index)+"."+"interfaces.interface", []interface{}{})
 				for cindex, citem := range item.Interfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-unawares.vlan-unaware"+"."+strconv.Itoa(index)+"."+"interfaces.interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -343,6 +348,7 @@ func (data L2VPN) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NeighborEvpnEvis) > 0 {
+				body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-unawares.vlan-unaware"+"."+strconv.Itoa(index)+"."+"neighbor.evpn.evis.evi", []interface{}{})
 				for cindex, citem := range item.NeighborEvpnEvis {
 					if !citem.VpnId.IsNull() && !citem.VpnId.IsUnknown() {
 						body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-unawares.vlan-unaware"+"."+strconv.Itoa(index)+"."+"neighbor.evpn.evis.evi"+"."+strconv.Itoa(cindex)+"."+"vpn-id", strconv.FormatInt(citem.VpnId.ValueInt64(), 10))
@@ -361,6 +367,7 @@ func (data L2VPN) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-aware.evis.evi"+"."+strconv.Itoa(index)+"."+"vpn-id", strconv.FormatInt(item.VpnId.ValueInt64(), 10))
 			}
 			if len(item.Interfaces) > 0 {
+				body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-aware.evis.evi"+"."+strconv.Itoa(index)+"."+"interfaces.interface", []interface{}{})
 				for cindex, citem := range item.Interfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "flexible-xconnect-service.vlan-aware.evis.evi"+"."+strconv.Itoa(index)+"."+"interfaces.interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -374,15 +381,71 @@ func (data L2VPN) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *L2VPN) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("description"); value.Exists() && !data.Description.IsNull() {
+// GetVersionConstraints returns the version constraints for all fields
+func (data L2VPN) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath: "pw_oam_refresh_transmit",
+
+			RemovedInVersion: "25.4",
+		},
+	}...)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data L2VPN) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data L2VPN) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data L2VPN) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data L2VPN) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *L2VPN) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
 	} else if data.Description.IsNull() {
 		data.Description = types.StringNull()
 	}
-	if value := res.Get("router-id"); value.Exists() && !data.RouterId.IsNull() {
+	if value := gjson.GetBytes(res, "router-id"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RouterId.IsNull() {
 		data.RouterId = types.StringValue(value.String())
 	} else if data.RouterId.IsNull() {
 		data.RouterId = types.StringNull()
@@ -392,7 +455,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("redundancy.iccp.groups.group").ForEach(
+		gjson.GetBytes(res, "redundancy.iccp.groups.group").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -438,17 +501,17 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res gjson.Result) {
 					return true
 				},
 			)
-			if value := cr.Get("interface-name"); value.Exists() && !data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.IsNull() {
+			if value := cr.Get("interface-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.IsNull() {
 				data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName = types.StringValue(value.String())
 			} else {
 				data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName = types.StringNull()
 			}
-			if value := cr.Get("primary.vlan"); value.Exists() && !data.RedundancyIccpGroups[i].Interfaces[ci].PrimaryVlan.IsNull() {
+			if value := cr.Get("primary.vlan"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedundancyIccpGroups[i].Interfaces[ci].PrimaryVlan.IsNull() {
 				data.RedundancyIccpGroups[i].Interfaces[ci].PrimaryVlan = types.StringValue(value.String())
 			} else {
 				data.RedundancyIccpGroups[i].Interfaces[ci].PrimaryVlan = types.StringNull()
 			}
-			if value := cr.Get("secondary.vlan"); value.Exists() && !data.RedundancyIccpGroups[i].Interfaces[ci].SecondaryVlan.IsNull() {
+			if value := cr.Get("secondary.vlan"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.RedundancyIccpGroups[i].Interfaces[ci].SecondaryVlan.IsNull() {
 				data.RedundancyIccpGroups[i].Interfaces[ci].SecondaryVlan = types.StringValue(value.String())
 			} else {
 				data.RedundancyIccpGroups[i].Interfaces[ci].SecondaryVlan = types.StringNull()
@@ -480,7 +543,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString()}
 
 		var r gjson.Result
-		res.Get("flexible-xconnect-service.vlan-unawares.vlan-unaware").ForEach(
+		gjson.GetBytes(res, "flexible-xconnect-service.vlan-unawares.vlan-unaware").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -498,7 +561,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res gjson.Result) {
 				return true
 			},
 		)
-		if value := r.Get("service-name"); value.Exists() && !data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.IsNull() {
+		if value := r.Get("service-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.IsNull() {
 			data.FlexibleXconnectServiceVlanUnaware[i].ServiceName = types.StringValue(value.String())
 		} else {
 			data.FlexibleXconnectServiceVlanUnaware[i].ServiceName = types.StringNull()
@@ -526,7 +589,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res gjson.Result) {
 					return true
 				},
 			)
-			if value := cr.Get("interface-name"); value.Exists() && !data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.IsNull() {
+			if value := cr.Get("interface-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.IsNull() {
 				data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName = types.StringValue(value.String())
 			} else {
 				data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName = types.StringNull()
@@ -572,7 +635,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("flexible-xconnect-service.vlan-aware.evis.evi").ForEach(
+		gjson.GetBytes(res, "flexible-xconnect-service.vlan-aware.evis.evi").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -618,259 +681,1359 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res gjson.Result) {
 					return true
 				},
 			)
-			if value := cr.Get("interface-name"); value.Exists() && !data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.IsNull() {
+			if value := cr.Get("interface-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.IsNull() {
 				data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName = types.StringValue(value.String())
 			} else {
 				data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName = types.StringNull()
 			}
 		}
 	}
-	if value := res.Get("ignore-mtu-mismatch"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.IgnoreMtuMismatch.IsNull() {
+	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); !data.IgnoreMtuMismatch.IsNull() {
+		if value.Exists() {
 			data.IgnoreMtuMismatch = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.IgnoreMtuMismatch = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.IgnoreMtuMismatch.IsNull() {
-			data.IgnoreMtuMismatch = types.BoolNull()
-		}
+	} else if data.IgnoreMtuMismatch.IsNull() {
+		data.IgnoreMtuMismatch = types.BoolNull()
 	}
-	if value := res.Get("ignore-mtu-mismatch-ad"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.IgnoreMtuMismatchAd.IsNull() {
+	if value := gjson.GetBytes(res, "ignore-mtu-mismatch-ad"); !data.IgnoreMtuMismatchAd.IsNull() {
+		if value.Exists() {
 			data.IgnoreMtuMismatchAd = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.IgnoreMtuMismatchAd = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.IgnoreMtuMismatchAd.IsNull() {
-			data.IgnoreMtuMismatchAd = types.BoolNull()
-		}
+	} else if data.IgnoreMtuMismatchAd.IsNull() {
+		data.IgnoreMtuMismatchAd = types.BoolNull()
 	}
-	if value := res.Get("pw-status.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.PwStatusDisable.IsNull() {
+	if value := gjson.GetBytes(res, "pw-status.disable"); !data.PwStatusDisable.IsNull() {
+		if value.Exists() {
 			data.PwStatusDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.PwStatusDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.PwStatusDisable.IsNull() {
-			data.PwStatusDisable = types.BoolNull()
-		}
+	} else if data.PwStatusDisable.IsNull() {
+		data.PwStatusDisable = types.BoolNull()
 	}
-	if value := res.Get("load-balancing.flow.src-dst-mac"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LoadBalancingFlowSrcDstMac.IsNull() {
+	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-mac"); !data.LoadBalancingFlowSrcDstMac.IsNull() {
+		if value.Exists() {
 			data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LoadBalancingFlowSrcDstMac = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LoadBalancingFlowSrcDstMac.IsNull() {
-			data.LoadBalancingFlowSrcDstMac = types.BoolNull()
-		}
+	} else if data.LoadBalancingFlowSrcDstMac.IsNull() {
+		data.LoadBalancingFlowSrcDstMac = types.BoolNull()
 	}
-	if value := res.Get("load-balancing.flow.src-dst-ip"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LoadBalancingFlowSrcDstIp.IsNull() {
+	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-ip"); !data.LoadBalancingFlowSrcDstIp.IsNull() {
+		if value.Exists() {
 			data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LoadBalancingFlowSrcDstIp = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LoadBalancingFlowSrcDstIp.IsNull() {
-			data.LoadBalancingFlowSrcDstIp = types.BoolNull()
-		}
+	} else if data.LoadBalancingFlowSrcDstIp.IsNull() {
+		data.LoadBalancingFlowSrcDstIp = types.BoolNull()
 	}
-	if value := res.Get("capability.single-mode"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.CapabilitySingleMode.IsNull() {
+	if value := gjson.GetBytes(res, "capability.single-mode"); !data.CapabilitySingleMode.IsNull() {
+		if value.Exists() {
 			data.CapabilitySingleMode = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CapabilitySingleMode = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.CapabilitySingleMode.IsNull() {
-			data.CapabilitySingleMode = types.BoolNull()
-		}
+	} else if data.CapabilitySingleMode.IsNull() {
+		data.CapabilitySingleMode = types.BoolNull()
 	}
-	if value := res.Get("capability.high-mode"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.CapabilityHighMode.IsNull() {
+	if value := gjson.GetBytes(res, "capability.high-mode"); !data.CapabilityHighMode.IsNull() {
+		if value.Exists() {
 			data.CapabilityHighMode = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.CapabilityHighMode = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.CapabilityHighMode.IsNull() {
-			data.CapabilityHighMode = types.BoolNull()
-		}
+	} else if data.CapabilityHighMode.IsNull() {
+		data.CapabilityHighMode = types.BoolNull()
 	}
-	if value := res.Get("pw-oam.refresh.transmit"); value.Exists() && !data.PwOamRefreshTransmit.IsNull() {
+	if value := gjson.GetBytes(res, "pw-oam.refresh.transmit"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && !data.PwOamRefreshTransmit.IsNull() {
 		data.PwOamRefreshTransmit = types.Int64Value(value.Int())
 	} else if data.PwOamRefreshTransmit.IsNull() {
 		data.PwOamRefreshTransmit = types.Int64Null()
 	}
-	if value := res.Get("tcn-propagation"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TcnPropagation.IsNull() {
+	if value := gjson.GetBytes(res, "tcn-propagation"); !data.TcnPropagation.IsNull() {
+		if value.Exists() {
 			data.TcnPropagation = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TcnPropagation = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TcnPropagation.IsNull() {
-			data.TcnPropagation = types.BoolNull()
-		}
+	} else if data.TcnPropagation.IsNull() {
+		data.TcnPropagation = types.BoolNull()
 	}
-	if value := res.Get("pw-grouping"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.PwGrouping.IsNull() {
+	if value := gjson.GetBytes(res, "pw-grouping"); !data.PwGrouping.IsNull() {
+		if value.Exists() {
 			data.PwGrouping = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.PwGrouping = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.PwGrouping.IsNull() {
-			data.PwGrouping = types.BoolNull()
-		}
+	} else if data.PwGrouping.IsNull() {
+		data.PwGrouping = types.BoolNull()
 	}
-	if value := res.Get("neighbors.all.ldp.flap"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.NeighborsAllLdpFlap.IsNull() {
+	if value := gjson.GetBytes(res, "neighbors.all.ldp.flap"); !data.NeighborsAllLdpFlap.IsNull() {
+		if value.Exists() {
 			data.NeighborsAllLdpFlap = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.NeighborsAllLdpFlap = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.NeighborsAllLdpFlap.IsNull() {
-			data.NeighborsAllLdpFlap = types.BoolNull()
-		}
+	} else if data.NeighborsAllLdpFlap.IsNull() {
+		data.NeighborsAllLdpFlap = types.BoolNull()
 	}
-	if value := res.Get("mac.limit.threshold"); value.Exists() && !data.MacLimitThreshold.IsNull() {
+	if value := gjson.GetBytes(res, "mac.limit.threshold"); value.Exists() && !data.MacLimitThreshold.IsNull() {
 		data.MacLimitThreshold = types.Int64Value(value.Int())
 	} else if data.MacLimitThreshold.IsNull() {
 		data.MacLimitThreshold = types.Int64Null()
 	}
-	if value := res.Get("logging.pseudowire"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LoggingPseudowire.IsNull() {
+	if value := gjson.GetBytes(res, "logging.pseudowire"); !data.LoggingPseudowire.IsNull() {
+		if value.Exists() {
 			data.LoggingPseudowire = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LoggingPseudowire = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LoggingPseudowire.IsNull() {
-			data.LoggingPseudowire = types.BoolNull()
-		}
+	} else if data.LoggingPseudowire.IsNull() {
+		data.LoggingPseudowire = types.BoolNull()
 	}
-	if value := res.Get("logging.bridge-domain"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LoggingBridgeDomain.IsNull() {
+	if value := gjson.GetBytes(res, "logging.bridge-domain"); !data.LoggingBridgeDomain.IsNull() {
+		if value.Exists() {
 			data.LoggingBridgeDomain = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LoggingBridgeDomain = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LoggingBridgeDomain.IsNull() {
-			data.LoggingBridgeDomain = types.BoolNull()
-		}
+	} else if data.LoggingBridgeDomain.IsNull() {
+		data.LoggingBridgeDomain = types.BoolNull()
 	}
-	if value := res.Get("logging.vfi"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LoggingVfi.IsNull() {
+	if value := gjson.GetBytes(res, "logging.vfi"); !data.LoggingVfi.IsNull() {
+		if value.Exists() {
 			data.LoggingVfi = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LoggingVfi = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LoggingVfi.IsNull() {
-			data.LoggingVfi = types.BoolNull()
-		}
+	} else if data.LoggingVfi.IsNull() {
+		data.LoggingVfi = types.BoolNull()
 	}
-	if value := res.Get("logging.nsr"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LoggingNsr.IsNull() {
+	if value := gjson.GetBytes(res, "logging.nsr"); !data.LoggingNsr.IsNull() {
+		if value.Exists() {
 			data.LoggingNsr = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LoggingNsr = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LoggingNsr.IsNull() {
-			data.LoggingNsr = types.BoolNull()
-		}
+	} else if data.LoggingNsr.IsNull() {
+		data.LoggingNsr = types.BoolNull()
 	}
-	if value := res.Get("logging.pwhe-replication.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LoggingPwheReplicationDisable.IsNull() {
+	if value := gjson.GetBytes(res, "logging.pwhe-replication.disable"); !data.LoggingPwheReplicationDisable.IsNull() {
+		if value.Exists() {
 			data.LoggingPwheReplicationDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LoggingPwheReplicationDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LoggingPwheReplicationDisable.IsNull() {
-			data.LoggingPwheReplicationDisable = types.BoolNull()
-		}
+	} else if data.LoggingPwheReplicationDisable.IsNull() {
+		data.LoggingPwheReplicationDisable = types.BoolNull()
 	}
-	if value := res.Get("autodiscovery.bgp.signaling-protocol.bgp.mtu.mismatch.ignore"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() {
+	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.bgp.mtu.mismatch.ignore"); !data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() {
+		if value.Exists() {
 			data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() {
-			data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolNull()
-		}
+	} else if data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() {
+		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolNull()
 	}
-	if value := res.Get("pw-routing.global-id"); value.Exists() && !data.PwRoutingGlobalId.IsNull() {
+	if value := gjson.GetBytes(res, "pw-routing.global-id"); value.Exists() && !data.PwRoutingGlobalId.IsNull() {
 		data.PwRoutingGlobalId = types.Int64Value(value.Int())
 	} else if data.PwRoutingGlobalId.IsNull() {
 		data.PwRoutingGlobalId = types.Int64Null()
 	}
-	if value := res.Get("pw-routing.bgp.rd.two-byte-as-number"); value.Exists() && !data.PwRoutingBgpRdTwoByteAsNumber.IsNull() {
+	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.two-byte-as-number"); value.Exists() && !data.PwRoutingBgpRdTwoByteAsNumber.IsNull() {
 		data.PwRoutingBgpRdTwoByteAsNumber = types.Int64Value(value.Int())
 	} else if data.PwRoutingBgpRdTwoByteAsNumber.IsNull() {
 		data.PwRoutingBgpRdTwoByteAsNumber = types.Int64Null()
 	}
-	if value := res.Get("pw-routing.bgp.rd.two-byte-as-assigned-number"); value.Exists() && !data.PwRoutingBgpRdTwoByteAsAssignedNumber.IsNull() {
+	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.two-byte-as-assigned-number"); value.Exists() && !data.PwRoutingBgpRdTwoByteAsAssignedNumber.IsNull() {
 		data.PwRoutingBgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
 	} else if data.PwRoutingBgpRdTwoByteAsAssignedNumber.IsNull() {
 		data.PwRoutingBgpRdTwoByteAsAssignedNumber = types.Int64Null()
 	}
-	if value := res.Get("pw-routing.bgp.rd.four-byte-as-number"); value.Exists() && !data.PwRoutingBgpRdFourByteAsNumber.IsNull() {
+	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.four-byte-as-number"); value.Exists() && !data.PwRoutingBgpRdFourByteAsNumber.IsNull() {
 		data.PwRoutingBgpRdFourByteAsNumber = types.Int64Value(value.Int())
 	} else if data.PwRoutingBgpRdFourByteAsNumber.IsNull() {
 		data.PwRoutingBgpRdFourByteAsNumber = types.Int64Null()
 	}
-	if value := res.Get("pw-routing.bgp.rd.four-byte-as-assigned-number"); value.Exists() && !data.PwRoutingBgpRdFourByteAsAssignedNumber.IsNull() {
+	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.four-byte-as-assigned-number"); value.Exists() && !data.PwRoutingBgpRdFourByteAsAssignedNumber.IsNull() {
 		data.PwRoutingBgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
 	} else if data.PwRoutingBgpRdFourByteAsAssignedNumber.IsNull() {
 		data.PwRoutingBgpRdFourByteAsAssignedNumber = types.Int64Null()
 	}
-	if value := res.Get("pw-routing.bgp.rd.ipv4-address"); value.Exists() && !data.PwRoutingBgpRdIpv4Address.IsNull() {
+	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.ipv4-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PwRoutingBgpRdIpv4Address.IsNull() {
 		data.PwRoutingBgpRdIpv4Address = types.StringValue(value.String())
 	} else if data.PwRoutingBgpRdIpv4Address.IsNull() {
 		data.PwRoutingBgpRdIpv4Address = types.StringNull()
 	}
-	if value := res.Get("pw-routing.bgp.rd.ipv4-address-assigned-number"); value.Exists() && !data.PwRoutingBgpRdIpv4AddressAssignedNumber.IsNull() {
+	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.ipv4-address-assigned-number"); value.Exists() && !data.PwRoutingBgpRdIpv4AddressAssignedNumber.IsNull() {
 		data.PwRoutingBgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
 	} else if data.PwRoutingBgpRdIpv4AddressAssignedNumber.IsNull() {
 		data.PwRoutingBgpRdIpv4AddressAssignedNumber = types.Int64Null()
 	}
-	if value := res.Get("snmp.mib.interface.format.external"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SnmpMibInterfaceFormatExternal.IsNull() {
+	if value := gjson.GetBytes(res, "snmp.mib.interface.format.external"); !data.SnmpMibInterfaceFormatExternal.IsNull() {
+		if value.Exists() {
 			data.SnmpMibInterfaceFormatExternal = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SnmpMibInterfaceFormatExternal = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SnmpMibInterfaceFormatExternal.IsNull() {
-			data.SnmpMibInterfaceFormatExternal = types.BoolNull()
-		}
+	} else if data.SnmpMibInterfaceFormatExternal.IsNull() {
+		data.SnmpMibInterfaceFormatExternal = types.BoolNull()
 	}
-	if value := res.Get("snmp.mib.pseudowire.statistics"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SnmpMibPseudowireStatistics.IsNull() {
+	if value := gjson.GetBytes(res, "snmp.mib.pseudowire.statistics"); !data.SnmpMibPseudowireStatistics.IsNull() {
+		if value.Exists() {
 			data.SnmpMibPseudowireStatistics = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SnmpMibPseudowireStatistics = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SnmpMibPseudowireStatistics.IsNull() {
-			data.SnmpMibPseudowireStatistics = types.BoolNull()
-		}
+	} else if data.SnmpMibPseudowireStatistics.IsNull() {
+		data.SnmpMibPseudowireStatistics = types.BoolNull()
 	}
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *L2VPN) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "router-id"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.RouterId = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "redundancy.iccp.groups.group"); value.Exists() {
+		data.RedundancyIccpGroups = make([]L2VPNRedundancyIccpGroups, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNRedundancyIccpGroups{}
+			if cValue := v.Get("group-number"); cValue.Exists() {
+				item.GroupNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("interface"); cValue.Exists() {
+				item.Interfaces = make([]L2VPNRedundancyIccpGroupsInterfaces, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNRedundancyIccpGroupsInterfaces{}
+					if ccValue := cv.Get("interface-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.InterfaceName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("primary.vlan"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.PrimaryVlan = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("secondary.vlan"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.SecondaryVlan = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("mac-flush.stp-tcn"); ccValue.Exists() {
+						cItem.MacFlushStpTcn = types.BoolValue(true)
+					} else {
+						cItem.MacFlushStpTcn = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("recovery.delay"); ccValue.Exists() {
+						cItem.RecoveryDelay = types.Int64Value(ccValue.Int())
+					}
+					item.Interfaces = append(item.Interfaces, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("multi-homing.node-id"); cValue.Exists() {
+				item.MultiHomingNodeId = types.Int64Value(cValue.Int())
+			}
+			data.RedundancyIccpGroups = append(data.RedundancyIccpGroups, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "flexible-xconnect-service.vlan-unawares.vlan-unaware"); value.Exists() {
+		data.FlexibleXconnectServiceVlanUnaware = make([]L2VPNFlexibleXconnectServiceVlanUnaware, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNFlexibleXconnectServiceVlanUnaware{}
+			if cValue := v.Get("service-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.ServiceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("interfaces.interface"); cValue.Exists() {
+				item.Interfaces = make([]L2VPNFlexibleXconnectServiceVlanUnawareInterfaces, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNFlexibleXconnectServiceVlanUnawareInterfaces{}
+					if ccValue := cv.Get("interface-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.InterfaceName = types.StringValue(ccValue.String())
+					}
+					item.Interfaces = append(item.Interfaces, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("neighbor.evpn.evis.evi"); cValue.Exists() {
+				item.NeighborEvpnEvis = make([]L2VPNFlexibleXconnectServiceVlanUnawareNeighborEvpnEvis, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNFlexibleXconnectServiceVlanUnawareNeighborEvpnEvis{}
+					if ccValue := cv.Get("vpn-id"); ccValue.Exists() {
+						cItem.VpnId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("remote-ac-id"); ccValue.Exists() {
+						cItem.RemoteAcId = types.Int64Value(ccValue.Int())
+					}
+					item.NeighborEvpnEvis = append(item.NeighborEvpnEvis, cItem)
+					return true
+				})
+			}
+			data.FlexibleXconnectServiceVlanUnaware = append(data.FlexibleXconnectServiceVlanUnaware, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "flexible-xconnect-service.vlan-aware.evis.evi"); value.Exists() {
+		data.FlexibleXconnectServiceVlanAwareEvis = make([]L2VPNFlexibleXconnectServiceVlanAwareEvis, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNFlexibleXconnectServiceVlanAwareEvis{}
+			if cValue := v.Get("vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("interfaces.interface"); cValue.Exists() {
+				item.Interfaces = make([]L2VPNFlexibleXconnectServiceVlanAwareEvisInterfaces, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNFlexibleXconnectServiceVlanAwareEvisInterfaces{}
+					if ccValue := cv.Get("interface-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.InterfaceName = types.StringValue(ccValue.String())
+					}
+					item.Interfaces = append(item.Interfaces, cItem)
+					return true
+				})
+			}
+			data.FlexibleXconnectServiceVlanAwareEvis = append(data.FlexibleXconnectServiceVlanAwareEvis, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); value.Exists() {
+		data.IgnoreMtuMismatch = types.BoolValue(true)
+	} else if !data.IgnoreMtuMismatch.IsNull() {
+		// Only set to false if it was previously set in state
+		data.IgnoreMtuMismatch = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ignore-mtu-mismatch-ad"); value.Exists() {
+		data.IgnoreMtuMismatchAd = types.BoolValue(true)
+	} else if !data.IgnoreMtuMismatchAd.IsNull() {
+		// Only set to false if it was previously set in state
+		data.IgnoreMtuMismatchAd = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "pw-status.disable"); value.Exists() {
+		data.PwStatusDisable = types.BoolValue(true)
+	} else if !data.PwStatusDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PwStatusDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-mac"); value.Exists() {
+		data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
+	} else if !data.LoadBalancingFlowSrcDstMac.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoadBalancingFlowSrcDstMac = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-ip"); value.Exists() {
+		data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
+	} else if !data.LoadBalancingFlowSrcDstIp.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoadBalancingFlowSrcDstIp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "capability.single-mode"); value.Exists() {
+		data.CapabilitySingleMode = types.BoolValue(true)
+	} else if !data.CapabilitySingleMode.IsNull() {
+		// Only set to false if it was previously set in state
+		data.CapabilitySingleMode = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "capability.high-mode"); value.Exists() {
+		data.CapabilityHighMode = types.BoolValue(true)
+	} else if !data.CapabilityHighMode.IsNull() {
+		// Only set to false if it was previously set in state
+		data.CapabilityHighMode = types.BoolValue(false)
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "pw-oam.refresh.transmit"); value.Exists() {
+			data.PwOamRefreshTransmit = types.Int64Value(value.Int())
+		}
+	} else {
+		data.PwOamRefreshTransmit = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "tcn-propagation"); value.Exists() {
+		data.TcnPropagation = types.BoolValue(true)
+	} else if !data.TcnPropagation.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TcnPropagation = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "pw-grouping"); value.Exists() {
+		data.PwGrouping = types.BoolValue(true)
+	} else if !data.PwGrouping.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PwGrouping = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "neighbors.all.ldp.flap"); value.Exists() {
+		data.NeighborsAllLdpFlap = types.BoolValue(true)
+	} else if !data.NeighborsAllLdpFlap.IsNull() {
+		// Only set to false if it was previously set in state
+		data.NeighborsAllLdpFlap = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mac.limit.threshold"); value.Exists() {
+		data.MacLimitThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "logging.pseudowire"); value.Exists() {
+		data.LoggingPseudowire = types.BoolValue(true)
+	} else if !data.LoggingPseudowire.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingPseudowire = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "logging.bridge-domain"); value.Exists() {
+		data.LoggingBridgeDomain = types.BoolValue(true)
+	} else if !data.LoggingBridgeDomain.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingBridgeDomain = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "logging.vfi"); value.Exists() {
+		data.LoggingVfi = types.BoolValue(true)
+	} else if !data.LoggingVfi.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingVfi = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "logging.nsr"); value.Exists() {
+		data.LoggingNsr = types.BoolValue(true)
+	} else if !data.LoggingNsr.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingNsr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "logging.pwhe-replication.disable"); value.Exists() {
+		data.LoggingPwheReplicationDisable = types.BoolValue(true)
+	} else if !data.LoggingPwheReplicationDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingPwheReplicationDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.bgp.mtu.mismatch.ignore"); value.Exists() {
+		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(true)
+	} else if !data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "pw-routing.global-id"); value.Exists() {
+		data.PwRoutingGlobalId = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.two-byte-as-number"); value.Exists() {
+		data.PwRoutingBgpRdTwoByteAsNumber = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.two-byte-as-assigned-number"); value.Exists() {
+		data.PwRoutingBgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.four-byte-as-number"); value.Exists() {
+		data.PwRoutingBgpRdFourByteAsNumber = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.four-byte-as-assigned-number"); value.Exists() {
+		data.PwRoutingBgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.ipv4-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.PwRoutingBgpRdIpv4Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.ipv4-address-assigned-number"); value.Exists() {
+		data.PwRoutingBgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "snmp.mib.interface.format.external"); value.Exists() {
+		data.SnmpMibInterfaceFormatExternal = types.BoolValue(true)
+	} else if !data.SnmpMibInterfaceFormatExternal.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SnmpMibInterfaceFormatExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "snmp.mib.pseudowire.statistics"); value.Exists() {
+		data.SnmpMibPseudowireStatistics = types.BoolValue(true)
+	} else if !data.SnmpMibPseudowireStatistics.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SnmpMibPseudowireStatistics = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *L2VPNData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "router-id"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.RouterId = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "redundancy.iccp.groups.group"); value.Exists() {
+		data.RedundancyIccpGroups = make([]L2VPNRedundancyIccpGroups, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNRedundancyIccpGroups{}
+			if cValue := v.Get("group-number"); cValue.Exists() {
+				item.GroupNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("interface"); cValue.Exists() {
+				item.Interfaces = make([]L2VPNRedundancyIccpGroupsInterfaces, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNRedundancyIccpGroupsInterfaces{}
+					if ccValue := cv.Get("interface-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.InterfaceName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("primary.vlan"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.PrimaryVlan = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("secondary.vlan"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.SecondaryVlan = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("mac-flush.stp-tcn"); ccValue.Exists() {
+						cItem.MacFlushStpTcn = types.BoolValue(true)
+					} else {
+						cItem.MacFlushStpTcn = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("recovery.delay"); ccValue.Exists() {
+						cItem.RecoveryDelay = types.Int64Value(ccValue.Int())
+					}
+					item.Interfaces = append(item.Interfaces, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("multi-homing.node-id"); cValue.Exists() {
+				item.MultiHomingNodeId = types.Int64Value(cValue.Int())
+			}
+			data.RedundancyIccpGroups = append(data.RedundancyIccpGroups, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "flexible-xconnect-service.vlan-unawares.vlan-unaware"); value.Exists() {
+		data.FlexibleXconnectServiceVlanUnaware = make([]L2VPNFlexibleXconnectServiceVlanUnaware, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNFlexibleXconnectServiceVlanUnaware{}
+			if cValue := v.Get("service-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.ServiceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("interfaces.interface"); cValue.Exists() {
+				item.Interfaces = make([]L2VPNFlexibleXconnectServiceVlanUnawareInterfaces, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNFlexibleXconnectServiceVlanUnawareInterfaces{}
+					if ccValue := cv.Get("interface-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.InterfaceName = types.StringValue(ccValue.String())
+					}
+					item.Interfaces = append(item.Interfaces, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("neighbor.evpn.evis.evi"); cValue.Exists() {
+				item.NeighborEvpnEvis = make([]L2VPNFlexibleXconnectServiceVlanUnawareNeighborEvpnEvis, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNFlexibleXconnectServiceVlanUnawareNeighborEvpnEvis{}
+					if ccValue := cv.Get("vpn-id"); ccValue.Exists() {
+						cItem.VpnId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("remote-ac-id"); ccValue.Exists() {
+						cItem.RemoteAcId = types.Int64Value(ccValue.Int())
+					}
+					item.NeighborEvpnEvis = append(item.NeighborEvpnEvis, cItem)
+					return true
+				})
+			}
+			data.FlexibleXconnectServiceVlanUnaware = append(data.FlexibleXconnectServiceVlanUnaware, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "flexible-xconnect-service.vlan-aware.evis.evi"); value.Exists() {
+		data.FlexibleXconnectServiceVlanAwareEvis = make([]L2VPNFlexibleXconnectServiceVlanAwareEvis, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNFlexibleXconnectServiceVlanAwareEvis{}
+			if cValue := v.Get("vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("interfaces.interface"); cValue.Exists() {
+				item.Interfaces = make([]L2VPNFlexibleXconnectServiceVlanAwareEvisInterfaces, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := L2VPNFlexibleXconnectServiceVlanAwareEvisInterfaces{}
+					if ccValue := cv.Get("interface-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.InterfaceName = types.StringValue(ccValue.String())
+					}
+					item.Interfaces = append(item.Interfaces, cItem)
+					return true
+				})
+			}
+			data.FlexibleXconnectServiceVlanAwareEvis = append(data.FlexibleXconnectServiceVlanAwareEvis, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "ignore-mtu-mismatch"); value.Exists() {
+		data.IgnoreMtuMismatch = types.BoolValue(true)
+	} else {
+		data.IgnoreMtuMismatch = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ignore-mtu-mismatch-ad"); value.Exists() {
+		data.IgnoreMtuMismatchAd = types.BoolValue(true)
+	} else {
+		data.IgnoreMtuMismatchAd = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "pw-status.disable"); value.Exists() {
+		data.PwStatusDisable = types.BoolValue(true)
+	} else {
+		data.PwStatusDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-mac"); value.Exists() {
+		data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
+	} else {
+		data.LoadBalancingFlowSrcDstMac = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-ip"); value.Exists() {
+		data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
+	} else {
+		data.LoadBalancingFlowSrcDstIp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "capability.single-mode"); value.Exists() {
+		data.CapabilitySingleMode = types.BoolValue(true)
+	} else {
+		data.CapabilitySingleMode = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "capability.high-mode"); value.Exists() {
+		data.CapabilityHighMode = types.BoolValue(true)
+	} else {
+		data.CapabilityHighMode = types.BoolValue(false)
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "pw-oam.refresh.transmit"); value.Exists() {
+			data.PwOamRefreshTransmit = types.Int64Value(value.Int())
+		}
+	} else {
+		data.PwOamRefreshTransmit = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "tcn-propagation"); value.Exists() {
+		data.TcnPropagation = types.BoolValue(true)
+	} else {
+		data.TcnPropagation = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "pw-grouping"); value.Exists() {
+		data.PwGrouping = types.BoolValue(true)
+	} else {
+		data.PwGrouping = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "neighbors.all.ldp.flap"); value.Exists() {
+		data.NeighborsAllLdpFlap = types.BoolValue(true)
+	} else {
+		data.NeighborsAllLdpFlap = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mac.limit.threshold"); value.Exists() {
+		data.MacLimitThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "logging.pseudowire"); value.Exists() {
+		data.LoggingPseudowire = types.BoolValue(true)
+	} else {
+		data.LoggingPseudowire = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "logging.bridge-domain"); value.Exists() {
+		data.LoggingBridgeDomain = types.BoolValue(true)
+	} else {
+		data.LoggingBridgeDomain = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "logging.vfi"); value.Exists() {
+		data.LoggingVfi = types.BoolValue(true)
+	} else {
+		data.LoggingVfi = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "logging.nsr"); value.Exists() {
+		data.LoggingNsr = types.BoolValue(true)
+	} else {
+		data.LoggingNsr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "logging.pwhe-replication.disable"); value.Exists() {
+		data.LoggingPwheReplicationDisable = types.BoolValue(true)
+	} else {
+		data.LoggingPwheReplicationDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "autodiscovery.bgp.signaling-protocol.bgp.mtu.mismatch.ignore"); value.Exists() {
+		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(true)
+	} else {
+		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "pw-routing.global-id"); value.Exists() {
+		data.PwRoutingGlobalId = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.two-byte-as-number"); value.Exists() {
+		data.PwRoutingBgpRdTwoByteAsNumber = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.two-byte-as-assigned-number"); value.Exists() {
+		data.PwRoutingBgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.four-byte-as-number"); value.Exists() {
+		data.PwRoutingBgpRdFourByteAsNumber = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.four-byte-as-assigned-number"); value.Exists() {
+		data.PwRoutingBgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.ipv4-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.PwRoutingBgpRdIpv4Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "pw-routing.bgp.rd.ipv4-address-assigned-number"); value.Exists() {
+		data.PwRoutingBgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "snmp.mib.interface.format.external"); value.Exists() {
+		data.SnmpMibInterfaceFormatExternal = types.BoolValue(true)
+	} else {
+		data.SnmpMibInterfaceFormatExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "snmp.mib.pseudowire.statistics"); value.Exists() {
+		data.SnmpMibPseudowireStatistics = types.BoolValue(true)
+	} else {
+		data.SnmpMibPseudowireStatistics = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.SnmpMibPseudowireStatistics.IsNull() && data.SnmpMibPseudowireStatistics.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "snmp/mib/pseudowire/statistics"))
+	}
+	if !state.SnmpMibInterfaceFormatExternal.IsNull() && data.SnmpMibInterfaceFormatExternal.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "snmp/mib/interface/format/external"))
+	}
+	if !state.PwRoutingBgpRdIpv4AddressAssignedNumber.IsNull() && data.PwRoutingBgpRdIpv4AddressAssignedNumber.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "pw-routing/bgp/rd/ipv4-address-assigned-number"))
+	}
+	if !state.PwRoutingBgpRdIpv4Address.IsNull() && data.PwRoutingBgpRdIpv4Address.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "pw-routing/bgp/rd/ipv4-address"))
+	}
+	if !state.PwRoutingBgpRdFourByteAsAssignedNumber.IsNull() && data.PwRoutingBgpRdFourByteAsAssignedNumber.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "pw-routing/bgp/rd/four-byte-as-assigned-number"))
+	}
+	if !state.PwRoutingBgpRdFourByteAsNumber.IsNull() && data.PwRoutingBgpRdFourByteAsNumber.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "pw-routing/bgp/rd/four-byte-as-number"))
+	}
+	if !state.PwRoutingBgpRdTwoByteAsAssignedNumber.IsNull() && data.PwRoutingBgpRdTwoByteAsAssignedNumber.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "pw-routing/bgp/rd/two-byte-as-assigned-number"))
+	}
+	if !state.PwRoutingBgpRdTwoByteAsNumber.IsNull() && data.PwRoutingBgpRdTwoByteAsNumber.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "pw-routing/bgp/rd/two-byte-as-number"))
+	}
+	if !state.PwRoutingGlobalId.IsNull() && data.PwRoutingGlobalId.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "pw-routing/global-id"))
+	}
+	if !state.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() && data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "autodiscovery/bgp/signaling-protocol/bgp/mtu/mismatch/ignore"))
+	}
+	if !state.LoggingPwheReplicationDisable.IsNull() && data.LoggingPwheReplicationDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "logging/pwhe-replication/disable"))
+	}
+	if !state.LoggingNsr.IsNull() && data.LoggingNsr.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "logging/nsr"))
+	}
+	if !state.LoggingVfi.IsNull() && data.LoggingVfi.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "logging/vfi"))
+	}
+	if !state.LoggingBridgeDomain.IsNull() && data.LoggingBridgeDomain.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "logging/bridge-domain"))
+	}
+	if !state.LoggingPseudowire.IsNull() && data.LoggingPseudowire.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "logging/pseudowire"))
+	}
+	if !state.MacLimitThreshold.IsNull() && data.MacLimitThreshold.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "mac/limit/threshold"))
+	}
+	if !state.NeighborsAllLdpFlap.IsNull() && data.NeighborsAllLdpFlap.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "neighbors/all/ldp/flap"))
+	}
+	if !state.PwGrouping.IsNull() && data.PwGrouping.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "pw-grouping"))
+	}
+	if !state.TcnPropagation.IsNull() && data.TcnPropagation.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "tcn-propagation"))
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.PwOamRefreshTransmit.IsNull() && data.PwOamRefreshTransmit.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "pw-oam/refresh/transmit"))
+	}
+	if !state.CapabilityHighMode.IsNull() && data.CapabilityHighMode.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "capability/high-mode"))
+	}
+	if !state.CapabilitySingleMode.IsNull() && data.CapabilitySingleMode.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "capability/single-mode"))
+	}
+	if !state.LoadBalancingFlowSrcDstIp.IsNull() && data.LoadBalancingFlowSrcDstIp.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "load-balancing/flow/src-dst-ip"))
+	}
+	if !state.LoadBalancingFlowSrcDstMac.IsNull() && data.LoadBalancingFlowSrcDstMac.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "load-balancing/flow/src-dst-mac"))
+	}
+	if !state.PwStatusDisable.IsNull() && data.PwStatusDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "pw-status/disable"))
+	}
+	if !state.IgnoreMtuMismatchAd.IsNull() && data.IgnoreMtuMismatchAd.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ignore-mtu-mismatch-ad"))
+	}
+	if !state.IgnoreMtuMismatch.IsNull() && data.IgnoreMtuMismatch.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ignore-mtu-mismatch"))
+	}
+	for i := range state.FlexibleXconnectServiceVlanAwareEvis {
+		keys := [...]string{"vpn-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.FlexibleXconnectServiceVlanAwareEvis {
+			found = true
+			if state.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64() != data.FlexibleXconnectServiceVlanAwareEvis[j].VpnId.ValueInt64() {
+				found = false
+			}
+			if found {
+				for ci := range state.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces {
+					ckeys := [...]string{"interface-name"}
+					cstateKeyValues := [...]string{state.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.FlexibleXconnectServiceVlanAwareEvis[j].Interfaces {
+						found = true
+						if state.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString() != data.FlexibleXconnectServiceVlanAwareEvis[j].Interfaces[cj].InterfaceName.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "flexible-xconnect-service/vlan-aware/evis/evi", keyString, "interfaces/interface", ckeyString))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "flexible-xconnect-service/vlan-aware/evis/evi", keyString))
+		}
+	}
+	for i := range state.FlexibleXconnectServiceVlanUnaware {
+		keys := [...]string{"service-name"}
+		stateKeyValues := [...]string{state.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.FlexibleXconnectServiceVlanUnaware {
+			found = true
+			if state.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString() != data.FlexibleXconnectServiceVlanUnaware[j].ServiceName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis {
+					ckeys := [...]string{"vpn-id", "remote-ac-id"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.FlexibleXconnectServiceVlanUnaware[j].NeighborEvpnEvis {
+						found = true
+						if state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64() != data.FlexibleXconnectServiceVlanUnaware[j].NeighborEvpnEvis[cj].VpnId.ValueInt64() {
+							found = false
+						}
+						if state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64() != data.FlexibleXconnectServiceVlanUnaware[j].NeighborEvpnEvis[cj].RemoteAcId.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "flexible-xconnect-service/vlan-unawares/vlan-unaware", keyString, "neighbor/evpn/evis/evi", ckeyString))
+					}
+				}
+				for ci := range state.FlexibleXconnectServiceVlanUnaware[i].Interfaces {
+					ckeys := [...]string{"interface-name"}
+					cstateKeyValues := [...]string{state.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.FlexibleXconnectServiceVlanUnaware[j].Interfaces {
+						found = true
+						if state.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString() != data.FlexibleXconnectServiceVlanUnaware[j].Interfaces[cj].InterfaceName.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "flexible-xconnect-service/vlan-unawares/vlan-unaware", keyString, "interfaces/interface", ckeyString))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "flexible-xconnect-service/vlan-unawares/vlan-unaware", keyString))
+		}
+	}
+	for i := range state.RedundancyIccpGroups {
+		keys := [...]string{"group-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.RedundancyIccpGroups[i].GroupNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.RedundancyIccpGroups {
+			found = true
+			if state.RedundancyIccpGroups[i].GroupNumber.ValueInt64() != data.RedundancyIccpGroups[j].GroupNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.RedundancyIccpGroups[i].MultiHomingNodeId.IsNull() && data.RedundancyIccpGroups[j].MultiHomingNodeId.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "redundancy/iccp/groups/group", keyString), "multi-homing/node-id"))
+				}
+				for ci := range state.RedundancyIccpGroups[i].Interfaces {
+					ckeys := [...]string{"interface-name"}
+					cstateKeyValues := [...]string{state.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.RedundancyIccpGroups[j].Interfaces {
+						found = true
+						if state.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString() != data.RedundancyIccpGroups[j].Interfaces[cj].InterfaceName.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.RedundancyIccpGroups[i].Interfaces[ci].RecoveryDelay.IsNull() && data.RedundancyIccpGroups[j].Interfaces[cj].RecoveryDelay.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "redundancy/iccp/groups/group", keyString, "interface", ckeyString), "recovery/delay"))
+							}
+							if !state.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() && data.RedundancyIccpGroups[j].Interfaces[cj].MacFlushStpTcn.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "redundancy/iccp/groups/group", keyString, "interface", ckeyString), "mac-flush/stp-tcn"))
+							}
+							if !state.RedundancyIccpGroups[i].Interfaces[ci].SecondaryVlan.IsNull() && data.RedundancyIccpGroups[j].Interfaces[cj].SecondaryVlan.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "redundancy/iccp/groups/group", keyString, "interface", ckeyString), "secondary/vlan"))
+							}
+							if !state.RedundancyIccpGroups[i].Interfaces[ci].PrimaryVlan.IsNull() && data.RedundancyIccpGroups[j].Interfaces[cj].PrimaryVlan.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "redundancy/iccp/groups/group", keyString, "interface", ckeyString), "primary/vlan"))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "redundancy/iccp/groups/group", keyString, "interface", ckeyString))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "redundancy/iccp/groups/group", keyString))
+		}
+	}
+	if !state.RouterId.IsNull() && data.RouterId.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "router-id"))
+	}
+	if !state.Description.IsNull() && data.Description.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "description"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *L2VPN) getEmptyLeafsDelete(ctx context.Context, state *L2VPN, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if !data.SnmpMibPseudowireStatistics.IsNull() && !data.SnmpMibPseudowireStatistics.ValueBool() {
+		if state == nil || state.SnmpMibPseudowireStatistics.IsNull() || state.SnmpMibPseudowireStatistics.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "snmp/mib/pseudowire/statistics"))
+		}
+	}
+	if !data.SnmpMibInterfaceFormatExternal.IsNull() && !data.SnmpMibInterfaceFormatExternal.ValueBool() {
+		if state == nil || state.SnmpMibInterfaceFormatExternal.IsNull() || state.SnmpMibInterfaceFormatExternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "snmp/mib/interface/format/external"))
+		}
+	}
+	if !data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() && !data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.ValueBool() {
+		if state == nil || state.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() || state.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "autodiscovery/bgp/signaling-protocol/bgp/mtu/mismatch/ignore"))
+		}
+	}
+	if !data.LoggingPwheReplicationDisable.IsNull() && !data.LoggingPwheReplicationDisable.ValueBool() {
+		if state == nil || state.LoggingPwheReplicationDisable.IsNull() || state.LoggingPwheReplicationDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/pwhe-replication/disable"))
+		}
+	}
+	if !data.LoggingNsr.IsNull() && !data.LoggingNsr.ValueBool() {
+		if state == nil || state.LoggingNsr.IsNull() || state.LoggingNsr.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/nsr"))
+		}
+	}
+	if !data.LoggingVfi.IsNull() && !data.LoggingVfi.ValueBool() {
+		if state == nil || state.LoggingVfi.IsNull() || state.LoggingVfi.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/vfi"))
+		}
+	}
+	if !data.LoggingBridgeDomain.IsNull() && !data.LoggingBridgeDomain.ValueBool() {
+		if state == nil || state.LoggingBridgeDomain.IsNull() || state.LoggingBridgeDomain.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/bridge-domain"))
+		}
+	}
+	if !data.LoggingPseudowire.IsNull() && !data.LoggingPseudowire.ValueBool() {
+		if state == nil || state.LoggingPseudowire.IsNull() || state.LoggingPseudowire.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/pseudowire"))
+		}
+	}
+	if !data.NeighborsAllLdpFlap.IsNull() && !data.NeighborsAllLdpFlap.ValueBool() {
+		if state == nil || state.NeighborsAllLdpFlap.IsNull() || state.NeighborsAllLdpFlap.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "neighbors/all/ldp/flap"))
+		}
+	}
+	if !data.PwGrouping.IsNull() && !data.PwGrouping.ValueBool() {
+		if state == nil || state.PwGrouping.IsNull() || state.PwGrouping.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "pw-grouping"))
+		}
+	}
+	if !data.TcnPropagation.IsNull() && !data.TcnPropagation.ValueBool() {
+		if state == nil || state.TcnPropagation.IsNull() || state.TcnPropagation.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "tcn-propagation"))
+		}
+	}
+	if !data.CapabilityHighMode.IsNull() && !data.CapabilityHighMode.ValueBool() {
+		if state == nil || state.CapabilityHighMode.IsNull() || state.CapabilityHighMode.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "capability/high-mode"))
+		}
+	}
+	if !data.CapabilitySingleMode.IsNull() && !data.CapabilitySingleMode.ValueBool() {
+		if state == nil || state.CapabilitySingleMode.IsNull() || state.CapabilitySingleMode.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "capability/single-mode"))
+		}
+	}
+	if !data.LoadBalancingFlowSrcDstIp.IsNull() && !data.LoadBalancingFlowSrcDstIp.ValueBool() {
+		if state == nil || state.LoadBalancingFlowSrcDstIp.IsNull() || state.LoadBalancingFlowSrcDstIp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "load-balancing/flow/src-dst-ip"))
+		}
+	}
+	if !data.LoadBalancingFlowSrcDstMac.IsNull() && !data.LoadBalancingFlowSrcDstMac.ValueBool() {
+		if state == nil || state.LoadBalancingFlowSrcDstMac.IsNull() || state.LoadBalancingFlowSrcDstMac.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "load-balancing/flow/src-dst-mac"))
+		}
+	}
+	if !data.PwStatusDisable.IsNull() && !data.PwStatusDisable.ValueBool() {
+		if state == nil || state.PwStatusDisable.IsNull() || state.PwStatusDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "pw-status/disable"))
+		}
+	}
+	if !data.IgnoreMtuMismatchAd.IsNull() && !data.IgnoreMtuMismatchAd.ValueBool() {
+		if state == nil || state.IgnoreMtuMismatchAd.IsNull() || state.IgnoreMtuMismatchAd.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ignore-mtu-mismatch-ad"))
+		}
+	}
+	if !data.IgnoreMtuMismatch.IsNull() && !data.IgnoreMtuMismatch.ValueBool() {
+		if state == nil || state.IgnoreMtuMismatch.IsNull() || state.IgnoreMtuMismatch.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ignore-mtu-mismatch"))
+		}
+	}
+	for i := range data.FlexibleXconnectServiceVlanAwareEvis {
+		keys := [...]string{"vpn-id"}
+		keyValues := [...]string{strconv.FormatInt(data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces {
+			ckeys := [...]string{"interface-name"}
+			ckeyValues := [...]string{data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+	}
+	for i := range data.FlexibleXconnectServiceVlanUnaware {
+		keys := [...]string{"service-name"}
+		keyValues := [...]string{data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis {
+			ckeys := [...]string{"vpn-id", "remote-ac-id"}
+			ckeyValues := [...]string{strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+		for ci := range data.FlexibleXconnectServiceVlanUnaware[i].Interfaces {
+			ckeys := [...]string{"interface-name"}
+			ckeyValues := [...]string{data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+	}
+	for i := range data.RedundancyIccpGroups {
+		keys := [...]string{"group-number"}
+		keyValues := [...]string{strconv.FormatInt(data.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.RedundancyIccpGroups[i].Interfaces {
+			ckeys := [...]string{"interface-name"}
+			ckeyValues := [...]string{data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			if !data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() && !data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.ValueBool() {
+				if state == nil || i >= len(state.RedundancyIccpGroups) || ci >= len(state.RedundancyIccpGroups[i].Interfaces) || state.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() || state.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "redundancy/iccp/groups/group", keyString, "interface", ckeyString), "mac-flush/stp-tcn"))
+				}
+			}
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *L2VPN) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.SnmpMibPseudowireStatistics.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "snmp/mib/pseudowire/statistics"))
+	}
+	if !data.SnmpMibInterfaceFormatExternal.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "snmp/mib/interface/format/external"))
+	}
+	if !data.PwRoutingBgpRdIpv4AddressAssignedNumber.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "pw-routing/bgp/rd/ipv4-address-assigned-number"))
+	}
+	if !data.PwRoutingBgpRdIpv4Address.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "pw-routing/bgp/rd/ipv4-address"))
+	}
+	if !data.PwRoutingBgpRdFourByteAsAssignedNumber.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "pw-routing/bgp/rd/four-byte-as-assigned-number"))
+	}
+	if !data.PwRoutingBgpRdFourByteAsNumber.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "pw-routing/bgp/rd/four-byte-as-number"))
+	}
+	if !data.PwRoutingBgpRdTwoByteAsAssignedNumber.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "pw-routing/bgp/rd/two-byte-as-assigned-number"))
+	}
+	if !data.PwRoutingBgpRdTwoByteAsNumber.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "pw-routing/bgp/rd/two-byte-as-number"))
+	}
+	if !data.PwRoutingGlobalId.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "pw-routing/global-id"))
+	}
+	if !data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "autodiscovery/bgp/signaling-protocol/bgp/mtu/mismatch/ignore"))
+	}
+	if !data.LoggingPwheReplicationDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "logging/pwhe-replication/disable"))
+	}
+	if !data.LoggingNsr.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "logging/nsr"))
+	}
+	if !data.LoggingVfi.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "logging/vfi"))
+	}
+	if !data.LoggingBridgeDomain.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "logging/bridge-domain"))
+	}
+	if !data.LoggingPseudowire.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "logging/pseudowire"))
+	}
+	if !data.MacLimitThreshold.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "mac/limit/threshold"))
+	}
+	if !data.NeighborsAllLdpFlap.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "neighbors/all/ldp/flap"))
+	}
+	if !data.PwGrouping.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "pw-grouping"))
+	}
+	if !data.TcnPropagation.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "tcn-propagation"))
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.PwOamRefreshTransmit.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "pw-oam/refresh/transmit"))
+	}
+	if !data.CapabilityHighMode.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "capability/high-mode"))
+	}
+	if !data.CapabilitySingleMode.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "capability/single-mode"))
+	}
+	if !data.LoadBalancingFlowSrcDstIp.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "load-balancing/flow/src-dst-ip"))
+	}
+	if !data.LoadBalancingFlowSrcDstMac.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "load-balancing/flow/src-dst-mac"))
+	}
+	if !data.PwStatusDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "pw-status/disable"))
+	}
+	if !data.IgnoreMtuMismatchAd.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ignore-mtu-mismatch-ad"))
+	}
+	if !data.IgnoreMtuMismatch.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ignore-mtu-mismatch"))
+	}
+	for i := range data.FlexibleXconnectServiceVlanAwareEvis {
+		keys := [...]string{"vpn-id"}
+		keyValues := [...]string{strconv.FormatInt(data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "flexible-xconnect-service/vlan-aware/evis/evi", keyString))
+	}
+	for i := range data.FlexibleXconnectServiceVlanUnaware {
+		keys := [...]string{"service-name"}
+		keyValues := [...]string{data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "flexible-xconnect-service/vlan-unawares/vlan-unaware", keyString))
+	}
+	for i := range data.RedundancyIccpGroups {
+		keys := [...]string{"group-number"}
+		keyValues := [...]string{strconv.FormatInt(data.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.RedundancyIccpGroups[i].GroupNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "redundancy/iccp/groups/group", keyString))
+	}
+	if !data.RouterId.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "router-id"))
+	}
+	if !data.Description.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "description"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data L2VPN) toBodyXML(ctx context.Context, stateArg ...*L2VPN) string {
@@ -1100,7 +2263,7 @@ func (data L2VPN) toBodyXML(ctx context.Context, stateArg ...*L2VPN) string {
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -1108,6 +2271,7 @@ func (data L2VPN) toBodyXML(ctx context.Context, stateArg ...*L2VPN) string {
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1605,494 +2769,7 @@ func (data *L2VPN) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *L2VPN) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "description"); value.Exists() {
-		data.Description = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "router-id"); value.Exists() {
-		data.RouterId = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "redundancy.iccp.groups.group"); value.Exists() {
-		data.RedundancyIccpGroups = make([]L2VPNRedundancyIccpGroups, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := L2VPNRedundancyIccpGroups{}
-			if cValue := v.Get("group-number"); cValue.Exists() {
-				item.GroupNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("interface"); cValue.Exists() {
-				item.Interfaces = make([]L2VPNRedundancyIccpGroupsInterfaces, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := L2VPNRedundancyIccpGroupsInterfaces{}
-					if ccValue := cv.Get("interface-name"); ccValue.Exists() {
-						cItem.InterfaceName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("primary.vlan"); ccValue.Exists() {
-						cItem.PrimaryVlan = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("secondary.vlan"); ccValue.Exists() {
-						cItem.SecondaryVlan = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("mac-flush.stp-tcn"); ccValue.Exists() {
-						cItem.MacFlushStpTcn = types.BoolValue(true)
-					} else if !cItem.MacFlushStpTcn.IsNull() {
-						// Only set to false if it was previously set
-						cItem.MacFlushStpTcn = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("recovery.delay"); ccValue.Exists() {
-						cItem.RecoveryDelay = types.Int64Value(ccValue.Int())
-					}
-					item.Interfaces = append(item.Interfaces, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("multi-homing.node-id"); cValue.Exists() {
-				item.MultiHomingNodeId = types.Int64Value(cValue.Int())
-			}
-			data.RedundancyIccpGroups = append(data.RedundancyIccpGroups, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "flexible-xconnect-service.vlan-unawares.vlan-unaware"); value.Exists() {
-		data.FlexibleXconnectServiceVlanUnaware = make([]L2VPNFlexibleXconnectServiceVlanUnaware, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := L2VPNFlexibleXconnectServiceVlanUnaware{}
-			if cValue := v.Get("service-name"); cValue.Exists() {
-				item.ServiceName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("interfaces.interface"); cValue.Exists() {
-				item.Interfaces = make([]L2VPNFlexibleXconnectServiceVlanUnawareInterfaces, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := L2VPNFlexibleXconnectServiceVlanUnawareInterfaces{}
-					if ccValue := cv.Get("interface-name"); ccValue.Exists() {
-						cItem.InterfaceName = types.StringValue(ccValue.String())
-					}
-					item.Interfaces = append(item.Interfaces, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("neighbor.evpn.evis.evi"); cValue.Exists() {
-				item.NeighborEvpnEvis = make([]L2VPNFlexibleXconnectServiceVlanUnawareNeighborEvpnEvis, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := L2VPNFlexibleXconnectServiceVlanUnawareNeighborEvpnEvis{}
-					if ccValue := cv.Get("vpn-id"); ccValue.Exists() {
-						cItem.VpnId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("remote-ac-id"); ccValue.Exists() {
-						cItem.RemoteAcId = types.Int64Value(ccValue.Int())
-					}
-					item.NeighborEvpnEvis = append(item.NeighborEvpnEvis, cItem)
-					return true
-				})
-			}
-			data.FlexibleXconnectServiceVlanUnaware = append(data.FlexibleXconnectServiceVlanUnaware, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "flexible-xconnect-service.vlan-aware.evis.evi"); value.Exists() {
-		data.FlexibleXconnectServiceVlanAwareEvis = make([]L2VPNFlexibleXconnectServiceVlanAwareEvis, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := L2VPNFlexibleXconnectServiceVlanAwareEvis{}
-			if cValue := v.Get("vpn-id"); cValue.Exists() {
-				item.VpnId = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("interfaces.interface"); cValue.Exists() {
-				item.Interfaces = make([]L2VPNFlexibleXconnectServiceVlanAwareEvisInterfaces, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := L2VPNFlexibleXconnectServiceVlanAwareEvisInterfaces{}
-					if ccValue := cv.Get("interface-name"); ccValue.Exists() {
-						cItem.InterfaceName = types.StringValue(ccValue.String())
-					}
-					item.Interfaces = append(item.Interfaces, cItem)
-					return true
-				})
-			}
-			data.FlexibleXconnectServiceVlanAwareEvis = append(data.FlexibleXconnectServiceVlanAwareEvis, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "ignore-mtu-mismatch"); value.Exists() {
-		data.IgnoreMtuMismatch = types.BoolValue(true)
-	} else if !data.IgnoreMtuMismatch.IsNull() {
-		// Only set to false if it was previously set in state
-		data.IgnoreMtuMismatch = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ignore-mtu-mismatch-ad"); value.Exists() {
-		data.IgnoreMtuMismatchAd = types.BoolValue(true)
-	} else if !data.IgnoreMtuMismatchAd.IsNull() {
-		// Only set to false if it was previously set in state
-		data.IgnoreMtuMismatchAd = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "pw-status.disable"); value.Exists() {
-		data.PwStatusDisable = types.BoolValue(true)
-	} else if !data.PwStatusDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.PwStatusDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "load-balancing.flow.src-dst-mac"); value.Exists() {
-		data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
-	} else if !data.LoadBalancingFlowSrcDstMac.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LoadBalancingFlowSrcDstMac = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "load-balancing.flow.src-dst-ip"); value.Exists() {
-		data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
-	} else if !data.LoadBalancingFlowSrcDstIp.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LoadBalancingFlowSrcDstIp = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "capability.single-mode"); value.Exists() {
-		data.CapabilitySingleMode = types.BoolValue(true)
-	} else if !data.CapabilitySingleMode.IsNull() {
-		// Only set to false if it was previously set in state
-		data.CapabilitySingleMode = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "capability.high-mode"); value.Exists() {
-		data.CapabilityHighMode = types.BoolValue(true)
-	} else if !data.CapabilityHighMode.IsNull() {
-		// Only set to false if it was previously set in state
-		data.CapabilityHighMode = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "pw-oam.refresh.transmit"); value.Exists() {
-		data.PwOamRefreshTransmit = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "tcn-propagation"); value.Exists() {
-		data.TcnPropagation = types.BoolValue(true)
-	} else if !data.TcnPropagation.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TcnPropagation = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "pw-grouping"); value.Exists() {
-		data.PwGrouping = types.BoolValue(true)
-	} else if !data.PwGrouping.IsNull() {
-		// Only set to false if it was previously set in state
-		data.PwGrouping = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "neighbors.all.ldp.flap"); value.Exists() {
-		data.NeighborsAllLdpFlap = types.BoolValue(true)
-	} else if !data.NeighborsAllLdpFlap.IsNull() {
-		// Only set to false if it was previously set in state
-		data.NeighborsAllLdpFlap = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "mac.limit.threshold"); value.Exists() {
-		data.MacLimitThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "logging.pseudowire"); value.Exists() {
-		data.LoggingPseudowire = types.BoolValue(true)
-	} else if !data.LoggingPseudowire.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LoggingPseudowire = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.bridge-domain"); value.Exists() {
-		data.LoggingBridgeDomain = types.BoolValue(true)
-	} else if !data.LoggingBridgeDomain.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LoggingBridgeDomain = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.vfi"); value.Exists() {
-		data.LoggingVfi = types.BoolValue(true)
-	} else if !data.LoggingVfi.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LoggingVfi = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.nsr"); value.Exists() {
-		data.LoggingNsr = types.BoolValue(true)
-	} else if !data.LoggingNsr.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LoggingNsr = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.pwhe-replication.disable"); value.Exists() {
-		data.LoggingPwheReplicationDisable = types.BoolValue(true)
-	} else if !data.LoggingPwheReplicationDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LoggingPwheReplicationDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.bgp.mtu.mismatch.ignore"); value.Exists() {
-		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(true)
-	} else if !data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() {
-		// Only set to false if it was previously set in state
-		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "pw-routing.global-id"); value.Exists() {
-		data.PwRoutingGlobalId = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "pw-routing.bgp.rd.two-byte-as-number"); value.Exists() {
-		data.PwRoutingBgpRdTwoByteAsNumber = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "pw-routing.bgp.rd.two-byte-as-assigned-number"); value.Exists() {
-		data.PwRoutingBgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "pw-routing.bgp.rd.four-byte-as-number"); value.Exists() {
-		data.PwRoutingBgpRdFourByteAsNumber = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "pw-routing.bgp.rd.four-byte-as-assigned-number"); value.Exists() {
-		data.PwRoutingBgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "pw-routing.bgp.rd.ipv4-address"); value.Exists() {
-		data.PwRoutingBgpRdIpv4Address = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "pw-routing.bgp.rd.ipv4-address-assigned-number"); value.Exists() {
-		data.PwRoutingBgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "snmp.mib.interface.format.external"); value.Exists() {
-		data.SnmpMibInterfaceFormatExternal = types.BoolValue(true)
-	} else if !data.SnmpMibInterfaceFormatExternal.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SnmpMibInterfaceFormatExternal = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "snmp.mib.pseudowire.statistics"); value.Exists() {
-		data.SnmpMibPseudowireStatistics = types.BoolValue(true)
-	} else if !data.SnmpMibPseudowireStatistics.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SnmpMibPseudowireStatistics = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *L2VPNData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "description"); value.Exists() {
-		data.Description = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "router-id"); value.Exists() {
-		data.RouterId = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "redundancy.iccp.groups.group"); value.Exists() {
-		data.RedundancyIccpGroups = make([]L2VPNRedundancyIccpGroups, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := L2VPNRedundancyIccpGroups{}
-			if cValue := v.Get("group-number"); cValue.Exists() {
-				item.GroupNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("interface"); cValue.Exists() {
-				item.Interfaces = make([]L2VPNRedundancyIccpGroupsInterfaces, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := L2VPNRedundancyIccpGroupsInterfaces{}
-					if ccValue := cv.Get("interface-name"); ccValue.Exists() {
-						cItem.InterfaceName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("primary.vlan"); ccValue.Exists() {
-						cItem.PrimaryVlan = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("secondary.vlan"); ccValue.Exists() {
-						cItem.SecondaryVlan = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("mac-flush.stp-tcn"); ccValue.Exists() {
-						cItem.MacFlushStpTcn = types.BoolValue(true)
-					} else {
-						cItem.MacFlushStpTcn = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("recovery.delay"); ccValue.Exists() {
-						cItem.RecoveryDelay = types.Int64Value(ccValue.Int())
-					}
-					item.Interfaces = append(item.Interfaces, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("multi-homing.node-id"); cValue.Exists() {
-				item.MultiHomingNodeId = types.Int64Value(cValue.Int())
-			}
-			data.RedundancyIccpGroups = append(data.RedundancyIccpGroups, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "flexible-xconnect-service.vlan-unawares.vlan-unaware"); value.Exists() {
-		data.FlexibleXconnectServiceVlanUnaware = make([]L2VPNFlexibleXconnectServiceVlanUnaware, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := L2VPNFlexibleXconnectServiceVlanUnaware{}
-			if cValue := v.Get("service-name"); cValue.Exists() {
-				item.ServiceName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("interfaces.interface"); cValue.Exists() {
-				item.Interfaces = make([]L2VPNFlexibleXconnectServiceVlanUnawareInterfaces, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := L2VPNFlexibleXconnectServiceVlanUnawareInterfaces{}
-					if ccValue := cv.Get("interface-name"); ccValue.Exists() {
-						cItem.InterfaceName = types.StringValue(ccValue.String())
-					}
-					item.Interfaces = append(item.Interfaces, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("neighbor.evpn.evis.evi"); cValue.Exists() {
-				item.NeighborEvpnEvis = make([]L2VPNFlexibleXconnectServiceVlanUnawareNeighborEvpnEvis, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := L2VPNFlexibleXconnectServiceVlanUnawareNeighborEvpnEvis{}
-					if ccValue := cv.Get("vpn-id"); ccValue.Exists() {
-						cItem.VpnId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("remote-ac-id"); ccValue.Exists() {
-						cItem.RemoteAcId = types.Int64Value(ccValue.Int())
-					}
-					item.NeighborEvpnEvis = append(item.NeighborEvpnEvis, cItem)
-					return true
-				})
-			}
-			data.FlexibleXconnectServiceVlanUnaware = append(data.FlexibleXconnectServiceVlanUnaware, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "flexible-xconnect-service.vlan-aware.evis.evi"); value.Exists() {
-		data.FlexibleXconnectServiceVlanAwareEvis = make([]L2VPNFlexibleXconnectServiceVlanAwareEvis, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := L2VPNFlexibleXconnectServiceVlanAwareEvis{}
-			if cValue := v.Get("vpn-id"); cValue.Exists() {
-				item.VpnId = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("interfaces.interface"); cValue.Exists() {
-				item.Interfaces = make([]L2VPNFlexibleXconnectServiceVlanAwareEvisInterfaces, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := L2VPNFlexibleXconnectServiceVlanAwareEvisInterfaces{}
-					if ccValue := cv.Get("interface-name"); ccValue.Exists() {
-						cItem.InterfaceName = types.StringValue(ccValue.String())
-					}
-					item.Interfaces = append(item.Interfaces, cItem)
-					return true
-				})
-			}
-			data.FlexibleXconnectServiceVlanAwareEvis = append(data.FlexibleXconnectServiceVlanAwareEvis, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "ignore-mtu-mismatch"); value.Exists() {
-		data.IgnoreMtuMismatch = types.BoolValue(true)
-	} else {
-		data.IgnoreMtuMismatch = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ignore-mtu-mismatch-ad"); value.Exists() {
-		data.IgnoreMtuMismatchAd = types.BoolValue(true)
-	} else {
-		data.IgnoreMtuMismatchAd = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "pw-status.disable"); value.Exists() {
-		data.PwStatusDisable = types.BoolValue(true)
-	} else {
-		data.PwStatusDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "load-balancing.flow.src-dst-mac"); value.Exists() {
-		data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
-	} else {
-		data.LoadBalancingFlowSrcDstMac = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "load-balancing.flow.src-dst-ip"); value.Exists() {
-		data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
-	} else {
-		data.LoadBalancingFlowSrcDstIp = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "capability.single-mode"); value.Exists() {
-		data.CapabilitySingleMode = types.BoolValue(true)
-	} else {
-		data.CapabilitySingleMode = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "capability.high-mode"); value.Exists() {
-		data.CapabilityHighMode = types.BoolValue(true)
-	} else {
-		data.CapabilityHighMode = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "pw-oam.refresh.transmit"); value.Exists() {
-		data.PwOamRefreshTransmit = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "tcn-propagation"); value.Exists() {
-		data.TcnPropagation = types.BoolValue(true)
-	} else {
-		data.TcnPropagation = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "pw-grouping"); value.Exists() {
-		data.PwGrouping = types.BoolValue(true)
-	} else {
-		data.PwGrouping = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "neighbors.all.ldp.flap"); value.Exists() {
-		data.NeighborsAllLdpFlap = types.BoolValue(true)
-	} else {
-		data.NeighborsAllLdpFlap = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "mac.limit.threshold"); value.Exists() {
-		data.MacLimitThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "logging.pseudowire"); value.Exists() {
-		data.LoggingPseudowire = types.BoolValue(true)
-	} else {
-		data.LoggingPseudowire = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.bridge-domain"); value.Exists() {
-		data.LoggingBridgeDomain = types.BoolValue(true)
-	} else {
-		data.LoggingBridgeDomain = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.vfi"); value.Exists() {
-		data.LoggingVfi = types.BoolValue(true)
-	} else {
-		data.LoggingVfi = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.nsr"); value.Exists() {
-		data.LoggingNsr = types.BoolValue(true)
-	} else {
-		data.LoggingNsr = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.pwhe-replication.disable"); value.Exists() {
-		data.LoggingPwheReplicationDisable = types.BoolValue(true)
-	} else {
-		data.LoggingPwheReplicationDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "autodiscovery.bgp.signaling-protocol.bgp.mtu.mismatch.ignore"); value.Exists() {
-		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(true)
-	} else {
-		data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "pw-routing.global-id"); value.Exists() {
-		data.PwRoutingGlobalId = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "pw-routing.bgp.rd.two-byte-as-number"); value.Exists() {
-		data.PwRoutingBgpRdTwoByteAsNumber = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "pw-routing.bgp.rd.two-byte-as-assigned-number"); value.Exists() {
-		data.PwRoutingBgpRdTwoByteAsAssignedNumber = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "pw-routing.bgp.rd.four-byte-as-number"); value.Exists() {
-		data.PwRoutingBgpRdFourByteAsNumber = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "pw-routing.bgp.rd.four-byte-as-assigned-number"); value.Exists() {
-		data.PwRoutingBgpRdFourByteAsAssignedNumber = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "pw-routing.bgp.rd.ipv4-address"); value.Exists() {
-		data.PwRoutingBgpRdIpv4Address = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "pw-routing.bgp.rd.ipv4-address-assigned-number"); value.Exists() {
-		data.PwRoutingBgpRdIpv4AddressAssignedNumber = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "snmp.mib.interface.format.external"); value.Exists() {
-		data.SnmpMibInterfaceFormatExternal = types.BoolValue(true)
-	} else {
-		data.SnmpMibInterfaceFormatExternal = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "snmp.mib.pseudowire.statistics"); value.Exists() {
-		data.SnmpMibPseudowireStatistics = types.BoolValue(true)
-	} else {
-		data.SnmpMibPseudowireStatistics = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *L2VPN) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -2319,6 +2996,7 @@ func (data *L2VPN) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *L2VPNData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -2545,625 +3223,7 @@ func (data *L2VPNData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN) []string {
-	deletedItems := make([]string, 0)
-	if !state.SnmpMibPseudowireStatistics.IsNull() && data.SnmpMibPseudowireStatistics.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/snmp/mib/pseudowire/statistics", state.getPath()))
-	}
-	if !state.SnmpMibInterfaceFormatExternal.IsNull() && data.SnmpMibInterfaceFormatExternal.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/snmp/mib/interface/format/external", state.getPath()))
-	}
-	if !state.PwRoutingBgpRdIpv4AddressAssignedNumber.IsNull() && data.PwRoutingBgpRdIpv4AddressAssignedNumber.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/pw-routing/bgp/rd/ipv4-address-assigned-number", state.getPath()))
-	}
-	if !state.PwRoutingBgpRdIpv4Address.IsNull() && data.PwRoutingBgpRdIpv4Address.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/pw-routing/bgp/rd/ipv4-address", state.getPath()))
-	}
-	if !state.PwRoutingBgpRdFourByteAsAssignedNumber.IsNull() && data.PwRoutingBgpRdFourByteAsAssignedNumber.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/pw-routing/bgp/rd/four-byte-as-assigned-number", state.getPath()))
-	}
-	if !state.PwRoutingBgpRdFourByteAsNumber.IsNull() && data.PwRoutingBgpRdFourByteAsNumber.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/pw-routing/bgp/rd/four-byte-as-number", state.getPath()))
-	}
-	if !state.PwRoutingBgpRdTwoByteAsAssignedNumber.IsNull() && data.PwRoutingBgpRdTwoByteAsAssignedNumber.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/pw-routing/bgp/rd/two-byte-as-assigned-number", state.getPath()))
-	}
-	if !state.PwRoutingBgpRdTwoByteAsNumber.IsNull() && data.PwRoutingBgpRdTwoByteAsNumber.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/pw-routing/bgp/rd/two-byte-as-number", state.getPath()))
-	}
-	if !state.PwRoutingGlobalId.IsNull() && data.PwRoutingGlobalId.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/pw-routing/global-id", state.getPath()))
-	}
-	if !state.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() && data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/autodiscovery/bgp/signaling-protocol/bgp/mtu/mismatch/ignore", state.getPath()))
-	}
-	if !state.LoggingPwheReplicationDisable.IsNull() && data.LoggingPwheReplicationDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/pwhe-replication/disable", state.getPath()))
-	}
-	if !state.LoggingNsr.IsNull() && data.LoggingNsr.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/nsr", state.getPath()))
-	}
-	if !state.LoggingVfi.IsNull() && data.LoggingVfi.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/vfi", state.getPath()))
-	}
-	if !state.LoggingBridgeDomain.IsNull() && data.LoggingBridgeDomain.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/bridge-domain", state.getPath()))
-	}
-	if !state.LoggingPseudowire.IsNull() && data.LoggingPseudowire.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/pseudowire", state.getPath()))
-	}
-	if !state.MacLimitThreshold.IsNull() && data.MacLimitThreshold.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mac/limit/threshold", state.getPath()))
-	}
-	if !state.NeighborsAllLdpFlap.IsNull() && data.NeighborsAllLdpFlap.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/all/ldp/flap", state.getPath()))
-	}
-	if !state.PwGrouping.IsNull() && data.PwGrouping.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/pw-grouping", state.getPath()))
-	}
-	if !state.TcnPropagation.IsNull() && data.TcnPropagation.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/tcn-propagation", state.getPath()))
-	}
-	if !state.PwOamRefreshTransmit.IsNull() && data.PwOamRefreshTransmit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/pw-oam/refresh/transmit", state.getPath()))
-	}
-	if !state.CapabilityHighMode.IsNull() && data.CapabilityHighMode.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/capability/high-mode", state.getPath()))
-	}
-	if !state.CapabilitySingleMode.IsNull() && data.CapabilitySingleMode.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/capability/single-mode", state.getPath()))
-	}
-	if !state.LoadBalancingFlowSrcDstIp.IsNull() && data.LoadBalancingFlowSrcDstIp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/load-balancing/flow/src-dst-ip", state.getPath()))
-	}
-	if !state.LoadBalancingFlowSrcDstMac.IsNull() && data.LoadBalancingFlowSrcDstMac.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/load-balancing/flow/src-dst-mac", state.getPath()))
-	}
-	if !state.PwStatusDisable.IsNull() && data.PwStatusDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/pw-status/disable", state.getPath()))
-	}
-	if !state.IgnoreMtuMismatchAd.IsNull() && data.IgnoreMtuMismatchAd.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ignore-mtu-mismatch-ad", state.getPath()))
-	}
-	if !state.IgnoreMtuMismatch.IsNull() && data.IgnoreMtuMismatch.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ignore-mtu-mismatch", state.getPath()))
-	}
-	for i := range state.FlexibleXconnectServiceVlanAwareEvis {
-		keys := [...]string{"vpn-id"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.FlexibleXconnectServiceVlanAwareEvis {
-			found = true
-			if state.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64() != data.FlexibleXconnectServiceVlanAwareEvis[j].VpnId.ValueInt64() {
-				found = false
-			}
-			if found {
-				for ci := range state.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces {
-					ckeys := [...]string{"interface-name"}
-					cstateKeyValues := [...]string{state.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString()}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.FlexibleXconnectServiceVlanAwareEvis[j].Interfaces {
-						found = true
-						if state.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString() != data.FlexibleXconnectServiceVlanAwareEvis[j].Interfaces[cj].InterfaceName.ValueString() {
-							found = false
-						}
-						if found {
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/flexible-xconnect-service/vlan-aware/evis/evi%v/interfaces/interface%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/flexible-xconnect-service/vlan-aware/evis/evi%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.FlexibleXconnectServiceVlanUnaware {
-		keys := [...]string{"service-name"}
-		stateKeyValues := [...]string{state.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.FlexibleXconnectServiceVlanUnaware {
-			found = true
-			if state.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString() != data.FlexibleXconnectServiceVlanUnaware[j].ServiceName.ValueString() {
-				found = false
-			}
-			if found {
-				for ci := range state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis {
-					ckeys := [...]string{"vpn-id", "remote-ac-id"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64(), 10)}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64()).IsZero() {
-						cemptyKeys = false
-					}
-					if !reflect.ValueOf(state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.FlexibleXconnectServiceVlanUnaware[j].NeighborEvpnEvis {
-						found = true
-						if state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64() != data.FlexibleXconnectServiceVlanUnaware[j].NeighborEvpnEvis[cj].VpnId.ValueInt64() {
-							found = false
-						}
-						if state.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64() != data.FlexibleXconnectServiceVlanUnaware[j].NeighborEvpnEvis[cj].RemoteAcId.ValueInt64() {
-							found = false
-						}
-						if found {
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/flexible-xconnect-service/vlan-unawares/vlan-unaware%v/neighbor/evpn/evis/evi%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				for ci := range state.FlexibleXconnectServiceVlanUnaware[i].Interfaces {
-					ckeys := [...]string{"interface-name"}
-					cstateKeyValues := [...]string{state.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString()}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.FlexibleXconnectServiceVlanUnaware[j].Interfaces {
-						found = true
-						if state.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString() != data.FlexibleXconnectServiceVlanUnaware[j].Interfaces[cj].InterfaceName.ValueString() {
-							found = false
-						}
-						if found {
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/flexible-xconnect-service/vlan-unawares/vlan-unaware%v/interfaces/interface%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/flexible-xconnect-service/vlan-unawares/vlan-unaware%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.RedundancyIccpGroups {
-		keys := [...]string{"group-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.RedundancyIccpGroups[i].GroupNumber.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.RedundancyIccpGroups {
-			found = true
-			if state.RedundancyIccpGroups[i].GroupNumber.ValueInt64() != data.RedundancyIccpGroups[j].GroupNumber.ValueInt64() {
-				found = false
-			}
-			if found {
-				if !state.RedundancyIccpGroups[i].MultiHomingNodeId.IsNull() && data.RedundancyIccpGroups[j].MultiHomingNodeId.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/multi-homing/node-id", state.getPath(), keyString))
-				}
-				for ci := range state.RedundancyIccpGroups[i].Interfaces {
-					ckeys := [...]string{"interface-name"}
-					cstateKeyValues := [...]string{state.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString()}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.RedundancyIccpGroups[j].Interfaces {
-						found = true
-						if state.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString() != data.RedundancyIccpGroups[j].Interfaces[cj].InterfaceName.ValueString() {
-							found = false
-						}
-						if found {
-							if !state.RedundancyIccpGroups[i].Interfaces[ci].RecoveryDelay.IsNull() && data.RedundancyIccpGroups[j].Interfaces[cj].RecoveryDelay.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/interface%v/recovery/delay", state.getPath(), keyString, ckeyString))
-							}
-							if !state.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() && data.RedundancyIccpGroups[j].Interfaces[cj].MacFlushStpTcn.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/interface%v/mac-flush/stp-tcn", state.getPath(), keyString, ckeyString))
-							}
-							if !state.RedundancyIccpGroups[i].Interfaces[ci].SecondaryVlan.IsNull() && data.RedundancyIccpGroups[j].Interfaces[cj].SecondaryVlan.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/interface%v/secondary/vlan", state.getPath(), keyString, ckeyString))
-							}
-							if !state.RedundancyIccpGroups[i].Interfaces[ci].PrimaryVlan.IsNull() && data.RedundancyIccpGroups[j].Interfaces[cj].PrimaryVlan.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/interface%v/primary/vlan", state.getPath(), keyString, ckeyString))
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/interface%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/redundancy/iccp/groups/group%v", state.getPath(), keyString))
-		}
-	}
-	if !state.RouterId.IsNull() && data.RouterId.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id", state.getPath()))
-	}
-	if !state.Description.IsNull() && data.Description.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/description", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *L2VPN) getEmptyLeafsDelete(ctx context.Context, state *L2VPN) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.SnmpMibPseudowireStatistics.IsNull() && !data.SnmpMibPseudowireStatistics.ValueBool() {
-		if state != nil && !state.SnmpMibPseudowireStatistics.IsNull() && state.SnmpMibPseudowireStatistics.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/snmp/mib/pseudowire/statistics", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SnmpMibInterfaceFormatExternal.IsNull() && !data.SnmpMibInterfaceFormatExternal.ValueBool() {
-		if state != nil && !state.SnmpMibInterfaceFormatExternal.IsNull() && state.SnmpMibInterfaceFormatExternal.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/snmp/mib/interface/format/external", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() && !data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.ValueBool() {
-		if state != nil && !state.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() && state.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/autodiscovery/bgp/signaling-protocol/bgp/mtu/mismatch/ignore", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LoggingPwheReplicationDisable.IsNull() && !data.LoggingPwheReplicationDisable.ValueBool() {
-		if state != nil && !state.LoggingPwheReplicationDisable.IsNull() && state.LoggingPwheReplicationDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/pwhe-replication/disable", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LoggingNsr.IsNull() && !data.LoggingNsr.ValueBool() {
-		if state != nil && !state.LoggingNsr.IsNull() && state.LoggingNsr.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/nsr", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LoggingVfi.IsNull() && !data.LoggingVfi.ValueBool() {
-		if state != nil && !state.LoggingVfi.IsNull() && state.LoggingVfi.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/vfi", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LoggingBridgeDomain.IsNull() && !data.LoggingBridgeDomain.ValueBool() {
-		if state != nil && !state.LoggingBridgeDomain.IsNull() && state.LoggingBridgeDomain.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/bridge-domain", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LoggingPseudowire.IsNull() && !data.LoggingPseudowire.ValueBool() {
-		if state != nil && !state.LoggingPseudowire.IsNull() && state.LoggingPseudowire.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/pseudowire", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.NeighborsAllLdpFlap.IsNull() && !data.NeighborsAllLdpFlap.ValueBool() {
-		if state != nil && !state.NeighborsAllLdpFlap.IsNull() && state.NeighborsAllLdpFlap.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/all/ldp/flap", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.PwGrouping.IsNull() && !data.PwGrouping.ValueBool() {
-		if state != nil && !state.PwGrouping.IsNull() && state.PwGrouping.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/pw-grouping", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TcnPropagation.IsNull() && !data.TcnPropagation.ValueBool() {
-		if state != nil && !state.TcnPropagation.IsNull() && state.TcnPropagation.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/tcn-propagation", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.CapabilityHighMode.IsNull() && !data.CapabilityHighMode.ValueBool() {
-		if state != nil && !state.CapabilityHighMode.IsNull() && state.CapabilityHighMode.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/capability/high-mode", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.CapabilitySingleMode.IsNull() && !data.CapabilitySingleMode.ValueBool() {
-		if state != nil && !state.CapabilitySingleMode.IsNull() && state.CapabilitySingleMode.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/capability/single-mode", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LoadBalancingFlowSrcDstIp.IsNull() && !data.LoadBalancingFlowSrcDstIp.ValueBool() {
-		if state != nil && !state.LoadBalancingFlowSrcDstIp.IsNull() && state.LoadBalancingFlowSrcDstIp.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing/flow/src-dst-ip", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LoadBalancingFlowSrcDstMac.IsNull() && !data.LoadBalancingFlowSrcDstMac.ValueBool() {
-		if state != nil && !state.LoadBalancingFlowSrcDstMac.IsNull() && state.LoadBalancingFlowSrcDstMac.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing/flow/src-dst-mac", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.PwStatusDisable.IsNull() && !data.PwStatusDisable.ValueBool() {
-		if state != nil && !state.PwStatusDisable.IsNull() && state.PwStatusDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/pw-status/disable", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.IgnoreMtuMismatchAd.IsNull() && !data.IgnoreMtuMismatchAd.ValueBool() {
-		if state != nil && !state.IgnoreMtuMismatchAd.IsNull() && state.IgnoreMtuMismatchAd.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ignore-mtu-mismatch-ad", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.IgnoreMtuMismatch.IsNull() && !data.IgnoreMtuMismatch.ValueBool() {
-		if state != nil && !state.IgnoreMtuMismatch.IsNull() && state.IgnoreMtuMismatch.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ignore-mtu-mismatch", data.getXPath()))
-		}
-	}
-	for i := range data.FlexibleXconnectServiceVlanAwareEvis {
-		keys := [...]string{"vpn-id"}
-		keyValues := [...]string{strconv.FormatInt(data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		for ci := range data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces {
-			ckeys := [...]string{"interface-name"}
-			ckeyValues := [...]string{data.FlexibleXconnectServiceVlanAwareEvis[i].Interfaces[ci].InterfaceName.ValueString()}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-		}
-	}
-	for i := range data.FlexibleXconnectServiceVlanUnaware {
-		keys := [...]string{"service-name"}
-		keyValues := [...]string{data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		for ci := range data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis {
-			ckeys := [...]string{"vpn-id", "remote-ac-id"}
-			ckeyValues := [...]string{strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].VpnId.ValueInt64(), 10), strconv.FormatInt(data.FlexibleXconnectServiceVlanUnaware[i].NeighborEvpnEvis[ci].RemoteAcId.ValueInt64(), 10)}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-		}
-		for ci := range data.FlexibleXconnectServiceVlanUnaware[i].Interfaces {
-			ckeys := [...]string{"interface-name"}
-			ckeyValues := [...]string{data.FlexibleXconnectServiceVlanUnaware[i].Interfaces[ci].InterfaceName.ValueString()}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-		}
-	}
-	for i := range data.RedundancyIccpGroups {
-		keys := [...]string{"group-number"}
-		keyValues := [...]string{strconv.FormatInt(data.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		for ci := range data.RedundancyIccpGroups[i].Interfaces {
-			ckeys := [...]string{"interface-name"}
-			ckeyValues := [...]string{data.RedundancyIccpGroups[i].Interfaces[ci].InterfaceName.ValueString()}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-			// Only delete if state has true and plan has false
-			if !data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() && !data.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.RedundancyIccpGroups) && ci < len(state.RedundancyIccpGroups[i].Interfaces) && !state.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.IsNull() && state.RedundancyIccpGroups[i].Interfaces[ci].MacFlushStpTcn.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redundancy/iccp/groups/group%v/interface%v/mac-flush/stp-tcn", data.getXPath(), keyString, ckeyString))
-				}
-			}
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *L2VPN) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.SnmpMibPseudowireStatistics.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/snmp/mib/pseudowire/statistics", data.getPath()))
-	}
-	if !data.SnmpMibInterfaceFormatExternal.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/snmp/mib/interface/format/external", data.getPath()))
-	}
-	if !data.PwRoutingBgpRdIpv4AddressAssignedNumber.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/pw-routing/bgp/rd/ipv4-address-assigned-number", data.getPath()))
-	}
-	if !data.PwRoutingBgpRdIpv4Address.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/pw-routing/bgp/rd/ipv4-address", data.getPath()))
-	}
-	if !data.PwRoutingBgpRdFourByteAsAssignedNumber.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/pw-routing/bgp/rd/four-byte-as-assigned-number", data.getPath()))
-	}
-	if !data.PwRoutingBgpRdFourByteAsNumber.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/pw-routing/bgp/rd/four-byte-as-number", data.getPath()))
-	}
-	if !data.PwRoutingBgpRdTwoByteAsAssignedNumber.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/pw-routing/bgp/rd/two-byte-as-assigned-number", data.getPath()))
-	}
-	if !data.PwRoutingBgpRdTwoByteAsNumber.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/pw-routing/bgp/rd/two-byte-as-number", data.getPath()))
-	}
-	if !data.PwRoutingGlobalId.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/pw-routing/global-id", data.getPath()))
-	}
-	if !data.AutodiscoveryBgpSignalingProtocolBgpMtuMismatchIgnore.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/autodiscovery/bgp/signaling-protocol/bgp/mtu/mismatch/ignore", data.getPath()))
-	}
-	if !data.LoggingPwheReplicationDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/pwhe-replication/disable", data.getPath()))
-	}
-	if !data.LoggingNsr.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/nsr", data.getPath()))
-	}
-	if !data.LoggingVfi.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/vfi", data.getPath()))
-	}
-	if !data.LoggingBridgeDomain.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/bridge-domain", data.getPath()))
-	}
-	if !data.LoggingPseudowire.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/pseudowire", data.getPath()))
-	}
-	if !data.MacLimitThreshold.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mac/limit/threshold", data.getPath()))
-	}
-	if !data.NeighborsAllLdpFlap.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbors/all/ldp/flap", data.getPath()))
-	}
-	if !data.PwGrouping.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/pw-grouping", data.getPath()))
-	}
-	if !data.TcnPropagation.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/tcn-propagation", data.getPath()))
-	}
-	if !data.PwOamRefreshTransmit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/pw-oam/refresh/transmit", data.getPath()))
-	}
-	if !data.CapabilityHighMode.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/capability/high-mode", data.getPath()))
-	}
-	if !data.CapabilitySingleMode.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/capability/single-mode", data.getPath()))
-	}
-	if !data.LoadBalancingFlowSrcDstIp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/load-balancing/flow/src-dst-ip", data.getPath()))
-	}
-	if !data.LoadBalancingFlowSrcDstMac.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/load-balancing/flow/src-dst-mac", data.getPath()))
-	}
-	if !data.PwStatusDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/pw-status/disable", data.getPath()))
-	}
-	if !data.IgnoreMtuMismatchAd.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ignore-mtu-mismatch-ad", data.getPath()))
-	}
-	if !data.IgnoreMtuMismatch.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ignore-mtu-mismatch", data.getPath()))
-	}
-	for i := range data.FlexibleXconnectServiceVlanAwareEvis {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[vpn-id=" + strconv.FormatInt(data.FlexibleXconnectServiceVlanAwareEvis[i].VpnId.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/flexible-xconnect-service/vlan-aware/evis/evi%v", data.getPath(), keyPath))
-	}
-	for i := range data.FlexibleXconnectServiceVlanUnaware {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[service-name=" + data.FlexibleXconnectServiceVlanUnaware[i].ServiceName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/flexible-xconnect-service/vlan-unawares/vlan-unaware%v", data.getPath(), keyPath))
-	}
-	for i := range data.RedundancyIccpGroups {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[group-number=" + strconv.FormatInt(data.RedundancyIccpGroups[i].GroupNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/redundancy/iccp/groups/group%v", data.getPath(), keyPath))
-	}
-	if !data.RouterId.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id", data.getPath()))
-	}
-	if !data.Description.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body string) string {
@@ -3862,6 +3922,7 @@ func (data *L2VPN) addDeletedItemsXML(ctx context.Context, state L2VPN, body str
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *L2VPN) addDeletePathsXML(ctx context.Context, body string) string {

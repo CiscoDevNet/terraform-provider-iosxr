@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -115,7 +114,7 @@ func (d *PerformanceMeasurementEndpointIPv4DataSource) Schema(ctx context.Contex
 				Computed:            true,
 			},
 			"liveness_detection_collect_hbh": schema.BoolAttribute{
-				MarkdownDescription: "Collect hop by hop data for liveness sessions",
+				MarkdownDescription: "Collect hop by hop data for liveness sessions" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"segment_routing": schema.BoolAttribute{
@@ -193,7 +192,6 @@ func (d *PerformanceMeasurementEndpointIPv4DataSource) Read(ctx context.Context,
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -213,7 +211,7 @@ func (d *PerformanceMeasurementEndpointIPv4DataSource) Read(ctx context.Context,
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

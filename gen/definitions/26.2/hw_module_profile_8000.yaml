@@ -1,0 +1,23 @@
+---
+name: HW Module Profile 8000
+path: Cisco-IOS-XR-um-8000-hw-module-profile-cfg:/hw-module
+doc_category: Cisco 8000 Series
+ds_description: This data source can read the HW Module Profile configuration on Cisco 8000 series routers.
+res_description: This resource can manage the HW Module Profile configuration on Cisco 8000 series routers.
+test_tags: [C8000]
+attributes:
+  # ===========================================================
+  # profile/tcam/format/og-compr-id-extension: presence container -> container
+  # 25.4: presence container (bool)
+  # 26.2: non-presence container with presence children ingress / egress
+  # ===========================================================
+  - yang_name: profile/tcam/format/og-compr-id-extension
+    legacy: true
+  - yang_name: profile/tcam/format/og-compr-id-extension/ingress
+    tf_name: profile_tcam_format_og_compr_id_extension_ingress
+    exclude_test: true
+    example: true
+  - yang_name: profile/tcam/format/og-compr-id-extension/egress
+    tf_name: profile_tcam_format_og_compr_id_extension_egress
+    exclude_test: true
+    example: true

@@ -49,6 +49,14 @@ func TestAccIosxrBFD(t *testing.T) {
 	if os.Getenv("XRV9K") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "multipath_destinations.0.destination_address", "10.1.1.1"))
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "multipath_destinations.0.location_id", "0/0/CPU0"))
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "multipath_destinations.0.vrfs.0.vrf_name", "VRF1"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "multipath_destinations.0.vrfs.0.location_id", "0/0/CPU0"))
+			}
+		}
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "multihop_ttl_drop_threshold", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "dampening_initial_wait", "3600"))
@@ -144,6 +152,16 @@ func testAccIosxrBFDConfig_all() string {
 		config += `	multipath_destinations = [{` + "\n"
 		config += `		destination_address = "10.1.1.1"` + "\n"
 		config += `		location_id = "0/0/CPU0"` + "\n"
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+			config += `		vrfs = [{` + "\n"
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+				config += `			vrf_name = "VRF1"` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+				config += `			location_id = "0/0/CPU0"` + "\n"
+			}
+			config += `		}]` + "\n"
+		}
 		config += `		}]` + "\n"
 	}
 	config += `	multihop_ttl_drop_threshold = 200` + "\n"

@@ -1,5 +1,9 @@
 ## Unreleased
 
+- Add multi-version support for IOS-XR 24.4.2, 25.4.2 and 26.2.1. Attributes and YANG paths follow the release of the device. See the Multi-Version Support guide
+- Add `iosxr_version` provider attribute to set the IOS-XR version in `major.minor` format; the patch is ignored. If not set, the provider auto-detects the version of each managed device over gNMI
+- Add `iosxr_device_info` data source, which returns the auto-detected IOS-XR version (`major.minor`) of a device
+- Add `iosxr_cef_accounting` resource and data source
 - BREAKING CHANGE: Remove `neighbors` list from `router_bgp` resource and data source. Use the new `router_bgp_neighbor` resource instead.
 - BREAKING CHANGE: Remove `neighbors` list from `router_bgp_vrf` resource and data source. Use the new `router_bgp_vrf_neighbor` resource instead.
 - Add `router_bgp_neighbor` resource and data source
@@ -16,6 +20,7 @@
 - Add NETCONF protocol support (`protocol = "netconf"`) as an alternative to gNMI, with support for NETCONF 1.0/1.1, candidate and running datastore workflows, connection reuse, and automatic capability detection
 - BREAKING CHANGE: Rename resource and data source `iosxr_gnmi` to `iosxr_yang`. Update all HCL references and run `terraform state mv` to migrate existing state.
 - Fix: preserve newlines in multi-line `iosxr_cli` commands by JSON-encoding the gNMI `json_ietf` value and XML-escaping the NETCONF payload, so multi-line CLI submode configuration applies correctly instead of being sent as invalid single-line content
+- Add `timeout` provider attribute (gNMI operation timeout, default 30s, previously 15s)
 
 ## 0.7.1
 

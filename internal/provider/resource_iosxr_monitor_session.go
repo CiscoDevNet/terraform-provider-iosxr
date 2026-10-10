@@ -39,11 +39,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
-	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
-
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewMonitorSessionResource() resource.Resource {
@@ -227,18 +225,82 @@ func (r *MonitorSessionResource) Schema(ctx context.Context, req resource.Schema
 							},
 						},
 						"rate_limit_rx": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Rate limit mirroring in the rx direction").AddIntegerRangeDescription(0, 4294967295).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Rate limit mirroring in the rx direction").AddIntegerRangeDescription(0, 4294967295).String + "\n  - **Not supported from version `25.4` and above**",
 							Optional:            true,
+							// Field removed in version 25.4 - keep base range validation + runtime check
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
 							},
 						},
 						"rate_limit_tx": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Rate limit mirroring in the tx direction").AddIntegerRangeDescription(0, 4294967295).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Rate limit mirroring in the tx direction").AddIntegerRangeDescription(0, 4294967295).String + "\n  - **Not supported from version `25.4` and above**",
 							Optional:            true,
+							// Field removed in version 25.4 - keep base range validation + runtime check
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
 							},
+						},
+						"destination_application": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify an application destination").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
+						"destination_rate_limit": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the maximum mirroring rate").AddIntegerRangeDescription(1, 4294967295).String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"destination_rate_limit_units": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the units for the maximum mirror rate").AddStringEnumDescription("kbps", "pps").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("kbps", "pps"),
+							},
+						},
+						"rx_application": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify an application destination").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
+						"rx_rate_limit": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the maximum mirroring rate").AddIntegerRangeDescription(1, 4294967295).String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"rx_rate_limit_units": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the units for the maximum mirror rate").AddStringEnumDescription("kbps", "pps").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("kbps", "pps"),
+							},
+						},
+						"tx_application": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify an application destination").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
+						"tx_rate_limit": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the maximum mirroring rate").AddIntegerRangeDescription(1, 4294967295).String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"tx_rate_limit_units": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify the units for the maximum mirror rate").AddStringEnumDescription("kbps", "pps").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("kbps", "pps"),
+							},
+						},
+						"drops_unique_punt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Only mirror the first packet for a given drop reason").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+						},
+						"drops_unique_port": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Only mirror the first packet for a given port").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
 						},
 					},
 				},
@@ -304,7 +366,10 @@ func (r *MonitorSessionResource) Create(ctx context.Context, req resource.Create
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
-
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
@@ -322,10 +387,10 @@ func (r *MonitorSessionResource) Create(ctx context.Context, req resource.Create
 			var ops []gnmi.SetOperation
 
 			// Create object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("gNMI Set body for path %s: %s", plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -380,7 +445,6 @@ func (r *MonitorSessionResource) Create(ctx context.Context, req resource.Create
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-
 func (r *MonitorSessionResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state MonitorSession
 
@@ -445,10 +509,10 @@ func (r *MonitorSessionResource) Read(ctx context.Context, req resource.ReadRequ
 				if imp {
 					// After `terraform import` we switch to a full read so all device
 					// attributes are populated in state (fromBody overwrites everything).
-					state.fromBody(ctx, gjson.ParseBytes(respBody))
+					state.fromBody(ctx, respBody, device.Version)
 				} else {
 					// Normal read: preserve config-only fields not returned by the device.
-					state.updateFromBody(ctx, gjson.ParseBytes(respBody))
+					state.updateFromBody(ctx, respBody, device.Version)
 				}
 			}
 		} else {
@@ -489,7 +553,6 @@ func (r *MonitorSessionResource) Read(ctx context.Context, req resource.ReadRequ
 			}
 		}
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
@@ -501,7 +564,6 @@ func (r *MonitorSessionResource) Read(ctx context.Context, req resource.ReadRequ
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-
 func (r *MonitorSessionResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state MonitorSession
 
@@ -524,6 +586,10 @@ func (r *MonitorSessionResource) Update(ctx context.Context, req resource.Update
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -542,16 +608,16 @@ func (r *MonitorSessionResource) Update(ctx context.Context, req resource.Update
 			var ops []gnmi.SetOperation
 
 			// Update object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 
-			deletedListItems := plan.getDeletedItems(ctx, state)
+			deletedListItems := plan.getDeletedItems(ctx, state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
 
 			for _, i := range deletedListItems {
 				ops = append(ops, gnmi.Delete(i))
 			}
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -594,7 +660,6 @@ func (r *MonitorSessionResource) Update(ctx context.Context, req resource.Update
 			}
 		}
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
@@ -604,7 +669,6 @@ func (r *MonitorSessionResource) Update(ctx context.Context, req resource.Update
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-
 func (r *MonitorSessionResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state MonitorSession
 
@@ -619,6 +683,14 @@ func (r *MonitorSessionResource) Delete(ctx context.Context, req resource.Delete
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
@@ -690,7 +762,7 @@ func (r *MonitorSessionResource) Delete(ctx context.Context, req resource.Delete
 				}
 
 				var ops []gnmi.SetOperation
-				deletePaths := state.getDeletePaths(ctx)
+				deletePaths := state.getDeletePaths(ctx, device.Version)
 				tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
 
 				for _, i := range deletePaths {
@@ -738,7 +810,6 @@ func (r *MonitorSessionResource) Delete(ctx context.Context, req resource.Delete
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-
 func (r *MonitorSessionResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)

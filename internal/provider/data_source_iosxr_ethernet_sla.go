@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -239,6 +238,14 @@ func (d *EthernetSLADataSource) Schema(ctx context.Context, req datasource.Schem
 							MarkdownDescription: "Specify the bin number in-and-above which samples count towards the threshold sample count",
 							Computed:            true,
 						},
+						"aggregate_minimum_delay": schema.Int64Attribute{
+							MarkdownDescription: "Specify the width of the first bin in milliseconds (or optionally microseconds), independent of the width of the other bins" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"aggregate_usec_minimum_delay": schema.BoolAttribute{
+							MarkdownDescription: "Interpret the minimum-delay in microseconds" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
 					},
 				},
 			},
@@ -321,7 +328,6 @@ func (d *EthernetSLADataSource) Read(ctx context.Context, req datasource.ReadReq
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -341,7 +347,7 @@ func (d *EthernetSLADataSource) Read(ctx context.Context, req datasource.ReadReq
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"strconv"
 	"strings"
 
@@ -108,7 +109,7 @@ func (data HTTPClientData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data HTTPClient) toBody(ctx context.Context) string {
+func (data HTTPClient) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.Vrf.IsNull() && !data.Vrf.IsUnknown() {
 		body, _ = sjson.Set(body, "vrf", data.Vrf.ValueString())
@@ -182,141 +183,131 @@ func (data HTTPClient) toBody(ctx context.Context) string {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
-
-func (data *HTTPClient) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("vrf"); value.Exists() && !data.Vrf.IsNull() {
+func (data *HTTPClient) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Vrf.IsNull() {
 		data.Vrf = types.StringValue(value.String())
 	} else if data.Vrf.IsNull() {
 		data.Vrf = types.StringNull()
 	}
-	if value := res.Get("secure-verify-peer.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SecureVerifyPeerDisable.IsNull() {
+	if value := gjson.GetBytes(res, "secure-verify-peer.disable"); !data.SecureVerifyPeerDisable.IsNull() {
+		if value.Exists() {
 			data.SecureVerifyPeerDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SecureVerifyPeerDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SecureVerifyPeerDisable.IsNull() {
-			data.SecureVerifyPeerDisable = types.BoolNull()
-		}
+	} else if data.SecureVerifyPeerDisable.IsNull() {
+		data.SecureVerifyPeerDisable = types.BoolNull()
 	}
-	if value := res.Get("secure-verify-host.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SecureVerifyHostDisable.IsNull() {
+	if value := gjson.GetBytes(res, "secure-verify-host.disable"); !data.SecureVerifyHostDisable.IsNull() {
+		if value.Exists() {
 			data.SecureVerifyHostDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SecureVerifyHostDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SecureVerifyHostDisable.IsNull() {
-			data.SecureVerifyHostDisable = types.BoolNull()
-		}
+	} else if data.SecureVerifyHostDisable.IsNull() {
+		data.SecureVerifyHostDisable = types.BoolNull()
 	}
-	if value := res.Get("response.timeout"); value.Exists() && !data.ResponseTimeout.IsNull() {
+	if value := gjson.GetBytes(res, "response.timeout"); value.Exists() && !data.ResponseTimeout.IsNull() {
 		data.ResponseTimeout = types.Int64Value(value.Int())
 	} else if data.ResponseTimeout.IsNull() {
 		data.ResponseTimeout = types.Int64Null()
 	}
-	if value := res.Get("connection.timeout"); value.Exists() && !data.ConnectionTimeout.IsNull() {
+	if value := gjson.GetBytes(res, "connection.timeout"); value.Exists() && !data.ConnectionTimeout.IsNull() {
 		data.ConnectionTimeout = types.Int64Value(value.Int())
 	} else if data.ConnectionTimeout.IsNull() {
 		data.ConnectionTimeout = types.Int64Null()
 	}
-	if value := res.Get("connection.retry"); value.Exists() && !data.ConnectionRetry.IsNull() {
+	if value := gjson.GetBytes(res, "connection.retry"); value.Exists() && !data.ConnectionRetry.IsNull() {
 		data.ConnectionRetry = types.Int64Value(value.Int())
 	} else if data.ConnectionRetry.IsNull() {
 		data.ConnectionRetry = types.Int64Null()
 	}
-	if value := res.Get("source-interface.ipv4.interface"); value.Exists() && !data.SourceInterfaceIpv4.IsNull() {
+	if value := gjson.GetBytes(res, "source-interface.ipv4.interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SourceInterfaceIpv4.IsNull() {
 		data.SourceInterfaceIpv4 = types.StringValue(value.String())
 	} else if data.SourceInterfaceIpv4.IsNull() {
 		data.SourceInterfaceIpv4 = types.StringNull()
 	}
-	if value := res.Get("source-interface.ipv6.interface"); value.Exists() && !data.SourceInterfaceIpv6.IsNull() {
+	if value := gjson.GetBytes(res, "source-interface.ipv6.interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SourceInterfaceIpv6.IsNull() {
 		data.SourceInterfaceIpv6 = types.StringValue(value.String())
 	} else if data.SourceInterfaceIpv6.IsNull() {
 		data.SourceInterfaceIpv6 = types.StringNull()
 	}
-	if value := res.Get("version.default"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.VersionDefault.IsNull() {
+	if value := gjson.GetBytes(res, "version.default"); !data.VersionDefault.IsNull() {
+		if value.Exists() {
 			data.VersionDefault = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.VersionDefault = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.VersionDefault.IsNull() {
-			data.VersionDefault = types.BoolNull()
-		}
+	} else if data.VersionDefault.IsNull() {
+		data.VersionDefault = types.BoolNull()
 	}
-	if value := res.Get("version.http1\\.0"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Version10.IsNull() {
+	if value := gjson.GetBytes(res, "version.http1\\.0"); !data.Version10.IsNull() {
+		if value.Exists() {
 			data.Version10 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Version10 = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Version10.IsNull() {
-			data.Version10 = types.BoolNull()
-		}
+	} else if data.Version10.IsNull() {
+		data.Version10 = types.BoolNull()
 	}
-	if value := res.Get("version.http1\\.1"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Version11.IsNull() {
+	if value := gjson.GetBytes(res, "version.http1\\.1"); !data.Version11.IsNull() {
+		if value.Exists() {
 			data.Version11 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Version11 = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Version11.IsNull() {
-			data.Version11 = types.BoolNull()
-		}
+	} else if data.Version11.IsNull() {
+		data.Version11 = types.BoolNull()
 	}
-	if value := res.Get("tcp-window-scale"); value.Exists() && !data.TcpWindowScale.IsNull() {
+	if value := gjson.GetBytes(res, "tcp-window-scale"); value.Exists() && !data.TcpWindowScale.IsNull() {
 		data.TcpWindowScale = types.Int64Value(value.Int())
 	} else if data.TcpWindowScale.IsNull() {
 		data.TcpWindowScale = types.Int64Null()
 	}
-	if value := res.Get("ssl.version.tls1\\.0"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SslVersionTls10.IsNull() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.0"); !data.SslVersionTls10.IsNull() {
+		if value.Exists() {
 			data.SslVersionTls10 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SslVersionTls10 = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SslVersionTls10.IsNull() {
-			data.SslVersionTls10 = types.BoolNull()
-		}
+	} else if data.SslVersionTls10.IsNull() {
+		data.SslVersionTls10 = types.BoolNull()
 	}
-	if value := res.Get("ssl.version.tls1\\.1"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SslVersionTls11.IsNull() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.1"); !data.SslVersionTls11.IsNull() {
+		if value.Exists() {
 			data.SslVersionTls11 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SslVersionTls11 = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SslVersionTls11.IsNull() {
-			data.SslVersionTls11 = types.BoolNull()
-		}
+	} else if data.SslVersionTls11.IsNull() {
+		data.SslVersionTls11 = types.BoolNull()
 	}
-	if value := res.Get("ssl.version.tls1\\.2"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SslVersionTls12.IsNull() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.2"); !data.SslVersionTls12.IsNull() {
+		if value.Exists() {
 			data.SslVersionTls12 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SslVersionTls12 = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SslVersionTls12.IsNull() {
-			data.SslVersionTls12 = types.BoolNull()
-		}
+	} else if data.SslVersionTls12.IsNull() {
+		data.SslVersionTls12 = types.BoolNull()
 	}
-	if value := res.Get("ssl.version.tls1\\.3"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SslVersionTls13.IsNull() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.3"); !data.SslVersionTls13.IsNull() {
+		if value.Exists() {
 			data.SslVersionTls13 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SslVersionTls13 = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SslVersionTls13.IsNull() {
-			data.SslVersionTls13 = types.BoolNull()
-		}
+	} else if data.SslVersionTls13.IsNull() {
+		data.SslVersionTls13 = types.BoolNull()
 	}
 }
 
@@ -324,85 +315,77 @@ func (data *HTTPClient) updateFromBody(ctx context.Context, res gjson.Result) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *HTTPClient) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "vrf"); value.Exists() {
+func (data *HTTPClient) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.Vrf = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "secure-verify-peer.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "secure-verify-peer.disable"); value.Exists() {
 		data.SecureVerifyPeerDisable = types.BoolValue(true)
 	} else if !data.SecureVerifyPeerDisable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SecureVerifyPeerDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "secure-verify-host.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "secure-verify-host.disable"); value.Exists() {
 		data.SecureVerifyHostDisable = types.BoolValue(true)
 	} else if !data.SecureVerifyHostDisable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SecureVerifyHostDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "response.timeout"); value.Exists() {
+	if value := gjson.GetBytes(res, "response.timeout"); value.Exists() {
 		data.ResponseTimeout = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "connection.timeout"); value.Exists() {
+	if value := gjson.GetBytes(res, "connection.timeout"); value.Exists() {
 		data.ConnectionTimeout = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "connection.retry"); value.Exists() {
+	if value := gjson.GetBytes(res, "connection.retry"); value.Exists() {
 		data.ConnectionRetry = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "source-interface.ipv4.interface"); value.Exists() {
+	if value := gjson.GetBytes(res, "source-interface.ipv4.interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.SourceInterfaceIpv4 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "source-interface.ipv6.interface"); value.Exists() {
+	if value := gjson.GetBytes(res, "source-interface.ipv6.interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.SourceInterfaceIpv6 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "version.default"); value.Exists() {
+	if value := gjson.GetBytes(res, "version.default"); value.Exists() {
 		data.VersionDefault = types.BoolValue(true)
 	} else if !data.VersionDefault.IsNull() {
 		// Only set to false if it was previously set in state
 		data.VersionDefault = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "version.http1\\.0"); value.Exists() {
+	if value := gjson.GetBytes(res, "version.http1\\.0"); value.Exists() {
 		data.Version10 = types.BoolValue(true)
 	} else if !data.Version10.IsNull() {
 		// Only set to false if it was previously set in state
 		data.Version10 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "version.http1\\.1"); value.Exists() {
+	if value := gjson.GetBytes(res, "version.http1\\.1"); value.Exists() {
 		data.Version11 = types.BoolValue(true)
 	} else if !data.Version11.IsNull() {
 		// Only set to false if it was previously set in state
 		data.Version11 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "tcp-window-scale"); value.Exists() {
+	if value := gjson.GetBytes(res, "tcp-window-scale"); value.Exists() {
 		data.TcpWindowScale = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "ssl.version.tls1\\.0"); value.Exists() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.0"); value.Exists() {
 		data.SslVersionTls10 = types.BoolValue(true)
 	} else if !data.SslVersionTls10.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SslVersionTls10 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "ssl.version.tls1\\.1"); value.Exists() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.1"); value.Exists() {
 		data.SslVersionTls11 = types.BoolValue(true)
 	} else if !data.SslVersionTls11.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SslVersionTls11 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "ssl.version.tls1\\.2"); value.Exists() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.2"); value.Exists() {
 		data.SslVersionTls12 = types.BoolValue(true)
 	} else if !data.SslVersionTls12.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SslVersionTls12 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "ssl.version.tls1\\.3"); value.Exists() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.3"); value.Exists() {
 		data.SslVersionTls13 = types.BoolValue(true)
 	} else if !data.SslVersionTls13.IsNull() {
 		// Only set to false if it was previously set in state
@@ -414,78 +397,69 @@ func (data *HTTPClient) fromBody(ctx context.Context, res gjson.Result) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *HTTPClientData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "vrf"); value.Exists() {
+func (data *HTTPClientData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.Vrf = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "secure-verify-peer.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "secure-verify-peer.disable"); value.Exists() {
 		data.SecureVerifyPeerDisable = types.BoolValue(true)
 	} else {
 		data.SecureVerifyPeerDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "secure-verify-host.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "secure-verify-host.disable"); value.Exists() {
 		data.SecureVerifyHostDisable = types.BoolValue(true)
 	} else {
 		data.SecureVerifyHostDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "response.timeout"); value.Exists() {
+	if value := gjson.GetBytes(res, "response.timeout"); value.Exists() {
 		data.ResponseTimeout = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "connection.timeout"); value.Exists() {
+	if value := gjson.GetBytes(res, "connection.timeout"); value.Exists() {
 		data.ConnectionTimeout = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "connection.retry"); value.Exists() {
+	if value := gjson.GetBytes(res, "connection.retry"); value.Exists() {
 		data.ConnectionRetry = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "source-interface.ipv4.interface"); value.Exists() {
+	if value := gjson.GetBytes(res, "source-interface.ipv4.interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.SourceInterfaceIpv4 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "source-interface.ipv6.interface"); value.Exists() {
+	if value := gjson.GetBytes(res, "source-interface.ipv6.interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.SourceInterfaceIpv6 = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "version.default"); value.Exists() {
+	if value := gjson.GetBytes(res, "version.default"); value.Exists() {
 		data.VersionDefault = types.BoolValue(true)
 	} else {
 		data.VersionDefault = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "version.http1\\.0"); value.Exists() {
+	if value := gjson.GetBytes(res, "version.http1\\.0"); value.Exists() {
 		data.Version10 = types.BoolValue(true)
 	} else {
 		data.Version10 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "version.http1\\.1"); value.Exists() {
+	if value := gjson.GetBytes(res, "version.http1\\.1"); value.Exists() {
 		data.Version11 = types.BoolValue(true)
 	} else {
 		data.Version11 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "tcp-window-scale"); value.Exists() {
+	if value := gjson.GetBytes(res, "tcp-window-scale"); value.Exists() {
 		data.TcpWindowScale = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "ssl.version.tls1\\.0"); value.Exists() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.0"); value.Exists() {
 		data.SslVersionTls10 = types.BoolValue(true)
 	} else {
 		data.SslVersionTls10 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "ssl.version.tls1\\.1"); value.Exists() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.1"); value.Exists() {
 		data.SslVersionTls11 = types.BoolValue(true)
 	} else {
 		data.SslVersionTls11 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "ssl.version.tls1\\.2"); value.Exists() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.2"); value.Exists() {
 		data.SslVersionTls12 = types.BoolValue(true)
 	} else {
 		data.SslVersionTls12 = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "ssl.version.tls1\\.3"); value.Exists() {
+	if value := gjson.GetBytes(res, "ssl.version.tls1\\.3"); value.Exists() {
 		data.SslVersionTls13 = types.BoolValue(true)
 	} else {
 		data.SslVersionTls13 = types.BoolValue(false)
@@ -496,55 +470,55 @@ func (data *HTTPClientData) fromBody(ctx context.Context, res gjson.Result) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *HTTPClient) getDeletedItems(ctx context.Context, state HTTPClient) []string {
+func (data *HTTPClient) getDeletedItems(ctx context.Context, state HTTPClient, version string) []string {
 	deletedItems := make([]string, 0)
 	if !state.SslVersionTls13.IsNull() && data.SslVersionTls13.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ssl/version/tls1.3", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ssl/version/tls1.3"))
 	}
 	if !state.SslVersionTls12.IsNull() && data.SslVersionTls12.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ssl/version/tls1.2", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ssl/version/tls1.2"))
 	}
 	if !state.SslVersionTls11.IsNull() && data.SslVersionTls11.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ssl/version/tls1.1", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ssl/version/tls1.1"))
 	}
 	if !state.SslVersionTls10.IsNull() && data.SslVersionTls10.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ssl/version/tls1.0", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ssl/version/tls1.0"))
 	}
 	if !state.TcpWindowScale.IsNull() && data.TcpWindowScale.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/tcp-window-scale", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "tcp-window-scale"))
 	}
 	if !state.Version11.IsNull() && data.Version11.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/http1.1", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "version/http1.1"))
 	}
 	if !state.Version10.IsNull() && data.Version10.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/http1.0", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "version/http1.0"))
 	}
 	if !state.VersionDefault.IsNull() && data.VersionDefault.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/default", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "version/default"))
 	}
 	if !state.SourceInterfaceIpv6.IsNull() && data.SourceInterfaceIpv6.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/source-interface/ipv6/interface", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "source-interface/ipv6/interface"))
 	}
 	if !state.SourceInterfaceIpv4.IsNull() && data.SourceInterfaceIpv4.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/source-interface/ipv4/interface", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "source-interface/ipv4/interface"))
 	}
 	if !state.ConnectionRetry.IsNull() && data.ConnectionRetry.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/connection/retry", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "connection/retry"))
 	}
 	if !state.ConnectionTimeout.IsNull() && data.ConnectionTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/connection/timeout", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "connection/timeout"))
 	}
 	if !state.ResponseTimeout.IsNull() && data.ResponseTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/response/timeout", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "response/timeout"))
 	}
 	if !state.SecureVerifyHostDisable.IsNull() && data.SecureVerifyHostDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/secure-verify-host/disable", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "secure-verify-host/disable"))
 	}
 	if !state.SecureVerifyPeerDisable.IsNull() && data.SecureVerifyPeerDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/secure-verify-peer/disable", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "secure-verify-peer/disable"))
 	}
 	if !state.Vrf.IsNull() && data.Vrf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/vrf", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "vrf"))
 	}
 	return deletedItems
 }
@@ -553,60 +527,51 @@ func (data *HTTPClient) getDeletedItems(ctx context.Context, state HTTPClient) [
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *HTTPClient) getEmptyLeafsDelete(ctx context.Context, state *HTTPClient) []string {
+func (data *HTTPClient) getEmptyLeafsDelete(ctx context.Context, state *HTTPClient, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
 	if !data.SslVersionTls13.IsNull() && !data.SslVersionTls13.ValueBool() {
-		if state != nil && !state.SslVersionTls13.IsNull() && state.SslVersionTls13.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ssl/version/tls1.3", data.getXPath()))
+		if state == nil || state.SslVersionTls13.IsNull() || state.SslVersionTls13.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ssl/version/tls1.3"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SslVersionTls12.IsNull() && !data.SslVersionTls12.ValueBool() {
-		if state != nil && !state.SslVersionTls12.IsNull() && state.SslVersionTls12.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ssl/version/tls1.2", data.getXPath()))
+		if state == nil || state.SslVersionTls12.IsNull() || state.SslVersionTls12.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ssl/version/tls1.2"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SslVersionTls11.IsNull() && !data.SslVersionTls11.ValueBool() {
-		if state != nil && !state.SslVersionTls11.IsNull() && state.SslVersionTls11.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ssl/version/tls1.1", data.getXPath()))
+		if state == nil || state.SslVersionTls11.IsNull() || state.SslVersionTls11.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ssl/version/tls1.1"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SslVersionTls10.IsNull() && !data.SslVersionTls10.ValueBool() {
-		if state != nil && !state.SslVersionTls10.IsNull() && state.SslVersionTls10.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ssl/version/tls1.0", data.getXPath()))
+		if state == nil || state.SslVersionTls10.IsNull() || state.SslVersionTls10.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ssl/version/tls1.0"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.Version11.IsNull() && !data.Version11.ValueBool() {
-		if state != nil && !state.Version11.IsNull() && state.Version11.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/version/http1.1", data.getXPath()))
+		if state == nil || state.Version11.IsNull() || state.Version11.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "version/http1.1"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.Version10.IsNull() && !data.Version10.ValueBool() {
-		if state != nil && !state.Version10.IsNull() && state.Version10.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/version/http1.0", data.getXPath()))
+		if state == nil || state.Version10.IsNull() || state.Version10.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "version/http1.0"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.VersionDefault.IsNull() && !data.VersionDefault.ValueBool() {
-		if state != nil && !state.VersionDefault.IsNull() && state.VersionDefault.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/version/default", data.getXPath()))
+		if state == nil || state.VersionDefault.IsNull() || state.VersionDefault.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "version/default"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SecureVerifyHostDisable.IsNull() && !data.SecureVerifyHostDisable.ValueBool() {
-		if state != nil && !state.SecureVerifyHostDisable.IsNull() && state.SecureVerifyHostDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/secure-verify-host/disable", data.getXPath()))
+		if state == nil || state.SecureVerifyHostDisable.IsNull() || state.SecureVerifyHostDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "secure-verify-host/disable"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SecureVerifyPeerDisable.IsNull() && !data.SecureVerifyPeerDisable.ValueBool() {
-		if state != nil && !state.SecureVerifyPeerDisable.IsNull() && state.SecureVerifyPeerDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/secure-verify-peer/disable", data.getXPath()))
+		if state == nil || state.SecureVerifyPeerDisable.IsNull() || state.SecureVerifyPeerDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "secure-verify-peer/disable"))
 		}
 	}
 	return emptyLeafsDelete
@@ -615,56 +580,55 @@ func (data *HTTPClient) getEmptyLeafsDelete(ctx context.Context, state *HTTPClie
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *HTTPClient) getDeletePaths(ctx context.Context) []string {
+func (data *HTTPClient) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
 	if !data.SslVersionTls13.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ssl/version/tls1.3", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ssl/version/tls1.3"))
 	}
 	if !data.SslVersionTls12.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ssl/version/tls1.2", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ssl/version/tls1.2"))
 	}
 	if !data.SslVersionTls11.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ssl/version/tls1.1", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ssl/version/tls1.1"))
 	}
 	if !data.SslVersionTls10.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ssl/version/tls1.0", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ssl/version/tls1.0"))
 	}
 	if !data.TcpWindowScale.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/tcp-window-scale", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "tcp-window-scale"))
 	}
 	if !data.Version11.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/http1.1", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "version/http1.1"))
 	}
 	if !data.Version10.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/http1.0", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "version/http1.0"))
 	}
 	if !data.VersionDefault.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/default", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "version/default"))
 	}
 	if !data.SourceInterfaceIpv6.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-interface/ipv6/interface", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "source-interface/ipv6/interface"))
 	}
 	if !data.SourceInterfaceIpv4.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-interface/ipv4/interface", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "source-interface/ipv4/interface"))
 	}
 	if !data.ConnectionRetry.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/connection/retry", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "connection/retry"))
 	}
 	if !data.ConnectionTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/connection/timeout", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "connection/timeout"))
 	}
 	if !data.ResponseTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/response/timeout", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "response/timeout"))
 	}
 	if !data.SecureVerifyHostDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/secure-verify-host/disable", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "secure-verify-host/disable"))
 	}
 	if !data.SecureVerifyPeerDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/secure-verify-peer/disable", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "secure-verify-peer/disable"))
 	}
 	if !data.Vrf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/vrf", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "vrf"))
 	}
 
 	return deletePaths
@@ -768,7 +732,7 @@ func (data HTTPClient) toBodyXML(ctx context.Context, stateArg ...*HTTPClient) s
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))

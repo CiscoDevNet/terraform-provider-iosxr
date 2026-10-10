@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
@@ -79,7 +80,7 @@ func (data MACSecData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data MACSec) toBody(ctx context.Context) string {
+func (data MACSec) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.Shutdown.IsNull() && !data.Shutdown.IsUnknown() {
 		if data.Shutdown.ValueBool() {
@@ -96,34 +97,167 @@ func (data MACSec) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *MACSec) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("shutdown"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Shutdown.IsNull() {
-			data.Shutdown = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Shutdown.IsNull() {
-			data.Shutdown = types.BoolNull()
-		}
+// GetVersionConstraints returns the version constraints for all fields
+func (data MACSec) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
 	}
-	if value := res.Get("fips"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Fips.IsNull() {
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data MACSec) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data MACSec) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data MACSec) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data MACSec) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *MACSec) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "shutdown"); !data.Shutdown.IsNull() {
+		if value.Exists() {
+			data.Shutdown = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Shutdown = types.BoolValue(false)
+		}
+	} else if data.Shutdown.IsNull() {
+		data.Shutdown = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "fips"); !data.Fips.IsNull() {
+		if value.Exists() {
 			data.Fips = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Fips = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Fips.IsNull() {
-			data.Fips = types.BoolNull()
-		}
+	} else if data.Fips.IsNull() {
+		data.Fips = types.BoolNull()
 	}
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *MACSec) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
+		data.Shutdown = types.BoolValue(true)
+	} else if !data.Shutdown.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Shutdown = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fips"); value.Exists() {
+		data.Fips = types.BoolValue(true)
+	} else if !data.Fips.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Fips = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *MACSecData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
+		data.Shutdown = types.BoolValue(true)
+	} else {
+		data.Shutdown = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fips"); value.Exists() {
+		data.Fips = types.BoolValue(true)
+	} else {
+		data.Fips = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *MACSec) getDeletedItems(ctx context.Context, state MACSec, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.Fips.IsNull() && data.Fips.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "fips"))
+	}
+	if !state.Shutdown.IsNull() && data.Shutdown.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "shutdown"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *MACSec) getEmptyLeafsDelete(ctx context.Context, state *MACSec, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if !data.Fips.IsNull() && !data.Fips.ValueBool() {
+		if state == nil || state.Fips.IsNull() || state.Fips.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "fips"))
+		}
+	}
+	if !data.Shutdown.IsNull() && !data.Shutdown.ValueBool() {
+		if state == nil || state.Shutdown.IsNull() || state.Shutdown.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "shutdown"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *MACSec) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.Fips.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "fips"))
+	}
+	if !data.Shutdown.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "shutdown"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data MACSec) toBodyXML(ctx context.Context, stateArg ...*MACSec) string {
@@ -164,7 +298,7 @@ func (data MACSec) toBodyXML(ctx context.Context, stateArg ...*MACSec) string {
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -172,6 +306,7 @@ func (data MACSec) toBodyXML(ctx context.Context, stateArg ...*MACSec) string {
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *MACSec) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -200,57 +335,7 @@ func (data *MACSec) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *MACSec) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "shutdown"); value.Exists() {
-		data.Shutdown = types.BoolValue(true)
-	} else if !data.Shutdown.IsNull() {
-		// Only set to false if it was previously set in state
-		data.Shutdown = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "fips"); value.Exists() {
-		data.Fips = types.BoolValue(true)
-	} else if !data.Fips.IsNull() {
-		// Only set to false if it was previously set in state
-		data.Fips = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *MACSecData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "shutdown"); value.Exists() {
-		data.Shutdown = types.BoolValue(true)
-	} else {
-		data.Shutdown = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "fips"); value.Exists() {
-		data.Fips = types.BoolValue(true)
-	} else {
-		data.Fips = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *MACSec) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -267,6 +352,7 @@ func (data *MACSec) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *MACSecData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -283,55 +369,7 @@ func (data *MACSecData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *MACSec) getDeletedItems(ctx context.Context, state MACSec) []string {
-	deletedItems := make([]string, 0)
-	if !state.Fips.IsNull() && data.Fips.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/fips", state.getPath()))
-	}
-	if !state.Shutdown.IsNull() && data.Shutdown.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/shutdown", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *MACSec) getEmptyLeafsDelete(ctx context.Context, state *MACSec) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.Fips.IsNull() && !data.Fips.ValueBool() {
-		if state != nil && !state.Fips.IsNull() && state.Fips.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fips", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.Shutdown.IsNull() && !data.Shutdown.ValueBool() {
-		if state != nil && !state.Shutdown.IsNull() && state.Shutdown.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/shutdown", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *MACSec) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.Fips.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/fips", data.getPath()))
-	}
-	if !data.Shutdown.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/shutdown", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *MACSec) addDeletedItemsXML(ctx context.Context, state MACSec, body string) string {
@@ -377,6 +415,7 @@ func (data *MACSec) addDeletedItemsXML(ctx context.Context, state MACSec, body s
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *MACSec) addDeletePathsXML(ctx context.Context, body string) string {

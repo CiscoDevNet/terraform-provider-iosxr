@@ -10,85 +10,88 @@ description: |-
 
 This resource can manage the EVPN configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `srv6_locators` | `25.4` |
+
 ## Example Usage
 
 ```terraform
 resource "iosxr_evpn" "example" {
   bgp_rd_ipv4_address                               = "192.168.1.1"
   bgp_rd_ipv4_address_index                         = 100
-  timers_recovery                                   = 120
-  timers_peering                                    = 60
-  timers_carving                                    = 5
-  timers_ac_debounce                                = 2000
-  timers_backup_replacement_delay                   = 3000
-  timers_mac_postpone                               = 240
-  load_balancing_flow_label_static                  = true
-  source_interface                                  = "Loopback0"
   cost_out                                          = true
-  startup_cost_in                                   = 60
-  staggered_bringup_timer                           = 3000
-  logging_df_election                               = true
   ethernet_segment_type_one_auto_generation_disable = true
   groups = [
     {
-      group_id = 10
       core_interfaces = [
         {
           interface_name = "GigabitEthernet0/0/0/2"
         }
       ]
+      group_id = 10
     }
   ]
-  srv6 = true
-  srv6_locators = [
-    {
-      locator_name                        = "LOC1"
-      usid_allocation_wide_local_id_block = true
-    }
-  ]
-  srv6_usid_allocation_wide_local_id_block                  = true
-  ignore_mtu_mismatch                                       = true
-  transmit_mtu_zero                                         = true
+  host_ipv4_duplicate_detection_freeze_time                 = 120
   host_ipv4_duplicate_detection_move_count                  = 10
   host_ipv4_duplicate_detection_move_interval               = 360
-  host_ipv4_duplicate_detection_freeze_time                 = 120
-  host_ipv4_duplicate_detection_retry_count                 = "5"
   host_ipv4_duplicate_detection_reset_freeze_count_interval = 48
+  host_ipv4_duplicate_detection_retry_count                 = "5"
+  host_ipv6_duplicate_detection_freeze_time                 = 120
   host_ipv6_duplicate_detection_move_count                  = 10
   host_ipv6_duplicate_detection_move_interval               = 360
-  host_ipv6_duplicate_detection_freeze_time                 = 120
-  host_ipv6_duplicate_detection_retry_count                 = "5"
   host_ipv6_duplicate_detection_reset_freeze_count_interval = 48
+  host_ipv6_duplicate_detection_retry_count                 = "5"
+  ignore_mtu_mismatch                                       = true
+  load_balancing_flow_label_static                          = true
+  logging_df_election                                       = true
+  source_interface                                          = "Loopback0"
+  srv6                                                      = true
+  srv6_locator_name                                         = "LOC1"
+  srv6_locator_usid_allocation_wide_local_id_block          = true
+  staggered_bringup_timer                                   = 3000
+  startup_cost_in                                           = 60
+  timers_ac_debounce                                        = 2000
+  timers_backup_replacement_delay                           = 3000
+  timers_carving                                            = 5
+  timers_mac_postpone                                       = 240
+  timers_peering                                            = 60
+  timers_recovery                                           = 120
+  transmit_mtu_zero                                         = true
+  virtual_access_evi_ethernet_segment_bgp_rt                = "01:01:01:01:01:03"
+  virtual_access_evi_ethernet_segment_esi_zero              = "01.01.01.01.01.01.01.01.03"
   virtual_neighbors = [
     {
       address                                            = "192.168.1.1"
-      pw_id                                              = 100
-      timers_peering                                     = 60
-      timers_recovery                                    = 120
-      timers_carving                                     = 5
-      timers_ac_debounce                                 = 2000
+      ethernet_segment_bgp_rt                            = "01:01:01:01:01:01"
       ethernet_segment_esi_zero                          = "01.01.01.01.01.01.01.01.01"
       ethernet_segment_service_carving_manual_primary    = "100-101,103"
       ethernet_segment_service_carving_manual_secondary  = "200-201,203"
       ethernet_segment_service_carving_multicast_hrw_s_g = true
-      ethernet_segment_bgp_rt                            = "01:01:01:01:01:01"
+      pw_id                                              = 100
+      timers_ac_debounce                                 = 2000
+      timers_carving                                     = 5
+      timers_peering                                     = 60
+      timers_recovery                                    = 120
     }
   ]
   virtual_vfis = [
     {
-      vfi_name                                          = "VFI1"
-      timers_peering                                    = 60
-      timers_recovery                                   = 120
-      timers_carving                                    = 5
-      timers_ac_debounce                                = 2000
+      ethernet_segment_bgp_rt                           = "01:01:01:01:01:02"
       ethernet_segment_esi_zero                         = "01.01.01.01.02.02.02.02.02"
       ethernet_segment_service_carving_manual_primary   = "100-101,103"
       ethernet_segment_service_carving_manual_secondary = "200-201,203"
-      ethernet_segment_bgp_rt                           = "01:01:01:01:01:02"
+      timers_ac_debounce                                = 2000
+      timers_carving                                    = 5
+      timers_peering                                    = 60
+      timers_recovery                                   = 120
+      vfi_name                                          = "VFI1"
     }
   ]
-  virtual_access_evi_ethernet_segment_esi_zero = "01.01.01.01.01.01.01.01.03"
-  virtual_access_evi_ethernet_segment_bgp_rt   = "01:01:01:01:01:03"
 }
 ```
 
@@ -140,7 +143,12 @@ resource "iosxr_evpn" "example" {
 - `logging_df_election` (Boolean) Enable Designated Forwarder election logging
 - `source_interface` (String) Configure EVPN router-id implicitly through Loopback Interface
 - `srv6` (Boolean) SRv6 configuration for EVPN
-- `srv6_locators` (Attributes List) Default locator to use for EVPN SID allocation (see [below for nested schema](#nestedatt--srv6_locators))
+- `srv6_locator_name` (String) Default locator to use for EVPN SID allocation
+  - Supported from version: `25.4`
+- `srv6_locator_usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function knob for the locator
+  - Supported from version: `25.4`
+- `srv6_locators` (Attributes List) Default locator to use for EVPN SID allocation
+  - **Not supported from version `25.4` and above** (see [below for nested schema](#nestedatt--srv6_locators))
 - `srv6_usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function global knob
 - `staggered_bringup_timer` (Number) Staggered bringup timer delay timer
   - Range: `0`-`300000`
@@ -162,6 +170,8 @@ resource "iosxr_evpn" "example" {
 - `transmit_mtu_zero` (Boolean) Transmit MTU zero to remote instead of actual local MTU
 - `virtual_access_evi_ethernet_segment_bgp_rt` (String) Set ES-Import Route Target
 - `virtual_access_evi_ethernet_segment_esi_zero` (String) ESI value
+- `virtual_interfaces` (Attributes List) Specify interface name
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--virtual_interfaces))
 - `virtual_neighbors` (Attributes List) Specify the peer to cross connect (see [below for nested schema](#nestedatt--virtual_neighbors))
 - `virtual_vfis` (Attributes List) Specify the virtual forwarding interface name (see [below for nested schema](#nestedatt--virtual_vfis))
 
@@ -200,6 +210,27 @@ Required:
 Optional:
 
 - `usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function knob for the locator
+
+
+<a id="nestedatt--virtual_interfaces"></a>
+### Nested Schema for `virtual_interfaces`
+
+Optional:
+
+- `ethernet_segment_bgp_rt` (String) Set ES-Import Route Target
+  - Supported from version: `25.4`
+- `ethernet_segment_convergence_mac_mobility` (Boolean) MAC-Mobility triggered reconvergence
+  - Supported from version: `25.4`
+- `ethernet_segment_convergence_nexthop_tracking` (Boolean) Enable EVPN procedures to be influenced by BGP nexthop reachability
+  - Supported from version: `25.4`
+- `ethernet_segment_convergence_reroute` (Boolean) Redirect unicast traffic to backup peer
+  - Supported from version: `25.4`
+- `ethernet_segment_esi_zero` (String) ESI value
+  - Supported from version: `25.4`
+- `ethernet_segment_service_carving_hrw` (Boolean) HRW mode of carving services
+  - Supported from version: `25.4`
+- `interface_name` (String) Specify interface name
+  - Supported from version: `25.4`
 
 
 <a id="nestedatt--virtual_neighbors"></a>

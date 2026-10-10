@@ -53,9 +53,13 @@ func TestAccIosxrEVPN(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "groups.0.group_id", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "groups.0.core_interfaces.0.interface_name", "GigabitEthernet0/0/0/2"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "srv6", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "srv6_locators.0.locator_name", "LOC1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "srv6_locators.0.usid_allocation_wide_local_id_block", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "srv6_usid_allocation_wide_local_id_block", "true"))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "srv6_locators.0.locator_name", "LOC1"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "srv6_locators.0.usid_allocation_wide_local_id_block", "true"))
+	}
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "srv6_usid_allocation_wide_local_id_block", "true"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "ignore_mtu_mismatch", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "transmit_mtu_zero", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "host_ipv4_duplicate_detection_move_count", "10"))
@@ -90,14 +94,33 @@ func TestAccIosxrEVPN(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_vfis.0.ethernet_segment_bgp_rt", "01:01:01:01:01:02"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_access_evi_ethernet_segment_esi_zero", "01.01.01.01.01.01.01.01.03"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_access_evi_ethernet_segment_bgp_rt", "01:01:01:01:01:03"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "srv6_locator_name", "LOC1"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "srv6_locator_usid_allocation_wide_local_id_block", "true"))
+	}
+	if os.Getenv("C8000") != "" {
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_interfaces.0.interface_name", "TenGigE0/0/0/1/0.100"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_interfaces.0.ethernet_segment_esi_zero", "01.01.01.01.01.01.01.01.02"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "virtual_interfaces.0.ethernet_segment_bgp_rt", "01:01:01:01:01:02"))
+			}
+		}
+	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrEVPNPrerequisitesConfig + testAccIosxrEVPNConfig_minimum(),
+			Config: testAccIosxrEVPNPrerequisitesConfig() + testAccIosxrEVPNConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrEVPNPrerequisitesConfig + testAccIosxrEVPNConfig_all(),
+		Config: testAccIosxrEVPNPrerequisitesConfig() + testAccIosxrEVPNConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -127,7 +150,7 @@ func iosxrEVPNImportStateIdFunc(resourceName string) resource.ImportStateIdFunc 
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrEVPNPrerequisitesConfig = `
+const testAccIosxrEVPNPrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
 	attributes = {
@@ -136,13 +159,24 @@ resource "iosxr_yang" "PreReq0" {
 
 `
 
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccIosxrEVPNPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccIosxrEVPNPrerequisitesConfig_V24_4,
+		},
+	)
+}
+
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 
 func testAccIosxrEVPNConfig_minimum() string {
 	config := `resource "iosxr_evpn" "test" {` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -175,11 +209,15 @@ func testAccIosxrEVPNConfig_all() string {
 	config += `		}]` + "\n"
 	config += `		}]` + "\n"
 	config += `	srv6 = true` + "\n"
-	config += `	srv6_locators = [{` + "\n"
-	config += `		locator_name = "LOC1"` + "\n"
-	config += `		usid_allocation_wide_local_id_block = true` + "\n"
-	config += `		}]` + "\n"
-	config += `	srv6_usid_allocation_wide_local_id_block = true` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	srv6_locators = [{` + "\n"
+		config += `		locator_name = "LOC1"` + "\n"
+		config += `		usid_allocation_wide_local_id_block = true` + "\n"
+		config += `		}]` + "\n"
+	}
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	srv6_usid_allocation_wide_local_id_block = true` + "\n"
+	}
 	config += `	ignore_mtu_mismatch = true` + "\n"
 	config += `	transmit_mtu_zero = true` + "\n"
 	config += `	host_ipv4_duplicate_detection_move_count = 10` + "\n"
@@ -218,7 +256,30 @@ func testAccIosxrEVPNConfig_all() string {
 	config += `		}]` + "\n"
 	config += `	virtual_access_evi_ethernet_segment_esi_zero = "01.01.01.01.01.01.01.01.03"` + "\n"
 	config += `	virtual_access_evi_ethernet_segment_bgp_rt = "01:01:01:01:01:03"` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	srv6_locator_name = "LOC1"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	srv6_locator_usid_allocation_wide_local_id_block = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("C8000") != "" {
+			config += `	virtual_interfaces = [{` + "\n"
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `		interface_name = "TenGigE0/0/0/1/0.100"` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `		ethernet_segment_esi_zero = "01.01.01.01.01.01.01.01.02"` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `		ethernet_segment_bgp_rt = "01:01:01:01:01:02"` + "\n"
+			}
+			config += `		}]` + "\n"
+		}
+	}
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }

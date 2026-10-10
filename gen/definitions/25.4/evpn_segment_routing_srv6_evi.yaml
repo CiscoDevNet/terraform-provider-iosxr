@@ -1,0 +1,20 @@
+---
+name: EVPN Segment Routing SRv6 EVI
+path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/segment-routing/srv6/evi[vpn-id=%v]
+doc_category: EVPN
+attributes:
+  # ===========================================================
+  # REMOVALS — locators list replaced by a single locator container
+  # ===========================================================
+  - yang_name: locators/locator
+    legacy: true
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: locator/locator-name
+    tf_name: locator_name
+    example: LOC12
+  - yang_name: locator/usid/allocation/wide-local-id-block
+    tf_name: locator_usid_allocation_wide_local_id_block
+    exclude_test: true
+    example: true

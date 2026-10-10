@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
@@ -95,7 +96,7 @@ func (data FrequencySynchronizationData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data FrequencySynchronization) toBody(ctx context.Context) string {
+func (data FrequencySynchronization) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.QualityItuTOptionOne.IsNull() && !data.QualityItuTOptionOne.IsUnknown() {
 		if data.QualityItuTOptionOne.ValueBool() {
@@ -149,6 +150,408 @@ func (data FrequencySynchronization) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
+
+// GetVersionConstraints returns the version constraints for all fields
+func (data FrequencySynchronization) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data FrequencySynchronization) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data FrequencySynchronization) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data FrequencySynchronization) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data FrequencySynchronization) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *FrequencySynchronization) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "quality.itu-t.option.one"); !data.QualityItuTOptionOne.IsNull() {
+		if value.Exists() {
+			data.QualityItuTOptionOne = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.QualityItuTOptionOne = types.BoolValue(false)
+		}
+	} else if data.QualityItuTOptionOne.IsNull() {
+		data.QualityItuTOptionOne = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "quality.itu-t.option.two.generation.one"); !data.QualityItuTOptionTwoGenerationOne.IsNull() {
+		if value.Exists() {
+			data.QualityItuTOptionTwoGenerationOne = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.QualityItuTOptionTwoGenerationOne = types.BoolValue(false)
+		}
+	} else if data.QualityItuTOptionTwoGenerationOne.IsNull() {
+		data.QualityItuTOptionTwoGenerationOne = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "quality.itu-t.option.two.generation.two"); !data.QualityItuTOptionTwoGenerationTwo.IsNull() {
+		if value.Exists() {
+			data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(false)
+		}
+	} else if data.QualityItuTOptionTwoGenerationTwo.IsNull() {
+		data.QualityItuTOptionTwoGenerationTwo = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "clock-interface.timing-mode.system"); !data.ClockInterfaceTimingModeSystem.IsNull() {
+		if value.Exists() {
+			data.ClockInterfaceTimingModeSystem = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ClockInterfaceTimingModeSystem = types.BoolValue(false)
+		}
+	} else if data.ClockInterfaceTimingModeSystem.IsNull() {
+		data.ClockInterfaceTimingModeSystem = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "clock-interface.timing-mode.independent"); !data.ClockInterfaceTimingModeIndependent.IsNull() {
+		if value.Exists() {
+			data.ClockInterfaceTimingModeIndependent = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ClockInterfaceTimingModeIndependent = types.BoolValue(false)
+		}
+	} else if data.ClockInterfaceTimingModeIndependent.IsNull() {
+		data.ClockInterfaceTimingModeIndependent = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "system.timing-mode.line-only"); !data.SystemTimingModeLineOnly.IsNull() {
+		if value.Exists() {
+			data.SystemTimingModeLineOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SystemTimingModeLineOnly = types.BoolValue(false)
+		}
+	} else if data.SystemTimingModeLineOnly.IsNull() {
+		data.SystemTimingModeLineOnly = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "system.timing-mode.clock-only"); !data.SystemTimingModeClockOnly.IsNull() {
+		if value.Exists() {
+			data.SystemTimingModeClockOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SystemTimingModeClockOnly = types.BoolValue(false)
+		}
+	} else if data.SystemTimingModeClockOnly.IsNull() {
+		data.SystemTimingModeClockOnly = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "log.selection.changes"); !data.LogSelectionChanges.IsNull() {
+		if value.Exists() {
+			data.LogSelectionChanges = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LogSelectionChanges = types.BoolValue(false)
+		}
+	} else if data.LogSelectionChanges.IsNull() {
+		data.LogSelectionChanges = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "log.selection.errors"); !data.LogSelectionErrors.IsNull() {
+		if value.Exists() {
+			data.LogSelectionErrors = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LogSelectionErrors = types.BoolValue(false)
+		}
+	} else if data.LogSelectionErrors.IsNull() {
+		data.LogSelectionErrors = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "clock-identity.mac-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ClockIdentityMacAddress.IsNull() {
+		data.ClockIdentityMacAddress = types.StringValue(value.String())
+	} else if data.ClockIdentityMacAddress.IsNull() {
+		data.ClockIdentityMacAddress = types.StringNull()
+	}
+}
+
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *FrequencySynchronization) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "quality.itu-t.option.one"); value.Exists() {
+		data.QualityItuTOptionOne = types.BoolValue(true)
+	} else if !data.QualityItuTOptionOne.IsNull() {
+		// Only set to false if it was previously set in state
+		data.QualityItuTOptionOne = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "quality.itu-t.option.two.generation.one"); value.Exists() {
+		data.QualityItuTOptionTwoGenerationOne = types.BoolValue(true)
+	} else if !data.QualityItuTOptionTwoGenerationOne.IsNull() {
+		// Only set to false if it was previously set in state
+		data.QualityItuTOptionTwoGenerationOne = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "quality.itu-t.option.two.generation.two"); value.Exists() {
+		data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(true)
+	} else if !data.QualityItuTOptionTwoGenerationTwo.IsNull() {
+		// Only set to false if it was previously set in state
+		data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "clock-interface.timing-mode.system"); value.Exists() {
+		data.ClockInterfaceTimingModeSystem = types.BoolValue(true)
+	} else if !data.ClockInterfaceTimingModeSystem.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockInterfaceTimingModeSystem = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "clock-interface.timing-mode.independent"); value.Exists() {
+		data.ClockInterfaceTimingModeIndependent = types.BoolValue(true)
+	} else if !data.ClockInterfaceTimingModeIndependent.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockInterfaceTimingModeIndependent = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "system.timing-mode.line-only"); value.Exists() {
+		data.SystemTimingModeLineOnly = types.BoolValue(true)
+	} else if !data.SystemTimingModeLineOnly.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SystemTimingModeLineOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "system.timing-mode.clock-only"); value.Exists() {
+		data.SystemTimingModeClockOnly = types.BoolValue(true)
+	} else if !data.SystemTimingModeClockOnly.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SystemTimingModeClockOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "log.selection.changes"); value.Exists() {
+		data.LogSelectionChanges = types.BoolValue(true)
+	} else if !data.LogSelectionChanges.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LogSelectionChanges = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "log.selection.errors"); value.Exists() {
+		data.LogSelectionErrors = types.BoolValue(true)
+	} else if !data.LogSelectionErrors.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LogSelectionErrors = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "clock-identity.mac-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ClockIdentityMacAddress = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *FrequencySynchronizationData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "quality.itu-t.option.one"); value.Exists() {
+		data.QualityItuTOptionOne = types.BoolValue(true)
+	} else {
+		data.QualityItuTOptionOne = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "quality.itu-t.option.two.generation.one"); value.Exists() {
+		data.QualityItuTOptionTwoGenerationOne = types.BoolValue(true)
+	} else {
+		data.QualityItuTOptionTwoGenerationOne = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "quality.itu-t.option.two.generation.two"); value.Exists() {
+		data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(true)
+	} else {
+		data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "clock-interface.timing-mode.system"); value.Exists() {
+		data.ClockInterfaceTimingModeSystem = types.BoolValue(true)
+	} else {
+		data.ClockInterfaceTimingModeSystem = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "clock-interface.timing-mode.independent"); value.Exists() {
+		data.ClockInterfaceTimingModeIndependent = types.BoolValue(true)
+	} else {
+		data.ClockInterfaceTimingModeIndependent = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "system.timing-mode.line-only"); value.Exists() {
+		data.SystemTimingModeLineOnly = types.BoolValue(true)
+	} else {
+		data.SystemTimingModeLineOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "system.timing-mode.clock-only"); value.Exists() {
+		data.SystemTimingModeClockOnly = types.BoolValue(true)
+	} else {
+		data.SystemTimingModeClockOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "log.selection.changes"); value.Exists() {
+		data.LogSelectionChanges = types.BoolValue(true)
+	} else {
+		data.LogSelectionChanges = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "log.selection.errors"); value.Exists() {
+		data.LogSelectionErrors = types.BoolValue(true)
+	} else {
+		data.LogSelectionErrors = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "clock-identity.mac-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ClockIdentityMacAddress = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *FrequencySynchronization) getDeletedItems(ctx context.Context, state FrequencySynchronization, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.ClockIdentityMacAddress.IsNull() && data.ClockIdentityMacAddress.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "clock-identity/mac-address"))
+	}
+	if !state.LogSelectionErrors.IsNull() && data.LogSelectionErrors.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "log/selection/errors"))
+	}
+	if !state.LogSelectionChanges.IsNull() && data.LogSelectionChanges.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "log/selection/changes"))
+	}
+	if !state.SystemTimingModeClockOnly.IsNull() && data.SystemTimingModeClockOnly.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "system/timing-mode/clock-only"))
+	}
+	if !state.SystemTimingModeLineOnly.IsNull() && data.SystemTimingModeLineOnly.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "system/timing-mode/line-only"))
+	}
+	if !state.ClockInterfaceTimingModeIndependent.IsNull() && data.ClockInterfaceTimingModeIndependent.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "clock-interface/timing-mode/independent"))
+	}
+	if !state.ClockInterfaceTimingModeSystem.IsNull() && data.ClockInterfaceTimingModeSystem.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "clock-interface/timing-mode/system"))
+	}
+	if !state.QualityItuTOptionTwoGenerationTwo.IsNull() && data.QualityItuTOptionTwoGenerationTwo.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "quality/itu-t/option/two/generation/two"))
+	}
+	if !state.QualityItuTOptionTwoGenerationOne.IsNull() && data.QualityItuTOptionTwoGenerationOne.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "quality/itu-t/option/two/generation/one"))
+	}
+	if !state.QualityItuTOptionOne.IsNull() && data.QualityItuTOptionOne.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "quality/itu-t/option/one"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *FrequencySynchronization) getEmptyLeafsDelete(ctx context.Context, state *FrequencySynchronization, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if !data.LogSelectionErrors.IsNull() && !data.LogSelectionErrors.ValueBool() {
+		if state == nil || state.LogSelectionErrors.IsNull() || state.LogSelectionErrors.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "log/selection/errors"))
+		}
+	}
+	if !data.LogSelectionChanges.IsNull() && !data.LogSelectionChanges.ValueBool() {
+		if state == nil || state.LogSelectionChanges.IsNull() || state.LogSelectionChanges.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "log/selection/changes"))
+		}
+	}
+	if !data.SystemTimingModeClockOnly.IsNull() && !data.SystemTimingModeClockOnly.ValueBool() {
+		if state == nil || state.SystemTimingModeClockOnly.IsNull() || state.SystemTimingModeClockOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "system/timing-mode/clock-only"))
+		}
+	}
+	if !data.SystemTimingModeLineOnly.IsNull() && !data.SystemTimingModeLineOnly.ValueBool() {
+		if state == nil || state.SystemTimingModeLineOnly.IsNull() || state.SystemTimingModeLineOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "system/timing-mode/line-only"))
+		}
+	}
+	if !data.ClockInterfaceTimingModeIndependent.IsNull() && !data.ClockInterfaceTimingModeIndependent.ValueBool() {
+		if state == nil || state.ClockInterfaceTimingModeIndependent.IsNull() || state.ClockInterfaceTimingModeIndependent.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock-interface/timing-mode/independent"))
+		}
+	}
+	if !data.ClockInterfaceTimingModeSystem.IsNull() && !data.ClockInterfaceTimingModeSystem.ValueBool() {
+		if state == nil || state.ClockInterfaceTimingModeSystem.IsNull() || state.ClockInterfaceTimingModeSystem.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock-interface/timing-mode/system"))
+		}
+	}
+	if !data.QualityItuTOptionTwoGenerationTwo.IsNull() && !data.QualityItuTOptionTwoGenerationTwo.ValueBool() {
+		if state == nil || state.QualityItuTOptionTwoGenerationTwo.IsNull() || state.QualityItuTOptionTwoGenerationTwo.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "quality/itu-t/option/two/generation/two"))
+		}
+	}
+	if !data.QualityItuTOptionTwoGenerationOne.IsNull() && !data.QualityItuTOptionTwoGenerationOne.ValueBool() {
+		if state == nil || state.QualityItuTOptionTwoGenerationOne.IsNull() || state.QualityItuTOptionTwoGenerationOne.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "quality/itu-t/option/two/generation/one"))
+		}
+	}
+	if !data.QualityItuTOptionOne.IsNull() && !data.QualityItuTOptionOne.ValueBool() {
+		if state == nil || state.QualityItuTOptionOne.IsNull() || state.QualityItuTOptionOne.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "quality/itu-t/option/one"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *FrequencySynchronization) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.ClockIdentityMacAddress.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "clock-identity/mac-address"))
+	}
+	if !data.LogSelectionErrors.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "log/selection/errors"))
+	}
+	if !data.LogSelectionChanges.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "log/selection/changes"))
+	}
+	if !data.SystemTimingModeClockOnly.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "system/timing-mode/clock-only"))
+	}
+	if !data.SystemTimingModeLineOnly.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "system/timing-mode/line-only"))
+	}
+	if !data.ClockInterfaceTimingModeIndependent.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "clock-interface/timing-mode/independent"))
+	}
+	if !data.ClockInterfaceTimingModeSystem.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "clock-interface/timing-mode/system"))
+	}
+	if !data.QualityItuTOptionTwoGenerationTwo.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "quality/itu-t/option/two/generation/two"))
+	}
+	if !data.QualityItuTOptionTwoGenerationOne.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "quality/itu-t/option/two/generation/one"))
+	}
+	if !data.QualityItuTOptionOne.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "quality/itu-t/option/one"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
@@ -228,7 +631,7 @@ func (data FrequencySynchronization) toBodyXML(ctx context.Context, stateArg ...
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -236,117 +639,6 @@ func (data FrequencySynchronization) toBodyXML(ctx context.Context, stateArg ...
 }
 
 // End of section. //template:end toBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
-
-func (data *FrequencySynchronization) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("quality.itu-t.option.one"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.QualityItuTOptionOne.IsNull() {
-			data.QualityItuTOptionOne = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.QualityItuTOptionOne.IsNull() {
-			data.QualityItuTOptionOne = types.BoolNull()
-		}
-	}
-	if value := res.Get("quality.itu-t.option.two.generation.one"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.QualityItuTOptionTwoGenerationOne.IsNull() {
-			data.QualityItuTOptionTwoGenerationOne = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.QualityItuTOptionTwoGenerationOne.IsNull() {
-			data.QualityItuTOptionTwoGenerationOne = types.BoolNull()
-		}
-	}
-	if value := res.Get("quality.itu-t.option.two.generation.two"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.QualityItuTOptionTwoGenerationTwo.IsNull() {
-			data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.QualityItuTOptionTwoGenerationTwo.IsNull() {
-			data.QualityItuTOptionTwoGenerationTwo = types.BoolNull()
-		}
-	}
-	if value := res.Get("clock-interface.timing-mode.system"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ClockInterfaceTimingModeSystem.IsNull() {
-			data.ClockInterfaceTimingModeSystem = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ClockInterfaceTimingModeSystem.IsNull() {
-			data.ClockInterfaceTimingModeSystem = types.BoolNull()
-		}
-	}
-	if value := res.Get("clock-interface.timing-mode.independent"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ClockInterfaceTimingModeIndependent.IsNull() {
-			data.ClockInterfaceTimingModeIndependent = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ClockInterfaceTimingModeIndependent.IsNull() {
-			data.ClockInterfaceTimingModeIndependent = types.BoolNull()
-		}
-	}
-	if value := res.Get("system.timing-mode.line-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SystemTimingModeLineOnly.IsNull() {
-			data.SystemTimingModeLineOnly = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SystemTimingModeLineOnly.IsNull() {
-			data.SystemTimingModeLineOnly = types.BoolNull()
-		}
-	}
-	if value := res.Get("system.timing-mode.clock-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SystemTimingModeClockOnly.IsNull() {
-			data.SystemTimingModeClockOnly = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SystemTimingModeClockOnly.IsNull() {
-			data.SystemTimingModeClockOnly = types.BoolNull()
-		}
-	}
-	if value := res.Get("log.selection.changes"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LogSelectionChanges.IsNull() {
-			data.LogSelectionChanges = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LogSelectionChanges.IsNull() {
-			data.LogSelectionChanges = types.BoolNull()
-		}
-	}
-	if value := res.Get("log.selection.errors"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LogSelectionErrors.IsNull() {
-			data.LogSelectionErrors = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LogSelectionErrors.IsNull() {
-			data.LogSelectionErrors = types.BoolNull()
-		}
-	}
-	if value := res.Get("clock-identity.mac-address"); value.Exists() && !data.ClockIdentityMacAddress.IsNull() {
-		data.ClockIdentityMacAddress = types.StringValue(value.String())
-	} else if data.ClockIdentityMacAddress.IsNull() {
-		data.ClockIdentityMacAddress = types.StringNull()
-	}
-}
-
-// End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
@@ -459,142 +751,6 @@ func (data *FrequencySynchronization) updateFromBodyXML(ctx context.Context, res
 
 // End of section. //template:end updateFromBodyXML
 
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
-
-func (data *FrequencySynchronization) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "quality.itu-t.option.one"); value.Exists() {
-		data.QualityItuTOptionOne = types.BoolValue(true)
-	} else if !data.QualityItuTOptionOne.IsNull() {
-		// Only set to false if it was previously set in state
-		data.QualityItuTOptionOne = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "quality.itu-t.option.two.generation.one"); value.Exists() {
-		data.QualityItuTOptionTwoGenerationOne = types.BoolValue(true)
-	} else if !data.QualityItuTOptionTwoGenerationOne.IsNull() {
-		// Only set to false if it was previously set in state
-		data.QualityItuTOptionTwoGenerationOne = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "quality.itu-t.option.two.generation.two"); value.Exists() {
-		data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(true)
-	} else if !data.QualityItuTOptionTwoGenerationTwo.IsNull() {
-		// Only set to false if it was previously set in state
-		data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "clock-interface.timing-mode.system"); value.Exists() {
-		data.ClockInterfaceTimingModeSystem = types.BoolValue(true)
-	} else if !data.ClockInterfaceTimingModeSystem.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ClockInterfaceTimingModeSystem = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "clock-interface.timing-mode.independent"); value.Exists() {
-		data.ClockInterfaceTimingModeIndependent = types.BoolValue(true)
-	} else if !data.ClockInterfaceTimingModeIndependent.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ClockInterfaceTimingModeIndependent = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "system.timing-mode.line-only"); value.Exists() {
-		data.SystemTimingModeLineOnly = types.BoolValue(true)
-	} else if !data.SystemTimingModeLineOnly.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SystemTimingModeLineOnly = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "system.timing-mode.clock-only"); value.Exists() {
-		data.SystemTimingModeClockOnly = types.BoolValue(true)
-	} else if !data.SystemTimingModeClockOnly.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SystemTimingModeClockOnly = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "log.selection.changes"); value.Exists() {
-		data.LogSelectionChanges = types.BoolValue(true)
-	} else if !data.LogSelectionChanges.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LogSelectionChanges = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "log.selection.errors"); value.Exists() {
-		data.LogSelectionErrors = types.BoolValue(true)
-	} else if !data.LogSelectionErrors.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LogSelectionErrors = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "clock-identity.mac-address"); value.Exists() {
-		data.ClockIdentityMacAddress = types.StringValue(value.String())
-	}
-}
-
-// End of section. //template:end fromBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *FrequencySynchronizationData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "quality.itu-t.option.one"); value.Exists() {
-		data.QualityItuTOptionOne = types.BoolValue(true)
-	} else {
-		data.QualityItuTOptionOne = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "quality.itu-t.option.two.generation.one"); value.Exists() {
-		data.QualityItuTOptionTwoGenerationOne = types.BoolValue(true)
-	} else {
-		data.QualityItuTOptionTwoGenerationOne = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "quality.itu-t.option.two.generation.two"); value.Exists() {
-		data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(true)
-	} else {
-		data.QualityItuTOptionTwoGenerationTwo = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "clock-interface.timing-mode.system"); value.Exists() {
-		data.ClockInterfaceTimingModeSystem = types.BoolValue(true)
-	} else {
-		data.ClockInterfaceTimingModeSystem = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "clock-interface.timing-mode.independent"); value.Exists() {
-		data.ClockInterfaceTimingModeIndependent = types.BoolValue(true)
-	} else {
-		data.ClockInterfaceTimingModeIndependent = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "system.timing-mode.line-only"); value.Exists() {
-		data.SystemTimingModeLineOnly = types.BoolValue(true)
-	} else {
-		data.SystemTimingModeLineOnly = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "system.timing-mode.clock-only"); value.Exists() {
-		data.SystemTimingModeClockOnly = types.BoolValue(true)
-	} else {
-		data.SystemTimingModeClockOnly = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "log.selection.changes"); value.Exists() {
-		data.LogSelectionChanges = types.BoolValue(true)
-	} else {
-		data.LogSelectionChanges = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "log.selection.errors"); value.Exists() {
-		data.LogSelectionErrors = types.BoolValue(true)
-	} else {
-		data.LogSelectionErrors = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "clock-identity.mac-address"); value.Exists() {
-		data.ClockIdentityMacAddress = types.StringValue(value.String())
-	}
-}
-
-// End of section. //template:end fromBodyData
-
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *FrequencySynchronization) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -704,148 +860,6 @@ func (data *FrequencySynchronizationData) fromBodyXML(ctx context.Context, res x
 }
 
 // End of section. //template:end fromBodyDataXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data *FrequencySynchronization) getDeletedItems(ctx context.Context, state FrequencySynchronization) []string {
-	deletedItems := make([]string, 0)
-	if !state.ClockIdentityMacAddress.IsNull() && data.ClockIdentityMacAddress.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/clock-identity/mac-address", state.getPath()))
-	}
-	if !state.LogSelectionErrors.IsNull() && data.LogSelectionErrors.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/selection/errors", state.getPath()))
-	}
-	if !state.LogSelectionChanges.IsNull() && data.LogSelectionChanges.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/selection/changes", state.getPath()))
-	}
-	if !state.SystemTimingModeClockOnly.IsNull() && data.SystemTimingModeClockOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/system/timing-mode/clock-only", state.getPath()))
-	}
-	if !state.SystemTimingModeLineOnly.IsNull() && data.SystemTimingModeLineOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/system/timing-mode/line-only", state.getPath()))
-	}
-	if !state.ClockInterfaceTimingModeIndependent.IsNull() && data.ClockInterfaceTimingModeIndependent.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/clock-interface/timing-mode/independent", state.getPath()))
-	}
-	if !state.ClockInterfaceTimingModeSystem.IsNull() && data.ClockInterfaceTimingModeSystem.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/clock-interface/timing-mode/system", state.getPath()))
-	}
-	if !state.QualityItuTOptionTwoGenerationTwo.IsNull() && data.QualityItuTOptionTwoGenerationTwo.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/quality/itu-t/option/two/generation/two", state.getPath()))
-	}
-	if !state.QualityItuTOptionTwoGenerationOne.IsNull() && data.QualityItuTOptionTwoGenerationOne.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/quality/itu-t/option/two/generation/one", state.getPath()))
-	}
-	if !state.QualityItuTOptionOne.IsNull() && data.QualityItuTOptionOne.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/quality/itu-t/option/one", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *FrequencySynchronization) getEmptyLeafsDelete(ctx context.Context, state *FrequencySynchronization) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.LogSelectionErrors.IsNull() && !data.LogSelectionErrors.ValueBool() {
-		if state != nil && !state.LogSelectionErrors.IsNull() && state.LogSelectionErrors.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/selection/errors", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LogSelectionChanges.IsNull() && !data.LogSelectionChanges.ValueBool() {
-		if state != nil && !state.LogSelectionChanges.IsNull() && state.LogSelectionChanges.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/selection/changes", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SystemTimingModeClockOnly.IsNull() && !data.SystemTimingModeClockOnly.ValueBool() {
-		if state != nil && !state.SystemTimingModeClockOnly.IsNull() && state.SystemTimingModeClockOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/system/timing-mode/clock-only", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SystemTimingModeLineOnly.IsNull() && !data.SystemTimingModeLineOnly.ValueBool() {
-		if state != nil && !state.SystemTimingModeLineOnly.IsNull() && state.SystemTimingModeLineOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/system/timing-mode/line-only", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ClockInterfaceTimingModeIndependent.IsNull() && !data.ClockInterfaceTimingModeIndependent.ValueBool() {
-		if state != nil && !state.ClockInterfaceTimingModeIndependent.IsNull() && state.ClockInterfaceTimingModeIndependent.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/clock-interface/timing-mode/independent", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ClockInterfaceTimingModeSystem.IsNull() && !data.ClockInterfaceTimingModeSystem.ValueBool() {
-		if state != nil && !state.ClockInterfaceTimingModeSystem.IsNull() && state.ClockInterfaceTimingModeSystem.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/clock-interface/timing-mode/system", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.QualityItuTOptionTwoGenerationTwo.IsNull() && !data.QualityItuTOptionTwoGenerationTwo.ValueBool() {
-		if state != nil && !state.QualityItuTOptionTwoGenerationTwo.IsNull() && state.QualityItuTOptionTwoGenerationTwo.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/quality/itu-t/option/two/generation/two", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.QualityItuTOptionTwoGenerationOne.IsNull() && !data.QualityItuTOptionTwoGenerationOne.ValueBool() {
-		if state != nil && !state.QualityItuTOptionTwoGenerationOne.IsNull() && state.QualityItuTOptionTwoGenerationOne.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/quality/itu-t/option/two/generation/one", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.QualityItuTOptionOne.IsNull() && !data.QualityItuTOptionOne.ValueBool() {
-		if state != nil && !state.QualityItuTOptionOne.IsNull() && state.QualityItuTOptionOne.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/quality/itu-t/option/one", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *FrequencySynchronization) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.ClockIdentityMacAddress.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/clock-identity/mac-address", data.getPath()))
-	}
-	if !data.LogSelectionErrors.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/selection/errors", data.getPath()))
-	}
-	if !data.LogSelectionChanges.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/selection/changes", data.getPath()))
-	}
-	if !data.SystemTimingModeClockOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/system/timing-mode/clock-only", data.getPath()))
-	}
-	if !data.SystemTimingModeLineOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/system/timing-mode/line-only", data.getPath()))
-	}
-	if !data.ClockInterfaceTimingModeIndependent.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/clock-interface/timing-mode/independent", data.getPath()))
-	}
-	if !data.ClockInterfaceTimingModeSystem.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/clock-interface/timing-mode/system", data.getPath()))
-	}
-	if !data.QualityItuTOptionTwoGenerationTwo.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/quality/itu-t/option/two/generation/two", data.getPath()))
-	}
-	if !data.QualityItuTOptionTwoGenerationOne.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/quality/itu-t/option/two/generation/one", data.getPath()))
-	}
-	if !data.QualityItuTOptionOne.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/quality/itu-t/option/one", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 

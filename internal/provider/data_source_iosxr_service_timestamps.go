@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -71,7 +70,7 @@ func (d *ServiceTimestampsDataSource) Schema(ctx context.Context, req datasource
 				Computed:            true,
 			},
 			"debug_datetime_localtime_only": schema.BoolAttribute{
-				MarkdownDescription: "Timestamp with date and time",
+				MarkdownDescription: "Timestamp with date and time" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"debug_datetime_localtime": schema.BoolAttribute{
@@ -99,7 +98,7 @@ func (d *ServiceTimestampsDataSource) Schema(ctx context.Context, req datasource
 				Computed:            true,
 			},
 			"log_datetime_localtime_only": schema.BoolAttribute{
-				MarkdownDescription: "Timestamp with date and time",
+				MarkdownDescription: "Timestamp with date and time" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"log_datetime_localtime": schema.BoolAttribute{
@@ -124,6 +123,14 @@ func (d *ServiceTimestampsDataSource) Schema(ctx context.Context, req datasource
 			},
 			"log_disable": schema.BoolAttribute{
 				MarkdownDescription: "Disable timestamp log messages",
+				Computed:            true,
+			},
+			"debug_datetime_usec": schema.BoolAttribute{
+				MarkdownDescription: "Include microseconds in timestamp" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"log_datetime_usec": schema.BoolAttribute{
+				MarkdownDescription: "Include microseconds in timestamp" + "\n  - Supported from version: `25.4`",
 				Computed:            true,
 			},
 		},
@@ -158,7 +165,7 @@ func (d *ServiceTimestampsDataSource) Read(ctx context.Context, req datasource.R
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPathForVersion(device.Version)))
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
@@ -173,8 +180,7 @@ func (d *ServiceTimestampsDataSource) Read(ctx context.Context, req datasource.R
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
-			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
+			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPathForVersion(device.Version)})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
 				return
@@ -193,7 +199,7 @@ func (d *ServiceTimestampsDataSource) Read(ctx context.Context, req datasource.R
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)
@@ -219,9 +225,9 @@ func (d *ServiceTimestampsDataSource) Read(ctx context.Context, req datasource.R
 		}
 	}
 
-	config.Id = types.StringValue(config.getPath())
+	config.Id = types.StringValue(config.getPathForVersion(device.Version))
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPathForVersion(device.Version)))
 
 	diags = resp.State.Set(ctx, &config)
 	resp.Diagnostics.Append(diags...)

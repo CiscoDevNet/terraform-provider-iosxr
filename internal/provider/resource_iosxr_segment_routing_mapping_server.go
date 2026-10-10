@@ -38,11 +38,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
-	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
-
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewSegmentRoutingMappingServerResource() resource.Resource {
@@ -94,7 +92,7 @@ func (r *SegmentRoutingMappingServerResource) Schema(ctx context.Context, req re
 							},
 						},
 						"prefix_addresses": schema.ListNestedAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("SID index range").String,
+							MarkdownDescription: helpers.NewAttributeDescription("SID index range").String + "\n  - **Not supported from version `25.4` and above**",
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -122,6 +120,43 @@ func (r *SegmentRoutingMappingServerResource) Schema(ctx context.Context, req re
 									},
 									"attached": schema.BoolAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("Attached entry advertised via the A-flag").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
+						"addresses": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPaddress").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"ip_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IPaddress").String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+									},
+									"prefix": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP address prefix").AddIntegerRangeDescription(0, 128).String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 128),
+										},
+									},
+									"start_sid_index_range": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Start of SID index range").AddIntegerRangeDescription(0, 1048575).String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 1048575),
+										},
+									},
+									"range": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Number of allocated SIDs").AddIntegerRangeDescription(0, 65535).String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 65535),
+										},
+									},
+									"attached": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Attached entry advertised via the A-flag").String + "\n  - Supported from version: `25.4`",
 										Optional:            true,
 									},
 								},
@@ -161,7 +196,10 @@ func (r *SegmentRoutingMappingServerResource) Create(ctx context.Context, req re
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
-
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
@@ -179,10 +217,10 @@ func (r *SegmentRoutingMappingServerResource) Create(ctx context.Context, req re
 			var ops []gnmi.SetOperation
 
 			// Create object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("gNMI Set body for path %s: %s", plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -237,7 +275,6 @@ func (r *SegmentRoutingMappingServerResource) Create(ctx context.Context, req re
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-
 func (r *SegmentRoutingMappingServerResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state SegmentRoutingMappingServer
 
@@ -302,10 +339,10 @@ func (r *SegmentRoutingMappingServerResource) Read(ctx context.Context, req reso
 				if imp {
 					// After `terraform import` we switch to a full read so all device
 					// attributes are populated in state (fromBody overwrites everything).
-					state.fromBody(ctx, gjson.ParseBytes(respBody))
+					state.fromBody(ctx, respBody, device.Version)
 				} else {
 					// Normal read: preserve config-only fields not returned by the device.
-					state.updateFromBody(ctx, gjson.ParseBytes(respBody))
+					state.updateFromBody(ctx, respBody, device.Version)
 				}
 			}
 		} else {
@@ -346,7 +383,6 @@ func (r *SegmentRoutingMappingServerResource) Read(ctx context.Context, req reso
 			}
 		}
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
@@ -358,7 +394,6 @@ func (r *SegmentRoutingMappingServerResource) Read(ctx context.Context, req reso
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-
 func (r *SegmentRoutingMappingServerResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state SegmentRoutingMappingServer
 
@@ -381,6 +416,10 @@ func (r *SegmentRoutingMappingServerResource) Update(ctx context.Context, req re
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -399,16 +438,16 @@ func (r *SegmentRoutingMappingServerResource) Update(ctx context.Context, req re
 			var ops []gnmi.SetOperation
 
 			// Update object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 
-			deletedListItems := plan.getDeletedItems(ctx, state)
+			deletedListItems := plan.getDeletedItems(ctx, state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
 
 			for _, i := range deletedListItems {
 				ops = append(ops, gnmi.Delete(i))
 			}
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -451,7 +490,6 @@ func (r *SegmentRoutingMappingServerResource) Update(ctx context.Context, req re
 			}
 		}
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
@@ -461,7 +499,6 @@ func (r *SegmentRoutingMappingServerResource) Update(ctx context.Context, req re
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-
 func (r *SegmentRoutingMappingServerResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state SegmentRoutingMappingServer
 
@@ -476,6 +513,14 @@ func (r *SegmentRoutingMappingServerResource) Delete(ctx context.Context, req re
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
@@ -552,7 +597,7 @@ func (r *SegmentRoutingMappingServerResource) Delete(ctx context.Context, req re
 				}
 
 				var ops []gnmi.SetOperation
-				deletePaths := state.getDeletePaths(ctx)
+				deletePaths := state.getDeletePaths(ctx, device.Version)
 				tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
 
 				for _, i := range deletePaths {
@@ -600,7 +645,6 @@ func (r *SegmentRoutingMappingServerResource) Delete(ctx context.Context, req re
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-
 func (r *SegmentRoutingMappingServerResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)

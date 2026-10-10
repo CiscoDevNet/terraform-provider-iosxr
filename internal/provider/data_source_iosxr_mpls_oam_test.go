@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -39,6 +40,15 @@ func TestAccDataSourceIosxrMPLSOAM(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam_dpm_pps", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam_dpm_interval", "60"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam_dpm_downstream_ecmp_faults", "true"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam_address_family_ipv4_reply_ip_header_source", "1.1.1.1"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam_address_family_ipv6_reply_ip_header_source", "2001:db8::1"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam_dpm_shutdown", "true"))
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -69,6 +79,15 @@ func testAccDataSourceIosxrMPLSOAMConfig() string {
 	config += `	oam_dpm_pps = 10` + "\n"
 	config += `	oam_dpm_interval = 60` + "\n"
 	config += `	oam_dpm_downstream_ecmp_faults = true` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	oam_address_family_ipv4_reply_ip_header_source = "1.1.1.1"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	oam_address_family_ipv6_reply_ip_header_source = "2001:db8::1"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	oam_dpm_shutdown = true` + "\n"
+	}
 	config += `}` + "\n"
 
 	config += `

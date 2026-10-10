@@ -80,7 +80,8 @@ func TestAccIosxrYang(t *testing.T) {
 			{
 				Config: testAccIosxrYangConfig_yangEmptyNull(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_yang.test", "attributes.system-network-name", "router-null-test"),
+					resource.TestCheckResourceAttr("iosxr_yang.test", "id", "Cisco-IOS-XR-um-bfd-sbfd-cfg:/bfd"),
+					resource.TestCheckResourceAttr("iosxr_yang.test", "attributes.echo/disable", "<NULL>"),
 				),
 			},
 		},
@@ -163,9 +164,9 @@ func testAccIosxrYangConfig_yangEmpty() string {
 func testAccIosxrYangConfig_yangEmptyNull() string {
 	return `
 	resource "iosxr_yang" "test" {
-		path = "Cisco-IOS-XR-um-hostname-cfg:/hostname"
+		path = "Cisco-IOS-XR-um-bfd-sbfd-cfg:/bfd"
 		attributes = {
-			"system-network-name" = "router-null-test"
+			"echo/disable" = "<NULL>"
 		}
 	}
 	`

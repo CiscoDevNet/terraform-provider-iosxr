@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"sort"
 	"strconv"
@@ -154,7 +155,7 @@ func (data RSVPData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RSVP) toBody(ctx context.Context) string {
+func (data RSVP) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.SignallingGracefulRestart.IsNull() && !data.SignallingGracefulRestart.IsUnknown() {
 		if data.SignallingGracefulRestart.ValueBool() {
@@ -312,137 +313,179 @@ func (data RSVP) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *RSVP) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("signalling.graceful-restart"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SignallingGracefulRestart.IsNull() {
+// GetVersionConstraints returns the version constraints for all fields
+func (data RSVP) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data RSVP) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data RSVP) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data RSVP) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data RSVP) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *RSVP) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "signalling.graceful-restart"); !data.SignallingGracefulRestart.IsNull() {
+		if value.Exists() {
 			data.SignallingGracefulRestart = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SignallingGracefulRestart = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SignallingGracefulRestart.IsNull() {
-			data.SignallingGracefulRestart = types.BoolNull()
-		}
+	} else if data.SignallingGracefulRestart.IsNull() {
+		data.SignallingGracefulRestart = types.BoolNull()
 	}
-	if value := res.Get("signalling.graceful-restart-lsp-type"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SignallingGracefulRestartLspCtype.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.graceful-restart-lsp-type"); !data.SignallingGracefulRestartLspCtype.IsNull() {
+		if value.Exists() {
 			data.SignallingGracefulRestartLspCtype = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SignallingGracefulRestartLspCtype = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SignallingGracefulRestartLspCtype.IsNull() {
-			data.SignallingGracefulRestartLspCtype = types.BoolNull()
-		}
+	} else if data.SignallingGracefulRestartLspCtype.IsNull() {
+		data.SignallingGracefulRestartLspCtype = types.BoolNull()
 	}
-	if value := res.Get("signalling.graceful-restart-recovery-time"); value.Exists() && !data.SignallingGracefulRestartRecoveryTime.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.graceful-restart-recovery-time"); value.Exists() && !data.SignallingGracefulRestartRecoveryTime.IsNull() {
 		data.SignallingGracefulRestartRecoveryTime = types.Int64Value(value.Int())
 	} else if data.SignallingGracefulRestartRecoveryTime.IsNull() {
 		data.SignallingGracefulRestartRecoveryTime = types.Int64Null()
 	}
-	if value := res.Get("signalling.graceful-restart-restart-time"); value.Exists() && !data.SignallingGracefulRestartRestartTime.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.graceful-restart-restart-time"); value.Exists() && !data.SignallingGracefulRestartRestartTime.IsNull() {
 		data.SignallingGracefulRestartRestartTime = types.Int64Value(value.Int())
 	} else if data.SignallingGracefulRestartRestartTime.IsNull() {
 		data.SignallingGracefulRestartRestartTime = types.Int64Null()
 	}
-	if value := res.Get("signalling.hello.graceful-restart.refresh.interval"); value.Exists() && !data.SignallingHelloGracefulRestartRefreshInterval.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.hello.graceful-restart.refresh.interval"); value.Exists() && !data.SignallingHelloGracefulRestartRefreshInterval.IsNull() {
 		data.SignallingHelloGracefulRestartRefreshInterval = types.Int64Value(value.Int())
 	} else if data.SignallingHelloGracefulRestartRefreshInterval.IsNull() {
 		data.SignallingHelloGracefulRestartRefreshInterval = types.Int64Null()
 	}
-	if value := res.Get("signalling.hello.graceful-restart.refresh.misses"); value.Exists() && !data.SignallingHelloGracefulRestartRefreshMisses.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.hello.graceful-restart.refresh.misses"); value.Exists() && !data.SignallingHelloGracefulRestartRefreshMisses.IsNull() {
 		data.SignallingHelloGracefulRestartRefreshMisses = types.Int64Value(value.Int())
 	} else if data.SignallingHelloGracefulRestartRefreshMisses.IsNull() {
 		data.SignallingHelloGracefulRestartRefreshMisses = types.Int64Null()
 	}
-	if value := res.Get("signalling.event-per-pulse"); value.Exists() && !data.SignallingEventPerPulse.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.event-per-pulse"); value.Exists() && !data.SignallingEventPerPulse.IsNull() {
 		data.SignallingEventPerPulse = types.Int64Value(value.Int())
 	} else if data.SignallingEventPerPulse.IsNull() {
 		data.SignallingEventPerPulse = types.Int64Null()
 	}
-	if value := res.Get("signalling.prefix-filtering.access-list"); value.Exists() && !data.SignallingPrefixFilteringAcl.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.prefix-filtering.access-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SignallingPrefixFilteringAcl.IsNull() {
 		data.SignallingPrefixFilteringAcl = types.StringValue(value.String())
 	} else if data.SignallingPrefixFilteringAcl.IsNull() {
 		data.SignallingPrefixFilteringAcl = types.StringNull()
 	}
-	if value := res.Get("signalling.prefix-filtering.default-deny-action.drop"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.prefix-filtering.default-deny-action.drop"); !data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
+		if value.Exists() {
 			data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
-			data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolNull()
-		}
+	} else if data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
+		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolNull()
 	}
-	if value := res.Get("signalling.message-bundle.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SignallingMessageBundleDisable.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.message-bundle.disable"); !data.SignallingMessageBundleDisable.IsNull() {
+		if value.Exists() {
 			data.SignallingMessageBundleDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SignallingMessageBundleDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SignallingMessageBundleDisable.IsNull() {
-			data.SignallingMessageBundleDisable = types.BoolNull()
-		}
+	} else if data.SignallingMessageBundleDisable.IsNull() {
+		data.SignallingMessageBundleDisable = types.BoolNull()
 	}
-	if value := res.Get("signalling.nodeid-subobject.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SignallingNodeidSubobjectDisable.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.nodeid-subobject.disable"); !data.SignallingNodeidSubobjectDisable.IsNull() {
+		if value.Exists() {
 			data.SignallingNodeidSubobjectDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SignallingNodeidSubobjectDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SignallingNodeidSubobjectDisable.IsNull() {
-			data.SignallingNodeidSubobjectDisable = types.BoolNull()
-		}
+	} else if data.SignallingNodeidSubobjectDisable.IsNull() {
+		data.SignallingNodeidSubobjectDisable = types.BoolNull()
 	}
-	if value := res.Get("signalling.patherr.state-removal.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SignallingPatherrStateRemovalDisable.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.patherr.state-removal.disable"); !data.SignallingPatherrStateRemovalDisable.IsNull() {
+		if value.Exists() {
 			data.SignallingPatherrStateRemovalDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SignallingPatherrStateRemovalDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SignallingPatherrStateRemovalDisable.IsNull() {
-			data.SignallingPatherrStateRemovalDisable = types.BoolNull()
-		}
+	} else if data.SignallingPatherrStateRemovalDisable.IsNull() {
+		data.SignallingPatherrStateRemovalDisable = types.BoolNull()
 	}
-	if value := res.Get("signalling.checksum.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SignallingChecksumDisable.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.checksum.disable"); !data.SignallingChecksumDisable.IsNull() {
+		if value.Exists() {
 			data.SignallingChecksumDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SignallingChecksumDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SignallingChecksumDisable.IsNull() {
-			data.SignallingChecksumDisable = types.BoolNull()
-		}
+	} else if data.SignallingChecksumDisable.IsNull() {
+		data.SignallingChecksumDisable = types.BoolNull()
 	}
-	if value := res.Get("signalling.out-of-band.vrf"); value.Exists() && !data.SignallingOobVrf.IsNull() {
+	if value := gjson.GetBytes(res, "signalling.out-of-band.vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SignallingOobVrf.IsNull() {
 		data.SignallingOobVrf = types.StringValue(value.String())
 	} else if data.SignallingOobVrf.IsNull() {
 		data.SignallingOobVrf = types.StringNull()
 	}
-	if value := res.Get("authentication.key-source.key-chain"); value.Exists() && !data.AuthenticationKeyChain.IsNull() {
+	if value := gjson.GetBytes(res, "authentication.key-source.key-chain"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AuthenticationKeyChain.IsNull() {
 		data.AuthenticationKeyChain = types.StringValue(value.String())
 	} else if data.AuthenticationKeyChain.IsNull() {
 		data.AuthenticationKeyChain = types.StringNull()
 	}
-	if value := res.Get("authentication.window-size"); value.Exists() && !data.AuthenticationWindowSize.IsNull() {
+	if value := gjson.GetBytes(res, "authentication.window-size"); value.Exists() && !data.AuthenticationWindowSize.IsNull() {
 		data.AuthenticationWindowSize = types.Int64Value(value.Int())
 	} else if data.AuthenticationWindowSize.IsNull() {
 		data.AuthenticationWindowSize = types.Int64Null()
 	}
-	if value := res.Get("authentication.life-time"); value.Exists() && !data.AuthenticationLifeTime.IsNull() {
+	if value := gjson.GetBytes(res, "authentication.life-time"); value.Exists() && !data.AuthenticationLifeTime.IsNull() {
 		data.AuthenticationLifeTime = types.Int64Value(value.Int())
 	} else if data.AuthenticationLifeTime.IsNull() {
 		data.AuthenticationLifeTime = types.Int64Null()
 	}
-	if value := res.Get("authentication.retransmit"); value.Exists() && !data.AuthenticationRetransmit.IsNull() {
+	if value := gjson.GetBytes(res, "authentication.retransmit"); value.Exists() && !data.AuthenticationRetransmit.IsNull() {
 		data.AuthenticationRetransmit = types.Int64Value(value.Int())
 	} else if data.AuthenticationRetransmit.IsNull() {
 		data.AuthenticationRetransmit = types.Int64Null()
@@ -452,7 +495,7 @@ func (data *RSVP) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{data.Neighbors[i].Address.ValueString()}
 
 		var r gjson.Result
-		res.Get("neighbors.neighbor").ForEach(
+		gjson.GetBytes(res, "neighbors.neighbor").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -470,12 +513,12 @@ func (data *RSVP) updateFromBody(ctx context.Context, res gjson.Result) {
 				return true
 			},
 		)
-		if value := r.Get("neighbor-address"); value.Exists() && !data.Neighbors[i].Address.IsNull() {
+		if value := r.Get("neighbor-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Neighbors[i].Address.IsNull() {
 			data.Neighbors[i].Address = types.StringValue(value.String())
 		} else {
 			data.Neighbors[i].Address = types.StringNull()
 		}
-		if value := r.Get("authentication.key-source.key-chain"); value.Exists() && !data.Neighbors[i].AuthenticationKeyChain.IsNull() {
+		if value := r.Get("authentication.key-source.key-chain"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Neighbors[i].AuthenticationKeyChain.IsNull() {
 			data.Neighbors[i].AuthenticationKeyChain = types.StringValue(value.String())
 		} else {
 			data.Neighbors[i].AuthenticationKeyChain = types.StringNull()
@@ -491,143 +534,849 @@ func (data *RSVP) updateFromBody(ctx context.Context, res gjson.Result) {
 			data.Neighbors[i].AuthenticationLifeTime = types.Int64Null()
 		}
 	}
-	if value := res.Get("bandwidth.mam.percentage.max-reservable.max-reservable-bandwidth"); value.Exists() && !data.BandwidthMamPercentageMaxReservableBandwidth.IsNull() {
+	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable.max-reservable-bandwidth"); value.Exists() && !data.BandwidthMamPercentageMaxReservableBandwidth.IsNull() {
 		data.BandwidthMamPercentageMaxReservableBandwidth = types.Int64Value(value.Int())
 	} else if data.BandwidthMamPercentageMaxReservableBandwidth.IsNull() {
 		data.BandwidthMamPercentageMaxReservableBandwidth = types.Int64Null()
 	}
-	if value := res.Get("bandwidth.mam.percentage.max-reservable.bc0"); value.Exists() && !data.BandwidthMamPercentageMaxReservableBc0.IsNull() {
+	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable.bc0"); value.Exists() && !data.BandwidthMamPercentageMaxReservableBc0.IsNull() {
 		data.BandwidthMamPercentageMaxReservableBc0 = types.Int64Value(value.Int())
 	} else if data.BandwidthMamPercentageMaxReservableBc0.IsNull() {
 		data.BandwidthMamPercentageMaxReservableBc0 = types.Int64Null()
 	}
-	if value := res.Get("bandwidth.mam.percentage.max-reservable.bc1"); value.Exists() && !data.BandwidthMamPercentageMaxReservableBc1.IsNull() {
+	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable.bc1"); value.Exists() && !data.BandwidthMamPercentageMaxReservableBc1.IsNull() {
 		data.BandwidthMamPercentageMaxReservableBc1 = types.Int64Value(value.Int())
 	} else if data.BandwidthMamPercentageMaxReservableBc1.IsNull() {
 		data.BandwidthMamPercentageMaxReservableBc1 = types.Int64Null()
 	}
-	if value := res.Get("bandwidth.rdm.percentage.max-reservable-bc0.bc0"); value.Exists() && !data.BandwidthRdmPercentageMaxReservableBc0.IsNull() {
+	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.max-reservable-bc0.bc0"); value.Exists() && !data.BandwidthRdmPercentageMaxReservableBc0.IsNull() {
 		data.BandwidthRdmPercentageMaxReservableBc0 = types.Int64Value(value.Int())
 	} else if data.BandwidthRdmPercentageMaxReservableBc0.IsNull() {
 		data.BandwidthRdmPercentageMaxReservableBc0 = types.Int64Null()
 	}
-	if value := res.Get("bandwidth.rdm.percentage.max-reservable-bc0.bc1"); value.Exists() && !data.BandwidthRdmPercentageMaxReservableBc1.IsNull() {
+	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.max-reservable-bc0.bc1"); value.Exists() && !data.BandwidthRdmPercentageMaxReservableBc1.IsNull() {
 		data.BandwidthRdmPercentageMaxReservableBc1 = types.Int64Value(value.Int())
 	} else if data.BandwidthRdmPercentageMaxReservableBc1.IsNull() {
 		data.BandwidthRdmPercentageMaxReservableBc1 = types.Int64Null()
 	}
-	if value := res.Get("latency.threshold"); value.Exists() && !data.LatencyThreshold.IsNull() {
+	if value := gjson.GetBytes(res, "latency.threshold"); value.Exists() && !data.LatencyThreshold.IsNull() {
 		data.LatencyThreshold = types.Int64Value(value.Int())
 	} else if data.LatencyThreshold.IsNull() {
 		data.LatencyThreshold = types.Int64Null()
 	}
-	if value := res.Get("logging.events.nsr"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LoggingEventsNsr.IsNull() {
+	if value := gjson.GetBytes(res, "logging.events.nsr"); !data.LoggingEventsNsr.IsNull() {
+		if value.Exists() {
 			data.LoggingEventsNsr = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LoggingEventsNsr = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LoggingEventsNsr.IsNull() {
-			data.LoggingEventsNsr = types.BoolNull()
-		}
+	} else if data.LoggingEventsNsr.IsNull() {
+		data.LoggingEventsNsr = types.BoolNull()
 	}
-	if value := res.Get("logging.events.issu"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LoggingEventsIssu.IsNull() {
+	if value := gjson.GetBytes(res, "logging.events.issu"); !data.LoggingEventsIssu.IsNull() {
+		if value.Exists() {
 			data.LoggingEventsIssu = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LoggingEventsIssu = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LoggingEventsIssu.IsNull() {
-			data.LoggingEventsIssu = types.BoolNull()
-		}
+	} else if data.LoggingEventsIssu.IsNull() {
+		data.LoggingEventsIssu = types.BoolNull()
 	}
-	if value := res.Get("ltrace-buffer.multiplier.multiplier-factor"); value.Exists() && !data.LtraceBufferMultiplier.IsNull() {
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.multiplier-factor"); value.Exists() && !data.LtraceBufferMultiplier.IsNull() {
 		data.LtraceBufferMultiplier = types.Int64Value(value.Int())
 	} else if data.LtraceBufferMultiplier.IsNull() {
 		data.LtraceBufferMultiplier = types.Int64Null()
 	}
-	if value := res.Get("ltrace-buffer.multiplier.rare"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LtraceBufferMultiplierRare.IsNull() {
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.rare"); !data.LtraceBufferMultiplierRare.IsNull() {
+		if value.Exists() {
 			data.LtraceBufferMultiplierRare = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LtraceBufferMultiplierRare = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LtraceBufferMultiplierRare.IsNull() {
-			data.LtraceBufferMultiplierRare = types.BoolNull()
-		}
+	} else if data.LtraceBufferMultiplierRare.IsNull() {
+		data.LtraceBufferMultiplierRare = types.BoolNull()
 	}
-	if value := res.Get("ltrace-buffer.multiplier.common"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LtraceBufferMultiplierCommon.IsNull() {
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.common"); !data.LtraceBufferMultiplierCommon.IsNull() {
+		if value.Exists() {
 			data.LtraceBufferMultiplierCommon = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LtraceBufferMultiplierCommon = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LtraceBufferMultiplierCommon.IsNull() {
-			data.LtraceBufferMultiplierCommon = types.BoolNull()
-		}
+	} else if data.LtraceBufferMultiplierCommon.IsNull() {
+		data.LtraceBufferMultiplierCommon = types.BoolNull()
 	}
-	if value := res.Get("ltrace-buffer.multiplier.sig"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LtraceBufferMultiplierSig.IsNull() {
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.sig"); !data.LtraceBufferMultiplierSig.IsNull() {
+		if value.Exists() {
 			data.LtraceBufferMultiplierSig = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LtraceBufferMultiplierSig = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LtraceBufferMultiplierSig.IsNull() {
-			data.LtraceBufferMultiplierSig = types.BoolNull()
-		}
+	} else if data.LtraceBufferMultiplierSig.IsNull() {
+		data.LtraceBufferMultiplierSig = types.BoolNull()
 	}
-	if value := res.Get("ltrace-buffer.multiplier.sig-err"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LtraceBufferMultiplierSigErr.IsNull() {
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.sig-err"); !data.LtraceBufferMultiplierSigErr.IsNull() {
+		if value.Exists() {
 			data.LtraceBufferMultiplierSigErr = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LtraceBufferMultiplierSigErr = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LtraceBufferMultiplierSigErr.IsNull() {
-			data.LtraceBufferMultiplierSigErr = types.BoolNull()
-		}
+	} else if data.LtraceBufferMultiplierSigErr.IsNull() {
+		data.LtraceBufferMultiplierSigErr = types.BoolNull()
 	}
-	if value := res.Get("ltrace-buffer.multiplier.intf"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LtraceBufferMultiplierIntf.IsNull() {
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.intf"); !data.LtraceBufferMultiplierIntf.IsNull() {
+		if value.Exists() {
 			data.LtraceBufferMultiplierIntf = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LtraceBufferMultiplierIntf = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LtraceBufferMultiplierIntf.IsNull() {
-			data.LtraceBufferMultiplierIntf = types.BoolNull()
-		}
+	} else if data.LtraceBufferMultiplierIntf.IsNull() {
+		data.LtraceBufferMultiplierIntf = types.BoolNull()
 	}
-	if value := res.Get("ltrace-buffer.multiplier.dbg-err"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LtraceBufferMultiplierDbgErr.IsNull() {
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.dbg-err"); !data.LtraceBufferMultiplierDbgErr.IsNull() {
+		if value.Exists() {
 			data.LtraceBufferMultiplierDbgErr = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LtraceBufferMultiplierDbgErr = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LtraceBufferMultiplierDbgErr.IsNull() {
-			data.LtraceBufferMultiplierDbgErr = types.BoolNull()
-		}
+	} else if data.LtraceBufferMultiplierDbgErr.IsNull() {
+		data.LtraceBufferMultiplierDbgErr = types.BoolNull()
 	}
-	if value := res.Get("ltrace-buffer.multiplier.sync"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LtraceBufferMultiplierSync.IsNull() {
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.sync"); !data.LtraceBufferMultiplierSync.IsNull() {
+		if value.Exists() {
 			data.LtraceBufferMultiplierSync = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LtraceBufferMultiplierSync = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LtraceBufferMultiplierSync.IsNull() {
-			data.LtraceBufferMultiplierSync = types.BoolNull()
-		}
+	} else if data.LtraceBufferMultiplierSync.IsNull() {
+		data.LtraceBufferMultiplierSync = types.BoolNull()
 	}
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *RSVP) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "signalling.graceful-restart"); value.Exists() {
+		data.SignallingGracefulRestart = types.BoolValue(true)
+	} else if !data.SignallingGracefulRestart.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SignallingGracefulRestart = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "signalling.graceful-restart-lsp-type"); value.Exists() {
+		data.SignallingGracefulRestartLspCtype = types.BoolValue(true)
+	} else if !data.SignallingGracefulRestartLspCtype.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SignallingGracefulRestartLspCtype = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "signalling.graceful-restart-recovery-time"); value.Exists() {
+		data.SignallingGracefulRestartRecoveryTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "signalling.graceful-restart-restart-time"); value.Exists() {
+		data.SignallingGracefulRestartRestartTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "signalling.hello.graceful-restart.refresh.interval"); value.Exists() {
+		data.SignallingHelloGracefulRestartRefreshInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "signalling.hello.graceful-restart.refresh.misses"); value.Exists() {
+		data.SignallingHelloGracefulRestartRefreshMisses = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "signalling.event-per-pulse"); value.Exists() {
+		data.SignallingEventPerPulse = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "signalling.prefix-filtering.access-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SignallingPrefixFilteringAcl = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "signalling.prefix-filtering.default-deny-action.drop"); value.Exists() {
+		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(true)
+	} else if !data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "signalling.message-bundle.disable"); value.Exists() {
+		data.SignallingMessageBundleDisable = types.BoolValue(true)
+	} else if !data.SignallingMessageBundleDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SignallingMessageBundleDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "signalling.nodeid-subobject.disable"); value.Exists() {
+		data.SignallingNodeidSubobjectDisable = types.BoolValue(true)
+	} else if !data.SignallingNodeidSubobjectDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SignallingNodeidSubobjectDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "signalling.patherr.state-removal.disable"); value.Exists() {
+		data.SignallingPatherrStateRemovalDisable = types.BoolValue(true)
+	} else if !data.SignallingPatherrStateRemovalDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SignallingPatherrStateRemovalDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "signalling.checksum.disable"); value.Exists() {
+		data.SignallingChecksumDisable = types.BoolValue(true)
+	} else if !data.SignallingChecksumDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SignallingChecksumDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "signalling.out-of-band.vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SignallingOobVrf = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "authentication.key-source.key-chain"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AuthenticationKeyChain = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "authentication.window-size"); value.Exists() {
+		data.AuthenticationWindowSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "authentication.life-time"); value.Exists() {
+		data.AuthenticationLifeTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "authentication.retransmit"); value.Exists() {
+		data.AuthenticationRetransmit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "neighbors.neighbor"); value.Exists() {
+		data.Neighbors = make([]RSVPNeighbors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RSVPNeighbors{}
+			if cValue := v.Get("neighbor-address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("authentication.key-source.key-chain"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.AuthenticationKeyChain = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("authentication.window-size"); cValue.Exists() {
+				item.AuthenticationWindowSize = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("authentication.life-time"); cValue.Exists() {
+				item.AuthenticationLifeTime = types.Int64Value(cValue.Int())
+			}
+			data.Neighbors = append(data.Neighbors, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable.max-reservable-bandwidth"); value.Exists() {
+		data.BandwidthMamPercentageMaxReservableBandwidth = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable.bc0"); value.Exists() {
+		data.BandwidthMamPercentageMaxReservableBc0 = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable.bc1"); value.Exists() {
+		data.BandwidthMamPercentageMaxReservableBc1 = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.max-reservable-bc0.bc0"); value.Exists() {
+		data.BandwidthRdmPercentageMaxReservableBc0 = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.max-reservable-bc0.bc1"); value.Exists() {
+		data.BandwidthRdmPercentageMaxReservableBc1 = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "latency.threshold"); value.Exists() {
+		data.LatencyThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "logging.events.nsr"); value.Exists() {
+		data.LoggingEventsNsr = types.BoolValue(true)
+	} else if !data.LoggingEventsNsr.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingEventsNsr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "logging.events.issu"); value.Exists() {
+		data.LoggingEventsIssu = types.BoolValue(true)
+	} else if !data.LoggingEventsIssu.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoggingEventsIssu = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.multiplier-factor"); value.Exists() {
+		data.LtraceBufferMultiplier = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.rare"); value.Exists() {
+		data.LtraceBufferMultiplierRare = types.BoolValue(true)
+	} else if !data.LtraceBufferMultiplierRare.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LtraceBufferMultiplierRare = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.common"); value.Exists() {
+		data.LtraceBufferMultiplierCommon = types.BoolValue(true)
+	} else if !data.LtraceBufferMultiplierCommon.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LtraceBufferMultiplierCommon = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.sig"); value.Exists() {
+		data.LtraceBufferMultiplierSig = types.BoolValue(true)
+	} else if !data.LtraceBufferMultiplierSig.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LtraceBufferMultiplierSig = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.sig-err"); value.Exists() {
+		data.LtraceBufferMultiplierSigErr = types.BoolValue(true)
+	} else if !data.LtraceBufferMultiplierSigErr.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LtraceBufferMultiplierSigErr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.intf"); value.Exists() {
+		data.LtraceBufferMultiplierIntf = types.BoolValue(true)
+	} else if !data.LtraceBufferMultiplierIntf.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LtraceBufferMultiplierIntf = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.dbg-err"); value.Exists() {
+		data.LtraceBufferMultiplierDbgErr = types.BoolValue(true)
+	} else if !data.LtraceBufferMultiplierDbgErr.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LtraceBufferMultiplierDbgErr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.sync"); value.Exists() {
+		data.LtraceBufferMultiplierSync = types.BoolValue(true)
+	} else if !data.LtraceBufferMultiplierSync.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LtraceBufferMultiplierSync = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *RSVPData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "signalling.graceful-restart"); value.Exists() {
+		data.SignallingGracefulRestart = types.BoolValue(true)
+	} else {
+		data.SignallingGracefulRestart = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "signalling.graceful-restart-lsp-type"); value.Exists() {
+		data.SignallingGracefulRestartLspCtype = types.BoolValue(true)
+	} else {
+		data.SignallingGracefulRestartLspCtype = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "signalling.graceful-restart-recovery-time"); value.Exists() {
+		data.SignallingGracefulRestartRecoveryTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "signalling.graceful-restart-restart-time"); value.Exists() {
+		data.SignallingGracefulRestartRestartTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "signalling.hello.graceful-restart.refresh.interval"); value.Exists() {
+		data.SignallingHelloGracefulRestartRefreshInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "signalling.hello.graceful-restart.refresh.misses"); value.Exists() {
+		data.SignallingHelloGracefulRestartRefreshMisses = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "signalling.event-per-pulse"); value.Exists() {
+		data.SignallingEventPerPulse = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "signalling.prefix-filtering.access-list"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SignallingPrefixFilteringAcl = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "signalling.prefix-filtering.default-deny-action.drop"); value.Exists() {
+		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(true)
+	} else {
+		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "signalling.message-bundle.disable"); value.Exists() {
+		data.SignallingMessageBundleDisable = types.BoolValue(true)
+	} else {
+		data.SignallingMessageBundleDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "signalling.nodeid-subobject.disable"); value.Exists() {
+		data.SignallingNodeidSubobjectDisable = types.BoolValue(true)
+	} else {
+		data.SignallingNodeidSubobjectDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "signalling.patherr.state-removal.disable"); value.Exists() {
+		data.SignallingPatherrStateRemovalDisable = types.BoolValue(true)
+	} else {
+		data.SignallingPatherrStateRemovalDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "signalling.checksum.disable"); value.Exists() {
+		data.SignallingChecksumDisable = types.BoolValue(true)
+	} else {
+		data.SignallingChecksumDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "signalling.out-of-band.vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SignallingOobVrf = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "authentication.key-source.key-chain"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AuthenticationKeyChain = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "authentication.window-size"); value.Exists() {
+		data.AuthenticationWindowSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "authentication.life-time"); value.Exists() {
+		data.AuthenticationLifeTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "authentication.retransmit"); value.Exists() {
+		data.AuthenticationRetransmit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "neighbors.neighbor"); value.Exists() {
+		data.Neighbors = make([]RSVPNeighbors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RSVPNeighbors{}
+			if cValue := v.Get("neighbor-address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("authentication.key-source.key-chain"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.AuthenticationKeyChain = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("authentication.window-size"); cValue.Exists() {
+				item.AuthenticationWindowSize = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("authentication.life-time"); cValue.Exists() {
+				item.AuthenticationLifeTime = types.Int64Value(cValue.Int())
+			}
+			data.Neighbors = append(data.Neighbors, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable.max-reservable-bandwidth"); value.Exists() {
+		data.BandwidthMamPercentageMaxReservableBandwidth = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable.bc0"); value.Exists() {
+		data.BandwidthMamPercentageMaxReservableBc0 = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bandwidth.mam.percentage.max-reservable.bc1"); value.Exists() {
+		data.BandwidthMamPercentageMaxReservableBc1 = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.max-reservable-bc0.bc0"); value.Exists() {
+		data.BandwidthRdmPercentageMaxReservableBc0 = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bandwidth.rdm.percentage.max-reservable-bc0.bc1"); value.Exists() {
+		data.BandwidthRdmPercentageMaxReservableBc1 = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "latency.threshold"); value.Exists() {
+		data.LatencyThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "logging.events.nsr"); value.Exists() {
+		data.LoggingEventsNsr = types.BoolValue(true)
+	} else {
+		data.LoggingEventsNsr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "logging.events.issu"); value.Exists() {
+		data.LoggingEventsIssu = types.BoolValue(true)
+	} else {
+		data.LoggingEventsIssu = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.multiplier-factor"); value.Exists() {
+		data.LtraceBufferMultiplier = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.rare"); value.Exists() {
+		data.LtraceBufferMultiplierRare = types.BoolValue(true)
+	} else {
+		data.LtraceBufferMultiplierRare = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.common"); value.Exists() {
+		data.LtraceBufferMultiplierCommon = types.BoolValue(true)
+	} else {
+		data.LtraceBufferMultiplierCommon = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.sig"); value.Exists() {
+		data.LtraceBufferMultiplierSig = types.BoolValue(true)
+	} else {
+		data.LtraceBufferMultiplierSig = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.sig-err"); value.Exists() {
+		data.LtraceBufferMultiplierSigErr = types.BoolValue(true)
+	} else {
+		data.LtraceBufferMultiplierSigErr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.intf"); value.Exists() {
+		data.LtraceBufferMultiplierIntf = types.BoolValue(true)
+	} else {
+		data.LtraceBufferMultiplierIntf = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.dbg-err"); value.Exists() {
+		data.LtraceBufferMultiplierDbgErr = types.BoolValue(true)
+	} else {
+		data.LtraceBufferMultiplierDbgErr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ltrace-buffer.multiplier.sync"); value.Exists() {
+		data.LtraceBufferMultiplierSync = types.BoolValue(true)
+	} else {
+		data.LtraceBufferMultiplierSync = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *RSVP) getDeletedItems(ctx context.Context, state RSVP, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.LtraceBufferMultiplierSync.IsNull() && data.LtraceBufferMultiplierSync.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ltrace-buffer/multiplier"))
+	}
+	if !state.LtraceBufferMultiplierDbgErr.IsNull() && data.LtraceBufferMultiplierDbgErr.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ltrace-buffer/multiplier"))
+	}
+	if !state.LtraceBufferMultiplierIntf.IsNull() && data.LtraceBufferMultiplierIntf.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ltrace-buffer/multiplier"))
+	}
+	if !state.LtraceBufferMultiplierSigErr.IsNull() && data.LtraceBufferMultiplierSigErr.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ltrace-buffer/multiplier"))
+	}
+	if !state.LtraceBufferMultiplierSig.IsNull() && data.LtraceBufferMultiplierSig.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ltrace-buffer/multiplier"))
+	}
+	if !state.LtraceBufferMultiplierCommon.IsNull() && data.LtraceBufferMultiplierCommon.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ltrace-buffer/multiplier"))
+	}
+	if !state.LtraceBufferMultiplierRare.IsNull() && data.LtraceBufferMultiplierRare.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ltrace-buffer/multiplier"))
+	}
+	if !state.LtraceBufferMultiplier.IsNull() && data.LtraceBufferMultiplier.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ltrace-buffer/multiplier"))
+	}
+	if !state.LoggingEventsIssu.IsNull() && data.LoggingEventsIssu.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "logging/events/issu"))
+	}
+	if !state.LoggingEventsNsr.IsNull() && data.LoggingEventsNsr.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "logging/events/nsr"))
+	}
+	if !state.LatencyThreshold.IsNull() && data.LatencyThreshold.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "latency/threshold"))
+	}
+	if !state.BandwidthRdmPercentageMaxReservableBc1.IsNull() && data.BandwidthRdmPercentageMaxReservableBc1.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "bandwidth/rdm/percentage/max-reservable-bc0"))
+	}
+	if !state.BandwidthRdmPercentageMaxReservableBc0.IsNull() && data.BandwidthRdmPercentageMaxReservableBc0.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "bandwidth/rdm/percentage/max-reservable-bc0"))
+	}
+	if !state.BandwidthMamPercentageMaxReservableBc1.IsNull() && data.BandwidthMamPercentageMaxReservableBc1.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "bandwidth/mam/percentage/max-reservable"))
+	}
+	if !state.BandwidthMamPercentageMaxReservableBc0.IsNull() && data.BandwidthMamPercentageMaxReservableBc0.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "bandwidth/mam/percentage/max-reservable"))
+	}
+	if !state.BandwidthMamPercentageMaxReservableBandwidth.IsNull() && data.BandwidthMamPercentageMaxReservableBandwidth.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "bandwidth/mam/percentage/max-reservable"))
+	}
+	for i := range state.Neighbors {
+		keys := [...]string{"neighbor-address"}
+		stateKeyValues := [...]string{state.Neighbors[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Neighbors[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Neighbors {
+			found = true
+			if state.Neighbors[i].Address.ValueString() != data.Neighbors[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Neighbors[i].AuthenticationLifeTime.IsNull() && data.Neighbors[j].AuthenticationLifeTime.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "neighbors/neighbor", keyString), "authentication/life-time"))
+				}
+				if !state.Neighbors[i].AuthenticationWindowSize.IsNull() && data.Neighbors[j].AuthenticationWindowSize.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "neighbors/neighbor", keyString), "authentication/window-size"))
+				}
+				if !state.Neighbors[i].AuthenticationKeyChain.IsNull() && data.Neighbors[j].AuthenticationKeyChain.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "neighbors/neighbor", keyString), "authentication/key-source/key-chain"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "neighbors/neighbor", keyString))
+		}
+	}
+	if !state.AuthenticationRetransmit.IsNull() && data.AuthenticationRetransmit.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "authentication/retransmit"))
+	}
+	if !state.AuthenticationLifeTime.IsNull() && data.AuthenticationLifeTime.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "authentication/life-time"))
+	}
+	if !state.AuthenticationWindowSize.IsNull() && data.AuthenticationWindowSize.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "authentication/window-size"))
+	}
+	if !state.AuthenticationKeyChain.IsNull() && data.AuthenticationKeyChain.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "authentication/key-source/key-chain"))
+	}
+	if !state.SignallingOobVrf.IsNull() && data.SignallingOobVrf.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "signalling/out-of-band/vrf"))
+	}
+	if !state.SignallingChecksumDisable.IsNull() && data.SignallingChecksumDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "signalling/checksum/disable"))
+	}
+	if !state.SignallingPatherrStateRemovalDisable.IsNull() && data.SignallingPatherrStateRemovalDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "signalling/patherr/state-removal/disable"))
+	}
+	if !state.SignallingNodeidSubobjectDisable.IsNull() && data.SignallingNodeidSubobjectDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "signalling/nodeid-subobject/disable"))
+	}
+	if !state.SignallingMessageBundleDisable.IsNull() && data.SignallingMessageBundleDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "signalling/message-bundle/disable"))
+	}
+	if !state.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() && data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "signalling/prefix-filtering/default-deny-action/drop"))
+	}
+	if !state.SignallingPrefixFilteringAcl.IsNull() && data.SignallingPrefixFilteringAcl.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "signalling/prefix-filtering/access-list"))
+	}
+	if !state.SignallingEventPerPulse.IsNull() && data.SignallingEventPerPulse.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "signalling/event-per-pulse"))
+	}
+	if !state.SignallingHelloGracefulRestartRefreshMisses.IsNull() && data.SignallingHelloGracefulRestartRefreshMisses.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "signalling/hello/graceful-restart/refresh/misses"))
+	}
+	if !state.SignallingHelloGracefulRestartRefreshInterval.IsNull() && data.SignallingHelloGracefulRestartRefreshInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "signalling/hello/graceful-restart/refresh/interval"))
+	}
+	if !state.SignallingGracefulRestartRestartTime.IsNull() && data.SignallingGracefulRestartRestartTime.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "signalling/graceful-restart-restart-time"))
+	}
+	if !state.SignallingGracefulRestartRecoveryTime.IsNull() && data.SignallingGracefulRestartRecoveryTime.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "signalling/graceful-restart-recovery-time"))
+	}
+	if !state.SignallingGracefulRestartLspCtype.IsNull() && data.SignallingGracefulRestartLspCtype.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "signalling/graceful-restart-lsp-type"))
+	}
+	if !state.SignallingGracefulRestart.IsNull() && data.SignallingGracefulRestart.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "signalling/graceful-restart"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *RSVP) getEmptyLeafsDelete(ctx context.Context, state *RSVP, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if !data.LtraceBufferMultiplierSync.IsNull() && !data.LtraceBufferMultiplierSync.ValueBool() {
+		if state == nil || state.LtraceBufferMultiplierSync.IsNull() || state.LtraceBufferMultiplierSync.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
+		}
+	}
+	if !data.LtraceBufferMultiplierDbgErr.IsNull() && !data.LtraceBufferMultiplierDbgErr.ValueBool() {
+		if state == nil || state.LtraceBufferMultiplierDbgErr.IsNull() || state.LtraceBufferMultiplierDbgErr.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
+		}
+	}
+	if !data.LtraceBufferMultiplierIntf.IsNull() && !data.LtraceBufferMultiplierIntf.ValueBool() {
+		if state == nil || state.LtraceBufferMultiplierIntf.IsNull() || state.LtraceBufferMultiplierIntf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
+		}
+	}
+	if !data.LtraceBufferMultiplierSigErr.IsNull() && !data.LtraceBufferMultiplierSigErr.ValueBool() {
+		if state == nil || state.LtraceBufferMultiplierSigErr.IsNull() || state.LtraceBufferMultiplierSigErr.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
+		}
+	}
+	if !data.LtraceBufferMultiplierSig.IsNull() && !data.LtraceBufferMultiplierSig.ValueBool() {
+		if state == nil || state.LtraceBufferMultiplierSig.IsNull() || state.LtraceBufferMultiplierSig.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
+		}
+	}
+	if !data.LtraceBufferMultiplierCommon.IsNull() && !data.LtraceBufferMultiplierCommon.ValueBool() {
+		if state == nil || state.LtraceBufferMultiplierCommon.IsNull() || state.LtraceBufferMultiplierCommon.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
+		}
+	}
+	if !data.LtraceBufferMultiplierRare.IsNull() && !data.LtraceBufferMultiplierRare.ValueBool() {
+		if state == nil || state.LtraceBufferMultiplierRare.IsNull() || state.LtraceBufferMultiplierRare.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
+		}
+	}
+	if !data.LoggingEventsIssu.IsNull() && !data.LoggingEventsIssu.ValueBool() {
+		if state == nil || state.LoggingEventsIssu.IsNull() || state.LoggingEventsIssu.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/events/issu"))
+		}
+	}
+	if !data.LoggingEventsNsr.IsNull() && !data.LoggingEventsNsr.ValueBool() {
+		if state == nil || state.LoggingEventsNsr.IsNull() || state.LoggingEventsNsr.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/events/nsr"))
+		}
+	}
+	for i := range data.Neighbors {
+		keys := [...]string{"neighbor-address"}
+		keyValues := [...]string{data.Neighbors[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	if !data.SignallingChecksumDisable.IsNull() && !data.SignallingChecksumDisable.ValueBool() {
+		if state == nil || state.SignallingChecksumDisable.IsNull() || state.SignallingChecksumDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "signalling/checksum/disable"))
+		}
+	}
+	if !data.SignallingPatherrStateRemovalDisable.IsNull() && !data.SignallingPatherrStateRemovalDisable.ValueBool() {
+		if state == nil || state.SignallingPatherrStateRemovalDisable.IsNull() || state.SignallingPatherrStateRemovalDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "signalling/patherr/state-removal/disable"))
+		}
+	}
+	if !data.SignallingNodeidSubobjectDisable.IsNull() && !data.SignallingNodeidSubobjectDisable.ValueBool() {
+		if state == nil || state.SignallingNodeidSubobjectDisable.IsNull() || state.SignallingNodeidSubobjectDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "signalling/nodeid-subobject/disable"))
+		}
+	}
+	if !data.SignallingMessageBundleDisable.IsNull() && !data.SignallingMessageBundleDisable.ValueBool() {
+		if state == nil || state.SignallingMessageBundleDisable.IsNull() || state.SignallingMessageBundleDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "signalling/message-bundle/disable"))
+		}
+	}
+	if !data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() && !data.SignallingPrefixFilteringDefaultDenyActionDrop.ValueBool() {
+		if state == nil || state.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() || state.SignallingPrefixFilteringDefaultDenyActionDrop.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "signalling/prefix-filtering/default-deny-action/drop"))
+		}
+	}
+	if !data.SignallingGracefulRestartLspCtype.IsNull() && !data.SignallingGracefulRestartLspCtype.ValueBool() {
+		if state == nil || state.SignallingGracefulRestartLspCtype.IsNull() || state.SignallingGracefulRestartLspCtype.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "signalling/graceful-restart-lsp-type"))
+		}
+	}
+	if !data.SignallingGracefulRestart.IsNull() && !data.SignallingGracefulRestart.ValueBool() {
+		if state == nil || state.SignallingGracefulRestart.IsNull() || state.SignallingGracefulRestart.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "signalling/graceful-restart"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *RSVP) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.LtraceBufferMultiplierSync.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
+	}
+	if !data.LtraceBufferMultiplierDbgErr.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
+	}
+	if !data.LtraceBufferMultiplierIntf.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
+	}
+	if !data.LtraceBufferMultiplierSigErr.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
+	}
+	if !data.LtraceBufferMultiplierSig.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
+	}
+	if !data.LtraceBufferMultiplierCommon.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
+	}
+	if !data.LtraceBufferMultiplierRare.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
+	}
+	if !data.LtraceBufferMultiplier.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ltrace-buffer/multiplier"))
+	}
+	if !data.LoggingEventsIssu.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "logging/events/issu"))
+	}
+	if !data.LoggingEventsNsr.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "logging/events/nsr"))
+	}
+	if !data.LatencyThreshold.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "latency/threshold"))
+	}
+	if !data.BandwidthRdmPercentageMaxReservableBc1.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "bandwidth/rdm/percentage/max-reservable-bc0"))
+	}
+	if !data.BandwidthRdmPercentageMaxReservableBc0.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "bandwidth/rdm/percentage/max-reservable-bc0"))
+	}
+	if !data.BandwidthMamPercentageMaxReservableBc1.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "bandwidth/mam/percentage/max-reservable"))
+	}
+	if !data.BandwidthMamPercentageMaxReservableBc0.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "bandwidth/mam/percentage/max-reservable"))
+	}
+	if !data.BandwidthMamPercentageMaxReservableBandwidth.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "bandwidth/mam/percentage/max-reservable"))
+	}
+	for i := range data.Neighbors {
+		keys := [...]string{"neighbor-address"}
+		keyValues := [...]string{data.Neighbors[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.Neighbors[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "neighbors/neighbor", keyString))
+	}
+	if !data.AuthenticationRetransmit.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "authentication/retransmit"))
+	}
+	if !data.AuthenticationLifeTime.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "authentication/life-time"))
+	}
+	if !data.AuthenticationWindowSize.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "authentication/window-size"))
+	}
+	if !data.AuthenticationKeyChain.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "authentication/key-source/key-chain"))
+	}
+	if !data.SignallingOobVrf.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "signalling/out-of-band/vrf"))
+	}
+	if !data.SignallingChecksumDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "signalling/checksum/disable"))
+	}
+	if !data.SignallingPatherrStateRemovalDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "signalling/patherr/state-removal/disable"))
+	}
+	if !data.SignallingNodeidSubobjectDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "signalling/nodeid-subobject/disable"))
+	}
+	if !data.SignallingMessageBundleDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "signalling/message-bundle/disable"))
+	}
+	if !data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "signalling/prefix-filtering/default-deny-action/drop"))
+	}
+	if !data.SignallingPrefixFilteringAcl.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "signalling/prefix-filtering/access-list"))
+	}
+	if !data.SignallingEventPerPulse.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "signalling/event-per-pulse"))
+	}
+	if !data.SignallingHelloGracefulRestartRefreshMisses.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "signalling/hello/graceful-restart/refresh/misses"))
+	}
+	if !data.SignallingHelloGracefulRestartRefreshInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "signalling/hello/graceful-restart/refresh/interval"))
+	}
+	if !data.SignallingGracefulRestartRestartTime.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "signalling/graceful-restart-restart-time"))
+	}
+	if !data.SignallingGracefulRestartRecoveryTime.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "signalling/graceful-restart-recovery-time"))
+	}
+	if !data.SignallingGracefulRestartLspCtype.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "signalling/graceful-restart-lsp-type"))
+	}
+	if !data.SignallingGracefulRestart.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "signalling/graceful-restart"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data RSVP) toBodyXML(ctx context.Context, stateArg ...*RSVP) string {
@@ -809,7 +1558,7 @@ func (data RSVP) toBodyXML(ctx context.Context, stateArg ...*RSVP) string {
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -817,6 +1566,7 @@ func (data RSVP) toBodyXML(ctx context.Context, stateArg ...*RSVP) string {
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1133,359 +1883,7 @@ func (data *RSVP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *RSVP) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "signalling.graceful-restart"); value.Exists() {
-		data.SignallingGracefulRestart = types.BoolValue(true)
-	} else if !data.SignallingGracefulRestart.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SignallingGracefulRestart = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "signalling.graceful-restart-lsp-type"); value.Exists() {
-		data.SignallingGracefulRestartLspCtype = types.BoolValue(true)
-	} else if !data.SignallingGracefulRestartLspCtype.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SignallingGracefulRestartLspCtype = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "signalling.graceful-restart-recovery-time"); value.Exists() {
-		data.SignallingGracefulRestartRecoveryTime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "signalling.graceful-restart-restart-time"); value.Exists() {
-		data.SignallingGracefulRestartRestartTime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "signalling.hello.graceful-restart.refresh.interval"); value.Exists() {
-		data.SignallingHelloGracefulRestartRefreshInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "signalling.hello.graceful-restart.refresh.misses"); value.Exists() {
-		data.SignallingHelloGracefulRestartRefreshMisses = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "signalling.event-per-pulse"); value.Exists() {
-		data.SignallingEventPerPulse = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "signalling.prefix-filtering.access-list"); value.Exists() {
-		data.SignallingPrefixFilteringAcl = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "signalling.prefix-filtering.default-deny-action.drop"); value.Exists() {
-		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(true)
-	} else if !data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "signalling.message-bundle.disable"); value.Exists() {
-		data.SignallingMessageBundleDisable = types.BoolValue(true)
-	} else if !data.SignallingMessageBundleDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SignallingMessageBundleDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "signalling.nodeid-subobject.disable"); value.Exists() {
-		data.SignallingNodeidSubobjectDisable = types.BoolValue(true)
-	} else if !data.SignallingNodeidSubobjectDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SignallingNodeidSubobjectDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "signalling.patherr.state-removal.disable"); value.Exists() {
-		data.SignallingPatherrStateRemovalDisable = types.BoolValue(true)
-	} else if !data.SignallingPatherrStateRemovalDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SignallingPatherrStateRemovalDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "signalling.checksum.disable"); value.Exists() {
-		data.SignallingChecksumDisable = types.BoolValue(true)
-	} else if !data.SignallingChecksumDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SignallingChecksumDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "signalling.out-of-band.vrf"); value.Exists() {
-		data.SignallingOobVrf = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "authentication.key-source.key-chain"); value.Exists() {
-		data.AuthenticationKeyChain = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "authentication.window-size"); value.Exists() {
-		data.AuthenticationWindowSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "authentication.life-time"); value.Exists() {
-		data.AuthenticationLifeTime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "authentication.retransmit"); value.Exists() {
-		data.AuthenticationRetransmit = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "neighbors.neighbor"); value.Exists() {
-		data.Neighbors = make([]RSVPNeighbors, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RSVPNeighbors{}
-			if cValue := v.Get("neighbor-address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("authentication.key-source.key-chain"); cValue.Exists() {
-				item.AuthenticationKeyChain = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("authentication.window-size"); cValue.Exists() {
-				item.AuthenticationWindowSize = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("authentication.life-time"); cValue.Exists() {
-				item.AuthenticationLifeTime = types.Int64Value(cValue.Int())
-			}
-			data.Neighbors = append(data.Neighbors, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable.max-reservable-bandwidth"); value.Exists() {
-		data.BandwidthMamPercentageMaxReservableBandwidth = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable.bc0"); value.Exists() {
-		data.BandwidthMamPercentageMaxReservableBc0 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable.bc1"); value.Exists() {
-		data.BandwidthMamPercentageMaxReservableBc1 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "bandwidth.rdm.percentage.max-reservable-bc0.bc0"); value.Exists() {
-		data.BandwidthRdmPercentageMaxReservableBc0 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "bandwidth.rdm.percentage.max-reservable-bc0.bc1"); value.Exists() {
-		data.BandwidthRdmPercentageMaxReservableBc1 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "latency.threshold"); value.Exists() {
-		data.LatencyThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "logging.events.nsr"); value.Exists() {
-		data.LoggingEventsNsr = types.BoolValue(true)
-	} else if !data.LoggingEventsNsr.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LoggingEventsNsr = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.events.issu"); value.Exists() {
-		data.LoggingEventsIssu = types.BoolValue(true)
-	} else if !data.LoggingEventsIssu.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LoggingEventsIssu = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.multiplier-factor"); value.Exists() {
-		data.LtraceBufferMultiplier = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.rare"); value.Exists() {
-		data.LtraceBufferMultiplierRare = types.BoolValue(true)
-	} else if !data.LtraceBufferMultiplierRare.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LtraceBufferMultiplierRare = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.common"); value.Exists() {
-		data.LtraceBufferMultiplierCommon = types.BoolValue(true)
-	} else if !data.LtraceBufferMultiplierCommon.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LtraceBufferMultiplierCommon = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.sig"); value.Exists() {
-		data.LtraceBufferMultiplierSig = types.BoolValue(true)
-	} else if !data.LtraceBufferMultiplierSig.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LtraceBufferMultiplierSig = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.sig-err"); value.Exists() {
-		data.LtraceBufferMultiplierSigErr = types.BoolValue(true)
-	} else if !data.LtraceBufferMultiplierSigErr.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LtraceBufferMultiplierSigErr = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.intf"); value.Exists() {
-		data.LtraceBufferMultiplierIntf = types.BoolValue(true)
-	} else if !data.LtraceBufferMultiplierIntf.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LtraceBufferMultiplierIntf = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.dbg-err"); value.Exists() {
-		data.LtraceBufferMultiplierDbgErr = types.BoolValue(true)
-	} else if !data.LtraceBufferMultiplierDbgErr.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LtraceBufferMultiplierDbgErr = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.sync"); value.Exists() {
-		data.LtraceBufferMultiplierSync = types.BoolValue(true)
-	} else if !data.LtraceBufferMultiplierSync.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LtraceBufferMultiplierSync = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *RSVPData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "signalling.graceful-restart"); value.Exists() {
-		data.SignallingGracefulRestart = types.BoolValue(true)
-	} else {
-		data.SignallingGracefulRestart = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "signalling.graceful-restart-lsp-type"); value.Exists() {
-		data.SignallingGracefulRestartLspCtype = types.BoolValue(true)
-	} else {
-		data.SignallingGracefulRestartLspCtype = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "signalling.graceful-restart-recovery-time"); value.Exists() {
-		data.SignallingGracefulRestartRecoveryTime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "signalling.graceful-restart-restart-time"); value.Exists() {
-		data.SignallingGracefulRestartRestartTime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "signalling.hello.graceful-restart.refresh.interval"); value.Exists() {
-		data.SignallingHelloGracefulRestartRefreshInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "signalling.hello.graceful-restart.refresh.misses"); value.Exists() {
-		data.SignallingHelloGracefulRestartRefreshMisses = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "signalling.event-per-pulse"); value.Exists() {
-		data.SignallingEventPerPulse = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "signalling.prefix-filtering.access-list"); value.Exists() {
-		data.SignallingPrefixFilteringAcl = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "signalling.prefix-filtering.default-deny-action.drop"); value.Exists() {
-		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(true)
-	} else {
-		data.SignallingPrefixFilteringDefaultDenyActionDrop = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "signalling.message-bundle.disable"); value.Exists() {
-		data.SignallingMessageBundleDisable = types.BoolValue(true)
-	} else {
-		data.SignallingMessageBundleDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "signalling.nodeid-subobject.disable"); value.Exists() {
-		data.SignallingNodeidSubobjectDisable = types.BoolValue(true)
-	} else {
-		data.SignallingNodeidSubobjectDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "signalling.patherr.state-removal.disable"); value.Exists() {
-		data.SignallingPatherrStateRemovalDisable = types.BoolValue(true)
-	} else {
-		data.SignallingPatherrStateRemovalDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "signalling.checksum.disable"); value.Exists() {
-		data.SignallingChecksumDisable = types.BoolValue(true)
-	} else {
-		data.SignallingChecksumDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "signalling.out-of-band.vrf"); value.Exists() {
-		data.SignallingOobVrf = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "authentication.key-source.key-chain"); value.Exists() {
-		data.AuthenticationKeyChain = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "authentication.window-size"); value.Exists() {
-		data.AuthenticationWindowSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "authentication.life-time"); value.Exists() {
-		data.AuthenticationLifeTime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "authentication.retransmit"); value.Exists() {
-		data.AuthenticationRetransmit = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "neighbors.neighbor"); value.Exists() {
-		data.Neighbors = make([]RSVPNeighbors, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RSVPNeighbors{}
-			if cValue := v.Get("neighbor-address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("authentication.key-source.key-chain"); cValue.Exists() {
-				item.AuthenticationKeyChain = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("authentication.window-size"); cValue.Exists() {
-				item.AuthenticationWindowSize = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("authentication.life-time"); cValue.Exists() {
-				item.AuthenticationLifeTime = types.Int64Value(cValue.Int())
-			}
-			data.Neighbors = append(data.Neighbors, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable.max-reservable-bandwidth"); value.Exists() {
-		data.BandwidthMamPercentageMaxReservableBandwidth = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable.bc0"); value.Exists() {
-		data.BandwidthMamPercentageMaxReservableBc0 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "bandwidth.mam.percentage.max-reservable.bc1"); value.Exists() {
-		data.BandwidthMamPercentageMaxReservableBc1 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "bandwidth.rdm.percentage.max-reservable-bc0.bc0"); value.Exists() {
-		data.BandwidthRdmPercentageMaxReservableBc0 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "bandwidth.rdm.percentage.max-reservable-bc0.bc1"); value.Exists() {
-		data.BandwidthRdmPercentageMaxReservableBc1 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "latency.threshold"); value.Exists() {
-		data.LatencyThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "logging.events.nsr"); value.Exists() {
-		data.LoggingEventsNsr = types.BoolValue(true)
-	} else {
-		data.LoggingEventsNsr = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "logging.events.issu"); value.Exists() {
-		data.LoggingEventsIssu = types.BoolValue(true)
-	} else {
-		data.LoggingEventsIssu = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.multiplier-factor"); value.Exists() {
-		data.LtraceBufferMultiplier = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.rare"); value.Exists() {
-		data.LtraceBufferMultiplierRare = types.BoolValue(true)
-	} else {
-		data.LtraceBufferMultiplierRare = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.common"); value.Exists() {
-		data.LtraceBufferMultiplierCommon = types.BoolValue(true)
-	} else {
-		data.LtraceBufferMultiplierCommon = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.sig"); value.Exists() {
-		data.LtraceBufferMultiplierSig = types.BoolValue(true)
-	} else {
-		data.LtraceBufferMultiplierSig = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.sig-err"); value.Exists() {
-		data.LtraceBufferMultiplierSigErr = types.BoolValue(true)
-	} else {
-		data.LtraceBufferMultiplierSigErr = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.intf"); value.Exists() {
-		data.LtraceBufferMultiplierIntf = types.BoolValue(true)
-	} else {
-		data.LtraceBufferMultiplierIntf = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.dbg-err"); value.Exists() {
-		data.LtraceBufferMultiplierDbgErr = types.BoolValue(true)
-	} else {
-		data.LtraceBufferMultiplierDbgErr = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ltrace-buffer.multiplier.sync"); value.Exists() {
-		data.LtraceBufferMultiplierSync = types.BoolValue(true)
-	} else {
-		data.LtraceBufferMultiplierSync = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RSVP) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1646,6 +2044,7 @@ func (data *RSVP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RSVPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1806,384 +2205,7 @@ func (data *RSVPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *RSVP) getDeletedItems(ctx context.Context, state RSVP) []string {
-	deletedItems := make([]string, 0)
-	if !state.LtraceBufferMultiplierSync.IsNull() && data.LtraceBufferMultiplierSync.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ltrace-buffer/multiplier", state.getPath()))
-	}
-	if !state.LtraceBufferMultiplierDbgErr.IsNull() && data.LtraceBufferMultiplierDbgErr.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ltrace-buffer/multiplier", state.getPath()))
-	}
-	if !state.LtraceBufferMultiplierIntf.IsNull() && data.LtraceBufferMultiplierIntf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ltrace-buffer/multiplier", state.getPath()))
-	}
-	if !state.LtraceBufferMultiplierSigErr.IsNull() && data.LtraceBufferMultiplierSigErr.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ltrace-buffer/multiplier", state.getPath()))
-	}
-	if !state.LtraceBufferMultiplierSig.IsNull() && data.LtraceBufferMultiplierSig.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ltrace-buffer/multiplier", state.getPath()))
-	}
-	if !state.LtraceBufferMultiplierCommon.IsNull() && data.LtraceBufferMultiplierCommon.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ltrace-buffer/multiplier", state.getPath()))
-	}
-	if !state.LtraceBufferMultiplierRare.IsNull() && data.LtraceBufferMultiplierRare.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ltrace-buffer/multiplier", state.getPath()))
-	}
-	if !state.LtraceBufferMultiplier.IsNull() && data.LtraceBufferMultiplier.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ltrace-buffer/multiplier", state.getPath()))
-	}
-	if !state.LoggingEventsIssu.IsNull() && data.LoggingEventsIssu.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/events/issu", state.getPath()))
-	}
-	if !state.LoggingEventsNsr.IsNull() && data.LoggingEventsNsr.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/events/nsr", state.getPath()))
-	}
-	if !state.LatencyThreshold.IsNull() && data.LatencyThreshold.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/latency/threshold", state.getPath()))
-	}
-	if !state.BandwidthRdmPercentageMaxReservableBc1.IsNull() && data.BandwidthRdmPercentageMaxReservableBc1.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bandwidth/rdm/percentage/max-reservable-bc0", state.getPath()))
-	}
-	if !state.BandwidthRdmPercentageMaxReservableBc0.IsNull() && data.BandwidthRdmPercentageMaxReservableBc0.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bandwidth/rdm/percentage/max-reservable-bc0", state.getPath()))
-	}
-	if !state.BandwidthMamPercentageMaxReservableBc1.IsNull() && data.BandwidthMamPercentageMaxReservableBc1.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bandwidth/mam/percentage/max-reservable", state.getPath()))
-	}
-	if !state.BandwidthMamPercentageMaxReservableBc0.IsNull() && data.BandwidthMamPercentageMaxReservableBc0.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bandwidth/mam/percentage/max-reservable", state.getPath()))
-	}
-	if !state.BandwidthMamPercentageMaxReservableBandwidth.IsNull() && data.BandwidthMamPercentageMaxReservableBandwidth.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bandwidth/mam/percentage/max-reservable", state.getPath()))
-	}
-	for i := range state.Neighbors {
-		keys := [...]string{"neighbor-address"}
-		stateKeyValues := [...]string{state.Neighbors[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Neighbors[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Neighbors {
-			found = true
-			if state.Neighbors[i].Address.ValueString() != data.Neighbors[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.Neighbors[i].AuthenticationLifeTime.IsNull() && data.Neighbors[j].AuthenticationLifeTime.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/authentication/life-time", state.getPath(), keyString))
-				}
-				if !state.Neighbors[i].AuthenticationWindowSize.IsNull() && data.Neighbors[j].AuthenticationWindowSize.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/authentication/window-size", state.getPath(), keyString))
-				}
-				if !state.Neighbors[i].AuthenticationKeyChain.IsNull() && data.Neighbors[j].AuthenticationKeyChain.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/authentication/key-source/key-chain", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v", state.getPath(), keyString))
-		}
-	}
-	if !state.AuthenticationRetransmit.IsNull() && data.AuthenticationRetransmit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/authentication/retransmit", state.getPath()))
-	}
-	if !state.AuthenticationLifeTime.IsNull() && data.AuthenticationLifeTime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/authentication/life-time", state.getPath()))
-	}
-	if !state.AuthenticationWindowSize.IsNull() && data.AuthenticationWindowSize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/authentication/window-size", state.getPath()))
-	}
-	if !state.AuthenticationKeyChain.IsNull() && data.AuthenticationKeyChain.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/authentication/key-source/key-chain", state.getPath()))
-	}
-	if !state.SignallingOobVrf.IsNull() && data.SignallingOobVrf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/signalling/out-of-band/vrf", state.getPath()))
-	}
-	if !state.SignallingChecksumDisable.IsNull() && data.SignallingChecksumDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/signalling/checksum/disable", state.getPath()))
-	}
-	if !state.SignallingPatherrStateRemovalDisable.IsNull() && data.SignallingPatherrStateRemovalDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/signalling/patherr/state-removal/disable", state.getPath()))
-	}
-	if !state.SignallingNodeidSubobjectDisable.IsNull() && data.SignallingNodeidSubobjectDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/signalling/nodeid-subobject/disable", state.getPath()))
-	}
-	if !state.SignallingMessageBundleDisable.IsNull() && data.SignallingMessageBundleDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/signalling/message-bundle/disable", state.getPath()))
-	}
-	if !state.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() && data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/signalling/prefix-filtering/default-deny-action/drop", state.getPath()))
-	}
-	if !state.SignallingPrefixFilteringAcl.IsNull() && data.SignallingPrefixFilteringAcl.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/signalling/prefix-filtering/access-list", state.getPath()))
-	}
-	if !state.SignallingEventPerPulse.IsNull() && data.SignallingEventPerPulse.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/signalling/event-per-pulse", state.getPath()))
-	}
-	if !state.SignallingHelloGracefulRestartRefreshMisses.IsNull() && data.SignallingHelloGracefulRestartRefreshMisses.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/signalling/hello/graceful-restart/refresh/misses", state.getPath()))
-	}
-	if !state.SignallingHelloGracefulRestartRefreshInterval.IsNull() && data.SignallingHelloGracefulRestartRefreshInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/signalling/hello/graceful-restart/refresh/interval", state.getPath()))
-	}
-	if !state.SignallingGracefulRestartRestartTime.IsNull() && data.SignallingGracefulRestartRestartTime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/signalling/graceful-restart-restart-time", state.getPath()))
-	}
-	if !state.SignallingGracefulRestartRecoveryTime.IsNull() && data.SignallingGracefulRestartRecoveryTime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/signalling/graceful-restart-recovery-time", state.getPath()))
-	}
-	if !state.SignallingGracefulRestartLspCtype.IsNull() && data.SignallingGracefulRestartLspCtype.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/signalling/graceful-restart-lsp-type", state.getPath()))
-	}
-	if !state.SignallingGracefulRestart.IsNull() && data.SignallingGracefulRestart.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/signalling/graceful-restart", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *RSVP) getEmptyLeafsDelete(ctx context.Context, state *RSVP) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.LtraceBufferMultiplierSync.IsNull() && !data.LtraceBufferMultiplierSync.ValueBool() {
-		if state != nil && !state.LtraceBufferMultiplierSync.IsNull() && state.LtraceBufferMultiplierSync.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ltrace-buffer/multiplier", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LtraceBufferMultiplierDbgErr.IsNull() && !data.LtraceBufferMultiplierDbgErr.ValueBool() {
-		if state != nil && !state.LtraceBufferMultiplierDbgErr.IsNull() && state.LtraceBufferMultiplierDbgErr.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ltrace-buffer/multiplier", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LtraceBufferMultiplierIntf.IsNull() && !data.LtraceBufferMultiplierIntf.ValueBool() {
-		if state != nil && !state.LtraceBufferMultiplierIntf.IsNull() && state.LtraceBufferMultiplierIntf.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ltrace-buffer/multiplier", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LtraceBufferMultiplierSigErr.IsNull() && !data.LtraceBufferMultiplierSigErr.ValueBool() {
-		if state != nil && !state.LtraceBufferMultiplierSigErr.IsNull() && state.LtraceBufferMultiplierSigErr.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ltrace-buffer/multiplier", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LtraceBufferMultiplierSig.IsNull() && !data.LtraceBufferMultiplierSig.ValueBool() {
-		if state != nil && !state.LtraceBufferMultiplierSig.IsNull() && state.LtraceBufferMultiplierSig.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ltrace-buffer/multiplier", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LtraceBufferMultiplierCommon.IsNull() && !data.LtraceBufferMultiplierCommon.ValueBool() {
-		if state != nil && !state.LtraceBufferMultiplierCommon.IsNull() && state.LtraceBufferMultiplierCommon.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ltrace-buffer/multiplier", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LtraceBufferMultiplierRare.IsNull() && !data.LtraceBufferMultiplierRare.ValueBool() {
-		if state != nil && !state.LtraceBufferMultiplierRare.IsNull() && state.LtraceBufferMultiplierRare.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ltrace-buffer/multiplier", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LoggingEventsIssu.IsNull() && !data.LoggingEventsIssu.ValueBool() {
-		if state != nil && !state.LoggingEventsIssu.IsNull() && state.LoggingEventsIssu.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/events/issu", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LoggingEventsNsr.IsNull() && !data.LoggingEventsNsr.ValueBool() {
-		if state != nil && !state.LoggingEventsNsr.IsNull() && state.LoggingEventsNsr.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/logging/events/nsr", data.getXPath()))
-		}
-	}
-	for i := range data.Neighbors {
-		keys := [...]string{"neighbor-address"}
-		keyValues := [...]string{data.Neighbors[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SignallingChecksumDisable.IsNull() && !data.SignallingChecksumDisable.ValueBool() {
-		if state != nil && !state.SignallingChecksumDisable.IsNull() && state.SignallingChecksumDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/signalling/checksum/disable", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SignallingPatherrStateRemovalDisable.IsNull() && !data.SignallingPatherrStateRemovalDisable.ValueBool() {
-		if state != nil && !state.SignallingPatherrStateRemovalDisable.IsNull() && state.SignallingPatherrStateRemovalDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/signalling/patherr/state-removal/disable", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SignallingNodeidSubobjectDisable.IsNull() && !data.SignallingNodeidSubobjectDisable.ValueBool() {
-		if state != nil && !state.SignallingNodeidSubobjectDisable.IsNull() && state.SignallingNodeidSubobjectDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/signalling/nodeid-subobject/disable", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SignallingMessageBundleDisable.IsNull() && !data.SignallingMessageBundleDisable.ValueBool() {
-		if state != nil && !state.SignallingMessageBundleDisable.IsNull() && state.SignallingMessageBundleDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/signalling/message-bundle/disable", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() && !data.SignallingPrefixFilteringDefaultDenyActionDrop.ValueBool() {
-		if state != nil && !state.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() && state.SignallingPrefixFilteringDefaultDenyActionDrop.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/signalling/prefix-filtering/default-deny-action/drop", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SignallingGracefulRestartLspCtype.IsNull() && !data.SignallingGracefulRestartLspCtype.ValueBool() {
-		if state != nil && !state.SignallingGracefulRestartLspCtype.IsNull() && state.SignallingGracefulRestartLspCtype.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/signalling/graceful-restart-lsp-type", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SignallingGracefulRestart.IsNull() && !data.SignallingGracefulRestart.ValueBool() {
-		if state != nil && !state.SignallingGracefulRestart.IsNull() && state.SignallingGracefulRestart.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/signalling/graceful-restart", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *RSVP) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.LtraceBufferMultiplierSync.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ltrace-buffer/multiplier", data.getPath()))
-	}
-	if !data.LtraceBufferMultiplierDbgErr.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ltrace-buffer/multiplier", data.getPath()))
-	}
-	if !data.LtraceBufferMultiplierIntf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ltrace-buffer/multiplier", data.getPath()))
-	}
-	if !data.LtraceBufferMultiplierSigErr.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ltrace-buffer/multiplier", data.getPath()))
-	}
-	if !data.LtraceBufferMultiplierSig.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ltrace-buffer/multiplier", data.getPath()))
-	}
-	if !data.LtraceBufferMultiplierCommon.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ltrace-buffer/multiplier", data.getPath()))
-	}
-	if !data.LtraceBufferMultiplierRare.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ltrace-buffer/multiplier", data.getPath()))
-	}
-	if !data.LtraceBufferMultiplier.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ltrace-buffer/multiplier", data.getPath()))
-	}
-	if !data.LoggingEventsIssu.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/events/issu", data.getPath()))
-	}
-	if !data.LoggingEventsNsr.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/events/nsr", data.getPath()))
-	}
-	if !data.LatencyThreshold.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/latency/threshold", data.getPath()))
-	}
-	if !data.BandwidthRdmPercentageMaxReservableBc1.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bandwidth/rdm/percentage/max-reservable-bc0", data.getPath()))
-	}
-	if !data.BandwidthRdmPercentageMaxReservableBc0.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bandwidth/rdm/percentage/max-reservable-bc0", data.getPath()))
-	}
-	if !data.BandwidthMamPercentageMaxReservableBc1.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bandwidth/mam/percentage/max-reservable", data.getPath()))
-	}
-	if !data.BandwidthMamPercentageMaxReservableBc0.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bandwidth/mam/percentage/max-reservable", data.getPath()))
-	}
-	if !data.BandwidthMamPercentageMaxReservableBandwidth.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bandwidth/mam/percentage/max-reservable", data.getPath()))
-	}
-	for i := range data.Neighbors {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[neighbor-address=" + data.Neighbors[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbors/neighbor%v", data.getPath(), keyPath))
-	}
-	if !data.AuthenticationRetransmit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication/retransmit", data.getPath()))
-	}
-	if !data.AuthenticationLifeTime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication/life-time", data.getPath()))
-	}
-	if !data.AuthenticationWindowSize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication/window-size", data.getPath()))
-	}
-	if !data.AuthenticationKeyChain.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication/key-source/key-chain", data.getPath()))
-	}
-	if !data.SignallingOobVrf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/signalling/out-of-band/vrf", data.getPath()))
-	}
-	if !data.SignallingChecksumDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/signalling/checksum/disable", data.getPath()))
-	}
-	if !data.SignallingPatherrStateRemovalDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/signalling/patherr/state-removal/disable", data.getPath()))
-	}
-	if !data.SignallingNodeidSubobjectDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/signalling/nodeid-subobject/disable", data.getPath()))
-	}
-	if !data.SignallingMessageBundleDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/signalling/message-bundle/disable", data.getPath()))
-	}
-	if !data.SignallingPrefixFilteringDefaultDenyActionDrop.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/signalling/prefix-filtering/default-deny-action/drop", data.getPath()))
-	}
-	if !data.SignallingPrefixFilteringAcl.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/signalling/prefix-filtering/access-list", data.getPath()))
-	}
-	if !data.SignallingEventPerPulse.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/signalling/event-per-pulse", data.getPath()))
-	}
-	if !data.SignallingHelloGracefulRestartRefreshMisses.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/signalling/hello/graceful-restart/refresh/misses", data.getPath()))
-	}
-	if !data.SignallingHelloGracefulRestartRefreshInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/signalling/hello/graceful-restart/refresh/interval", data.getPath()))
-	}
-	if !data.SignallingGracefulRestartRestartTime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/signalling/graceful-restart-restart-time", data.getPath()))
-	}
-	if !data.SignallingGracefulRestartRecoveryTime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/signalling/graceful-restart-recovery-time", data.getPath()))
-	}
-	if !data.SignallingGracefulRestartLspCtype.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/signalling/graceful-restart-lsp-type", data.getPath()))
-	}
-	if !data.SignallingGracefulRestart.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/signalling/graceful-restart", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body string) string {
@@ -3006,6 +3028,7 @@ func (data *RSVP) addDeletedItemsXML(ctx context.Context, state RSVP, body strin
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *RSVP) addDeletePathsXML(ctx context.Context, body string) string {

@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"sort"
 	"strconv"
 	"strings"
@@ -87,7 +88,7 @@ func (data SegmentRoutingData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data SegmentRouting) toBody(ctx context.Context) string {
+func (data SegmentRouting) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.LocalBlockLowerBound.IsNull() && !data.LocalBlockLowerBound.IsUnknown() {
 		body, _ = sjson.Set(body, "local-block.lower-bound", strconv.FormatInt(data.LocalBlockLowerBound.ValueInt64(), 10))
@@ -111,43 +112,203 @@ func (data SegmentRouting) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *SegmentRouting) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("local-block.lower-bound"); value.Exists() && !data.LocalBlockLowerBound.IsNull() {
+// GetVersionConstraints returns the version constraints for all fields
+func (data SegmentRouting) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data SegmentRouting) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data SegmentRouting) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data SegmentRouting) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data SegmentRouting) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *SegmentRouting) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "local-block.lower-bound"); value.Exists() && !data.LocalBlockLowerBound.IsNull() {
 		data.LocalBlockLowerBound = types.Int64Value(value.Int())
 	} else if data.LocalBlockLowerBound.IsNull() {
 		data.LocalBlockLowerBound = types.Int64Null()
 	}
-	if value := res.Get("local-block.upper-bound"); value.Exists() && !data.LocalBlockUpperBound.IsNull() {
+	if value := gjson.GetBytes(res, "local-block.upper-bound"); value.Exists() && !data.LocalBlockUpperBound.IsNull() {
 		data.LocalBlockUpperBound = types.Int64Value(value.Int())
 	} else if data.LocalBlockUpperBound.IsNull() {
 		data.LocalBlockUpperBound = types.Int64Null()
 	}
-	if value := res.Get("global-block.lower-bound"); value.Exists() && !data.GlobalBlockLowerBound.IsNull() {
+	if value := gjson.GetBytes(res, "global-block.lower-bound"); value.Exists() && !data.GlobalBlockLowerBound.IsNull() {
 		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
 	} else if data.GlobalBlockLowerBound.IsNull() {
 		data.GlobalBlockLowerBound = types.Int64Null()
 	}
-	if value := res.Get("global-block.upper-bound"); value.Exists() && !data.GlobalBlockUpperBound.IsNull() {
+	if value := gjson.GetBytes(res, "global-block.upper-bound"); value.Exists() && !data.GlobalBlockUpperBound.IsNull() {
 		data.GlobalBlockUpperBound = types.Int64Value(value.Int())
 	} else if data.GlobalBlockUpperBound.IsNull() {
 		data.GlobalBlockUpperBound = types.Int64Null()
 	}
-	if value := res.Get("enable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Enable.IsNull() {
+	if value := gjson.GetBytes(res, "enable"); !data.Enable.IsNull() {
+		if value.Exists() {
 			data.Enable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Enable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Enable.IsNull() {
-			data.Enable = types.BoolNull()
-		}
+	} else if data.Enable.IsNull() {
+		data.Enable = types.BoolNull()
 	}
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *SegmentRouting) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "local-block.lower-bound"); value.Exists() {
+		data.LocalBlockLowerBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "local-block.upper-bound"); value.Exists() {
+		data.LocalBlockUpperBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "global-block.lower-bound"); value.Exists() {
+		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "global-block.upper-bound"); value.Exists() {
+		data.GlobalBlockUpperBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "enable"); value.Exists() {
+		data.Enable = types.BoolValue(true)
+	} else if !data.Enable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Enable = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *SegmentRoutingData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "local-block.lower-bound"); value.Exists() {
+		data.LocalBlockLowerBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "local-block.upper-bound"); value.Exists() {
+		data.LocalBlockUpperBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "global-block.lower-bound"); value.Exists() {
+		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "global-block.upper-bound"); value.Exists() {
+		data.GlobalBlockUpperBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "enable"); value.Exists() {
+		data.Enable = types.BoolValue(true)
+	} else {
+		data.Enable = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *SegmentRouting) getDeletedItems(ctx context.Context, state SegmentRouting, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.Enable.IsNull() && data.Enable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "enable"))
+	}
+	if !state.GlobalBlockUpperBound.IsNull() && data.GlobalBlockUpperBound.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "global-block"))
+	}
+	if !state.GlobalBlockLowerBound.IsNull() && data.GlobalBlockLowerBound.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "global-block"))
+	}
+	if !state.LocalBlockUpperBound.IsNull() && data.LocalBlockUpperBound.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "local-block"))
+	}
+	if !state.LocalBlockLowerBound.IsNull() && data.LocalBlockLowerBound.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "local-block"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *SegmentRouting) getEmptyLeafsDelete(ctx context.Context, state *SegmentRouting, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if !data.Enable.IsNull() && !data.Enable.ValueBool() {
+		if state == nil || state.Enable.IsNull() || state.Enable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "enable"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *SegmentRouting) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.Enable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "enable"))
+	}
+	if !data.GlobalBlockUpperBound.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "global-block"))
+	}
+	if !data.GlobalBlockLowerBound.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "global-block"))
+	}
+	if !data.LocalBlockUpperBound.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "local-block"))
+	}
+	if !data.LocalBlockLowerBound.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "local-block"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data SegmentRouting) toBodyXML(ctx context.Context, stateArg ...*SegmentRouting) string {
@@ -195,7 +356,7 @@ func (data SegmentRouting) toBodyXML(ctx context.Context, stateArg ...*SegmentRo
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -203,6 +364,7 @@ func (data SegmentRouting) toBodyXML(ctx context.Context, stateArg ...*SegmentRo
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *SegmentRouting) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -240,70 +402,7 @@ func (data *SegmentRouting) updateFromBodyXML(ctx context.Context, res xmldot.Re
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *SegmentRouting) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "local-block.lower-bound"); value.Exists() {
-		data.LocalBlockLowerBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "local-block.upper-bound"); value.Exists() {
-		data.LocalBlockUpperBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "global-block.lower-bound"); value.Exists() {
-		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "global-block.upper-bound"); value.Exists() {
-		data.GlobalBlockUpperBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "enable"); value.Exists() {
-		data.Enable = types.BoolValue(true)
-	} else if !data.Enable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.Enable = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *SegmentRoutingData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "local-block.lower-bound"); value.Exists() {
-		data.LocalBlockLowerBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "local-block.upper-bound"); value.Exists() {
-		data.LocalBlockUpperBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "global-block.lower-bound"); value.Exists() {
-		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "global-block.upper-bound"); value.Exists() {
-		data.GlobalBlockUpperBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "enable"); value.Exists() {
-		data.Enable = types.BoolValue(true)
-	} else {
-		data.Enable = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *SegmentRouting) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -327,6 +426,7 @@ func (data *SegmentRouting) fromBodyXML(ctx context.Context, res xmldot.Result) 
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *SegmentRoutingData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -350,67 +450,7 @@ func (data *SegmentRoutingData) fromBodyXML(ctx context.Context, res xmldot.Resu
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *SegmentRouting) getDeletedItems(ctx context.Context, state SegmentRouting) []string {
-	deletedItems := make([]string, 0)
-	if !state.Enable.IsNull() && data.Enable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/enable", state.getPath()))
-	}
-	if !state.GlobalBlockUpperBound.IsNull() && data.GlobalBlockUpperBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/global-block", state.getPath()))
-	}
-	if !state.GlobalBlockLowerBound.IsNull() && data.GlobalBlockLowerBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/global-block", state.getPath()))
-	}
-	if !state.LocalBlockUpperBound.IsNull() && data.LocalBlockUpperBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-block", state.getPath()))
-	}
-	if !state.LocalBlockLowerBound.IsNull() && data.LocalBlockLowerBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-block", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *SegmentRouting) getEmptyLeafsDelete(ctx context.Context, state *SegmentRouting) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.Enable.IsNull() && !data.Enable.ValueBool() {
-		if state != nil && !state.Enable.IsNull() && state.Enable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/enable", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *SegmentRouting) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.Enable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/enable", data.getPath()))
-	}
-	if !data.GlobalBlockUpperBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/global-block", data.getPath()))
-	}
-	if !data.GlobalBlockLowerBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/global-block", data.getPath()))
-	}
-	if !data.LocalBlockUpperBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-block", data.getPath()))
-	}
-	if !data.LocalBlockLowerBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-block", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *SegmentRouting) addDeletedItemsXML(ctx context.Context, state SegmentRouting, body string) string {
@@ -528,6 +568,7 @@ func (data *SegmentRouting) addDeletedItemsXML(ctx context.Context, state Segmen
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *SegmentRouting) addDeletePathsXML(ctx context.Context, body string) string {

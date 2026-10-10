@@ -40,6 +40,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
 )
@@ -53,6 +54,7 @@ func New() provider.Provider {
 // provider satisfies the tfsdk.Provider interface and usually is included
 // with all Resource and DataSource implementations.
 type iosxrProvider struct {
+	version       string // Stores the iosxr_version after Configure() is called
 	clientCache   map[string]*IosxrProviderDataDevice
 	clientCacheMu sync.Mutex
 }
@@ -70,8 +72,10 @@ type providerData struct {
 	CaCertificate      types.String         `tfsdk:"ca_certificate"`
 	Retries            types.Int64          `tfsdk:"retries"`
 	LockReleaseTimeout types.Int64          `tfsdk:"lock_release_timeout"`
+	Timeout            types.Int64          `tfsdk:"timeout"`
 	ReuseConnection    types.Bool           `tfsdk:"reuse_connection"`
 	ClientCache        types.Bool           `tfsdk:"client_cache"`
+	IosxrVersion       types.String         `tfsdk:"iosxr_version"`
 	SelectedDevices    types.List           `tfsdk:"selected_devices"`
 	Devices            []providerDataDevice `tfsdk:"devices"`
 }
@@ -85,6 +89,7 @@ type providerDataDevice struct {
 type IosxrProviderData struct {
 	Devices         map[string]*IosxrProviderDataDevice
 	ReuseConnection bool
+	Version         string // Default/global version for backward compatibility
 	MaxRetries      int
 }
 
@@ -95,6 +100,8 @@ type IosxrProviderDataDevice struct {
 	ReuseConnection bool
 	MaxRetries      int
 	Managed         bool
+	Version         string      // Per-device IOS-XR version in major.minor format (e.g., "24.4", "25.4")
+	VersionDetected bool        // True if version was auto-detected
 	OpMutex         *sync.Mutex // Serializes operations on this device (pointer for sharing)
 }
 
@@ -185,12 +192,23 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 					int64validator.Between(0, 600),
 				},
 			},
+			"timeout": schema.Int64Attribute{
+				MarkdownDescription: "Operation timeout in seconds for gNMI calls. The total deadline per call is this value plus the retry backoff time. This can also be set as the IOSXR_TIMEOUT environment variable. Only applies to the `gnmi` protocol. Defaults to `30`.",
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 600),
+				},
+			},
 			"reuse_connection": schema.BoolAttribute{
 				MarkdownDescription: "Keep connections open between operations for better performance. When disabled, connections are closed and reopened for each operation. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.",
 				Optional:            true,
 			},
 			"client_cache": schema.BoolAttribute{
 				MarkdownDescription: "Enable or disable client-side caching of device connections. This can improve performance by reusing existing connections. Defaults to `true`.",
+				Optional:            true,
+			},
+			"iosxr_version": schema.StringAttribute{
+				MarkdownDescription: "IOS-XR version (major.minor). Accepts formats like `24.4`, `24.4.2`, or `25.1` — the patch component is ignored. If not specified, the provider will attempt to auto-detect the version from each device. This can also be set as the IOSXR_VERSION environment variable.",
 				Optional:            true,
 			},
 			"selected_devices": schema.ListAttribute{
@@ -488,6 +506,27 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		lockReleaseTimeout = config.LockReleaseTimeout.ValueInt64()
 	}
 
+	var timeout int64
+	if config.Timeout.IsUnknown() {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as timeout",
+		)
+		return
+	}
+
+	if config.Timeout.IsNull() {
+		timeoutStr := os.Getenv("IOSXR_TIMEOUT")
+		if timeoutStr == "" {
+			timeout = 30
+		} else {
+			timeout, _ = strconv.ParseInt(timeoutStr, 0, 64)
+		}
+	} else {
+		timeout = config.Timeout.ValueInt64()
+	}
+
 	var reuseConnection bool
 	if config.ReuseConnection.IsUnknown() {
 		// Cannot connect to client with an unknown value
@@ -599,7 +638,49 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 	data.ReuseConnection = reuseConnection
 	data.MaxRetries = int(retries)
 
+	// Handle iosxr_version configuration
+	var iosxrVersion string
+	var autoDetect bool
+
+	if config.IosxrVersion.IsUnknown() {
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as iosxr_version",
+		)
+		return
+	}
+
+	if config.IosxrVersion.IsNull() {
+		iosxrVersion = os.Getenv("IOSXR_VERSION")
+	} else {
+		iosxrVersion = config.IosxrVersion.ValueString()
+	}
+
+	// If no version specified, we'll auto-detect per device
+	if iosxrVersion == "" {
+		autoDetect = true
+		tflog.Info(ctx, "iosxr_version not specified - will auto-detect version from each device")
+	} else {
+		// Normalize to canonical "MM.mm" major.minor format (patch is stripped).
+		// "25.4.2" → "25.4", "25.4" → "25.4", "24.4.2" → "24.4"
+		versionInternal, ok := helpers.NormalizeVersion(iosxrVersion)
+		if !ok {
+			resp.Diagnostics.AddError(
+				"Invalid IOS-XR Version Format",
+				fmt.Sprintf(
+					"Cannot parse iosxr_version '%s'. Accepted formats: 'MM.mm.pp' (e.g. '25.4.2') or 'MM.mm' (e.g. '25.4').",
+					iosxrVersion,
+				),
+			)
+			return
+		}
+		data.Version = versionInternal
+		p.version = versionInternal
+		tflog.Info(ctx, fmt.Sprintf("Using explicitly configured IOS-XR version: %s (internal: %s)", iosxrVersion, versionInternal))
+	}
+
 	// Create default device client based on protocol
+	var defaultClient *gnmi.Client
 	if protocol == "gnmi" {
 		// Check cache first
 		cacheKey := fmt.Sprintf("gnmi:%s", host)
@@ -609,6 +690,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 
 		if cacheHit && reuseConnection && clientCache {
 			// Reuse both the client AND the mutex for proper serialization
+			defaultClient = cachedDevice.GnmiClient
 			data.Devices[""] = &IosxrProviderDataDevice{
 				GnmiClient:      cachedDevice.GnmiClient,
 				Protocol:        "gnmi",
@@ -628,6 +710,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				gnmi.TLS(tls),
 				gnmi.VerifyCertificate(verifyCertificate),
 				gnmi.MaxRetries(int(retries)),
+				gnmi.OperationTimeout(time.Duration(timeout) * time.Second),
 				gnmi.WithLogger(logger),
 			}
 
@@ -642,7 +725,6 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 			}
 
 			// Create default gNMI client
-			var defaultClient *gnmi.Client
 			if host != "" {
 				var err error
 				defaultClient, err = gnmi.NewClient(host, opts...)
@@ -724,9 +806,40 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		}
 	}
 
-	// Add all devices with their managed status
+	// Auto-detect version for default device if needed
+	if autoDetect && defaultClient != nil {
+		detectedVersion, err := helpers.DetectIosxrVersion(ctx, defaultClient, "default")
+		if err != nil {
+			resp.Diagnostics.AddError(
+				"Unable to Auto-Detect IOS-XR Version",
+				helpers.FormatVersionError("default", host, err),
+			)
+			return
+		}
+
+		if !helpers.ValidateSupportedVersion(detectedVersion) {
+			resp.Diagnostics.AddError(
+				"Unsupported IOS-XR Version",
+				fmt.Sprintf("Detected IOS-XR version '%s' for default device is not supported. %s", detectedVersion, helpers.SupportedVersionList()),
+			)
+			return
+		}
+
+		data.Version = detectedVersion
+		p.version = detectedVersion
+		tflog.Info(ctx, fmt.Sprintf("Auto-detected IOS-XR version for default device: %s", detectedVersion))
+	}
+
+	if defaultDevice, ok := data.Devices[""]; ok {
+		defaultDevice.Version = data.Version
+		defaultDevice.VersionDetected = autoDetect
+	}
+
+	// Add all devices with their managed status and version detection
 	for _, device := range config.Devices {
 		deviceName := device.Name.ValueString()
+		deviceHost := device.Host.ValueString()
+
 		var managed bool
 		if len(selectedDevices) > 0 {
 			if slices.Contains(selectedDevices, deviceName) {
@@ -735,14 +848,11 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				managed = false
 			}
 		} else {
-			if device.Managed.IsUnknown() || device.Managed.IsNull() {
-				managed = true
-			} else {
-				managed = device.Managed.ValueBool()
-			}
+			managed = device.Managed.IsNull() || device.Managed.IsUnknown() || device.Managed.ValueBool()
 		}
 
-		deviceHost := device.Host.ValueString()
+		var deviceClient *gnmi.Client
+		var deviceVersion string
 
 		// Create device client based on protocol
 		if protocol == "gnmi" {
@@ -753,6 +863,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 
 			if cacheHit && reuseConnection && clientCache {
 				// Reuse both the client AND the mutex for proper serialization
+				deviceClient = cachedDevice.GnmiClient
 				data.Devices[deviceName] = &IosxrProviderDataDevice{
 					GnmiClient:      cachedDevice.GnmiClient,
 					Protocol:        "gnmi",
@@ -769,6 +880,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 					gnmi.TLS(tls),
 					gnmi.VerifyCertificate(verifyCertificate),
 					gnmi.MaxRetries(int(retries)),
+					gnmi.OperationTimeout(time.Duration(timeout) * time.Second),
 					gnmi.WithLogger(logger),
 				}
 
@@ -782,7 +894,6 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 					opts = append(opts, gnmi.TLSCA(caCertificate))
 				}
 
-				var deviceClient *gnmi.Client
 				if managed {
 					var err error
 					deviceClient, err = gnmi.NewClient(deviceHost, opts...)
@@ -871,6 +982,49 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 				}
 			}
 		}
+
+		// Auto-detect version for this device if needed. Version auto-detection is
+		// gNMI-only (NETCONF version auto-detection is not implemented yet), so
+		// deviceClient stays nil for netconf-protocol devices and the nil-check below
+		// causes those devices to fall through to the explicit/global version instead.
+		if managed {
+			if autoDetect && deviceClient != nil {
+				detectedVersion, err := helpers.DetectIosxrVersion(ctx, deviceClient, deviceName)
+				if err != nil {
+					resp.Diagnostics.AddError(
+						"Unable to Auto-Detect IOS-XR Version",
+						helpers.FormatVersionError(deviceName, deviceHost, err),
+					)
+					return
+				}
+
+				if !helpers.ValidateSupportedVersion(detectedVersion) {
+					resp.Diagnostics.AddError(
+						"Unsupported IOS-XR Version",
+						fmt.Sprintf("Detected IOS-XR version '%s' for device '%s' is not supported. %s", detectedVersion, deviceName, helpers.SupportedVersionList()),
+					)
+					return
+				}
+
+				deviceVersion = detectedVersion
+				tflog.Info(ctx, fmt.Sprintf("Auto-detected IOS-XR version for device '%s': %s", deviceName, detectedVersion))
+			} else {
+				// Use global version (explicit config, or NETCONF where auto-detect isn't supported yet)
+				deviceVersion = data.Version
+			}
+		} else {
+			// Unmanaged device - still set version for potential future use
+			if autoDetect {
+				deviceVersion = "" // Will be detected if device becomes managed
+			} else {
+				deviceVersion = data.Version
+			}
+		}
+
+		if dev, ok := data.Devices[deviceName]; ok {
+			dev.Version = deviceVersion
+			dev.VersionDetected = autoDetect
+		}
 	}
 
 	resp.DataSourceData = &data
@@ -886,18 +1040,19 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewAAAAuthenticationResource,
 		NewAAAAuthorizationResource,
 		NewASPathSetResource,
-		NewBannerResource,
 		NewBFDResource,
 		NewBGPASFormatResource,
 		NewBMPServerResource,
-		NewCallHomeResource,
+		NewBannerResource,
 		NewCDPResource,
 		NewCEFResource,
+		NewCEFAccountingResource,
 		NewCEFLoadBalancing8000Resource,
 		NewCEFPBTSForwardClassResource,
+		NewCLIAliasResource,
+		NewCallHomeResource,
 		NewClassMapQoSResource,
 		NewClassMapTrafficResource,
-		NewCLIAliasResource,
 		NewClockResource,
 		NewCommunitySetResource,
 		NewControlPlaneResource,
@@ -905,11 +1060,7 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewCryptoResource,
 		NewDomainResource,
 		NewDomainVRFResource,
-		NewErrorDisableRecoveryResource,
 		NewESISetResource,
-		NewEtagSetResource,
-		NewEthernetCFMResource,
-		NewEthernetSLAResource,
 		NewEVPNResource,
 		NewEVPNEVIResource,
 		NewEVPNInterfaceResource,
@@ -920,34 +1071,30 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewEVPNStitchingEVIResource,
 		NewEVPNStitchingVNIResource,
 		NewEVPNVNIResource,
+		NewErrorDisableRecoveryResource,
+		NewEtagSetResource,
+		NewEthernetCFMResource,
+		NewEthernetSLAResource,
 		NewExtcommunityBandwidthSetResource,
 		NewExtcommunityCostSetResource,
 		NewExtcommunityEVPNLinkBandwidthSetResource,
 		NewExtcommunityOpaqueSetResource,
 		NewExtcommunityRTSetResource,
-		NewExtcommunitySegNHSetResource,
 		NewExtcommunitySOOSetResource,
+		NewExtcommunitySegNHSetResource,
+		NewFPDResource,
+		NewFTPResource,
 		NewFlowExporterMapResource,
 		NewFlowMonitorMapResource,
 		NewFlowSamplerMapResource,
-		NewFPDResource,
 		NewFrequencySynchronizationResource,
-		NewFTPResource,
 		NewGenericInterfaceListResource,
-		NewHostnameResource,
 		NewHTTPClientResource,
 		NewHWModuleProfileResource,
 		NewHWModuleProfile8000Resource,
 		NewHWModuleShutdownResource,
+		NewHostnameResource,
 		NewICMPResource,
-		NewInterfaceBundleEtherResource,
-		NewInterfaceBundleEtherSubinterfaceResource,
-		NewInterfaceBVIResource,
-		NewInterfaceEthernetResource,
-		NewInterfaceEthernetSubinterfaceResource,
-		NewInterfaceLoopbackResource,
-		NewInterfaceTunnelIPResource,
-		NewInterfaceTunnelTEResource,
 		NewIPSLAResource,
 		NewIPSLAResponderResource,
 		NewIPv4AccessListResource,
@@ -957,6 +1104,14 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewIPv6AccessListResource,
 		NewIPv6AccessListOptionsResource,
 		NewIPv6PrefixListResource,
+		NewInterfaceBVIResource,
+		NewInterfaceBundleEtherResource,
+		NewInterfaceBundleEtherSubinterfaceResource,
+		NewInterfaceEthernetResource,
+		NewInterfaceEthernetSubinterfaceResource,
+		NewInterfaceLoopbackResource,
+		NewInterfaceTunnelIPResource,
+		NewInterfaceTunnelTEResource,
 		NewKeyChainResource,
 		NewL2VPNResource,
 		NewL2VPNBridgeGroupBridgeDomainResource,
@@ -966,20 +1121,18 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewL2VPNPWClassResource,
 		NewL2VPNXconnectGroupResource,
 		NewLACPResource,
+		NewLLDPResource,
+		NewLPTSPuntPoliceResource,
 		NewLargeCommunitySetResource,
 		NewLineConsoleResource,
 		NewLineDefaultResource,
 		NewLineTemplateResource,
 		NewLinuxNetworkingResource,
-		NewLLDPResource,
 		NewLoggingResource,
 		NewLoggingEventsLinkStatusResource,
 		NewLoggingVRFResource,
-		NewLPTSPuntPoliceResource,
-		NewMacSetResource,
 		NewMACSecResource,
 		NewMACSecPolicyResource,
-		NewMonitorSessionResource,
 		NewMPLSLDPResource,
 		NewMPLSLDPAddressFamilyResource,
 		NewMPLSLDPInterfaceResource,
@@ -987,11 +1140,15 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewMPLSLDPVRFResource,
 		NewMPLSOAMResource,
 		NewMPLSTrafficEngResource,
+		NewMacSetResource,
+		NewMonitorSessionResource,
+		NewNTPResource,
 		NewNetconfAgentTTYResource,
 		NewNetconfYangAgentResource,
-		NewNTPResource,
 		NewOSPFAreaSetResource,
 		NewPCEResource,
+		NewPTPResource,
+		NewPTPProfileResource,
 		NewPerformanceMeasurementResource,
 		NewPerformanceMeasurementDelayProfileResource,
 		NewPerformanceMeasurementEndpointIPv4Resource,
@@ -1002,15 +1159,15 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewPolicyMapPBRResource,
 		NewPolicyMapQoSResource,
 		NewPrefixSetResource,
-		NewPTPResource,
-		NewPTPProfileResource,
+		NewRDSetResource,
+		NewRSVPResource,
+		NewRSVPInterfaceResource,
 		NewRadiusServerResource,
 		NewRadiusSourceInterfaceResource,
-		NewRDSetResource,
 		NewRoutePolicyResource,
 		NewRouterBGPResource,
-		NewRouterBGPAddressFamilyResource,
 		NewRouterBGPAFGroupResource,
+		NewRouterBGPAddressFamilyResource,
 		NewRouterBGPNeighborResource,
 		NewRouterBGPNeighborAddressFamilyResource,
 		NewRouterBGPNeighborGroupResource,
@@ -1056,8 +1213,11 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewRouterVRRPInterfaceResource,
 		NewRouterVRRPInterfaceIPv4Resource,
 		NewRouterVRRPInterfaceIPv6Resource,
-		NewRSVPResource,
-		NewRSVPInterfaceResource,
+		NewSNMPServerResource,
+		NewSNMPServerMIBResource,
+		NewSNMPServerVRFResource,
+		NewSRLGResource,
+		NewSSHResource,
 		NewSegmentRoutingResource,
 		NewSegmentRoutingMappingServerResource,
 		NewSegmentRoutingTEResource,
@@ -1065,20 +1225,15 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewSegmentRoutingTEPolicyResource,
 		NewSegmentRoutingV6Resource,
 		NewServiceTimestampsResource,
-		NewSNMPServerResource,
-		NewSNMPServerMIBResource,
-		NewSNMPServerVRFResource,
-		NewSRLGResource,
-		NewSSHResource,
 		NewTACACSServerResource,
 		NewTACACSSourceInterfaceResource,
-		NewTagSetResource,
 		NewTCPResource,
-		NewTelemetryModelDrivenResource,
-		NewTelnetResource,
 		NewTFTPClientResource,
 		NewTFTPServerResource,
 		NewTPAResource,
+		NewTagSetResource,
+		NewTelemetryModelDrivenResource,
+		NewTelnetResource,
 		NewTrackResource,
 		NewVRFResource,
 		NewVTYPoolResource,
@@ -1089,23 +1244,25 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewYangDataSource,
+		NewDeviceInfoDataSource,
 		NewAAADataSource,
 		NewAAAAccountingDataSource,
 		NewAAAAuthenticationDataSource,
 		NewAAAAuthorizationDataSource,
 		NewASPathSetDataSource,
-		NewBannerDataSource,
 		NewBFDDataSource,
 		NewBGPASFormatDataSource,
 		NewBMPServerDataSource,
-		NewCallHomeDataSource,
+		NewBannerDataSource,
 		NewCDPDataSource,
 		NewCEFDataSource,
+		NewCEFAccountingDataSource,
 		NewCEFLoadBalancing8000DataSource,
 		NewCEFPBTSForwardClassDataSource,
+		NewCLIAliasDataSource,
+		NewCallHomeDataSource,
 		NewClassMapQoSDataSource,
 		NewClassMapTrafficDataSource,
-		NewCLIAliasDataSource,
 		NewClockDataSource,
 		NewCommunitySetDataSource,
 		NewControlPlaneDataSource,
@@ -1113,11 +1270,7 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewCryptoDataSource,
 		NewDomainDataSource,
 		NewDomainVRFDataSource,
-		NewErrorDisableRecoveryDataSource,
 		NewESISetDataSource,
-		NewEtagSetDataSource,
-		NewEthernetCFMDataSource,
-		NewEthernetSLADataSource,
 		NewEVPNDataSource,
 		NewEVPNEVIDataSource,
 		NewEVPNInterfaceDataSource,
@@ -1128,34 +1281,30 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewEVPNStitchingEVIDataSource,
 		NewEVPNStitchingVNIDataSource,
 		NewEVPNVNIDataSource,
+		NewErrorDisableRecoveryDataSource,
+		NewEtagSetDataSource,
+		NewEthernetCFMDataSource,
+		NewEthernetSLADataSource,
 		NewExtcommunityBandwidthSetDataSource,
 		NewExtcommunityCostSetDataSource,
 		NewExtcommunityEVPNLinkBandwidthSetDataSource,
 		NewExtcommunityOpaqueSetDataSource,
 		NewExtcommunityRTSetDataSource,
-		NewExtcommunitySegNHSetDataSource,
 		NewExtcommunitySOOSetDataSource,
+		NewExtcommunitySegNHSetDataSource,
+		NewFPDDataSource,
+		NewFTPDataSource,
 		NewFlowExporterMapDataSource,
 		NewFlowMonitorMapDataSource,
 		NewFlowSamplerMapDataSource,
-		NewFPDDataSource,
 		NewFrequencySynchronizationDataSource,
-		NewFTPDataSource,
 		NewGenericInterfaceListDataSource,
-		NewHostnameDataSource,
 		NewHTTPClientDataSource,
 		NewHWModuleProfileDataSource,
 		NewHWModuleProfile8000DataSource,
 		NewHWModuleShutdownDataSource,
+		NewHostnameDataSource,
 		NewICMPDataSource,
-		NewInterfaceBundleEtherDataSource,
-		NewInterfaceBundleEtherSubinterfaceDataSource,
-		NewInterfaceBVIDataSource,
-		NewInterfaceEthernetDataSource,
-		NewInterfaceEthernetSubinterfaceDataSource,
-		NewInterfaceLoopbackDataSource,
-		NewInterfaceTunnelIPDataSource,
-		NewInterfaceTunnelTEDataSource,
 		NewIPSLADataSource,
 		NewIPSLAResponderDataSource,
 		NewIPv4AccessListDataSource,
@@ -1165,6 +1314,14 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewIPv6AccessListDataSource,
 		NewIPv6AccessListOptionsDataSource,
 		NewIPv6PrefixListDataSource,
+		NewInterfaceBVIDataSource,
+		NewInterfaceBundleEtherDataSource,
+		NewInterfaceBundleEtherSubinterfaceDataSource,
+		NewInterfaceEthernetDataSource,
+		NewInterfaceEthernetSubinterfaceDataSource,
+		NewInterfaceLoopbackDataSource,
+		NewInterfaceTunnelIPDataSource,
+		NewInterfaceTunnelTEDataSource,
 		NewKeyChainDataSource,
 		NewL2VPNDataSource,
 		NewL2VPNBridgeGroupBridgeDomainDataSource,
@@ -1174,20 +1331,18 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewL2VPNPWClassDataSource,
 		NewL2VPNXconnectGroupDataSource,
 		NewLACPDataSource,
+		NewLLDPDataSource,
+		NewLPTSPuntPoliceDataSource,
 		NewLargeCommunitySetDataSource,
 		NewLineConsoleDataSource,
 		NewLineDefaultDataSource,
 		NewLineTemplateDataSource,
 		NewLinuxNetworkingDataSource,
-		NewLLDPDataSource,
 		NewLoggingDataSource,
 		NewLoggingEventsLinkStatusDataSource,
 		NewLoggingVRFDataSource,
-		NewLPTSPuntPoliceDataSource,
-		NewMacSetDataSource,
 		NewMACSecDataSource,
 		NewMACSecPolicyDataSource,
-		NewMonitorSessionDataSource,
 		NewMPLSLDPDataSource,
 		NewMPLSLDPAddressFamilyDataSource,
 		NewMPLSLDPInterfaceDataSource,
@@ -1195,11 +1350,15 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewMPLSLDPVRFDataSource,
 		NewMPLSOAMDataSource,
 		NewMPLSTrafficEngDataSource,
+		NewMacSetDataSource,
+		NewMonitorSessionDataSource,
+		NewNTPDataSource,
 		NewNetconfAgentTTYDataSource,
 		NewNetconfYangAgentDataSource,
-		NewNTPDataSource,
 		NewOSPFAreaSetDataSource,
 		NewPCEDataSource,
+		NewPTPDataSource,
+		NewPTPProfileDataSource,
 		NewPerformanceMeasurementDataSource,
 		NewPerformanceMeasurementDelayProfileDataSource,
 		NewPerformanceMeasurementEndpointIPv4DataSource,
@@ -1210,15 +1369,15 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewPolicyMapPBRDataSource,
 		NewPolicyMapQoSDataSource,
 		NewPrefixSetDataSource,
-		NewPTPDataSource,
-		NewPTPProfileDataSource,
+		NewRDSetDataSource,
+		NewRSVPDataSource,
+		NewRSVPInterfaceDataSource,
 		NewRadiusServerDataSource,
 		NewRadiusSourceInterfaceDataSource,
-		NewRDSetDataSource,
 		NewRoutePolicyDataSource,
 		NewRouterBGPDataSource,
-		NewRouterBGPAddressFamilyDataSource,
 		NewRouterBGPAFGroupDataSource,
+		NewRouterBGPAddressFamilyDataSource,
 		NewRouterBGPNeighborDataSource,
 		NewRouterBGPNeighborAddressFamilyDataSource,
 		NewRouterBGPNeighborGroupDataSource,
@@ -1264,8 +1423,11 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewRouterVRRPInterfaceDataSource,
 		NewRouterVRRPInterfaceIPv4DataSource,
 		NewRouterVRRPInterfaceIPv6DataSource,
-		NewRSVPDataSource,
-		NewRSVPInterfaceDataSource,
+		NewSNMPServerDataSource,
+		NewSNMPServerMIBDataSource,
+		NewSNMPServerVRFDataSource,
+		NewSRLGDataSource,
+		NewSSHDataSource,
 		NewSegmentRoutingDataSource,
 		NewSegmentRoutingMappingServerDataSource,
 		NewSegmentRoutingTEDataSource,
@@ -1273,20 +1435,15 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewSegmentRoutingTEPolicyDataSource,
 		NewSegmentRoutingV6DataSource,
 		NewServiceTimestampsDataSource,
-		NewSNMPServerDataSource,
-		NewSNMPServerMIBDataSource,
-		NewSNMPServerVRFDataSource,
-		NewSRLGDataSource,
-		NewSSHDataSource,
 		NewTACACSServerDataSource,
 		NewTACACSSourceInterfaceDataSource,
-		NewTagSetDataSource,
 		NewTCPDataSource,
-		NewTelemetryModelDrivenDataSource,
-		NewTelnetDataSource,
 		NewTFTPClientDataSource,
 		NewTFTPServerDataSource,
 		NewTPADataSource,
+		NewTagSetDataSource,
+		NewTelemetryModelDrivenDataSource,
+		NewTelnetDataSource,
 		NewTrackDataSource,
 		NewVRFDataSource,
 		NewVTYPoolDataSource,

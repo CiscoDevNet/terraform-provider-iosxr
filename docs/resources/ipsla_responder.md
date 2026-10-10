@@ -14,21 +14,11 @@ This resource can manage the IPSLA Responder configuration.
 
 ```terraform
 resource "iosxr_ipsla_responder" "example" {
-  type_udp_ipv4 = [
-    {
-      address = "10.1.1.1"
-      ports = [
-        {
-          port_number = 888
-        }
-      ]
-    }
-  ]
-  twamp         = true
-  twamp_timeout = 600
+  twamp = true
   twamp_light_sessions = [
     {
-      session_id = 1
+      authentication = true
+      encryption     = true
       local_ipv4_addresses = [
         {
           address    = "10.1.1.1"
@@ -42,9 +32,19 @@ resource "iosxr_ipsla_responder" "example" {
           ]
         }
       ]
-      authentication = true
-      encryption     = true
-      timeout        = 3600
+      session_id = 1
+      timeout    = 3600
+    }
+  ]
+  twamp_timeout = 600
+  type_udp_ipv4 = [
+    {
+      address = "10.1.1.1"
+      ports = [
+        {
+          port_number = 888
+        }
+      ]
     }
   ]
 }

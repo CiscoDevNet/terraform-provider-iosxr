@@ -14,41 +14,41 @@ This resource can manage the BFD configuration.
 
 ```terraform
 resource "iosxr_bfd" "example" {
-  echo_latency_detect                          = true
-  echo_latency_detect_percentage               = 200
-  echo_latency_detect_count                    = 10
-  echo_startup_validate_force                  = true
-  echo_ipv4_source                             = "10.1.1.1"
+  bundle_coexistence_bob_blb                   = "inherit"
+  dampening_bundle_member_initial_wait         = 5184
+  dampening_bundle_member_l3_only_mode         = true
+  dampening_bundle_member_maximum_wait         = 7184
+  dampening_bundle_member_secondary_wait       = 6184
+  dampening_extensions_down_monitoring         = true
+  dampening_initial_wait                       = 3600
+  dampening_maximum_wait                       = 3100
+  dampening_secondary_wait                     = 3200
+  dampening_threshold                          = 60000
   echo_ipv4_bundle_per_member_minimum_interval = 200
-  trap_singlehop_pre_mapped                    = true
+  echo_ipv4_source                             = "10.1.1.1"
+  echo_latency_detect                          = true
+  echo_latency_detect_count                    = 10
+  echo_latency_detect_percentage               = 200
+  echo_startup_validate_force                  = true
+  interfaces = [
+    {
+      echo_ipv4_source      = "12.1.1.1"
+      interface_name        = "GigabitEthernet0/0/0/0"
+      ipv6_checksum_disable = true
+      local_address         = "12.1.1.1"
+      multiplier            = 40
+      rx_interval           = 30000
+      tx_interval           = 10000
+    }
+  ]
+  ipv6_checksum_disable       = true
+  multihop_ttl_drop_threshold = 200
   multipath_locations = [
     {
       location_id = "0/0/CPU0"
     }
   ]
-  multihop_ttl_drop_threshold            = 200
-  dampening_initial_wait                 = 3600
-  dampening_secondary_wait               = 3200
-  dampening_maximum_wait                 = 3100
-  dampening_threshold                    = 60000
-  dampening_extensions_down_monitoring   = true
-  dampening_bundle_member_l3_only_mode   = true
-  dampening_bundle_member_initial_wait   = 5184
-  dampening_bundle_member_secondary_wait = 6184
-  dampening_bundle_member_maximum_wait   = 7184
-  bundle_coexistence_bob_blb             = "inherit"
-  ipv6_checksum_disable                  = true
-  interfaces = [
-    {
-      interface_name        = "GigabitEthernet0/0/0/0"
-      echo_ipv4_source      = "12.1.1.1"
-      ipv6_checksum_disable = true
-      local_address         = "12.1.1.1"
-      tx_interval           = 10000
-      rx_interval           = 30000
-      multiplier            = 40
-    }
-  ]
+  trap_singlehop_pre_mapped = true
 }
 ```
 
@@ -131,6 +131,22 @@ Required:
 
 - `destination_address` (String) IP address
 - `location_id` (String) Fully qualified location specification
+
+Optional:
+
+- `vrfs` (Attributes List) Enter the vrf-name in string
+  - Supported from version: `26.2` (see [below for nested schema](#nestedatt--multipath_destinations--vrfs))
+
+<a id="nestedatt--multipath_destinations--vrfs"></a>
+### Nested Schema for `multipath_destinations.vrfs`
+
+Optional:
+
+- `location_id` (String) Specify a location
+  - Supported from version: `26.2`
+- `vrf_name` (String) vrf
+  - Supported from version: `26.2`
+
 
 
 <a id="nestedatt--multipath_locations"></a>

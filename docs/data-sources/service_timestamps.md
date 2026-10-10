@@ -10,6 +10,15 @@ description: |-
 
 This data source can read the Service Timestamps configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `debug_datetime_localtime_only` | `25.4` |
+| `log_datetime_localtime_only` | `25.4` |
+
 ## Example Usage
 
 ```terraform
@@ -28,16 +37,22 @@ data "iosxr_service_timestamps" "example" {
 
 - `debug_datetime_localtime` (Boolean) Use local time zone for timestamps
 - `debug_datetime_localtime_only` (Boolean) Timestamp with date and time
+  - **Not supported from version `25.4` and above**
 - `debug_datetime_msec` (Boolean) Include milliseconds in timestamp
 - `debug_datetime_show_timezone` (Boolean) Add time zone information to timestamp
+- `debug_datetime_usec` (Boolean) Include microseconds in timestamp
+  - Supported from version: `25.4`
 - `debug_datetime_year` (Boolean) Add year to timestamp
 - `debug_disable` (Boolean) Disable timestamp debug messages
 - `debug_uptime` (Boolean) Timestamp with systime uptime
 - `id` (String) The path of the retrieved object.
 - `log_datetime_localtime` (Boolean) Use local time zone for timestamps
 - `log_datetime_localtime_only` (Boolean) Timestamp with date and time
+  - **Not supported from version `25.4` and above**
 - `log_datetime_msec` (Boolean) Include milliseconds in timestamp
 - `log_datetime_show_timezone` (Boolean) Add time zone information to timestamp
+- `log_datetime_usec` (Boolean) Include microseconds in timestamp
+  - Supported from version: `25.4`
 - `log_datetime_year` (Boolean) Add Year to timestamp
 - `log_disable` (Boolean) Disable timestamp log messages
 - `log_uptime` (Boolean) Timestamp with systime uptime

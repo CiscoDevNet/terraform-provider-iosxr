@@ -18,17 +18,17 @@ resource "iosxr_telnet" "example" {
   ipv6_client_source_interface = "GigabitEthernet0/0/0/1"
   vrfs = [
     {
-      vrf_name                = "ROI"
-      ipv4_server_max_servers = 32
       ipv4_server_access_list = "ACCESS1"
-      ipv6_server_max_servers = 34
+      ipv4_server_max_servers = 32
       ipv6_server_access_list = "ACCESS11"
+      ipv6_server_max_servers = 34
+      vrf_name                = "ROI"
     }
   ]
   vrfs_dscp = [
     {
-      vrf_name  = "TOI"
       ipv4_dscp = 55
+      vrf_name  = "TOI"
     }
   ]
 }

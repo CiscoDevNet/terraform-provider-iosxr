@@ -14,42 +14,42 @@ This resource can manage the Policy Map QoS configuration.
 
 ```terraform
 resource "iosxr_policy_map_qos" "example" {
-  policy_map_name = "PM-QOS"
-  description     = "My description"
   classes = [
     {
       name                    = "class-default"
-      type                    = "qos"
-      police_rate_value       = "5"
-      police_rate_unit        = "gbps"
-      police_burst_value      = 500
       police_burst_unit       = "bytes"
-      police_peak_rate_value  = "6"
-      police_peak_rate_unit   = "gbps"
-      police_peak_burst_value = 1000
+      police_burst_value      = 500
       police_peak_burst_unit  = "bytes"
+      police_peak_burst_value = 1000
+      police_peak_rate_unit   = "gbps"
+      police_peak_rate_value  = "6"
+      police_rate_unit        = "gbps"
+      police_rate_value       = "5"
       priority_level          = 1
       queue_limits = [
         {
-          value = "100"
           unit  = "ms"
+          value = "100"
         }
       ]
-      random_detect_ecn = true
       random_detect = [
         {
-          minimum_threshold_value = 100
-          minimum_threshold_unit  = "ms"
-          maximum_threshold_value = 200
           maximum_threshold_unit  = "ms"
+          maximum_threshold_value = 200
+          minimum_threshold_unit  = "ms"
+          minimum_threshold_value = 100
         }
       ]
+      random_detect_ecn             = true
       service_policy_name           = "CHILD_POLICY"
-      set_traffic_class             = 1
       set_discard_class             = 1
       set_mpls_experimental_topmost = 5
+      set_traffic_class             = 1
+      type                          = "qos"
     }
   ]
+  description     = "My description"
+  policy_map_name = "PM-QOS"
 }
 ```
 
@@ -97,6 +97,9 @@ Optional:
 - `police_conform_action_set_discard_class` (Number) Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.
   - Range: `0`-`7`
 - `police_conform_action_set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
+- `police_conform_action_set_ipencap_cos` (Number) Set the IP encapsulation class-of-service.
+  - Range: `0`-`63`
+  - Supported from version: `25.4`
 - `police_conform_action_set_mpls_experimental_imposition` (Number) Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy
   - Range: `0`-`7`
 - `police_conform_action_set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
@@ -111,6 +114,9 @@ Optional:
 - `police_exceed_action_set_discard_class` (Number) Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.
   - Range: `0`-`7`
 - `police_exceed_action_set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
+- `police_exceed_action_set_ipencap_cos` (Number) Set the IP encapsulation class-of-service.
+  - Range: `0`-`63`
+  - Supported from version: `25.4`
 - `police_exceed_action_set_mpls_experimental_imposition` (Number) Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy
   - Range: `0`-`7`
 - `police_exceed_action_set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
@@ -135,6 +141,9 @@ Optional:
 - `police_violate_action_set_discard_class` (Number) Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.
   - Range: `0`-`7`
 - `police_violate_action_set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
+- `police_violate_action_set_ipencap_cos` (Number) Set the IP encapsulation class-of-service.
+  - Range: `0`-`63`
+  - Supported from version: `25.4`
 - `police_violate_action_set_mpls_experimental_imposition` (Number) Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy
   - Range: `0`-`7`
 - `police_violate_action_set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
@@ -155,6 +164,9 @@ Optional:
 - `set_discard_class` (Number) Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.
   - Range: `0`-`7`
 - `set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
+- `set_ipencap_cos` (Number) Set the IP encapsulation class-of-service.
+  - Range: `0`-`63`
+  - Supported from version: `25.4`
 - `set_mpls_experimental_imposition` (Number) Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy
   - Range: `0`-`7`
 - `set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.

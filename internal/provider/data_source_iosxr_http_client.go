@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -119,11 +118,11 @@ func (d *HTTPClientDataSource) Schema(ctx context.Context, req datasource.Schema
 				Computed:            true,
 			},
 			"ssl_version_tls10": schema.BoolAttribute{
-				MarkdownDescription: "Force TLSv1.0 to be used for HTTPS requests",
+				MarkdownDescription: "Force TLSv1.0 to be used for HTTPS requests, TLSv1.0 is deprecated from 25.3.1",
 				Computed:            true,
 			},
 			"ssl_version_tls11": schema.BoolAttribute{
-				MarkdownDescription: "Force TLSv1.1 to be used for HTTPS requests",
+				MarkdownDescription: "Force TLSv1.1 to be used for HTTPS requests, TLSv1.1 is deprecated from 25.3.1",
 				Computed:            true,
 			},
 			"ssl_version_tls12": schema.BoolAttribute{
@@ -181,7 +180,6 @@ func (d *HTTPClientDataSource) Read(ctx context.Context, req datasource.ReadRequ
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -201,7 +199,7 @@ func (d *HTTPClientDataSource) Read(ctx context.Context, req datasource.ReadRequ
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

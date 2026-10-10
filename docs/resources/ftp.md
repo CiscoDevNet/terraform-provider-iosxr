@@ -16,12 +16,12 @@ This resource can manage the FTP configuration.
 resource "iosxr_ftp" "example" {
   client_vrfs = [
     {
-      vrf_name           = "VRF1"
-      passive            = true
-      source_interface   = "Loopback0"
       anonymous_password = "mypassword"
-      username           = "ftpuser"
+      passive            = true
       password           = "myencryptedpassword"
+      source_interface   = "Loopback0"
+      username           = "ftpuser"
+      vrf_name           = "VRF1"
     }
   ]
 }

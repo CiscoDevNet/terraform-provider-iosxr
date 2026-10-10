@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -68,12 +69,21 @@ func TestAccDataSourceIosxrRouterBGPVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "bfd_minimum_interval", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "bfd_multiplier", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "rd_auto", "true"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "distance_bgp_external", "100"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "distance_bgp_internal", "150"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "distance_bgp_local", "200"))
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterBGPVRFPrerequisitesConfig + testAccDataSourceIosxrRouterBGPVRFConfig(),
+				Config: testAccDataSourceIosxrRouterBGPVRFPrerequisitesConfig() + testAccDataSourceIosxrRouterBGPVRFConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -83,7 +93,7 @@ func TestAccDataSourceIosxrRouterBGPVRF(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrRouterBGPVRFPrerequisitesConfig = `
+const testAccDataSourceIosxrRouterBGPVRFPrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
@@ -94,6 +104,8 @@ resource "iosxr_yang" "PreReq0" {
 
 resource "iosxr_yang" "PreReq1" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/bmp/servers"
+	attributes = {
+	}
 	lists = [
 		{
 			name = "server"
@@ -110,6 +122,15 @@ resource "iosxr_yang" "PreReq1" {
 }
 
 `
+
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccDataSourceIosxrRouterBGPVRFPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccDataSourceIosxrRouterBGPVRFPrerequisitesConfig_V24_4,
+		},
+	)
+}
 
 // End of section. //template:end testPrerequisites
 
@@ -158,7 +179,18 @@ func testAccDataSourceIosxrRouterBGPVRFConfig() string {
 	config += `	bfd_minimum_interval = 10` + "\n"
 	config += `	bfd_multiplier = 4` + "\n"
 	config += `	rd_auto = true` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	distance_bgp_external = 100` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	distance_bgp_internal = 150` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	distance_bgp_local = 200` + "\n"
+	}
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 
 	config += `

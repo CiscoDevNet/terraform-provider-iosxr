@@ -55,6 +55,6 @@ In order to run the full suite of acceptance tests, set up a `.env` file with th
 cp .env.sample .env
 ```
 
-Then, run `make test` to execute all acceptance tests across devices and the two currently supported versions.
+Then, run `make test` to execute all acceptance tests across devices and supported versions.
 
 > **Note**: Acceptance tests create real resources.

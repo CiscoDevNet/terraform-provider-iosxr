@@ -985,10 +985,9 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		}
 
 		// Auto-detect version for this device if needed. Version auto-detection is
-		// gNMI-only (NETCONF multi-version support is not implemented yet — see
-		// merge-main.md Appendix "NETCONF multi-version refactor"), so deviceClient
-		// stays nil for netconf-protocol devices and the nil-check below causes
-		// those devices to fall through to the explicit/global version instead.
+		// gNMI-only (NETCONF version auto-detection is not implemented yet), so
+		// deviceClient stays nil for netconf-protocol devices and the nil-check below
+		// causes those devices to fall through to the explicit/global version instead.
 		if managed {
 			if autoDetect && deviceClient != nil {
 				detectedVersion, err := helpers.DetectIosxrVersion(ctx, deviceClient, deviceName)

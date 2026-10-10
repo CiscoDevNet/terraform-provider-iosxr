@@ -9,6 +9,9 @@ description: |-
 
 ## Unreleased
 
+- Add multi-version support for IOS-XR 24.4.2, 25.4.2 and 26.2.1. Attributes and YANG paths follow the release of the device. See the Multi-Version Support guide
+- Add `iosxr_version` provider attribute to set the IOS-XR version in `major.minor` format; the patch is ignored. If not set, the provider auto-detects the version of each managed device over gNMI
+- Add `iosxr_device_info` data source, which returns the auto-detected IOS-XR version (`major.minor`) of a device
 - Add `iosxr_cef_accounting` resource and data source
 - BREAKING CHANGE: Remove `neighbors` list from `router_bgp` resource and data source. Use the new `router_bgp_neighbor` resource instead.
 - BREAKING CHANGE: Remove `neighbors` list from `router_bgp_vrf` resource and data source. Use the new `router_bgp_vrf_neighbor` resource instead.

@@ -60,7 +60,7 @@ func (d *AttributeDescription) AddVersionRangeDescription(versionRanges map[stri
 	for v := range versionRanges {
 		versions = append(versions, v)
 	}
-	sort.Strings(versions)
+	sort.Slice(versions, func(i, j int) bool { return compareVersions(versions[i], versions[j]) < 0 })
 
 	d.String = fmt.Sprintf("%s\n  - Range:", d.String)
 	for _, v := range versions {

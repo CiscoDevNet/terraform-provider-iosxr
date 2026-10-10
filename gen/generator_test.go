@@ -1674,3 +1674,117 @@ func TestFindNoAugmentConfigViolations_ResourceLevel_CorrectRestatement_Passes(t
 		t.Errorf("violations = %v, want none (resource-level flag correctly restated)", violations)
 	}
 }
+
+// ---------------------------------------------------------------------------
+// version ordering tests (two-digit minors must sort numerically)
+// ---------------------------------------------------------------------------
+
+func TestSortedVersionKeys(t *testing.T) {
+	tests := []struct {
+		name string
+		keys []string
+		want []string
+	}{
+		{name: "two_digit_minor_after_one_digit", keys: []string{"25.10", "25.4", "24.4"}, want: []string{"24.4", "25.4", "25.10"}},
+		{name: "next_major_after_two_digit_minor", keys: []string{"26.2", "25.20", "25.4"}, want: []string{"25.4", "25.20", "26.2"}},
+		{name: "already_sorted", keys: []string{"24.4", "25.4", "26.2"}, want: []string{"24.4", "25.4", "26.2"}},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			m := make(map[string]string, len(tc.keys))
+			for _, k := range tc.keys {
+				m[k] = "x"
+			}
+			got := sortedVersionKeys(m)
+			if strings.Join(got, ",") != strings.Join(tc.want, ",") {
+				t.Errorf("sortedVersionKeys(%v) = %v; want %v", tc.keys, got, tc.want)
+			}
+		})
+	}
+}
+
+func TestFormatVersionRanges_TwoDigitMinorSortsNumerically(t *testing.T) {
+	got := FormatVersionRanges(map[string]RangeConstraint{
+		"25.10": {Min: 1, Max: 30},
+		"25.4":  {Min: 1, Max: 20},
+		"24.4":  {Min: 1, Max: 10},
+	})
+	want := "`1`-`10` (v24.4), `1`-`20` (v25.4), `1`-`30` (v25.10)"
+	if got != want {
+		t.Errorf("FormatVersionRanges = %q; want %q", got, want)
+	}
+}
+
+func TestFormatVersionEnums_TwoDigitMinorSortsNumerically(t *testing.T) {
+	got := FormatVersionEnums(map[string][]string{
+		"25.10": {"c"},
+		"25.4":  {"b"},
+		"24.4":  {"a"},
+	})
+	if !(strings.Index(got, "v24.4") < strings.Index(got, "v25.4") && strings.Index(got, "v25.4") < strings.Index(got, "v25.10")) {
+		t.Errorf("FormatVersionEnums = %q; want versions in order 24.4, 25.4, 25.10", got)
+	}
+}
+
+func TestFormatVersionStringLengths_TwoDigitMinorSortsNumerically(t *testing.T) {
+	got := FormatVersionStringLengths(map[string]StringLengthConstraint{
+		"25.10": {Min: 1, Max: 30},
+		"25.4":  {Min: 1, Max: 20},
+		"24.4":  {Min: 1, Max: 10},
+	})
+	want := "`1`-`10` (v24.4), `1`-`20` (v25.4), `1`-`30` (v25.10)"
+	if got != want {
+		t.Errorf("FormatVersionStringLengths = %q; want %q", got, want)
+	}
+}
+
+func TestFormatVersionExamples_TwoDigitMinorSortsNumerically(t *testing.T) {
+	got := FormatVersionExamples(map[string]string{"25.10": "c", "25.4": "b", "24.4": "a"})
+	want := `"24.4": "a", "25.4": "b", "25.10": "c",`
+	if got != want {
+		t.Errorf("FormatVersionExamples = %q; want %q", got, want)
+	}
+}
+
+func TestFixAttributeBaseVersion_MovedInVersionUsesNumericOrder(t *testing.T) {
+	attr := YamlConfigAttribute{
+		VersionYangNames: map[string]string{
+			"_base": "old-name",
+			"25.4":  "new-name",
+			"25.10": "newer-name",
+		},
+	}
+	fixAttributeBaseVersion(&attr, "24.4")
+	if attr.MovedInVersion != "25.4" {
+		t.Errorf("MovedInVersion = %q; want %q (earliest version with a new name, 25.4 before 25.10)", attr.MovedInVersion, "25.4")
+	}
+}
+
+// ---------------------------------------------------------------------------
+// version directory name guard
+// ---------------------------------------------------------------------------
+
+func TestFindInvalidVersionDirs(t *testing.T) {
+	tests := []struct {
+		name  string
+		names []string
+		want  int
+	}{
+		{name: "dotted_major_minor", names: []string{"24.4", "25.4", "26.2"}, want: 0},
+		{name: "two_digit_minor", names: []string{"25.10", "26.20"}, want: 0},
+		{name: "compact_rejected", names: []string{"2442"}, want: 1},
+		{name: "patch_rejected", names: []string{"24.4.2"}, want: 1},
+		{name: "free_text_rejected", names: []string{"latest"}, want: 1},
+		{name: "mixed", names: []string{"24.4", "2542", "26.2"}, want: 1},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := findInvalidVersionDirs(tc.names)
+			if len(got) != tc.want {
+				t.Errorf("findInvalidVersionDirs(%v) = %v; want %d violation(s)", tc.names, got, tc.want)
+			}
+		})
+	}
+}

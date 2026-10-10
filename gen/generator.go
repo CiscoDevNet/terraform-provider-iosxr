@@ -278,8 +278,8 @@ func ToJsonPath(yangPath, xPath string) string {
 }
 
 // sortedVersionKeys returns the keys of m sorted in ascending version order.
-// Used to produce deterministic map literals in generated code.
-func sortedVersionKeys(m map[string]string) []string {
+// Used to produce deterministic map literals and descriptions in generated code.
+func sortedVersionKeys[V any](m map[string]V) []string {
 	keys := make([]string, 0, len(m))
 	for k := range m {
 		keys = append(keys, k)
@@ -836,17 +836,8 @@ func CollectRemovedAttrs(attrs []YamlConfigAttribute, prefix string) []Versioned
 }
 
 // FormatVersionDisplay formats a version string for display.
-// New dotted format ("25.2", "24.4") is returned as-is.
-// Legacy 4-digit compact format ("2512") is converted to "MM.mm" (patch dropped).
+// The dotted format ("25.2", "24.4") is returned as-is.
 func FormatVersionDisplay(version string) string {
-	if strings.Contains(version, ".") {
-		return version // already dotted major.minor
-	}
-	if len(version) == 4 {
-		if _, err := strconv.Atoi(version); err == nil {
-			return version[0:2] + "." + string(version[2])
-		}
-	}
 	return version
 }
 
@@ -857,11 +848,7 @@ func FormatVersionRanges(versionRanges map[string]RangeConstraint) string {
 	}
 
 	// Sort versions for consistent output
-	versions := make([]string, 0, len(versionRanges))
-	for v := range versionRanges {
-		versions = append(versions, v)
-	}
-	sort.Strings(versions)
+	versions := sortedVersionKeys(versionRanges)
 
 	parts := make([]string, 0, len(versions))
 	for _, v := range versions {
@@ -955,11 +942,7 @@ func FormatVersionEnums(versionEnums map[string][]string) string {
 	if len(versionEnums) == 0 {
 		return ""
 	}
-	versions := make([]string, 0, len(versionEnums))
-	for v := range versionEnums {
-		versions = append(versions, v)
-	}
-	sort.Strings(versions)
+	versions := sortedVersionKeys(versionEnums)
 	parts := make([]string, 0, len(versions))
 	for _, v := range versions {
 		vals := versionEnums[v]
@@ -989,11 +972,7 @@ func HasVersionEnums(attributes []YamlConfigAttribute) bool {
 // The trailing comma is required when the closing "}" is on the next line (Go syntax rule).
 // Registered under both "formatVersionExamples" and "formatVersionMinimumTestValues" — identical signature.
 func FormatVersionExamples(m map[string]string) string {
-	keys := make([]string, 0, len(m))
-	for k := range m {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
+	keys := sortedVersionKeys(m)
 	parts := make([]string, 0, len(keys))
 	for _, k := range keys {
 		parts = append(parts, fmt.Sprintf("%q: %q", k, m[k]))
@@ -1044,11 +1023,7 @@ func HasVersionMinimumTestValues(attributes []YamlConfigAttribute) bool {
 
 // FormatVersionTestTags returns sorted "ver": []string{...}, entries for inline map literals in generated test code.
 func FormatVersionTestTags(m map[string][]string) string {
-	keys := make([]string, 0, len(m))
-	for k := range m {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
+	keys := sortedVersionKeys(m)
 	parts := make([]string, 0, len(keys))
 	for _, k := range keys {
 		quotedTags := make([]string, len(m[k]))
@@ -1066,11 +1041,7 @@ func FormatVersionTestTags(m map[string][]string) string {
 // "testAccDataSourceIosxr" for data source tests); camelName is the CamelCase resource
 // name (e.g. "Logging"), used to build constant names.
 func FormatVersionTestPrerequisites(m map[string][]YamlTest, prefix, camelName string) string {
-	keys := make([]string, 0, len(m))
-	for k := range m {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
+	keys := sortedVersionKeys(m)
 	parts := make([]string, len(keys))
 	for i, k := range keys {
 		parts[i] = fmt.Sprintf("%q: %s%sPrerequisitesConfig_%s", k, prefix, camelName, VersionSuffix(k))
@@ -1152,11 +1123,7 @@ func FormatVersionStringLengths(versionStringLengths map[string]StringLengthCons
 	if len(versionStringLengths) == 0 {
 		return ""
 	}
-	versions := make([]string, 0, len(versionStringLengths))
-	for v := range versionStringLengths {
-		versions = append(versions, v)
-	}
-	sort.Strings(versions)
+	versions := sortedVersionKeys(versionStringLengths)
 	parts := make([]string, 0, len(versions))
 	for _, v := range versions {
 		c := versionStringLengths[v]
@@ -1303,6 +1270,36 @@ func findAttributeNoAugmentConfigViolations(acc, raw []YamlConfigAttribute, reso
 		}
 	}
 	return violations
+}
+
+// versionDirPattern matches a version directory name: dotted major.minor, no patch.
+var versionDirPattern = regexp.MustCompile(`^\d+\.\d+$`)
+
+// findInvalidVersionDirs returns one message per version directory name that is not dotted
+// major.minor (for example "2442" or "24.4.2"). The directory name becomes the version
+// literal in generated code, and VersionAtLeast allows the feature when a version cannot be
+// parsed, so a stray name would silently enable the feature on every device.
+//
+// Pure and testable; validateVersionDirs below is the log.Fatalf wrapper called from main().
+func findInvalidVersionDirs(names []string) []string {
+	var violations []string
+	for _, name := range names {
+		if !versionDirPattern.MatchString(name) {
+			violations = append(violations, fmt.Sprintf(
+				"%q is not a valid version directory name; use dotted major.minor, for example \"24.4\" "+
+					"(no patch, no compact form).",
+				name,
+			))
+		}
+	}
+	return violations
+}
+
+// validateVersionDirs fails the build on the first invalid version directory name.
+func validateVersionDirs(names []string) {
+	for _, msg := range findInvalidVersionDirs(names) {
+		log.Fatalf("%s", msg)
+	}
 }
 
 // validateNoAugmentConfigCarryover fails the build on the first no_augment_config carryover
@@ -1869,8 +1866,7 @@ func renderTemplate(templatePath, outputPath string, config interface{}) {
 
 // versionCompare compares two version strings. Returns -1 if v1 < v2, 0 if equal, 1 if v1 > v2
 func versionCompare(v1, v2 string) int {
-	// Handle simple numeric versions like "2442"
-	// Also handle dot versions like "25.2.2"
+	// Handle dotted versions like "25.2" or "25.2.2"
 	parts1 := strings.Split(v1, ".")
 	parts2 := strings.Split(v2, ".")
 
@@ -2386,7 +2382,7 @@ func fixAttributeBaseVersion(attr *YamlConfigAttribute, baseVersion string) {
 			delete(attr.VersionYangNames, "_base")
 			attr.VersionYangNames[baseVersion] = base
 			for v := range attr.VersionYangNames {
-				if v != baseVersion && (attr.MovedInVersion == "" || v < attr.MovedInVersion) {
+				if v != baseVersion && (attr.MovedInVersion == "" || versionCompare(v, attr.MovedInVersion) < 0) {
 					attr.MovedInVersion = v
 				}
 			}
@@ -2569,6 +2565,7 @@ func main() {
 			versions = append(versions, versionDir.Name())
 		}
 	}
+	validateVersionDirs(versions)
 	sort.Slice(versions, func(i, j int) bool {
 		return versionCompare(versions[i], versions[j]) < 0
 	})

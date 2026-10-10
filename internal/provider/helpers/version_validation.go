@@ -30,52 +30,56 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-// versionToInt converts a version string to a comparable integer (major*10 + minor).
-// Handles both the new dotted format ("25.2" → 252) and legacy 4-digit compact
-// format ("2512" → 251, "2442" → 244) so old generated code continues to work.
-func versionToInt(v string) int {
-	if strings.Contains(v, ".") {
-		parts := strings.Split(v, ".")
-		if len(parts) >= 2 {
-			major, err1 := strconv.Atoi(parts[0])
-			minor, err2 := strconv.Atoi(parts[1])
-			if err1 != nil || err2 != nil {
-				return -1
-			}
-			return major*10 + minor
+// parseMajorMinor extracts the major and minor numbers from a dotted version
+// string ("25.4", "25.4.10"). Anything after the second part (the patch) is ignored.
+// ok is false when the string has fewer than two parts or a part is not a number.
+func parseMajorMinor(v string) (major, minor int, ok bool) {
+	parts := strings.Split(v, ".")
+	if len(parts) < 2 {
+		return 0, 0, false
+	}
+	major, err1 := strconv.Atoi(parts[0])
+	minor, err2 := strconv.Atoi(parts[1])
+	return major, minor, err1 == nil && err2 == nil
+}
+
+// compareVersions compares two dotted versions by (major, minor) and returns
+// -1, 0 or 1. It returns 0 when either version cannot be parsed.
+func compareVersions(a, b string) int {
+	aMajor, aMinor, ok1 := parseMajorMinor(a)
+	bMajor, bMinor, ok2 := parseMajorMinor(b)
+	if !ok1 || !ok2 {
+		return 0
+	}
+	if aMajor != bMajor {
+		if aMajor < bMajor {
+			return -1
 		}
-		return -1
+		return 1
 	}
-	// Legacy 4-digit compact: "2512" → major=25, minor=1 (patch digit dropped)
-	if len(v) == 4 {
-		if _, err := strconv.Atoi(v); err == nil {
-			major, _ := strconv.Atoi(v[0:2])
-			minor, _ := strconv.Atoi(v[2:3])
-			return major*10 + minor
+	if aMinor != bMinor {
+		if aMinor < bMinor {
+			return -1
 		}
+		return 1
 	}
-	// Final fallback: plain integer
-	n, err := strconv.Atoi(v)
-	if err == nil {
-		return n
-	}
-	return -1
+	return 0
 }
 
 // VersionAtLeast checks if the current provider version is at least the required version.
-// Accepts the new dotted major.minor format ("25.2", "24.4") as well as legacy
-// 4-digit compact strings ("2512", "2442") for backward compatibility with existing
-// generated code that has not yet been regenerated.
+// Both versions use the dotted major.minor format ("25.2", "24.4"); a patch is ignored
+// and minors of any size compare numerically ("25.10" is above "25.4").
 func VersionAtLeast(currentVersion, requiredVersion string) bool {
 	if currentVersion == "" || requiredVersion == "" {
 		return true // If version is not set, allow all features
 	}
-	current := versionToInt(currentVersion)
-	required := versionToInt(requiredVersion)
-	if current < 0 || required < 0 {
-		return true // If conversion fails, allow the feature
+	if _, _, ok := parseMajorMinor(currentVersion); !ok {
+		return true // If parsing fails, allow the feature
 	}
-	return current >= required
+	if _, _, ok := parseMajorMinor(requiredVersion); !ok {
+		return true // If parsing fails, allow the feature
+	}
+	return compareVersions(currentVersion, requiredVersion) >= 0
 }
 
 // FieldVersionConstraint represents version requirements for a field
@@ -94,7 +98,7 @@ type VersionRange struct {
 // FieldRangeConstraint represents version-specific range constraints for an integer field
 type FieldRangeConstraint struct {
 	FieldPath     string                  // e.g., "endpoint_default_probe_tx_interval"
-	VersionRanges map[string]VersionRange // version -> range (e.g., "2442" -> {Min: 30000, Max: 15000000})
+	VersionRanges map[string]VersionRange // version -> range (e.g., "24.4" -> {Min: 30000, Max: 15000000})
 }
 
 // FieldEnumConstraint represents version-specific valid enum sets for a string field.
@@ -523,19 +527,8 @@ func toCamelCase(s string) string {
 }
 
 // FormatVersion converts an internal version string to a user-friendly display string.
-// New dotted format ("25.2", "24.4") is returned as-is.
-// Legacy 4-digit compact format ("2512") is converted to "MM.mm" (patch dropped).
+// The dotted format ("25.2", "24.4") is returned as-is.
 func FormatVersion(version string) string {
-	// Already dotted (new format) — return as-is
-	if strings.Contains(version, ".") {
-		return version
-	}
-	// Legacy 4-digit compact: "2512" → "25.1"
-	if len(version) == 4 {
-		if _, err := strconv.Atoi(version); err == nil {
-			return version[0:2] + "." + string(version[2])
-		}
-	}
 	return version
 }
 

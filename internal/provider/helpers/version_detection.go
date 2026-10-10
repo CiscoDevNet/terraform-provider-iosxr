@@ -32,7 +32,7 @@ import (
 )
 
 // versionCache stores detected IOS-XR versions to avoid redundant queries
-// Key: deviceName, Value: normalized version string (e.g., "2442")
+// Key: deviceName, Value: normalized version string (e.g., "24.4")
 var versionCache sync.Map
 
 // NormalizeVersion converts any user-facing version string to the canonical
@@ -43,21 +43,12 @@ var versionCache sync.Map
 //
 //	3-part dotted   "24.4.2" → "24.4"   (patch stripped)
 //	2-part dotted   "25.2"   → "25.2"   (already major.minor)
-//	4-digit compact "2442"   → "24.4"   (legacy format, backward-compat)
 //
 // Returns ("", false) when the input cannot be parsed.
 func NormalizeVersion(version string) (string, bool) {
 	version = strings.TrimSpace(version)
 	if version == "" {
 		return "", false
-	}
-
-	// Legacy 4-digit compact format (e.g. "2442", "2512") → convert to dotted major.minor.
-	// Format: first 2 chars = major, 3rd char = minor (patch digit is dropped).
-	if len(version) == 4 && !strings.Contains(version, ".") {
-		if _, err := strconv.Atoi(version); err == nil {
-			return version[0:2] + "." + string(version[2]), true
-		}
 	}
 
 	parts := strings.Split(version, ".")
@@ -89,15 +80,15 @@ func NormalizeVersion(version string) (string, bool) {
 	}
 }
 
-// ParseVersion accepts any supported version format (dotted or compact) and returns
-// the 4-digit internal compact format.  Returns ("", false) if parsing fails.
+// ParseVersion accepts any supported dotted version format and returns the
+// normalized major.minor string.  Returns ("", false) if parsing fails.
 // Deprecated: prefer NormalizeVersion directly; ParseVersion is kept for compatibility.
 func ParseVersion(version string) (string, bool) {
 	return NormalizeVersion(version)
 }
 
 // ValidateSupportedVersion checks whether a version string can be successfully normalized.
-// Any well-formed version (e.g., "25.2", "25.2.1", "2521") is accepted.
+// Any well-formed dotted version (e.g., "25.2", "25.2.1") is accepted.
 func ValidateSupportedVersion(version string) bool {
 	_, ok := NormalizeVersion(version)
 	return ok
@@ -144,14 +135,14 @@ func DetectIosxrVersion(ctx context.Context, client *gnmi.Client, deviceName str
 		return "", fmt.Errorf("unable to auto-detect IOS-XR version from device: %w", err)
 	}
 
-	compact, ok := NormalizeVersion(version)
+	normalized, ok := NormalizeVersion(version)
 	if !ok {
 		return "", fmt.Errorf("detected IOS-XR version '%s' could not be parsed. Expected format: %s", version, SupportedVersionList())
 	}
 
 	tflog.Info(ctx, fmt.Sprintf("Auto-detected IOS-XR version for device '%s': %s", deviceName, version))
-	versionCache.Store(deviceName, compact)
-	return compact, nil
+	versionCache.Store(deviceName, normalized)
+	return normalized, nil
 }
 
 // extractVersionFromResponse attempts to extract version information from gNMI response

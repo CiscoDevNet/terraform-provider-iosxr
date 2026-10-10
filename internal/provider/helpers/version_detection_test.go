@@ -31,7 +31,11 @@ func TestNormalizeVersion(t *testing.T) {
 	}{
 		{name: "three_dotted_decimal", input: "24.4.2", want: "24.4", wantOk: true},
 		{name: "two_dotted_decimal", input: "25.4", want: "25.4", wantOk: true},
-		{name: "legacy_format", input: "2442", want: "24.4", wantOk: true},
+		{name: "three_dotted_two_digit_patch", input: "25.4.10", want: "25.4", wantOk: true},
+		{name: "three_dotted_two_digit_patch_26_2", input: "26.2.20", want: "26.2", wantOk: true},
+		{name: "three_dotted_two_digit_minor", input: "25.10.2", want: "25.10", wantOk: true},
+		{name: "two_dotted_two_digit_minor", input: "25.10", want: "25.10", wantOk: true},
+		{name: "compact_format_rejected", input: "2442", want: "", wantOk: false},
 		{name: "empty_string", input: "", want: "", wantOk: false},
 		{name: "malformed_word", input: "garbage", want: "", wantOk: false},
 		{name: "malformed_dotted_alpha", input: "abc.def", want: "", wantOk: false},
@@ -57,7 +61,7 @@ func TestValidateSupportedVersion(t *testing.T) {
 	}{
 		{name: "three_dotted_decimal", input: "24.4.2", want: true},
 		{name: "two_dotted_decimal", input: "25.4", want: true},
-		{name: "legacy_format", input: "2442", want: true},
+		{name: "compact_format_rejected", input: "2442", want: false},
 		{name: "empty_string", input: "", want: false},
 		{name: "malformed_word", input: "garbage", want: false},
 	}

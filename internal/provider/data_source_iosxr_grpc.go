@@ -296,7 +296,7 @@ func (d *GRPCDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										MarkdownDescription: "Enter port number" + "\n  - Supported from version: `25.4`",
 										Computed:            true,
 									},
-									"notls": schema.BoolAttribute{
+									"no_tls": schema.BoolAttribute{
 										MarkdownDescription: "turn off TLS" + "\n  - Supported from version: `25.4`",
 										Computed:            true,
 									},
@@ -328,7 +328,7 @@ func (d *GRPCDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										MarkdownDescription: "Enter port number" + "\n  - Supported from version: `25.4`",
 										Computed:            true,
 									},
-									"notls": schema.BoolAttribute{
+									"no_tls": schema.BoolAttribute{
 										MarkdownDescription: "turn off TLS" + "\n  - Supported from version: `25.4`",
 										Computed:            true,
 									},

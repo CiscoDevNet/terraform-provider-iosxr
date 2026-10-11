@@ -162,7 +162,7 @@ type GRPCSegmentRoutingTrafficEngServiceInstances struct {
 type GRPCSegmentRoutingTrafficEngServiceInstancesIpv4Addresses struct {
 	Ipv4Address         types.String `tfsdk:"ipv4_address"`
 	Port                types.Int64  `tfsdk:"port"`
-	Notls               types.Bool   `tfsdk:"notls"`
+	NoTls               types.Bool   `tfsdk:"no_tls"`
 	SourceInterface     types.String `tfsdk:"source_interface"`
 	Vrf                 types.String `tfsdk:"vrf"`
 	TlsHostnameOverride types.String `tfsdk:"tls_hostname_override"`
@@ -170,7 +170,7 @@ type GRPCSegmentRoutingTrafficEngServiceInstancesIpv4Addresses struct {
 type GRPCSegmentRoutingTrafficEngServiceInstancesIpv6Addresses struct {
 	Ipv6Address         types.String `tfsdk:"ipv6_address"`
 	Port                types.Int64  `tfsdk:"port"`
-	Notls               types.Bool   `tfsdk:"notls"`
+	NoTls               types.Bool   `tfsdk:"no_tls"`
 	SourceInterface     types.String `tfsdk:"source_interface"`
 	Vrf                 types.String `tfsdk:"vrf"`
 	TlsHostnameOverride types.String `tfsdk:"tls_hostname_override"`
@@ -434,8 +434,8 @@ func (data GRPC) toBody(ctx context.Context, providerVersion string) string {
 						}
 					}
 					if helpers.VersionAtLeast(providerVersion, "25.4") {
-						if !citem.Notls.IsNull() && !citem.Notls.IsUnknown() {
-							if citem.Notls.ValueBool() {
+						if !citem.NoTls.IsNull() && !citem.NoTls.IsUnknown() {
+							if citem.NoTls.ValueBool() {
 								body, _ = sjson.Set(body, "segment-routing.traffic-eng.service-instances.service-instance"+"."+strconv.Itoa(index)+"."+"addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"notls", []interface{}{nil})
 							}
 						}
@@ -471,8 +471,8 @@ func (data GRPC) toBody(ctx context.Context, providerVersion string) string {
 						}
 					}
 					if helpers.VersionAtLeast(providerVersion, "25.4") {
-						if !citem.Notls.IsNull() && !citem.Notls.IsUnknown() {
-							if citem.Notls.ValueBool() {
+						if !citem.NoTls.IsNull() && !citem.NoTls.IsUnknown() {
+							if citem.NoTls.ValueBool() {
 								body, _ = sjson.Set(body, "segment-routing.traffic-eng.service-instances.service-instance"+"."+strconv.Itoa(index)+"."+"addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"notls", []interface{}{nil})
 							}
 						}
@@ -557,7 +557,7 @@ func (data GRPC) GetVersionConstraints() []helpers.FieldVersionConstraint {
 			AddedInVersion: "25.4",
 		},
 		{
-			FieldPath:      "segment_routing_traffic_eng_service_instances.ipv4_addresses.notls",
+			FieldPath:      "segment_routing_traffic_eng_service_instances.ipv4_addresses.no_tls",
 			AddedInVersion: "25.4",
 		},
 		{
@@ -585,7 +585,7 @@ func (data GRPC) GetVersionConstraints() []helpers.FieldVersionConstraint {
 			AddedInVersion: "25.4",
 		},
 		{
-			FieldPath:      "segment_routing_traffic_eng_service_instances.ipv6_addresses.notls",
+			FieldPath:      "segment_routing_traffic_eng_service_instances.ipv6_addresses.no_tls",
 			AddedInVersion: "25.4",
 		},
 		{
@@ -1071,13 +1071,13 @@ func (data *GRPC) updateFromBody(ctx context.Context, res []byte, version string
 				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Port = types.Int64Null()
 			}
 			if value := cr.Get("notls"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
-				if !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.IsNull() {
-					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls = types.BoolValue(true)
+				if !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].NoTls.IsNull() {
+					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].NoTls = types.BoolValue(true)
 				}
 			} else {
 				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.IsNull() {
-					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls = types.BoolNull()
+				if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].NoTls.IsNull() {
+					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].NoTls = types.BoolNull()
 				}
 			}
 			if value := cr.Get("source-interface"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].SourceInterface.IsNull() {
@@ -1138,13 +1138,13 @@ func (data *GRPC) updateFromBody(ctx context.Context, res []byte, version string
 				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Port = types.Int64Null()
 			}
 			if value := cr.Get("notls"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
-				if !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.IsNull() {
-					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls = types.BoolValue(true)
+				if !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].NoTls.IsNull() {
+					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].NoTls = types.BoolValue(true)
 				}
 			} else {
 				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.IsNull() {
-					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls = types.BoolNull()
+				if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].NoTls.IsNull() {
+					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].NoTls = types.BoolNull()
 				}
 			}
 			if value := cr.Get("source-interface"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].SourceInterface.IsNull() {
@@ -1442,12 +1442,12 @@ func (data *GRPC) fromBody(ctx context.Context, res []byte, version string) {
 					}
 					if helpers.VersionAtLeast(version, "25.4") {
 						if ccValue := cv.Get("notls"); ccValue.Exists() {
-							cItem.Notls = types.BoolValue(true)
+							cItem.NoTls = types.BoolValue(true)
 						} else {
-							cItem.Notls = types.BoolValue(false)
+							cItem.NoTls = types.BoolValue(false)
 						}
 					} else {
-						cItem.Notls = types.BoolNull()
+						cItem.NoTls = types.BoolNull()
 					}
 					if helpers.VersionAtLeast(version, "25.4") {
 						if ccValue := cv.Get("source-interface"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
@@ -1494,12 +1494,12 @@ func (data *GRPC) fromBody(ctx context.Context, res []byte, version string) {
 					}
 					if helpers.VersionAtLeast(version, "25.4") {
 						if ccValue := cv.Get("notls"); ccValue.Exists() {
-							cItem.Notls = types.BoolValue(true)
+							cItem.NoTls = types.BoolValue(true)
 						} else {
-							cItem.Notls = types.BoolValue(false)
+							cItem.NoTls = types.BoolValue(false)
 						}
 					} else {
-						cItem.Notls = types.BoolNull()
+						cItem.NoTls = types.BoolNull()
 					}
 					if helpers.VersionAtLeast(version, "25.4") {
 						if ccValue := cv.Get("source-interface"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
@@ -1789,12 +1789,12 @@ func (data *GRPCData) fromBody(ctx context.Context, res []byte, version string) 
 					}
 					if helpers.VersionAtLeast(version, "25.4") {
 						if ccValue := cv.Get("notls"); ccValue.Exists() {
-							cItem.Notls = types.BoolValue(true)
+							cItem.NoTls = types.BoolValue(true)
 						} else {
-							cItem.Notls = types.BoolValue(false)
+							cItem.NoTls = types.BoolValue(false)
 						}
 					} else {
-						cItem.Notls = types.BoolNull()
+						cItem.NoTls = types.BoolNull()
 					}
 					if helpers.VersionAtLeast(version, "25.4") {
 						if ccValue := cv.Get("source-interface"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
@@ -1841,12 +1841,12 @@ func (data *GRPCData) fromBody(ctx context.Context, res []byte, version string) 
 					}
 					if helpers.VersionAtLeast(version, "25.4") {
 						if ccValue := cv.Get("notls"); ccValue.Exists() {
-							cItem.Notls = types.BoolValue(true)
+							cItem.NoTls = types.BoolValue(true)
 						} else {
-							cItem.Notls = types.BoolValue(false)
+							cItem.NoTls = types.BoolValue(false)
 						}
 					} else {
-						cItem.Notls = types.BoolNull()
+						cItem.NoTls = types.BoolNull()
 					}
 					if helpers.VersionAtLeast(version, "25.4") {
 						if ccValue := cv.Get("source-interface"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
@@ -1960,7 +1960,7 @@ func (data *GRPC) getDeletedItems(ctx context.Context, state GRPC, version strin
 									if helpers.VersionAtLeast(version, "25.4") && !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].SourceInterface.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses[cj].SourceInterface.IsNull() {
 										deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString, "addresses/ipv6-address", ckeyString), "source-interface"))
 									}
-									if helpers.VersionAtLeast(version, "25.4") && !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses[cj].Notls.IsNull() {
+									if helpers.VersionAtLeast(version, "25.4") && !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].NoTls.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses[cj].NoTls.IsNull() {
 										deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString, "addresses/ipv6-address", ckeyString), "notls"))
 									}
 									break
@@ -2018,7 +2018,7 @@ func (data *GRPC) getDeletedItems(ctx context.Context, state GRPC, version strin
 									if helpers.VersionAtLeast(version, "25.4") && !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].SourceInterface.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses[cj].SourceInterface.IsNull() {
 										deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString, "addresses/ipv4-address", ckeyString), "source-interface"))
 									}
-									if helpers.VersionAtLeast(version, "25.4") && !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses[cj].Notls.IsNull() {
+									if helpers.VersionAtLeast(version, "25.4") && !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].NoTls.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses[cj].NoTls.IsNull() {
 										deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString, "addresses/ipv4-address", ckeyString), "notls"))
 									}
 									break
@@ -2227,8 +2227,8 @@ func (data *GRPC) getEmptyLeafsDelete(ctx context.Context, state *GRPC, version 
 					for cki := range ckeys {
 						ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 					}
-					if helpers.VersionAtLeast(version, "25.4") && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.IsNull() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.ValueBool() {
-						if state == nil || i >= len(state.SegmentRoutingTrafficEngServiceInstances) || ci >= len(state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses) || state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.IsNull() || state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.ValueBool() {
+					if helpers.VersionAtLeast(version, "25.4") && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].NoTls.IsNull() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].NoTls.ValueBool() {
+						if state == nil || i >= len(state.SegmentRoutingTrafficEngServiceInstances) || ci >= len(state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses) || state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].NoTls.IsNull() || state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].NoTls.ValueBool() {
 							emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString, "addresses/ipv6-address", ckeyString), "notls"))
 						}
 					}
@@ -2250,8 +2250,8 @@ func (data *GRPC) getEmptyLeafsDelete(ctx context.Context, state *GRPC, version 
 					for cki := range ckeys {
 						ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 					}
-					if helpers.VersionAtLeast(version, "25.4") && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.IsNull() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.ValueBool() {
-						if state == nil || i >= len(state.SegmentRoutingTrafficEngServiceInstances) || ci >= len(state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses) || state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.IsNull() || state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.ValueBool() {
+					if helpers.VersionAtLeast(version, "25.4") && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].NoTls.IsNull() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].NoTls.ValueBool() {
+						if state == nil || i >= len(state.SegmentRoutingTrafficEngServiceInstances) || ci >= len(state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses) || state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].NoTls.IsNull() || state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].NoTls.ValueBool() {
 							emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString, "addresses/ipv4-address", ckeyString), "notls"))
 						}
 					}
@@ -2763,8 +2763,8 @@ func (data GRPC) toBodyXML(ctx context.Context, stateArg ...*GRPC) string {
 					if !citem.Port.IsNull() && !citem.Port.IsUnknown() {
 						body = helpers.SetFromXPath(body, cbasePath+"/port", strconv.FormatInt(citem.Port.ValueInt64(), 10))
 					}
-					if !citem.Notls.IsNull() && !citem.Notls.IsUnknown() {
-						if citem.Notls.ValueBool() {
+					if !citem.NoTls.IsNull() && !citem.NoTls.IsUnknown() {
+						if citem.NoTls.ValueBool() {
 							body = helpers.SetFromXPath(body, cbasePath+"/notls", "")
 						}
 					}
@@ -2788,8 +2788,8 @@ func (data GRPC) toBodyXML(ctx context.Context, stateArg ...*GRPC) string {
 					if !citem.Port.IsNull() && !citem.Port.IsUnknown() {
 						body = helpers.SetFromXPath(body, cbasePath+"/port", strconv.FormatInt(citem.Port.ValueInt64(), 10))
 					}
-					if !citem.Notls.IsNull() && !citem.Notls.IsUnknown() {
-						if citem.Notls.ValueBool() {
+					if !citem.NoTls.IsNull() && !citem.NoTls.IsUnknown() {
+						if citem.NoTls.ValueBool() {
 							body = helpers.SetFromXPath(body, cbasePath+"/notls", "")
 						}
 					}
@@ -3271,13 +3271,13 @@ func (data *GRPC) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Port = types.Int64Null()
 			}
 			if value := helpers.GetFromXPath(cr, "notls"); value.Exists() {
-				if !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.IsNull() {
-					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls = types.BoolValue(true)
+				if !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].NoTls.IsNull() {
+					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].NoTls = types.BoolValue(true)
 				}
 			} else {
 				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.IsNull() {
-					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls = types.BoolNull()
+				if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].NoTls.IsNull() {
+					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].NoTls = types.BoolNull()
 				}
 			}
 			if value := helpers.GetFromXPath(cr, "source-interface"); value.Exists() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].SourceInterface.IsNull() {
@@ -3330,13 +3330,13 @@ func (data *GRPC) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Port = types.Int64Null()
 			}
 			if value := helpers.GetFromXPath(cr, "notls"); value.Exists() {
-				if !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.IsNull() {
-					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls = types.BoolValue(true)
+				if !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].NoTls.IsNull() {
+					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].NoTls = types.BoolValue(true)
 				}
 			} else {
 				// For presence-based booleans, only set to false if the attribute is null in state
-				if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.IsNull() {
-					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls = types.BoolNull()
+				if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].NoTls.IsNull() {
+					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].NoTls = types.BoolNull()
 				}
 			}
 			if value := helpers.GetFromXPath(cr, "source-interface"); value.Exists() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].SourceInterface.IsNull() {
@@ -3574,9 +3574,9 @@ func (data *GRPC) fromBodyXML(ctx context.Context, res xmldot.Result) {
 						cItem.Port = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "notls"); ccValue.Exists() {
-						cItem.Notls = types.BoolValue(true)
+						cItem.NoTls = types.BoolValue(true)
 					} else {
-						cItem.Notls = types.BoolValue(false)
+						cItem.NoTls = types.BoolValue(false)
 					}
 					if ccValue := helpers.GetFromXPath(cv, "source-interface"); ccValue.Exists() {
 						cItem.SourceInterface = types.StringValue(ccValue.String())
@@ -3602,9 +3602,9 @@ func (data *GRPC) fromBodyXML(ctx context.Context, res xmldot.Result) {
 						cItem.Port = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "notls"); ccValue.Exists() {
-						cItem.Notls = types.BoolValue(true)
+						cItem.NoTls = types.BoolValue(true)
 					} else {
-						cItem.Notls = types.BoolValue(false)
+						cItem.NoTls = types.BoolValue(false)
 					}
 					if ccValue := helpers.GetFromXPath(cv, "source-interface"); ccValue.Exists() {
 						cItem.SourceInterface = types.StringValue(ccValue.String())
@@ -3841,9 +3841,9 @@ func (data *GRPCData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 						cItem.Port = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "notls"); ccValue.Exists() {
-						cItem.Notls = types.BoolValue(true)
+						cItem.NoTls = types.BoolValue(true)
 					} else {
-						cItem.Notls = types.BoolValue(false)
+						cItem.NoTls = types.BoolValue(false)
 					}
 					if ccValue := helpers.GetFromXPath(cv, "source-interface"); ccValue.Exists() {
 						cItem.SourceInterface = types.StringValue(ccValue.String())
@@ -3869,9 +3869,9 @@ func (data *GRPCData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 						cItem.Port = types.Int64Value(ccValue.Int())
 					}
 					if ccValue := helpers.GetFromXPath(cv, "notls"); ccValue.Exists() {
-						cItem.Notls = types.BoolValue(true)
+						cItem.NoTls = types.BoolValue(true)
 					} else {
-						cItem.Notls = types.BoolValue(false)
+						cItem.NoTls = types.BoolValue(false)
 					}
 					if ccValue := helpers.GetFromXPath(cv, "source-interface"); ccValue.Exists() {
 						cItem.SourceInterface = types.StringValue(ccValue.String())
@@ -3963,7 +3963,7 @@ func (data *GRPC) addDeletedItemsXML(ctx context.Context, state GRPC, body strin
 								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance%v/addresses/ipv6-address%v/source-interface", predicates, cpredicates))
 							}
 							// For boolean fields, only delete if state was true (presence container was set)
-							if !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.IsNull() && state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.ValueBool() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses[cj].Notls.IsNull() {
+							if !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].NoTls.IsNull() && state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].NoTls.ValueBool() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses[cj].NoTls.IsNull() {
 								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance%v/addresses/ipv6-address%v/notls", predicates, cpredicates))
 							}
 							break
@@ -4012,7 +4012,7 @@ func (data *GRPC) addDeletedItemsXML(ctx context.Context, state GRPC, body strin
 								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance%v/addresses/ipv4-address%v/source-interface", predicates, cpredicates))
 							}
 							// For boolean fields, only delete if state was true (presence container was set)
-							if !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.IsNull() && state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.ValueBool() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses[cj].Notls.IsNull() {
+							if !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].NoTls.IsNull() && state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].NoTls.ValueBool() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses[cj].NoTls.IsNull() {
 								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance%v/addresses/ipv4-address%v/notls", predicates, cpredicates))
 							}
 							break

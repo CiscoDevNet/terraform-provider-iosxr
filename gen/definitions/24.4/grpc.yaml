@@ -2,21 +2,14 @@
 name: GRPC
 path: Cisco-IOS-XR-um-grpc-cfg:/grpc
 doc_category: Management
-# grpc is a presence container: deleting it shuts down the gRPC server, which
-# is also the transport the provider uses (gNMI). Destroy therefore always
-# removes only the configured attributes and never the container itself.
 default_delete_attributes: true
 no_delete_attributes: true
 test_tags: [GRPC]
-# The tunnel, servers and p4rt containers are not modeled.
-# Attributes marked exclude_test can change how the device accepts connections
-# (port, vrf, address family, TLS, authentication, listen addresses, services)
-# and are kept out of the acceptance tests so they cannot lock out the provider.
 attributes:
   - yang_name: port
     description: "Server listening port (1024-65535), default: 57400"
+    exclude_test: true
     example: 57400
-    minimum_test_value: 57400
   - yang_name: vrf
     example: default
     exclude_test: true
@@ -36,16 +29,18 @@ attributes:
     xpath: address-family/dual
     tf_name: address_family_dual
     delete_parent: true
+    exclude_test: true
     example: true
   - yang_name: no-tls
-    example: true
     exclude_test: true
+    example: true
   - yang_name: local-connection
     example: true
   - yang_name: certificate-authentication
-    example: false
+    example: true
     exclude_test: true
   - yang_name: max-request-total
+    minimum_test_value: 128
     example: 128
   - yang_name: max-request-per-user
     example: 10
@@ -68,25 +63,18 @@ attributes:
     exclude_test: true
     example: default
   - yang_name: name
-    exclude_test: true
     example: grpc-1
   - yang_name: keepalive/time
-    exclude_test: true
     example: 300
   - yang_name: keepalive/timeout
-    exclude_test: true
     example: 30
   - yang_name: min-keepalive-interval
-    exclude_test: true
     example: 300
   - yang_name: ttl
-    exclude_test: true
     example: 64
   - yang_name: tls-min-version
-    exclude_test: true
     example: "1.2"
   - yang_name: tls-max-version
-    exclude_test: true
     example: "1.3"
   - yang_name: tls-mutual
     exclude_test: true
@@ -101,7 +89,6 @@ attributes:
     exclude_test: true
     example: ECDHE-RSA-AES128-GCM-SHA256
   - yang_name: tls-cipher/default
-    exclude_test: true
     example: enable
   - yang_name: tls-cipher/disable
     exclude_test: true
@@ -118,31 +105,22 @@ attributes:
     exclude_test: true
     example: 192.0.2.1
   - yang_name: service-layer
-    exclude_test: true
     example: true
   - yang_name: service-layer/auto-register
-    exclude_test: true
     example: true
   - yang_name: segment-routing
-    exclude_test: true
     example: true
   - yang_name: segment-routing/traffic-eng
-    exclude_test: true
     example: true
   - yang_name: segment-routing/traffic-eng/policy-service
-    exclude_test: true
     example: true
   - yang_name: gribi
-    exclude_test: true
     example: true
   - yang_name: gribi/port
-    exclude_test: true
     example: 50051
   - yang_name: gnmi
-    exclude_test: true
     example: true
   - yang_name: gnmi/port
-    exclude_test: true
     example: 57401
   - yang_name: gnsi/service/certz/ssl-profile-id
     exclude_test: true

@@ -407,7 +407,7 @@ func (r *GRPCResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 											int64validator.Between(1, 65535),
 										},
 									},
-									"notls": schema.BoolAttribute{
+									"no_tls": schema.BoolAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("turn off TLS").String + "\n  - Supported from version: `25.4`",
 										Optional:            true,
 									},
@@ -453,7 +453,7 @@ func (r *GRPCResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 											int64validator.Between(1, 65535),
 										},
 									},
-									"notls": schema.BoolAttribute{
+									"no_tls": schema.BoolAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("turn off TLS").String + "\n  - Supported from version: `25.4`",
 										Optional:            true,
 									},

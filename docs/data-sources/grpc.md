@@ -107,7 +107,7 @@ Read-Only:
 
 - `ipv4_address` (String) Enter Destination IPv4 address
   - Supported from version: `25.4`
-- `notls` (Boolean) turn off TLS
+- `no_tls` (Boolean) turn off TLS
   - Supported from version: `25.4`
 - `port` (Number) Enter port number
   - Supported from version: `25.4`
@@ -126,7 +126,7 @@ Read-Only:
 
 - `ipv6_address` (String) Enter Destination IPv6 address
   - Supported from version: `25.4`
-- `notls` (Boolean) turn off TLS
+- `no_tls` (Boolean) turn off TLS
   - Supported from version: `25.4`
 - `port` (Number) Enter port number
   - Supported from version: `25.4`

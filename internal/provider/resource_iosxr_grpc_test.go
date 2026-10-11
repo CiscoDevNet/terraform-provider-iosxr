@@ -38,8 +38,6 @@ func TestAccIosxrGRPC(t *testing.T) {
 		t.Skip("skipping test, set environment variable GRPC")
 	}
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "port", "57400"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "address_family_dual", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "local_connection", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "max_request_total", "128"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "max_request_per_user", "10"))
@@ -49,8 +47,79 @@ func TestAccIosxrGRPC(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "memory_limit", "1000"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "dscp", "af11"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "aaa_accounting_queue_size", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "name", "grpc-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "keepalive_time", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "keepalive_timeout", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "min_keepalive_interval", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "ttl", "64"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "tls_min_version", "1.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "tls_max_version", "1.3"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "tls_cipher_default", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "service_layer", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "service_layer_auto_register", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "segment_routing", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "segment_routing_traffic_eng", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "segment_routing_traffic_eng_policy_service", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "gribi", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "gribi_port", "50051"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "gnmi", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "gnmi_port", "57401"))
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "aaa_accounting_history_memory", "100"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "gnmi_get_limit_multiple", "10"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "gnpsi", "true"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "gnpsi_stream_queue_size", "4000"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "segment_routing_traffic_eng_service_instances.0.service_instance_name", "SERVICE-1"))
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "segment_routing_traffic_eng_service_instances.0.ipv4_addresses.0.ipv4_address", "192.0.2.10"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "segment_routing_traffic_eng_service_instances.0.ipv4_addresses.0.port", "50051"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "segment_routing_traffic_eng_service_instances.0.ipv4_addresses.0.no_tls", "true"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "segment_routing_traffic_eng_service_instances.0.ipv4_addresses.0.source_interface", "Loopback0"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "segment_routing_traffic_eng_service_instances.0.ipv4_addresses.0.vrf", "default"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "segment_routing_traffic_eng_service_instances.0.ipv4_addresses.0.tls_hostname_override", "service.example.com"))
+			}
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "segment_routing_traffic_eng_service_instances.0.ipv6_addresses.0.ipv6_address", "2001:db8::10"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "segment_routing_traffic_eng_service_instances.0.ipv6_addresses.0.port", "50051"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "segment_routing_traffic_eng_service_instances.0.ipv6_addresses.0.no_tls", "true"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "segment_routing_traffic_eng_service_instances.0.ipv6_addresses.0.source_interface", "Loopback0"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "segment_routing_traffic_eng_service_instances.0.ipv6_addresses.0.vrf", "default"))
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "segment_routing_traffic_eng_service_instances.0.ipv6_addresses.0.tls_hostname_override", "service.example.com"))
+			}
+		}
 	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
@@ -96,7 +165,7 @@ func iosxrGRPCImportStateIdFunc(resourceName string) resource.ImportStateIdFunc 
 
 func testAccIosxrGRPCConfig_minimum() string {
 	config := `resource "iosxr_grpc" "test" {` + "\n"
-	config += `	port = 57400` + "\n"
+	config += `	max_request_total = 128` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -107,8 +176,6 @@ func testAccIosxrGRPCConfig_minimum() string {
 
 func testAccIosxrGRPCConfig_all() string {
 	config := `resource "iosxr_grpc" "test" {` + "\n"
-	config += `	port = 57400` + "\n"
-	config += `	address_family_dual = true` + "\n"
 	config += `	local_connection = true` + "\n"
 	config += `	max_request_total = 128` + "\n"
 	config += `	max_request_per_user = 10` + "\n"
@@ -118,8 +185,85 @@ func testAccIosxrGRPCConfig_all() string {
 	config += `	memory_limit = 1000` + "\n"
 	config += `	dscp = "af11"` + "\n"
 	config += `	aaa_accounting_queue_size = 100` + "\n"
+	config += `	name = "grpc-1"` + "\n"
+	config += `	keepalive_time = 300` + "\n"
+	config += `	keepalive_timeout = 30` + "\n"
+	config += `	min_keepalive_interval = 300` + "\n"
+	config += `	ttl = 64` + "\n"
+	config += `	tls_min_version = "1.2"` + "\n"
+	config += `	tls_max_version = "1.3"` + "\n"
+	config += `	tls_cipher_default = "enable"` + "\n"
+	config += `	service_layer = true` + "\n"
+	config += `	service_layer_auto_register = true` + "\n"
+	config += `	segment_routing = true` + "\n"
+	config += `	segment_routing_traffic_eng = true` + "\n"
+	config += `	segment_routing_traffic_eng_policy_service = true` + "\n"
+	config += `	gribi = true` + "\n"
+	config += `	gribi_port = 50051` + "\n"
+	config += `	gnmi = true` + "\n"
+	config += `	gnmi_port = 57401` + "\n"
 	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
 		config += `	aaa_accounting_history_memory = 100` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	gnmi_get_limit_multiple = 10` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	gnpsi = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	gnpsi_stream_queue_size = 4000` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	segment_routing_traffic_eng_service_instances = [{` + "\n"
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			config += `		service_instance_name = "SERVICE-1"` + "\n"
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			config += `		ipv4_addresses = [{` + "\n"
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			ipv4_address = "192.0.2.10"` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			port = 50051` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			no_tls = true` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			source_interface = "Loopback0"` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			vrf = "default"` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			tls_hostname_override = "service.example.com"` + "\n"
+			}
+			config += `		}]` + "\n"
+		}
+		if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+			config += `		ipv6_addresses = [{` + "\n"
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			ipv6_address = "2001:db8::10"` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			port = 50051` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			no_tls = true` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			source_interface = "Loopback0"` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			vrf = "default"` + "\n"
+			}
+			if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+				config += `			tls_hostname_override = "service.example.com"` + "\n"
+			}
+			config += `		}]` + "\n"
+		}
+		config += `		}]` + "\n"
 	}
 	config += `}` + "\n"
 	return config

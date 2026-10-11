@@ -45,6 +45,13 @@ func TestAccIosxrGRPC(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "max_request_per_user", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "max_streams", "32"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "max_streams_per_user", "32"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "max_concurrent_streams", "64"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "memory_limit", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "dscp", "af11"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "aaa_accounting_queue_size", "100"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_grpc.test", "aaa_accounting_history_memory", "100"))
+	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -107,6 +114,13 @@ func testAccIosxrGRPCConfig_all() string {
 	config += `	max_request_per_user = 10` + "\n"
 	config += `	max_streams = 32` + "\n"
 	config += `	max_streams_per_user = 32` + "\n"
+	config += `	max_concurrent_streams = 64` + "\n"
+	config += `	memory_limit = 1000` + "\n"
+	config += `	dscp = "af11"` + "\n"
+	config += `	aaa_accounting_queue_size = 100` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	aaa_accounting_history_memory = 100` + "\n"
+	}
 	config += `}` + "\n"
 	return config
 }

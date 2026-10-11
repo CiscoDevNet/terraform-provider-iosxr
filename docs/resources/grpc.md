@@ -3,24 +3,29 @@
 page_title: "iosxr_grpc Resource - terraform-provider-iosxr"
 subcategory: "Management"
 description: |-
-  This resource can manage the gRPC configuration.
+  This resource can manage the GRPC configuration.
 ---
 
 # iosxr_grpc (Resource)
 
-This resource can manage the gRPC configuration.
+This resource can manage the GRPC configuration.
 
 ## Example Usage
 
 ```terraform
 resource "iosxr_grpc" "example" {
-  address_family_dual  = true
-  local_connection     = true
-  max_request_per_user = 10
-  max_request_total    = 128
-  max_streams          = 32
-  max_streams_per_user = 32
-  port                 = 57400
+  aaa_accounting_history_memory = 100
+  aaa_accounting_queue_size     = 100
+  address_family_dual           = true
+  dscp                          = "af11"
+  local_connection              = true
+  max_concurrent_streams        = 64
+  max_request_per_user          = 10
+  max_request_total             = 128
+  max_streams                   = 32
+  max_streams_per_user          = 32
+  memory_limit                  = 1000
+  port                          = 57400
 }
 ```
 
@@ -29,12 +34,48 @@ resource "iosxr_grpc" "example" {
 
 ### Optional
 
-- `address_family_dual` (Boolean) Dual stack address-family
+- `aaa_accounting_history_memory` (Number) Maximum configurable memory of the accounting history in MB
+  - Range: `1`-`400`
+  - Supported from version: `25.4`
+- `aaa_accounting_queue_size` (Number) Maximum configurable size of the accounting queue
+  - Range: `1`-`512`
+- `aaa_authentication_login` (String) AAA authentication login method list
+- `aaa_authorization_exec` (String) AAA authorization exec method list
+- `address_family_dual` (Boolean) dual stackaddress-family
 - `address_family_ipv4` (Boolean) IPv4 address-family
 - `address_family_ipv6` (Boolean) IPv6 address-family
 - `certificate_authentication` (Boolean) Enables Certificate based Authentication
+- `certificate_common_name` (String) Common name when generate certificates
+- `certificate_id` (String) Active Certificate
+- `default_server_disable` (Boolean) Configuration to disable the default gRPC server
+  - Supported from version: `25.4`
 - `device` (String) A device name from the provider configuration.
+- `dscp` (String) QoS marking DSCP to be set on transmitted gRPC
+- `gnmi` (Boolean) gNMI service configuration
+- `gnmi_get_limit_multiple` (Number) gNMI get request max size-limit multiplier, to support larger get results
+  - Range: `1`-`20`
+  - Supported from version: `25.4`
+- `gnmi_port` (Number) gNMI service listening port
+  - Range: `1024`-`65535`
+- `gnpsi` (Boolean) gNPSI service configuration
+  - Supported from version: `25.4`
+- `gnpsi_stream_queue_size` (Number) Configure gNPSI stream queue size
+  - Range: `1`-`8000`
+  - Supported from version: `25.4`
+- `gnsi_service_certz_ssl_profile_id` (String) SSL profile to be consumed by gRPC server
+- `gribi` (Boolean) gRIBI service configuration
+- `gribi_port` (Number) gRIBI service listening port
+  - Range: `1024`-`65535`
+- `keepalive_time` (Number) Server keepalive time
+  - Range: `1`-`10000`
+- `keepalive_timeout` (Number) Server keepalive timeout
+  - Range: `1`-`10000`
+- `listen_addresses` (List of String) DEPRECATED. Removing in 26.3.1: Listen address
+- `listen_addresses_any` (Boolean) DEPRECATED. Removing in 26.3.1: Listen on all addresses
+  - Supported from version: `25.4`
 - `local_connection` (Boolean) Enable gRPC server over Unix socket
+- `max_concurrent_streams` (Number) gRPC server maximum concurrent streams per connection
+  - Range: `1`-`128`
 - `max_request_per_user` (Number) Maximum concurrent requests per user
   - Range: `1`-`32`
 - `max_request_total` (Number) Maximum concurrent requests in total
@@ -43,14 +84,92 @@ resource "iosxr_grpc" "example" {
   - Range: `1`-`128`
 - `max_streams_per_user` (Number) Maximum number of streaming gRPCs per user (Default: 32)
   - Range: `1`-`128`
+- `memory_limit` (Number) Soft memory limit in MB
+  - Range: `600`-`1400`
+- `min_keepalive_interval` (Number) Minimum client keepalive interval
+  - Range: `1`-`10000`
+- `name` (String) gRPC server name
 - `no_tls` (Boolean) No TLS
 - `port` (Number) Server listening port (1024-65535), default: 57400
   - Range: `1024`-`65535`
+- `remote_connection_disable` (Boolean) Disable TCP on the gRPC server
+  - Supported from version: `25.4`
+- `segment_routing` (Boolean) gRPC segment-routing configuration
+- `segment_routing_traffic_eng` (Boolean) gRPC segment-routing traffic-eng configuration
+- `segment_routing_traffic_eng_policy_service` (Boolean) Enable SRTE policy services
+- `segment_routing_traffic_eng_service_instances` (Attributes List) Configure a named service
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--segment_routing_traffic_eng_service_instances))
+- `service_layer` (Boolean) grpc service layer configuration
+- `service_layer_auto_register` (Boolean) Enable service-layer auto-register
+- `tls_cipher_default` (String) Default of all ciphers
+  - Choices: `disable`, `enable`
+- `tls_cipher_disable` (String) Disable ciphers if 'default enable'
+- `tls_cipher_enable` (String) Enable ciphers if 'default disable'
+- `tls_max_version` (String) gRPC maximum TLS version
+  - Choices: `1.0`, `1.1`, `1.2`, `1.3`
+- `tls_min_version` (String) gRPC minimum TLS version
+  - Choices: `1.0`, `1.1`, `1.2`, `1.3`
+- `tls_mutual` (Boolean) Mutual Authentication
+- `tls_trustpoint` (String) Configure trustpoint
+- `tlsv1_disable` (Boolean) Disable support for TLS version 1.0ntlsv1-disable CLI is deprecated.nUse tls-min-version CLI to set minimum TLS version.
+- `ttl` (Number) gRPC packets TTL value
+  - Range: `0`-`255`
 - `vrf` (String) Server vrf
 
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--segment_routing_traffic_eng_service_instances"></a>
+### Nested Schema for `segment_routing_traffic_eng_service_instances`
+
+Optional:
+
+- `ipv4_addresses` (Attributes List) Destination address
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--segment_routing_traffic_eng_service_instances--ipv4_addresses))
+- `ipv6_addresses` (Attributes List) Destination address
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--segment_routing_traffic_eng_service_instances--ipv6_addresses))
+- `service_instance_name` (String) service instance name
+  - Supported from version: `25.4`
+
+<a id="nestedatt--segment_routing_traffic_eng_service_instances--ipv4_addresses"></a>
+### Nested Schema for `segment_routing_traffic_eng_service_instances.ipv4_addresses`
+
+Optional:
+
+- `ipv4_address` (String) Enter Destination IPv4 address
+  - Supported from version: `25.4`
+- `notls` (Boolean) turn off TLS
+  - Supported from version: `25.4`
+- `port` (Number) Enter port number
+  - Range: `1`-`65535`
+  - Supported from version: `25.4`
+- `source_interface` (String) Source interface to be used for dialout
+  - Supported from version: `25.4`
+- `tls_hostname_override` (String) host name to use for TLS cert verification
+  - Supported from version: `25.4`
+- `vrf` (String) Enter specific VRF Name for this nexthop
+  - Supported from version: `25.4`
+
+
+<a id="nestedatt--segment_routing_traffic_eng_service_instances--ipv6_addresses"></a>
+### Nested Schema for `segment_routing_traffic_eng_service_instances.ipv6_addresses`
+
+Optional:
+
+- `ipv6_address` (String) Enter Destination IPv6 address
+  - Supported from version: `25.4`
+- `notls` (Boolean) turn off TLS
+  - Supported from version: `25.4`
+- `port` (Number) Enter port number
+  - Range: `1`-`65535`
+  - Supported from version: `25.4`
+- `source_interface` (String) Source interface to be used for dialout
+  - Supported from version: `25.4`
+- `tls_hostname_override` (String) host name to use for TLS cert verification
+  - Supported from version: `25.4`
+- `vrf` (String) Enter specific VRF Name for this nexthop
+  - Supported from version: `25.4`
 
 ## Import
 

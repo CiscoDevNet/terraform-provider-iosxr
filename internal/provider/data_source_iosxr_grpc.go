@@ -58,7 +58,7 @@ func (d *GRPCDataSource) Metadata(_ context.Context, req datasource.MetadataRequ
 func (d *GRPCDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the gRPC configuration.",
+		MarkdownDescription: "This data source can read the GRPC configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -86,7 +86,7 @@ func (d *GRPCDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Computed:            true,
 			},
 			"address_family_dual": schema.BoolAttribute{
-				MarkdownDescription: "Dual stack address-family",
+				MarkdownDescription: "dual stackaddress-family",
 				Computed:            true,
 			},
 			"no_tls": schema.BoolAttribute{
@@ -116,6 +116,239 @@ func (d *GRPCDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 			"max_streams_per_user": schema.Int64Attribute{
 				MarkdownDescription: "Maximum number of streaming gRPCs per user (Default: 32)",
 				Computed:            true,
+			},
+			"max_concurrent_streams": schema.Int64Attribute{
+				MarkdownDescription: "gRPC server maximum concurrent streams per connection",
+				Computed:            true,
+			},
+			"memory_limit": schema.Int64Attribute{
+				MarkdownDescription: "Soft memory limit in MB",
+				Computed:            true,
+			},
+			"dscp": schema.StringAttribute{
+				MarkdownDescription: "QoS marking DSCP to be set on transmitted gRPC",
+				Computed:            true,
+			},
+			"aaa_accounting_queue_size": schema.Int64Attribute{
+				MarkdownDescription: "Maximum configurable size of the accounting queue",
+				Computed:            true,
+			},
+			"aaa_authorization_exec": schema.StringAttribute{
+				MarkdownDescription: "AAA authorization exec method list",
+				Computed:            true,
+			},
+			"aaa_authentication_login": schema.StringAttribute{
+				MarkdownDescription: "AAA authentication login method list",
+				Computed:            true,
+			},
+			"name": schema.StringAttribute{
+				MarkdownDescription: "gRPC server name",
+				Computed:            true,
+			},
+			"keepalive_time": schema.Int64Attribute{
+				MarkdownDescription: "Server keepalive time",
+				Computed:            true,
+			},
+			"keepalive_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Server keepalive timeout",
+				Computed:            true,
+			},
+			"min_keepalive_interval": schema.Int64Attribute{
+				MarkdownDescription: "Minimum client keepalive interval",
+				Computed:            true,
+			},
+			"ttl": schema.Int64Attribute{
+				MarkdownDescription: "gRPC packets TTL value",
+				Computed:            true,
+			},
+			"tls_min_version": schema.StringAttribute{
+				MarkdownDescription: "gRPC minimum TLS version",
+				Computed:            true,
+			},
+			"tls_max_version": schema.StringAttribute{
+				MarkdownDescription: "gRPC maximum TLS version",
+				Computed:            true,
+			},
+			"tls_mutual": schema.BoolAttribute{
+				MarkdownDescription: "Mutual Authentication",
+				Computed:            true,
+			},
+			"tlsv1_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable support for TLS version 1.0ntlsv1-disable CLI is deprecated.nUse tls-min-version CLI to set minimum TLS version.",
+				Computed:            true,
+			},
+			"tls_trustpoint": schema.StringAttribute{
+				MarkdownDescription: "Configure trustpoint",
+				Computed:            true,
+			},
+			"tls_cipher_enable": schema.StringAttribute{
+				MarkdownDescription: "Enable ciphers if 'default disable'",
+				Computed:            true,
+			},
+			"tls_cipher_default": schema.StringAttribute{
+				MarkdownDescription: "Default of all ciphers",
+				Computed:            true,
+			},
+			"tls_cipher_disable": schema.StringAttribute{
+				MarkdownDescription: "Disable ciphers if 'default enable'",
+				Computed:            true,
+			},
+			"certificate_id": schema.StringAttribute{
+				MarkdownDescription: "Active Certificate",
+				Computed:            true,
+			},
+			"certificate_common_name": schema.StringAttribute{
+				MarkdownDescription: "Common name when generate certificates",
+				Computed:            true,
+			},
+			"listen_addresses": schema.ListAttribute{
+				MarkdownDescription: "DEPRECATED. Removing in 26.3.1: Listen address",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"service_layer": schema.BoolAttribute{
+				MarkdownDescription: "grpc service layer configuration",
+				Computed:            true,
+			},
+			"service_layer_auto_register": schema.BoolAttribute{
+				MarkdownDescription: "Enable service-layer auto-register",
+				Computed:            true,
+			},
+			"segment_routing": schema.BoolAttribute{
+				MarkdownDescription: "gRPC segment-routing configuration",
+				Computed:            true,
+			},
+			"segment_routing_traffic_eng": schema.BoolAttribute{
+				MarkdownDescription: "gRPC segment-routing traffic-eng configuration",
+				Computed:            true,
+			},
+			"segment_routing_traffic_eng_policy_service": schema.BoolAttribute{
+				MarkdownDescription: "Enable SRTE policy services",
+				Computed:            true,
+			},
+			"gribi": schema.BoolAttribute{
+				MarkdownDescription: "gRIBI service configuration",
+				Computed:            true,
+			},
+			"gribi_port": schema.Int64Attribute{
+				MarkdownDescription: "gRIBI service listening port",
+				Computed:            true,
+			},
+			"gnmi": schema.BoolAttribute{
+				MarkdownDescription: "gNMI service configuration",
+				Computed:            true,
+			},
+			"gnmi_port": schema.Int64Attribute{
+				MarkdownDescription: "gNMI service listening port",
+				Computed:            true,
+			},
+			"gnsi_service_certz_ssl_profile_id": schema.StringAttribute{
+				MarkdownDescription: "SSL profile to be consumed by gRPC server",
+				Computed:            true,
+			},
+			"listen_addresses_any": schema.BoolAttribute{
+				MarkdownDescription: "DEPRECATED. Removing in 26.3.1: Listen on all addresses" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"aaa_accounting_history_memory": schema.Int64Attribute{
+				MarkdownDescription: "Maximum configurable memory of the accounting history in MB" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"default_server_disable": schema.BoolAttribute{
+				MarkdownDescription: "Configuration to disable the default gRPC server" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"remote_connection_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable TCP on the gRPC server" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"gnmi_get_limit_multiple": schema.Int64Attribute{
+				MarkdownDescription: "gNMI get request max size-limit multiplier, to support larger get results" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"gnpsi": schema.BoolAttribute{
+				MarkdownDescription: "gNPSI service configuration" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"gnpsi_stream_queue_size": schema.Int64Attribute{
+				MarkdownDescription: "Configure gNPSI stream queue size" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"segment_routing_traffic_eng_service_instances": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure a named service" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"service_instance_name": schema.StringAttribute{
+							MarkdownDescription: "service instance name" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"ipv4_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: "Destination address" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"ipv4_address": schema.StringAttribute{
+										MarkdownDescription: "Enter Destination IPv4 address" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"port": schema.Int64Attribute{
+										MarkdownDescription: "Enter port number" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"notls": schema.BoolAttribute{
+										MarkdownDescription: "turn off TLS" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"source_interface": schema.StringAttribute{
+										MarkdownDescription: "Source interface to be used for dialout" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"vrf": schema.StringAttribute{
+										MarkdownDescription: "Enter specific VRF Name for this nexthop" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"tls_hostname_override": schema.StringAttribute{
+										MarkdownDescription: "host name to use for TLS cert verification" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"ipv6_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: "Destination address" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"ipv6_address": schema.StringAttribute{
+										MarkdownDescription: "Enter Destination IPv6 address" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"port": schema.Int64Attribute{
+										MarkdownDescription: "Enter port number" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"notls": schema.BoolAttribute{
+										MarkdownDescription: "turn off TLS" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"source_interface": schema.StringAttribute{
+										MarkdownDescription: "Source interface to be used for dialout" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"vrf": schema.StringAttribute{
+										MarkdownDescription: "Enter specific VRF Name for this nexthop" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+									"tls_hostname_override": schema.StringAttribute{
+										MarkdownDescription: "host name to use for TLS cert verification" + "\n  - Supported from version: `25.4`",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}

@@ -1088,6 +1088,7 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewFlowMonitorMapResource,
 		NewFlowSamplerMapResource,
 		NewFrequencySynchronizationResource,
+		NewGRPCResource,
 		NewGenericInterfaceListResource,
 		NewHTTPClientResource,
 		NewHWModuleProfileResource,
@@ -1238,7 +1239,6 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewVRFResource,
 		NewVTYPoolResource,
 		NewXMLAgentResource,
-		NewGRPCResource,
 	}
 }
 
@@ -1299,6 +1299,7 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewFlowMonitorMapDataSource,
 		NewFlowSamplerMapDataSource,
 		NewFrequencySynchronizationDataSource,
+		NewGRPCDataSource,
 		NewGenericInterfaceListDataSource,
 		NewHTTPClientDataSource,
 		NewHWModuleProfileDataSource,
@@ -1449,7 +1450,6 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewVRFDataSource,
 		NewVTYPoolDataSource,
 		NewXMLAgentDataSource,
-		NewGRPCDataSource,
 	}
 }
 

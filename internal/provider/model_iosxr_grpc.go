@@ -24,6 +24,8 @@ import (
 	"context"
 	"fmt"
 	"path"
+	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -40,37 +42,138 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type GRPC struct {
-	Device                    types.String `tfsdk:"device"`
-	Id                        types.String `tfsdk:"id"`
-	Port                      types.Int64  `tfsdk:"port"`
-	Vrf                       types.String `tfsdk:"vrf"`
-	AddressFamilyIpv4         types.Bool   `tfsdk:"address_family_ipv4"`
-	AddressFamilyIpv6         types.Bool   `tfsdk:"address_family_ipv6"`
-	AddressFamilyDual         types.Bool   `tfsdk:"address_family_dual"`
-	NoTls                     types.Bool   `tfsdk:"no_tls"`
-	LocalConnection           types.Bool   `tfsdk:"local_connection"`
-	CertificateAuthentication types.Bool   `tfsdk:"certificate_authentication"`
-	MaxRequestTotal           types.Int64  `tfsdk:"max_request_total"`
-	MaxRequestPerUser         types.Int64  `tfsdk:"max_request_per_user"`
-	MaxStreams                types.Int64  `tfsdk:"max_streams"`
-	MaxStreamsPerUser         types.Int64  `tfsdk:"max_streams_per_user"`
+	Device                                   types.String                                   `tfsdk:"device"`
+	Id                                       types.String                                   `tfsdk:"id"`
+	Port                                     types.Int64                                    `tfsdk:"port"`
+	Vrf                                      types.String                                   `tfsdk:"vrf"`
+	AddressFamilyIpv4                        types.Bool                                     `tfsdk:"address_family_ipv4"`
+	AddressFamilyIpv6                        types.Bool                                     `tfsdk:"address_family_ipv6"`
+	AddressFamilyDual                        types.Bool                                     `tfsdk:"address_family_dual"`
+	NoTls                                    types.Bool                                     `tfsdk:"no_tls"`
+	LocalConnection                          types.Bool                                     `tfsdk:"local_connection"`
+	CertificateAuthentication                types.Bool                                     `tfsdk:"certificate_authentication"`
+	MaxRequestTotal                          types.Int64                                    `tfsdk:"max_request_total"`
+	MaxRequestPerUser                        types.Int64                                    `tfsdk:"max_request_per_user"`
+	MaxStreams                               types.Int64                                    `tfsdk:"max_streams"`
+	MaxStreamsPerUser                        types.Int64                                    `tfsdk:"max_streams_per_user"`
+	MaxConcurrentStreams                     types.Int64                                    `tfsdk:"max_concurrent_streams"`
+	MemoryLimit                              types.Int64                                    `tfsdk:"memory_limit"`
+	Dscp                                     types.String                                   `tfsdk:"dscp"`
+	AaaAccountingQueueSize                   types.Int64                                    `tfsdk:"aaa_accounting_queue_size"`
+	AaaAuthorizationExec                     types.String                                   `tfsdk:"aaa_authorization_exec"`
+	AaaAuthenticationLogin                   types.String                                   `tfsdk:"aaa_authentication_login"`
+	Name                                     types.String                                   `tfsdk:"name"`
+	KeepaliveTime                            types.Int64                                    `tfsdk:"keepalive_time"`
+	KeepaliveTimeout                         types.Int64                                    `tfsdk:"keepalive_timeout"`
+	MinKeepaliveInterval                     types.Int64                                    `tfsdk:"min_keepalive_interval"`
+	Ttl                                      types.Int64                                    `tfsdk:"ttl"`
+	TlsMinVersion                            types.String                                   `tfsdk:"tls_min_version"`
+	TlsMaxVersion                            types.String                                   `tfsdk:"tls_max_version"`
+	TlsMutual                                types.Bool                                     `tfsdk:"tls_mutual"`
+	Tlsv1Disable                             types.Bool                                     `tfsdk:"tlsv1_disable"`
+	TlsTrustpoint                            types.String                                   `tfsdk:"tls_trustpoint"`
+	TlsCipherEnable                          types.String                                   `tfsdk:"tls_cipher_enable"`
+	TlsCipherDefault                         types.String                                   `tfsdk:"tls_cipher_default"`
+	TlsCipherDisable                         types.String                                   `tfsdk:"tls_cipher_disable"`
+	CertificateId                            types.String                                   `tfsdk:"certificate_id"`
+	CertificateCommonName                    types.String                                   `tfsdk:"certificate_common_name"`
+	ListenAddresses                          types.List                                     `tfsdk:"listen_addresses"`
+	ServiceLayer                             types.Bool                                     `tfsdk:"service_layer"`
+	ServiceLayerAutoRegister                 types.Bool                                     `tfsdk:"service_layer_auto_register"`
+	SegmentRouting                           types.Bool                                     `tfsdk:"segment_routing"`
+	SegmentRoutingTrafficEng                 types.Bool                                     `tfsdk:"segment_routing_traffic_eng"`
+	SegmentRoutingTrafficEngPolicyService    types.Bool                                     `tfsdk:"segment_routing_traffic_eng_policy_service"`
+	Gribi                                    types.Bool                                     `tfsdk:"gribi"`
+	GribiPort                                types.Int64                                    `tfsdk:"gribi_port"`
+	Gnmi                                     types.Bool                                     `tfsdk:"gnmi"`
+	GnmiPort                                 types.Int64                                    `tfsdk:"gnmi_port"`
+	GnsiServiceCertzSslProfileId             types.String                                   `tfsdk:"gnsi_service_certz_ssl_profile_id"`
+	ListenAddressesAny                       types.Bool                                     `tfsdk:"listen_addresses_any"`
+	AaaAccountingHistoryMemory               types.Int64                                    `tfsdk:"aaa_accounting_history_memory"`
+	DefaultServerDisable                     types.Bool                                     `tfsdk:"default_server_disable"`
+	RemoteConnectionDisable                  types.Bool                                     `tfsdk:"remote_connection_disable"`
+	GnmiGetLimitMultiple                     types.Int64                                    `tfsdk:"gnmi_get_limit_multiple"`
+	Gnpsi                                    types.Bool                                     `tfsdk:"gnpsi"`
+	GnpsiStreamQueueSize                     types.Int64                                    `tfsdk:"gnpsi_stream_queue_size"`
+	SegmentRoutingTrafficEngServiceInstances []GRPCSegmentRoutingTrafficEngServiceInstances `tfsdk:"segment_routing_traffic_eng_service_instances"`
 }
 
 type GRPCData struct {
-	Device                    types.String `tfsdk:"device"`
-	Id                        types.String `tfsdk:"id"`
-	Port                      types.Int64  `tfsdk:"port"`
-	Vrf                       types.String `tfsdk:"vrf"`
-	AddressFamilyIpv4         types.Bool   `tfsdk:"address_family_ipv4"`
-	AddressFamilyIpv6         types.Bool   `tfsdk:"address_family_ipv6"`
-	AddressFamilyDual         types.Bool   `tfsdk:"address_family_dual"`
-	NoTls                     types.Bool   `tfsdk:"no_tls"`
-	LocalConnection           types.Bool   `tfsdk:"local_connection"`
-	CertificateAuthentication types.Bool   `tfsdk:"certificate_authentication"`
-	MaxRequestTotal           types.Int64  `tfsdk:"max_request_total"`
-	MaxRequestPerUser         types.Int64  `tfsdk:"max_request_per_user"`
-	MaxStreams                types.Int64  `tfsdk:"max_streams"`
-	MaxStreamsPerUser         types.Int64  `tfsdk:"max_streams_per_user"`
+	Device                                   types.String                                   `tfsdk:"device"`
+	Id                                       types.String                                   `tfsdk:"id"`
+	Port                                     types.Int64                                    `tfsdk:"port"`
+	Vrf                                      types.String                                   `tfsdk:"vrf"`
+	AddressFamilyIpv4                        types.Bool                                     `tfsdk:"address_family_ipv4"`
+	AddressFamilyIpv6                        types.Bool                                     `tfsdk:"address_family_ipv6"`
+	AddressFamilyDual                        types.Bool                                     `tfsdk:"address_family_dual"`
+	NoTls                                    types.Bool                                     `tfsdk:"no_tls"`
+	LocalConnection                          types.Bool                                     `tfsdk:"local_connection"`
+	CertificateAuthentication                types.Bool                                     `tfsdk:"certificate_authentication"`
+	MaxRequestTotal                          types.Int64                                    `tfsdk:"max_request_total"`
+	MaxRequestPerUser                        types.Int64                                    `tfsdk:"max_request_per_user"`
+	MaxStreams                               types.Int64                                    `tfsdk:"max_streams"`
+	MaxStreamsPerUser                        types.Int64                                    `tfsdk:"max_streams_per_user"`
+	MaxConcurrentStreams                     types.Int64                                    `tfsdk:"max_concurrent_streams"`
+	MemoryLimit                              types.Int64                                    `tfsdk:"memory_limit"`
+	Dscp                                     types.String                                   `tfsdk:"dscp"`
+	AaaAccountingQueueSize                   types.Int64                                    `tfsdk:"aaa_accounting_queue_size"`
+	AaaAuthorizationExec                     types.String                                   `tfsdk:"aaa_authorization_exec"`
+	AaaAuthenticationLogin                   types.String                                   `tfsdk:"aaa_authentication_login"`
+	Name                                     types.String                                   `tfsdk:"name"`
+	KeepaliveTime                            types.Int64                                    `tfsdk:"keepalive_time"`
+	KeepaliveTimeout                         types.Int64                                    `tfsdk:"keepalive_timeout"`
+	MinKeepaliveInterval                     types.Int64                                    `tfsdk:"min_keepalive_interval"`
+	Ttl                                      types.Int64                                    `tfsdk:"ttl"`
+	TlsMinVersion                            types.String                                   `tfsdk:"tls_min_version"`
+	TlsMaxVersion                            types.String                                   `tfsdk:"tls_max_version"`
+	TlsMutual                                types.Bool                                     `tfsdk:"tls_mutual"`
+	Tlsv1Disable                             types.Bool                                     `tfsdk:"tlsv1_disable"`
+	TlsTrustpoint                            types.String                                   `tfsdk:"tls_trustpoint"`
+	TlsCipherEnable                          types.String                                   `tfsdk:"tls_cipher_enable"`
+	TlsCipherDefault                         types.String                                   `tfsdk:"tls_cipher_default"`
+	TlsCipherDisable                         types.String                                   `tfsdk:"tls_cipher_disable"`
+	CertificateId                            types.String                                   `tfsdk:"certificate_id"`
+	CertificateCommonName                    types.String                                   `tfsdk:"certificate_common_name"`
+	ListenAddresses                          types.List                                     `tfsdk:"listen_addresses"`
+	ServiceLayer                             types.Bool                                     `tfsdk:"service_layer"`
+	ServiceLayerAutoRegister                 types.Bool                                     `tfsdk:"service_layer_auto_register"`
+	SegmentRouting                           types.Bool                                     `tfsdk:"segment_routing"`
+	SegmentRoutingTrafficEng                 types.Bool                                     `tfsdk:"segment_routing_traffic_eng"`
+	SegmentRoutingTrafficEngPolicyService    types.Bool                                     `tfsdk:"segment_routing_traffic_eng_policy_service"`
+	Gribi                                    types.Bool                                     `tfsdk:"gribi"`
+	GribiPort                                types.Int64                                    `tfsdk:"gribi_port"`
+	Gnmi                                     types.Bool                                     `tfsdk:"gnmi"`
+	GnmiPort                                 types.Int64                                    `tfsdk:"gnmi_port"`
+	GnsiServiceCertzSslProfileId             types.String                                   `tfsdk:"gnsi_service_certz_ssl_profile_id"`
+	ListenAddressesAny                       types.Bool                                     `tfsdk:"listen_addresses_any"`
+	AaaAccountingHistoryMemory               types.Int64                                    `tfsdk:"aaa_accounting_history_memory"`
+	DefaultServerDisable                     types.Bool                                     `tfsdk:"default_server_disable"`
+	RemoteConnectionDisable                  types.Bool                                     `tfsdk:"remote_connection_disable"`
+	GnmiGetLimitMultiple                     types.Int64                                    `tfsdk:"gnmi_get_limit_multiple"`
+	Gnpsi                                    types.Bool                                     `tfsdk:"gnpsi"`
+	GnpsiStreamQueueSize                     types.Int64                                    `tfsdk:"gnpsi_stream_queue_size"`
+	SegmentRoutingTrafficEngServiceInstances []GRPCSegmentRoutingTrafficEngServiceInstances `tfsdk:"segment_routing_traffic_eng_service_instances"`
+}
+type GRPCSegmentRoutingTrafficEngServiceInstances struct {
+	ServiceInstanceName types.String                                                `tfsdk:"service_instance_name"`
+	Ipv4Addresses       []GRPCSegmentRoutingTrafficEngServiceInstancesIpv4Addresses `tfsdk:"ipv4_addresses"`
+	Ipv6Addresses       []GRPCSegmentRoutingTrafficEngServiceInstancesIpv6Addresses `tfsdk:"ipv6_addresses"`
+}
+type GRPCSegmentRoutingTrafficEngServiceInstancesIpv4Addresses struct {
+	Ipv4Address         types.String `tfsdk:"ipv4_address"`
+	Port                types.Int64  `tfsdk:"port"`
+	Notls               types.Bool   `tfsdk:"notls"`
+	SourceInterface     types.String `tfsdk:"source_interface"`
+	Vrf                 types.String `tfsdk:"vrf"`
+	TlsHostnameOverride types.String `tfsdk:"tls_hostname_override"`
+}
+type GRPCSegmentRoutingTrafficEngServiceInstancesIpv6Addresses struct {
+	Ipv6Address         types.String `tfsdk:"ipv6_address"`
+	Port                types.Int64  `tfsdk:"port"`
+	Notls               types.Bool   `tfsdk:"notls"`
+	SourceInterface     types.String `tfsdk:"source_interface"`
+	Vrf                 types.String `tfsdk:"vrf"`
+	TlsHostnameOverride types.String `tfsdk:"tls_hostname_override"`
 }
 
 // End of section. //template:end types
@@ -150,6 +253,249 @@ func (data GRPC) toBody(ctx context.Context, providerVersion string) string {
 	if !data.MaxStreamsPerUser.IsNull() && !data.MaxStreamsPerUser.IsUnknown() {
 		body, _ = sjson.Set(body, "max-streams-per-user", strconv.FormatInt(data.MaxStreamsPerUser.ValueInt64(), 10))
 	}
+	if !data.MaxConcurrentStreams.IsNull() && !data.MaxConcurrentStreams.IsUnknown() {
+		body, _ = sjson.Set(body, "max-concurrent-streams", strconv.FormatInt(data.MaxConcurrentStreams.ValueInt64(), 10))
+	}
+	if !data.MemoryLimit.IsNull() && !data.MemoryLimit.IsUnknown() {
+		body, _ = sjson.Set(body, "memory.limit", strconv.FormatInt(data.MemoryLimit.ValueInt64(), 10))
+	}
+	if !data.Dscp.IsNull() && !data.Dscp.IsUnknown() {
+		body, _ = sjson.Set(body, "dscp", data.Dscp.ValueString())
+	}
+	if !data.AaaAccountingQueueSize.IsNull() && !data.AaaAccountingQueueSize.IsUnknown() {
+		body, _ = sjson.Set(body, "aaa.accounting.queue-size", strconv.FormatInt(data.AaaAccountingQueueSize.ValueInt64(), 10))
+	}
+	if !data.AaaAuthorizationExec.IsNull() && !data.AaaAuthorizationExec.IsUnknown() {
+		body, _ = sjson.Set(body, "aaa.authorization.exec", data.AaaAuthorizationExec.ValueString())
+	}
+	if !data.AaaAuthenticationLogin.IsNull() && !data.AaaAuthenticationLogin.IsUnknown() {
+		body, _ = sjson.Set(body, "aaa.authentication.login", data.AaaAuthenticationLogin.ValueString())
+	}
+	if !data.Name.IsNull() && !data.Name.IsUnknown() {
+		body, _ = sjson.Set(body, "name", data.Name.ValueString())
+	}
+	if !data.KeepaliveTime.IsNull() && !data.KeepaliveTime.IsUnknown() {
+		body, _ = sjson.Set(body, "keepalive.time", strconv.FormatInt(data.KeepaliveTime.ValueInt64(), 10))
+	}
+	if !data.KeepaliveTimeout.IsNull() && !data.KeepaliveTimeout.IsUnknown() {
+		body, _ = sjson.Set(body, "keepalive.timeout", strconv.FormatInt(data.KeepaliveTimeout.ValueInt64(), 10))
+	}
+	if !data.MinKeepaliveInterval.IsNull() && !data.MinKeepaliveInterval.IsUnknown() {
+		body, _ = sjson.Set(body, "min-keepalive-interval", strconv.FormatInt(data.MinKeepaliveInterval.ValueInt64(), 10))
+	}
+	if !data.Ttl.IsNull() && !data.Ttl.IsUnknown() {
+		body, _ = sjson.Set(body, "ttl", strconv.FormatInt(data.Ttl.ValueInt64(), 10))
+	}
+	if !data.TlsMinVersion.IsNull() && !data.TlsMinVersion.IsUnknown() {
+		body, _ = sjson.Set(body, "tls-min-version", data.TlsMinVersion.ValueString())
+	}
+	if !data.TlsMaxVersion.IsNull() && !data.TlsMaxVersion.IsUnknown() {
+		body, _ = sjson.Set(body, "tls-max-version", data.TlsMaxVersion.ValueString())
+	}
+	if !data.TlsMutual.IsNull() && !data.TlsMutual.IsUnknown() {
+		if data.TlsMutual.ValueBool() {
+			body, _ = sjson.Set(body, "tls-mutual", []interface{}{nil})
+		}
+	}
+	if !data.Tlsv1Disable.IsNull() && !data.Tlsv1Disable.IsUnknown() {
+		if data.Tlsv1Disable.ValueBool() {
+			body, _ = sjson.Set(body, "tlsv1-disable", []interface{}{nil})
+		}
+	}
+	if !data.TlsTrustpoint.IsNull() && !data.TlsTrustpoint.IsUnknown() {
+		body, _ = sjson.Set(body, "tls-trustpoint", data.TlsTrustpoint.ValueString())
+	}
+	if !data.TlsCipherEnable.IsNull() && !data.TlsCipherEnable.IsUnknown() {
+		body, _ = sjson.Set(body, "tls-cipher.enable", data.TlsCipherEnable.ValueString())
+	}
+	if !data.TlsCipherDefault.IsNull() && !data.TlsCipherDefault.IsUnknown() {
+		body, _ = sjson.Set(body, "tls-cipher.default", data.TlsCipherDefault.ValueString())
+	}
+	if !data.TlsCipherDisable.IsNull() && !data.TlsCipherDisable.IsUnknown() {
+		body, _ = sjson.Set(body, "tls-cipher.disable", data.TlsCipherDisable.ValueString())
+	}
+	if !data.CertificateId.IsNull() && !data.CertificateId.IsUnknown() {
+		body, _ = sjson.Set(body, "certificate-id", data.CertificateId.ValueString())
+	}
+	if !data.CertificateCommonName.IsNull() && !data.CertificateCommonName.IsUnknown() {
+		body, _ = sjson.Set(body, "certificate.common-name", data.CertificateCommonName.ValueString())
+	}
+	if !data.ListenAddresses.IsNull() && !data.ListenAddresses.IsUnknown() {
+		var values []string
+		data.ListenAddresses.ElementsAs(ctx, &values, false)
+		body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "listen-addresses.listen-addresses-argument", "25.4": "listen-addresses.listen-address.address"}, "listen-addresses.listen-addresses-argument"), values)
+	}
+	if !data.ServiceLayer.IsNull() && !data.ServiceLayer.IsUnknown() {
+		if data.ServiceLayer.ValueBool() {
+			body, _ = sjson.Set(body, "service-layer", map[string]string{})
+		}
+	}
+	if !data.ServiceLayerAutoRegister.IsNull() && !data.ServiceLayerAutoRegister.IsUnknown() {
+		if data.ServiceLayerAutoRegister.ValueBool() {
+			body, _ = sjson.Set(body, "service-layer.auto-register", []interface{}{nil})
+		}
+	}
+	if !data.SegmentRouting.IsNull() && !data.SegmentRouting.IsUnknown() {
+		if data.SegmentRouting.ValueBool() {
+			body, _ = sjson.Set(body, "segment-routing", map[string]string{})
+		}
+	}
+	if !data.SegmentRoutingTrafficEng.IsNull() && !data.SegmentRoutingTrafficEng.IsUnknown() {
+		if data.SegmentRoutingTrafficEng.ValueBool() {
+			body, _ = sjson.Set(body, "segment-routing.traffic-eng", map[string]string{})
+		}
+	}
+	if !data.SegmentRoutingTrafficEngPolicyService.IsNull() && !data.SegmentRoutingTrafficEngPolicyService.IsUnknown() {
+		if data.SegmentRoutingTrafficEngPolicyService.ValueBool() {
+			body, _ = sjson.Set(body, "segment-routing.traffic-eng.policy-service", []interface{}{nil})
+		}
+	}
+	if !data.Gribi.IsNull() && !data.Gribi.IsUnknown() {
+		if data.Gribi.ValueBool() {
+			body, _ = sjson.Set(body, "gribi", map[string]string{})
+		}
+	}
+	if !data.GribiPort.IsNull() && !data.GribiPort.IsUnknown() {
+		body, _ = sjson.Set(body, "gribi.port", strconv.FormatInt(data.GribiPort.ValueInt64(), 10))
+	}
+	if !data.Gnmi.IsNull() && !data.Gnmi.IsUnknown() {
+		if data.Gnmi.ValueBool() {
+			body, _ = sjson.Set(body, "gnmi", map[string]string{})
+		}
+	}
+	if !data.GnmiPort.IsNull() && !data.GnmiPort.IsUnknown() {
+		body, _ = sjson.Set(body, "gnmi.port", strconv.FormatInt(data.GnmiPort.ValueInt64(), 10))
+	}
+	if !data.GnsiServiceCertzSslProfileId.IsNull() && !data.GnsiServiceCertzSslProfileId.IsUnknown() {
+		body, _ = sjson.Set(body, "gnsi.service.certz.ssl-profile-id", data.GnsiServiceCertzSslProfileId.ValueString())
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ListenAddressesAny.IsNull() && !data.ListenAddressesAny.IsUnknown() {
+			if data.ListenAddressesAny.ValueBool() {
+				body, _ = sjson.Set(body, "listen-addresses.any", []interface{}{nil})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.AaaAccountingHistoryMemory.IsNull() && !data.AaaAccountingHistoryMemory.IsUnknown() {
+			body, _ = sjson.Set(body, "aaa.accounting.history-memory", strconv.FormatInt(data.AaaAccountingHistoryMemory.ValueInt64(), 10))
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.DefaultServerDisable.IsNull() && !data.DefaultServerDisable.IsUnknown() {
+			if data.DefaultServerDisable.ValueBool() {
+				body, _ = sjson.Set(body, "default-server-disable", []interface{}{nil})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.RemoteConnectionDisable.IsNull() && !data.RemoteConnectionDisable.IsUnknown() {
+			if data.RemoteConnectionDisable.ValueBool() {
+				body, _ = sjson.Set(body, "remote-connection.disable", []interface{}{nil})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.GnmiGetLimitMultiple.IsNull() && !data.GnmiGetLimitMultiple.IsUnknown() {
+			body, _ = sjson.Set(body, "gnmi.get-limit-multiple", strconv.FormatInt(data.GnmiGetLimitMultiple.ValueInt64(), 10))
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.Gnpsi.IsNull() && !data.Gnpsi.IsUnknown() {
+			if data.Gnpsi.ValueBool() {
+				body, _ = sjson.Set(body, "gnpsi", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.GnpsiStreamQueueSize.IsNull() && !data.GnpsiStreamQueueSize.IsUnknown() {
+			body, _ = sjson.Set(body, "gnpsi.stream.queue.size", strconv.FormatInt(data.GnpsiStreamQueueSize.ValueInt64(), 10))
+		}
+	}
+	if (helpers.VersionAtLeast(providerVersion, "25.4")) && len(data.SegmentRoutingTrafficEngServiceInstances) > 0 {
+		body, _ = sjson.Set(body, "segment-routing.traffic-eng.service-instances.service-instance", []interface{}{})
+		for index, item := range data.SegmentRoutingTrafficEngServiceInstances {
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.ServiceInstanceName.IsNull() && !item.ServiceInstanceName.IsUnknown() {
+					body, _ = sjson.Set(body, "segment-routing.traffic-eng.service-instances.service-instance"+"."+strconv.Itoa(index)+"."+"service-instance-name", item.ServiceInstanceName.ValueString())
+				}
+			}
+			if (helpers.VersionAtLeast(providerVersion, "25.4")) && len(item.Ipv4Addresses) > 0 {
+				body, _ = sjson.Set(body, "segment-routing.traffic-eng.service-instances.service-instance"+"."+strconv.Itoa(index)+"."+"addresses.ipv4-address", []interface{}{})
+				for cindex, citem := range item.Ipv4Addresses {
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.Ipv4Address.IsNull() && !citem.Ipv4Address.IsUnknown() {
+							body, _ = sjson.Set(body, "segment-routing.traffic-eng.service-instances.service-instance"+"."+strconv.Itoa(index)+"."+"addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"ipv4-address", citem.Ipv4Address.ValueString())
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.Port.IsNull() && !citem.Port.IsUnknown() {
+							body, _ = sjson.Set(body, "segment-routing.traffic-eng.service-instances.service-instance"+"."+strconv.Itoa(index)+"."+"addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"port", strconv.FormatInt(citem.Port.ValueInt64(), 10))
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.Notls.IsNull() && !citem.Notls.IsUnknown() {
+							if citem.Notls.ValueBool() {
+								body, _ = sjson.Set(body, "segment-routing.traffic-eng.service-instances.service-instance"+"."+strconv.Itoa(index)+"."+"addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"notls", []interface{}{nil})
+							}
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.SourceInterface.IsNull() && !citem.SourceInterface.IsUnknown() {
+							body, _ = sjson.Set(body, "segment-routing.traffic-eng.service-instances.service-instance"+"."+strconv.Itoa(index)+"."+"addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"source-interface", citem.SourceInterface.ValueString())
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.Vrf.IsNull() && !citem.Vrf.IsUnknown() {
+							body, _ = sjson.Set(body, "segment-routing.traffic-eng.service-instances.service-instance"+"."+strconv.Itoa(index)+"."+"addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"vrf", citem.Vrf.ValueString())
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.TlsHostnameOverride.IsNull() && !citem.TlsHostnameOverride.IsUnknown() {
+							body, _ = sjson.Set(body, "segment-routing.traffic-eng.service-instances.service-instance"+"."+strconv.Itoa(index)+"."+"addresses.ipv4-address"+"."+strconv.Itoa(cindex)+"."+"tls-hostname-override", citem.TlsHostnameOverride.ValueString())
+						}
+					}
+				}
+			}
+			if (helpers.VersionAtLeast(providerVersion, "25.4")) && len(item.Ipv6Addresses) > 0 {
+				body, _ = sjson.Set(body, "segment-routing.traffic-eng.service-instances.service-instance"+"."+strconv.Itoa(index)+"."+"addresses.ipv6-address", []interface{}{})
+				for cindex, citem := range item.Ipv6Addresses {
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.Ipv6Address.IsNull() && !citem.Ipv6Address.IsUnknown() {
+							body, _ = sjson.Set(body, "segment-routing.traffic-eng.service-instances.service-instance"+"."+strconv.Itoa(index)+"."+"addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"ipv6-address", citem.Ipv6Address.ValueString())
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.Port.IsNull() && !citem.Port.IsUnknown() {
+							body, _ = sjson.Set(body, "segment-routing.traffic-eng.service-instances.service-instance"+"."+strconv.Itoa(index)+"."+"addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"port", strconv.FormatInt(citem.Port.ValueInt64(), 10))
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.Notls.IsNull() && !citem.Notls.IsUnknown() {
+							if citem.Notls.ValueBool() {
+								body, _ = sjson.Set(body, "segment-routing.traffic-eng.service-instances.service-instance"+"."+strconv.Itoa(index)+"."+"addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"notls", []interface{}{nil})
+							}
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.SourceInterface.IsNull() && !citem.SourceInterface.IsUnknown() {
+							body, _ = sjson.Set(body, "segment-routing.traffic-eng.service-instances.service-instance"+"."+strconv.Itoa(index)+"."+"addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"source-interface", citem.SourceInterface.ValueString())
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.Vrf.IsNull() && !citem.Vrf.IsUnknown() {
+							body, _ = sjson.Set(body, "segment-routing.traffic-eng.service-instances.service-instance"+"."+strconv.Itoa(index)+"."+"addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"vrf", citem.Vrf.ValueString())
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.TlsHostnameOverride.IsNull() && !citem.TlsHostnameOverride.IsUnknown() {
+							body, _ = sjson.Set(body, "segment-routing.traffic-eng.service-instances.service-instance"+"."+strconv.Itoa(index)+"."+"addresses.ipv6-address"+"."+strconv.Itoa(cindex)+"."+"tls-hostname-override", citem.TlsHostnameOverride.ValueString())
+						}
+					}
+				}
+			}
+		}
+	}
 	return body
 }
 
@@ -161,6 +507,100 @@ func (data GRPC) toBody(ctx context.Context, providerVersion string) string {
 func (data GRPC) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "listen_addresses_any",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "aaa_accounting_history_memory",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "default_server_disable",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "remote_connection_disable",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "gnmi_get_limit_multiple",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "gnpsi",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "gnpsi_stream_queue_size",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "segment_routing_traffic_eng_service_instances",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "segment_routing_traffic_eng_service_instances.service_instance_name",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "segment_routing_traffic_eng_service_instances.ipv4_addresses",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "segment_routing_traffic_eng_service_instances.ipv4_addresses.ipv4_address",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "segment_routing_traffic_eng_service_instances.ipv4_addresses.port",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "segment_routing_traffic_eng_service_instances.ipv4_addresses.notls",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "segment_routing_traffic_eng_service_instances.ipv4_addresses.source_interface",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "segment_routing_traffic_eng_service_instances.ipv4_addresses.vrf",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "segment_routing_traffic_eng_service_instances.ipv4_addresses.tls_hostname_override",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "segment_routing_traffic_eng_service_instances.ipv6_addresses",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "segment_routing_traffic_eng_service_instances.ipv6_addresses.ipv6_address",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "segment_routing_traffic_eng_service_instances.ipv6_addresses.port",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "segment_routing_traffic_eng_service_instances.ipv6_addresses.notls",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "segment_routing_traffic_eng_service_instances.ipv6_addresses.source_interface",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "segment_routing_traffic_eng_service_instances.ipv6_addresses.vrf",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "segment_routing_traffic_eng_service_instances.ipv6_addresses.tls_hostname_override",
+			AddedInVersion: "25.4",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -297,6 +737,433 @@ func (data *GRPC) updateFromBody(ctx context.Context, res []byte, version string
 	} else if data.MaxStreamsPerUser.IsNull() {
 		data.MaxStreamsPerUser = types.Int64Null()
 	}
+	if value := gjson.GetBytes(res, "max-concurrent-streams"); value.Exists() && !data.MaxConcurrentStreams.IsNull() {
+		data.MaxConcurrentStreams = types.Int64Value(value.Int())
+	} else if data.MaxConcurrentStreams.IsNull() {
+		data.MaxConcurrentStreams = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "memory.limit"); value.Exists() && !data.MemoryLimit.IsNull() {
+		data.MemoryLimit = types.Int64Value(value.Int())
+	} else if data.MemoryLimit.IsNull() {
+		data.MemoryLimit = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Dscp.IsNull() {
+		data.Dscp = types.StringValue(value.String())
+	} else if data.Dscp.IsNull() {
+		data.Dscp = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "aaa.accounting.queue-size"); value.Exists() && !data.AaaAccountingQueueSize.IsNull() {
+		data.AaaAccountingQueueSize = types.Int64Value(value.Int())
+	} else if data.AaaAccountingQueueSize.IsNull() {
+		data.AaaAccountingQueueSize = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "aaa.authorization.exec"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AaaAuthorizationExec.IsNull() {
+		data.AaaAuthorizationExec = types.StringValue(value.String())
+	} else if data.AaaAuthorizationExec.IsNull() {
+		data.AaaAuthorizationExec = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "aaa.authentication.login"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AaaAuthenticationLogin.IsNull() {
+		data.AaaAuthenticationLogin = types.StringValue(value.String())
+	} else if data.AaaAuthenticationLogin.IsNull() {
+		data.AaaAuthenticationLogin = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Name.IsNull() {
+		data.Name = types.StringValue(value.String())
+	} else if data.Name.IsNull() {
+		data.Name = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "keepalive.time"); value.Exists() && !data.KeepaliveTime.IsNull() {
+		data.KeepaliveTime = types.Int64Value(value.Int())
+	} else if data.KeepaliveTime.IsNull() {
+		data.KeepaliveTime = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "keepalive.timeout"); value.Exists() && !data.KeepaliveTimeout.IsNull() {
+		data.KeepaliveTimeout = types.Int64Value(value.Int())
+	} else if data.KeepaliveTimeout.IsNull() {
+		data.KeepaliveTimeout = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "min-keepalive-interval"); value.Exists() && !data.MinKeepaliveInterval.IsNull() {
+		data.MinKeepaliveInterval = types.Int64Value(value.Int())
+	} else if data.MinKeepaliveInterval.IsNull() {
+		data.MinKeepaliveInterval = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "ttl"); value.Exists() && !data.Ttl.IsNull() {
+		data.Ttl = types.Int64Value(value.Int())
+	} else if data.Ttl.IsNull() {
+		data.Ttl = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "tls-min-version"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.TlsMinVersion.IsNull() {
+		data.TlsMinVersion = types.StringValue(value.String())
+	} else if data.TlsMinVersion.IsNull() {
+		data.TlsMinVersion = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "tls-max-version"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.TlsMaxVersion.IsNull() {
+		data.TlsMaxVersion = types.StringValue(value.String())
+	} else if data.TlsMaxVersion.IsNull() {
+		data.TlsMaxVersion = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "tls-mutual"); !data.TlsMutual.IsNull() {
+		if value.Exists() {
+			data.TlsMutual = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TlsMutual = types.BoolValue(false)
+		}
+	} else if data.TlsMutual.IsNull() {
+		data.TlsMutual = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "tlsv1-disable"); !data.Tlsv1Disable.IsNull() {
+		if value.Exists() {
+			data.Tlsv1Disable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Tlsv1Disable = types.BoolValue(false)
+		}
+	} else if data.Tlsv1Disable.IsNull() {
+		data.Tlsv1Disable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "tls-trustpoint"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.TlsTrustpoint.IsNull() {
+		data.TlsTrustpoint = types.StringValue(value.String())
+	} else if data.TlsTrustpoint.IsNull() {
+		data.TlsTrustpoint = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "tls-cipher.enable"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.TlsCipherEnable.IsNull() {
+		data.TlsCipherEnable = types.StringValue(value.String())
+	} else if data.TlsCipherEnable.IsNull() {
+		data.TlsCipherEnable = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "tls-cipher.default"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.TlsCipherDefault.IsNull() {
+		data.TlsCipherDefault = types.StringValue(value.String())
+	} else if data.TlsCipherDefault.IsNull() {
+		data.TlsCipherDefault = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "tls-cipher.disable"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.TlsCipherDisable.IsNull() {
+		data.TlsCipherDisable = types.StringValue(value.String())
+	} else if data.TlsCipherDisable.IsNull() {
+		data.TlsCipherDisable = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "certificate-id"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CertificateId.IsNull() {
+		data.CertificateId = types.StringValue(value.String())
+	} else if data.CertificateId.IsNull() {
+		data.CertificateId = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "certificate.common-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.CertificateCommonName.IsNull() {
+		data.CertificateCommonName = types.StringValue(value.String())
+	} else if data.CertificateCommonName.IsNull() {
+		data.CertificateCommonName = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "listen-addresses.listen-addresses-argument", "25.4": "listen-addresses.listen-address.address"}, "listen-addresses.listen-addresses-argument")); value.Exists() && !data.ListenAddresses.IsNull() {
+		data.ListenAddresses = helpers.GetStringList(value.Array())
+	} else if data.ListenAddresses.IsNull() {
+		data.ListenAddresses = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "service-layer"); !data.ServiceLayer.IsNull() {
+		if value.Exists() {
+			data.ServiceLayer = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ServiceLayer = types.BoolValue(false)
+		}
+	} else if data.ServiceLayer.IsNull() {
+		data.ServiceLayer = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "service-layer.auto-register"); !data.ServiceLayerAutoRegister.IsNull() {
+		if value.Exists() {
+			data.ServiceLayerAutoRegister = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ServiceLayerAutoRegister = types.BoolValue(false)
+		}
+	} else if data.ServiceLayerAutoRegister.IsNull() {
+		data.ServiceLayerAutoRegister = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing"); !data.SegmentRouting.IsNull() {
+		if value.Exists() {
+			data.SegmentRouting = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SegmentRouting = types.BoolValue(false)
+		}
+	} else if data.SegmentRouting.IsNull() {
+		data.SegmentRouting = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.traffic-eng"); !data.SegmentRoutingTrafficEng.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingTrafficEng = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SegmentRoutingTrafficEng = types.BoolValue(false)
+		}
+	} else if data.SegmentRoutingTrafficEng.IsNull() {
+		data.SegmentRoutingTrafficEng = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.traffic-eng.policy-service"); !data.SegmentRoutingTrafficEngPolicyService.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingTrafficEngPolicyService = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SegmentRoutingTrafficEngPolicyService = types.BoolValue(false)
+		}
+	} else if data.SegmentRoutingTrafficEngPolicyService.IsNull() {
+		data.SegmentRoutingTrafficEngPolicyService = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "gribi"); !data.Gribi.IsNull() {
+		if value.Exists() {
+			data.Gribi = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Gribi = types.BoolValue(false)
+		}
+	} else if data.Gribi.IsNull() {
+		data.Gribi = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "gribi.port"); value.Exists() && !data.GribiPort.IsNull() {
+		data.GribiPort = types.Int64Value(value.Int())
+	} else if data.GribiPort.IsNull() {
+		data.GribiPort = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "gnmi"); !data.Gnmi.IsNull() {
+		if value.Exists() {
+			data.Gnmi = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Gnmi = types.BoolValue(false)
+		}
+	} else if data.Gnmi.IsNull() {
+		data.Gnmi = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "gnmi.port"); value.Exists() && !data.GnmiPort.IsNull() {
+		data.GnmiPort = types.Int64Value(value.Int())
+	} else if data.GnmiPort.IsNull() {
+		data.GnmiPort = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "gnsi.service.certz.ssl-profile-id"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.GnsiServiceCertzSslProfileId.IsNull() {
+		data.GnsiServiceCertzSslProfileId = types.StringValue(value.String())
+	} else if data.GnsiServiceCertzSslProfileId.IsNull() {
+		data.GnsiServiceCertzSslProfileId = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "listen-addresses.any"); helpers.VersionAtLeast(version, "25.4") && !data.ListenAddressesAny.IsNull() {
+		if value.Exists() {
+			data.ListenAddressesAny = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ListenAddressesAny = types.BoolValue(false)
+		}
+	} else if data.ListenAddressesAny.IsNull() {
+		data.ListenAddressesAny = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "aaa.accounting.history-memory"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.AaaAccountingHistoryMemory.IsNull() {
+		data.AaaAccountingHistoryMemory = types.Int64Value(value.Int())
+	} else if data.AaaAccountingHistoryMemory.IsNull() {
+		data.AaaAccountingHistoryMemory = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "default-server-disable"); helpers.VersionAtLeast(version, "25.4") && !data.DefaultServerDisable.IsNull() {
+		if value.Exists() {
+			data.DefaultServerDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.DefaultServerDisable = types.BoolValue(false)
+		}
+	} else if data.DefaultServerDisable.IsNull() {
+		data.DefaultServerDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "remote-connection.disable"); helpers.VersionAtLeast(version, "25.4") && !data.RemoteConnectionDisable.IsNull() {
+		if value.Exists() {
+			data.RemoteConnectionDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.RemoteConnectionDisable = types.BoolValue(false)
+		}
+	} else if data.RemoteConnectionDisable.IsNull() {
+		data.RemoteConnectionDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "gnmi.get-limit-multiple"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.GnmiGetLimitMultiple.IsNull() {
+		data.GnmiGetLimitMultiple = types.Int64Value(value.Int())
+	} else if data.GnmiGetLimitMultiple.IsNull() {
+		data.GnmiGetLimitMultiple = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "gnpsi"); helpers.VersionAtLeast(version, "25.4") && !data.Gnpsi.IsNull() {
+		if value.Exists() {
+			data.Gnpsi = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Gnpsi = types.BoolValue(false)
+		}
+	} else if data.Gnpsi.IsNull() {
+		data.Gnpsi = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "gnpsi.stream.queue.size"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.GnpsiStreamQueueSize.IsNull() {
+		data.GnpsiStreamQueueSize = types.Int64Value(value.Int())
+	} else if data.GnpsiStreamQueueSize.IsNull() {
+		data.GnpsiStreamQueueSize = types.Int64Null()
+	}
+	for i := range data.SegmentRoutingTrafficEngServiceInstances {
+		var keys []string
+		var keyValues []string
+		if helpers.VersionAtLeast(version, "25.4") {
+			keys = append(keys, "service-instance-name")
+			keyValues = append(keyValues, data.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName.ValueString())
+		}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "segment-routing.traffic-eng.service-instances.service-instance").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("service-instance-name"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName.IsNull() {
+			data.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName = types.StringValue(value.String())
+		} else {
+			data.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName = types.StringNull()
+		}
+		for ci := range data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "ipv4-address")
+				keyValues = append(keyValues, data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Ipv4Address.ValueString())
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "port")
+				keyValues = append(keyValues, strconv.FormatInt(data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Port.ValueInt64(), 10))
+			}
+
+			var cr gjson.Result
+			r.Get("addresses.ipv4-address").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("ipv4-address"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Ipv4Address.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Ipv4Address = types.StringValue(value.String())
+			} else {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Ipv4Address = types.StringNull()
+			}
+			if value := cr.Get("port"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Port.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Port = types.Int64Value(value.Int())
+			} else {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Port = types.Int64Null()
+			}
+			if value := cr.Get("notls"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+				if !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.IsNull() {
+					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.IsNull() {
+					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls = types.BoolNull()
+				}
+			}
+			if value := cr.Get("source-interface"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].SourceInterface.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].SourceInterface = types.StringValue(value.String())
+			} else {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].SourceInterface = types.StringNull()
+			}
+			if value := cr.Get("vrf"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Vrf.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Vrf = types.StringValue(value.String())
+			} else {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Vrf = types.StringNull()
+			}
+			if value := cr.Get("tls-hostname-override"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].TlsHostnameOverride.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].TlsHostnameOverride = types.StringValue(value.String())
+			} else {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].TlsHostnameOverride = types.StringNull()
+			}
+		}
+		for ci := range data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "ipv6-address")
+				keyValues = append(keyValues, data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Ipv6Address.ValueString())
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "port")
+				keyValues = append(keyValues, strconv.FormatInt(data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Port.ValueInt64(), 10))
+			}
+
+			var cr gjson.Result
+			r.Get("addresses.ipv6-address").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("ipv6-address"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Ipv6Address.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Ipv6Address = types.StringValue(value.String())
+			} else {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Ipv6Address = types.StringNull()
+			}
+			if value := cr.Get("port"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Port.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Port = types.Int64Value(value.Int())
+			} else {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Port = types.Int64Null()
+			}
+			if value := cr.Get("notls"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+				if !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.IsNull() {
+					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.IsNull() {
+					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls = types.BoolNull()
+				}
+			}
+			if value := cr.Get("source-interface"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].SourceInterface.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].SourceInterface = types.StringValue(value.String())
+			} else {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].SourceInterface = types.StringNull()
+			}
+			if value := cr.Get("vrf"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Vrf.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Vrf = types.StringValue(value.String())
+			} else {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Vrf = types.StringNull()
+			}
+			if value := cr.Get("tls-hostname-override"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].TlsHostnameOverride.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].TlsHostnameOverride = types.StringValue(value.String())
+			} else {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].TlsHostnameOverride = types.StringNull()
+			}
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -358,6 +1225,311 @@ func (data *GRPC) fromBody(ctx context.Context, res []byte, version string) {
 	if value := gjson.GetBytes(res, "max-streams-per-user"); value.Exists() {
 		data.MaxStreamsPerUser = types.Int64Value(value.Int())
 	}
+	if value := gjson.GetBytes(res, "max-concurrent-streams"); value.Exists() {
+		data.MaxConcurrentStreams = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "memory.limit"); value.Exists() {
+		data.MemoryLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Dscp = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "aaa.accounting.queue-size"); value.Exists() {
+		data.AaaAccountingQueueSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "aaa.authorization.exec"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AaaAuthorizationExec = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "aaa.authentication.login"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AaaAuthenticationLogin = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Name = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "keepalive.time"); value.Exists() {
+		data.KeepaliveTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "keepalive.timeout"); value.Exists() {
+		data.KeepaliveTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "min-keepalive-interval"); value.Exists() {
+		data.MinKeepaliveInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ttl"); value.Exists() {
+		data.Ttl = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "tls-min-version"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.TlsMinVersion = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "tls-max-version"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.TlsMaxVersion = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "tls-mutual"); value.Exists() {
+		data.TlsMutual = types.BoolValue(true)
+	} else if !data.TlsMutual.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TlsMutual = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "tlsv1-disable"); value.Exists() {
+		data.Tlsv1Disable = types.BoolValue(true)
+	} else if !data.Tlsv1Disable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Tlsv1Disable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "tls-trustpoint"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.TlsTrustpoint = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "tls-cipher.enable"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.TlsCipherEnable = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "tls-cipher.default"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.TlsCipherDefault = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "tls-cipher.disable"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.TlsCipherDisable = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "certificate-id"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CertificateId = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "certificate.common-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CertificateCommonName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "listen-addresses.listen-addresses-argument", "25.4": "listen-addresses.listen-address.address"}, "listen-addresses.listen-addresses-argument")); value.Exists() {
+		data.ListenAddresses = helpers.GetStringList(value.Array())
+	} else {
+		data.ListenAddresses = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "service-layer"); value.Exists() {
+		data.ServiceLayer = types.BoolValue(true)
+	} else if !data.ServiceLayer.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ServiceLayer = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "service-layer.auto-register"); value.Exists() {
+		data.ServiceLayerAutoRegister = types.BoolValue(true)
+	} else if !data.ServiceLayerAutoRegister.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ServiceLayerAutoRegister = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing"); value.Exists() {
+		data.SegmentRouting = types.BoolValue(true)
+	} else if !data.SegmentRouting.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SegmentRouting = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.traffic-eng"); value.Exists() {
+		data.SegmentRoutingTrafficEng = types.BoolValue(true)
+	} else if !data.SegmentRoutingTrafficEng.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SegmentRoutingTrafficEng = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.traffic-eng.policy-service"); value.Exists() {
+		data.SegmentRoutingTrafficEngPolicyService = types.BoolValue(true)
+	} else if !data.SegmentRoutingTrafficEngPolicyService.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SegmentRoutingTrafficEngPolicyService = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "gribi"); value.Exists() {
+		data.Gribi = types.BoolValue(true)
+	} else if !data.Gribi.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Gribi = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "gribi.port"); value.Exists() {
+		data.GribiPort = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "gnmi"); value.Exists() {
+		data.Gnmi = types.BoolValue(true)
+	} else if !data.Gnmi.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Gnmi = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "gnmi.port"); value.Exists() {
+		data.GnmiPort = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "gnsi.service.certz.ssl-profile-id"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.GnsiServiceCertzSslProfileId = types.StringValue(value.String())
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "listen-addresses.any"); value.Exists() {
+			data.ListenAddressesAny = types.BoolValue(true)
+		} else if !data.ListenAddressesAny.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ListenAddressesAny = types.BoolValue(false)
+		}
+	} else {
+		data.ListenAddressesAny = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "aaa.accounting.history-memory"); value.Exists() {
+			data.AaaAccountingHistoryMemory = types.Int64Value(value.Int())
+		}
+	} else {
+		data.AaaAccountingHistoryMemory = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "default-server-disable"); value.Exists() {
+			data.DefaultServerDisable = types.BoolValue(true)
+		} else if !data.DefaultServerDisable.IsNull() {
+			// Only set to false if it was previously set in state
+			data.DefaultServerDisable = types.BoolValue(false)
+		}
+	} else {
+		data.DefaultServerDisable = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "remote-connection.disable"); value.Exists() {
+			data.RemoteConnectionDisable = types.BoolValue(true)
+		} else if !data.RemoteConnectionDisable.IsNull() {
+			// Only set to false if it was previously set in state
+			data.RemoteConnectionDisable = types.BoolValue(false)
+		}
+	} else {
+		data.RemoteConnectionDisable = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "gnmi.get-limit-multiple"); value.Exists() {
+			data.GnmiGetLimitMultiple = types.Int64Value(value.Int())
+		}
+	} else {
+		data.GnmiGetLimitMultiple = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "gnpsi"); value.Exists() {
+			data.Gnpsi = types.BoolValue(true)
+		} else if !data.Gnpsi.IsNull() {
+			// Only set to false if it was previously set in state
+			data.Gnpsi = types.BoolValue(false)
+		}
+	} else {
+		data.Gnpsi = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "gnpsi.stream.queue.size"); value.Exists() {
+			data.GnpsiStreamQueueSize = types.Int64Value(value.Int())
+		}
+	} else {
+		data.GnpsiStreamQueueSize = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.traffic-eng.service-instances.service-instance"); value.Exists() {
+		data.SegmentRoutingTrafficEngServiceInstances = make([]GRPCSegmentRoutingTrafficEngServiceInstances, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := GRPCSegmentRoutingTrafficEngServiceInstances{}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("service-instance-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.ServiceInstanceName = types.StringValue(cValue.String())
+				}
+			} else {
+				item.ServiceInstanceName = types.StringNull()
+			}
+			if cValue := v.Get("addresses.ipv4-address"); cValue.Exists() {
+				item.Ipv4Addresses = make([]GRPCSegmentRoutingTrafficEngServiceInstancesIpv4Addresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := GRPCSegmentRoutingTrafficEngServiceInstancesIpv4Addresses{}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("ipv4-address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.Ipv4Address = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.Ipv4Address = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("port"); ccValue.Exists() {
+							cItem.Port = types.Int64Value(ccValue.Int())
+						}
+					} else {
+						cItem.Port = types.Int64Null()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("notls"); ccValue.Exists() {
+							cItem.Notls = types.BoolValue(true)
+						} else {
+							cItem.Notls = types.BoolValue(false)
+						}
+					} else {
+						cItem.Notls = types.BoolNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("source-interface"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.SourceInterface = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.SourceInterface = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("vrf"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.Vrf = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.Vrf = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("tls-hostname-override"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.TlsHostnameOverride = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.TlsHostnameOverride = types.StringNull()
+					}
+					item.Ipv4Addresses = append(item.Ipv4Addresses, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("addresses.ipv6-address"); cValue.Exists() {
+				item.Ipv6Addresses = make([]GRPCSegmentRoutingTrafficEngServiceInstancesIpv6Addresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := GRPCSegmentRoutingTrafficEngServiceInstancesIpv6Addresses{}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("ipv6-address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.Ipv6Address = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.Ipv6Address = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("port"); ccValue.Exists() {
+							cItem.Port = types.Int64Value(ccValue.Int())
+						}
+					} else {
+						cItem.Port = types.Int64Null()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("notls"); ccValue.Exists() {
+							cItem.Notls = types.BoolValue(true)
+						} else {
+							cItem.Notls = types.BoolValue(false)
+						}
+					} else {
+						cItem.Notls = types.BoolNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("source-interface"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.SourceInterface = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.SourceInterface = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("vrf"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.Vrf = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.Vrf = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("tls-hostname-override"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.TlsHostnameOverride = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.TlsHostnameOverride = types.StringNull()
+					}
+					item.Ipv6Addresses = append(item.Ipv6Addresses, cItem)
+					return true
+				})
+			}
+			data.SegmentRoutingTrafficEngServiceInstances = append(data.SegmentRoutingTrafficEngServiceInstances, item)
+			return true
+		})
+	}
 }
 
 // End of section. //template:end fromBody
@@ -413,6 +1585,298 @@ func (data *GRPCData) fromBody(ctx context.Context, res []byte, version string) 
 	if value := gjson.GetBytes(res, "max-streams-per-user"); value.Exists() {
 		data.MaxStreamsPerUser = types.Int64Value(value.Int())
 	}
+	if value := gjson.GetBytes(res, "max-concurrent-streams"); value.Exists() {
+		data.MaxConcurrentStreams = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "memory.limit"); value.Exists() {
+		data.MemoryLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Dscp = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "aaa.accounting.queue-size"); value.Exists() {
+		data.AaaAccountingQueueSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "aaa.authorization.exec"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AaaAuthorizationExec = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "aaa.authentication.login"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AaaAuthenticationLogin = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Name = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "keepalive.time"); value.Exists() {
+		data.KeepaliveTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "keepalive.timeout"); value.Exists() {
+		data.KeepaliveTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "min-keepalive-interval"); value.Exists() {
+		data.MinKeepaliveInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ttl"); value.Exists() {
+		data.Ttl = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "tls-min-version"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.TlsMinVersion = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "tls-max-version"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.TlsMaxVersion = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "tls-mutual"); value.Exists() {
+		data.TlsMutual = types.BoolValue(true)
+	} else {
+		data.TlsMutual = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "tlsv1-disable"); value.Exists() {
+		data.Tlsv1Disable = types.BoolValue(true)
+	} else {
+		data.Tlsv1Disable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "tls-trustpoint"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.TlsTrustpoint = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "tls-cipher.enable"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.TlsCipherEnable = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "tls-cipher.default"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.TlsCipherDefault = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "tls-cipher.disable"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.TlsCipherDisable = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "certificate-id"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CertificateId = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "certificate.common-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.CertificateCommonName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "listen-addresses.listen-addresses-argument", "25.4": "listen-addresses.listen-address.address"}, "listen-addresses.listen-addresses-argument")); value.Exists() {
+		data.ListenAddresses = helpers.GetStringList(value.Array())
+	} else {
+		data.ListenAddresses = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "service-layer"); value.Exists() {
+		data.ServiceLayer = types.BoolValue(true)
+	} else {
+		data.ServiceLayer = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "service-layer.auto-register"); value.Exists() {
+		data.ServiceLayerAutoRegister = types.BoolValue(true)
+	} else {
+		data.ServiceLayerAutoRegister = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing"); value.Exists() {
+		data.SegmentRouting = types.BoolValue(true)
+	} else {
+		data.SegmentRouting = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.traffic-eng"); value.Exists() {
+		data.SegmentRoutingTrafficEng = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingTrafficEng = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.traffic-eng.policy-service"); value.Exists() {
+		data.SegmentRoutingTrafficEngPolicyService = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingTrafficEngPolicyService = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "gribi"); value.Exists() {
+		data.Gribi = types.BoolValue(true)
+	} else {
+		data.Gribi = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "gribi.port"); value.Exists() {
+		data.GribiPort = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "gnmi"); value.Exists() {
+		data.Gnmi = types.BoolValue(true)
+	} else {
+		data.Gnmi = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "gnmi.port"); value.Exists() {
+		data.GnmiPort = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "gnsi.service.certz.ssl-profile-id"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.GnsiServiceCertzSslProfileId = types.StringValue(value.String())
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "listen-addresses.any"); value.Exists() {
+			data.ListenAddressesAny = types.BoolValue(true)
+		} else {
+			data.ListenAddressesAny = types.BoolValue(false)
+		}
+	} else {
+		data.ListenAddressesAny = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "aaa.accounting.history-memory"); value.Exists() {
+			data.AaaAccountingHistoryMemory = types.Int64Value(value.Int())
+		}
+	} else {
+		data.AaaAccountingHistoryMemory = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "default-server-disable"); value.Exists() {
+			data.DefaultServerDisable = types.BoolValue(true)
+		} else {
+			data.DefaultServerDisable = types.BoolValue(false)
+		}
+	} else {
+		data.DefaultServerDisable = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "remote-connection.disable"); value.Exists() {
+			data.RemoteConnectionDisable = types.BoolValue(true)
+		} else {
+			data.RemoteConnectionDisable = types.BoolValue(false)
+		}
+	} else {
+		data.RemoteConnectionDisable = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "gnmi.get-limit-multiple"); value.Exists() {
+			data.GnmiGetLimitMultiple = types.Int64Value(value.Int())
+		}
+	} else {
+		data.GnmiGetLimitMultiple = types.Int64Null()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "gnpsi"); value.Exists() {
+			data.Gnpsi = types.BoolValue(true)
+		} else {
+			data.Gnpsi = types.BoolValue(false)
+		}
+	} else {
+		data.Gnpsi = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "gnpsi.stream.queue.size"); value.Exists() {
+			data.GnpsiStreamQueueSize = types.Int64Value(value.Int())
+		}
+	} else {
+		data.GnpsiStreamQueueSize = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.traffic-eng.service-instances.service-instance"); value.Exists() {
+		data.SegmentRoutingTrafficEngServiceInstances = make([]GRPCSegmentRoutingTrafficEngServiceInstances, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := GRPCSegmentRoutingTrafficEngServiceInstances{}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("service-instance-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.ServiceInstanceName = types.StringValue(cValue.String())
+				}
+			} else {
+				item.ServiceInstanceName = types.StringNull()
+			}
+			if cValue := v.Get("addresses.ipv4-address"); cValue.Exists() {
+				item.Ipv4Addresses = make([]GRPCSegmentRoutingTrafficEngServiceInstancesIpv4Addresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := GRPCSegmentRoutingTrafficEngServiceInstancesIpv4Addresses{}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("ipv4-address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.Ipv4Address = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.Ipv4Address = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("port"); ccValue.Exists() {
+							cItem.Port = types.Int64Value(ccValue.Int())
+						}
+					} else {
+						cItem.Port = types.Int64Null()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("notls"); ccValue.Exists() {
+							cItem.Notls = types.BoolValue(true)
+						} else {
+							cItem.Notls = types.BoolValue(false)
+						}
+					} else {
+						cItem.Notls = types.BoolNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("source-interface"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.SourceInterface = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.SourceInterface = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("vrf"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.Vrf = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.Vrf = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("tls-hostname-override"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.TlsHostnameOverride = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.TlsHostnameOverride = types.StringNull()
+					}
+					item.Ipv4Addresses = append(item.Ipv4Addresses, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("addresses.ipv6-address"); cValue.Exists() {
+				item.Ipv6Addresses = make([]GRPCSegmentRoutingTrafficEngServiceInstancesIpv6Addresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := GRPCSegmentRoutingTrafficEngServiceInstancesIpv6Addresses{}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("ipv6-address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.Ipv6Address = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.Ipv6Address = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("port"); ccValue.Exists() {
+							cItem.Port = types.Int64Value(ccValue.Int())
+						}
+					} else {
+						cItem.Port = types.Int64Null()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("notls"); ccValue.Exists() {
+							cItem.Notls = types.BoolValue(true)
+						} else {
+							cItem.Notls = types.BoolValue(false)
+						}
+					} else {
+						cItem.Notls = types.BoolNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("source-interface"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.SourceInterface = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.SourceInterface = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("vrf"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.Vrf = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.Vrf = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("tls-hostname-override"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.TlsHostnameOverride = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.TlsHostnameOverride = types.StringNull()
+					}
+					item.Ipv6Addresses = append(item.Ipv6Addresses, cItem)
+					return true
+				})
+			}
+			data.SegmentRoutingTrafficEngServiceInstances = append(data.SegmentRoutingTrafficEngServiceInstances, item)
+			return true
+		})
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -421,6 +1885,275 @@ func (data *GRPCData) fromBody(ctx context.Context, res []byte, version string) 
 
 func (data *GRPC) getDeletedItems(ctx context.Context, state GRPC, version string) []string {
 	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") {
+		for i := range state.SegmentRoutingTrafficEngServiceInstances {
+			var keys []string
+			var stateKeyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "service-instance-name")
+				stateKeyValues = append(stateKeyValues, state.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName.ValueString())
+			}
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+
+			emptyKeys := true
+			if !reflect.ValueOf(state.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName.ValueString()).IsZero() {
+				emptyKeys = false
+			}
+			if emptyKeys {
+				continue
+			}
+
+			found := false
+			for j := range data.SegmentRoutingTrafficEngServiceInstances {
+				found = true
+				if state.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName.ValueString() != data.SegmentRoutingTrafficEngServiceInstances[j].ServiceInstanceName.ValueString() {
+					found = false
+				}
+				if found {
+					if helpers.VersionAtLeast(version, "25.4") {
+						for ci := range state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses {
+							var ckeys []string
+							var cstateKeyValues []string
+							if helpers.VersionAtLeast(version, "25.4") {
+								ckeys = append(ckeys, "ipv6-address")
+								cstateKeyValues = append(cstateKeyValues, state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Ipv6Address.ValueString())
+							}
+							if helpers.VersionAtLeast(version, "25.4") {
+								ckeys = append(ckeys, "port")
+								cstateKeyValues = append(cstateKeyValues, strconv.FormatInt(state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Port.ValueInt64(), 10))
+							}
+							ckeyString := ""
+							for cki := range ckeys {
+								ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+							}
+
+							cemptyKeys := true
+							if !reflect.ValueOf(state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Ipv6Address.ValueString()).IsZero() {
+								cemptyKeys = false
+							}
+							if !reflect.ValueOf(state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Port.ValueInt64()).IsZero() {
+								cemptyKeys = false
+							}
+							if cemptyKeys {
+								continue
+							}
+
+							found := false
+							for cj := range data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses {
+								found = true
+								if state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Ipv6Address.ValueString() != data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses[cj].Ipv6Address.ValueString() {
+									found = false
+								}
+								if state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Port.ValueInt64() != data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses[cj].Port.ValueInt64() {
+									found = false
+								}
+								if found {
+									if helpers.VersionAtLeast(version, "25.4") && !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].TlsHostnameOverride.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses[cj].TlsHostnameOverride.IsNull() {
+										deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString, "addresses/ipv6-address", ckeyString), "tls-hostname-override"))
+									}
+									if helpers.VersionAtLeast(version, "25.4") && !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Vrf.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses[cj].Vrf.IsNull() {
+										deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString, "addresses/ipv6-address", ckeyString), "vrf"))
+									}
+									if helpers.VersionAtLeast(version, "25.4") && !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].SourceInterface.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses[cj].SourceInterface.IsNull() {
+										deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString, "addresses/ipv6-address", ckeyString), "source-interface"))
+									}
+									if helpers.VersionAtLeast(version, "25.4") && !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses[cj].Notls.IsNull() {
+										deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString, "addresses/ipv6-address", ckeyString), "notls"))
+									}
+									break
+								}
+							}
+							if !found {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString, "addresses/ipv6-address", ckeyString))
+							}
+						}
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						for ci := range state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses {
+							var ckeys []string
+							var cstateKeyValues []string
+							if helpers.VersionAtLeast(version, "25.4") {
+								ckeys = append(ckeys, "ipv4-address")
+								cstateKeyValues = append(cstateKeyValues, state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Ipv4Address.ValueString())
+							}
+							if helpers.VersionAtLeast(version, "25.4") {
+								ckeys = append(ckeys, "port")
+								cstateKeyValues = append(cstateKeyValues, strconv.FormatInt(state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Port.ValueInt64(), 10))
+							}
+							ckeyString := ""
+							for cki := range ckeys {
+								ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+							}
+
+							cemptyKeys := true
+							if !reflect.ValueOf(state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Ipv4Address.ValueString()).IsZero() {
+								cemptyKeys = false
+							}
+							if !reflect.ValueOf(state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Port.ValueInt64()).IsZero() {
+								cemptyKeys = false
+							}
+							if cemptyKeys {
+								continue
+							}
+
+							found := false
+							for cj := range data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses {
+								found = true
+								if state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Ipv4Address.ValueString() != data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses[cj].Ipv4Address.ValueString() {
+									found = false
+								}
+								if state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Port.ValueInt64() != data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses[cj].Port.ValueInt64() {
+									found = false
+								}
+								if found {
+									if helpers.VersionAtLeast(version, "25.4") && !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].TlsHostnameOverride.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses[cj].TlsHostnameOverride.IsNull() {
+										deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString, "addresses/ipv4-address", ckeyString), "tls-hostname-override"))
+									}
+									if helpers.VersionAtLeast(version, "25.4") && !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Vrf.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses[cj].Vrf.IsNull() {
+										deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString, "addresses/ipv4-address", ckeyString), "vrf"))
+									}
+									if helpers.VersionAtLeast(version, "25.4") && !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].SourceInterface.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses[cj].SourceInterface.IsNull() {
+										deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString, "addresses/ipv4-address", ckeyString), "source-interface"))
+									}
+									if helpers.VersionAtLeast(version, "25.4") && !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses[cj].Notls.IsNull() {
+										deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString, "addresses/ipv4-address", ckeyString), "notls"))
+									}
+									break
+								}
+							}
+							if !found {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString, "addresses/ipv4-address", ckeyString))
+							}
+						}
+					}
+					break
+				}
+			}
+			if !found {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString))
+			}
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.GnpsiStreamQueueSize.IsNull() && data.GnpsiStreamQueueSize.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "gnpsi/stream/queue/size"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.Gnpsi.IsNull() && data.Gnpsi.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "gnpsi"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.GnmiGetLimitMultiple.IsNull() && data.GnmiGetLimitMultiple.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "gnmi/get-limit-multiple"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.RemoteConnectionDisable.IsNull() && data.RemoteConnectionDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "remote-connection/disable"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.DefaultServerDisable.IsNull() && data.DefaultServerDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "default-server-disable"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.AaaAccountingHistoryMemory.IsNull() && data.AaaAccountingHistoryMemory.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "aaa/accounting/history-memory"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ListenAddressesAny.IsNull() && data.ListenAddressesAny.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "listen-addresses"))
+	}
+	if !state.GnsiServiceCertzSslProfileId.IsNull() && data.GnsiServiceCertzSslProfileId.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "gnsi/service/certz/ssl-profile-id"))
+	}
+	if !state.GnmiPort.IsNull() && data.GnmiPort.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "gnmi/port"))
+	}
+	if !state.Gnmi.IsNull() && data.Gnmi.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "gnmi"))
+	}
+	if !state.GribiPort.IsNull() && data.GribiPort.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "gribi/port"))
+	}
+	if !state.Gribi.IsNull() && data.Gribi.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "gribi"))
+	}
+	if !state.SegmentRoutingTrafficEngPolicyService.IsNull() && data.SegmentRoutingTrafficEngPolicyService.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/traffic-eng/policy-service"))
+	}
+	if !state.SegmentRoutingTrafficEng.IsNull() && data.SegmentRoutingTrafficEng.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/traffic-eng"))
+	}
+	if !state.SegmentRouting.IsNull() && data.SegmentRouting.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing"))
+	}
+	if !state.ServiceLayerAutoRegister.IsNull() && data.ServiceLayerAutoRegister.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "service-layer/auto-register"))
+	}
+	if !state.ServiceLayer.IsNull() && data.ServiceLayer.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "service-layer"))
+	}
+	if !state.ListenAddresses.IsNull() && data.ListenAddresses.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "listen-addresses/listen-addresses-argument", "25.4": "listen-addresses/listen-address"}, "listen-addresses/listen-addresses-argument")))
+	}
+	if !state.CertificateCommonName.IsNull() && data.CertificateCommonName.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "certificate/common-name"))
+	}
+	if !state.CertificateId.IsNull() && data.CertificateId.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "certificate-id"))
+	}
+	if !state.TlsCipherDisable.IsNull() && data.TlsCipherDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "tls-cipher/disable"))
+	}
+	if !state.TlsCipherDefault.IsNull() && data.TlsCipherDefault.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "tls-cipher/default"))
+	}
+	if !state.TlsCipherEnable.IsNull() && data.TlsCipherEnable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "tls-cipher/enable"))
+	}
+	if !state.TlsTrustpoint.IsNull() && data.TlsTrustpoint.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "tls-trustpoint"))
+	}
+	if !state.Tlsv1Disable.IsNull() && data.Tlsv1Disable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "tlsv1-disable"))
+	}
+	if !state.TlsMutual.IsNull() && data.TlsMutual.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "tls-mutual"))
+	}
+	if !state.TlsMaxVersion.IsNull() && data.TlsMaxVersion.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "tls-max-version"))
+	}
+	if !state.TlsMinVersion.IsNull() && data.TlsMinVersion.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "tls-min-version"))
+	}
+	if !state.Ttl.IsNull() && data.Ttl.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ttl"))
+	}
+	if !state.MinKeepaliveInterval.IsNull() && data.MinKeepaliveInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "min-keepalive-interval"))
+	}
+	if !state.KeepaliveTimeout.IsNull() && data.KeepaliveTimeout.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "keepalive/timeout"))
+	}
+	if !state.KeepaliveTime.IsNull() && data.KeepaliveTime.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "keepalive/time"))
+	}
+	if !state.Name.IsNull() && data.Name.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "name"))
+	}
+	if !state.AaaAuthenticationLogin.IsNull() && data.AaaAuthenticationLogin.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "aaa/authentication/login"))
+	}
+	if !state.AaaAuthorizationExec.IsNull() && data.AaaAuthorizationExec.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "aaa/authorization/exec"))
+	}
+	if !state.AaaAccountingQueueSize.IsNull() && data.AaaAccountingQueueSize.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "aaa/accounting/queue-size"))
+	}
+	if !state.Dscp.IsNull() && data.Dscp.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "dscp"))
+	}
+	if !state.MemoryLimit.IsNull() && data.MemoryLimit.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "memory/limit"))
+	}
+	if !state.MaxConcurrentStreams.IsNull() && data.MaxConcurrentStreams.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "max-concurrent-streams"))
+	}
 	if !state.MaxStreamsPerUser.IsNull() && data.MaxStreamsPerUser.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "max-streams-per-user"))
 	}
@@ -443,13 +2176,13 @@ func (data *GRPC) getDeletedItems(ctx context.Context, state GRPC, version strin
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "no-tls"))
 	}
 	if !state.AddressFamilyDual.IsNull() && data.AddressFamilyDual.IsNull() {
-		deletedItems = append(deletedItems, path.Join(state.getPath(), "address-family/dual"))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "address-family"))
 	}
 	if !state.AddressFamilyIpv6.IsNull() && data.AddressFamilyIpv6.IsNull() {
-		deletedItems = append(deletedItems, path.Join(state.getPath(), "address-family/ipv6"))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "address-family"))
 	}
 	if !state.AddressFamilyIpv4.IsNull() && data.AddressFamilyIpv4.IsNull() {
-		deletedItems = append(deletedItems, path.Join(state.getPath(), "address-family/ipv4"))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "address-family"))
 	}
 	if !state.Vrf.IsNull() && data.Vrf.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "vrf"))
@@ -466,6 +2199,131 @@ func (data *GRPC) getDeletedItems(ctx context.Context, state GRPC, version strin
 
 func (data *GRPC) getEmptyLeafsDelete(ctx context.Context, state *GRPC, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") {
+		for i := range data.SegmentRoutingTrafficEngServiceInstances {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "service-instance-name")
+				keyValues = append(keyValues, data.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName.ValueString())
+			}
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				for ci := range data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses {
+					var ckeys []string
+					var ckeyValues []string
+					if helpers.VersionAtLeast(version, "25.4") {
+						ckeys = append(ckeys, "ipv6-address")
+						ckeyValues = append(ckeyValues, data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Ipv6Address.ValueString())
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						ckeys = append(ckeys, "port")
+						ckeyValues = append(ckeyValues, strconv.FormatInt(data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Port.ValueInt64(), 10))
+					}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+					}
+					if helpers.VersionAtLeast(version, "25.4") && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.IsNull() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.ValueBool() {
+						if state == nil || i >= len(state.SegmentRoutingTrafficEngServiceInstances) || ci >= len(state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses) || state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.IsNull() || state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.ValueBool() {
+							emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString, "addresses/ipv6-address", ckeyString), "notls"))
+						}
+					}
+				}
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				for ci := range data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses {
+					var ckeys []string
+					var ckeyValues []string
+					if helpers.VersionAtLeast(version, "25.4") {
+						ckeys = append(ckeys, "ipv4-address")
+						ckeyValues = append(ckeyValues, data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Ipv4Address.ValueString())
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						ckeys = append(ckeys, "port")
+						ckeyValues = append(ckeyValues, strconv.FormatInt(data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Port.ValueInt64(), 10))
+					}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+					}
+					if helpers.VersionAtLeast(version, "25.4") && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.IsNull() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.ValueBool() {
+						if state == nil || i >= len(state.SegmentRoutingTrafficEngServiceInstances) || ci >= len(state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses) || state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.IsNull() || state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.ValueBool() {
+							emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString, "addresses/ipv4-address", ckeyString), "notls"))
+						}
+					}
+				}
+			}
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.Gnpsi.IsNull() && !data.Gnpsi.ValueBool() {
+		if state == nil || state.Gnpsi.IsNull() || state.Gnpsi.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "gnpsi"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.RemoteConnectionDisable.IsNull() && !data.RemoteConnectionDisable.ValueBool() {
+		if state == nil || state.RemoteConnectionDisable.IsNull() || state.RemoteConnectionDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "remote-connection/disable"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.DefaultServerDisable.IsNull() && !data.DefaultServerDisable.ValueBool() {
+		if state == nil || state.DefaultServerDisable.IsNull() || state.DefaultServerDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "default-server-disable"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ListenAddressesAny.IsNull() && !data.ListenAddressesAny.ValueBool() {
+		if state == nil || state.ListenAddressesAny.IsNull() || state.ListenAddressesAny.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "listen-addresses"))
+		}
+	}
+	if !data.Gnmi.IsNull() && !data.Gnmi.ValueBool() {
+		if state == nil || state.Gnmi.IsNull() || state.Gnmi.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "gnmi"))
+		}
+	}
+	if !data.Gribi.IsNull() && !data.Gribi.ValueBool() {
+		if state == nil || state.Gribi.IsNull() || state.Gribi.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "gribi"))
+		}
+	}
+	if !data.SegmentRoutingTrafficEngPolicyService.IsNull() && !data.SegmentRoutingTrafficEngPolicyService.ValueBool() {
+		if state == nil || state.SegmentRoutingTrafficEngPolicyService.IsNull() || state.SegmentRoutingTrafficEngPolicyService.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/traffic-eng/policy-service"))
+		}
+	}
+	if !data.SegmentRoutingTrafficEng.IsNull() && !data.SegmentRoutingTrafficEng.ValueBool() {
+		if state == nil || state.SegmentRoutingTrafficEng.IsNull() || state.SegmentRoutingTrafficEng.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing/traffic-eng"))
+		}
+	}
+	if !data.SegmentRouting.IsNull() && !data.SegmentRouting.ValueBool() {
+		if state == nil || state.SegmentRouting.IsNull() || state.SegmentRouting.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "segment-routing"))
+		}
+	}
+	if !data.ServiceLayerAutoRegister.IsNull() && !data.ServiceLayerAutoRegister.ValueBool() {
+		if state == nil || state.ServiceLayerAutoRegister.IsNull() || state.ServiceLayerAutoRegister.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "service-layer/auto-register"))
+		}
+	}
+	if !data.ServiceLayer.IsNull() && !data.ServiceLayer.ValueBool() {
+		if state == nil || state.ServiceLayer.IsNull() || state.ServiceLayer.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "service-layer"))
+		}
+	}
+	if !data.Tlsv1Disable.IsNull() && !data.Tlsv1Disable.ValueBool() {
+		if state == nil || state.Tlsv1Disable.IsNull() || state.Tlsv1Disable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "tlsv1-disable"))
+		}
+	}
+	if !data.TlsMutual.IsNull() && !data.TlsMutual.ValueBool() {
+		if state == nil || state.TlsMutual.IsNull() || state.TlsMutual.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "tls-mutual"))
+		}
+	}
 	if !data.CertificateAuthentication.IsNull() && !data.CertificateAuthentication.ValueBool() {
 		if state == nil || state.CertificateAuthentication.IsNull() || state.CertificateAuthentication.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "certificate-authentication"))
@@ -483,17 +2341,17 @@ func (data *GRPC) getEmptyLeafsDelete(ctx context.Context, state *GRPC, version 
 	}
 	if !data.AddressFamilyDual.IsNull() && !data.AddressFamilyDual.ValueBool() {
 		if state == nil || state.AddressFamilyDual.IsNull() || state.AddressFamilyDual.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/dual"))
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family"))
 		}
 	}
 	if !data.AddressFamilyIpv6.IsNull() && !data.AddressFamilyIpv6.ValueBool() {
 		if state == nil || state.AddressFamilyIpv6.IsNull() || state.AddressFamilyIpv6.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv6"))
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family"))
 		}
 	}
 	if !data.AddressFamilyIpv4.IsNull() && !data.AddressFamilyIpv4.ValueBool() {
 		if state == nil || state.AddressFamilyIpv4.IsNull() || state.AddressFamilyIpv4.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family/ipv4"))
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "address-family"))
 		}
 	}
 	return emptyLeafsDelete
@@ -504,6 +2362,147 @@ func (data *GRPC) getEmptyLeafsDelete(ctx context.Context, state *GRPC, version 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *GRPC) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") {
+		for i := range data.SegmentRoutingTrafficEngServiceInstances {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "service-instance-name")
+				keyValues = append(keyValues, data.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName.ValueString())
+			}
+
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			}
+
+			emptyKeys := true
+			if !reflect.ValueOf(data.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName.ValueString()).IsZero() {
+				emptyKeys = false
+			}
+			if emptyKeys {
+				continue
+			}
+			deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "segment-routing/traffic-eng/service-instances/service-instance", keyString))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.GnpsiStreamQueueSize.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "gnpsi/stream/queue/size"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.Gnpsi.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "gnpsi"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.GnmiGetLimitMultiple.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "gnmi/get-limit-multiple"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.RemoteConnectionDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "remote-connection/disable"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.DefaultServerDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "default-server-disable"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.AaaAccountingHistoryMemory.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "aaa/accounting/history-memory"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ListenAddressesAny.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "listen-addresses"))
+	}
+	if !data.GnsiServiceCertzSslProfileId.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "gnsi/service/certz/ssl-profile-id"))
+	}
+	if !data.GnmiPort.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "gnmi/port"))
+	}
+	if !data.Gnmi.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "gnmi"))
+	}
+	if !data.GribiPort.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "gribi/port"))
+	}
+	if !data.Gribi.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "gribi"))
+	}
+	if !data.SegmentRoutingTrafficEngPolicyService.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/traffic-eng/policy-service"))
+	}
+	if !data.SegmentRoutingTrafficEng.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/traffic-eng"))
+	}
+	if !data.SegmentRouting.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing"))
+	}
+	if !data.ServiceLayerAutoRegister.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "service-layer/auto-register"))
+	}
+	if !data.ServiceLayer.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "service-layer"))
+	}
+	if !data.ListenAddresses.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "listen-addresses/listen-addresses-argument", "25.4": "listen-addresses/listen-address"}, "listen-addresses/listen-addresses-argument")))
+	}
+	if !data.CertificateCommonName.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "certificate/common-name"))
+	}
+	if !data.CertificateId.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "certificate-id"))
+	}
+	if !data.TlsCipherDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "tls-cipher/disable"))
+	}
+	if !data.TlsCipherDefault.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "tls-cipher/default"))
+	}
+	if !data.TlsCipherEnable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "tls-cipher/enable"))
+	}
+	if !data.TlsTrustpoint.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "tls-trustpoint"))
+	}
+	if !data.Tlsv1Disable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "tlsv1-disable"))
+	}
+	if !data.TlsMutual.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "tls-mutual"))
+	}
+	if !data.TlsMaxVersion.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "tls-max-version"))
+	}
+	if !data.TlsMinVersion.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "tls-min-version"))
+	}
+	if !data.Ttl.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ttl"))
+	}
+	if !data.MinKeepaliveInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "min-keepalive-interval"))
+	}
+	if !data.KeepaliveTimeout.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "keepalive/timeout"))
+	}
+	if !data.KeepaliveTime.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "keepalive/time"))
+	}
+	if !data.Name.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "name"))
+	}
+	if !data.AaaAuthenticationLogin.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "aaa/authentication/login"))
+	}
+	if !data.AaaAuthorizationExec.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "aaa/authorization/exec"))
+	}
+	if !data.AaaAccountingQueueSize.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "aaa/accounting/queue-size"))
+	}
+	if !data.Dscp.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "dscp"))
+	}
+	if !data.MemoryLimit.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "memory/limit"))
+	}
+	if !data.MaxConcurrentStreams.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "max-concurrent-streams"))
+	}
 	if !data.MaxStreamsPerUser.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "max-streams-per-user"))
 	}
@@ -526,13 +2525,13 @@ func (data *GRPC) getDeletePaths(ctx context.Context, version string) []string {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "no-tls"))
 	}
 	if !data.AddressFamilyDual.IsNull() {
-		deletePaths = append(deletePaths, path.Join(data.getPath(), "address-family/dual"))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "address-family"))
 	}
 	if !data.AddressFamilyIpv6.IsNull() {
-		deletePaths = append(deletePaths, path.Join(data.getPath(), "address-family/ipv6"))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "address-family"))
 	}
 	if !data.AddressFamilyIpv4.IsNull() {
-		deletePaths = append(deletePaths, path.Join(data.getPath(), "address-family/ipv4"))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "address-family"))
 	}
 	if !data.Vrf.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "vrf"))
@@ -601,6 +2600,211 @@ func (data GRPC) toBodyXML(ctx context.Context, stateArg ...*GRPC) string {
 	}
 	if !data.MaxStreamsPerUser.IsNull() && !data.MaxStreamsPerUser.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/max-streams-per-user", strconv.FormatInt(data.MaxStreamsPerUser.ValueInt64(), 10))
+	}
+	if !data.MaxConcurrentStreams.IsNull() && !data.MaxConcurrentStreams.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/max-concurrent-streams", strconv.FormatInt(data.MaxConcurrentStreams.ValueInt64(), 10))
+	}
+	if !data.MemoryLimit.IsNull() && !data.MemoryLimit.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/memory/limit", strconv.FormatInt(data.MemoryLimit.ValueInt64(), 10))
+	}
+	if !data.Dscp.IsNull() && !data.Dscp.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/dscp", data.Dscp.ValueString())
+	}
+	if !data.AaaAccountingQueueSize.IsNull() && !data.AaaAccountingQueueSize.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/aaa/accounting/queue-size", strconv.FormatInt(data.AaaAccountingQueueSize.ValueInt64(), 10))
+	}
+	if !data.AaaAuthorizationExec.IsNull() && !data.AaaAuthorizationExec.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/aaa/authorization/exec", data.AaaAuthorizationExec.ValueString())
+	}
+	if !data.AaaAuthenticationLogin.IsNull() && !data.AaaAuthenticationLogin.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/aaa/authentication/login", data.AaaAuthenticationLogin.ValueString())
+	}
+	if !data.Name.IsNull() && !data.Name.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/name", data.Name.ValueString())
+	}
+	if !data.KeepaliveTime.IsNull() && !data.KeepaliveTime.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/keepalive/time", strconv.FormatInt(data.KeepaliveTime.ValueInt64(), 10))
+	}
+	if !data.KeepaliveTimeout.IsNull() && !data.KeepaliveTimeout.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/keepalive/timeout", strconv.FormatInt(data.KeepaliveTimeout.ValueInt64(), 10))
+	}
+	if !data.MinKeepaliveInterval.IsNull() && !data.MinKeepaliveInterval.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/min-keepalive-interval", strconv.FormatInt(data.MinKeepaliveInterval.ValueInt64(), 10))
+	}
+	if !data.Ttl.IsNull() && !data.Ttl.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/ttl", strconv.FormatInt(data.Ttl.ValueInt64(), 10))
+	}
+	if !data.TlsMinVersion.IsNull() && !data.TlsMinVersion.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/tls-min-version", data.TlsMinVersion.ValueString())
+	}
+	if !data.TlsMaxVersion.IsNull() && !data.TlsMaxVersion.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/tls-max-version", data.TlsMaxVersion.ValueString())
+	}
+	if !data.TlsMutual.IsNull() && !data.TlsMutual.IsUnknown() {
+		if data.TlsMutual.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/tls-mutual", "")
+		}
+	}
+	if !data.Tlsv1Disable.IsNull() && !data.Tlsv1Disable.IsUnknown() {
+		if data.Tlsv1Disable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/tlsv1-disable", "")
+		}
+	}
+	if !data.TlsTrustpoint.IsNull() && !data.TlsTrustpoint.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/tls-trustpoint", data.TlsTrustpoint.ValueString())
+	}
+	if !data.TlsCipherEnable.IsNull() && !data.TlsCipherEnable.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/tls-cipher/enable", data.TlsCipherEnable.ValueString())
+	}
+	if !data.TlsCipherDefault.IsNull() && !data.TlsCipherDefault.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/tls-cipher/default", data.TlsCipherDefault.ValueString())
+	}
+	if !data.TlsCipherDisable.IsNull() && !data.TlsCipherDisable.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/tls-cipher/disable", data.TlsCipherDisable.ValueString())
+	}
+	if !data.CertificateId.IsNull() && !data.CertificateId.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/certificate-id", data.CertificateId.ValueString())
+	}
+	if !data.CertificateCommonName.IsNull() && !data.CertificateCommonName.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/certificate/common-name", data.CertificateCommonName.ValueString())
+	}
+	if !data.ListenAddresses.IsNull() && !data.ListenAddresses.IsUnknown() {
+		var values []string
+		data.ListenAddresses.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			body = helpers.AppendFromXPath(body, data.getXPath()+"/listen-addresses/listen-address/address", v)
+		}
+	}
+	if !data.ServiceLayer.IsNull() && !data.ServiceLayer.IsUnknown() {
+		if data.ServiceLayer.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/service-layer", "")
+		}
+	}
+	if !data.ServiceLayerAutoRegister.IsNull() && !data.ServiceLayerAutoRegister.IsUnknown() {
+		if data.ServiceLayerAutoRegister.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/service-layer/auto-register", "")
+		}
+	}
+	if !data.SegmentRouting.IsNull() && !data.SegmentRouting.IsUnknown() {
+		if data.SegmentRouting.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/segment-routing", "")
+		}
+	}
+	if !data.SegmentRoutingTrafficEng.IsNull() && !data.SegmentRoutingTrafficEng.IsUnknown() {
+		if data.SegmentRoutingTrafficEng.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/segment-routing/traffic-eng", "")
+		}
+	}
+	if !data.SegmentRoutingTrafficEngPolicyService.IsNull() && !data.SegmentRoutingTrafficEngPolicyService.IsUnknown() {
+		if data.SegmentRoutingTrafficEngPolicyService.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/segment-routing/traffic-eng/policy-service", "")
+		}
+	}
+	if !data.Gribi.IsNull() && !data.Gribi.IsUnknown() {
+		if data.Gribi.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/gribi", "")
+		}
+	}
+	if !data.GribiPort.IsNull() && !data.GribiPort.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/gribi/port", strconv.FormatInt(data.GribiPort.ValueInt64(), 10))
+	}
+	if !data.Gnmi.IsNull() && !data.Gnmi.IsUnknown() {
+		if data.Gnmi.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/gnmi", "")
+		}
+	}
+	if !data.GnmiPort.IsNull() && !data.GnmiPort.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/gnmi/port", strconv.FormatInt(data.GnmiPort.ValueInt64(), 10))
+	}
+	if !data.GnsiServiceCertzSslProfileId.IsNull() && !data.GnsiServiceCertzSslProfileId.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/gnsi/service/certz/ssl-profile-id", data.GnsiServiceCertzSslProfileId.ValueString())
+	}
+	if !data.ListenAddressesAny.IsNull() && !data.ListenAddressesAny.IsUnknown() {
+		if data.ListenAddressesAny.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/listen-addresses/any", "")
+		}
+	}
+	if !data.AaaAccountingHistoryMemory.IsNull() && !data.AaaAccountingHistoryMemory.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/aaa/accounting/history-memory", strconv.FormatInt(data.AaaAccountingHistoryMemory.ValueInt64(), 10))
+	}
+	if !data.DefaultServerDisable.IsNull() && !data.DefaultServerDisable.IsUnknown() {
+		if data.DefaultServerDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/default-server-disable", "")
+		}
+	}
+	if !data.RemoteConnectionDisable.IsNull() && !data.RemoteConnectionDisable.IsUnknown() {
+		if data.RemoteConnectionDisable.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/remote-connection/disable", "")
+		}
+	}
+	if !data.GnmiGetLimitMultiple.IsNull() && !data.GnmiGetLimitMultiple.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/gnmi/get-limit-multiple", strconv.FormatInt(data.GnmiGetLimitMultiple.ValueInt64(), 10))
+	}
+	if !data.Gnpsi.IsNull() && !data.Gnpsi.IsUnknown() {
+		if data.Gnpsi.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/gnpsi", "")
+		}
+	}
+	if !data.GnpsiStreamQueueSize.IsNull() && !data.GnpsiStreamQueueSize.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/gnpsi/stream/queue/size", strconv.FormatInt(data.GnpsiStreamQueueSize.ValueInt64(), 10))
+	}
+	if len(data.SegmentRoutingTrafficEngServiceInstances) > 0 {
+		for _, item := range data.SegmentRoutingTrafficEngServiceInstances {
+			basePath := data.getXPath() + "/segment-routing/traffic-eng/service-instances/service-instance[service-instance-name='" + item.ServiceInstanceName.ValueString() + "']"
+			if !item.ServiceInstanceName.IsNull() && !item.ServiceInstanceName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/service-instance-name", item.ServiceInstanceName.ValueString())
+			}
+			if len(item.Ipv4Addresses) > 0 {
+				for _, citem := range item.Ipv4Addresses {
+					cbasePath := basePath + "/addresses/ipv4-address[ipv4-address='" + citem.Ipv4Address.ValueString() + "' and port='" + strconv.FormatInt(citem.Port.ValueInt64(), 10) + "']"
+					if !citem.Ipv4Address.IsNull() && !citem.Ipv4Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/ipv4-address", citem.Ipv4Address.ValueString())
+					}
+					if !citem.Port.IsNull() && !citem.Port.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/port", strconv.FormatInt(citem.Port.ValueInt64(), 10))
+					}
+					if !citem.Notls.IsNull() && !citem.Notls.IsUnknown() {
+						if citem.Notls.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/notls", "")
+						}
+					}
+					if !citem.SourceInterface.IsNull() && !citem.SourceInterface.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/source-interface", citem.SourceInterface.ValueString())
+					}
+					if !citem.Vrf.IsNull() && !citem.Vrf.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/vrf", citem.Vrf.ValueString())
+					}
+					if !citem.TlsHostnameOverride.IsNull() && !citem.TlsHostnameOverride.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/tls-hostname-override", citem.TlsHostnameOverride.ValueString())
+					}
+				}
+			}
+			if len(item.Ipv6Addresses) > 0 {
+				for _, citem := range item.Ipv6Addresses {
+					cbasePath := basePath + "/addresses/ipv6-address[ipv6-address='" + citem.Ipv6Address.ValueString() + "' and port='" + strconv.FormatInt(citem.Port.ValueInt64(), 10) + "']"
+					if !citem.Ipv6Address.IsNull() && !citem.Ipv6Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/ipv6-address", citem.Ipv6Address.ValueString())
+					}
+					if !citem.Port.IsNull() && !citem.Port.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/port", strconv.FormatInt(citem.Port.ValueInt64(), 10))
+					}
+					if !citem.Notls.IsNull() && !citem.Notls.IsUnknown() {
+						if citem.Notls.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/notls", "")
+						}
+					}
+					if !citem.SourceInterface.IsNull() && !citem.SourceInterface.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/source-interface", citem.SourceInterface.ValueString())
+					}
+					if !citem.Vrf.IsNull() && !citem.Vrf.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/vrf", citem.Vrf.ValueString())
+					}
+					if !citem.TlsHostnameOverride.IsNull() && !citem.TlsHostnameOverride.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/tls-hostname-override", citem.TlsHostnameOverride.ValueString())
+					}
+				}
+			}
+		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
@@ -732,6 +2936,426 @@ func (data *GRPC) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 	} else if data.MaxStreamsPerUser.IsNull() {
 		data.MaxStreamsPerUser = types.Int64Null()
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/max-concurrent-streams"); value.Exists() && !data.MaxConcurrentStreams.IsNull() {
+		data.MaxConcurrentStreams = types.Int64Value(value.Int())
+	} else if data.MaxConcurrentStreams.IsNull() {
+		data.MaxConcurrentStreams = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/memory/limit"); value.Exists() && !data.MemoryLimit.IsNull() {
+		data.MemoryLimit = types.Int64Value(value.Int())
+	} else if data.MemoryLimit.IsNull() {
+		data.MemoryLimit = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dscp"); value.Exists() && !data.Dscp.IsNull() {
+		data.Dscp = types.StringValue(value.String())
+	} else if data.Dscp.IsNull() {
+		data.Dscp = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/aaa/accounting/queue-size"); value.Exists() && !data.AaaAccountingQueueSize.IsNull() {
+		data.AaaAccountingQueueSize = types.Int64Value(value.Int())
+	} else if data.AaaAccountingQueueSize.IsNull() {
+		data.AaaAccountingQueueSize = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/aaa/authorization/exec"); value.Exists() && !data.AaaAuthorizationExec.IsNull() {
+		data.AaaAuthorizationExec = types.StringValue(value.String())
+	} else if data.AaaAuthorizationExec.IsNull() {
+		data.AaaAuthorizationExec = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/aaa/authentication/login"); value.Exists() && !data.AaaAuthenticationLogin.IsNull() {
+		data.AaaAuthenticationLogin = types.StringValue(value.String())
+	} else if data.AaaAuthenticationLogin.IsNull() {
+		data.AaaAuthenticationLogin = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/name"); value.Exists() && !data.Name.IsNull() {
+		data.Name = types.StringValue(value.String())
+	} else if data.Name.IsNull() {
+		data.Name = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/keepalive/time"); value.Exists() && !data.KeepaliveTime.IsNull() {
+		data.KeepaliveTime = types.Int64Value(value.Int())
+	} else if data.KeepaliveTime.IsNull() {
+		data.KeepaliveTime = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/keepalive/timeout"); value.Exists() && !data.KeepaliveTimeout.IsNull() {
+		data.KeepaliveTimeout = types.Int64Value(value.Int())
+	} else if data.KeepaliveTimeout.IsNull() {
+		data.KeepaliveTimeout = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/min-keepalive-interval"); value.Exists() && !data.MinKeepaliveInterval.IsNull() {
+		data.MinKeepaliveInterval = types.Int64Value(value.Int())
+	} else if data.MinKeepaliveInterval.IsNull() {
+		data.MinKeepaliveInterval = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ttl"); value.Exists() && !data.Ttl.IsNull() {
+		data.Ttl = types.Int64Value(value.Int())
+	} else if data.Ttl.IsNull() {
+		data.Ttl = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-min-version"); value.Exists() && !data.TlsMinVersion.IsNull() {
+		data.TlsMinVersion = types.StringValue(value.String())
+	} else if data.TlsMinVersion.IsNull() {
+		data.TlsMinVersion = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-max-version"); value.Exists() && !data.TlsMaxVersion.IsNull() {
+		data.TlsMaxVersion = types.StringValue(value.String())
+	} else if data.TlsMaxVersion.IsNull() {
+		data.TlsMaxVersion = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-mutual"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.TlsMutual.IsNull() {
+			data.TlsMutual = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.TlsMutual.IsNull() {
+			data.TlsMutual = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tlsv1-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Tlsv1Disable.IsNull() {
+			data.Tlsv1Disable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Tlsv1Disable.IsNull() {
+			data.Tlsv1Disable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-trustpoint"); value.Exists() && !data.TlsTrustpoint.IsNull() {
+		data.TlsTrustpoint = types.StringValue(value.String())
+	} else if data.TlsTrustpoint.IsNull() {
+		data.TlsTrustpoint = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-cipher/enable"); value.Exists() && !data.TlsCipherEnable.IsNull() {
+		data.TlsCipherEnable = types.StringValue(value.String())
+	} else if data.TlsCipherEnable.IsNull() {
+		data.TlsCipherEnable = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-cipher/default"); value.Exists() && !data.TlsCipherDefault.IsNull() {
+		data.TlsCipherDefault = types.StringValue(value.String())
+	} else if data.TlsCipherDefault.IsNull() {
+		data.TlsCipherDefault = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-cipher/disable"); value.Exists() && !data.TlsCipherDisable.IsNull() {
+		data.TlsCipherDisable = types.StringValue(value.String())
+	} else if data.TlsCipherDisable.IsNull() {
+		data.TlsCipherDisable = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/certificate-id"); value.Exists() && !data.CertificateId.IsNull() {
+		data.CertificateId = types.StringValue(value.String())
+	} else if data.CertificateId.IsNull() {
+		data.CertificateId = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/certificate/common-name"); value.Exists() && !data.CertificateCommonName.IsNull() {
+		data.CertificateCommonName = types.StringValue(value.String())
+	} else if data.CertificateCommonName.IsNull() {
+		data.CertificateCommonName = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/listen-addresses/listen-address/address"); value.Exists() && !data.ListenAddresses.IsNull() {
+		data.ListenAddresses = helpers.GetStringListXML(value.Array())
+	} else if data.ListenAddresses.IsNull() {
+		data.ListenAddresses = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/service-layer"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServiceLayer.IsNull() {
+			data.ServiceLayer = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServiceLayer.IsNull() {
+			data.ServiceLayer = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/service-layer/auto-register"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ServiceLayerAutoRegister.IsNull() {
+			data.ServiceLayerAutoRegister = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ServiceLayerAutoRegister.IsNull() {
+			data.ServiceLayerAutoRegister = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SegmentRouting.IsNull() {
+			data.SegmentRouting = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.SegmentRouting.IsNull() {
+			data.SegmentRouting = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/traffic-eng"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SegmentRoutingTrafficEng.IsNull() {
+			data.SegmentRoutingTrafficEng = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.SegmentRoutingTrafficEng.IsNull() {
+			data.SegmentRoutingTrafficEng = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/traffic-eng/policy-service"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SegmentRoutingTrafficEngPolicyService.IsNull() {
+			data.SegmentRoutingTrafficEngPolicyService = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.SegmentRoutingTrafficEngPolicyService.IsNull() {
+			data.SegmentRoutingTrafficEngPolicyService = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gribi"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Gribi.IsNull() {
+			data.Gribi = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Gribi.IsNull() {
+			data.Gribi = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gribi/port"); value.Exists() && !data.GribiPort.IsNull() {
+		data.GribiPort = types.Int64Value(value.Int())
+	} else if data.GribiPort.IsNull() {
+		data.GribiPort = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Gnmi.IsNull() {
+			data.Gnmi = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Gnmi.IsNull() {
+			data.Gnmi = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi/port"); value.Exists() && !data.GnmiPort.IsNull() {
+		data.GnmiPort = types.Int64Value(value.Int())
+	} else if data.GnmiPort.IsNull() {
+		data.GnmiPort = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnsi/service/certz/ssl-profile-id"); value.Exists() && !data.GnsiServiceCertzSslProfileId.IsNull() {
+		data.GnsiServiceCertzSslProfileId = types.StringValue(value.String())
+	} else if data.GnsiServiceCertzSslProfileId.IsNull() {
+		data.GnsiServiceCertzSslProfileId = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/listen-addresses/any"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ListenAddressesAny.IsNull() {
+			data.ListenAddressesAny = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ListenAddressesAny.IsNull() {
+			data.ListenAddressesAny = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/aaa/accounting/history-memory"); value.Exists() && !data.AaaAccountingHistoryMemory.IsNull() {
+		data.AaaAccountingHistoryMemory = types.Int64Value(value.Int())
+	} else if data.AaaAccountingHistoryMemory.IsNull() {
+		data.AaaAccountingHistoryMemory = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/default-server-disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.DefaultServerDisable.IsNull() {
+			data.DefaultServerDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.DefaultServerDisable.IsNull() {
+			data.DefaultServerDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/remote-connection/disable"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.RemoteConnectionDisable.IsNull() {
+			data.RemoteConnectionDisable = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.RemoteConnectionDisable.IsNull() {
+			data.RemoteConnectionDisable = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi/get-limit-multiple"); value.Exists() && !data.GnmiGetLimitMultiple.IsNull() {
+		data.GnmiGetLimitMultiple = types.Int64Value(value.Int())
+	} else if data.GnmiGetLimitMultiple.IsNull() {
+		data.GnmiGetLimitMultiple = types.Int64Null()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnpsi"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Gnpsi.IsNull() {
+			data.Gnpsi = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Gnpsi.IsNull() {
+			data.Gnpsi = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnpsi/stream/queue/size"); value.Exists() && !data.GnpsiStreamQueueSize.IsNull() {
+		data.GnpsiStreamQueueSize = types.Int64Value(value.Int())
+	} else if data.GnpsiStreamQueueSize.IsNull() {
+		data.GnpsiStreamQueueSize = types.Int64Null()
+	}
+	for i := range data.SegmentRoutingTrafficEngServiceInstances {
+		keys := [...]string{"service-instance-name"}
+		keyValues := [...]string{data.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "service-instance-name"); value.Exists() && !data.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName.IsNull() {
+			data.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName = types.StringValue(value.String())
+		} else if data.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName.IsNull() {
+			data.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName = types.StringNull()
+		}
+		for ci := range data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses {
+			keys := [...]string{"ipv4-address", "port"}
+			keyValues := [...]string{data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Ipv4Address.ValueString(), strconv.FormatInt(data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Port.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "addresses/ipv4-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "ipv4-address"); value.Exists() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Ipv4Address.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Ipv4Address = types.StringValue(value.String())
+			} else if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Ipv4Address.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Ipv4Address = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "port"); value.Exists() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Port.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Port = types.Int64Value(value.Int())
+			} else if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Port.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Port = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "notls"); value.Exists() {
+				if !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.IsNull() {
+					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.IsNull() {
+					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "source-interface"); value.Exists() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].SourceInterface.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].SourceInterface = types.StringValue(value.String())
+			} else if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].SourceInterface.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].SourceInterface = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "vrf"); value.Exists() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Vrf.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Vrf = types.StringValue(value.String())
+			} else if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Vrf.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Vrf = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "tls-hostname-override"); value.Exists() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].TlsHostnameOverride.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].TlsHostnameOverride = types.StringValue(value.String())
+			} else if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].TlsHostnameOverride.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].TlsHostnameOverride = types.StringNull()
+			}
+		}
+		for ci := range data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses {
+			keys := [...]string{"ipv6-address", "port"}
+			keyValues := [...]string{data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Ipv6Address.ValueString(), strconv.FormatInt(data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Port.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "addresses/ipv6-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "ipv6-address"); value.Exists() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Ipv6Address.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Ipv6Address = types.StringValue(value.String())
+			} else if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Ipv6Address.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Ipv6Address = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "port"); value.Exists() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Port.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Port = types.Int64Value(value.Int())
+			} else if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Port.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Port = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "notls"); value.Exists() {
+				if !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.IsNull() {
+					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.IsNull() {
+					data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "source-interface"); value.Exists() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].SourceInterface.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].SourceInterface = types.StringValue(value.String())
+			} else if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].SourceInterface.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].SourceInterface = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "vrf"); value.Exists() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Vrf.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Vrf = types.StringValue(value.String())
+			} else if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Vrf.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Vrf = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "tls-hostname-override"); value.Exists() && !data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].TlsHostnameOverride.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].TlsHostnameOverride = types.StringValue(value.String())
+			} else if data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].TlsHostnameOverride.IsNull() {
+				data.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].TlsHostnameOverride = types.StringNull()
+			}
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -786,6 +3410,218 @@ func (data *GRPC) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/max-streams-per-user"); value.Exists() {
 		data.MaxStreamsPerUser = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/max-concurrent-streams"); value.Exists() {
+		data.MaxConcurrentStreams = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/memory/limit"); value.Exists() {
+		data.MemoryLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dscp"); value.Exists() {
+		data.Dscp = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/aaa/accounting/queue-size"); value.Exists() {
+		data.AaaAccountingQueueSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/aaa/authorization/exec"); value.Exists() {
+		data.AaaAuthorizationExec = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/aaa/authentication/login"); value.Exists() {
+		data.AaaAuthenticationLogin = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/name"); value.Exists() {
+		data.Name = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/keepalive/time"); value.Exists() {
+		data.KeepaliveTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/keepalive/timeout"); value.Exists() {
+		data.KeepaliveTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/min-keepalive-interval"); value.Exists() {
+		data.MinKeepaliveInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ttl"); value.Exists() {
+		data.Ttl = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-min-version"); value.Exists() {
+		data.TlsMinVersion = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-max-version"); value.Exists() {
+		data.TlsMaxVersion = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-mutual"); value.Exists() {
+		data.TlsMutual = types.BoolValue(true)
+	} else {
+		data.TlsMutual = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tlsv1-disable"); value.Exists() {
+		data.Tlsv1Disable = types.BoolValue(true)
+	} else {
+		data.Tlsv1Disable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-trustpoint"); value.Exists() {
+		data.TlsTrustpoint = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-cipher/enable"); value.Exists() {
+		data.TlsCipherEnable = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-cipher/default"); value.Exists() {
+		data.TlsCipherDefault = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-cipher/disable"); value.Exists() {
+		data.TlsCipherDisable = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/certificate-id"); value.Exists() {
+		data.CertificateId = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/certificate/common-name"); value.Exists() {
+		data.CertificateCommonName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/listen-addresses/listen-address/address"); value.Exists() {
+		data.ListenAddresses = helpers.GetStringListXML(value.Array())
+	} else {
+		data.ListenAddresses = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/service-layer"); value.Exists() {
+		data.ServiceLayer = types.BoolValue(true)
+	} else {
+		data.ServiceLayer = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/service-layer/auto-register"); value.Exists() {
+		data.ServiceLayerAutoRegister = types.BoolValue(true)
+	} else {
+		data.ServiceLayerAutoRegister = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing"); value.Exists() {
+		data.SegmentRouting = types.BoolValue(true)
+	} else {
+		data.SegmentRouting = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/traffic-eng"); value.Exists() {
+		data.SegmentRoutingTrafficEng = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingTrafficEng = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/traffic-eng/policy-service"); value.Exists() {
+		data.SegmentRoutingTrafficEngPolicyService = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingTrafficEngPolicyService = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gribi"); value.Exists() {
+		data.Gribi = types.BoolValue(true)
+	} else {
+		data.Gribi = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gribi/port"); value.Exists() {
+		data.GribiPort = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi"); value.Exists() {
+		data.Gnmi = types.BoolValue(true)
+	} else {
+		data.Gnmi = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi/port"); value.Exists() {
+		data.GnmiPort = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnsi/service/certz/ssl-profile-id"); value.Exists() {
+		data.GnsiServiceCertzSslProfileId = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/listen-addresses/any"); value.Exists() {
+		data.ListenAddressesAny = types.BoolValue(true)
+	} else {
+		data.ListenAddressesAny = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/aaa/accounting/history-memory"); value.Exists() {
+		data.AaaAccountingHistoryMemory = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/default-server-disable"); value.Exists() {
+		data.DefaultServerDisable = types.BoolValue(true)
+	} else {
+		data.DefaultServerDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/remote-connection/disable"); value.Exists() {
+		data.RemoteConnectionDisable = types.BoolValue(true)
+	} else {
+		data.RemoteConnectionDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi/get-limit-multiple"); value.Exists() {
+		data.GnmiGetLimitMultiple = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnpsi"); value.Exists() {
+		data.Gnpsi = types.BoolValue(true)
+	} else {
+		data.Gnpsi = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnpsi/stream/queue/size"); value.Exists() {
+		data.GnpsiStreamQueueSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance"); value.Exists() {
+		data.SegmentRoutingTrafficEngServiceInstances = make([]GRPCSegmentRoutingTrafficEngServiceInstances, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := GRPCSegmentRoutingTrafficEngServiceInstances{}
+			if cValue := helpers.GetFromXPath(v, "service-instance-name"); cValue.Exists() {
+				item.ServiceInstanceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "addresses/ipv4-address"); cValue.Exists() {
+				item.Ipv4Addresses = make([]GRPCSegmentRoutingTrafficEngServiceInstancesIpv4Addresses, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := GRPCSegmentRoutingTrafficEngServiceInstancesIpv4Addresses{}
+					if ccValue := helpers.GetFromXPath(cv, "ipv4-address"); ccValue.Exists() {
+						cItem.Ipv4Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "port"); ccValue.Exists() {
+						cItem.Port = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "notls"); ccValue.Exists() {
+						cItem.Notls = types.BoolValue(true)
+					} else {
+						cItem.Notls = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "source-interface"); ccValue.Exists() {
+						cItem.SourceInterface = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "vrf"); ccValue.Exists() {
+						cItem.Vrf = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "tls-hostname-override"); ccValue.Exists() {
+						cItem.TlsHostnameOverride = types.StringValue(ccValue.String())
+					}
+					item.Ipv4Addresses = append(item.Ipv4Addresses, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "addresses/ipv6-address"); cValue.Exists() {
+				item.Ipv6Addresses = make([]GRPCSegmentRoutingTrafficEngServiceInstancesIpv6Addresses, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := GRPCSegmentRoutingTrafficEngServiceInstancesIpv6Addresses{}
+					if ccValue := helpers.GetFromXPath(cv, "ipv6-address"); ccValue.Exists() {
+						cItem.Ipv6Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "port"); ccValue.Exists() {
+						cItem.Port = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "notls"); ccValue.Exists() {
+						cItem.Notls = types.BoolValue(true)
+					} else {
+						cItem.Notls = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "source-interface"); ccValue.Exists() {
+						cItem.SourceInterface = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "vrf"); ccValue.Exists() {
+						cItem.Vrf = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "tls-hostname-override"); ccValue.Exists() {
+						cItem.TlsHostnameOverride = types.StringValue(ccValue.String())
+					}
+					item.Ipv6Addresses = append(item.Ipv6Addresses, cItem)
+					return true
+				})
+			}
+			data.SegmentRoutingTrafficEngServiceInstances = append(data.SegmentRoutingTrafficEngServiceInstances, item)
+			return true
+		})
 	}
 }
 
@@ -842,6 +3678,218 @@ func (data *GRPCData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/max-streams-per-user"); value.Exists() {
 		data.MaxStreamsPerUser = types.Int64Value(value.Int())
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/max-concurrent-streams"); value.Exists() {
+		data.MaxConcurrentStreams = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/memory/limit"); value.Exists() {
+		data.MemoryLimit = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/dscp"); value.Exists() {
+		data.Dscp = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/aaa/accounting/queue-size"); value.Exists() {
+		data.AaaAccountingQueueSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/aaa/authorization/exec"); value.Exists() {
+		data.AaaAuthorizationExec = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/aaa/authentication/login"); value.Exists() {
+		data.AaaAuthenticationLogin = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/name"); value.Exists() {
+		data.Name = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/keepalive/time"); value.Exists() {
+		data.KeepaliveTime = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/keepalive/timeout"); value.Exists() {
+		data.KeepaliveTimeout = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/min-keepalive-interval"); value.Exists() {
+		data.MinKeepaliveInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ttl"); value.Exists() {
+		data.Ttl = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-min-version"); value.Exists() {
+		data.TlsMinVersion = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-max-version"); value.Exists() {
+		data.TlsMaxVersion = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-mutual"); value.Exists() {
+		data.TlsMutual = types.BoolValue(true)
+	} else {
+		data.TlsMutual = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tlsv1-disable"); value.Exists() {
+		data.Tlsv1Disable = types.BoolValue(true)
+	} else {
+		data.Tlsv1Disable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-trustpoint"); value.Exists() {
+		data.TlsTrustpoint = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-cipher/enable"); value.Exists() {
+		data.TlsCipherEnable = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-cipher/default"); value.Exists() {
+		data.TlsCipherDefault = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/tls-cipher/disable"); value.Exists() {
+		data.TlsCipherDisable = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/certificate-id"); value.Exists() {
+		data.CertificateId = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/certificate/common-name"); value.Exists() {
+		data.CertificateCommonName = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/listen-addresses/listen-address/address"); value.Exists() {
+		data.ListenAddresses = helpers.GetStringListXML(value.Array())
+	} else {
+		data.ListenAddresses = types.ListNull(types.StringType)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/service-layer"); value.Exists() {
+		data.ServiceLayer = types.BoolValue(true)
+	} else {
+		data.ServiceLayer = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/service-layer/auto-register"); value.Exists() {
+		data.ServiceLayerAutoRegister = types.BoolValue(true)
+	} else {
+		data.ServiceLayerAutoRegister = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing"); value.Exists() {
+		data.SegmentRouting = types.BoolValue(true)
+	} else {
+		data.SegmentRouting = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/traffic-eng"); value.Exists() {
+		data.SegmentRoutingTrafficEng = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingTrafficEng = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/traffic-eng/policy-service"); value.Exists() {
+		data.SegmentRoutingTrafficEngPolicyService = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingTrafficEngPolicyService = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gribi"); value.Exists() {
+		data.Gribi = types.BoolValue(true)
+	} else {
+		data.Gribi = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gribi/port"); value.Exists() {
+		data.GribiPort = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi"); value.Exists() {
+		data.Gnmi = types.BoolValue(true)
+	} else {
+		data.Gnmi = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi/port"); value.Exists() {
+		data.GnmiPort = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnsi/service/certz/ssl-profile-id"); value.Exists() {
+		data.GnsiServiceCertzSslProfileId = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/listen-addresses/any"); value.Exists() {
+		data.ListenAddressesAny = types.BoolValue(true)
+	} else {
+		data.ListenAddressesAny = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/aaa/accounting/history-memory"); value.Exists() {
+		data.AaaAccountingHistoryMemory = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/default-server-disable"); value.Exists() {
+		data.DefaultServerDisable = types.BoolValue(true)
+	} else {
+		data.DefaultServerDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/remote-connection/disable"); value.Exists() {
+		data.RemoteConnectionDisable = types.BoolValue(true)
+	} else {
+		data.RemoteConnectionDisable = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnmi/get-limit-multiple"); value.Exists() {
+		data.GnmiGetLimitMultiple = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnpsi"); value.Exists() {
+		data.Gnpsi = types.BoolValue(true)
+	} else {
+		data.Gnpsi = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/gnpsi/stream/queue/size"); value.Exists() {
+		data.GnpsiStreamQueueSize = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance"); value.Exists() {
+		data.SegmentRoutingTrafficEngServiceInstances = make([]GRPCSegmentRoutingTrafficEngServiceInstances, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := GRPCSegmentRoutingTrafficEngServiceInstances{}
+			if cValue := helpers.GetFromXPath(v, "service-instance-name"); cValue.Exists() {
+				item.ServiceInstanceName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "addresses/ipv4-address"); cValue.Exists() {
+				item.Ipv4Addresses = make([]GRPCSegmentRoutingTrafficEngServiceInstancesIpv4Addresses, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := GRPCSegmentRoutingTrafficEngServiceInstancesIpv4Addresses{}
+					if ccValue := helpers.GetFromXPath(cv, "ipv4-address"); ccValue.Exists() {
+						cItem.Ipv4Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "port"); ccValue.Exists() {
+						cItem.Port = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "notls"); ccValue.Exists() {
+						cItem.Notls = types.BoolValue(true)
+					} else {
+						cItem.Notls = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "source-interface"); ccValue.Exists() {
+						cItem.SourceInterface = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "vrf"); ccValue.Exists() {
+						cItem.Vrf = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "tls-hostname-override"); ccValue.Exists() {
+						cItem.TlsHostnameOverride = types.StringValue(ccValue.String())
+					}
+					item.Ipv4Addresses = append(item.Ipv4Addresses, cItem)
+					return true
+				})
+			}
+			if cValue := helpers.GetFromXPath(v, "addresses/ipv6-address"); cValue.Exists() {
+				item.Ipv6Addresses = make([]GRPCSegmentRoutingTrafficEngServiceInstancesIpv6Addresses, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := GRPCSegmentRoutingTrafficEngServiceInstancesIpv6Addresses{}
+					if ccValue := helpers.GetFromXPath(cv, "ipv6-address"); ccValue.Exists() {
+						cItem.Ipv6Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "port"); ccValue.Exists() {
+						cItem.Port = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "notls"); ccValue.Exists() {
+						cItem.Notls = types.BoolValue(true)
+					} else {
+						cItem.Notls = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "source-interface"); ccValue.Exists() {
+						cItem.SourceInterface = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "vrf"); ccValue.Exists() {
+						cItem.Vrf = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "tls-hostname-override"); ccValue.Exists() {
+						cItem.TlsHostnameOverride = types.StringValue(ccValue.String())
+					}
+					item.Ipv6Addresses = append(item.Ipv6Addresses, cItem)
+					return true
+				})
+			}
+			data.SegmentRoutingTrafficEngServiceInstances = append(data.SegmentRoutingTrafficEngServiceInstances, item)
+			return true
+		})
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -853,6 +3901,746 @@ func (data *GRPC) addDeletedItemsXML(ctx context.Context, state GRPC, body strin
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.SegmentRoutingTrafficEngServiceInstances {
+		stateKeys := [...]string{"service-instance-name"}
+		stateKeyValues := [...]string{state.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SegmentRoutingTrafficEngServiceInstances {
+			found = true
+			if state.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName.ValueString() != data.SegmentRoutingTrafficEngServiceInstances[j].ServiceInstanceName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses {
+					cstateKeys := [...]string{"ipv6-address", "port"}
+					cstateKeyValues := [...]string{state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Ipv6Address.ValueString(), strconv.FormatInt(state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Port.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Ipv6Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Port.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses {
+						found = true
+						if state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Ipv6Address.ValueString() != data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses[cj].Ipv6Address.ValueString() {
+							found = false
+						}
+						if state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Port.ValueInt64() != data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses[cj].Port.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].TlsHostnameOverride.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses[cj].TlsHostnameOverride.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance%v/addresses/ipv6-address%v/tls-hostname-override", predicates, cpredicates))
+							}
+							if !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Vrf.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses[cj].Vrf.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance%v/addresses/ipv6-address%v/vrf", predicates, cpredicates))
+							}
+							if !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].SourceInterface.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses[cj].SourceInterface.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance%v/addresses/ipv6-address%v/source-interface", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.IsNull() && state.SegmentRoutingTrafficEngServiceInstances[i].Ipv6Addresses[ci].Notls.ValueBool() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv6Addresses[cj].Notls.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance%v/addresses/ipv6-address%v/notls", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance%v/addresses/ipv6-address%v", predicates, cpredicates))
+					}
+				}
+				for ci := range state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses {
+					cstateKeys := [...]string{"ipv4-address", "port"}
+					cstateKeyValues := [...]string{state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Ipv4Address.ValueString(), strconv.FormatInt(state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Port.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Ipv4Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Port.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses {
+						found = true
+						if state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Ipv4Address.ValueString() != data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses[cj].Ipv4Address.ValueString() {
+							found = false
+						}
+						if state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Port.ValueInt64() != data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses[cj].Port.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].TlsHostnameOverride.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses[cj].TlsHostnameOverride.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance%v/addresses/ipv4-address%v/tls-hostname-override", predicates, cpredicates))
+							}
+							if !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Vrf.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses[cj].Vrf.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance%v/addresses/ipv4-address%v/vrf", predicates, cpredicates))
+							}
+							if !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].SourceInterface.IsNull() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses[cj].SourceInterface.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance%v/addresses/ipv4-address%v/source-interface", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.IsNull() && state.SegmentRoutingTrafficEngServiceInstances[i].Ipv4Addresses[ci].Notls.ValueBool() && data.SegmentRoutingTrafficEngServiceInstances[j].Ipv4Addresses[cj].Notls.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance%v/addresses/ipv4-address%v/notls", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance%v/addresses/ipv4-address%v", predicates, cpredicates))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance%v", predicates))
+		}
+	}
+	if !state.GnpsiStreamQueueSize.IsNull() && data.GnpsiStreamQueueSize.IsNull() {
+		deletePath := state.getXPath() + "/gnpsi/stream/queue/size"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Gnpsi.IsNull() && state.Gnpsi.ValueBool() && data.Gnpsi.IsNull() {
+		deletePath := state.getXPath() + "/gnpsi"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.GnmiGetLimitMultiple.IsNull() && data.GnmiGetLimitMultiple.IsNull() {
+		deletePath := state.getXPath() + "/gnmi/get-limit-multiple"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.RemoteConnectionDisable.IsNull() && state.RemoteConnectionDisable.ValueBool() && data.RemoteConnectionDisable.IsNull() {
+		deletePath := state.getXPath() + "/remote-connection/disable"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.DefaultServerDisable.IsNull() && state.DefaultServerDisable.ValueBool() && data.DefaultServerDisable.IsNull() {
+		deletePath := state.getXPath() + "/default-server-disable"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AaaAccountingHistoryMemory.IsNull() && data.AaaAccountingHistoryMemory.IsNull() {
+		deletePath := state.getXPath() + "/aaa/accounting/history-memory"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ListenAddressesAny.IsNull() && state.ListenAddressesAny.ValueBool() && data.ListenAddressesAny.IsNull() {
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/listen-addresses"
+		predicates := make(map[string]string)
+		predicates["any"] = fmt.Sprintf("%v", state.ListenAddressesAny.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.GnsiServiceCertzSslProfileId.IsNull() && data.GnsiServiceCertzSslProfileId.IsNull() {
+		deletePath := state.getXPath() + "/gnsi/service/certz/ssl-profile-id"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.GnmiPort.IsNull() && data.GnmiPort.IsNull() {
+		deletePath := state.getXPath() + "/gnmi/port"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Gnmi.IsNull() && state.Gnmi.ValueBool() && data.Gnmi.IsNull() {
+		deletePath := state.getXPath() + "/gnmi"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.GribiPort.IsNull() && data.GribiPort.IsNull() {
+		deletePath := state.getXPath() + "/gribi/port"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Gribi.IsNull() && state.Gribi.ValueBool() && data.Gribi.IsNull() {
+		deletePath := state.getXPath() + "/gribi"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SegmentRoutingTrafficEngPolicyService.IsNull() && state.SegmentRoutingTrafficEngPolicyService.ValueBool() && data.SegmentRoutingTrafficEngPolicyService.IsNull() {
+		deletePath := state.getXPath() + "/segment-routing/traffic-eng/policy-service"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SegmentRoutingTrafficEng.IsNull() && state.SegmentRoutingTrafficEng.ValueBool() && data.SegmentRoutingTrafficEng.IsNull() {
+		deletePath := state.getXPath() + "/segment-routing/traffic-eng"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SegmentRouting.IsNull() && state.SegmentRouting.ValueBool() && data.SegmentRouting.IsNull() {
+		deletePath := state.getXPath() + "/segment-routing"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServiceLayerAutoRegister.IsNull() && state.ServiceLayerAutoRegister.ValueBool() && data.ServiceLayerAutoRegister.IsNull() {
+		deletePath := state.getXPath() + "/service-layer/auto-register"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ServiceLayer.IsNull() && state.ServiceLayer.ValueBool() && data.ServiceLayer.IsNull() {
+		deletePath := state.getXPath() + "/service-layer"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ListenAddresses.IsNull() {
+		if data.ListenAddresses.IsNull() {
+			var values []string
+			state.ListenAddresses.ElementsAs(ctx, &values, false)
+			for _, v := range values {
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/listen-addresses/listen-address/address[.=%v]", v))
+			}
+		} else {
+			var dataValues, stateValues []string
+			data.ListenAddresses.ElementsAs(ctx, &dataValues, false)
+			state.ListenAddresses.ElementsAs(ctx, &stateValues, false)
+			for _, v := range stateValues {
+				found := false
+				for _, vv := range dataValues {
+					if v == vv {
+						found = true
+						break
+					}
+				}
+				if !found {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/listen-addresses/listen-address/address[.=%v]", v))
+				}
+			}
+		}
+	}
+	if !state.CertificateCommonName.IsNull() && data.CertificateCommonName.IsNull() {
+		deletePath := state.getXPath() + "/certificate/common-name"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.CertificateId.IsNull() && data.CertificateId.IsNull() {
+		deletePath := state.getXPath() + "/certificate-id"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.TlsCipherDisable.IsNull() && data.TlsCipherDisable.IsNull() {
+		deletePath := state.getXPath() + "/tls-cipher/disable"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.TlsCipherDefault.IsNull() && data.TlsCipherDefault.IsNull() {
+		deletePath := state.getXPath() + "/tls-cipher/default"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.TlsCipherEnable.IsNull() && data.TlsCipherEnable.IsNull() {
+		deletePath := state.getXPath() + "/tls-cipher/enable"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.TlsTrustpoint.IsNull() && data.TlsTrustpoint.IsNull() {
+		deletePath := state.getXPath() + "/tls-trustpoint"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Tlsv1Disable.IsNull() && state.Tlsv1Disable.ValueBool() && data.Tlsv1Disable.IsNull() {
+		deletePath := state.getXPath() + "/tlsv1-disable"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.TlsMutual.IsNull() && state.TlsMutual.ValueBool() && data.TlsMutual.IsNull() {
+		deletePath := state.getXPath() + "/tls-mutual"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.TlsMaxVersion.IsNull() && data.TlsMaxVersion.IsNull() {
+		deletePath := state.getXPath() + "/tls-max-version"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.TlsMinVersion.IsNull() && data.TlsMinVersion.IsNull() {
+		deletePath := state.getXPath() + "/tls-min-version"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Ttl.IsNull() && data.Ttl.IsNull() {
+		deletePath := state.getXPath() + "/ttl"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.MinKeepaliveInterval.IsNull() && data.MinKeepaliveInterval.IsNull() {
+		deletePath := state.getXPath() + "/min-keepalive-interval"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.KeepaliveTimeout.IsNull() && data.KeepaliveTimeout.IsNull() {
+		deletePath := state.getXPath() + "/keepalive/timeout"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.KeepaliveTime.IsNull() && data.KeepaliveTime.IsNull() {
+		deletePath := state.getXPath() + "/keepalive/time"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Name.IsNull() && data.Name.IsNull() {
+		deletePath := state.getXPath() + "/name"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AaaAuthenticationLogin.IsNull() && data.AaaAuthenticationLogin.IsNull() {
+		deletePath := state.getXPath() + "/aaa/authentication/login"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AaaAuthorizationExec.IsNull() && data.AaaAuthorizationExec.IsNull() {
+		deletePath := state.getXPath() + "/aaa/authorization/exec"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.AaaAccountingQueueSize.IsNull() && data.AaaAccountingQueueSize.IsNull() {
+		deletePath := state.getXPath() + "/aaa/accounting/queue-size"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.Dscp.IsNull() && data.Dscp.IsNull() {
+		deletePath := state.getXPath() + "/dscp"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.MemoryLimit.IsNull() && data.MemoryLimit.IsNull() {
+		deletePath := state.getXPath() + "/memory/limit"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.MaxConcurrentStreams.IsNull() && data.MaxConcurrentStreams.IsNull() {
+		deletePath := state.getXPath() + "/max-concurrent-streams"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	if !state.MaxStreamsPerUser.IsNull() && data.MaxStreamsPerUser.IsNull() {
 		deletePath := state.getXPath() + "/max-streams-per-user"
 		// Check if a parent path is already marked for deletion
@@ -963,54 +4751,78 @@ func (data *GRPC) addDeletedItemsXML(ctx context.Context, state GRPC, body strin
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AddressFamilyDual.IsNull() && state.AddressFamilyDual.ValueBool() && data.AddressFamilyDual.IsNull() {
-		// For no_augment_config leaf with enum values, delete the specific child element (value)
-		// Path should be: root-element/<value> where value is the enum value
-		deletePath := state.getXPath() + "/" + strconv.FormatBool(state.AddressFamilyDual.ValueBool())
-		// Check if a parent path is already marked for deletion
-		parentAlreadyDeleted := false
-		for dp := range deletedPaths {
-			if strings.HasPrefix(deletePath, dp+"/") {
-				parentAlreadyDeleted = true
-				break
-			}
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/address-family"
+		predicates := make(map[string]string)
+		if !state.AddressFamilyIpv4.IsNull() {
+			predicates["ipv4"] = fmt.Sprintf("%v", state.AddressFamilyIpv4.ValueBool())
 		}
-		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+		if !state.AddressFamilyIpv6.IsNull() {
+			predicates["ipv6"] = fmt.Sprintf("%v", state.AddressFamilyIpv6.ValueBool())
+		}
+		predicates["dual"] = fmt.Sprintf("%v", state.AddressFamilyDual.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
 			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AddressFamilyIpv6.IsNull() && state.AddressFamilyIpv6.ValueBool() && data.AddressFamilyIpv6.IsNull() {
-		// For no_augment_config leaf with enum values, delete the specific child element (value)
-		// Path should be: root-element/<value> where value is the enum value
-		deletePath := state.getXPath() + "/" + strconv.FormatBool(state.AddressFamilyIpv6.ValueBool())
-		// Check if a parent path is already marked for deletion
-		parentAlreadyDeleted := false
-		for dp := range deletedPaths {
-			if strings.HasPrefix(deletePath, dp+"/") {
-				parentAlreadyDeleted = true
-				break
-			}
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/address-family"
+		predicates := make(map[string]string)
+		if !state.AddressFamilyIpv4.IsNull() {
+			predicates["ipv4"] = fmt.Sprintf("%v", state.AddressFamilyIpv4.ValueBool())
 		}
-		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+		if !state.AddressFamilyDual.IsNull() {
+			predicates["dual"] = fmt.Sprintf("%v", state.AddressFamilyDual.ValueBool())
+		}
+		predicates["ipv6"] = fmt.Sprintf("%v", state.AddressFamilyIpv6.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
 			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
 	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.AddressFamilyIpv4.IsNull() && state.AddressFamilyIpv4.ValueBool() && data.AddressFamilyIpv4.IsNull() {
-		// For no_augment_config leaf with enum values, delete the specific child element (value)
-		// Path should be: root-element/<value> where value is the enum value
-		deletePath := state.getXPath() + "/" + strconv.FormatBool(state.AddressFamilyIpv4.ValueBool())
-		// Check if a parent path is already marked for deletion
-		parentAlreadyDeleted := false
-		for dp := range deletedPaths {
-			if strings.HasPrefix(deletePath, dp+"/") {
-				parentAlreadyDeleted = true
-				break
-			}
+		// Build predicates for delete_parent by finding sibling attributes with same parent path
+		deletePath := state.getXPath() + "/address-family"
+		predicates := make(map[string]string)
+		if !state.AddressFamilyIpv6.IsNull() {
+			predicates["ipv6"] = fmt.Sprintf("%v", state.AddressFamilyIpv6.ValueBool())
 		}
-		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+		if !state.AddressFamilyDual.IsNull() {
+			predicates["dual"] = fmt.Sprintf("%v", state.AddressFamilyDual.ValueBool())
+		}
+		predicates["ipv4"] = fmt.Sprintf("%v", state.AddressFamilyIpv4.ValueBool())
+		// Sort keys to ensure consistent ordering
+		keys := make([]string, 0, len(predicates))
+		for k := range predicates {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			deletePath += fmt.Sprintf("[%s='%s']", k, predicates[k])
+		}
+		if !deletedPaths[deletePath] {
 			b = helpers.RemoveFromXPath(b, deletePath)
 			deletedPaths[deletePath] = true
 		}
@@ -1056,6 +4868,137 @@ func (data *GRPC) addDeletedItemsXML(ctx context.Context, state GRPC, body strin
 
 func (data *GRPC) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	for i := range data.SegmentRoutingTrafficEngServiceInstances {
+		keys := [...]string{"service-instance-name"}
+		keyValues := [...]string{data.SegmentRoutingTrafficEngServiceInstances[i].ServiceInstanceName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/segment-routing/traffic-eng/service-instances/service-instance%v", predicates))
+	}
+	if !data.GnpsiStreamQueueSize.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/gnpsi/stream/queue/size")
+	}
+	if !data.Gnpsi.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/gnpsi")
+	}
+	if !data.GnmiGetLimitMultiple.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/gnmi/get-limit-multiple")
+	}
+	if !data.RemoteConnectionDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/remote-connection/disable")
+	}
+	if !data.DefaultServerDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/default-server-disable")
+	}
+	if !data.AaaAccountingHistoryMemory.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/aaa/accounting/history-memory")
+	}
+	if !data.ListenAddressesAny.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/listen-addresses")
+	}
+	if !data.GnsiServiceCertzSslProfileId.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/gnsi/service/certz/ssl-profile-id")
+	}
+	if !data.GnmiPort.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/gnmi/port")
+	}
+	if !data.Gnmi.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/gnmi")
+	}
+	if !data.GribiPort.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/gribi/port")
+	}
+	if !data.Gribi.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/gribi")
+	}
+	if !data.SegmentRoutingTrafficEngPolicyService.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/segment-routing/traffic-eng/policy-service")
+	}
+	if !data.SegmentRoutingTrafficEng.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/segment-routing/traffic-eng")
+	}
+	if !data.SegmentRouting.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/segment-routing")
+	}
+	if !data.ServiceLayerAutoRegister.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/service-layer/auto-register")
+	}
+	if !data.ServiceLayer.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/service-layer")
+	}
+	if !data.ListenAddresses.IsNull() {
+		var values []string
+		data.ListenAddresses.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/listen-addresses/listen-address/address[.=%v]", v))
+		}
+	}
+	if !data.CertificateCommonName.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/certificate/common-name")
+	}
+	if !data.CertificateId.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/certificate-id")
+	}
+	if !data.TlsCipherDisable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/tls-cipher/disable")
+	}
+	if !data.TlsCipherDefault.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/tls-cipher/default")
+	}
+	if !data.TlsCipherEnable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/tls-cipher/enable")
+	}
+	if !data.TlsTrustpoint.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/tls-trustpoint")
+	}
+	if !data.Tlsv1Disable.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/tlsv1-disable")
+	}
+	if !data.TlsMutual.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/tls-mutual")
+	}
+	if !data.TlsMaxVersion.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/tls-max-version")
+	}
+	if !data.TlsMinVersion.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/tls-min-version")
+	}
+	if !data.Ttl.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ttl")
+	}
+	if !data.MinKeepaliveInterval.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/min-keepalive-interval")
+	}
+	if !data.KeepaliveTimeout.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/keepalive/timeout")
+	}
+	if !data.KeepaliveTime.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/keepalive/time")
+	}
+	if !data.Name.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/name")
+	}
+	if !data.AaaAuthenticationLogin.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/aaa/authentication/login")
+	}
+	if !data.AaaAuthorizationExec.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/aaa/authorization/exec")
+	}
+	if !data.AaaAccountingQueueSize.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/aaa/accounting/queue-size")
+	}
+	if !data.Dscp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/dscp")
+	}
+	if !data.MemoryLimit.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/memory/limit")
+	}
+	if !data.MaxConcurrentStreams.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/max-concurrent-streams")
+	}
 	if !data.MaxStreamsPerUser.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/max-streams-per-user")
 	}
@@ -1078,22 +5021,13 @@ func (data *GRPC) addDeletePathsXML(ctx context.Context, body string) string {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/no-tls")
 	}
 	if !data.AddressFamilyDual.IsNull() {
-		// For no_augment_config, delete the entire container (not child elements)
-		// This is because these use YANG choice/case - you can't delete individual choice values
-		deletePath := data.getXPath()
-		b = helpers.RemoveFromXPath(b, deletePath)
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/address-family")
 	}
 	if !data.AddressFamilyIpv6.IsNull() {
-		// For no_augment_config, delete the entire container (not child elements)
-		// This is because these use YANG choice/case - you can't delete individual choice values
-		deletePath := data.getXPath()
-		b = helpers.RemoveFromXPath(b, deletePath)
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/address-family")
 	}
 	if !data.AddressFamilyIpv4.IsNull() {
-		// For no_augment_config, delete the entire container (not child elements)
-		// This is because these use YANG choice/case - you can't delete individual choice values
-		deletePath := data.getXPath()
-		b = helpers.RemoveFromXPath(b, deletePath)
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/address-family")
 	}
 	if !data.Vrf.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/vrf")

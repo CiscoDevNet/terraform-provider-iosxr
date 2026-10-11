@@ -1,5 +1,5 @@
 ---
-name: gRPC
+name: GRPC
 path: Cisco-IOS-XR-um-grpc-cfg:/grpc
 doc_category: Management
 # grpc is a presence container: deleting it shuts down the gRPC server, which
@@ -8,6 +8,10 @@ doc_category: Management
 default_delete_attributes: true
 no_delete_attributes: true
 test_tags: [GRPC]
+# The tunnel, servers and p4rt containers are not modeled.
+# Attributes marked exclude_test can change how the device accepts connections
+# (port, vrf, address family, TLS, authentication, listen addresses, services)
+# and are kept out of the acceptance tests so they cannot lock out the provider.
 attributes:
   - yang_name: port
     description: "Server listening port (1024-65535), default: 57400"
@@ -16,28 +20,22 @@ attributes:
   - yang_name: vrf
     example: default
     exclude_test: true
-  - yang_name: address-family/ipv4
+  - yang_name: address-family/ADDRESS-FAMILY/IPV4/ipv4
+    xpath: address-family/ipv4
     tf_name: address_family_ipv4
-    description: "IPv4 address-family"
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    example: false
+    delete_parent: true
     exclude_test: true
-  - yang_name: address-family/ipv6
+    example: true
+  - yang_name: address-family/ADDRESS-FAMILY/IPV6/ipv6
+    xpath: address-family/ipv6
     tf_name: address_family_ipv6
-    description: "IPv6 address-family"
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    example: false
+    delete_parent: true
     exclude_test: true
-  - yang_name: address-family/dual
+    example: true
+  - yang_name: address-family/ADDRESS-FAMILY/DUAL/dual
+    xpath: address-family/dual
     tf_name: address_family_dual
-    description: "Dual stack address-family"
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
+    delete_parent: true
     example: true
   - yang_name: no-tls
     example: true
@@ -55,3 +53,97 @@ attributes:
     example: 32
   - yang_name: max-streams-per-user
     example: 32
+  - yang_name: max-concurrent-streams
+    example: 64
+  - yang_name: memory/limit
+    example: 1000
+  - yang_name: dscp
+    example: af11
+  - yang_name: aaa/accounting/queue-size
+    example: 100
+  - yang_name: aaa/authorization/exec
+    exclude_test: true
+    example: default
+  - yang_name: aaa/authentication/login
+    exclude_test: true
+    example: default
+  - yang_name: name
+    exclude_test: true
+    example: grpc-1
+  - yang_name: keepalive/time
+    exclude_test: true
+    example: 300
+  - yang_name: keepalive/timeout
+    exclude_test: true
+    example: 30
+  - yang_name: min-keepalive-interval
+    exclude_test: true
+    example: 300
+  - yang_name: ttl
+    exclude_test: true
+    example: 64
+  - yang_name: tls-min-version
+    exclude_test: true
+    example: "1.2"
+  - yang_name: tls-max-version
+    exclude_test: true
+    example: "1.3"
+  - yang_name: tls-mutual
+    exclude_test: true
+    example: true
+  - yang_name: tlsv1-disable
+    exclude_test: true
+    example: true
+  - yang_name: tls-trustpoint
+    exclude_test: true
+    example: TRUSTPOINT-1
+  - yang_name: tls-cipher/enable
+    exclude_test: true
+    example: ECDHE-RSA-AES128-GCM-SHA256
+  - yang_name: tls-cipher/default
+    exclude_test: true
+    example: enable
+  - yang_name: tls-cipher/disable
+    exclude_test: true
+    example: ECDHE-RSA-AES256-GCM-SHA384
+  - yang_name: certificate-id
+    exclude_test: true
+    example: CERT-1
+  - yang_name: certificate/common-name
+    exclude_test: true
+    example: router.example.com
+  - yang_name: listen-addresses/listen-addresses-argument
+    tf_name: listen_addresses
+    type: StringList
+    exclude_test: true
+    example: 192.0.2.1
+  - yang_name: service-layer
+    exclude_test: true
+    example: true
+  - yang_name: service-layer/auto-register
+    exclude_test: true
+    example: true
+  - yang_name: segment-routing
+    exclude_test: true
+    example: true
+  - yang_name: segment-routing/traffic-eng
+    exclude_test: true
+    example: true
+  - yang_name: segment-routing/traffic-eng/policy-service
+    exclude_test: true
+    example: true
+  - yang_name: gribi
+    exclude_test: true
+    example: true
+  - yang_name: gribi/port
+    exclude_test: true
+    example: 50051
+  - yang_name: gnmi
+    exclude_test: true
+    example: true
+  - yang_name: gnmi/port
+    exclude_test: true
+    example: 57401
+  - yang_name: gnsi/service/certz/ssl-profile-id
+    exclude_test: true
+    example: SSL-PROFILE-1

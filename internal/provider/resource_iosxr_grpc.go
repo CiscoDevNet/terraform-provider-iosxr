@@ -59,7 +59,7 @@ func (r *GRPCResource) Metadata(_ context.Context, req resource.MetadataRequest,
 func (r *GRPCResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the gRPC configuration.",
+		MarkdownDescription: "This resource can manage the GRPC configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -97,7 +97,7 @@ func (r *GRPCResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Optional:            true,
 			},
 			"address_family_dual": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Dual stack address-family").String,
+				MarkdownDescription: helpers.NewAttributeDescription("dual stackaddress-family").String,
 				Optional:            true,
 			},
 			"no_tls": schema.BoolAttribute{
@@ -140,6 +140,352 @@ func (r *GRPCResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					int64validator.Between(1, 128),
 				},
 			},
+			"max_concurrent_streams": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("gRPC server maximum concurrent streams per connection").AddIntegerRangeDescription(1, 128).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 128),
+				},
+			},
+			"memory_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Soft memory limit in MB").AddIntegerRangeDescription(600, 1400).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(600, 1400),
+				},
+			},
+			"dscp": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("QoS marking DSCP to be set on transmitted gRPC").String,
+				Optional:            true,
+			},
+			"aaa_accounting_queue_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum configurable size of the accounting queue").AddIntegerRangeDescription(1, 512).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 512),
+				},
+			},
+			"aaa_authorization_exec": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("AAA authorization exec method list").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"aaa_authentication_login": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("AAA authentication login method list").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("gRPC server name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 64),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"keepalive_time": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Server keepalive time").AddIntegerRangeDescription(1, 10000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 10000),
+				},
+			},
+			"keepalive_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Server keepalive timeout").AddIntegerRangeDescription(1, 10000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 10000),
+				},
+			},
+			"min_keepalive_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Minimum client keepalive interval").AddIntegerRangeDescription(1, 10000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 10000),
+				},
+			},
+			"ttl": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("gRPC packets TTL value").AddIntegerRangeDescription(0, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 255),
+				},
+			},
+			"tls_min_version": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("gRPC minimum TLS version").AddStringEnumDescription("1.0", "1.1", "1.2", "1.3").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("1.0", "1.1", "1.2", "1.3"),
+				},
+			},
+			"tls_max_version": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("gRPC maximum TLS version").AddStringEnumDescription("1.0", "1.1", "1.2", "1.3").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("1.0", "1.1", "1.2", "1.3"),
+				},
+			},
+			"tls_mutual": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Mutual Authentication").String,
+				Optional:            true,
+			},
+			"tlsv1_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable support for TLS version 1.0ntlsv1-disable CLI is deprecated.nUse tls-min-version CLI to set minimum TLS version.").String,
+				Optional:            true,
+			},
+			"tls_trustpoint": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure trustpoint").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"tls_cipher_enable": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable ciphers if 'default disable'").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"tls_cipher_default": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default of all ciphers").AddStringEnumDescription("disable", "enable").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"tls_cipher_disable": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable ciphers if 'default enable'").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"certificate_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Active Certificate").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"certificate_common_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Common name when generate certificates").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 64),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"listen_addresses": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DEPRECATED. Removing in 26.3.1: Listen address").String,
+				ElementType:         types.StringType,
+				Optional:            true,
+			},
+			"service_layer": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("grpc service layer configuration").String,
+				Optional:            true,
+			},
+			"service_layer_auto_register": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable service-layer auto-register").String,
+				Optional:            true,
+			},
+			"segment_routing": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("gRPC segment-routing configuration").String,
+				Optional:            true,
+			},
+			"segment_routing_traffic_eng": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("gRPC segment-routing traffic-eng configuration").String,
+				Optional:            true,
+			},
+			"segment_routing_traffic_eng_policy_service": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable SRTE policy services").String,
+				Optional:            true,
+			},
+			"gribi": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("gRIBI service configuration").String,
+				Optional:            true,
+			},
+			"gribi_port": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("gRIBI service listening port").AddIntegerRangeDescription(1024, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1024, 65535),
+				},
+			},
+			"gnmi": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("gNMI service configuration").String,
+				Optional:            true,
+			},
+			"gnmi_port": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("gNMI service listening port").AddIntegerRangeDescription(1024, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1024, 65535),
+				},
+			},
+			"gnsi_service_certz_ssl_profile_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SSL profile to be consumed by gRPC server").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 256),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"listen_addresses_any": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("DEPRECATED. Removing in 26.3.1: Listen on all addresses").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"aaa_accounting_history_memory": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum configurable memory of the accounting history in MB").AddIntegerRangeDescription(1, 400).String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 400),
+				},
+			},
+			"default_server_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configuration to disable the default gRPC server").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"remote_connection_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable TCP on the gRPC server").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"gnmi_get_limit_multiple": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("gNMI get request max size-limit multiplier, to support larger get results").AddIntegerRangeDescription(1, 20).String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 20),
+				},
+			},
+			"gnpsi": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("gNPSI service configuration").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"gnpsi_stream_queue_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure gNPSI stream queue size").AddIntegerRangeDescription(1, 8000).String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 8000),
+				},
+			},
+			"segment_routing_traffic_eng_service_instances": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure a named service").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"service_instance_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("service instance name").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 128),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"ipv4_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Destination address").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"ipv4_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enter Destination IPv4 address").String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+									},
+									"port": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enter port number").AddIntegerRangeDescription(1, 65535).String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"notls": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("turn off TLS").String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+									},
+									"source_interface": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Source interface to be used for dialout").String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+										},
+									},
+									"vrf": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enter specific VRF Name for this nexthop").String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 32),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+									"tls_hostname_override": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("host name to use for TLS cert verification").String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 32),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+								},
+							},
+						},
+						"ipv6_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Destination address").String + "\n  - Supported from version: `25.4`",
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"ipv6_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enter Destination IPv6 address").String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+									},
+									"port": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enter port number").AddIntegerRangeDescription(1, 65535).String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"notls": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("turn off TLS").String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+									},
+									"source_interface": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Source interface to be used for dialout").String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+										},
+									},
+									"vrf": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enter specific VRF Name for this nexthop").String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 32),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+									"tls_hostname_override": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("host name to use for TLS cert verification").String + "\n  - Supported from version: `25.4`",
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 32),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -169,6 +515,10 @@ func (r *GRPCResource) Create(ctx context.Context, req resource.CreateRequest, r
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -387,6 +737,10 @@ func (r *GRPCResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -480,6 +834,14 @@ func (r *GRPCResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

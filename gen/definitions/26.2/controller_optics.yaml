@@ -1,0 +1,11 @@
+---
+name: Controller Optics
+path: Cisco-IOS-XR-ifmgr-cfg:/interface-configurations/interface-configuration[interface-name=%s%s][active=%s]
+augment_path: Cisco-IOS-XR-ifmgr-cfg:/interface-configurations/interface-configuration[interface-name=Optics%s][active=%s]
+doc_category: Controller
+attributes:
+  # ===========================================================
+  # breakout: 3x200, 4x200 and 2x400 added to the allowed modes
+  # ===========================================================
+  - yang_name: Cisco-IOS-XR-optics-driver-cfg:breakout
+    tf_name: breakout

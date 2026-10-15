@@ -102,11 +102,15 @@ func (d *ControllerOpticsDataSource) Schema(ctx context.Context, req datasource.
 				Computed:            true,
 			},
 			"speed": schema.StringAttribute{
-				MarkdownDescription: "optics speed set configuration",
+				MarkdownDescription: "Speed config for optics",
 				Computed:            true,
 			},
 			"breakout": schema.StringAttribute{
 				MarkdownDescription: "breakout mode configuration",
+				Computed:            true,
+			},
+			"speed_host_lanes": schema.Int64Attribute{
+				MarkdownDescription: "Host lanes config for optics" + "\n  - Supported from version: `25.4`",
 				Computed:            true,
 			},
 		},

@@ -41,5 +41,7 @@ data "iosxr_controller_optics" "example" {
 - `link_status` (Boolean) Enable interface and line-protocol state change alarms
 - `performance_monitoring` (Boolean) Select Performance Monitoring as Enable or Disable
 - `shutdown` (Boolean) The existence of this configuration indicates the interface is shut down
-- `speed` (String) optics speed set configuration
+- `speed` (String) Speed config for optics
+- `speed_host_lanes` (Number) Host lanes config for optics
+  - Supported from version: `25.4`
 - `transceiver_disable` (Boolean) Disable the transceiver module, treating it as not inserted.  When the configuration is removed, the transceiver module on that port, if present, would be initialized as if it is just inserted

@@ -1,0 +1,29 @@
+---
+name: Controller Optics
+path: Cisco-IOS-XR-ifmgr-cfg:/interface-configurations/interface-configuration[interface-name=%s%s][active=%s]
+augment_path: Cisco-IOS-XR-ifmgr-cfg:/interface-configurations/interface-configuration[interface-name=Optics%s][active=%s]
+doc_category: Controller
+attributes:
+  # ===========================================================
+  # speed: leaf -> presence container
+  # 24.4: speed (leaf)
+  # 25.4: speed/speed (leaf), speed/host-lanes (new, mandatory together with speed)
+  # ===========================================================
+  - yang_name: Cisco-IOS-XR-optics-speed-cfg:speed/speed
+    replaces_yang_name: Cisco-IOS-XR-optics-speed-cfg:speed
+    tf_name: speed
+    optional: true
+    test_tags: [C8000]
+    include_example: true
+    example: 400g
+  - yang_name: Cisco-IOS-XR-optics-speed-cfg:speed/host-lanes
+    tf_name: speed_host_lanes
+    optional: true
+    test_tags: [C8000]
+    include_example: true
+    example: 4
+  # ===========================================================
+  # breakout: 2x200 added to the allowed modes
+  # ===========================================================
+  - yang_name: Cisco-IOS-XR-optics-driver-cfg:breakout
+    tf_name: breakout

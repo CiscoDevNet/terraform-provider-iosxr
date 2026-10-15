@@ -27,6 +27,7 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -130,20 +131,27 @@ func (r *ControllerOpticsResource) Schema(ctx context.Context, req resource.Sche
 				Optional:            true,
 			},
 			"speed": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("optics speed set configuration").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Speed config for optics").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`(1g)|(1G)|(10g)|(10G)|(25g)|(25G)|(40g)|(40G)|(50g)|(50G)|(100g)|(100G)|(200g)|(200G)|(300g)|(300G)|(400g)|(400G)|(none)`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`(invalid)|(1g)|(1G)|(10g)|(10G)|(25g)|(25G)|(40g)|(40G)|(50g)|(50G)|(100g)|(100G)|(200g)|(200G)|(300g)|(300G)|(400g)|(400G)|(none)`), ""),
 				},
 			},
 			"breakout": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("breakout mode configuration").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`(4x10)|(4x25)|(8x25)|(1x40)|(2x50)|(8x50)|(1x100)|(2x100)|(3x100)|(4x100)|(8x100)`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`(4x10)|(4x25)|(8x25)|(1x40)|(2x50)|(8x50)|(1x100)|(2x100)|(3x100)|(4x100)|(8x100)|(2x200)|(3x200)|(4x200)|(2x400)`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"speed_host_lanes": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Host lanes config for optics").AddIntegerRangeDescription(0, 16).String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 16),
 				},
 			},
 		},
@@ -175,6 +183,10 @@ func (r *ControllerOpticsResource) Create(ctx context.Context, req resource.Crea
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -393,6 +405,10 @@ func (r *ControllerOpticsResource) Update(ctx context.Context, req resource.Upda
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -486,6 +502,14 @@ func (r *ControllerOpticsResource) Delete(ctx context.Context, req resource.Dele
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

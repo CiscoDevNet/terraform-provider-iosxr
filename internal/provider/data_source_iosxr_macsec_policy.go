@@ -101,6 +101,10 @@ func (d *MACSecPolicyDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "macsec policy exception to allow packets in clear text",
 				Computed:            true,
 			},
+			"sak_rekey_interval_minutes": schema.Int64Attribute{
+				MarkdownDescription: "Interval after which key-server generates new SAK for a Secured Session",
+				Computed:            true,
+			},
 			"sak_rekey_interval_seconds": schema.Int64Attribute{
 				MarkdownDescription: "Interval(in seconds)<60-2592000>, Default: OFF",
 				Computed:            true,
@@ -167,6 +171,14 @@ func (d *MACSecPolicyDataSource) Schema(ctx context.Context, req datasource.Sche
 			},
 			"logging_sak_rekey_summary_interval": schema.Int64Attribute{
 				MarkdownDescription: "Log summary of sak-rekey in syslogs after every specified Interval(in minutes), range(30,43200)",
+				Computed:            true,
+			},
+			"allow_ptp_in_clear": schema.BoolAttribute{
+				MarkdownDescription: "Allow Precision Time Protocol packets in clear text (unencrypted)" + "\n  - Supported from version: `26.2`",
+				Computed:            true,
+			},
+			"enable_fault_detection": schema.BoolAttribute{
+				MarkdownDescription: "enable fault detection" + "\n  - Supported from version: `26.2`",
 				Computed:            true,
 			},
 		},

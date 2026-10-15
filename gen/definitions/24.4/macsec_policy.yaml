@@ -22,6 +22,9 @@ attributes:
     example: 1
   - yang_name: policy-exception
     example: lacp-in-clear
+  - yang_name: sak-rekey-interval/minutes
+    example: 30
+    exclude_test: true
   - yang_name: sak-rekey-interval/seconds
     example: 1800
   - yang_name: include-icv-indicator

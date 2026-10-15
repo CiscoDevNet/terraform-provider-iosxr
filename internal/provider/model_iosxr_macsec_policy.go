@@ -52,6 +52,7 @@ type MACSecPolicy struct {
 	SecurityPolicy                 types.String `tfsdk:"security_policy"`
 	VlanTagsInClear                types.Int64  `tfsdk:"vlan_tags_in_clear"`
 	PolicyException                types.String `tfsdk:"policy_exception"`
+	SakRekeyIntervalMinutes        types.Int64  `tfsdk:"sak_rekey_interval_minutes"`
 	SakRekeyIntervalSeconds        types.Int64  `tfsdk:"sak_rekey_interval_seconds"`
 	IncludeIcvIndicator            types.Bool   `tfsdk:"include_icv_indicator"`
 	DelayProtection                types.Bool   `tfsdk:"delay_protection"`
@@ -69,6 +70,8 @@ type MACSecPolicy struct {
 	PpkSksProfile                  types.String `tfsdk:"ppk_sks_profile"`
 	LoggingSakRekeyDisable         types.Bool   `tfsdk:"logging_sak_rekey_disable"`
 	LoggingSakRekeySummaryInterval types.Int64  `tfsdk:"logging_sak_rekey_summary_interval"`
+	AllowPtpInClear                types.Bool   `tfsdk:"allow_ptp_in_clear"`
+	EnableFaultDetection           types.Bool   `tfsdk:"enable_fault_detection"`
 }
 
 type MACSecPolicyData struct {
@@ -82,6 +85,7 @@ type MACSecPolicyData struct {
 	SecurityPolicy                 types.String `tfsdk:"security_policy"`
 	VlanTagsInClear                types.Int64  `tfsdk:"vlan_tags_in_clear"`
 	PolicyException                types.String `tfsdk:"policy_exception"`
+	SakRekeyIntervalMinutes        types.Int64  `tfsdk:"sak_rekey_interval_minutes"`
 	SakRekeyIntervalSeconds        types.Int64  `tfsdk:"sak_rekey_interval_seconds"`
 	IncludeIcvIndicator            types.Bool   `tfsdk:"include_icv_indicator"`
 	DelayProtection                types.Bool   `tfsdk:"delay_protection"`
@@ -99,6 +103,8 @@ type MACSecPolicyData struct {
 	PpkSksProfile                  types.String `tfsdk:"ppk_sks_profile"`
 	LoggingSakRekeyDisable         types.Bool   `tfsdk:"logging_sak_rekey_disable"`
 	LoggingSakRekeySummaryInterval types.Int64  `tfsdk:"logging_sak_rekey_summary_interval"`
+	AllowPtpInClear                types.Bool   `tfsdk:"allow_ptp_in_clear"`
+	EnableFaultDetection           types.Bool   `tfsdk:"enable_fault_detection"`
 }
 
 // End of section. //template:end types
@@ -155,6 +161,9 @@ func (data MACSecPolicy) toBody(ctx context.Context, providerVersion string) str
 	}
 	if !data.PolicyException.IsNull() && !data.PolicyException.IsUnknown() {
 		body, _ = sjson.Set(body, "policy-exception", data.PolicyException.ValueString())
+	}
+	if !data.SakRekeyIntervalMinutes.IsNull() && !data.SakRekeyIntervalMinutes.IsUnknown() {
+		body, _ = sjson.Set(body, "sak-rekey-interval.minutes", strconv.FormatInt(data.SakRekeyIntervalMinutes.ValueInt64(), 10))
 	}
 	if !data.SakRekeyIntervalSeconds.IsNull() && !data.SakRekeyIntervalSeconds.IsUnknown() {
 		body, _ = sjson.Set(body, "sak-rekey-interval.seconds", strconv.FormatInt(data.SakRekeyIntervalSeconds.ValueInt64(), 10))
@@ -233,6 +242,20 @@ func (data MACSecPolicy) toBody(ctx context.Context, providerVersion string) str
 	if !data.LoggingSakRekeySummaryInterval.IsNull() && !data.LoggingSakRekeySummaryInterval.IsUnknown() {
 		body, _ = sjson.Set(body, "logging.sak-rekey.summary-interval", strconv.FormatInt(data.LoggingSakRekeySummaryInterval.ValueInt64(), 10))
 	}
+	if helpers.VersionAtLeast(providerVersion, "26.2") {
+		if !data.AllowPtpInClear.IsNull() && !data.AllowPtpInClear.IsUnknown() {
+			if data.AllowPtpInClear.ValueBool() {
+				body, _ = sjson.Set(body, "allow.ptp-in-clear", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "26.2") {
+		if !data.EnableFaultDetection.IsNull() && !data.EnableFaultDetection.IsUnknown() {
+			if data.EnableFaultDetection.ValueBool() {
+				body, _ = sjson.Set(body, "enable-fault-detection", map[string]string{})
+			}
+		}
+	}
 	return body
 }
 
@@ -244,6 +267,16 @@ func (data MACSecPolicy) toBody(ctx context.Context, providerVersion string) str
 func (data MACSecPolicy) GetVersionConstraints() []helpers.FieldVersionConstraint {
 	constraints := make([]helpers.FieldVersionConstraint, 0)
 
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "allow_ptp_in_clear",
+			AddedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "enable_fault_detection",
+			AddedInVersion: "26.2",
+		},
+	}...)
 	if len(constraints) == 0 {
 		return nil
 	}
@@ -324,6 +357,11 @@ func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte, versio
 		data.PolicyException = types.StringValue(value.String())
 	} else if data.PolicyException.IsNull() {
 		data.PolicyException = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "sak-rekey-interval.minutes"); value.Exists() && !data.SakRekeyIntervalMinutes.IsNull() {
+		data.SakRekeyIntervalMinutes = types.Int64Value(value.Int())
+	} else if data.SakRekeyIntervalMinutes.IsNull() {
+		data.SakRekeyIntervalMinutes = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "sak-rekey-interval.seconds"); value.Exists() && !data.SakRekeyIntervalSeconds.IsNull() {
 		data.SakRekeyIntervalSeconds = types.Int64Value(value.Int())
@@ -475,6 +513,26 @@ func (data *MACSecPolicy) updateFromBody(ctx context.Context, res []byte, versio
 	} else if data.LoggingSakRekeySummaryInterval.IsNull() {
 		data.LoggingSakRekeySummaryInterval = types.Int64Null()
 	}
+	if value := gjson.GetBytes(res, "allow.ptp-in-clear"); helpers.VersionAtLeast(version, "26.2") && !data.AllowPtpInClear.IsNull() {
+		if value.Exists() {
+			data.AllowPtpInClear = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.AllowPtpInClear = types.BoolValue(false)
+		}
+	} else if data.AllowPtpInClear.IsNull() {
+		data.AllowPtpInClear = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "enable-fault-detection"); helpers.VersionAtLeast(version, "26.2") && !data.EnableFaultDetection.IsNull() {
+		if value.Exists() {
+			data.EnableFaultDetection = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EnableFaultDetection = types.BoolValue(false)
+		}
+	} else if data.EnableFaultDetection.IsNull() {
+		data.EnableFaultDetection = types.BoolNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -502,6 +560,9 @@ func (data *MACSecPolicy) fromBody(ctx context.Context, res []byte, version stri
 	}
 	if value := gjson.GetBytes(res, "policy-exception"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.PolicyException = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "sak-rekey-interval.minutes"); value.Exists() {
+		data.SakRekeyIntervalMinutes = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "sak-rekey-interval.seconds"); value.Exists() {
 		data.SakRekeyIntervalSeconds = types.Int64Value(value.Int())
@@ -593,6 +654,26 @@ func (data *MACSecPolicy) fromBody(ctx context.Context, res []byte, version stri
 	if value := gjson.GetBytes(res, "logging.sak-rekey.summary-interval"); value.Exists() {
 		data.LoggingSakRekeySummaryInterval = types.Int64Value(value.Int())
 	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "allow.ptp-in-clear"); value.Exists() {
+			data.AllowPtpInClear = types.BoolValue(true)
+		} else if !data.AllowPtpInClear.IsNull() {
+			// Only set to false if it was previously set in state
+			data.AllowPtpInClear = types.BoolValue(false)
+		}
+	} else {
+		data.AllowPtpInClear = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "enable-fault-detection"); value.Exists() {
+			data.EnableFaultDetection = types.BoolValue(true)
+		} else if !data.EnableFaultDetection.IsNull() {
+			// Only set to false if it was previously set in state
+			data.EnableFaultDetection = types.BoolValue(false)
+		}
+	} else {
+		data.EnableFaultDetection = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBody
@@ -620,6 +701,9 @@ func (data *MACSecPolicyData) fromBody(ctx context.Context, res []byte, version 
 	}
 	if value := gjson.GetBytes(res, "policy-exception"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.PolicyException = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "sak-rekey-interval.minutes"); value.Exists() {
+		data.SakRekeyIntervalMinutes = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "sak-rekey-interval.seconds"); value.Exists() {
 		data.SakRekeyIntervalSeconds = types.Int64Value(value.Int())
@@ -698,6 +782,24 @@ func (data *MACSecPolicyData) fromBody(ctx context.Context, res []byte, version 
 	if value := gjson.GetBytes(res, "logging.sak-rekey.summary-interval"); value.Exists() {
 		data.LoggingSakRekeySummaryInterval = types.Int64Value(value.Int())
 	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "allow.ptp-in-clear"); value.Exists() {
+			data.AllowPtpInClear = types.BoolValue(true)
+		} else {
+			data.AllowPtpInClear = types.BoolValue(false)
+		}
+	} else {
+		data.AllowPtpInClear = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "enable-fault-detection"); value.Exists() {
+			data.EnableFaultDetection = types.BoolValue(true)
+		} else {
+			data.EnableFaultDetection = types.BoolValue(false)
+		}
+	} else {
+		data.EnableFaultDetection = types.BoolNull()
+	}
 }
 
 // End of section. //template:end fromBodyData
@@ -706,6 +808,12 @@ func (data *MACSecPolicyData) fromBody(ctx context.Context, res []byte, version 
 
 func (data *MACSecPolicy) getDeletedItems(ctx context.Context, state MACSecPolicy, version string) []string {
 	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "26.2") && !state.EnableFaultDetection.IsNull() && data.EnableFaultDetection.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "enable-fault-detection"))
+	}
+	if helpers.VersionAtLeast(version, "26.2") && !state.AllowPtpInClear.IsNull() && data.AllowPtpInClear.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "allow/ptp-in-clear"))
+	}
 	if !state.LoggingSakRekeySummaryInterval.IsNull() && data.LoggingSakRekeySummaryInterval.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "logging/sak-rekey/summary-interval"))
 	}
@@ -757,6 +865,9 @@ func (data *MACSecPolicy) getDeletedItems(ctx context.Context, state MACSecPolic
 	if !state.SakRekeyIntervalSeconds.IsNull() && data.SakRekeyIntervalSeconds.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "sak-rekey-interval/seconds"))
 	}
+	if !state.SakRekeyIntervalMinutes.IsNull() && data.SakRekeyIntervalMinutes.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sak-rekey-interval/minutes"))
+	}
 	if !state.PolicyException.IsNull() && data.PolicyException.IsNull() {
 		deletedItems = append(deletedItems, path.Join(state.getPath(), "policy-exception"))
 	}
@@ -787,6 +898,16 @@ func (data *MACSecPolicy) getDeletedItems(ctx context.Context, state MACSecPolic
 
 func (data *MACSecPolicy) getEmptyLeafsDelete(ctx context.Context, state *MACSecPolicy, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "26.2") && !data.EnableFaultDetection.IsNull() && !data.EnableFaultDetection.ValueBool() {
+		if state == nil || state.EnableFaultDetection.IsNull() || state.EnableFaultDetection.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "enable-fault-detection"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "26.2") && !data.AllowPtpInClear.IsNull() && !data.AllowPtpInClear.ValueBool() {
+		if state == nil || state.AllowPtpInClear.IsNull() || state.AllowPtpInClear.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "allow/ptp-in-clear"))
+		}
+	}
 	if !data.LoggingSakRekeyDisable.IsNull() && !data.LoggingSakRekeyDisable.ValueBool() {
 		if state == nil || state.LoggingSakRekeyDisable.IsNull() || state.LoggingSakRekeyDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "logging/sak-rekey"))
@@ -860,6 +981,12 @@ func (data *MACSecPolicy) getEmptyLeafsDelete(ctx context.Context, state *MACSec
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 func (data *MACSecPolicy) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
+	if helpers.VersionAtLeast(version, "26.2") && !data.EnableFaultDetection.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "enable-fault-detection"))
+	}
+	if helpers.VersionAtLeast(version, "26.2") && !data.AllowPtpInClear.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "allow/ptp-in-clear"))
+	}
 	if !data.LoggingSakRekeySummaryInterval.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "logging/sak-rekey/summary-interval"))
 	}
@@ -910,6 +1037,9 @@ func (data *MACSecPolicy) getDeletePaths(ctx context.Context, version string) []
 	}
 	if !data.SakRekeyIntervalSeconds.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "sak-rekey-interval/seconds"))
+	}
+	if !data.SakRekeyIntervalMinutes.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sak-rekey-interval/minutes"))
 	}
 	if !data.PolicyException.IsNull() {
 		deletePaths = append(deletePaths, path.Join(data.getPath(), "policy-exception"))
@@ -966,6 +1096,9 @@ func (data MACSecPolicy) toBodyXML(ctx context.Context, stateArg ...*MACSecPolic
 	}
 	if !data.PolicyException.IsNull() && !data.PolicyException.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/policy-exception", data.PolicyException.ValueString())
+	}
+	if !data.SakRekeyIntervalMinutes.IsNull() && !data.SakRekeyIntervalMinutes.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/sak-rekey-interval/minutes", strconv.FormatInt(data.SakRekeyIntervalMinutes.ValueInt64(), 10))
 	}
 	if !data.SakRekeyIntervalSeconds.IsNull() && !data.SakRekeyIntervalSeconds.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/sak-rekey-interval/seconds", strconv.FormatInt(data.SakRekeyIntervalSeconds.ValueInt64(), 10))
@@ -1044,6 +1177,16 @@ func (data MACSecPolicy) toBodyXML(ctx context.Context, stateArg ...*MACSecPolic
 	if !data.LoggingSakRekeySummaryInterval.IsNull() && !data.LoggingSakRekeySummaryInterval.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/logging/sak-rekey/summary-interval", strconv.FormatInt(data.LoggingSakRekeySummaryInterval.ValueInt64(), 10))
 	}
+	if !data.AllowPtpInClear.IsNull() && !data.AllowPtpInClear.IsUnknown() {
+		if data.AllowPtpInClear.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/allow/ptp-in-clear", "")
+		}
+	}
+	if !data.EnableFaultDetection.IsNull() && !data.EnableFaultDetection.IsUnknown() {
+		if data.EnableFaultDetection.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/enable-fault-detection", "")
+		}
+	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
 		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
@@ -1112,6 +1255,11 @@ func (data *MACSecPolicy) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 		data.PolicyException = types.StringValue(value.String())
 	} else if data.PolicyException.IsNull() {
 		data.PolicyException = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sak-rekey-interval/minutes"); value.Exists() && !data.SakRekeyIntervalMinutes.IsNull() {
+		data.SakRekeyIntervalMinutes = types.Int64Value(value.Int())
+	} else if data.SakRekeyIntervalMinutes.IsNull() {
+		data.SakRekeyIntervalMinutes = types.Int64Null()
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sak-rekey-interval/seconds"); value.Exists() && !data.SakRekeyIntervalSeconds.IsNull() {
 		data.SakRekeyIntervalSeconds = types.Int64Value(value.Int())
@@ -1276,6 +1424,28 @@ func (data *MACSecPolicy) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 	} else if data.LoggingSakRekeySummaryInterval.IsNull() {
 		data.LoggingSakRekeySummaryInterval = types.Int64Null()
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/allow/ptp-in-clear"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AllowPtpInClear.IsNull() {
+			data.AllowPtpInClear = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.AllowPtpInClear.IsNull() {
+			data.AllowPtpInClear = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/enable-fault-detection"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EnableFaultDetection.IsNull() {
+			data.EnableFaultDetection = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EnableFaultDetection.IsNull() {
+			data.EnableFaultDetection = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
@@ -1303,6 +1473,9 @@ func (data *MACSecPolicy) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/policy-exception"); value.Exists() {
 		data.PolicyException = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sak-rekey-interval/minutes"); value.Exists() {
+		data.SakRekeyIntervalMinutes = types.Int64Value(value.Int())
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sak-rekey-interval/seconds"); value.Exists() {
 		data.SakRekeyIntervalSeconds = types.Int64Value(value.Int())
@@ -1380,6 +1553,16 @@ func (data *MACSecPolicy) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/sak-rekey/summary-interval"); value.Exists() {
 		data.LoggingSakRekeySummaryInterval = types.Int64Value(value.Int())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/allow/ptp-in-clear"); value.Exists() {
+		data.AllowPtpInClear = types.BoolValue(true)
+	} else {
+		data.AllowPtpInClear = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/enable-fault-detection"); value.Exists() {
+		data.EnableFaultDetection = types.BoolValue(true)
+	} else {
+		data.EnableFaultDetection = types.BoolValue(false)
 	}
 }
 
@@ -1409,6 +1592,9 @@ func (data *MACSecPolicyData) fromBodyXML(ctx context.Context, res xmldot.Result
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/policy-exception"); value.Exists() {
 		data.PolicyException = types.StringValue(value.String())
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sak-rekey-interval/minutes"); value.Exists() {
+		data.SakRekeyIntervalMinutes = types.Int64Value(value.Int())
+	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sak-rekey-interval/seconds"); value.Exists() {
 		data.SakRekeyIntervalSeconds = types.Int64Value(value.Int())
 	}
@@ -1486,6 +1672,16 @@ func (data *MACSecPolicyData) fromBodyXML(ctx context.Context, res xmldot.Result
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/logging/sak-rekey/summary-interval"); value.Exists() {
 		data.LoggingSakRekeySummaryInterval = types.Int64Value(value.Int())
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/allow/ptp-in-clear"); value.Exists() {
+		data.AllowPtpInClear = types.BoolValue(true)
+	} else {
+		data.AllowPtpInClear = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/enable-fault-detection"); value.Exists() {
+		data.EnableFaultDetection = types.BoolValue(true)
+	} else {
+		data.EnableFaultDetection = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
@@ -1497,6 +1693,38 @@ func (data *MACSecPolicy) addDeletedItemsXML(ctx context.Context, state MACSecPo
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EnableFaultDetection.IsNull() && state.EnableFaultDetection.ValueBool() && data.EnableFaultDetection.IsNull() {
+		deletePath := state.getXPath() + "/enable-fault-detection"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AllowPtpInClear.IsNull() && state.AllowPtpInClear.ValueBool() && data.AllowPtpInClear.IsNull() {
+		deletePath := state.getXPath() + "/allow/ptp-in-clear"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	if !state.LoggingSakRekeySummaryInterval.IsNull() && data.LoggingSakRekeySummaryInterval.IsNull() {
 		deletePath := state.getXPath() + "/logging/sak-rekey/summary-interval"
 		// Check if a parent path is already marked for deletion
@@ -1777,6 +2005,21 @@ func (data *MACSecPolicy) addDeletedItemsXML(ctx context.Context, state MACSecPo
 			deletedPaths[deletePath] = true
 		}
 	}
+	if !state.SakRekeyIntervalMinutes.IsNull() && data.SakRekeyIntervalMinutes.IsNull() {
+		deletePath := state.getXPath() + "/sak-rekey-interval/minutes"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	if !state.PolicyException.IsNull() && data.PolicyException.IsNull() {
 		deletePath := state.getXPath() + "/policy-exception"
 		// Check if a parent path is already marked for deletion
@@ -1893,6 +2136,12 @@ func (data *MACSecPolicy) addDeletedItemsXML(ctx context.Context, state MACSecPo
 
 func (data *MACSecPolicy) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.EnableFaultDetection.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/enable-fault-detection")
+	}
+	if !data.AllowPtpInClear.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/allow/ptp-in-clear")
+	}
 	if !data.LoggingSakRekeySummaryInterval.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/logging/sak-rekey/summary-interval")
 	}
@@ -1943,6 +2192,9 @@ func (data *MACSecPolicy) addDeletePathsXML(ctx context.Context, body string) st
 	}
 	if !data.SakRekeyIntervalSeconds.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/sak-rekey-interval/seconds")
+	}
+	if !data.SakRekeyIntervalMinutes.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/sak-rekey-interval/minutes")
 	}
 	if !data.PolicyException.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/policy-exception")

@@ -34,9 +34,13 @@ data "iosxr_macsec_policy" "example" {
 - `allow_lacp_in_clear` (Boolean) Allow LACP((Link aggregation control plane protocol) Packets in clear Text
 - `allow_lldp_in_clear` (Boolean) Allow lldp packets in clear text
 - `allow_pause_frame_in_clear` (Boolean) Allow pause-frame packets in clear text
+- `allow_ptp_in_clear` (Boolean) Allow Precision Time Protocol packets in clear text (unencrypted)
+  - Supported from version: `26.2`
 - `cipher_suite` (String) Cipher-Suite used for encryption
 - `conf_offset` (String) conf-offset used for encryption
 - `delay_protection` (Boolean) enable data delay protection
+- `enable_fault_detection` (Boolean) enable fault detection
+  - Supported from version: `26.2`
 - `enable_legacy_fallback` (Boolean) enable keepalive fallback ca
 - `enable_legacy_sak_write` (Boolean) To interop with legacy ncs5500 coherent systems
 - `id` (String) The path of the retrieved object.
@@ -49,6 +53,7 @@ data "iosxr_macsec_policy" "example" {
 - `policy_exception` (String) macsec policy exception to allow packets in clear text
 - `ppk` (Boolean) To use PPK supported MACsec session
 - `ppk_sks_profile` (String) use sks profile for PPK generation
+- `sak_rekey_interval_minutes` (Number) Interval after which key-server generates new SAK for a Secured Session
 - `sak_rekey_interval_seconds` (Number) Interval(in seconds)<60-2592000>, Default: OFF
 - `security_policy` (String) Must Secure/Should Secure for Data encryption
 - `suspend_for_disable` (Boolean) disable MKA suspension when in issu

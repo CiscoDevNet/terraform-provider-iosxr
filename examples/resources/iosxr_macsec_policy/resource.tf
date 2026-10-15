@@ -2,9 +2,11 @@ resource "iosxr_macsec_policy" "example" {
   allow_lacp_in_clear                = true
   allow_lldp_in_clear                = true
   allow_pause_frame_in_clear         = true
+  allow_ptp_in_clear                 = true
   cipher_suite                       = "GCM-AES-256"
   conf_offset                        = "CONF-OFFSET-50"
   delay_protection                   = true
+  enable_fault_detection             = true
   enable_legacy_fallback             = true
   enable_legacy_sak_write            = true
   impose_overhead_on_bundle          = true

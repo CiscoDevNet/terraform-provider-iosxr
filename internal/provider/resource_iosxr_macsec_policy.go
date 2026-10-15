@@ -140,6 +140,13 @@ func (r *MACSecPolicyResource) Schema(ctx context.Context, req resource.SchemaRe
 					stringvalidator.OneOf("lacp-in-clear"),
 				},
 			},
+			"sak_rekey_interval_minutes": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interval after which key-server generates new SAK for a Secured Session").AddIntegerRangeDescription(1, 43200).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 43200),
+				},
+			},
 			"sak_rekey_interval_seconds": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Interval(in seconds)<60-2592000>, Default: OFF").AddIntegerRangeDescription(60, 2592000).String,
 				Optional:            true,
@@ -221,6 +228,14 @@ func (r *MACSecPolicyResource) Schema(ctx context.Context, req resource.SchemaRe
 					int64validator.Between(30, 43200),
 				},
 			},
+			"allow_ptp_in_clear": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow Precision Time Protocol packets in clear text (unencrypted)").String + "\n  - Supported from version: `26.2`",
+				Optional:            true,
+			},
+			"enable_fault_detection": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("enable fault detection").String + "\n  - Supported from version: `26.2`",
+				Optional:            true,
+			},
 		},
 	}
 }
@@ -250,6 +265,10 @@ func (r *MACSecPolicyResource) Create(ctx context.Context, req resource.CreateRe
 	device, ok := r.data.Devices[plan.Device.ValueString()]
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
 		return
 	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
@@ -468,6 +487,10 @@ func (r *MACSecPolicyResource) Update(ctx context.Context, req resource.UpdateRe
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -561,6 +584,14 @@ func (r *MACSecPolicyResource) Delete(ctx context.Context, req resource.DeleteRe
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))

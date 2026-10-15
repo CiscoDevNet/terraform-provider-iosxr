@@ -60,6 +60,12 @@ func TestAccDataSourceIosxrMACSecPolicy(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_macsec_policy.test", "ppk_sks_profile", "SKS-PROFILE1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_macsec_policy.test", "logging_sak_rekey_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_macsec_policy.test", "logging_sak_rekey_summary_interval", "60"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_macsec_policy.test", "allow_ptp_in_clear", "true"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_macsec_policy.test", "enable_fault_detection", "true"))
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -108,6 +114,12 @@ func testAccDataSourceIosxrMACSecPolicyConfig() string {
 	config += `	ppk_sks_profile = "SKS-PROFILE1"` + "\n"
 	config += `	logging_sak_rekey_disable = true` + "\n"
 	config += `	logging_sak_rekey_summary_interval = 60` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+		config += `	allow_ptp_in_clear = true` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "26.2") {
+		config += `	enable_fault_detection = true` + "\n"
+	}
 	config += `}` + "\n"
 
 	config += `

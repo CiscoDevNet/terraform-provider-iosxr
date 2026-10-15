@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Add `sak_rekey_interval_minutes` to `iosxr_macsec_policy` resource and data source
+- Add `allow_ptp_in_clear`, `enable_fault_detection` to `iosxr_macsec_policy` resource and data source (available from 26.2)
 - Add multi-version support for IOS-XR 24.4.2, 25.4.2 and 26.2.1. Attributes and YANG paths follow the release of the device. See the Multi-Version Support guide
 - Add `iosxr_version` provider attribute to set the IOS-XR version in `major.minor` format; the patch is ignored. If not set, the provider auto-detects the version of each managed device over gNMI
 - Add `iosxr_device_info` data source, which returns the auto-detected IOS-XR version (`major.minor`) of a device

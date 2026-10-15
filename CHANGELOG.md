@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Add `iosxr_password6` resource and data source
 - Add `speed_host_lanes` to `iosxr_controller_optics` resource and data source (available from 25.4)
 - Add `sak_rekey_interval_minutes` to `iosxr_macsec_policy` resource and data source
 - Add `allow_ptp_in_clear`, `enable_fault_detection` to `iosxr_macsec_policy` resource and data source (available from 26.2)

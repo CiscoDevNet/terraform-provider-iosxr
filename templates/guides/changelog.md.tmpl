@@ -9,9 +9,8 @@ description: |-
 
 ## Unreleased
 
+- Add `iosxr_password6` resource and data source
 - Add `speed_host_lanes` to `iosxr_controller_optics` resource and data source (available from 25.4)
-- Change: `speed` is configured together with `speed_host_lanes` and accepts `invalid` from 25.4 for `iosxr_controller_optics` resource and data source
-- Change: `breakout` accepts `2x200` from 25.4 and `3x200`, `4x200`, `2x400` from 26.2 for `iosxr_controller_optics` resource and data source
 - Add `sak_rekey_interval_minutes` to `iosxr_macsec_policy` resource and data source
 - Add `allow_ptp_in_clear`, `enable_fault_detection` to `iosxr_macsec_policy` resource and data source (available from 26.2)
 - Add multi-version support for IOS-XR 24.4.2, 25.4.2 and 26.2.1. Attributes and YANG paths follow the release of the device. See the Multi-Version Support guide

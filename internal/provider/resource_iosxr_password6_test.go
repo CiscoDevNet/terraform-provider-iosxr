@@ -80,6 +80,7 @@ func iosxrPassword6ImportStateIdFunc(resourceName string) resource.ImportStateId
 
 func testAccIosxrPassword6Config_minimum() string {
 	config := `resource "iosxr_password6" "test" {` + "\n"
+	config += `	encryption_aes = true` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -294,12 +294,8 @@ func FormatVersionError(deviceName, host string, err error) string {
 
 Error details: %v
 
-Please explicitly specify the 'iosxr_version' attribute in your provider configuration:
-
-  provider "iosxr" {
-    iosxr_version = "24.4"  # optional, auto-detected if not set
-    devices = [...]
-  }
+Check that the device is reachable and that the username and password are correct.
+If the device should not be managed, set 'managed = false' for it.
 
 Supported versions: %s`, deviceName, host, err, SupportedVersionList())
 }
@@ -310,11 +306,8 @@ func FormatHardwareError(deviceName, host string, err error) string {
 
 Error details: %v
 
-The hardware-info field of Cisco-IOS-XR-install-oper:install/version is needed to select between the
-Cisco 8000 specific and the unified YANG models.
-
-Setting the 'iosxr_version' provider attribute skips auto-detection, but it also leaves the hardware
-empty, so Cisco 8000 specific features are not routed to the 8000 model.`, deviceName, host, err)
+Check that the device is reachable and that the username and password are correct.
+If the device should not be managed, set 'managed = false' for it.`, deviceName, host, err)
 }
 
 // ClearVersionCache clears the version and hardware caches for a specific device or all devices

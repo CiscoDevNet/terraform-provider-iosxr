@@ -21,16 +21,17 @@ A single version of this provider can manage devices running different IOS-XR re
 
 The provider works with `major.minor` and ignores the patch, so `24.4.1` and `24.4.2` are both `24.4`. Only the releases listed above are tested. The behavior on other releases is not guaranteed.
 
-### How the Version Is Determined
+### How the Version and Platform Are Determined
 
-1. **Explicit version**: the `iosxr_version` provider attribute or the `IOSXR_VERSION` environment variable. The value applies to every device of the provider.
-2. **Auto-detection**: if no version is set, the provider reads the release of every managed device when the provider is configured. It queries `Cisco-IOS-XR-install-oper:install/version`, normalizes the label to `major.minor` and caches the result per device.
+1. **Version auto-detection**: the provider reads the release of every managed device when the provider is configured. It queries `Cisco-IOS-XR-install-oper:install`, normalizes the version to `major.minor` and caches the result per device.
+2. **Platform auto-detection**: the provider reads the hardware of every managed device from the same query and caches the result per device.
+3. **Explicit version**: the `iosxr_version` provider attribute or the `IOSXR_VERSION` environment variable. The value applies to every device of the provider. Should not be specified for normal use, used for provider acceptance testing only.
 
 Keep the following in mind:
 
-- Auto-detection uses gNMI only. When the provider uses `protocol = "netconf"`, set `iosxr_version` explicitly. NETCONF support for version auto-detection will be added at a later date.
-- Auto-detection happens when the provider is configured, so every managed device must be reachable. If a device cannot be queried, the provider fails with `Unable to Auto-Detect IOS-XR Version`. Set `iosxr_version` to skip the detection, or set `managed = false` for the device.
-- An explicit `iosxr_version` applies to all devices. To manage devices with different releases in one provider configuration, use auto-detection.
+- Auto-detection uses gNMI only. NETCONF support for version auto-detection will be added at a later date.
+- Auto-detection happens when the provider is configured, so every managed device must be reachable. If a device cannot be queried, the provider fails with `Unable to Auto-Detect IOS-XR Version`.
+- An explicit `iosxr_version` applies to all devices and does not account for platform-specific Yang models. To manage devices with different releases and platforms in one provider configuration, use auto-detection.
 
 ## Configuration Reference
 
@@ -48,27 +49,9 @@ provider "iosxr" {
 
 ```
 
-### Explicit Version
+### Reading the Detected Version and Platform
 
-Set the version with the `iosxr_version` attribute. The patch version in `major.minor.patch` is optional and ignored:
-
-```hcl
-provider "iosxr" {
-  iosxr_version = "25.4"
-  host          = "10.1.1.10:57400"
-}
-
-```
-
-Alternatively, use the `IOSXR_VERSION` environment variable:
-
-```bash
-export IOSXR_VERSION="25.4.2"
-```
-
-### Reading the Detected Version
-
-The `iosxr_device_info` data source returns the version that the provider uses for a device. It does not open an additional connection, the value is read from the provider. The value is an empty string if the detection was skipped, for example for a device with `managed = false`.
+The `iosxr_device_info` data source returns the version/platform that the provider uses for a device. It does not open an additional connection, the value is read from the provider. The value is an empty string if the detection was skipped, for example for a device with `managed = false`.
 
 ```hcl
 data "iosxr_device_info" "router_02" {
@@ -76,7 +59,8 @@ data "iosxr_device_info" "router_02" {
 }
 
 locals {
-  router_02_version = data.iosxr_device_info.router_02.version  # for example "26.2"
+  router_02_version  = data.iosxr_device_info.router_02.version   # for example "26.2"
+  router_02_hardware = data.iosxr_device_info.router_02.hardware  # for example "8000"
 }
 ```
 

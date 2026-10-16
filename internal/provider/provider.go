@@ -210,7 +210,7 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 				Optional:            true,
 			},
 			"iosxr_version": schema.StringAttribute{
-				MarkdownDescription: "IOS-XR version (major.minor). Accepts formats like `24.4`, `24.4.2`, or `25.1` — the patch component is ignored. If not specified, the provider will attempt to auto-detect the version from each device. This can also be set as the IOSXR_VERSION environment variable.",
+				MarkdownDescription: "IOS-XR version (major.minor). Accepts formats like `24.4`, `24.4.2`, or `25.1` — the patch component is ignored. Should not be specified for normal use, the provider will attempt to auto-detect the version and platform from each device. This can also be set as the IOSXR_VERSION environment variable.",
 				Optional:            true,
 			},
 			"selected_devices": schema.ListAttribute{

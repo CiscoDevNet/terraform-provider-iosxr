@@ -1,0 +1,14 @@
+---
+name: Clock 8000
+path: Cisco-IOS-XR-um-clock-cfg:/clock/timezone/%s
+no_augment_config: true
+doc_category: Cisco 8000 Series
+ds_description: "This data source can read the Clock configuration on Cisco 8000 series routers."
+res_description: "This resource can manage the Clock configuration on Cisco 8000 series routers."
+test_tags: [C8000]
+attributes:
+  - tf_name: timezone
+    id: true
+    type: String
+    description: "IANA timezone identifier (replace slashes with hyphens, e.g. America-New_York for America/New_York)"
+    example: America-New_York

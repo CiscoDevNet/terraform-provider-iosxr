@@ -35,6 +35,11 @@ import (
 // Key: deviceName, Value: normalized version string (e.g., "24.4")
 var versionCache sync.Map
 
+// hardwareCache stores the hardware identifier each device reports in the hardware-info field of
+// install/version, to avoid redundant queries
+// Key: deviceName, Value: trimmed hardware-info string (e.g., "8000"), empty if the device did not report it
+var hardwareCache sync.Map
+
 // NormalizeVersion converts any user-facing version string to the canonical
 // internal "MM.mm" (major.minor) dotted format. The patch component is always
 // stripped so that "25.2.1", "25.2.2", and "25.2" all map to the same key "25.2".
@@ -106,6 +111,7 @@ func SupportedVersionList() string {
 // and returns the normalized version string (e.g., "24.4" for 24.4.2)
 // Reads the label from Cisco-IOS-XR-install-oper:install/version
 // Results are cached per device to avoid redundant queries
+// The hardware-info field of the same response is cached for DetectIosxrHardware
 func DetectIosxrVersion(ctx context.Context, client *gnmi.Client, deviceName string) (string, error) {
 	if client == nil {
 		return "", fmt.Errorf("gNMI client is nil")
@@ -124,13 +130,7 @@ func DetectIosxrVersion(ctx context.Context, client *gnmi.Client, deviceName str
 	// Note: gNMI Capabilities Version field is not used — IOS-XR returns the gNMI
 	// library version there, not the OS version.
 
-	// install-oper version - small payload, label holds the OS release
-	result, err := client.Get(ctx, []string{"/Cisco-IOS-XR-install-oper:install/version"})
-	if err != nil {
-		return "", fmt.Errorf("unable to auto-detect IOS-XR version from device: %w", err)
-	}
-
-	version, err := extractVersionFromResponse(ctx, result)
+	version, hardware, err := queryInstallVersion(ctx, client)
 	if err != nil {
 		return "", fmt.Errorf("unable to auto-detect IOS-XR version from device: %w", err)
 	}
@@ -142,37 +142,99 @@ func DetectIosxrVersion(ctx context.Context, client *gnmi.Client, deviceName str
 
 	tflog.Info(ctx, fmt.Sprintf("Auto-detected IOS-XR version for device '%s': %s", deviceName, version))
 	versionCache.Store(deviceName, normalized)
+	hardwareCache.Store(deviceName, hardware)
 	return normalized, nil
 }
 
-// extractVersionFromResponse attempts to extract version information from gNMI response
+// DetectIosxrHardware returns the hardware identifier a device reports in the hardware-info field of
+// Cisco-IOS-XR-install-oper:install/version (e.g., "8000" for a Cisco 8000)
+// It is the counterpart of DetectIosxrVersion and shares its cache: after DetectIosxrVersion has run for the
+// device the value is already cached and no second request is made
+// A device that does not report hardware-info is an error, like a missing version label
+func DetectIosxrHardware(ctx context.Context, client *gnmi.Client, deviceName string) (string, error) {
+	if client == nil {
+		return "", fmt.Errorf("gNMI client is nil")
+	}
+
+	// Check cache first. An empty cached value means the device did not report hardware-info
+	if cached, ok := hardwareCache.Load(deviceName); ok {
+		if hardware, ok := cached.(string); ok {
+			if hardware == "" {
+				return "", fmt.Errorf("unable to auto-detect IOS-XR hardware from device: no hardware-info in install/version response")
+			}
+			tflog.Debug(ctx, fmt.Sprintf("Using cached IOS-XR hardware for device '%s': %s", deviceName, hardware))
+			return hardware, nil
+		}
+	}
+
+	tflog.Debug(ctx, fmt.Sprintf("Attempting to auto-detect IOS-XR hardware for device '%s'", deviceName))
+
+	version, hardware, err := queryInstallVersion(ctx, client)
+	if err != nil {
+		return "", fmt.Errorf("unable to auto-detect IOS-XR hardware from device: %w", err)
+	}
+
+	// The same response carries the version, so cache it as well
+	if normalized, ok := NormalizeVersion(version); ok {
+		versionCache.Store(deviceName, normalized)
+	}
+	hardwareCache.Store(deviceName, hardware)
+
+	if hardware == "" {
+		return "", fmt.Errorf("unable to auto-detect IOS-XR hardware from device: no hardware-info in install/version response")
+	}
+
+	tflog.Info(ctx, fmt.Sprintf("Auto-detected IOS-XR hardware for device '%s': %s", deviceName, hardware))
+	return hardware, nil
+}
+
+// queryInstallVersion reads Cisco-IOS-XR-install-oper:install/version with one gNMI request and returns the
+// release label and the hardware-info field. The hardware is empty if the device did not report it; only a
+// missing label is an error. Callers wrap the error with their own context.
+func queryInstallVersion(ctx context.Context, client *gnmi.Client) (string, string, error) {
+	// install-oper version - small payload, label holds the OS release
+	result, err := client.Get(ctx, []string{"/Cisco-IOS-XR-install-oper:install/version"})
+	if err != nil {
+		return "", "", err
+	}
+
+	return extractInstallInfoFromResponse(ctx, result)
+}
+
+// extractInstallInfoFromResponse attempts to extract version and hardware information from gNMI response
 // Handles the Cisco IOS-XR install-oper version payload, which carries the release in its label field
-func extractVersionFromResponse(ctx context.Context, response interface{}) (string, error) {
+// and the hardware identifier in its hardware-info field
+func extractInstallInfoFromResponse(ctx context.Context, response interface{}) (string, string, error) {
 	// Convert response to JSON for easier parsing
 	jsonData, err := json.Marshal(response)
 	if err != nil {
-		return "", fmt.Errorf("failed to marshal response: %w", err)
+		return "", "", fmt.Errorf("failed to marshal response: %w", err)
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("Response JSON (first 1000 chars): %s", truncate(string(jsonData), 1000)))
 
 	var data map[string]interface{}
 	if err := json.Unmarshal(jsonData, &data); err != nil {
-		return "", fmt.Errorf("failed to unmarshal response: %w", err)
+		return "", "", fmt.Errorf("failed to unmarshal response: %w", err)
 	}
 
 	// Extract version from the install-oper label
-	version := tryExtractFromDevice(data)
-	if version != "" {
-		tflog.Debug(ctx, fmt.Sprintf("Found version from install/version label: %s", version))
-		return version, nil
+	payload := decodeInstallPayload(data)
+	version := extractVersionFromDevice(payload)
+	if version == "" {
+		return "", "", fmt.Errorf("no label in install/version response")
 	}
+	tflog.Debug(ctx, fmt.Sprintf("Found version from install/version label: %s", version))
 
-	return "", fmt.Errorf("no label in install/version response")
+	// hardware-info is optional here; DetectIosxrHardware decides if its absence is an error
+	hardware := extractHardwareFromDevice(payload)
+	tflog.Debug(ctx, fmt.Sprintf("Found hardware from install/version hardware-info: %q", hardware))
+
+	return version, hardware, nil
 }
 
-// tryExtractFromDevice tries to extract the version label from the install/version payload
-func tryExtractFromDevice(data map[string]interface{}) string {
+// decodeInstallPayload returns the decoded install/version JSON payload from the gNMI response, or "" if it cannot be found
+func decodeInstallPayload(data map[string]interface{}) string {
 	// The payload is in the gNMI response under "Notifications"
 	// Navigate to the actual install/version content
 	if notifications, ok := data["Notifications"].([]interface{}); ok && len(notifications) > 0 {
@@ -183,11 +245,7 @@ func tryExtractFromDevice(data map[string]interface{}) string {
 						if value, ok := val["Value"].(map[string]interface{}); ok {
 							if jsonIetfVal, ok := value["JsonIetfVal"].(string); ok {
 								// Decode base64-encoded JSON payload
-								if decoded := decodeBase64Payload(jsonIetfVal); decoded != "" {
-									if v := extractVersionFromDevice(decoded); v != "" {
-										return v
-									}
-								}
+								return decodeBase64Payload(jsonIetfVal)
 							}
 						}
 					}
@@ -203,6 +261,12 @@ func tryExtractFromDevice(data map[string]interface{}) string {
 // Example payload: {"label": "24.4.2", "hardware-info": "8000", ...}
 func extractVersionFromDevice(payload string) string {
 	return gjson.Get(payload, "label").String()
+}
+
+// extractHardwareFromDevice reads the hardware-info field from an install/version JSON payload
+// Example payload: {"label": "24.4.2", "hardware-info": "8000", ...}
+func extractHardwareFromDevice(payload string) string {
+	return strings.TrimSpace(gjson.Get(payload, "hardware-info").String())
 }
 
 // decodeBase64Payload decodes a base64-encoded JSON payload
@@ -240,14 +304,29 @@ Please explicitly specify the 'iosxr_version' attribute in your provider configu
 Supported versions: %s`, deviceName, host, err, SupportedVersionList())
 }
 
-// ClearVersionCache clears the version cache for a specific device or all devices
+// FormatHardwareError creates a user-friendly error message for hardware detection failures
+func FormatHardwareError(deviceName, host string, err error) string {
+	return fmt.Sprintf(`Unable to auto-detect IOS-XR hardware for device '%s' at %s.
+
+Error details: %v
+
+The hardware-info field of Cisco-IOS-XR-install-oper:install/version is needed to select between the
+Cisco 8000 specific and the unified YANG models.
+
+Setting the 'iosxr_version' provider attribute skips auto-detection, but it also leaves the hardware
+empty, so Cisco 8000 specific features are not routed to the 8000 model.`, deviceName, host, err)
+}
+
+// ClearVersionCache clears the version and hardware caches for a specific device or all devices
 // If deviceName is empty, clears the entire cache
 func ClearVersionCache(deviceName string) {
 	if deviceName == "" {
 		// Clear entire cache
 		versionCache = sync.Map{}
+		hardwareCache = sync.Map{}
 	} else {
 		// Clear specific device
 		versionCache.Delete(deviceName)
+		hardwareCache.Delete(deviceName)
 	}
 }

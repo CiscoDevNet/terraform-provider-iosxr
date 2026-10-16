@@ -42,9 +42,10 @@ type DeviceInfoDataSource struct {
 }
 
 type DeviceInfoData struct {
-	Device  types.String `tfsdk:"device"`
-	Id      types.String `tfsdk:"id"`
-	Version types.String `tfsdk:"version"`
+	Device   types.String `tfsdk:"device"`
+	Id       types.String `tfsdk:"id"`
+	Version  types.String `tfsdk:"version"`
+	Hardware types.String `tfsdk:"hardware"`
 }
 
 func (d *DeviceInfoDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -53,7 +54,7 @@ func (d *DeviceInfoDataSource) Metadata(_ context.Context, req datasource.Metada
 
 func (d *DeviceInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Returns metadata about a managed device, including the auto-detected IOS-XR version. No additional gNMI connection is made — the version is read from the provider's internal cache.",
+		MarkdownDescription: "Returns metadata about a managed device, including the auto-detected IOS-XR version and hardware. No additional gNMI connection is made — the version and hardware are read from the provider's internal cache.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -66,6 +67,10 @@ func (d *DeviceInfoDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 			},
 			"version": schema.StringAttribute{
 				MarkdownDescription: "Auto-detected IOS-XR version in `major.minor` format (e.g. `24.4`, `25.4`). Empty string if version detection was skipped or unavailable.",
+				Computed:            true,
+			},
+			"hardware": schema.StringAttribute{
+				MarkdownDescription: "Auto-detected IOS-XR hardware identifier. Empty string if version detection was skipped or unavailable.",
 				Computed:            true,
 			},
 		},
@@ -106,12 +111,13 @@ func (d *DeviceInfoDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	tflog.Debug(ctx, fmt.Sprintf("iosxr_device_info: Reading device info for '%s'", id))
 
 	state := DeviceInfoData{
-		Device:  config.Device,
-		Id:      types.StringValue(id),
-		Version: types.StringValue(device.Version),
+		Device:   config.Device,
+		Id:       types.StringValue(id),
+		Version:  types.StringValue(device.Version),
+		Hardware: types.StringValue(device.Hardware),
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("iosxr_device_info: device='%s' version='%s'", id, device.Version))
+	tflog.Debug(ctx, fmt.Sprintf("iosxr_device_info: device='%s' version='%s' hardware='%s'", id, device.Version, device.Hardware))
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)

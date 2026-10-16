@@ -90,6 +90,7 @@ type IosxrProviderData struct {
 	Devices         map[string]*IosxrProviderDataDevice
 	ReuseConnection bool
 	Version         string // Default/global version for backward compatibility
+	Hardware        string // Default device hardware identifier (hardware-info of install/version), empty if not detected
 	MaxRetries      int
 }
 
@@ -102,6 +103,7 @@ type IosxrProviderDataDevice struct {
 	Managed         bool
 	Version         string      // Per-device IOS-XR version in major.minor format (e.g., "24.4", "25.4")
 	VersionDetected bool        // True if version was auto-detected
+	Hardware        string      // Per-device hardware identifier reported by the device (hardware-info), empty if detection was skipped
 	OpMutex         *sync.Mutex // Serializes operations on this device (pointer for sharing)
 }
 
@@ -828,11 +830,24 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		data.Version = detectedVersion
 		p.version = detectedVersion
 		tflog.Info(ctx, fmt.Sprintf("Auto-detected IOS-XR version for default device: %s", detectedVersion))
+
+		detectedHardware, err := helpers.DetectIosxrHardware(ctx, defaultClient, "default")
+		if err != nil {
+			resp.Diagnostics.AddError(
+				"Unable to Auto-Detect IOS-XR Hardware",
+				helpers.FormatHardwareError("default", host, err),
+			)
+			return
+		}
+
+		data.Hardware = detectedHardware
+		tflog.Info(ctx, fmt.Sprintf("Auto-detected IOS-XR hardware for default device: %s", detectedHardware))
 	}
 
 	if defaultDevice, ok := data.Devices[""]; ok {
 		defaultDevice.Version = data.Version
 		defaultDevice.VersionDetected = autoDetect
+		defaultDevice.Hardware = data.Hardware
 	}
 
 	// Add all devices with their managed status and version detection
@@ -853,6 +868,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 
 		var deviceClient *gnmi.Client
 		var deviceVersion string
+		var deviceHardware string
 
 		// Create device client based on protocol
 		if protocol == "gnmi" {
@@ -1008,6 +1024,18 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 
 				deviceVersion = detectedVersion
 				tflog.Info(ctx, fmt.Sprintf("Auto-detected IOS-XR version for device '%s': %s", deviceName, detectedVersion))
+
+				detectedHardware, err := helpers.DetectIosxrHardware(ctx, deviceClient, deviceName)
+				if err != nil {
+					resp.Diagnostics.AddError(
+						"Unable to Auto-Detect IOS-XR Hardware",
+						helpers.FormatHardwareError(deviceName, deviceHost, err),
+					)
+					return
+				}
+
+				deviceHardware = detectedHardware
+				tflog.Info(ctx, fmt.Sprintf("Auto-detected IOS-XR hardware for device '%s': %s", deviceName, detectedHardware))
 			} else {
 				// Use global version (explicit config, or NETCONF where auto-detect isn't supported yet)
 				deviceVersion = data.Version
@@ -1024,6 +1052,7 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		if dev, ok := data.Devices[deviceName]; ok {
 			dev.Version = deviceVersion
 			dev.VersionDetected = autoDetect
+			dev.Hardware = deviceHardware
 		}
 	}
 

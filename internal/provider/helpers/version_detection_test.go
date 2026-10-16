@@ -18,8 +18,11 @@
 package helpers
 
 import (
+	"context"
 	"encoding/base64"
 	"testing"
+
+	"github.com/netascode/go-gnmi"
 )
 
 func TestNormalizeVersion(t *testing.T) {
@@ -98,6 +101,127 @@ func TestExtractVersionFromDevice(t *testing.T) {
 				t.Errorf("extractVersionFromDevice(%q) = %q; want %q", tc.input, got, tc.want)
 			}
 		})
+	}
+}
+
+func TestExtractHardwareFromDevice(t *testing.T) {
+	tests := []struct {
+		name  string
+		input string
+		want  string
+	}{
+		{name: "c8000", input: `{"label": "25.4.2", "hardware-info": "8000", "chassis-pid": "8201-24H8FH"}`, want: "8000"},
+		{name: "ncs5500", input: `{"label": "24.4.2", "hardware-info": "cisco NCS-5500 () processor"}`, want: "cisco NCS-5500 () processor"},
+		{name: "xrv9k", input: `{"label": "25.4.2", "hardware-info": "cisco IOS-XRv 9000 () processor"}`, want: "cisco IOS-XRv 9000 () processor"},
+		{name: "whitespace_trimmed", input: `{"label": "25.4.2", "hardware-info": "  8000 \n"}`, want: "8000"},
+		{name: "no_hardware_info", input: `{"label": "24.4.2"}`, want: ""},
+		{name: "empty_string", input: "", want: ""},
+		{name: "invalid_json", input: "not json", want: ""},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := extractHardwareFromDevice(tc.input)
+			if got != tc.want {
+				t.Errorf("extractHardwareFromDevice(%q) = %q; want %q", tc.input, got, tc.want)
+			}
+		})
+	}
+}
+
+// installVersionResponse builds the gNMI response shape the provider receives for install/version
+func installVersionResponse(payload string) map[string]interface{} {
+	return map[string]interface{}{
+		"Notifications": []interface{}{
+			map[string]interface{}{
+				"update": []interface{}{
+					map[string]interface{}{
+						"val": map[string]interface{}{
+							"Value": map[string]interface{}{
+								"JsonIetfVal": base64.StdEncoding.EncodeToString([]byte(payload)),
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func TestExtractInstallInfoFromResponse(t *testing.T) {
+	tests := []struct {
+		name         string
+		response     interface{}
+		wantVersion  string
+		wantHardware string
+		wantErr      bool
+	}{
+		{name: "label_and_hardware", response: installVersionResponse(`{"label": "25.4.2", "hardware-info": "8000"}`), wantVersion: "25.4.2", wantHardware: "8000"},
+		{name: "label_only", response: installVersionResponse(`{"label": "24.4.2"}`), wantVersion: "24.4.2", wantHardware: ""},
+		{name: "hardware_only", response: installVersionResponse(`{"hardware-info": "8000"}`), wantErr: true},
+		{name: "no_notifications", response: map[string]interface{}{}, wantErr: true},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			version, hardware, err := extractInstallInfoFromResponse(context.Background(), tc.response)
+			if (err != nil) != tc.wantErr {
+				t.Fatalf("extractInstallInfoFromResponse() error = %v; wantErr %v", err, tc.wantErr)
+			}
+			if version != tc.wantVersion || hardware != tc.wantHardware {
+				t.Errorf("extractInstallInfoFromResponse() = (%q, %q); want (%q, %q)", version, hardware, tc.wantVersion, tc.wantHardware)
+			}
+		})
+	}
+}
+
+func TestDetectIosxrHardwareCache(t *testing.T) {
+	ClearVersionCache("")
+	t.Cleanup(func() { ClearVersionCache("") })
+
+	// A cache hit does not use the client, so a zero value client is enough
+	client := &gnmi.Client{}
+
+	hardwareCache.Store("c8000", "8000")
+	got, err := DetectIosxrHardware(context.Background(), client, "c8000")
+	if err != nil || got != "8000" {
+		t.Errorf("DetectIosxrHardware(cached 8000) = (%q, %v); want (\"8000\", nil)", got, err)
+	}
+
+	// An empty cached value means the device did not report hardware-info
+	hardwareCache.Store("nohw", "")
+	if got, err := DetectIosxrHardware(context.Background(), client, "nohw"); err == nil {
+		t.Errorf("DetectIosxrHardware(cached empty) = (%q, nil); want an error", got)
+	}
+
+	if _, err := DetectIosxrHardware(context.Background(), nil, "c8000"); err == nil {
+		t.Error("DetectIosxrHardware(nil client) returned no error")
+	}
+}
+
+func TestClearVersionCacheClearsHardware(t *testing.T) {
+	ClearVersionCache("")
+	t.Cleanup(func() { ClearVersionCache("") })
+
+	versionCache.Store("a", "24.4")
+	hardwareCache.Store("a", "8000")
+	versionCache.Store("b", "25.4")
+	hardwareCache.Store("b", "cisco NCS-5500 () processor")
+
+	ClearVersionCache("a")
+	if _, ok := versionCache.Load("a"); ok {
+		t.Error("versionCache still has device a after ClearVersionCache(a)")
+	}
+	if _, ok := hardwareCache.Load("a"); ok {
+		t.Error("hardwareCache still has device a after ClearVersionCache(a)")
+	}
+	if _, ok := hardwareCache.Load("b"); !ok {
+		t.Error("ClearVersionCache(a) removed the hardware of device b")
+	}
+
+	ClearVersionCache("")
+	if _, ok := hardwareCache.Load("b"); ok {
+		t.Error("hardwareCache still has device b after ClearVersionCache(\"\")")
 	}
 }
 

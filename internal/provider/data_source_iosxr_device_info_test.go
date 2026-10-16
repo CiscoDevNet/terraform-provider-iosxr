@@ -18,22 +18,30 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrDeviceInfo(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttrSet("data.iosxr_device_info.test", "version"))
+	checks = append(checks, resource.TestCheckResourceAttrSet("data.iosxr_device_info.test", "id"))
+	if os.Getenv("IOSXR_VERSION") == "" {
+		// The version is auto-detected, so the hardware is read from the same response
+		checks = append(checks, resource.TestCheckResourceAttrSet("data.iosxr_device_info.test", "hardware"))
+	} else {
+		// A pinned version skips detection, so the hardware stays empty
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_device_info.test", "hardware", ""))
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceIosxrDeviceInfoConfig(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttrSet("data.iosxr_device_info.test", "version"),
-					resource.TestCheckResourceAttrSet("data.iosxr_device_info.test", "id"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})

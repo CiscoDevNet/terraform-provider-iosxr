@@ -3,12 +3,12 @@
 page_title: "iosxr_device_info Data Source - terraform-provider-iosxr"
 subcategory: ""
 description: |-
-  Returns metadata about a managed device, including the auto-detected IOS-XR version. No additional gNMI connection is made — the version is read from the provider's internal cache.
+  Returns metadata about a managed device, including the auto-detected IOS-XR version and hardware. No additional gNMI connection is made — the version and hardware are read from the provider's internal cache.
 ---
 
 # iosxr_device_info (Data Source)
 
-Returns metadata about a managed device, including the auto-detected IOS-XR version. No additional gNMI connection is made — the version is read from the provider's internal cache.
+Returns metadata about a managed device, including the auto-detected IOS-XR version and hardware. No additional gNMI connection is made — the version and hardware are read from the provider's internal cache.
 
 ## Example Usage
 
@@ -27,5 +27,6 @@ data "iosxr_device_info" "example" {
 
 ### Read-Only
 
+- `hardware` (String) Auto-detected IOS-XR hardware identifier. Empty string if version detection was skipped or unavailable.
 - `id` (String) The device name (same as `device`).
 - `version` (String) Auto-detected IOS-XR version in `major.minor` format (e.g. `24.4`, `25.4`). Empty string if version detection was skipped or unavailable.

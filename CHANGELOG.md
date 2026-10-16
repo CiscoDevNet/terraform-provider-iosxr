@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Add `iosxr_clock_8000` resource and data source
 - Add `hardware` attribute to the `iosxr_device_info` data source, which returns the auto-detected IOS-XR hardware identifier (the `hardware-info` field of `install/version`, for example `8000` on a Cisco 8000). Auto-detection now fails with a clear error if the device does not report it
 - Add `iosxr_password6` resource and data source
 - Add `speed_host_lanes` to `iosxr_controller_optics` resource and data source (available from 25.4)

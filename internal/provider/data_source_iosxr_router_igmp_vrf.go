@@ -169,6 +169,190 @@ func (d *RouterIGMPVRFDataSource) Schema(ctx context.Context, req datasource.Sch
 				MarkdownDescription: "Configure route-policy to be used to map the bandwidth profile",
 				Computed:            true,
 			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Select an interface to configure",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Select an interface to configure",
+							Computed:            true,
+						},
+						"version": schema.Int64Attribute{
+							MarkdownDescription: "IGMP version",
+							Computed:            true,
+						},
+						"router_enable": schema.BoolAttribute{
+							MarkdownDescription: "Enable Router side functionality in IGMP",
+							Computed:            true,
+						},
+						"router_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable Router side functionality in IGMP",
+							Computed:            true,
+						},
+						"dvmrp_enable": schema.BoolAttribute{
+							MarkdownDescription: "Configure dvmrp to allow dvmrp processing on all interfaces",
+							Computed:            true,
+						},
+						"query_interval": schema.Int64Attribute{
+							MarkdownDescription: "IGMP host query interval",
+							Computed:            true,
+						},
+						"query_timeout": schema.Int64Attribute{
+							MarkdownDescription: "IGMP previous querier timeout",
+							Computed:            true,
+						},
+						"query_max_response_time": schema.Int64Attribute{
+							MarkdownDescription: "IGMP max query response value",
+							Computed:            true,
+						},
+						"explicit_tracking_enable": schema.BoolAttribute{
+							MarkdownDescription: "Disable IGMPv3 explicit host tracking",
+							Computed:            true,
+						},
+						"explicit_tracking_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable IGMPv3 explicit host tracking",
+							Computed:            true,
+						},
+						"explicit_tracking_acl": schema.StringAttribute{
+							MarkdownDescription: "Access list specifying tracking group range",
+							Computed:            true,
+						},
+						"access_group": schema.StringAttribute{
+							MarkdownDescription: "IGMP group access group",
+							Computed:            true,
+						},
+						"maximum_groups_per_interface": schema.Int64Attribute{
+							MarkdownDescription: "Maxinum number of groups accepted per interface by this router",
+							Computed:            true,
+						},
+						"maximum_groups_per_interface_threshold": schema.Int64Attribute{
+							MarkdownDescription: "Threshold warning",
+							Computed:            true,
+						},
+						"maximum_groups_per_interface_acl": schema.StringAttribute{
+							MarkdownDescription: "Name of ACL",
+							Computed:            true,
+						},
+						"static_groups": schema.ListNestedAttribute{
+							MarkdownDescription: "IGMP static multicast group",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_address": schema.StringAttribute{
+										MarkdownDescription: "IP group address",
+										Computed:            true,
+									},
+									"group_address_only": schema.BoolAttribute{
+										MarkdownDescription: "Group-address without increment mask/source-address",
+										Computed:            true,
+									},
+									"suppress_reports": schema.BoolAttribute{
+										MarkdownDescription: "Suppress IGMP reports",
+										Computed:            true,
+									},
+									"group_masks": schema.ListNestedAttribute{
+										MarkdownDescription: "Increment mask for group address",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"group_inc_mask": schema.StringAttribute{
+													MarkdownDescription: "Increment mask for group address",
+													Computed:            true,
+												},
+												"group_count": schema.Int64Attribute{
+													MarkdownDescription: "No. of group addresses to join",
+													Computed:            true,
+												},
+												"suppress_reports": schema.BoolAttribute{
+													MarkdownDescription: "Suppress IGMP reports",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"source_addresses": schema.ListNestedAttribute{
+										MarkdownDescription: "IGMP static multicast group",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: "Source address to join",
+													Computed:            true,
+												},
+												"suppress_reports": schema.BoolAttribute{
+													MarkdownDescription: "Suppress IGMP reports",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"group_masks_source_addresses": schema.ListNestedAttribute{
+										MarkdownDescription: "Increment mask for group address",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"group_inc_mask": schema.StringAttribute{
+													MarkdownDescription: "Increment mask for group address",
+													Computed:            true,
+												},
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: "Source address to join",
+													Computed:            true,
+												},
+												"group_count": schema.Int64Attribute{
+													MarkdownDescription: "No. of group addresses to join",
+													Computed:            true,
+												},
+												"suppress_reports": schema.BoolAttribute{
+													MarkdownDescription: "Suppress IGMP reports",
+													Computed:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"join_groups": schema.ListNestedAttribute{
+							MarkdownDescription: "IGMP join multicast group",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_address": schema.StringAttribute{
+										MarkdownDescription: "IP group address",
+										Computed:            true,
+									},
+									"group_address_only": schema.BoolAttribute{
+										MarkdownDescription: "Join multicast group without source address",
+										Computed:            true,
+									},
+									"source_addresses": schema.ListNestedAttribute{
+										MarkdownDescription: "Source address to include or exclude",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: "Source address to include",
+													Computed:            true,
+												},
+												"include": schema.BoolAttribute{
+													MarkdownDescription: "Include only the following source address",
+													Computed:            true,
+												},
+												"exclude": schema.BoolAttribute{
+													MarkdownDescription: "Exclude only the following source address",
+													Computed:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }

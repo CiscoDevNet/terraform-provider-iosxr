@@ -9,6 +9,8 @@ description: |-
 
 ## Unreleased
 
+- BREAKING CHANGE: Remove the `iosxr_router_igmp_interface` resource and data source. Use the new `interfaces` list of the `iosxr_router_igmp` resource and data source instead.
+- BREAKING CHANGE: Remove the `iosxr_router_igmp_vrf_interface` resource and data source. Use the new `interfaces` list of the `iosxr_router_igmp_vrf` resource and data source instead.
 - Add `iosxr_clock_8000` resource and data source
 - Add `hardware` attribute to the `iosxr_device_info` data source, which returns the auto-detected IOS-XR hardware identifier (the `hardware-info` field of `install/version`, for example `8000` on a Cisco 8000). Auto-detection now fails with a clear error if the device does not report it
 - Add `iosxr_password6` resource and data source

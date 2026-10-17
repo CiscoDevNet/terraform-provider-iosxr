@@ -248,6 +248,256 @@ func (r *RouterIGMPResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringvalidator.LengthBetween(1, 255),
 				},
 			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Select an interface to configure").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Select an interface to configure").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+						"version": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IGMP version").AddIntegerRangeDescription(1, 3).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 3),
+							},
+						},
+						"router_enable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable Router side functionality in IGMP").String,
+							Optional:            true,
+						},
+						"router_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable Router side functionality in IGMP").String,
+							Optional:            true,
+						},
+						"dvmrp_enable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure dvmrp to allow dvmrp processing on all interfaces").String,
+							Optional:            true,
+						},
+						"query_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IGMP host query interval").AddIntegerRangeDescription(1, 3600).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 3600),
+							},
+						},
+						"query_timeout": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IGMP previous querier timeout").AddIntegerRangeDescription(60, 300).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(60, 300),
+							},
+						},
+						"query_max_response_time": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IGMP max query response value").AddIntegerRangeDescription(1, 25).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 25),
+							},
+						},
+						"explicit_tracking_enable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable IGMPv3 explicit host tracking").String,
+							Optional:            true,
+						},
+						"explicit_tracking_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable IGMPv3 explicit host tracking").String,
+							Optional:            true,
+						},
+						"explicit_tracking_acl": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access list specifying tracking group range").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"access_group": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IGMP group access group").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"maximum_groups_per_interface": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Maxinum number of groups accepted per interface by this router").AddIntegerRangeDescription(1, 40000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 40000),
+							},
+						},
+						"maximum_groups_per_interface_threshold": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Threshold warning").AddIntegerRangeDescription(1, 40000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 40000),
+							},
+						},
+						"maximum_groups_per_interface_acl": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of ACL").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"static_groups": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IGMP static multicast group").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP group address").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+										},
+									},
+									"group_address_only": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Group-address without increment mask/source-address").String,
+										Optional:            true,
+									},
+									"suppress_reports": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Suppress IGMP reports").String,
+										Optional:            true,
+									},
+									"group_masks": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"group_inc_mask": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"group_count": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("No. of group addresses to join").AddIntegerRangeDescription(1, 512).String,
+													Required:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 512),
+													},
+												},
+												"suppress_reports": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Suppress IGMP reports").String,
+													Optional:            true,
+												},
+											},
+										},
+									},
+									"source_addresses": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IGMP static multicast group").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Source address to join").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"suppress_reports": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Suppress IGMP reports").String,
+													Optional:            true,
+												},
+											},
+										},
+									},
+									"group_masks_source_addresses": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"group_inc_mask": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Source address to join").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"group_count": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("No. of group addresses to join").AddIntegerRangeDescription(1, 512).String,
+													Required:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 512),
+													},
+												},
+												"suppress_reports": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Suppress IGMP reports").String,
+													Optional:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"join_groups": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IGMP join multicast group").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP group address").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+										},
+									},
+									"group_address_only": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Join multicast group without source address").String,
+										Optional:            true,
+									},
+									"source_addresses": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Source address to include or exclude").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Source address to include").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"include": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Include only the following source address").String,
+													Optional:            true,
+												},
+												"exclude": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Exclude only the following source address").String,
+													Optional:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }

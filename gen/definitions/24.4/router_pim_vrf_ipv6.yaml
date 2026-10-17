@@ -302,6 +302,7 @@ attributes:
         example: "INTF_NEIGHBOR_ACL_V6"
       - yang_name: maximum/route-interfaces/maximum-route-interfaces
         tf_name: maximum_route_interfaces
+        optional: true
         delete_parent: true
         example: 10000
       - yang_name: maximum/route-interfaces/threshold

@@ -754,7 +754,7 @@ func (r *RouterPIMIPv6Resource) Schema(ctx context.Context, req resource.SchemaR
 						},
 						"maximum_route_interfaces": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("PIM downstream joined interfaces").AddIntegerRangeDescription(1, 1100000).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 1100000),
 							},

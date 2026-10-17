@@ -272,8 +272,6 @@ Optional:
 Required:
 
 - `interface_name` (String) Select an interface to configure
-- `maximum_route_interfaces` (Number) PIM downstream joined interfaces
-  - Range: `1`-`1100000`
 
 Optional:
 
@@ -293,6 +291,8 @@ Optional:
   - Range: `10`-`600`
 - `join_prune_mtu` (Number) MTU to use when sending PIM J/P packets
   - Range: `576`-`65535`
+- `maximum_route_interfaces` (Number) PIM downstream joined interfaces
+  - Range: `1`-`1100000`
 - `maximum_route_interfaces_access_list` (String) Name of ACL that specifies to which routes to apply the maximum limit
 - `maximum_route_interfaces_threshold` (Number) Threshold warning
   - Range: `1`-`1100000`

@@ -165,6 +165,262 @@ func (d *RSVPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 					},
 				},
 			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Enable RSVP on an interface",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Enable RSVP on an interface",
+							Computed:            true,
+						},
+						"bandwidth_default": schema.BoolAttribute{
+							MarkdownDescription: "Configure RSVP default bandwidth",
+							Computed:            true,
+						},
+						"bandwidth_total": schema.Int64Attribute{
+							MarkdownDescription: "Total reservable bandwidth (in Kbps)",
+							Computed:            true,
+						},
+						"bandwidth_flow": schema.Int64Attribute{
+							MarkdownDescription: "Largest reservable flow (in Kbps)",
+							Computed:            true,
+						},
+						"bandwidth_global_pool_total": schema.Int64Attribute{
+							MarkdownDescription: "Total reservable bandwidth (in Kbps)",
+							Computed:            true,
+						},
+						"bandwidth_global_pool_flow": schema.Int64Attribute{
+							MarkdownDescription: "Largest reservable flow (in Kbps)",
+							Computed:            true,
+						},
+						"bandwidth_sub_pool_total": schema.Int64Attribute{
+							MarkdownDescription: "Reservable bandwidth in sub-pool",
+							Computed:            true,
+						},
+						"bandwidth_bc0_total": schema.Int64Attribute{
+							MarkdownDescription: "Total reservable bandwidth (in Kbps)",
+							Computed:            true,
+						},
+						"bandwidth_bc0_flow": schema.Int64Attribute{
+							MarkdownDescription: "Largest reservable flow (in Kbps)",
+							Computed:            true,
+						},
+						"bandwidth_bc1_total": schema.Int64Attribute{
+							MarkdownDescription: "Reservable bandwidth in sub-pool",
+							Computed:            true,
+						},
+						"bandwidth_percentage_total": schema.Int64Attribute{
+							MarkdownDescription: "Total reservable bandwidth as percentage of physical link bandwidth",
+							Computed:            true,
+						},
+						"bandwidth_percentage_flow": schema.Int64Attribute{
+							MarkdownDescription: "Largest reservable flow as percentage of physical link bandwidth",
+							Computed:            true,
+						},
+						"bandwidth_percentage_global_pool_total": schema.Int64Attribute{
+							MarkdownDescription: "Total reservable bandwidth as percentage of physical link bandwidth",
+							Computed:            true,
+						},
+						"bandwidth_percentage_global_pool_flow": schema.Int64Attribute{
+							MarkdownDescription: "Largest reservable flow as percentage of physical link bandwidth",
+							Computed:            true,
+						},
+						"bandwidth_percentage_sub_pool_total": schema.Int64Attribute{
+							MarkdownDescription: "Reservable bandwidth in sub-pool",
+							Computed:            true,
+						},
+						"bandwidth_percentage_bc0_total": schema.Int64Attribute{
+							MarkdownDescription: "Total reservable bandwidth as percentage of physical link bandwidth",
+							Computed:            true,
+						},
+						"bandwidth_percentage_bc0_flow": schema.Int64Attribute{
+							MarkdownDescription: "Largest reservable flow as percentage of physical link bandwidth",
+							Computed:            true,
+						},
+						"bandwidth_percentage_bc1_total": schema.Int64Attribute{
+							MarkdownDescription: "Reservable bandwidth in sub-pool",
+							Computed:            true,
+						},
+						"bandwidth_rdm_percentage_total": schema.Int64Attribute{
+							MarkdownDescription: "Total reservable bandwidth as percentage of physical link bandwidth",
+							Computed:            true,
+						},
+						"bandwidth_rdm_percentage_flow": schema.Int64Attribute{
+							MarkdownDescription: "Largest reservable flow as percentage of physical link bandwidth",
+							Computed:            true,
+						},
+						"bandwidth_rdm_percentage_global_pool_total": schema.Int64Attribute{
+							MarkdownDescription: "Total reservable bandwidth as percentage of physical link bandwidth",
+							Computed:            true,
+						},
+						"bandwidth_rdm_percentage_global_pool_flow": schema.Int64Attribute{
+							MarkdownDescription: "Largest reservable flow as percentage of physical link bandwidth",
+							Computed:            true,
+						},
+						"bandwidth_rdm_percentage_sub_pool_total": schema.Int64Attribute{
+							MarkdownDescription: "Reservable bandwidth in sub-pool",
+							Computed:            true,
+						},
+						"bandwidth_rdm_percentage_bc0_total": schema.Int64Attribute{
+							MarkdownDescription: "Total reservable bandwidth as percentage of physical link bandwidth",
+							Computed:            true,
+						},
+						"bandwidth_rdm_percentage_bc0_flow": schema.Int64Attribute{
+							MarkdownDescription: "Largest reservable flow as percentage of physical link bandwidth",
+							Computed:            true,
+						},
+						"bandwidth_rdm_percentage_bc1_total": schema.Int64Attribute{
+							MarkdownDescription: "Reservable bandwidth in sub-pool",
+							Computed:            true,
+						},
+						"bandwidth_rdm_total": schema.Int64Attribute{
+							MarkdownDescription: "Total reservable bandwidth in Kbps",
+							Computed:            true,
+						},
+						"bandwidth_rdm_flow": schema.Int64Attribute{
+							MarkdownDescription: "Largest reservable flow in Kbps",
+							Computed:            true,
+						},
+						"bandwidth_rdm_global_pool_total": schema.Int64Attribute{
+							MarkdownDescription: "Total reservable bandwidth in Kbps",
+							Computed:            true,
+						},
+						"bandwidth_rdm_global_pool_flow": schema.Int64Attribute{
+							MarkdownDescription: "Largest reservable flow in Kbps",
+							Computed:            true,
+						},
+						"bandwidth_rdm_sub_pool_total": schema.Int64Attribute{
+							MarkdownDescription: "Reservable bandwidth in sub-pool",
+							Computed:            true,
+						},
+						"bandwidth_rdm_bc0_total": schema.Int64Attribute{
+							MarkdownDescription: "Total reservable bandwidth (in Kbps)",
+							Computed:            true,
+						},
+						"bandwidth_rdm_bc0_flow": schema.Int64Attribute{
+							MarkdownDescription: "Largest reservable flow as (in Kbps)",
+							Computed:            true,
+						},
+						"bandwidth_rdm_bc1_total": schema.Int64Attribute{
+							MarkdownDescription: "Reservable bandwidth in sub-pool",
+							Computed:            true,
+						},
+						"bandwidth_mam_total": schema.Int64Attribute{
+							MarkdownDescription: "Total reservable bandwidth (in Kbps)",
+							Computed:            true,
+						},
+						"bandwidth_mam_flow": schema.Int64Attribute{
+							MarkdownDescription: "Largest reservable flow (in Kbps)",
+							Computed:            true,
+						},
+						"bandwidth_mam_bc0_total": schema.Int64Attribute{
+							MarkdownDescription: "Reservable bandwidth in bc0",
+							Computed:            true,
+						},
+						"bandwidth_mam_bc1_total": schema.Int64Attribute{
+							MarkdownDescription: "Reservable bandwidth in bc1",
+							Computed:            true,
+						},
+						"bandwidth_mam_percentage_total": schema.Int64Attribute{
+							MarkdownDescription: "Total reservable bandwidth as percentage of physical link bandwidth",
+							Computed:            true,
+						},
+						"bandwidth_mam_percentage_flow": schema.Int64Attribute{
+							MarkdownDescription: "Largest reservable flow as percentage of physical link bandwidth",
+							Computed:            true,
+						},
+						"bandwidth_mam_percentage_bc0_total": schema.Int64Attribute{
+							MarkdownDescription: "Reservable bandwidth in bc0",
+							Computed:            true,
+						},
+						"bandwidth_mam_percentage_bc1_total": schema.Int64Attribute{
+							MarkdownDescription: "Reservable bandwidth in bc1",
+							Computed:            true,
+						},
+						"signalling_dscp": schema.Int64Attribute{
+							MarkdownDescription: "Set DSCP for RSVP signalling messages",
+							Computed:            true,
+						},
+						"signalling_rate_limit_enable": schema.BoolAttribute{
+							MarkdownDescription: "Enable message rate limit",
+							Computed:            true,
+						},
+						"signalling_rate_limit_rate": schema.Int64Attribute{
+							MarkdownDescription: "Set message rate",
+							Computed:            true,
+						},
+						"signalling_rate_limit_interval": schema.Int64Attribute{
+							MarkdownDescription: "Set scheduling interval",
+							Computed:            true,
+						},
+						"signalling_refresh_interval": schema.Int64Attribute{
+							MarkdownDescription: "Set interval between successive refreshes",
+							Computed:            true,
+						},
+						"signalling_refresh_missed": schema.Int64Attribute{
+							MarkdownDescription: "Set max number of consecutive missed messages for state expiry",
+							Computed:            true,
+						},
+						"signalling_refresh_oob_interval": schema.Int64Attribute{
+							MarkdownDescription: "Set interval between successive refreshes",
+							Computed:            true,
+						},
+						"signalling_refresh_oob_missed": schema.Int64Attribute{
+							MarkdownDescription: "Set max number of consecutive missed messages for state expiry",
+							Computed:            true,
+						},
+						"signalling_refresh_reduction_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable refresh reduction",
+							Computed:            true,
+						},
+						"signalling_refresh_reduction_reliable_ack_hold_time": schema.Int64Attribute{
+							MarkdownDescription: "Set hold time for sending RSVP ACK message(s)",
+							Computed:            true,
+						},
+						"signalling_refresh_reduction_reliable_ack_max_size": schema.Int64Attribute{
+							MarkdownDescription: "Set max size of a single RSVP ACK message",
+							Computed:            true,
+						},
+						"signalling_refresh_reduction_reliable_retransmit_time": schema.Int64Attribute{
+							MarkdownDescription: "Set min delay to wait for an ACK before a retransmit",
+							Computed:            true,
+						},
+						"signalling_refresh_reduction_reliable_retransmit_queue_depth": schema.Int64Attribute{
+							MarkdownDescription: "Set rapid retransmit queue depth",
+							Computed:            true,
+						},
+						"signalling_refresh_reduction_reliable_summary_refresh": schema.BoolAttribute{
+							MarkdownDescription: "Configure use of reliable messaging for summary refresh",
+							Computed:            true,
+						},
+						"signalling_refresh_reduction_summary_max_size": schema.Int64Attribute{
+							MarkdownDescription: "Set max size of a single RSVP summary refresh message",
+							Computed:            true,
+						},
+						"signalling_refresh_reduction_bundle_max_size": schema.Int64Attribute{
+							MarkdownDescription: "Set max size of a single RSVP bundle message",
+							Computed:            true,
+						},
+						"signalling_hello_graceful_restart_interface_based": schema.BoolAttribute{
+							MarkdownDescription: "Configure Interface-based Hello",
+							Computed:            true,
+						},
+						"authentication_key_chain": schema.StringAttribute{
+							MarkdownDescription: "Use key-chain to authenticate RSVP signalling messages",
+							Computed:            true,
+						},
+						"authentication_window_size": schema.Int64Attribute{
+							MarkdownDescription: "Use window-size to limit number of out-of-order messages",
+							Computed:            true,
+						},
+						"authentication_life_time": schema.Int64Attribute{
+							MarkdownDescription: "Use to associate life-time for each security association",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"bandwidth_mam_percentage_max_reservable_bandwidth": schema.Int64Attribute{
 				MarkdownDescription: "Maximum reservable bandwidth",
 				Computed:            true,

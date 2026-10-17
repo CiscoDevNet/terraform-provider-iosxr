@@ -36,6 +36,7 @@ data "iosxr_rsvp" "example" {
 - `bandwidth_rdm_percentage_max_reservable_bc0` (Number) Maximum reservable/BC0
 - `bandwidth_rdm_percentage_max_reservable_bc1` (Number) BC1 pool
 - `id` (String) The path of the retrieved object.
+- `interfaces` (Attributes List) Enable RSVP on an interface (see [below for nested schema](#nestedatt--interfaces))
 - `latency_threshold` (Number) Set the latency threshold to a value in seconds (default 60)
 - `logging_events_issu` (Boolean) Enable ISSU Status Logging
 - `logging_events_nsr` (Boolean) Enable NSR Status Logging
@@ -62,6 +63,75 @@ data "iosxr_rsvp" "example" {
 - `signalling_patherr_state_removal_disable` (Boolean) Disable State-Removal flag for Path Error
 - `signalling_prefix_filtering_acl` (String) Specify access-list name
 - `signalling_prefix_filtering_default_deny_action_drop` (Boolean) Drop the packet
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Read-Only:
+
+- `authentication_key_chain` (String) Use key-chain to authenticate RSVP signalling messages
+- `authentication_life_time` (Number) Use to associate life-time for each security association
+- `authentication_window_size` (Number) Use window-size to limit number of out-of-order messages
+- `bandwidth_bc0_flow` (Number) Largest reservable flow (in Kbps)
+- `bandwidth_bc0_total` (Number) Total reservable bandwidth (in Kbps)
+- `bandwidth_bc1_total` (Number) Reservable bandwidth in sub-pool
+- `bandwidth_default` (Boolean) Configure RSVP default bandwidth
+- `bandwidth_flow` (Number) Largest reservable flow (in Kbps)
+- `bandwidth_global_pool_flow` (Number) Largest reservable flow (in Kbps)
+- `bandwidth_global_pool_total` (Number) Total reservable bandwidth (in Kbps)
+- `bandwidth_mam_bc0_total` (Number) Reservable bandwidth in bc0
+- `bandwidth_mam_bc1_total` (Number) Reservable bandwidth in bc1
+- `bandwidth_mam_flow` (Number) Largest reservable flow (in Kbps)
+- `bandwidth_mam_percentage_bc0_total` (Number) Reservable bandwidth in bc0
+- `bandwidth_mam_percentage_bc1_total` (Number) Reservable bandwidth in bc1
+- `bandwidth_mam_percentage_flow` (Number) Largest reservable flow as percentage of physical link bandwidth
+- `bandwidth_mam_percentage_total` (Number) Total reservable bandwidth as percentage of physical link bandwidth
+- `bandwidth_mam_total` (Number) Total reservable bandwidth (in Kbps)
+- `bandwidth_percentage_bc0_flow` (Number) Largest reservable flow as percentage of physical link bandwidth
+- `bandwidth_percentage_bc0_total` (Number) Total reservable bandwidth as percentage of physical link bandwidth
+- `bandwidth_percentage_bc1_total` (Number) Reservable bandwidth in sub-pool
+- `bandwidth_percentage_flow` (Number) Largest reservable flow as percentage of physical link bandwidth
+- `bandwidth_percentage_global_pool_flow` (Number) Largest reservable flow as percentage of physical link bandwidth
+- `bandwidth_percentage_global_pool_total` (Number) Total reservable bandwidth as percentage of physical link bandwidth
+- `bandwidth_percentage_sub_pool_total` (Number) Reservable bandwidth in sub-pool
+- `bandwidth_percentage_total` (Number) Total reservable bandwidth as percentage of physical link bandwidth
+- `bandwidth_rdm_bc0_flow` (Number) Largest reservable flow as (in Kbps)
+- `bandwidth_rdm_bc0_total` (Number) Total reservable bandwidth (in Kbps)
+- `bandwidth_rdm_bc1_total` (Number) Reservable bandwidth in sub-pool
+- `bandwidth_rdm_flow` (Number) Largest reservable flow in Kbps
+- `bandwidth_rdm_global_pool_flow` (Number) Largest reservable flow in Kbps
+- `bandwidth_rdm_global_pool_total` (Number) Total reservable bandwidth in Kbps
+- `bandwidth_rdm_percentage_bc0_flow` (Number) Largest reservable flow as percentage of physical link bandwidth
+- `bandwidth_rdm_percentage_bc0_total` (Number) Total reservable bandwidth as percentage of physical link bandwidth
+- `bandwidth_rdm_percentage_bc1_total` (Number) Reservable bandwidth in sub-pool
+- `bandwidth_rdm_percentage_flow` (Number) Largest reservable flow as percentage of physical link bandwidth
+- `bandwidth_rdm_percentage_global_pool_flow` (Number) Largest reservable flow as percentage of physical link bandwidth
+- `bandwidth_rdm_percentage_global_pool_total` (Number) Total reservable bandwidth as percentage of physical link bandwidth
+- `bandwidth_rdm_percentage_sub_pool_total` (Number) Reservable bandwidth in sub-pool
+- `bandwidth_rdm_percentage_total` (Number) Total reservable bandwidth as percentage of physical link bandwidth
+- `bandwidth_rdm_sub_pool_total` (Number) Reservable bandwidth in sub-pool
+- `bandwidth_rdm_total` (Number) Total reservable bandwidth in Kbps
+- `bandwidth_sub_pool_total` (Number) Reservable bandwidth in sub-pool
+- `bandwidth_total` (Number) Total reservable bandwidth (in Kbps)
+- `interface_name` (String) Enable RSVP on an interface
+- `signalling_dscp` (Number) Set DSCP for RSVP signalling messages
+- `signalling_hello_graceful_restart_interface_based` (Boolean) Configure Interface-based Hello
+- `signalling_rate_limit_enable` (Boolean) Enable message rate limit
+- `signalling_rate_limit_interval` (Number) Set scheduling interval
+- `signalling_rate_limit_rate` (Number) Set message rate
+- `signalling_refresh_interval` (Number) Set interval between successive refreshes
+- `signalling_refresh_missed` (Number) Set max number of consecutive missed messages for state expiry
+- `signalling_refresh_oob_interval` (Number) Set interval between successive refreshes
+- `signalling_refresh_oob_missed` (Number) Set max number of consecutive missed messages for state expiry
+- `signalling_refresh_reduction_bundle_max_size` (Number) Set max size of a single RSVP bundle message
+- `signalling_refresh_reduction_disable` (Boolean) Disable refresh reduction
+- `signalling_refresh_reduction_reliable_ack_hold_time` (Number) Set hold time for sending RSVP ACK message(s)
+- `signalling_refresh_reduction_reliable_ack_max_size` (Number) Set max size of a single RSVP ACK message
+- `signalling_refresh_reduction_reliable_retransmit_queue_depth` (Number) Set rapid retransmit queue depth
+- `signalling_refresh_reduction_reliable_retransmit_time` (Number) Set min delay to wait for an ACK before a retransmit
+- `signalling_refresh_reduction_reliable_summary_refresh` (Boolean) Configure use of reliable messaging for summary refresh
+- `signalling_refresh_reduction_summary_max_size` (Number) Set max size of a single RSVP summary refresh message
+
 
 <a id="nestedatt--neighbors"></a>
 ### Nested Schema for `neighbors`

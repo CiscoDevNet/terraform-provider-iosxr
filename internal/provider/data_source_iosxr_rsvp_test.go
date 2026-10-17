@@ -54,6 +54,30 @@ func TestAccDataSourceIosxrRSVP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "neighbors.0.authentication_key_chain", "KEY1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "neighbors.0.authentication_window_size", "32"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "neighbors.0.authentication_life_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.bandwidth_mam_percentage_total", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.bandwidth_mam_percentage_flow", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.bandwidth_mam_percentage_bc0_total", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.bandwidth_mam_percentage_bc1_total", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.signalling_dscp", "48"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.signalling_rate_limit_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.signalling_rate_limit_rate", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.signalling_rate_limit_interval", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.signalling_refresh_interval", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.signalling_refresh_missed", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.signalling_refresh_oob_interval", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.signalling_refresh_oob_missed", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.signalling_refresh_reduction_reliable_ack_hold_time", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.signalling_refresh_reduction_reliable_ack_max_size", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.signalling_refresh_reduction_reliable_retransmit_time", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.signalling_refresh_reduction_reliable_retransmit_queue_depth", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.signalling_refresh_reduction_reliable_summary_refresh", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.signalling_refresh_reduction_summary_max_size", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.signalling_refresh_reduction_bundle_max_size", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.signalling_hello_graceful_restart_interface_based", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.authentication_key_chain", "KEY1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.authentication_window_size", "32"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "interfaces.0.authentication_life_time", "60"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "bandwidth_mam_percentage_max_reservable_bandwidth", "10000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "bandwidth_mam_percentage_max_reservable_bc0", "2000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rsvp.test", "bandwidth_mam_percentage_max_reservable_bc1", "2000"))
@@ -113,6 +137,32 @@ func testAccDataSourceIosxrRSVPConfig() string {
 	config += `	authentication_retransmit = 120` + "\n"
 	config += `	neighbors = [{` + "\n"
 	config += `		address = "192.168.1.1"` + "\n"
+	config += `		authentication_key_chain = "KEY1"` + "\n"
+	config += `		authentication_window_size = 32` + "\n"
+	config += `		authentication_life_time = 60` + "\n"
+	config += `	}]` + "\n"
+	config += `	interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `		bandwidth_mam_percentage_total = 80` + "\n"
+	config += `		bandwidth_mam_percentage_flow = 20` + "\n"
+	config += `		bandwidth_mam_percentage_bc0_total = 80` + "\n"
+	config += `		bandwidth_mam_percentage_bc1_total = 20` + "\n"
+	config += `		signalling_dscp = 48` + "\n"
+	config += `		signalling_rate_limit_enable = true` + "\n"
+	config += `		signalling_rate_limit_rate = 200` + "\n"
+	config += `		signalling_rate_limit_interval = 1000` + "\n"
+	config += `		signalling_refresh_interval = 120` + "\n"
+	config += `		signalling_refresh_missed = 2` + "\n"
+	config += `		signalling_refresh_oob_interval = 200` + "\n"
+	config += `		signalling_refresh_oob_missed = 2` + "\n"
+	config += `		signalling_refresh_reduction_reliable_ack_hold_time = 1000` + "\n"
+	config += `		signalling_refresh_reduction_reliable_ack_max_size = 2000` + "\n"
+	config += `		signalling_refresh_reduction_reliable_retransmit_time = 1000` + "\n"
+	config += `		signalling_refresh_reduction_reliable_retransmit_queue_depth = 100` + "\n"
+	config += `		signalling_refresh_reduction_reliable_summary_refresh = true` + "\n"
+	config += `		signalling_refresh_reduction_summary_max_size = 100` + "\n"
+	config += `		signalling_refresh_reduction_bundle_max_size = 1000` + "\n"
+	config += `		signalling_hello_graceful_restart_interface_based = true` + "\n"
 	config += `		authentication_key_chain = "KEY1"` + "\n"
 	config += `		authentication_window_size = 32` + "\n"
 	config += `		authentication_life_time = 60` + "\n"

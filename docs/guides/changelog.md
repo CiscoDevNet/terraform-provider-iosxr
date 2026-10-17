@@ -10,6 +10,7 @@ description: |-
 ## Unreleased
 
 - Fix: Make `maximum_route_interfaces` of the `interfaces` list optional in `iosxr_router_pim_ipv4`, `iosxr_router_pim_ipv6`, `iosxr_router_pim_vrf_ipv4` and `iosxr_router_pim_vrf_ipv6` resources and data sources
+- BREAKING CHANGE: Remove the `iosxr_rsvp_interface` resource and data source. Use the new `interfaces` list of the `iosxr_rsvp` resource and data source instead.
 - BREAKING CHANGE: Remove the `iosxr_router_mld_interface` resource and data source. Use the new `interfaces` list of the `iosxr_router_mld` resource and data source instead.
 - BREAKING CHANGE: Remove the `iosxr_router_mld_vrf_interface` resource and data source. Use the new `interfaces` list of the `iosxr_router_mld_vrf` resource and data source instead.
 - BREAKING CHANGE: Remove the `iosxr_router_igmp_interface` resource and data source. Use the new `interfaces` list of the `iosxr_router_igmp` resource and data source instead.

@@ -224,6 +224,434 @@ func (r *RSVPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					},
 				},
 			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable RSVP on an interface").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable RSVP on an interface").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+						"bandwidth_default": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure RSVP default bandwidth").String,
+							Optional:            true,
+						},
+						"bandwidth_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Total reservable bandwidth (in Kbps)").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_flow": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Largest reservable flow (in Kbps)").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_global_pool_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Total reservable bandwidth (in Kbps)").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_global_pool_flow": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Largest reservable flow (in Kbps)").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_sub_pool_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Reservable bandwidth in sub-pool").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_bc0_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Total reservable bandwidth (in Kbps)").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_bc0_flow": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Largest reservable flow (in Kbps)").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_bc1_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Reservable bandwidth in sub-pool").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_percentage_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Total reservable bandwidth as percentage of physical link bandwidth").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_percentage_flow": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Largest reservable flow as percentage of physical link bandwidth").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_percentage_global_pool_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Total reservable bandwidth as percentage of physical link bandwidth").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_percentage_global_pool_flow": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Largest reservable flow as percentage of physical link bandwidth").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_percentage_sub_pool_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Reservable bandwidth in sub-pool").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_percentage_bc0_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Total reservable bandwidth as percentage of physical link bandwidth").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_percentage_bc0_flow": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Largest reservable flow as percentage of physical link bandwidth").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_percentage_bc1_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Reservable bandwidth in sub-pool").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_rdm_percentage_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Total reservable bandwidth as percentage of physical link bandwidth").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_rdm_percentage_flow": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Largest reservable flow as percentage of physical link bandwidth").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_rdm_percentage_global_pool_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Total reservable bandwidth as percentage of physical link bandwidth").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_rdm_percentage_global_pool_flow": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Largest reservable flow as percentage of physical link bandwidth").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_rdm_percentage_sub_pool_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Reservable bandwidth in sub-pool").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_rdm_percentage_bc0_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Total reservable bandwidth as percentage of physical link bandwidth").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_rdm_percentage_bc0_flow": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Largest reservable flow as percentage of physical link bandwidth").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_rdm_percentage_bc1_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Reservable bandwidth in sub-pool").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_rdm_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Total reservable bandwidth in Kbps").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_rdm_flow": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Largest reservable flow in Kbps").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_rdm_global_pool_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Total reservable bandwidth in Kbps").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_rdm_global_pool_flow": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Largest reservable flow in Kbps").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_rdm_sub_pool_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Reservable bandwidth in sub-pool").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_rdm_bc0_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Total reservable bandwidth (in Kbps)").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_rdm_bc0_flow": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Largest reservable flow as (in Kbps)").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_rdm_bc1_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Reservable bandwidth in sub-pool").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_mam_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Total reservable bandwidth (in Kbps)").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_mam_flow": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Largest reservable flow (in Kbps)").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_mam_bc0_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Reservable bandwidth in bc0").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_mam_bc1_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Reservable bandwidth in bc1").AddIntegerRangeDescription(0, 10000000000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000000000000),
+							},
+						},
+						"bandwidth_mam_percentage_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Total reservable bandwidth as percentage of physical link bandwidth").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_mam_percentage_flow": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Largest reservable flow as percentage of physical link bandwidth").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_mam_percentage_bc0_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Reservable bandwidth in bc0").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"bandwidth_mam_percentage_bc1_total": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Reservable bandwidth in bc1").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"signalling_dscp": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set DSCP for RSVP signalling messages").AddIntegerRangeDescription(0, 63).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 63),
+							},
+						},
+						"signalling_rate_limit_enable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable message rate limit").String,
+							Optional:            true,
+						},
+						"signalling_rate_limit_rate": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set message rate").AddIntegerRangeDescription(1, 500).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 500),
+							},
+						},
+						"signalling_rate_limit_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set scheduling interval").AddIntegerRangeDescription(250, 2000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(250, 2000),
+							},
+						},
+						"signalling_refresh_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set interval between successive refreshes").AddIntegerRangeDescription(10, 180).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(10, 180),
+							},
+						},
+						"signalling_refresh_missed": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set max number of consecutive missed messages for state expiry").AddIntegerRangeDescription(1, 8).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 8),
+							},
+						},
+						"signalling_refresh_oob_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set interval between successive refreshes").AddIntegerRangeDescription(180, 86400).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(180, 86400),
+							},
+						},
+						"signalling_refresh_oob_missed": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set max number of consecutive missed messages for state expiry").AddIntegerRangeDescription(1, 110000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 110000),
+							},
+						},
+						"signalling_refresh_reduction_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable refresh reduction").String,
+							Optional:            true,
+						},
+						"signalling_refresh_reduction_reliable_ack_hold_time": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set hold time for sending RSVP ACK message(s)").AddIntegerRangeDescription(100, 5000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(100, 5000),
+							},
+						},
+						"signalling_refresh_reduction_reliable_ack_max_size": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set max size of a single RSVP ACK message").AddIntegerRangeDescription(20, 65000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(20, 65000),
+							},
+						},
+						"signalling_refresh_reduction_reliable_retransmit_time": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set min delay to wait for an ACK before a retransmit").AddIntegerRangeDescription(100, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(100, 10000),
+							},
+						},
+						"signalling_refresh_reduction_reliable_retransmit_queue_depth": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set rapid retransmit queue depth").AddIntegerRangeDescription(0, 100000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 100000),
+							},
+						},
+						"signalling_refresh_reduction_reliable_summary_refresh": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure use of reliable messaging for summary refresh").String,
+							Optional:            true,
+						},
+						"signalling_refresh_reduction_summary_max_size": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set max size of a single RSVP summary refresh message").AddIntegerRangeDescription(20, 65000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(20, 65000),
+							},
+						},
+						"signalling_refresh_reduction_bundle_max_size": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set max size of a single RSVP bundle message").AddIntegerRangeDescription(512, 65000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(512, 65000),
+							},
+						},
+						"signalling_hello_graceful_restart_interface_based": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure Interface-based Hello").String,
+							Optional:            true,
+						},
+						"authentication_key_chain": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use key-chain to authenticate RSVP signalling messages").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"authentication_window_size": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use window-size to limit number of out-of-order messages").AddIntegerRangeDescription(1, 64).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 64),
+							},
+						},
+						"authentication_life_time": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use to associate life-time for each security association").AddIntegerRangeDescription(30, 86400).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(30, 86400),
+							},
+						},
+					},
+				},
+			},
 			"bandwidth_mam_percentage_max_reservable_bandwidth": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Maximum reservable bandwidth").AddIntegerRangeDescription(0, 10000).String,
 				Optional:            true,

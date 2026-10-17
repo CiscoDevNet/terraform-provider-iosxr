@@ -1,5 +1,7 @@
 ## Unreleased
 
+- BREAKING CHANGE: Remove the `iosxr_router_mld_interface` resource and data source. Use the new `interfaces` list of the `iosxr_router_mld` resource and data source instead.
+- BREAKING CHANGE: Remove the `iosxr_router_mld_vrf_interface` resource and data source. Use the new `interfaces` list of the `iosxr_router_mld_vrf` resource and data source instead.
 - BREAKING CHANGE: Remove the `iosxr_router_igmp_interface` resource and data source. Use the new `interfaces` list of the `iosxr_router_igmp` resource and data source instead.
 - BREAKING CHANGE: Remove the `iosxr_router_igmp_vrf_interface` resource and data source. Use the new `interfaces` list of the `iosxr_router_igmp_vrf` resource and data source instead.
 - Add `iosxr_clock_8000` resource and data source

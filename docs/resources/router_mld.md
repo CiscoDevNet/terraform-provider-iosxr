@@ -14,9 +14,44 @@ This resource can manage the Router MLD configuration.
 
 ```terraform
 resource "iosxr_router_mld" "example" {
-  access_group                           = "MLD_ACL"
-  explicit_tracking                      = true
-  explicit_tracking_acl                  = "MLD_ACL"
+  access_group          = "MLD_ACL"
+  explicit_tracking     = true
+  explicit_tracking_acl = "MLD_ACL"
+  interfaces = [
+    {
+      access_group             = "MLD_ACL"
+      dvmrp_enable             = true
+      explicit_tracking_acl    = "MLD_ACL"
+      explicit_tracking_enable = true
+      interface_name           = "GigabitEthernet0/0/0/1"
+      join_groups = [
+        {
+          group_address = "ff3e::100"
+          source_addresses = [
+            {
+              include   = true
+              source_ip = "2001:db8::1"
+            }
+          ]
+        }
+      ]
+      maximum_groups_per_interface           = 25000
+      maximum_groups_per_interface_acl       = "MLD_ACL"
+      maximum_groups_per_interface_threshold = 20000
+      query_interval                         = 125
+      query_max_response_time                = 10
+      query_timeout                          = 255
+      router_enable                          = true
+      static_groups = [
+        {
+          group_address      = "ff3e::1"
+          group_address_only = true
+          suppress_reports   = true
+        }
+      ]
+      version = 2
+    }
+  ]
   maximum_groups                         = 50000
   maximum_groups_per_interface           = 25000
   maximum_groups_per_interface_acl       = "MLD_ACL"
@@ -53,6 +88,7 @@ resource "iosxr_router_mld" "example" {
 - `explicit_tracking` (Boolean) MLD explicit host tracking
 - `explicit_tracking_acl` (String) Access list specifying tracking group range
 - `explicit_tracking_disable` (Boolean) Disable MLD explicit host tracking
+- `interfaces` (Attributes List) Select an interface to configure (see [below for nested schema](#nestedatt--interfaces))
 - `maximum_groups` (Number) Maximum number of groups accepted by this router
   - Range: `1`-`75000`
 - `maximum_groups_per_interface` (Number) Maximum number of groups accepted per interface by this router
@@ -86,6 +122,122 @@ resource "iosxr_router_mld" "example" {
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Required:
+
+- `interface_name` (String) Select an interface to configure
+
+Optional:
+
+- `access_group` (String) MLD group access group
+- `dvmrp_enable` (Boolean) MLD Enable dvmrp on specific interface
+- `explicit_tracking_acl` (String) Access list specifying tracking group range
+- `explicit_tracking_disable` (Boolean) Disable MLD explicit host tracking
+- `explicit_tracking_enable` (Boolean) Enable MLD explicit host tracking
+- `join_groups` (Attributes List) MLD join multicast group (see [below for nested schema](#nestedatt--interfaces--join_groups))
+- `maximum_groups_per_interface` (Number) Maxinum number of groups accepted per interface by this router
+  - Range: `1`-`40000`
+- `maximum_groups_per_interface_acl` (String) Name of ACL
+- `maximum_groups_per_interface_threshold` (Number) Threshold warning
+  - Range: `1`-`40000`
+- `query_interval` (Number) MLD host query interval
+  - Range: `1`-`3600`
+- `query_max_response_time` (Number) MLD max query response value
+  - Range: `1`-`25`
+- `query_timeout` (Number) MLD previous querier timeout
+  - Range: `60`-`300`
+- `router_disable` (Boolean) Disable Router side functionality in MLD
+- `router_enable` (Boolean) Enable Router side functionality in MLD
+- `static_groups` (Attributes List) MLD static multicast group (see [below for nested schema](#nestedatt--interfaces--static_groups))
+- `version` (Number) MLD version
+  - Range: `1`-`2`
+
+<a id="nestedatt--interfaces--join_groups"></a>
+### Nested Schema for `interfaces.join_groups`
+
+Required:
+
+- `group_address` (String) IP group address
+
+Optional:
+
+- `group_address_only` (Boolean) Join multicast group without source address
+- `source_addresses` (Attributes List) Source address to include or exclude (see [below for nested schema](#nestedatt--interfaces--join_groups--source_addresses))
+
+<a id="nestedatt--interfaces--join_groups--source_addresses"></a>
+### Nested Schema for `interfaces.join_groups.source_addresses`
+
+Required:
+
+- `source_ip` (String) Source address to include
+
+Optional:
+
+- `exclude` (Boolean) Exclude only the following source address
+- `include` (Boolean) Include only the following source address
+
+
+
+<a id="nestedatt--interfaces--static_groups"></a>
+### Nested Schema for `interfaces.static_groups`
+
+Required:
+
+- `group_address` (String) IP group address
+
+Optional:
+
+- `group_address_only` (Boolean) Group-address without increment mask/source-address
+- `group_masks` (Attributes List) Increment mask for group address (see [below for nested schema](#nestedatt--interfaces--static_groups--group_masks))
+- `group_masks_source_addresses` (Attributes List) Increment mask for group address (see [below for nested schema](#nestedatt--interfaces--static_groups--group_masks_source_addresses))
+- `source_addresses` (Attributes List) IGMP static multicast group (see [below for nested schema](#nestedatt--interfaces--static_groups--source_addresses))
+- `suppress_reports` (Boolean) Suppress IGMP reports
+
+<a id="nestedatt--interfaces--static_groups--group_masks"></a>
+### Nested Schema for `interfaces.static_groups.group_masks`
+
+Required:
+
+- `group_count` (Number) No. of group addresses to join
+  - Range: `1`-`512`
+- `group_inc_mask` (String) Increment mask for group address
+
+Optional:
+
+- `suppress_reports` (Boolean) Suppress IGMP reports
+
+
+<a id="nestedatt--interfaces--static_groups--group_masks_source_addresses"></a>
+### Nested Schema for `interfaces.static_groups.group_masks_source_addresses`
+
+Required:
+
+- `group_count` (Number) No. of group addresses to join
+  - Range: `1`-`512`
+- `group_inc_mask` (String) Increment mask for group address
+- `source_ip` (String) Source address to join
+
+Optional:
+
+- `suppress_reports` (Boolean) Suppress IGMP reports
+
+
+<a id="nestedatt--interfaces--static_groups--source_addresses"></a>
+### Nested Schema for `interfaces.static_groups.source_addresses`
+
+Required:
+
+- `source_ip` (String) Source address to join
+
+Optional:
+
+- `suppress_reports` (Boolean) Suppress IGMP reports
+
+
+
 
 <a id="nestedatt--ssm_map_statics"></a>
 ### Nested Schema for `ssm_map_statics`

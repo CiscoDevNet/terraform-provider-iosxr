@@ -10,6 +10,14 @@ description: |-
 
 This data source can read the Performance Measurement Delay Profile configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `endpoint_default_histogram_delay_bins_explicit` | `26.2` |
+
 ## Example Usage
 
 ```terraform
@@ -41,6 +49,11 @@ data "iosxr_performance_measurement_delay_profile" "example" {
 - `endpoint_default_advertisement_threshold_check_average_delay` (Boolean) Enable average-delay threshold-check
 - `endpoint_default_advertisement_threshold_check_maximum_delay` (Boolean) Enable maximum-delay threshold-check
 - `endpoint_default_advertisement_threshold_check_minimum_delay` (Boolean) Enable minimum-delay threshold-check
+- `endpoint_default_histogram_delay_bins_explicit` (List of Number) explicit list of 27 numbers to split 28 bins. All 27 entries must be configured
+  - Supported from version: `25.4`
+  - **Not supported from version `26.2` and above**
+- `endpoint_default_probe_collect_hbh` (Boolean) Collect hop by hop data for delay sessions
+  - Supported from version: `25.4`
 - `endpoint_default_probe_computation_interval` (Number) Interval for metric computation
 - `endpoint_default_probe_flow_label_explicit` (Boolean) explicit list of flow labels
 - `endpoint_default_probe_flow_label_explicit_list` (List of Number) explicit list of flow labels
@@ -52,6 +65,8 @@ data "iosxr_performance_measurement_delay_profile" "example" {
 - `endpoint_default_probe_measurement_mode_two_way` (Boolean) Measure one way delay with timestamp 1, 2, 3 and 4 without clock synchronization
 - `endpoint_default_probe_sweep_destination_ipv4` (String) Start of the IPv4 address range
 - `endpoint_default_probe_sweep_destination_range` (Number) Number of IP addresses to sweep
+- `endpoint_default_probe_timestamp_format_ntp` (Boolean) Network Time Protocol timestamp format
+  - Supported from version: `25.4`
 - `endpoint_default_probe_tos_dscp` (Number) DSCP value indicating TOS level used by protocol twamp-light
 - `endpoint_default_probe_tx_interval` (Number) TX interval
 - `id` (String) The path of the retrieved object.
@@ -71,10 +86,14 @@ data "iosxr_performance_measurement_delay_profile" "example" {
 - `interfaces_default_probe_measurement_mode_two_way` (Boolean) Measure one way delay with timestamp 1, 2, 3 and 4 without clock synchronization
 - `interfaces_default_probe_protocol_pm_mpls` (Boolean) Interface delay measurement using RFC6374 with MPLS encap
 - `interfaces_default_probe_protocol_twamp_light` (Boolean) Interface delay measurement using RFC5357
+- `interfaces_default_probe_timestamp_format_ntp` (Boolean) Network Time Protocol timestamp format
+  - Supported from version: `25.4`
 - `interfaces_default_probe_tos_dscp` (Number) DSCP value indicating TOS level used by protocol twamp-light
 - `interfaces_default_probe_tos_traffic_class` (Number) Traffic Class value indicating TOS level used by protocol pm-mpls
 - `interfaces_default_probe_tx_interval` (Number) TX interval
 - `profiles` (Attributes List) Delay profile name (see [below for nested schema](#nestedatt--profiles))
+- `rsvp_te_default_probe_timestamp_format_ntp` (Boolean) Network Time Protocol timestamp format
+  - Supported from version: `25.4`
 - `sr_policy_default` (Boolean) Default profile
 - `sr_policy_default_advertisement_accelerated` (Boolean) SR Policy delay profile advertisement accelerated
 - `sr_policy_default_advertisement_accelerated_minimum_change` (Number) Accelerated advertisement minimum change
@@ -91,6 +110,8 @@ data "iosxr_performance_measurement_delay_profile" "example" {
 - `sr_policy_default_advertisement_threshold_check_average_delay` (Boolean) Enable average-delay threshold-check
 - `sr_policy_default_advertisement_threshold_check_maximum_delay` (Boolean) Enable maximum-delay threshold-check
 - `sr_policy_default_advertisement_threshold_check_minimum_delay` (Boolean) Enable minimum-delay threshold-check
+- `sr_policy_default_probe_collect_hbh` (Boolean) Collect hop by hop data for delay sessions
+  - Supported from version: `25.4`
 - `sr_policy_default_probe_computation_interval` (Number) Interval for metric computation
 - `sr_policy_default_probe_measurement_mode_loopback` (Boolean) Loopback the probe packet collecting only timestamp 1 and 4
 - `sr_policy_default_probe_measurement_mode_one_way` (Boolean) Measure one way delay with timestamp 1 and 2
@@ -100,6 +121,8 @@ data "iosxr_performance_measurement_delay_profile" "example" {
 - `sr_policy_default_probe_static_delay` (Number) Configure static-delay
 - `sr_policy_default_probe_sweep_destination_ipv4` (String) Start of the IPv4 address range, used by IPv4, IPv6 and NULL endpoint SR Policy
 - `sr_policy_default_probe_sweep_destination_range` (Number) Number of IP addresses to sweep
+- `sr_policy_default_probe_timestamp_format_ntp` (Boolean) Network Time Protocol timestamp format
+  - Supported from version: `25.4`
 - `sr_policy_default_probe_tos_dscp` (Number) DSCP value indicating TOS level used by protocol twamp-light
 - `sr_policy_default_probe_tos_traffic_class` (Number) Traffic Class value indicating TOS level used by protocol pm-mpls
 - `sr_policy_default_probe_tx_interval` (Number) TX interval
@@ -124,6 +147,8 @@ Read-Only:
 - `advertise_threshold_check_average_delay` (Boolean) Enable average-delay threshold-check
 - `advertise_threshold_check_maximum_delay` (Boolean) Enable maximum-delay threshold-check
 - `advertise_threshold_check_minimum_delay` (Boolean) Enable minimum-delay threshold-check
+- `probe_collect_hbh` (Boolean) Collect hop by hop data for delay sessions
+  - Supported from version: `25.4`
 - `probe_computation_interval` (Number) Interval for metric computation
 - `probe_flow_label_explicit` (Boolean) explicit list of flow labels
 - `probe_flow_label_explicit_list` (List of Number) explicit list of flow labels
@@ -138,6 +163,8 @@ Read-Only:
 - `probe_static_delay` (Number) Configure static-delay
 - `probe_sweep_destination_ipv4` (String) Start of the IPv4 address range, used by IPv4, IPv6 and NULL endpoint SR Policy
 - `probe_sweep_destination_range` (Number) Number of IP addresses to sweep
+- `probe_timestamp_format_ntp` (Boolean) Network Time Protocol timestamp format
+  - Supported from version: `25.4`
 - `probe_tos_dscp` (Number) DSCP value indicating TOS level used by protocol twamp-light
 - `probe_tos_traffic_class` (Number) Traffic Class value indicating TOS level used by protocol pm-mpls
 - `probe_tx_interval` (Number) TX interval

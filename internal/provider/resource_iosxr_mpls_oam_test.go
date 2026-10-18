@@ -42,6 +42,15 @@ func TestAccIosxrMPLSOAM(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_dpm_pps", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_dpm_interval", "60"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_dpm_downstream_ecmp_faults", "true"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_address_family_ipv4_reply_ip_header_source", "1.1.1.1"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_address_family_ipv6_reply_ip_header_source", "2001:db8::1"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_dpm_shutdown", "true"))
+	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -104,6 +113,15 @@ func testAccIosxrMPLSOAMConfig_all() string {
 	config += `	oam_dpm_pps = 10` + "\n"
 	config += `	oam_dpm_interval = 60` + "\n"
 	config += `	oam_dpm_downstream_ecmp_faults = true` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	oam_address_family_ipv4_reply_ip_header_source = "1.1.1.1"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	oam_address_family_ipv6_reply_ip_header_source = "2001:db8::1"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	oam_dpm_shutdown = true` + "\n"
+	}
 	config += `}` + "\n"
 	return config
 }

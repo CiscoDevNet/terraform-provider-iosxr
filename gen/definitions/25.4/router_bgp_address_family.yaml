@@ -1,0 +1,71 @@
+---
+name: Router BGP Address Family
+path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/address-families/address-family[af-name=%s]
+doc_category: BGP
+attributes:
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+    # Mutually exclusive with prefix-ecmp-delay/ attributes
+  - yang_name: ecmp-delay/as-based/as-list
+    test_tags: [NCS, C8000]
+    exclude_test: true
+    example: ECMP_PEER_AS_LIST
+  - yang_name: ecmp-delay/as-based/delay
+    test_tags: [NCS, C8000]
+    exclude_test: true
+    example: 200
+  - yang_name: ecmp-delay/fixed/delay
+    test_tags: [NCS, C8000]
+    example: 200
+  - yang_name: ecmp-delay/platform-oor-based/delay
+    test_tags: [NCS, C8000]
+    exclude_test: true
+    example: 500
+  - yang_name: ecmp-delay/platform-oor-based/threshold
+    test_tags: [NCS, C8000]
+    exclude_test: true
+    example: 80
+  - yang_name: redistribute/eigrps/eigrp
+    tf_name: redistribute_eigrp
+    type: List
+    attributes:
+      - yang_name: default-policy-action-in
+        example: accept
+  - yang_name: redistribute/isis-processes/isis-process
+    tf_name: redistribute_isis
+    type: List
+    attributes:
+      - yang_name: default-policy-action-in
+        example: accept
+  - yang_name: redistribute/ospfs/ospf
+    tf_name: redistribute_ospf
+    type: List
+    attributes:
+      - yang_name: default-policy-action-in
+        example: accept
+  - yang_name: redistribute/ospfv3s/ospfv3
+    tf_name: redistribute_ospfv3
+    type: List
+    attributes:
+      - yang_name: default-policy-action-in
+        example: accept
+  - yang_name: redistribute/connected/default-policy-action-in
+    example: accept
+  - yang_name: redistribute/static/default-policy-action-in
+    example: accept
+  - yang_name: redistribute/rip/default-policy-action-in
+    example: accept
+  - yang_name: vrf/all/update/out/quick-withdraw/disable
+    exclude_test: true
+    example: true
+  - yang_name: update/out/quick-withdraw/disable
+    example: true
+  - yang_name: maximum-paths/ebgp/bestpath-only
+    delete_parent: true
+    example: true
+  - yang_name: delay-route/inbound
+    example: 100
+  - yang_name: fast-reroute/per-link
+    exclude_test: true
+    example: true

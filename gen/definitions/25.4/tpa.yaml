@@ -1,0 +1,5 @@
+---
+name: TPA
+path: Cisco-IOS-XR-um-tpa-cfg:/tpa
+doc_category: Management
+legacy: true

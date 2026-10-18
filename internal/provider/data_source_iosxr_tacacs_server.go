@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -113,6 +112,14 @@ func (d *TACACSServerDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "Idle timeout for a single-connection to the server",
 							Computed:            true,
 						},
+						"tls_trustpoint": schema.StringAttribute{
+							MarkdownDescription: "Trustpoint to be used for TACACS over TLS" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"tls_server_name_indicator": schema.StringAttribute{
+							MarkdownDescription: "SNI extension to include in client hello" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
 					},
 				},
 			},
@@ -189,7 +196,6 @@ func (d *TACACSServerDataSource) Read(ctx context.Context, req datasource.ReadRe
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -209,7 +215,7 @@ func (d *TACACSServerDataSource) Read(ctx context.Context, req datasource.ReadRe
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

@@ -14,102 +14,102 @@ This resource can manage the Router Static VRF IPv6 Multicast configuration.
 
 ```terraform
 resource "iosxr_router_static_vrf_ipv6_multicast" "example" {
-  vrf_name       = "VRF2"
-  prefix_address = "1::"
-  prefix_length  = 64
-  nexthop_interfaces = [
-    {
-      interface_name  = "GigabitEthernet0/0/0/1"
-      description     = "interface-description"
-      tag             = 100
-      distance_metric = 122
-      permanent       = true
-      metric          = 10
-    }
-  ]
-  nexthop_interface_addresses = [
-    {
-      interface_name                   = "GigabitEthernet0/0/0/2"
-      address                          = "2::2"
-      bfd_fast_detect_minimum_interval = 100
-      bfd_fast_detect_multiplier       = 3
-      description                      = "interface-description"
-      tag                              = 103
-      distance_metric                  = 144
-      track                            = "TRACK1"
-      metric                           = 10
-    }
-  ]
   nexthop_addresses = [
     {
       address                          = "3::3"
       bfd_fast_detect_minimum_interval = 100
       bfd_fast_detect_multiplier       = 3
       description                      = "ip-description"
-      tag                              = 104
       distance_metric                  = 155
-      track                            = "TRACK1"
       metric                           = 10
+      tag                              = 104
+      track                            = "TRACK1"
     }
   ]
+  nexthop_interface_addresses = [
+    {
+      address                          = "2::2"
+      bfd_fast_detect_minimum_interval = 100
+      bfd_fast_detect_multiplier       = 3
+      description                      = "interface-description"
+      distance_metric                  = 144
+      interface_name                   = "GigabitEthernet0/0/0/2"
+      metric                           = 10
+      tag                              = 103
+      track                            = "TRACK1"
+    }
+  ]
+  nexthop_interfaces = [
+    {
+      description     = "interface-description"
+      distance_metric = 122
+      interface_name  = "GigabitEthernet0/0/0/1"
+      metric          = 10
+      permanent       = true
+      tag             = 100
+    }
+  ]
+  prefix_address = "1::"
+  prefix_length  = 64
   sr_policies = [
     {
-      sr_policy_name  = "sr_te_policy_1"
       description     = "interface-description"
-      tag             = 103
       distance_metric = 144
-      track           = "TRACK1"
       metric          = 10
+      sr_policy_name  = "sr_te_policy_1"
+      tag             = 103
+      track           = "TRACK1"
     }
   ]
+  vrf_name = "VRF2"
   vrfs = [
     {
-      vrf_name = "VRF1"
-      nexthop_interfaces = [
-        {
-          interface_name  = "GigabitEthernet0/0/0/3"
-          description     = "interface-description"
-          tag             = 100
-          distance_metric = 122
-          permanent       = true
-          metric          = 10
-        }
-      ]
-      nexthop_interface_addresses = [
-        {
-          interface_name                   = "GigabitEthernet0/0/0/4"
-          address                          = "2::2"
-          bfd_fast_detect_minimum_interval = 100
-          bfd_fast_detect_multiplier       = 3
-          description                      = "interface-description"
-          tag                              = 103
-          distance_metric                  = 144
-          track                            = "TRACK1"
-          metric                           = 10
-        }
-      ]
       nexthop_addresses = [
         {
           address                          = "3::3"
           bfd_fast_detect_minimum_interval = 100
           bfd_fast_detect_multiplier       = 3
           description                      = "ip-description"
-          tag                              = 104
           distance_metric                  = 155
-          track                            = "TRACK1"
           metric                           = 10
+          tag                              = 104
+          track                            = "TRACK1"
+        }
+      ]
+      nexthop_interface_addresses = [
+        {
+          address                          = "2::2"
+          bfd_fast_detect_minimum_interval = 100
+          bfd_fast_detect_multiplier       = 3
+          description                      = "interface-description"
+          distance_metric                  = 144
+          interface_name                   = "GigabitEthernet0/0/0/4"
+          metric                           = 10
+          tag                              = 103
+          track                            = "TRACK1"
+        }
+      ]
+      nexthop_interfaces = [
+        {
+          description     = "interface-description"
+          distance_metric = 122
+          interface_name  = "GigabitEthernet0/0/0/3"
+          metric          = 10
+          permanent       = true
+          tag             = 100
         }
       ]
       sr_policies = [
         {
-          sr_policy_name  = "sr_te_policy_1"
           description     = "interface-description"
-          tag             = 103
           distance_metric = 144
-          track           = "TRACK1"
           metric          = 10
+          sr_policy_name  = "sr_te_policy_1"
+          tag             = 103
+          track           = "TRACK1"
         }
       ]
+      vrf_name = "VRF1"
     }
   ]
 }

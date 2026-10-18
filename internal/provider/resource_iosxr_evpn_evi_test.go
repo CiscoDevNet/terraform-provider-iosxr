@@ -67,11 +67,11 @@ func TestAccIosxrEVPNEVI(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrEVPNEVIPrerequisitesConfig + testAccIosxrEVPNEVIConfig_minimum(),
+			Config: testAccIosxrEVPNEVIPrerequisitesConfig() + testAccIosxrEVPNEVIConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrEVPNEVIPrerequisitesConfig + testAccIosxrEVPNEVIConfig_all(),
+		Config: testAccIosxrEVPNEVIPrerequisitesConfig() + testAccIosxrEVPNEVIConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -103,7 +103,7 @@ func iosxrEVPNEVIImportStateIdFunc(resourceName string) resource.ImportStateIdFu
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrEVPNEVIPrerequisitesConfig = `
+const testAccIosxrEVPNEVIPrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]"
 	attributes = {
@@ -120,6 +120,15 @@ resource "iosxr_yang" "PreReq1" {
 
 `
 
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccIosxrEVPNEVIPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccIosxrEVPNEVIPrerequisitesConfig_V24_4,
+		},
+	)
+}
+
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
@@ -127,7 +136,9 @@ resource "iosxr_yang" "PreReq1" {
 func testAccIosxrEVPNEVIConfig_minimum() string {
 	config := `resource "iosxr_evpn_evi" "test" {` + "\n"
 	config += `	vpn_id = 101` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -171,7 +182,9 @@ func testAccIosxrEVPNEVIConfig_all() string {
 	config += `	etree_rt_leaf = true` + "\n"
 	config += `	vpws_single_active_backup_suppression = true` + "\n"
 	config += `	bvi_coupled_mode = true` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }

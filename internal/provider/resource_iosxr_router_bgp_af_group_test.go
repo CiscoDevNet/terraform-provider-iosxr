@@ -70,14 +70,20 @@ func TestAccIosxrRouterBGPAFGroup(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_af_group.test", "accept_own", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_af_group.test", "slow_peer_dynamic", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_af_group.test", "slow_peer_dynamic_threshold", "260"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_af_group.test", "default_policy_action_in", "accept"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_af_group.test", "default_policy_action_out", "accept"))
+	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterBGPAFGroupPrerequisitesConfig + testAccIosxrRouterBGPAFGroupConfig_minimum(),
+			Config: testAccIosxrRouterBGPAFGroupPrerequisitesConfig() + testAccIosxrRouterBGPAFGroupConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterBGPAFGroupPrerequisitesConfig + testAccIosxrRouterBGPAFGroupConfig_all(),
+		Config: testAccIosxrRouterBGPAFGroupPrerequisitesConfig() + testAccIosxrRouterBGPAFGroupConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -111,7 +117,7 @@ func iosxrRouterBGPAFGroupImportStateIdFunc(resourceName string) resource.Import
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrRouterBGPAFGroupPrerequisitesConfig = `
+const testAccIosxrRouterBGPAFGroupPrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
@@ -178,6 +184,15 @@ resource "iosxr_yang" "PreReq3" {
 
 `
 
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccIosxrRouterBGPAFGroupPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccIosxrRouterBGPAFGroupPrerequisitesConfig_V24_4,
+		},
+	)
+}
+
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
@@ -188,7 +203,9 @@ func testAccIosxrRouterBGPAFGroupConfig_minimum() string {
 	config += `	af_group_name = "AFGROUP1"` + "\n"
 	config += `	af_name = "vpnv4-unicast"` + "\n"
 	config += `	weight = 100` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -236,7 +253,15 @@ func testAccIosxrRouterBGPAFGroupConfig_all() string {
 	config += `	accept_own = true` + "\n"
 	config += `	slow_peer_dynamic = true` + "\n"
 	config += `	slow_peer_dynamic_threshold = 260` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, ]` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	default_policy_action_in = "accept"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	default_policy_action_out = "accept"` + "\n"
+	}
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, iosxr_yang.PreReq2, iosxr_yang.PreReq3, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }

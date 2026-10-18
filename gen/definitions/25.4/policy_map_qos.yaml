@@ -1,0 +1,31 @@
+---
+name: Policy Map QoS
+path: Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=%s]
+doc_category: QoS
+attributes:
+  - yang_name: class
+    tf_name: classes
+    type: List
+    attributes:
+      # ===========================================================
+      # ADDITIONS — new in 25.4 (ipencap-cos set action)
+      # ===========================================================
+      - yang_name: police/conform-action/set/ipencap-cos
+        tf_name: police_conform_action_set_ipencap_cos
+        test_tags: [C8000]
+        exclude_test: true
+        example: 5
+      - yang_name: police/exceed-action/set/ipencap-cos
+        tf_name: police_exceed_action_set_ipencap_cos
+        test_tags: [C8000]
+        exclude_test: true
+        example: 5
+      - yang_name: police/violate-action/set/ipencap-cos
+        tf_name: police_violate_action_set_ipencap_cos
+        test_tags: [C8000]
+        exclude_test: true
+        example: 5
+      - yang_name: set/ipencap-cos
+        tf_name: set_ipencap_cos
+        exclude_test: true
+        example: 5

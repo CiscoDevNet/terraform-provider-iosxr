@@ -1,0 +1,25 @@
+---
+name: Interface Ethernet Subinterface
+path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s%s]
+doc_category: Interface
+attributes:
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/solicited-ra
+    tf_name: ipv6_nd_solicited_ra
+    example: unicast
+  - yang_name: ipv6/Cisco-IOS-XR-um-ipv6-nd-cfg:nd/unsolicited-ra/disable
+    tf_name: ipv6_nd_unsolicited_ra_disable
+    example: true
+  # ptp monitor-sender/receiver — new in 25.4
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-sender
+    tf_name: ptp_monitor_sender
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-ptp-cfg:ptp/monitor-receiver
+    tf_name: ptp_monitor_receiver
+    test_tags: [NCS, C8000]
+    include_example: true
+    example: true

@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"sort"
 	"strconv"
@@ -190,7 +191,7 @@ func (data SegmentRoutingTEOnDemandColorData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data SegmentRoutingTEOnDemandColor) toBody(ctx context.Context) string {
+func (data SegmentRoutingTEOnDemandColor) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.Color.IsNull() && !data.Color.IsUnknown() {
 		body, _ = sjson.Set(body, "color", strconv.FormatInt(data.Color.ValueInt64(), 10))
@@ -336,13 +337,13 @@ func (data SegmentRoutingTEOnDemandColor) toBody(ctx context.Context) string {
 		body, _ = sjson.Set(body, "effective-metric.metric-value-type.metric-type", data.EffectiveMetricType.ValueString())
 	}
 	if !data.Srv6LocatorName.IsNull() && !data.Srv6LocatorName.IsUnknown() {
-		body, _ = sjson.Set(body, "srv6.locator.locator-name", data.Srv6LocatorName.ValueString())
+		body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "srv6.locator.locator-name", "26.2": "srv6-options.locator.locator-name"}, "srv6.locator.locator-name"), data.Srv6LocatorName.ValueString())
 	}
 	if !data.Srv6LocatorBindingSidType.IsNull() && !data.Srv6LocatorBindingSidType.IsUnknown() {
-		body, _ = sjson.Set(body, "srv6.locator.binding-sid-type", data.Srv6LocatorBindingSidType.ValueString())
+		body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "srv6.locator.binding-sid-type", "26.2": "srv6-options.locator.binding-sid-type"}, "srv6.locator.binding-sid-type"), data.Srv6LocatorBindingSidType.ValueString())
 	}
 	if !data.Srv6LocatorBehavior.IsNull() && !data.Srv6LocatorBehavior.IsUnknown() {
-		body, _ = sjson.Set(body, "srv6.locator.behavior", data.Srv6LocatorBehavior.ValueString())
+		body, _ = sjson.Set(body, helpers.SelectYangPath(providerVersion, map[string]string{"24.4": "srv6.locator.behavior", "26.2": "srv6-options.locator.behavior"}, "srv6.locator.behavior"), data.Srv6LocatorBehavior.ValueString())
 	}
 	if len(data.DynamicAffinityRules) > 0 {
 		body, _ = sjson.Set(body, "on-demand-color-dyn-mpls.affinity-rules.affinity-rule", []interface{}{})
@@ -351,6 +352,7 @@ func (data SegmentRoutingTEOnDemandColor) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "on-demand-color-dyn-mpls.affinity-rules.affinity-rule"+"."+strconv.Itoa(index)+"."+"rule", item.AffinityType.ValueString())
 			}
 			if len(item.Affinities) > 0 {
+				body, _ = sjson.Set(body, "on-demand-color-dyn-mpls.affinity-rules.affinity-rule"+"."+strconv.Itoa(index)+"."+"affinity-name", []interface{}{})
 				for cindex, citem := range item.Affinities {
 					if !citem.AffinityName.IsNull() && !citem.AffinityName.IsUnknown() {
 						body, _ = sjson.Set(body, "on-demand-color-dyn-mpls.affinity-rules.affinity-rule"+"."+strconv.Itoa(index)+"."+"affinity-name"+"."+strconv.Itoa(cindex)+"."+"affinity-name", citem.AffinityName.ValueString())
@@ -389,73 +391,132 @@ func (data SegmentRoutingTEOnDemandColor) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *SegmentRoutingTEOnDemandColor) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-anycast"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.DynamicAnycastSidInclusion.IsNull() {
-			data.DynamicAnycastSidInclusion = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.DynamicAnycastSidInclusion.IsNull() {
-			data.DynamicAnycastSidInclusion = types.BoolNull()
-		}
+// GetVersionConstraints returns the version constraints for all fields
+func (data SegmentRoutingTEOnDemandColor) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
 	}
-	if value := res.Get("on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-type"); value.Exists() && !data.DynamicMetricType.IsNull() {
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data SegmentRoutingTEOnDemandColor) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data SegmentRoutingTEOnDemandColor) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return []helpers.FieldEnumConstraint{
+		{
+			FieldPath: "srv6_locator_behavior",
+			VersionEnums: map[string][]string{
+				"24.4": {"ub6-encaps-reduced", "ub6-insert-reduced"},
+				"26.2": {"ub6-encaps-reduced", "ub6-insert-reduced", "ub6-psp-usd-encaps-reduced", "ub6-psp-usd-insert-reduced"},
+			},
+		},
+	}
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data SegmentRoutingTEOnDemandColor) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data SegmentRoutingTEOnDemandColor) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *SegmentRoutingTEOnDemandColor) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-anycast"); !data.DynamicAnycastSidInclusion.IsNull() {
+		if value.Exists() {
+			data.DynamicAnycastSidInclusion = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.DynamicAnycastSidInclusion = types.BoolValue(false)
+		}
+	} else if data.DynamicAnycastSidInclusion.IsNull() {
+		data.DynamicAnycastSidInclusion = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DynamicMetricType.IsNull() {
 		data.DynamicMetricType = types.StringValue(value.String())
 	} else if data.DynamicMetricType.IsNull() {
 		data.DynamicMetricType = types.StringNull()
 	}
-	if value := res.Get("on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-margin.value-type"); value.Exists() && !data.DynamicMetricMarginType.IsNull() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-margin.value-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DynamicMetricMarginType.IsNull() {
 		data.DynamicMetricMarginType = types.StringValue(value.String())
 	} else if data.DynamicMetricMarginType.IsNull() {
 		data.DynamicMetricMarginType = types.StringNull()
 	}
-	if value := res.Get("on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-margin.absolute-value"); value.Exists() && !data.DynamicMetricMarginAbsolute.IsNull() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-margin.absolute-value"); value.Exists() && !data.DynamicMetricMarginAbsolute.IsNull() {
 		data.DynamicMetricMarginAbsolute = types.Int64Value(value.Int())
 	} else if data.DynamicMetricMarginAbsolute.IsNull() {
 		data.DynamicMetricMarginAbsolute = types.Int64Null()
 	}
-	if value := res.Get("on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-margin.relative-value"); value.Exists() && !data.DynamicMetricMarginRelative.IsNull() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-margin.relative-value"); value.Exists() && !data.DynamicMetricMarginRelative.IsNull() {
 		data.DynamicMetricMarginRelative = types.Int64Value(value.Int())
 	} else if data.DynamicMetricMarginRelative.IsNull() {
 		data.DynamicMetricMarginRelative = types.Int64Null()
 	}
-	if value := res.Get("on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-pce"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.DynamicPcep.IsNull() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-pce"); !data.DynamicPcep.IsNull() {
+		if value.Exists() {
 			data.DynamicPcep = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.DynamicPcep = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.DynamicPcep.IsNull() {
-			data.DynamicPcep = types.BoolNull()
-		}
+	} else if data.DynamicPcep.IsNull() {
+		data.DynamicPcep = types.BoolNull()
 	}
-	if value := res.Get("on-demand-color-dyn-mpls.disjoint-path.group-id"); value.Exists() && !data.DynamicDisjointPathGroupId.IsNull() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.disjoint-path.group-id"); value.Exists() && !data.DynamicDisjointPathGroupId.IsNull() {
 		data.DynamicDisjointPathGroupId = types.Int64Value(value.Int())
 	} else if data.DynamicDisjointPathGroupId.IsNull() {
 		data.DynamicDisjointPathGroupId = types.Int64Null()
 	}
-	if value := res.Get("on-demand-color-dyn-mpls.disjoint-path.disjointness-type"); value.Exists() && !data.DynamicDisjointPathType.IsNull() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.disjoint-path.disjointness-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DynamicDisjointPathType.IsNull() {
 		data.DynamicDisjointPathType = types.StringValue(value.String())
 	} else if data.DynamicDisjointPathType.IsNull() {
 		data.DynamicDisjointPathType = types.StringNull()
 	}
-	if value := res.Get("on-demand-color-dyn-mpls.disjoint-path.sub-id"); value.Exists() && !data.DynamicDisjointPathSubId.IsNull() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.disjoint-path.sub-id"); value.Exists() && !data.DynamicDisjointPathSubId.IsNull() {
 		data.DynamicDisjointPathSubId = types.Int64Value(value.Int())
 	} else if data.DynamicDisjointPathSubId.IsNull() {
 		data.DynamicDisjointPathSubId = types.Int64Null()
 	}
-	if value := res.Get("on-demand-color-dyn-mpls.disjoint-path.shortest-path"); value.Exists() {
-		data.DynamicDisjointPathShortestPath = types.BoolValue(value.Bool())
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.disjoint-path.shortest-path"); !data.DynamicDisjointPathShortestPath.IsNull() {
+		if value.Exists() && (value.Type == gjson.True || value.Type == gjson.False) {
+			data.DynamicDisjointPathShortestPath = types.BoolValue(value.Bool())
+		}
 	} else if data.DynamicDisjointPathShortestPath.IsNull() {
 		data.DynamicDisjointPathShortestPath = types.BoolNull()
 	}
-	if value := res.Get("on-demand-color-dyn-mpls.disjoint-path.fallback-disable"); value.Exists() {
-		data.DynamicDisjointPathFallbackDisable = types.BoolValue(value.Bool())
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.disjoint-path.fallback-disable"); !data.DynamicDisjointPathFallbackDisable.IsNull() {
+		if value.Exists() && (value.Type == gjson.True || value.Type == gjson.False) {
+			data.DynamicDisjointPathFallbackDisable = types.BoolValue(value.Bool())
+		}
 	} else if data.DynamicDisjointPathFallbackDisable.IsNull() {
 		data.DynamicDisjointPathFallbackDisable = types.BoolNull()
 	}
@@ -464,7 +525,7 @@ func (data *SegmentRoutingTEOnDemandColor) updateFromBody(ctx context.Context, r
 		keyValues := [...]string{data.DynamicAffinityRules[i].AffinityType.ValueString()}
 
 		var r gjson.Result
-		res.Get("on-demand-color-dyn-mpls.affinity-rules.affinity-rule").ForEach(
+		gjson.GetBytes(res, "on-demand-color-dyn-mpls.affinity-rules.affinity-rule").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -482,7 +543,7 @@ func (data *SegmentRoutingTEOnDemandColor) updateFromBody(ctx context.Context, r
 				return true
 			},
 		)
-		if value := r.Get("rule"); value.Exists() && !data.DynamicAffinityRules[i].AffinityType.IsNull() {
+		if value := r.Get("rule"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DynamicAffinityRules[i].AffinityType.IsNull() {
 			data.DynamicAffinityRules[i].AffinityType = types.StringValue(value.String())
 		} else {
 			data.DynamicAffinityRules[i].AffinityType = types.StringNull()
@@ -510,7 +571,7 @@ func (data *SegmentRoutingTEOnDemandColor) updateFromBody(ctx context.Context, r
 					return true
 				},
 			)
-			if value := cr.Get("affinity-name"); value.Exists() && !data.DynamicAffinityRules[i].Affinities[ci].AffinityName.IsNull() {
+			if value := cr.Get("affinity-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DynamicAffinityRules[i].Affinities[ci].AffinityName.IsNull() {
 				data.DynamicAffinityRules[i].Affinities[ci].AffinityName = types.StringValue(value.String())
 			} else {
 				data.DynamicAffinityRules[i].Affinities[ci].AffinityName = types.StringNull()
@@ -522,7 +583,7 @@ func (data *SegmentRoutingTEOnDemandColor) updateFromBody(ctx context.Context, r
 		keyValues := [...]string{data.DynamicBounds[i].Type.ValueString(), data.DynamicBounds[i].MetricType.ValueString()}
 
 		var r gjson.Result
-		res.Get("on-demand-color-dyn-mpls.bounds.bounds.bound").ForEach(
+		gjson.GetBytes(res, "on-demand-color-dyn-mpls.bounds.bounds.bound").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -540,12 +601,12 @@ func (data *SegmentRoutingTEOnDemandColor) updateFromBody(ctx context.Context, r
 				return true
 			},
 		)
-		if value := r.Get("scope-type"); value.Exists() && !data.DynamicBounds[i].Type.IsNull() {
+		if value := r.Get("scope-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DynamicBounds[i].Type.IsNull() {
 			data.DynamicBounds[i].Type = types.StringValue(value.String())
 		} else {
 			data.DynamicBounds[i].Type = types.StringNull()
 		}
-		if value := r.Get("metric-type"); value.Exists() && !data.DynamicBounds[i].MetricType.IsNull() {
+		if value := r.Get("metric-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DynamicBounds[i].MetricType.IsNull() {
 			data.DynamicBounds[i].MetricType = types.StringValue(value.String())
 		} else {
 			data.DynamicBounds[i].MetricType = types.StringNull()
@@ -556,112 +617,107 @@ func (data *SegmentRoutingTEOnDemandColor) updateFromBody(ctx context.Context, r
 			data.DynamicBounds[i].Value = types.Int64Null()
 		}
 	}
-	if value := res.Get("constraint.segments.protection-type"); value.Exists() && !data.ConstraintSegmentsProtectionType.IsNull() {
+	if value := gjson.GetBytes(res, "constraint.segments.protection-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ConstraintSegmentsProtectionType.IsNull() {
 		data.ConstraintSegmentsProtectionType = types.StringValue(value.String())
 	} else if data.ConstraintSegmentsProtectionType.IsNull() {
 		data.ConstraintSegmentsProtectionType = types.StringNull()
 	}
-	if value := res.Get("constraint.segments.sid-algorithm"); value.Exists() && !data.ConstraintSegmentsSidAlgorithm.IsNull() {
+	if value := gjson.GetBytes(res, "constraint.segments.sid-algorithm"); value.Exists() && !data.ConstraintSegmentsSidAlgorithm.IsNull() {
 		data.ConstraintSegmentsSidAlgorithm = types.Int64Value(value.Int())
 	} else if data.ConstraintSegmentsSidAlgorithm.IsNull() {
 		data.ConstraintSegmentsSidAlgorithm = types.Int64Null()
 	}
-	if value := res.Get("steering.labeled-services.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SteeringLabeledServicesDisable.IsNull() {
+	if value := gjson.GetBytes(res, "steering.labeled-services.disable"); !data.SteeringLabeledServicesDisable.IsNull() {
+		if value.Exists() {
 			data.SteeringLabeledServicesDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SteeringLabeledServicesDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SteeringLabeledServicesDisable.IsNull() {
-			data.SteeringLabeledServicesDisable = types.BoolNull()
-		}
+	} else if data.SteeringLabeledServicesDisable.IsNull() {
+		data.SteeringLabeledServicesDisable = types.BoolNull()
 	}
-	if value := res.Get("steering.invalidation-drop"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SteeringInvalidationDrop.IsNull() {
+	if value := gjson.GetBytes(res, "steering.invalidation-drop"); !data.SteeringInvalidationDrop.IsNull() {
+		if value.Exists() {
 			data.SteeringInvalidationDrop = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SteeringInvalidationDrop = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SteeringInvalidationDrop.IsNull() {
-			data.SteeringInvalidationDrop = types.BoolNull()
-		}
+	} else if data.SteeringInvalidationDrop.IsNull() {
+		data.SteeringInvalidationDrop = types.BoolNull()
 	}
-	if value := res.Get("bandwidth"); value.Exists() && !data.Bandwidth.IsNull() {
+	if value := gjson.GetBytes(res, "bandwidth"); value.Exists() && !data.Bandwidth.IsNull() {
 		data.Bandwidth = types.Int64Value(value.Int())
 	} else if data.Bandwidth.IsNull() {
 		data.Bandwidth = types.Int64Null()
 	}
-	if value := res.Get("max-install-standby-c-paths"); value.Exists() && !data.MaxInstallStandbyPaths.IsNull() {
+	if value := gjson.GetBytes(res, "max-install-standby-c-paths"); value.Exists() && !data.MaxInstallStandbyPaths.IsNull() {
 		data.MaxInstallStandbyPaths = types.Int64Value(value.Int())
 	} else if data.MaxInstallStandbyPaths.IsNull() {
 		data.MaxInstallStandbyPaths = types.Int64Null()
 	}
-	if value := res.Get("performance-measurement.delay-measurement.delay-profile.pm-profile-name"); value.Exists() && !data.PerformanceMeasurementDelayProfile.IsNull() {
+	if value := gjson.GetBytes(res, "performance-measurement.delay-measurement.delay-profile.pm-profile-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PerformanceMeasurementDelayProfile.IsNull() {
 		data.PerformanceMeasurementDelayProfile = types.StringValue(value.String())
 	} else if data.PerformanceMeasurementDelayProfile.IsNull() {
 		data.PerformanceMeasurementDelayProfile = types.StringNull()
 	}
-	if value := res.Get("performance-measurement.delay-measurement.delay-measurement-logging.delay-exceeded"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.PerformanceMeasurementDelayLoggingDelayExceeded.IsNull() {
+	if value := gjson.GetBytes(res, "performance-measurement.delay-measurement.delay-measurement-logging.delay-exceeded"); !data.PerformanceMeasurementDelayLoggingDelayExceeded.IsNull() {
+		if value.Exists() {
 			data.PerformanceMeasurementDelayLoggingDelayExceeded = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.PerformanceMeasurementDelayLoggingDelayExceeded = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.PerformanceMeasurementDelayLoggingDelayExceeded.IsNull() {
-			data.PerformanceMeasurementDelayLoggingDelayExceeded = types.BoolNull()
-		}
+	} else if data.PerformanceMeasurementDelayLoggingDelayExceeded.IsNull() {
+		data.PerformanceMeasurementDelayLoggingDelayExceeded = types.BoolNull()
 	}
-	if value := res.Get("performance-measurement.pm-liveness-detection.liveness-profile.pm-profile-name"); value.Exists() && !data.PerformanceMeasurementLivenessProfile.IsNull() {
+	if value := gjson.GetBytes(res, "performance-measurement.pm-liveness-detection.liveness-profile.pm-profile-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PerformanceMeasurementLivenessProfile.IsNull() {
 		data.PerformanceMeasurementLivenessProfile = types.StringValue(value.String())
 	} else if data.PerformanceMeasurementLivenessProfile.IsNull() {
 		data.PerformanceMeasurementLivenessProfile = types.StringNull()
 	}
-	if value := res.Get("performance-measurement.pm-liveness-detection.liveness-profile.backup.pm-profile-name"); value.Exists() && !data.PerformanceMeasurementLivenessBackupProfile.IsNull() {
+	if value := gjson.GetBytes(res, "performance-measurement.pm-liveness-detection.liveness-profile.backup.pm-profile-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PerformanceMeasurementLivenessBackupProfile.IsNull() {
 		data.PerformanceMeasurementLivenessBackupProfile = types.StringValue(value.String())
 	} else if data.PerformanceMeasurementLivenessBackupProfile.IsNull() {
 		data.PerformanceMeasurementLivenessBackupProfile = types.StringNull()
 	}
-	if value := res.Get("performance-measurement.pm-liveness-detection.pm-liveness-detection-logging.pm-liveness-session-state-change"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() {
+	if value := gjson.GetBytes(res, "performance-measurement.pm-liveness-detection.pm-liveness-detection-logging.pm-liveness-session-state-change"); !data.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() {
+		if value.Exists() {
 			data.PerformanceMeasurementLivenessLoggingSessionStateChange = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.PerformanceMeasurementLivenessLoggingSessionStateChange = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() {
-			data.PerformanceMeasurementLivenessLoggingSessionStateChange = types.BoolNull()
-		}
+	} else if data.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() {
+		data.PerformanceMeasurementLivenessLoggingSessionStateChange = types.BoolNull()
 	}
-	if value := res.Get("performance-measurement.pm-liveness-detection.pm-liveness-invalidation-action"); value.Exists() && !data.PerformanceMeasurementLivenessInvalidationAction.IsNull() {
+	if value := gjson.GetBytes(res, "performance-measurement.pm-liveness-detection.pm-liveness-invalidation-action"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PerformanceMeasurementLivenessInvalidationAction.IsNull() {
 		data.PerformanceMeasurementLivenessInvalidationAction = types.StringValue(value.String())
 	} else if data.PerformanceMeasurementLivenessInvalidationAction.IsNull() {
 		data.PerformanceMeasurementLivenessInvalidationAction = types.StringNull()
 	}
-	if value := res.Get("performance-measurement.pm-reverse-path.segment-list-name"); value.Exists() && !data.PerformanceMeasurementReversePathSegmentList.IsNull() {
+	if value := gjson.GetBytes(res, "performance-measurement.pm-reverse-path.segment-list-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PerformanceMeasurementReversePathSegmentList.IsNull() {
 		data.PerformanceMeasurementReversePathSegmentList = types.StringValue(value.String())
 	} else if data.PerformanceMeasurementReversePathSegmentList.IsNull() {
 		data.PerformanceMeasurementReversePathSegmentList = types.StringNull()
 	}
-	if value := res.Get("performance-measurement.pm-reverse-path.label"); value.Exists() && !data.PerformanceMeasurementReversePathLabel.IsNull() {
+	if value := gjson.GetBytes(res, "performance-measurement.pm-reverse-path.label"); value.Exists() && !data.PerformanceMeasurementReversePathLabel.IsNull() {
 		data.PerformanceMeasurementReversePathLabel = types.Int64Value(value.Int())
 	} else if data.PerformanceMeasurementReversePathLabel.IsNull() {
 		data.PerformanceMeasurementReversePathLabel = types.Int64Null()
 	}
-	if value := res.Get("per-flow"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.PerFlow.IsNull() {
+	if value := gjson.GetBytes(res, "per-flow"); !data.PerFlow.IsNull() {
+		if value.Exists() {
 			data.PerFlow = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.PerFlow = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.PerFlow.IsNull() {
-			data.PerFlow = types.BoolNull()
-		}
+	} else if data.PerFlow.IsNull() {
+		data.PerFlow = types.BoolNull()
 	}
-	if value := res.Get("per-flow.default-forward-class"); value.Exists() && !data.PerFlowForwardClassDefault.IsNull() {
+	if value := gjson.GetBytes(res, "per-flow.default-forward-class"); value.Exists() && !data.PerFlowForwardClassDefault.IsNull() {
 		data.PerFlowForwardClassDefault = types.Int64Value(value.Int())
 	} else if data.PerFlowForwardClassDefault.IsNull() {
 		data.PerFlowForwardClassDefault = types.Int64Null()
@@ -671,7 +727,7 @@ func (data *SegmentRoutingTEOnDemandColor) updateFromBody(ctx context.Context, r
 		keyValues := [...]string{strconv.FormatInt(data.PerFlowForwardClasses[i].ForwardClass.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("per-flow.forward-class-and-colors.forward-class-and-color").ForEach(
+		gjson.GetBytes(res, "per-flow.forward-class-and-colors.forward-class-and-color").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -700,100 +756,97 @@ func (data *SegmentRoutingTEOnDemandColor) updateFromBody(ctx context.Context, r
 			data.PerFlowForwardClasses[i].Color = types.Int64Null()
 		}
 	}
-	if value := res.Get("maximum-sid-depth"); value.Exists() && !data.MaximumSidDepth.IsNull() {
+	if value := gjson.GetBytes(res, "maximum-sid-depth"); value.Exists() && !data.MaximumSidDepth.IsNull() {
 		data.MaximumSidDepth = types.Int64Value(value.Int())
 	} else if data.MaximumSidDepth.IsNull() {
 		data.MaximumSidDepth = types.Int64Null()
 	}
-	if value := res.Get("bfd"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.BfdEnable.IsNull() {
+	if value := gjson.GetBytes(res, "bfd"); !data.BfdEnable.IsNull() {
+		if value.Exists() {
 			data.BfdEnable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.BfdEnable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.BfdEnable.IsNull() {
-			data.BfdEnable = types.BoolNull()
-		}
+	} else if data.BfdEnable.IsNull() {
+		data.BfdEnable = types.BoolNull()
 	}
-	if value := res.Get("bfd.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.BfdDisable.IsNull() {
+	if value := gjson.GetBytes(res, "bfd.disable"); !data.BfdDisable.IsNull() {
+		if value.Exists() {
 			data.BfdDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.BfdDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.BfdDisable.IsNull() {
-			data.BfdDisable = types.BoolNull()
-		}
+	} else if data.BfdDisable.IsNull() {
+		data.BfdDisable = types.BoolNull()
 	}
-	if value := res.Get("bfd.multiplier"); value.Exists() && !data.BfdMultiplier.IsNull() {
+	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() && !data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	} else if data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Null()
 	}
-	if value := res.Get("bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
+	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	} else if data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Null()
 	}
-	if value := res.Get("bfd.invalidation-action"); value.Exists() && !data.BfdInvalidationAction.IsNull() {
+	if value := gjson.GetBytes(res, "bfd.invalidation-action"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.BfdInvalidationAction.IsNull() {
 		data.BfdInvalidationAction = types.StringValue(value.String())
 	} else if data.BfdInvalidationAction.IsNull() {
 		data.BfdInvalidationAction = types.StringNull()
 	}
-	if value := res.Get("bfd.reverse-path.binding-label"); value.Exists() && !data.BfdReversePathBindingLabel.IsNull() {
+	if value := gjson.GetBytes(res, "bfd.reverse-path.binding-label"); value.Exists() && !data.BfdReversePathBindingLabel.IsNull() {
 		data.BfdReversePathBindingLabel = types.Int64Value(value.Int())
 	} else if data.BfdReversePathBindingLabel.IsNull() {
 		data.BfdReversePathBindingLabel = types.Int64Null()
 	}
-	if value := res.Get("bfd.bfd-logging.session-state-change"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.BfdLoggingSessionStateChange.IsNull() {
+	if value := gjson.GetBytes(res, "bfd.bfd-logging.session-state-change"); !data.BfdLoggingSessionStateChange.IsNull() {
+		if value.Exists() {
 			data.BfdLoggingSessionStateChange = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.BfdLoggingSessionStateChange = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.BfdLoggingSessionStateChange.IsNull() {
-			data.BfdLoggingSessionStateChange = types.BoolNull()
-		}
+	} else if data.BfdLoggingSessionStateChange.IsNull() {
+		data.BfdLoggingSessionStateChange = types.BoolNull()
 	}
-	if value := res.Get("pce-group"); value.Exists() && !data.PceGroup.IsNull() {
+	if value := gjson.GetBytes(res, "pce-group"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PceGroup.IsNull() {
 		data.PceGroup = types.StringValue(value.String())
 	} else if data.PceGroup.IsNull() {
 		data.PceGroup = types.StringNull()
 	}
-	if value := res.Get("source-address.ip-address-type"); value.Exists() && !data.SourceAddressType.IsNull() {
+	if value := gjson.GetBytes(res, "source-address.ip-address-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SourceAddressType.IsNull() {
 		data.SourceAddressType = types.StringValue(value.String())
 	} else if data.SourceAddressType.IsNull() {
 		data.SourceAddressType = types.StringNull()
 	}
-	if value := res.Get("source-address.source-address"); value.Exists() && !data.SourceAddress.IsNull() {
+	if value := gjson.GetBytes(res, "source-address.source-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SourceAddress.IsNull() {
 		data.SourceAddress = types.StringValue(value.String())
 	} else if data.SourceAddress.IsNull() {
 		data.SourceAddress = types.StringNull()
 	}
-	if value := res.Get("effective-metric.metric-value-type.metric-value"); value.Exists() && !data.EffectiveMetricValue.IsNull() {
+	if value := gjson.GetBytes(res, "effective-metric.metric-value-type.metric-value"); value.Exists() && !data.EffectiveMetricValue.IsNull() {
 		data.EffectiveMetricValue = types.Int64Value(value.Int())
 	} else if data.EffectiveMetricValue.IsNull() {
 		data.EffectiveMetricValue = types.Int64Null()
 	}
-	if value := res.Get("effective-metric.metric-value-type.metric-type"); value.Exists() && !data.EffectiveMetricType.IsNull() {
+	if value := gjson.GetBytes(res, "effective-metric.metric-value-type.metric-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.EffectiveMetricType.IsNull() {
 		data.EffectiveMetricType = types.StringValue(value.String())
 	} else if data.EffectiveMetricType.IsNull() {
 		data.EffectiveMetricType = types.StringNull()
 	}
-	if value := res.Get("srv6.locator.locator-name"); value.Exists() && !data.Srv6LocatorName.IsNull() {
+	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "srv6.locator.locator-name", "26.2": "srv6-options.locator.locator-name"}, "srv6.locator.locator-name")); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Srv6LocatorName.IsNull() {
 		data.Srv6LocatorName = types.StringValue(value.String())
 	} else if data.Srv6LocatorName.IsNull() {
 		data.Srv6LocatorName = types.StringNull()
 	}
-	if value := res.Get("srv6.locator.binding-sid-type"); value.Exists() && !data.Srv6LocatorBindingSidType.IsNull() {
+	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "srv6.locator.binding-sid-type", "26.2": "srv6-options.locator.binding-sid-type"}, "srv6.locator.binding-sid-type")); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Srv6LocatorBindingSidType.IsNull() {
 		data.Srv6LocatorBindingSidType = types.StringValue(value.String())
 	} else if data.Srv6LocatorBindingSidType.IsNull() {
 		data.Srv6LocatorBindingSidType = types.StringNull()
 	}
-	if value := res.Get("srv6.locator.behavior"); value.Exists() && !data.Srv6LocatorBehavior.IsNull() {
+	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "srv6.locator.behavior", "26.2": "srv6-options.locator.behavior"}, "srv6.locator.behavior")); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Srv6LocatorBehavior.IsNull() {
 		data.Srv6LocatorBehavior = types.StringValue(value.String())
 	} else if data.Srv6LocatorBehavior.IsNull() {
 		data.Srv6LocatorBehavior = types.StringNull()
@@ -804,72 +857,64 @@ func (data *SegmentRoutingTEOnDemandColor) updateFromBody(ctx context.Context, r
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *SegmentRoutingTEOnDemandColor) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-anycast"); value.Exists() {
+func (data *SegmentRoutingTEOnDemandColor) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-anycast"); value.Exists() {
 		data.DynamicAnycastSidInclusion = types.BoolValue(true)
 	} else if !data.DynamicAnycastSidInclusion.IsNull() {
 		// Only set to false if it was previously set in state
 		data.DynamicAnycastSidInclusion = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.DynamicMetricType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-margin.value-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-margin.value-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.DynamicMetricMarginType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-margin.absolute-value"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-margin.absolute-value"); value.Exists() {
 		data.DynamicMetricMarginAbsolute = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-margin.relative-value"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-margin.relative-value"); value.Exists() {
 		data.DynamicMetricMarginRelative = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-pce"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-pce"); value.Exists() {
 		data.DynamicPcep = types.BoolValue(true)
 	} else if !data.DynamicPcep.IsNull() {
 		// Only set to false if it was previously set in state
 		data.DynamicPcep = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.disjoint-path.group-id"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.disjoint-path.group-id"); value.Exists() {
 		data.DynamicDisjointPathGroupId = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.disjoint-path.disjointness-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.disjoint-path.disjointness-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.DynamicDisjointPathType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.disjoint-path.sub-id"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.disjoint-path.sub-id"); value.Exists() {
 		data.DynamicDisjointPathSubId = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.disjoint-path.shortest-path"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.disjoint-path.shortest-path"); value.Exists() && (value.Type == gjson.True || value.Type == gjson.False) {
 		data.DynamicDisjointPathShortestPath = types.BoolValue(value.Bool())
 	} else if !data.DynamicDisjointPathShortestPath.IsNull() {
 		// Only set to false if it was previously set in state
 		data.DynamicDisjointPathShortestPath = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.disjoint-path.fallback-disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.disjoint-path.fallback-disable"); value.Exists() && (value.Type == gjson.True || value.Type == gjson.False) {
 		data.DynamicDisjointPathFallbackDisable = types.BoolValue(value.Bool())
 	} else if !data.DynamicDisjointPathFallbackDisable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.DynamicDisjointPathFallbackDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.affinity-rules.affinity-rule"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.affinity-rules.affinity-rule"); value.Exists() {
 		data.DynamicAffinityRules = make([]SegmentRoutingTEOnDemandColorDynamicAffinityRules, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SegmentRoutingTEOnDemandColorDynamicAffinityRules{}
-			if cValue := v.Get("rule"); cValue.Exists() {
+			if cValue := v.Get("rule"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.AffinityType = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("affinity-name"); cValue.Exists() {
 				item.Affinities = make([]SegmentRoutingTEOnDemandColorDynamicAffinityRulesAffinities, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := SegmentRoutingTEOnDemandColorDynamicAffinityRulesAffinities{}
-					if ccValue := cv.Get("affinity-name"); ccValue.Exists() {
+					if ccValue := cv.Get("affinity-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
 						cItem.AffinityName = types.StringValue(ccValue.String())
 					}
 					item.Affinities = append(item.Affinities, cItem)
@@ -880,14 +925,14 @@ func (data *SegmentRoutingTEOnDemandColor) fromBody(ctx context.Context, res gjs
 			return true
 		})
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.bounds.bounds.bound"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.bounds.bounds.bound"); value.Exists() {
 		data.DynamicBounds = make([]SegmentRoutingTEOnDemandColorDynamicBounds, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SegmentRoutingTEOnDemandColorDynamicBounds{}
-			if cValue := v.Get("scope-type"); cValue.Exists() {
+			if cValue := v.Get("scope-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Type = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("metric-type"); cValue.Exists() {
+			if cValue := v.Get("metric-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.MetricType = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("bound-value"); cValue.Exists() {
@@ -897,70 +942,70 @@ func (data *SegmentRoutingTEOnDemandColor) fromBody(ctx context.Context, res gjs
 			return true
 		})
 	}
-	if value := res.Get(prefix + "constraint.segments.protection-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "constraint.segments.protection-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.ConstraintSegmentsProtectionType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "constraint.segments.sid-algorithm"); value.Exists() {
+	if value := gjson.GetBytes(res, "constraint.segments.sid-algorithm"); value.Exists() {
 		data.ConstraintSegmentsSidAlgorithm = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "steering.labeled-services.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "steering.labeled-services.disable"); value.Exists() {
 		data.SteeringLabeledServicesDisable = types.BoolValue(true)
 	} else if !data.SteeringLabeledServicesDisable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SteeringLabeledServicesDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "steering.invalidation-drop"); value.Exists() {
+	if value := gjson.GetBytes(res, "steering.invalidation-drop"); value.Exists() {
 		data.SteeringInvalidationDrop = types.BoolValue(true)
 	} else if !data.SteeringInvalidationDrop.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SteeringInvalidationDrop = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "bandwidth"); value.Exists() {
+	if value := gjson.GetBytes(res, "bandwidth"); value.Exists() {
 		data.Bandwidth = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "max-install-standby-c-paths"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-install-standby-c-paths"); value.Exists() {
 		data.MaxInstallStandbyPaths = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "performance-measurement.delay-measurement.delay-profile.pm-profile-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "performance-measurement.delay-measurement.delay-profile.pm-profile-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.PerformanceMeasurementDelayProfile = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "performance-measurement.delay-measurement.delay-measurement-logging.delay-exceeded"); value.Exists() {
+	if value := gjson.GetBytes(res, "performance-measurement.delay-measurement.delay-measurement-logging.delay-exceeded"); value.Exists() {
 		data.PerformanceMeasurementDelayLoggingDelayExceeded = types.BoolValue(true)
 	} else if !data.PerformanceMeasurementDelayLoggingDelayExceeded.IsNull() {
 		// Only set to false if it was previously set in state
 		data.PerformanceMeasurementDelayLoggingDelayExceeded = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "performance-measurement.pm-liveness-detection.liveness-profile.pm-profile-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "performance-measurement.pm-liveness-detection.liveness-profile.pm-profile-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.PerformanceMeasurementLivenessProfile = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "performance-measurement.pm-liveness-detection.liveness-profile.backup.pm-profile-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "performance-measurement.pm-liveness-detection.liveness-profile.backup.pm-profile-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.PerformanceMeasurementLivenessBackupProfile = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "performance-measurement.pm-liveness-detection.pm-liveness-detection-logging.pm-liveness-session-state-change"); value.Exists() {
+	if value := gjson.GetBytes(res, "performance-measurement.pm-liveness-detection.pm-liveness-detection-logging.pm-liveness-session-state-change"); value.Exists() {
 		data.PerformanceMeasurementLivenessLoggingSessionStateChange = types.BoolValue(true)
 	} else if !data.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() {
 		// Only set to false if it was previously set in state
 		data.PerformanceMeasurementLivenessLoggingSessionStateChange = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "performance-measurement.pm-liveness-detection.pm-liveness-invalidation-action"); value.Exists() {
+	if value := gjson.GetBytes(res, "performance-measurement.pm-liveness-detection.pm-liveness-invalidation-action"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.PerformanceMeasurementLivenessInvalidationAction = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "performance-measurement.pm-reverse-path.segment-list-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "performance-measurement.pm-reverse-path.segment-list-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.PerformanceMeasurementReversePathSegmentList = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "performance-measurement.pm-reverse-path.label"); value.Exists() {
+	if value := gjson.GetBytes(res, "performance-measurement.pm-reverse-path.label"); value.Exists() {
 		data.PerformanceMeasurementReversePathLabel = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "per-flow"); value.Exists() {
+	if value := gjson.GetBytes(res, "per-flow"); value.Exists() {
 		data.PerFlow = types.BoolValue(true)
 	} else if !data.PerFlow.IsNull() {
 		// Only set to false if it was previously set in state
 		data.PerFlow = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "per-flow.default-forward-class"); value.Exists() {
+	if value := gjson.GetBytes(res, "per-flow.default-forward-class"); value.Exists() {
 		data.PerFlowForwardClassDefault = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "per-flow.forward-class-and-colors.forward-class-and-color"); value.Exists() {
+	if value := gjson.GetBytes(res, "per-flow.forward-class-and-colors.forward-class-and-color"); value.Exists() {
 		data.PerFlowForwardClasses = make([]SegmentRoutingTEOnDemandColorPerFlowForwardClasses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SegmentRoutingTEOnDemandColorPerFlowForwardClasses{}
@@ -974,61 +1019,61 @@ func (data *SegmentRoutingTEOnDemandColor) fromBody(ctx context.Context, res gjs
 			return true
 		})
 	}
-	if value := res.Get(prefix + "maximum-sid-depth"); value.Exists() {
+	if value := gjson.GetBytes(res, "maximum-sid-depth"); value.Exists() {
 		data.MaximumSidDepth = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bfd"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd"); value.Exists() {
 		data.BfdEnable = types.BoolValue(true)
 	} else if !data.BfdEnable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.BfdEnable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "bfd.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd.disable"); value.Exists() {
 		data.BfdDisable = types.BoolValue(true)
 	} else if !data.BfdDisable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.BfdDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "bfd.multiplier"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bfd.minimum-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bfd.invalidation-action"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd.invalidation-action"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.BfdInvalidationAction = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "bfd.reverse-path.binding-label"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd.reverse-path.binding-label"); value.Exists() {
 		data.BfdReversePathBindingLabel = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bfd.bfd-logging.session-state-change"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd.bfd-logging.session-state-change"); value.Exists() {
 		data.BfdLoggingSessionStateChange = types.BoolValue(true)
 	} else if !data.BfdLoggingSessionStateChange.IsNull() {
 		// Only set to false if it was previously set in state
 		data.BfdLoggingSessionStateChange = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "pce-group"); value.Exists() {
+	if value := gjson.GetBytes(res, "pce-group"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.PceGroup = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "source-address.ip-address-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "source-address.ip-address-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.SourceAddressType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "source-address.source-address"); value.Exists() {
+	if value := gjson.GetBytes(res, "source-address.source-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.SourceAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "effective-metric.metric-value-type.metric-value"); value.Exists() {
+	if value := gjson.GetBytes(res, "effective-metric.metric-value-type.metric-value"); value.Exists() {
 		data.EffectiveMetricValue = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "effective-metric.metric-value-type.metric-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "effective-metric.metric-value-type.metric-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.EffectiveMetricType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "srv6.locator.locator-name"); value.Exists() {
+	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "srv6.locator.locator-name", "26.2": "srv6-options.locator.locator-name"}, "srv6.locator.locator-name")); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.Srv6LocatorName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "srv6.locator.binding-sid-type"); value.Exists() {
+	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "srv6.locator.binding-sid-type", "26.2": "srv6-options.locator.binding-sid-type"}, "srv6.locator.binding-sid-type")); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.Srv6LocatorBindingSidType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "srv6.locator.behavior"); value.Exists() {
+	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "srv6.locator.behavior", "26.2": "srv6-options.locator.behavior"}, "srv6.locator.behavior")); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.Srv6LocatorBehavior = types.StringValue(value.String())
 	}
 }
@@ -1037,69 +1082,60 @@ func (data *SegmentRoutingTEOnDemandColor) fromBody(ctx context.Context, res gjs
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *SegmentRoutingTEOnDemandColorData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-anycast"); value.Exists() {
+func (data *SegmentRoutingTEOnDemandColorData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-anycast"); value.Exists() {
 		data.DynamicAnycastSidInclusion = types.BoolValue(true)
 	} else {
 		data.DynamicAnycastSidInclusion = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.DynamicMetricType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-margin.value-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-margin.value-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.DynamicMetricMarginType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-margin.absolute-value"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-margin.absolute-value"); value.Exists() {
 		data.DynamicMetricMarginAbsolute = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-margin.relative-value"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-margin.relative-value"); value.Exists() {
 		data.DynamicMetricMarginRelative = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-pce"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-pce"); value.Exists() {
 		data.DynamicPcep = types.BoolValue(true)
 	} else {
 		data.DynamicPcep = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.disjoint-path.group-id"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.disjoint-path.group-id"); value.Exists() {
 		data.DynamicDisjointPathGroupId = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.disjoint-path.disjointness-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.disjoint-path.disjointness-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.DynamicDisjointPathType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.disjoint-path.sub-id"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.disjoint-path.sub-id"); value.Exists() {
 		data.DynamicDisjointPathSubId = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.disjoint-path.shortest-path"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.disjoint-path.shortest-path"); value.Exists() && (value.Type == gjson.True || value.Type == gjson.False) {
 		data.DynamicDisjointPathShortestPath = types.BoolValue(value.Bool())
 	} else {
 		data.DynamicDisjointPathShortestPath = types.BoolNull()
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.disjoint-path.fallback-disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.disjoint-path.fallback-disable"); value.Exists() && (value.Type == gjson.True || value.Type == gjson.False) {
 		data.DynamicDisjointPathFallbackDisable = types.BoolValue(value.Bool())
 	} else {
 		data.DynamicDisjointPathFallbackDisable = types.BoolNull()
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.affinity-rules.affinity-rule"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.affinity-rules.affinity-rule"); value.Exists() {
 		data.DynamicAffinityRules = make([]SegmentRoutingTEOnDemandColorDynamicAffinityRules, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SegmentRoutingTEOnDemandColorDynamicAffinityRules{}
-			if cValue := v.Get("rule"); cValue.Exists() {
+			if cValue := v.Get("rule"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.AffinityType = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("affinity-name"); cValue.Exists() {
 				item.Affinities = make([]SegmentRoutingTEOnDemandColorDynamicAffinityRulesAffinities, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := SegmentRoutingTEOnDemandColorDynamicAffinityRulesAffinities{}
-					if ccValue := cv.Get("affinity-name"); ccValue.Exists() {
+					if ccValue := cv.Get("affinity-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
 						cItem.AffinityName = types.StringValue(ccValue.String())
 					}
 					item.Affinities = append(item.Affinities, cItem)
@@ -1110,14 +1146,14 @@ func (data *SegmentRoutingTEOnDemandColorData) fromBody(ctx context.Context, res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "on-demand-color-dyn-mpls.bounds.bounds.bound"); value.Exists() {
+	if value := gjson.GetBytes(res, "on-demand-color-dyn-mpls.bounds.bounds.bound"); value.Exists() {
 		data.DynamicBounds = make([]SegmentRoutingTEOnDemandColorDynamicBounds, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SegmentRoutingTEOnDemandColorDynamicBounds{}
-			if cValue := v.Get("scope-type"); cValue.Exists() {
+			if cValue := v.Get("scope-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.Type = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("metric-type"); cValue.Exists() {
+			if cValue := v.Get("metric-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.MetricType = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("bound-value"); cValue.Exists() {
@@ -1127,65 +1163,65 @@ func (data *SegmentRoutingTEOnDemandColorData) fromBody(ctx context.Context, res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "constraint.segments.protection-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "constraint.segments.protection-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.ConstraintSegmentsProtectionType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "constraint.segments.sid-algorithm"); value.Exists() {
+	if value := gjson.GetBytes(res, "constraint.segments.sid-algorithm"); value.Exists() {
 		data.ConstraintSegmentsSidAlgorithm = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "steering.labeled-services.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "steering.labeled-services.disable"); value.Exists() {
 		data.SteeringLabeledServicesDisable = types.BoolValue(true)
 	} else {
 		data.SteeringLabeledServicesDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "steering.invalidation-drop"); value.Exists() {
+	if value := gjson.GetBytes(res, "steering.invalidation-drop"); value.Exists() {
 		data.SteeringInvalidationDrop = types.BoolValue(true)
 	} else {
 		data.SteeringInvalidationDrop = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "bandwidth"); value.Exists() {
+	if value := gjson.GetBytes(res, "bandwidth"); value.Exists() {
 		data.Bandwidth = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "max-install-standby-c-paths"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-install-standby-c-paths"); value.Exists() {
 		data.MaxInstallStandbyPaths = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "performance-measurement.delay-measurement.delay-profile.pm-profile-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "performance-measurement.delay-measurement.delay-profile.pm-profile-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.PerformanceMeasurementDelayProfile = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "performance-measurement.delay-measurement.delay-measurement-logging.delay-exceeded"); value.Exists() {
+	if value := gjson.GetBytes(res, "performance-measurement.delay-measurement.delay-measurement-logging.delay-exceeded"); value.Exists() {
 		data.PerformanceMeasurementDelayLoggingDelayExceeded = types.BoolValue(true)
 	} else {
 		data.PerformanceMeasurementDelayLoggingDelayExceeded = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "performance-measurement.pm-liveness-detection.liveness-profile.pm-profile-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "performance-measurement.pm-liveness-detection.liveness-profile.pm-profile-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.PerformanceMeasurementLivenessProfile = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "performance-measurement.pm-liveness-detection.liveness-profile.backup.pm-profile-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "performance-measurement.pm-liveness-detection.liveness-profile.backup.pm-profile-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.PerformanceMeasurementLivenessBackupProfile = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "performance-measurement.pm-liveness-detection.pm-liveness-detection-logging.pm-liveness-session-state-change"); value.Exists() {
+	if value := gjson.GetBytes(res, "performance-measurement.pm-liveness-detection.pm-liveness-detection-logging.pm-liveness-session-state-change"); value.Exists() {
 		data.PerformanceMeasurementLivenessLoggingSessionStateChange = types.BoolValue(true)
 	} else {
 		data.PerformanceMeasurementLivenessLoggingSessionStateChange = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "performance-measurement.pm-liveness-detection.pm-liveness-invalidation-action"); value.Exists() {
+	if value := gjson.GetBytes(res, "performance-measurement.pm-liveness-detection.pm-liveness-invalidation-action"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.PerformanceMeasurementLivenessInvalidationAction = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "performance-measurement.pm-reverse-path.segment-list-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "performance-measurement.pm-reverse-path.segment-list-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.PerformanceMeasurementReversePathSegmentList = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "performance-measurement.pm-reverse-path.label"); value.Exists() {
+	if value := gjson.GetBytes(res, "performance-measurement.pm-reverse-path.label"); value.Exists() {
 		data.PerformanceMeasurementReversePathLabel = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "per-flow"); value.Exists() {
+	if value := gjson.GetBytes(res, "per-flow"); value.Exists() {
 		data.PerFlow = types.BoolValue(true)
 	} else {
 		data.PerFlow = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "per-flow.default-forward-class"); value.Exists() {
+	if value := gjson.GetBytes(res, "per-flow.default-forward-class"); value.Exists() {
 		data.PerFlowForwardClassDefault = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "per-flow.forward-class-and-colors.forward-class-and-color"); value.Exists() {
+	if value := gjson.GetBytes(res, "per-flow.forward-class-and-colors.forward-class-and-color"); value.Exists() {
 		data.PerFlowForwardClasses = make([]SegmentRoutingTEOnDemandColorPerFlowForwardClasses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SegmentRoutingTEOnDemandColorPerFlowForwardClasses{}
@@ -1199,58 +1235,58 @@ func (data *SegmentRoutingTEOnDemandColorData) fromBody(ctx context.Context, res
 			return true
 		})
 	}
-	if value := res.Get(prefix + "maximum-sid-depth"); value.Exists() {
+	if value := gjson.GetBytes(res, "maximum-sid-depth"); value.Exists() {
 		data.MaximumSidDepth = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bfd"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd"); value.Exists() {
 		data.BfdEnable = types.BoolValue(true)
 	} else {
 		data.BfdEnable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "bfd.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd.disable"); value.Exists() {
 		data.BfdDisable = types.BoolValue(true)
 	} else {
 		data.BfdDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "bfd.multiplier"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bfd.minimum-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bfd.invalidation-action"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd.invalidation-action"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.BfdInvalidationAction = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "bfd.reverse-path.binding-label"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd.reverse-path.binding-label"); value.Exists() {
 		data.BfdReversePathBindingLabel = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "bfd.bfd-logging.session-state-change"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd.bfd-logging.session-state-change"); value.Exists() {
 		data.BfdLoggingSessionStateChange = types.BoolValue(true)
 	} else {
 		data.BfdLoggingSessionStateChange = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "pce-group"); value.Exists() {
+	if value := gjson.GetBytes(res, "pce-group"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.PceGroup = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "source-address.ip-address-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "source-address.ip-address-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.SourceAddressType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "source-address.source-address"); value.Exists() {
+	if value := gjson.GetBytes(res, "source-address.source-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.SourceAddress = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "effective-metric.metric-value-type.metric-value"); value.Exists() {
+	if value := gjson.GetBytes(res, "effective-metric.metric-value-type.metric-value"); value.Exists() {
 		data.EffectiveMetricValue = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "effective-metric.metric-value-type.metric-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "effective-metric.metric-value-type.metric-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.EffectiveMetricType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "srv6.locator.locator-name"); value.Exists() {
+	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "srv6.locator.locator-name", "26.2": "srv6-options.locator.locator-name"}, "srv6.locator.locator-name")); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.Srv6LocatorName = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "srv6.locator.binding-sid-type"); value.Exists() {
+	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "srv6.locator.binding-sid-type", "26.2": "srv6-options.locator.binding-sid-type"}, "srv6.locator.binding-sid-type")); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.Srv6LocatorBindingSidType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "srv6.locator.behavior"); value.Exists() {
+	if value := gjson.GetBytes(res, helpers.SelectYangPath(version, map[string]string{"24.4": "srv6.locator.behavior", "26.2": "srv6-options.locator.behavior"}, "srv6.locator.behavior")); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.Srv6LocatorBehavior = types.StringValue(value.String())
 	}
 }
@@ -1259,55 +1295,55 @@ func (data *SegmentRoutingTEOnDemandColorData) fromBody(ctx context.Context, res
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *SegmentRoutingTEOnDemandColor) getDeletedItems(ctx context.Context, state SegmentRoutingTEOnDemandColor) []string {
+func (data *SegmentRoutingTEOnDemandColor) getDeletedItems(ctx context.Context, state SegmentRoutingTEOnDemandColor, version string) []string {
 	deletedItems := make([]string, 0)
 	if !state.Srv6LocatorBehavior.IsNull() && data.Srv6LocatorBehavior.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/srv6/locator/behavior", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "srv6/locator/behavior", "26.2": "srv6-options/locator/behavior"}, "srv6/locator/behavior")))
 	}
 	if !state.Srv6LocatorBindingSidType.IsNull() && data.Srv6LocatorBindingSidType.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/srv6/locator/binding-sid-type", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "srv6/locator/binding-sid-type", "26.2": "srv6-options/locator/binding-sid-type"}, "srv6/locator/binding-sid-type")))
 	}
 	if !state.Srv6LocatorName.IsNull() && data.Srv6LocatorName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/srv6/locator", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "srv6/locator", "26.2": "srv6-options/locator"}, "srv6/locator")))
 	}
 	if !state.EffectiveMetricType.IsNull() && data.EffectiveMetricType.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/effective-metric/metric-value-type/metric-type", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "effective-metric/metric-value-type/metric-type"))
 	}
 	if !state.EffectiveMetricValue.IsNull() && data.EffectiveMetricValue.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/effective-metric/metric-value-type/metric-value", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "effective-metric/metric-value-type/metric-value"))
 	}
 	if !state.SourceAddress.IsNull() && data.SourceAddress.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/source-address", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "source-address"))
 	}
 	if !state.SourceAddressType.IsNull() && data.SourceAddressType.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/source-address", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "source-address"))
 	}
 	if !state.PceGroup.IsNull() && data.PceGroup.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/pce-group", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "pce-group"))
 	}
 	if !state.BfdLoggingSessionStateChange.IsNull() && data.BfdLoggingSessionStateChange.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/bfd-logging/session-state-change", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "bfd/bfd-logging/session-state-change"))
 	}
 	if !state.BfdReversePathBindingLabel.IsNull() && data.BfdReversePathBindingLabel.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/reverse-path/binding-label", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "bfd/reverse-path/binding-label"))
 	}
 	if !state.BfdInvalidationAction.IsNull() && data.BfdInvalidationAction.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/invalidation-action", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "bfd/invalidation-action"))
 	}
 	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/minimum-interval", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "bfd/minimum-interval"))
 	}
 	if !state.BfdMultiplier.IsNull() && data.BfdMultiplier.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/multiplier", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "bfd/multiplier"))
 	}
 	if !state.BfdDisable.IsNull() && data.BfdDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/disable", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "bfd/disable"))
 	}
 	if !state.BfdEnable.IsNull() && data.BfdEnable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "bfd"))
 	}
 	if !state.MaximumSidDepth.IsNull() && data.MaximumSidDepth.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-sid-depth", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "maximum-sid-depth"))
 	}
 	for i := range state.PerFlowForwardClasses {
 		keys := [...]string{"forward-class"}
@@ -1333,62 +1369,62 @@ func (data *SegmentRoutingTEOnDemandColor) getDeletedItems(ctx context.Context, 
 			}
 			if found {
 				if !state.PerFlowForwardClasses[i].Color.IsNull() && data.PerFlowForwardClasses[j].Color.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/per-flow/forward-class-and-colors/forward-class-and-color%v/color", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "per-flow/forward-class-and-colors/forward-class-and-color", keyString), "color"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/per-flow/forward-class-and-colors/forward-class-and-color%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "per-flow/forward-class-and-colors/forward-class-and-color", keyString))
 		}
 	}
 	if !state.PerFlowForwardClassDefault.IsNull() && data.PerFlowForwardClassDefault.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/per-flow/default-forward-class", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "per-flow/default-forward-class"))
 	}
 	if !state.PerFlow.IsNull() && data.PerFlow.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/per-flow", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "per-flow"))
 	}
 	if !state.PerformanceMeasurementReversePathLabel.IsNull() && data.PerformanceMeasurementReversePathLabel.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/performance-measurement/pm-reverse-path/label", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "performance-measurement/pm-reverse-path/label"))
 	}
 	if !state.PerformanceMeasurementReversePathSegmentList.IsNull() && data.PerformanceMeasurementReversePathSegmentList.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/performance-measurement/pm-reverse-path/segment-list-name", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "performance-measurement/pm-reverse-path/segment-list-name"))
 	}
 	if !state.PerformanceMeasurementLivenessInvalidationAction.IsNull() && data.PerformanceMeasurementLivenessInvalidationAction.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/performance-measurement/pm-liveness-detection/pm-liveness-invalidation-action", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "performance-measurement/pm-liveness-detection/pm-liveness-invalidation-action"))
 	}
 	if !state.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() && data.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/performance-measurement/pm-liveness-detection/pm-liveness-detection-logging/pm-liveness-session-state-change", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "performance-measurement/pm-liveness-detection/pm-liveness-detection-logging/pm-liveness-session-state-change"))
 	}
 	if !state.PerformanceMeasurementLivenessBackupProfile.IsNull() && data.PerformanceMeasurementLivenessBackupProfile.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/performance-measurement/pm-liveness-detection/liveness-profile/backup/pm-profile-name", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "performance-measurement/pm-liveness-detection/liveness-profile/backup/pm-profile-name"))
 	}
 	if !state.PerformanceMeasurementLivenessProfile.IsNull() && data.PerformanceMeasurementLivenessProfile.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/performance-measurement/pm-liveness-detection/liveness-profile/pm-profile-name", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "performance-measurement/pm-liveness-detection/liveness-profile/pm-profile-name"))
 	}
 	if !state.PerformanceMeasurementDelayLoggingDelayExceeded.IsNull() && data.PerformanceMeasurementDelayLoggingDelayExceeded.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/performance-measurement/delay-measurement/delay-measurement-logging/delay-exceeded", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "performance-measurement/delay-measurement/delay-measurement-logging/delay-exceeded"))
 	}
 	if !state.PerformanceMeasurementDelayProfile.IsNull() && data.PerformanceMeasurementDelayProfile.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/performance-measurement/delay-measurement/delay-profile/pm-profile-name", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "performance-measurement/delay-measurement/delay-profile/pm-profile-name"))
 	}
 	if !state.MaxInstallStandbyPaths.IsNull() && data.MaxInstallStandbyPaths.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/max-install-standby-c-paths", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "max-install-standby-c-paths"))
 	}
 	if !state.Bandwidth.IsNull() && data.Bandwidth.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bandwidth", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "bandwidth"))
 	}
 	if !state.SteeringInvalidationDrop.IsNull() && data.SteeringInvalidationDrop.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/steering/invalidation-drop", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "steering/invalidation-drop"))
 	}
 	if !state.SteeringLabeledServicesDisable.IsNull() && data.SteeringLabeledServicesDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/steering/labeled-services/disable", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "steering/labeled-services/disable"))
 	}
 	if !state.ConstraintSegmentsSidAlgorithm.IsNull() && data.ConstraintSegmentsSidAlgorithm.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/constraint/segments/sid-algorithm", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "constraint/segments/sid-algorithm"))
 	}
 	if !state.ConstraintSegmentsProtectionType.IsNull() && data.ConstraintSegmentsProtectionType.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/constraint/segments/protection-type", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "constraint/segments/protection-type"))
 	}
 	for i := range state.DynamicBounds {
 		keys := [...]string{"scope-type", "metric-type"}
@@ -1420,13 +1456,13 @@ func (data *SegmentRoutingTEOnDemandColor) getDeletedItems(ctx context.Context, 
 			}
 			if found {
 				if !state.DynamicBounds[i].Value.IsNull() && data.DynamicBounds[j].Value.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-color-dyn-mpls/bounds/bounds/bound%v/bound-value", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "on-demand-color-dyn-mpls/bounds/bounds/bound", keyString), "bound-value"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-color-dyn-mpls/bounds/bounds/bound%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "on-demand-color-dyn-mpls/bounds/bounds/bound", keyString))
 		}
 	}
 	for i := range state.DynamicAffinityRules {
@@ -1479,48 +1515,48 @@ func (data *SegmentRoutingTEOnDemandColor) getDeletedItems(ctx context.Context, 
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-color-dyn-mpls/affinity-rules/affinity-rule%v/affinity-name%v", state.getPath(), keyString, ckeyString))
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "on-demand-color-dyn-mpls/affinity-rules/affinity-rule", keyString, "affinity-name", ckeyString))
 					}
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-color-dyn-mpls/affinity-rules/affinity-rule%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "on-demand-color-dyn-mpls/affinity-rules/affinity-rule", keyString))
 		}
 	}
 	if !state.DynamicDisjointPathFallbackDisable.IsNull() && data.DynamicDisjointPathFallbackDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-color-dyn-mpls/disjoint-path", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "on-demand-color-dyn-mpls/disjoint-path"))
 	}
 	if !state.DynamicDisjointPathShortestPath.IsNull() && data.DynamicDisjointPathShortestPath.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-color-dyn-mpls/disjoint-path", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "on-demand-color-dyn-mpls/disjoint-path"))
 	}
 	if !state.DynamicDisjointPathSubId.IsNull() && data.DynamicDisjointPathSubId.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-color-dyn-mpls/disjoint-path", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "on-demand-color-dyn-mpls/disjoint-path"))
 	}
 	if !state.DynamicDisjointPathType.IsNull() && data.DynamicDisjointPathType.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-color-dyn-mpls/disjoint-path", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "on-demand-color-dyn-mpls/disjoint-path"))
 	}
 	if !state.DynamicDisjointPathGroupId.IsNull() && data.DynamicDisjointPathGroupId.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-color-dyn-mpls/disjoint-path", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "on-demand-color-dyn-mpls/disjoint-path"))
 	}
 	if !state.DynamicPcep.IsNull() && data.DynamicPcep.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-pce", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-pce"))
 	}
 	if !state.DynamicMetricMarginRelative.IsNull() && data.DynamicMetricMarginRelative.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-margin/relative-value", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-margin/relative-value"))
 	}
 	if !state.DynamicMetricMarginAbsolute.IsNull() && data.DynamicMetricMarginAbsolute.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-margin/absolute-value", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-margin/absolute-value"))
 	}
 	if !state.DynamicMetricMarginType.IsNull() && data.DynamicMetricMarginType.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-margin/value-type", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-margin/value-type"))
 	}
 	if !state.DynamicMetricType.IsNull() && data.DynamicMetricType.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-type", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-type"))
 	}
 	if !state.DynamicAnycastSidInclusion.IsNull() && data.DynamicAnycastSidInclusion.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-anycast", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-anycast"))
 	}
 	return deletedItems
 }
@@ -1529,24 +1565,21 @@ func (data *SegmentRoutingTEOnDemandColor) getDeletedItems(ctx context.Context, 
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *SegmentRoutingTEOnDemandColor) getEmptyLeafsDelete(ctx context.Context, state *SegmentRoutingTEOnDemandColor) []string {
+func (data *SegmentRoutingTEOnDemandColor) getEmptyLeafsDelete(ctx context.Context, state *SegmentRoutingTEOnDemandColor, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
 	if !data.BfdLoggingSessionStateChange.IsNull() && !data.BfdLoggingSessionStateChange.ValueBool() {
-		if state != nil && !state.BfdLoggingSessionStateChange.IsNull() && state.BfdLoggingSessionStateChange.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/bfd-logging/session-state-change", data.getXPath()))
+		if state == nil || state.BfdLoggingSessionStateChange.IsNull() || state.BfdLoggingSessionStateChange.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "bfd/bfd-logging/session-state-change"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.BfdDisable.IsNull() && !data.BfdDisable.ValueBool() {
-		if state != nil && !state.BfdDisable.IsNull() && state.BfdDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/disable", data.getXPath()))
+		if state == nil || state.BfdDisable.IsNull() || state.BfdDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "bfd/disable"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.BfdEnable.IsNull() && !data.BfdEnable.ValueBool() {
-		if state != nil && !state.BfdEnable.IsNull() && state.BfdEnable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd", data.getXPath()))
+		if state == nil || state.BfdEnable.IsNull() || state.BfdEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "bfd"))
 		}
 	}
 	for i := range data.PerFlowForwardClasses {
@@ -1557,34 +1590,29 @@ func (data *SegmentRoutingTEOnDemandColor) getEmptyLeafsDelete(ctx context.Conte
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.PerFlow.IsNull() && !data.PerFlow.ValueBool() {
-		if state != nil && !state.PerFlow.IsNull() && state.PerFlow.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/per-flow", data.getXPath()))
+		if state == nil || state.PerFlow.IsNull() || state.PerFlow.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "per-flow"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() && !data.PerformanceMeasurementLivenessLoggingSessionStateChange.ValueBool() {
-		if state != nil && !state.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() && state.PerformanceMeasurementLivenessLoggingSessionStateChange.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/performance-measurement/pm-liveness-detection/pm-liveness-detection-logging/pm-liveness-session-state-change", data.getXPath()))
+		if state == nil || state.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() || state.PerformanceMeasurementLivenessLoggingSessionStateChange.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "performance-measurement/pm-liveness-detection/pm-liveness-detection-logging/pm-liveness-session-state-change"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.PerformanceMeasurementDelayLoggingDelayExceeded.IsNull() && !data.PerformanceMeasurementDelayLoggingDelayExceeded.ValueBool() {
-		if state != nil && !state.PerformanceMeasurementDelayLoggingDelayExceeded.IsNull() && state.PerformanceMeasurementDelayLoggingDelayExceeded.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/performance-measurement/delay-measurement/delay-measurement-logging/delay-exceeded", data.getXPath()))
+		if state == nil || state.PerformanceMeasurementDelayLoggingDelayExceeded.IsNull() || state.PerformanceMeasurementDelayLoggingDelayExceeded.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "performance-measurement/delay-measurement/delay-measurement-logging/delay-exceeded"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SteeringInvalidationDrop.IsNull() && !data.SteeringInvalidationDrop.ValueBool() {
-		if state != nil && !state.SteeringInvalidationDrop.IsNull() && state.SteeringInvalidationDrop.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/steering/invalidation-drop", data.getXPath()))
+		if state == nil || state.SteeringInvalidationDrop.IsNull() || state.SteeringInvalidationDrop.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "steering/invalidation-drop"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SteeringLabeledServicesDisable.IsNull() && !data.SteeringLabeledServicesDisable.ValueBool() {
-		if state != nil && !state.SteeringLabeledServicesDisable.IsNull() && state.SteeringLabeledServicesDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/steering/labeled-services/disable", data.getXPath()))
+		if state == nil || state.SteeringLabeledServicesDisable.IsNull() || state.SteeringLabeledServicesDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "steering/labeled-services/disable"))
 		}
 	}
 	for i := range data.DynamicBounds {
@@ -1611,16 +1639,14 @@ func (data *SegmentRoutingTEOnDemandColor) getEmptyLeafsDelete(ctx context.Conte
 			}
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.DynamicPcep.IsNull() && !data.DynamicPcep.ValueBool() {
-		if state != nil && !state.DynamicPcep.IsNull() && state.DynamicPcep.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-pce", data.getXPath()))
+		if state == nil || state.DynamicPcep.IsNull() || state.DynamicPcep.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-pce"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.DynamicAnycastSidInclusion.IsNull() && !data.DynamicAnycastSidInclusion.ValueBool() {
-		if state != nil && !state.DynamicAnycastSidInclusion.IsNull() && state.DynamicAnycastSidInclusion.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-anycast", data.getXPath()))
+		if state == nil || state.DynamicAnycastSidInclusion.IsNull() || state.DynamicAnycastSidInclusion.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-anycast"))
 		}
 	}
 	return emptyLeafsDelete
@@ -1629,156 +1655,193 @@ func (data *SegmentRoutingTEOnDemandColor) getEmptyLeafsDelete(ctx context.Conte
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *SegmentRoutingTEOnDemandColor) getDeletePaths(ctx context.Context) []string {
+func (data *SegmentRoutingTEOnDemandColor) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
 	if !data.Srv6LocatorBehavior.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/srv6/locator/behavior", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "srv6/locator/behavior", "26.2": "srv6-options/locator/behavior"}, "srv6/locator/behavior")))
 	}
 	if !data.Srv6LocatorBindingSidType.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/srv6/locator/binding-sid-type", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "srv6/locator/binding-sid-type", "26.2": "srv6-options/locator/binding-sid-type"}, "srv6/locator/binding-sid-type")))
 	}
 	if !data.Srv6LocatorName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/srv6/locator", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), helpers.SelectYangPath(version, map[string]string{"24.4": "srv6/locator", "26.2": "srv6-options/locator"}, "srv6/locator")))
 	}
 	if !data.EffectiveMetricType.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/effective-metric/metric-value-type/metric-type", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "effective-metric/metric-value-type/metric-type"))
 	}
 	if !data.EffectiveMetricValue.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/effective-metric/metric-value-type/metric-value", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "effective-metric/metric-value-type/metric-value"))
 	}
 	if !data.SourceAddress.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-address", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "source-address"))
 	}
 	if !data.SourceAddressType.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-address", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "source-address"))
 	}
 	if !data.PceGroup.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/pce-group", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "pce-group"))
 	}
 	if !data.BfdLoggingSessionStateChange.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/bfd-logging/session-state-change", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "bfd/bfd-logging/session-state-change"))
 	}
 	if !data.BfdReversePathBindingLabel.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/reverse-path/binding-label", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "bfd/reverse-path/binding-label"))
 	}
 	if !data.BfdInvalidationAction.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/invalidation-action", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "bfd/invalidation-action"))
 	}
 	if !data.BfdMinimumInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/minimum-interval", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "bfd/minimum-interval"))
 	}
 	if !data.BfdMultiplier.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/multiplier", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "bfd/multiplier"))
 	}
 	if !data.BfdDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/disable", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "bfd/disable"))
 	}
 	if !data.BfdEnable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "bfd"))
 	}
 	if !data.MaximumSidDepth.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-sid-depth", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "maximum-sid-depth"))
 	}
 	for i := range data.PerFlowForwardClasses {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[forward-class=" + strconv.FormatInt(data.PerFlowForwardClasses[i].ForwardClass.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/per-flow/forward-class-and-colors/forward-class-and-color%v", data.getPath(), keyPath))
+		keys := [...]string{"forward-class"}
+		keyValues := [...]string{strconv.FormatInt(data.PerFlowForwardClasses[i].ForwardClass.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.PerFlowForwardClasses[i].ForwardClass.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "per-flow/forward-class-and-colors/forward-class-and-color", keyString))
 	}
 	if !data.PerFlowForwardClassDefault.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/per-flow/default-forward-class", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "per-flow/default-forward-class"))
 	}
 	if !data.PerFlow.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/per-flow", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "per-flow"))
 	}
 	if !data.PerformanceMeasurementReversePathLabel.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/performance-measurement/pm-reverse-path/label", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "performance-measurement/pm-reverse-path/label"))
 	}
 	if !data.PerformanceMeasurementReversePathSegmentList.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/performance-measurement/pm-reverse-path/segment-list-name", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "performance-measurement/pm-reverse-path/segment-list-name"))
 	}
 	if !data.PerformanceMeasurementLivenessInvalidationAction.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/performance-measurement/pm-liveness-detection/pm-liveness-invalidation-action", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "performance-measurement/pm-liveness-detection/pm-liveness-invalidation-action"))
 	}
 	if !data.PerformanceMeasurementLivenessLoggingSessionStateChange.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/performance-measurement/pm-liveness-detection/pm-liveness-detection-logging/pm-liveness-session-state-change", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "performance-measurement/pm-liveness-detection/pm-liveness-detection-logging/pm-liveness-session-state-change"))
 	}
 	if !data.PerformanceMeasurementLivenessBackupProfile.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/performance-measurement/pm-liveness-detection/liveness-profile/backup/pm-profile-name", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "performance-measurement/pm-liveness-detection/liveness-profile/backup/pm-profile-name"))
 	}
 	if !data.PerformanceMeasurementLivenessProfile.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/performance-measurement/pm-liveness-detection/liveness-profile/pm-profile-name", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "performance-measurement/pm-liveness-detection/liveness-profile/pm-profile-name"))
 	}
 	if !data.PerformanceMeasurementDelayLoggingDelayExceeded.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/performance-measurement/delay-measurement/delay-measurement-logging/delay-exceeded", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "performance-measurement/delay-measurement/delay-measurement-logging/delay-exceeded"))
 	}
 	if !data.PerformanceMeasurementDelayProfile.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/performance-measurement/delay-measurement/delay-profile/pm-profile-name", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "performance-measurement/delay-measurement/delay-profile/pm-profile-name"))
 	}
 	if !data.MaxInstallStandbyPaths.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-install-standby-c-paths", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "max-install-standby-c-paths"))
 	}
 	if !data.Bandwidth.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bandwidth", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "bandwidth"))
 	}
 	if !data.SteeringInvalidationDrop.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/steering/invalidation-drop", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "steering/invalidation-drop"))
 	}
 	if !data.SteeringLabeledServicesDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/steering/labeled-services/disable", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "steering/labeled-services/disable"))
 	}
 	if !data.ConstraintSegmentsSidAlgorithm.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/constraint/segments/sid-algorithm", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "constraint/segments/sid-algorithm"))
 	}
 	if !data.ConstraintSegmentsProtectionType.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/constraint/segments/protection-type", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "constraint/segments/protection-type"))
 	}
 	for i := range data.DynamicBounds {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[scope-type=" + data.DynamicBounds[i].Type.ValueString() + "]"
-		keyPath += "[metric-type=" + data.DynamicBounds[i].MetricType.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/on-demand-color-dyn-mpls/bounds/bounds/bound%v", data.getPath(), keyPath))
+		keys := [...]string{"scope-type", "metric-type"}
+		keyValues := [...]string{data.DynamicBounds[i].Type.ValueString(), data.DynamicBounds[i].MetricType.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.DynamicBounds[i].Type.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(data.DynamicBounds[i].MetricType.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "on-demand-color-dyn-mpls/bounds/bounds/bound", keyString))
 	}
 	for i := range data.DynamicAffinityRules {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[rule=" + data.DynamicAffinityRules[i].AffinityType.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/on-demand-color-dyn-mpls/affinity-rules/affinity-rule%v", data.getPath(), keyPath))
+		keys := [...]string{"rule"}
+		keyValues := [...]string{data.DynamicAffinityRules[i].AffinityType.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.DynamicAffinityRules[i].AffinityType.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "on-demand-color-dyn-mpls/affinity-rules/affinity-rule", keyString))
 	}
 	if !data.DynamicDisjointPathFallbackDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/on-demand-color-dyn-mpls/disjoint-path", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "on-demand-color-dyn-mpls/disjoint-path"))
 	}
 	if !data.DynamicDisjointPathShortestPath.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/on-demand-color-dyn-mpls/disjoint-path", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "on-demand-color-dyn-mpls/disjoint-path"))
 	}
 	if !data.DynamicDisjointPathSubId.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/on-demand-color-dyn-mpls/disjoint-path", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "on-demand-color-dyn-mpls/disjoint-path"))
 	}
 	if !data.DynamicDisjointPathType.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/on-demand-color-dyn-mpls/disjoint-path", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "on-demand-color-dyn-mpls/disjoint-path"))
 	}
 	if !data.DynamicDisjointPathGroupId.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/on-demand-color-dyn-mpls/disjoint-path", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "on-demand-color-dyn-mpls/disjoint-path"))
 	}
 	if !data.DynamicPcep.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-pce", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-pce"))
 	}
 	if !data.DynamicMetricMarginRelative.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-margin/relative-value", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-margin/relative-value"))
 	}
 	if !data.DynamicMetricMarginAbsolute.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-margin/absolute-value", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-margin/absolute-value"))
 	}
 	if !data.DynamicMetricMarginType.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-margin/value-type", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-margin/value-type"))
 	}
 	if !data.DynamicMetricType.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-type", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-type"))
 	}
 	if !data.DynamicAnycastSidInclusion.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-anycast", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-anycast"))
 	}
 
 	return deletePaths
@@ -1976,13 +2039,13 @@ func (data SegmentRoutingTEOnDemandColor) toBodyXML(ctx context.Context, stateAr
 		body = helpers.SetFromXPath(body, data.getXPath()+"/effective-metric/metric-value-type/metric-type", data.EffectiveMetricType.ValueString())
 	}
 	if !data.Srv6LocatorName.IsNull() && !data.Srv6LocatorName.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/srv6/locator/locator-name", data.Srv6LocatorName.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/srv6-options/locator/locator-name", data.Srv6LocatorName.ValueString())
 	}
 	if !data.Srv6LocatorBindingSidType.IsNull() && !data.Srv6LocatorBindingSidType.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/srv6/locator/binding-sid-type", data.Srv6LocatorBindingSidType.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/srv6-options/locator/binding-sid-type", data.Srv6LocatorBindingSidType.ValueString())
 	}
 	if !data.Srv6LocatorBehavior.IsNull() && !data.Srv6LocatorBehavior.IsUnknown() {
-		body = helpers.SetFromXPath(body, data.getXPath()+"/srv6/locator/behavior", data.Srv6LocatorBehavior.ValueString())
+		body = helpers.SetFromXPath(body, data.getXPath()+"/srv6-options/locator/behavior", data.Srv6LocatorBehavior.ValueString())
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
@@ -2006,7 +2069,7 @@ func (data SegmentRoutingTEOnDemandColor) toBodyXML(ctx context.Context, stateAr
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -2409,17 +2472,17 @@ func (data *SegmentRoutingTEOnDemandColor) updateFromBodyXML(ctx context.Context
 	} else if data.EffectiveMetricType.IsNull() {
 		data.EffectiveMetricType = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6/locator/locator-name"); value.Exists() && !data.Srv6LocatorName.IsNull() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6-options/locator/locator-name"); value.Exists() && !data.Srv6LocatorName.IsNull() {
 		data.Srv6LocatorName = types.StringValue(value.String())
 	} else if data.Srv6LocatorName.IsNull() {
 		data.Srv6LocatorName = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6/locator/binding-sid-type"); value.Exists() && !data.Srv6LocatorBindingSidType.IsNull() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6-options/locator/binding-sid-type"); value.Exists() && !data.Srv6LocatorBindingSidType.IsNull() {
 		data.Srv6LocatorBindingSidType = types.StringValue(value.String())
 	} else if data.Srv6LocatorBindingSidType.IsNull() {
 		data.Srv6LocatorBindingSidType = types.StringNull()
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6/locator/behavior"); value.Exists() && !data.Srv6LocatorBehavior.IsNull() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6-options/locator/behavior"); value.Exists() && !data.Srv6LocatorBehavior.IsNull() {
 		data.Srv6LocatorBehavior = types.StringValue(value.String())
 	} else if data.Srv6LocatorBehavior.IsNull() {
 		data.Srv6LocatorBehavior = types.StringNull()
@@ -2628,13 +2691,13 @@ func (data *SegmentRoutingTEOnDemandColor) fromBodyXML(ctx context.Context, res 
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/effective-metric/metric-value-type/metric-type"); value.Exists() {
 		data.EffectiveMetricType = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6/locator/locator-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6-options/locator/locator-name"); value.Exists() {
 		data.Srv6LocatorName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6/locator/binding-sid-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6-options/locator/binding-sid-type"); value.Exists() {
 		data.Srv6LocatorBindingSidType = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6/locator/behavior"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6-options/locator/behavior"); value.Exists() {
 		data.Srv6LocatorBehavior = types.StringValue(value.String())
 	}
 }
@@ -2841,13 +2904,13 @@ func (data *SegmentRoutingTEOnDemandColorData) fromBodyXML(ctx context.Context, 
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/effective-metric/metric-value-type/metric-type"); value.Exists() {
 		data.EffectiveMetricType = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6/locator/locator-name"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6-options/locator/locator-name"); value.Exists() {
 		data.Srv6LocatorName = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6/locator/binding-sid-type"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6-options/locator/binding-sid-type"); value.Exists() {
 		data.Srv6LocatorBindingSidType = types.StringValue(value.String())
 	}
-	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6/locator/behavior"); value.Exists() {
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/srv6-options/locator/behavior"); value.Exists() {
 		data.Srv6LocatorBehavior = types.StringValue(value.String())
 	}
 }
@@ -2862,7 +2925,7 @@ func (data *SegmentRoutingTEOnDemandColor) addDeletedItemsXML(ctx context.Contex
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
 	if !state.Srv6LocatorBehavior.IsNull() && data.Srv6LocatorBehavior.IsNull() {
-		deletePath := state.getXPath() + "/srv6/locator/behavior"
+		deletePath := state.getXPath() + "/srv6-options/locator/behavior"
 		// Check if a parent path is already marked for deletion
 		parentAlreadyDeleted := false
 		for dp := range deletedPaths {
@@ -2877,7 +2940,7 @@ func (data *SegmentRoutingTEOnDemandColor) addDeletedItemsXML(ctx context.Contex
 		}
 	}
 	if !state.Srv6LocatorBindingSidType.IsNull() && data.Srv6LocatorBindingSidType.IsNull() {
-		deletePath := state.getXPath() + "/srv6/locator/binding-sid-type"
+		deletePath := state.getXPath() + "/srv6-options/locator/binding-sid-type"
 		// Check if a parent path is already marked for deletion
 		parentAlreadyDeleted := false
 		for dp := range deletedPaths {
@@ -2893,7 +2956,7 @@ func (data *SegmentRoutingTEOnDemandColor) addDeletedItemsXML(ctx context.Contex
 	}
 	if !state.Srv6LocatorName.IsNull() && data.Srv6LocatorName.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
-		deletePath := state.getXPath() + "/srv6/locator"
+		deletePath := state.getXPath() + "/srv6-options/locator"
 		predicates := make(map[string]string)
 		predicates["locator-name"] = fmt.Sprintf("%v", state.Srv6LocatorName.ValueString())
 		// Sort keys to ensure consistent ordering
@@ -3760,13 +3823,13 @@ func (data *SegmentRoutingTEOnDemandColor) addDeletedItemsXML(ctx context.Contex
 func (data *SegmentRoutingTEOnDemandColor) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
 	if !data.Srv6LocatorBehavior.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/srv6/locator/behavior")
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/srv6-options/locator/behavior")
 	}
 	if !data.Srv6LocatorBindingSidType.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/srv6/locator/binding-sid-type")
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/srv6-options/locator/binding-sid-type")
 	}
 	if !data.Srv6LocatorName.IsNull() {
-		b = helpers.RemoveFromXPath(b, data.getXPath()+"/srv6/locator")
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/srv6-options/locator")
 	}
 	if !data.EffectiveMetricType.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/effective-metric/metric-value-type/metric-type")

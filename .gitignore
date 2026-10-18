@@ -36,3 +36,9 @@ website/vendor
 
 # Environment variables
 .env
+
+# Transient generator artifacts
+gen/version_changes_data.json
+
+# Compiled provider binary
+terraform-provider-iosxr

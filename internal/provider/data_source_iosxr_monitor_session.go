@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -180,11 +179,55 @@ func (d *MonitorSessionDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"rate_limit_rx": schema.Int64Attribute{
-							MarkdownDescription: "Rate limit mirroring in the rx direction",
+							MarkdownDescription: "Rate limit mirroring in the rx direction" + "\n  - **Not supported from version `25.4` and above**",
 							Computed:            true,
 						},
 						"rate_limit_tx": schema.Int64Attribute{
-							MarkdownDescription: "Rate limit mirroring in the tx direction",
+							MarkdownDescription: "Rate limit mirroring in the tx direction" + "\n  - **Not supported from version `25.4` and above**",
+							Computed:            true,
+						},
+						"destination_application": schema.BoolAttribute{
+							MarkdownDescription: "Specify an application destination" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"destination_rate_limit": schema.Int64Attribute{
+							MarkdownDescription: "Specify the maximum mirroring rate" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"destination_rate_limit_units": schema.StringAttribute{
+							MarkdownDescription: "Specify the units for the maximum mirror rate" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"rx_application": schema.BoolAttribute{
+							MarkdownDescription: "Specify an application destination" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"rx_rate_limit": schema.Int64Attribute{
+							MarkdownDescription: "Specify the maximum mirroring rate" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"rx_rate_limit_units": schema.StringAttribute{
+							MarkdownDescription: "Specify the units for the maximum mirror rate" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"tx_application": schema.BoolAttribute{
+							MarkdownDescription: "Specify an application destination" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"tx_rate_limit": schema.Int64Attribute{
+							MarkdownDescription: "Specify the maximum mirroring rate" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"tx_rate_limit_units": schema.StringAttribute{
+							MarkdownDescription: "Specify the units for the maximum mirror rate" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"drops_unique_punt": schema.BoolAttribute{
+							MarkdownDescription: "Only mirror the first packet for a given drop reason" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"drops_unique_port": schema.BoolAttribute{
+							MarkdownDescription: "Only mirror the first packet for a given port" + "\n  - Supported from version: `25.4`",
 							Computed:            true,
 						},
 					},
@@ -261,7 +304,6 @@ func (d *MonitorSessionDataSource) Read(ctx context.Context, req datasource.Read
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -281,7 +323,7 @@ func (d *MonitorSessionDataSource) Read(ctx context.Context, req datasource.Read
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

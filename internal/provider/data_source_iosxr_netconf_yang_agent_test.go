@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -35,7 +36,9 @@ func TestAccDataSourceIosxrNetconfYangAgent(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_netconf_yang_agent.test", "with_defaults_support", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_netconf_yang_agent.test", "session_limit", "50"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_netconf_yang_agent.test", "session_idle_timeout", "30"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_netconf_yang_agent.test", "session_absolute_timeout", "1440"))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_netconf_yang_agent.test", "session_absolute_timeout", "1440"))
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -61,7 +64,9 @@ func testAccDataSourceIosxrNetconfYangAgentConfig() string {
 	config += `	with_defaults_support = true` + "\n"
 	config += `	session_limit = 50` + "\n"
 	config += `	session_idle_timeout = 30` + "\n"
-	config += `	session_absolute_timeout = 1440` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	session_absolute_timeout = 1440` + "\n"
+	}
 	config += `}` + "\n"
 
 	config += `

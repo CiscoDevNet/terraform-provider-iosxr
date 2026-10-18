@@ -22,9 +22,11 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -33,10 +35,36 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 
 func TestAccDataSourceIosxr{{camelCase .Name}}(t *testing.T) {
-	{{- if len .TestTags}}
+	{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		allMissing := len(_tags) > 0
+		for _, _t := range _tags {
+			if os.Getenv(_t) != "" {
+				allMissing = false
+				break
+			}
+		}
+		if allMissing {
+			t.Skipf("skipping test, set environment variable %v", _tags)
+		}
+	}
+	{{- else if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} && {{end}}os.Getenv("{{$e}}") == ""{{end}} {
         t.Skip("skipping test, set environment variable {{range $i, $e := .TestTags}}{{if $i}} or {{end}}{{$e}}{{end}}")
     }
+	{{- end}}
+	{{- if .IntroducedInVersion}}
+	if os.Getenv("IOSXR_VERSION") != "" && !helpers.VersionAtLeast(os.Getenv("IOSXR_VERSION"), "{{.IntroducedInVersion}}") {
+		t.Skipf("skipping test, only supported from IOS-XR version {{formatVersionDisplay .IntroducedInVersion}} and above (current: %s)", os.Getenv("IOSXR_VERSION"))
+	}
+	{{- end}}
+	{{- if .RemovedInVersion}}
+	if helpers.VersionAtLeast(os.Getenv("IOSXR_VERSION"), "{{.RemovedInVersion}}") {
+		t.Skipf("skipping test, not supported from IOS-XR version {{formatVersionDisplay .RemovedInVersion}} and above (current: %s)", os.Getenv("IOSXR_VERSION"))
+	}
 	{{- end}}
 	var checks []resource.TestCheckFunc
 	{{- $name := .Name }}
@@ -44,32 +72,118 @@ func TestAccDataSourceIosxr{{camelCase .Name}}(t *testing.T) {
 	{{- if and (not .Id) (not .Reference) (not .WriteOnly) (not .ExcludeTest)}}
 	{{- if eq .Type "List"}}
 	{{- $list := .TfName }}
-	{{- if len .TestTags}}
+	{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags { if os.Getenv(_t) != "" { anySet = true; break } }
+		if anySet {
+	{{- else if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+	{{- end}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	if {{testVersionGuardExpr .}} {
 	{{- end}}
 	{{- range .Attributes}}
 	{{- if and (not .WriteOnly) (not .ExcludeTest)}}
 	{{- if eq .Type "List"}}
 	{{- $clist := .TfName }}
-	{{- if len .TestTags}}
+	{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags { if os.Getenv(_t) != "" { anySet = true; break } }
+		if anySet {
+	{{- else if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+	{{- end}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	if {{testVersionGuardExpr .}} {
 	{{- end}}
 	{{- range .Attributes}}
 	{{- if and (not .WriteOnly) (not .ExcludeTest)}}
 	{{- if eq .Type "List"}}
 	{{- $cclist := .TfName }}
-	{{- if len .TestTags}}
+	{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags { if os.Getenv(_t) != "" { anySet = true; break } }
+		if anySet {
+	{{- else if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+	{{- end}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	if {{testVersionGuardExpr .}} {
 	{{- end}}
 	{{- range .Attributes}}
 	{{- if and (not .WriteOnly) (not .ExcludeTest)}}
 	{{- if eq .Type "List"}}
 	{{- $ccclist := .TfName }}
-	{{- if len .TestTags}}
+	{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags { if os.Getenv(_t) != "" { anySet = true; break } }
+		if anySet {
+	{{- else if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+	{{- end}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	if {{testVersionGuardExpr .}} {
 	{{- end}}
 	{{- range .Attributes}}
 	{{- if and (not .WriteOnly) (not .ExcludeTest)}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	if {{testVersionGuardExpr .}} {
+	{{- end}}
+	{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags {
+			if os.Getenv(_t) != "" {
+				anySet = true
+				break
+			}
+		}
+		if anySet {
+			{{- if .VersionExamples}}
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test",
+				"{{$list}}.0.{{$clist}}.0.{{$cclist}}.0.{{$ccclist}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")))
+			{{- else}}
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test", "{{$list}}.0.{{$clist}}.0.{{$cclist}}.0.{{$ccclist}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", "{{.Example}}"))
+			{{- end}}
+		}
+	}
+	{{- else}}
+	{{- if .VersionExamples}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test",
+			"{{$list}}.0.{{$clist}}.0.{{$cclist}}.0.{{$ccclist}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")))
+	}
+	{{- else}}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test",
+		"{{$list}}.0.{{$clist}}.0.{{$cclist}}.0.{{$ccclist}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")))
+	{{- end}}
+	{{- else}}
 	{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test", "{{$list}}.0.{{$clist}}.0.{{$cclist}}.0.{{$ccclist}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", "{{.Example}}"))
@@ -79,8 +193,61 @@ func TestAccDataSourceIosxr{{camelCase .Name}}(t *testing.T) {
 	{{- end}}
 	{{- end}}
 	{{- end}}
-	{{- if len .TestTags}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
 	}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- if or .VersionTestTags (len .TestTags)}}
+	}
+	{{- end}}
+	{{- if .VersionTestTags}}
+	}
+	{{- end}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	}
+	{{- end}}
+	{{- else}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	if {{testVersionGuardExpr .}} {
+	{{- end}}
+	{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags {
+			if os.Getenv(_t) != "" {
+				anySet = true
+				break
+			}
+		}
+		if anySet {
+			{{- if .VersionExamples}}
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test",
+				"{{$list}}.0.{{$clist}}.0.{{$cclist}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")))
+			{{- else}}
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test", "{{$list}}.0.{{$clist}}.0.{{$cclist}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", "{{.Example}}"))
+			{{- end}}
+		}
+	}
+	{{- else}}
+	{{- if .VersionExamples}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test",
+			"{{$list}}.0.{{$clist}}.0.{{$cclist}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")))
+	}
+	{{- else}}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test",
+		"{{$list}}.0.{{$clist}}.0.{{$cclist}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")))
 	{{- end}}
 	{{- else}}
 	{{- if len .TestTags}}
@@ -92,9 +259,62 @@ func TestAccDataSourceIosxr{{camelCase .Name}}(t *testing.T) {
 	{{- end}}
 	{{- end}}
 	{{- end}}
-	{{- end}}
-	{{- if len .TestTags}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
 	}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- if or .VersionTestTags (len .TestTags)}}
+	}
+	{{- end}}
+	{{- if .VersionTestTags}}
+	}
+	{{- end}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	}
+	{{- end}}
+	{{- else}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	if {{testVersionGuardExpr .}} {
+	{{- end}}
+	{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags {
+			if os.Getenv(_t) != "" {
+				anySet = true
+				break
+			}
+		}
+		if anySet {
+			{{- if .VersionExamples}}
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test",
+				"{{$list}}.0.{{$clist}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")))
+			{{- else}}
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test", "{{$list}}.0.{{$clist}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", "{{.Example}}"))
+			{{- end}}
+		}
+	}
+	{{- else}}
+	{{- if .VersionExamples}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test",
+			"{{$list}}.0.{{$clist}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")))
+	}
+	{{- else}}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test",
+		"{{$list}}.0.{{$clist}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")))
 	{{- end}}
 	{{- else}}
 	{{- if len .TestTags}}
@@ -106,9 +326,62 @@ func TestAccDataSourceIosxr{{camelCase .Name}}(t *testing.T) {
 	{{- end}}
 	{{- end}}
 	{{- end}}
-	{{- end}}
-	{{- if len .TestTags}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
 	}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	}
+	{{- end}}
+	{{- if or .VersionTestTags (len .TestTags)}}
+	}
+	{{- end}}
+	{{- if .VersionTestTags}}
+	}
+	{{- end}}
+	{{- else}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	if {{testVersionGuardExpr .}} {
+	{{- end}}
+	{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags {
+			if os.Getenv(_t) != "" {
+				anySet = true
+				break
+			}
+		}
+		if anySet {
+			{{- if .VersionExamples}}
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test",
+				"{{$list}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")))
+			{{- else}}
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test", "{{$list}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", "{{.Example}}"))
+			{{- end}}
+		}
+	}
+	{{- else}}
+	{{- if .VersionExamples}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test",
+			"{{$list}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")))
+	}
+	{{- else}}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test",
+		"{{$list}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")))
 	{{- end}}
 	{{- else}}
 	{{- if len .TestTags}}
@@ -120,9 +393,62 @@ func TestAccDataSourceIosxr{{camelCase .Name}}(t *testing.T) {
 	{{- end}}
 	{{- end}}
 	{{- end}}
-	{{- end}}
-	{{- if len .TestTags}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
 	}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- if or .VersionTestTags (len .TestTags)}}
+	}
+	{{- end}}
+	{{- if .VersionTestTags}}
+	}
+	{{- end}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	}
+	{{- end}}
+	{{- else}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	if {{testVersionGuardExpr .}} {
+	{{- end}}
+	{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags {
+			if os.Getenv(_t) != "" {
+				anySet = true
+				break
+			}
+		}
+		if anySet {
+			{{- if .VersionExamples}}
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test",
+				"{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")))
+			{{- else}}
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test", "{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", "{{.Example}}"))
+			{{- end}}
+		}
+	}
+	{{- else}}
+	{{- if .VersionExamples}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test",
+			"{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")))
+	}
+	{{- else}}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test",
+		"{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")))
 	{{- end}}
 	{{- else}}
 	{{- if len .TestTags}}
@@ -134,13 +460,18 @@ func TestAccDataSourceIosxr{{camelCase .Name}}(t *testing.T) {
 	{{- end}}
 	{{- end}}
 	{{- end}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	}
+	{{- end}}
+	{{- end}}
+	{{- end}}
 	{{- end}}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: {{if .TestPrerequisites}}testAccDataSourceIosxr{{camelCase .Name}}PrerequisitesConfig+{{end}}testAccDataSourceIosxr{{camelCase .Name}}Config(),
+				Config: {{if .VersionTestPrerequisites}}testAccDataSourceIosxr{{camelCase .Name}}PrerequisitesConfig()+{{else if .TestPrerequisites}}testAccDataSourceIosxr{{camelCase .Name}}PrerequisitesConfig+{{end}}testAccDataSourceIosxr{{camelCase .Name}}Config(),
 				Check: resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -152,7 +483,62 @@ func TestAccDataSourceIosxr{{camelCase .Name}}(t *testing.T) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 
-{{- if .TestPrerequisites}}
+{{- if or .TestPrerequisites .VersionTestPrerequisites}}
+{{- if .VersionTestPrerequisites}}
+{{- range $ver, $prereqs := .VersionTestPrerequisites}}
+const testAccDataSourceIosxr{{camelCase $.Name}}PrerequisitesConfig_{{versionSuffix $ver}} = `
+{{- range $index, $item := $prereqs}}
+resource "iosxr_yang" "PreReq{{$index}}" {
+	path = "{{.Path}}"
+	{{- if .NoDelete}}
+	delete = false
+	{{- end}}
+	attributes = {
+		{{- range .Attributes}}
+		"{{.Name}}" = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
+		{{- end}}
+	}
+	{{- if .Lists}}
+	lists = [
+		{{- range .Lists}}
+		{
+			name = "{{.Name}}"
+			{{ if .Key}}key = "{{.Key}}"{{end}}
+			{{- if len .Items}}
+			items = [
+				{{- range .Items}}
+				{
+					{{- range .Attributes}}
+					"{{.Name}}" = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
+					{{- end}}
+				},
+				{{- end}}
+			]
+			{{- end}}
+			{{- if len .Values}}
+			values = [{{range .Values}}"{{.}}", {{end}}]
+			{{- end}}
+		},
+		{{- end}}
+	]
+	{{- end}}
+	{{- if .Dependencies}}
+	depends_on = [{{range .Dependencies}}iosxr_yang.PreReq{{.}}, {{end}}]
+	{{- end}}
+}
+{{ end}}
+`
+{{- end}}
+
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccDataSourceIosxr{{camelCase .Name}}PrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			{{formatVersionTestPrerequisites .VersionTestPrerequisites "testAccDataSourceIosxr" (camelCase .Name)}}
+		},
+	)
+}
+{{- else}}
 const testAccDataSourceIosxr{{camelCase .Name}}PrerequisitesConfig = `
 {{- range $index, $item := .TestPrerequisites}}
 resource "iosxr_yang" "PreReq{{$index}}" {
@@ -200,6 +586,7 @@ resource "iosxr_yang" "PreReq{{$index}}" {
 {{ end}}
 `
 {{- end}}
+{{- end}}
 
 // End of section. //template:end testPrerequisites
 
@@ -214,33 +601,148 @@ func testAccDataSourceIosxr{{camelCase .Name}}Config() string {
 	{{- range  .Attributes}}
 	{{- if not .ExcludeTest}}
 	{{- if eq .Type "List"}}
-	{{- if len .TestTags}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	if {{testVersionGuardExpr .}} {
+	{{- end}}
+	{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags { if os.Getenv(_t) != "" { anySet = true; break } }
+		if anySet {
+	{{- else if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 	{{- end}}
 	config += `	{{.TfName}} = [{` + "\n"
 		{{- range  .Attributes}}
 		{{- if not .ExcludeTest}}
 		{{- if eq .Type "List"}}
-		{{- if len .TestTags}}
+		{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	if {{testVersionGuardExpr .}} {
+		{{- end}}
+		{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags { if os.Getenv(_t) != "" { anySet = true; break } }
+		if anySet {
+		{{- else if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 		{{- end}}
 	config += `		{{.TfName}} = [{` + "\n"
 			{{- range  .Attributes}}
 			{{- if not .ExcludeTest}}
 			{{- if eq .Type "List"}}
-			{{- if len .TestTags}}
+			{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	if {{testVersionGuardExpr .}} {
+			{{- end}}
+			{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags { if os.Getenv(_t) != "" { anySet = true; break } }
+		if anySet {
+			{{- else if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 			{{- end}}
 	config += `			{{.TfName}} = [{` + "\n"
 				{{- range  .Attributes}}
 				{{- if not .ExcludeTest}}
 				{{- if eq .Type "List"}}
-				{{- if len .TestTags}}
+				{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	if {{testVersionGuardExpr .}} {
+				{{- end}}
+				{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags { if os.Getenv(_t) != "" { anySet = true; break } }
+		if anySet {
+				{{- else if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 				{{- end}}
 	config += `				{{.TfName}} = [{` + "\n"
 					{{- range  .Attributes}}
 					{{- if not .ExcludeTest}}
+					{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	if {{testVersionGuardExpr .}} {
+					{{- end}}
+					{{- if .VersionExamples}}
+					{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags {
+			if os.Getenv(_t) != "" {
+				anySet = true
+				break
+			}
+		}
+		if anySet {
+	config += `					{{.TfName}} = ` + {{if eq .Type "String"}}fmt.Sprintf("%q", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "StringList"}}fmt.Sprintf("[%q]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "Int64List"}}fmt.Sprintf("[%s]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else}}fmt.Sprintf("%s", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{end}} + "\n"
+		}
+	}
+					{{- else}}
+					{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		config += `					{{.TfName}} = ` + {{if eq .Type "String"}}fmt.Sprintf("%q", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "StringList"}}fmt.Sprintf("[%q]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "Int64List"}}fmt.Sprintf("[%s]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else}}fmt.Sprintf("%s", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{end}} + "\n"
+	}
+					{{- else}}
+	config += `					{{.TfName}} = ` + {{if eq .Type "String"}}fmt.Sprintf("%q", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "StringList"}}fmt.Sprintf("[%q]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "Int64List"}}fmt.Sprintf("[%s]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else}}fmt.Sprintf("%s", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{end}} + "\n"
+					{{- end}}
+					{{- end}}
+					{{- else}}
+					{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags {
+			if os.Getenv(_t) != "" {
+				anySet = true
+				break
+			}
+		}
+		if anySet {
+	config += `					{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"
+		}
+	}
+					{{- else}}
 					{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 		config += `					{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"
@@ -250,10 +752,92 @@ func testAccDataSourceIosxr{{camelCase .Name}}Config() string {
 					{{- end}}
 					{{- end}}
 					{{- end}}
+					{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	}
+					{{- end}}
+					{{- end}}
+					{{- end}}
 	config += `				}]` + "\n"
-				{{- if len .TestTags}}
+				{{- if or .VersionTestTags (len .TestTags)}}
 	}
 				{{- end}}
+				{{- if .VersionTestTags}}
+	}
+				{{- end}}
+				{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	}
+				{{- end}}
+				{{- else}}
+				{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	if {{testVersionGuardExpr .}} {
+				{{- end}}
+				{{- if .VersionExamples}}
+				{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags {
+			if os.Getenv(_t) != "" {
+				anySet = true
+				break
+			}
+		}
+		if anySet {
+	config += `				{{.TfName}} = ` + {{if eq .Type "String"}}fmt.Sprintf("%q", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "StringList"}}fmt.Sprintf("[%q]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "Int64List"}}fmt.Sprintf("[%s]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else}}fmt.Sprintf("%s", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{end}} + "\n"
+		}
+	}
+				{{- else}}
+				{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		config += `				{{.TfName}} = ` + {{if eq .Type "String"}}fmt.Sprintf("%q", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "StringList"}}fmt.Sprintf("[%q]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "Int64List"}}fmt.Sprintf("[%s]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else}}fmt.Sprintf("%s", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{end}} + "\n"
+	}
+				{{- else}}
+	config += `				{{.TfName}} = ` + {{if eq .Type "String"}}fmt.Sprintf("%q", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "StringList"}}fmt.Sprintf("[%q]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "Int64List"}}fmt.Sprintf("[%s]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else}}fmt.Sprintf("%s", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{end}} + "\n"
+				{{- end}}
+				{{- end}}
+				{{- else}}
+				{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags {
+			if os.Getenv(_t) != "" {
+				anySet = true
+				break
+			}
+		}
+		if anySet {
+	config += `				{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"
+		}
+	}
 				{{- else}}
 				{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
@@ -264,11 +848,93 @@ func testAccDataSourceIosxr{{camelCase .Name}}Config() string {
 				{{- end}}
 				{{- end}}
 				{{- end}}
+				{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	}
+				{{- end}}
+				{{- end}}
+				{{- end}}
 				{{- end}}
 	config += `			}]` + "\n"
-			{{- if len .TestTags}}
+			{{- if or .VersionTestTags (len .TestTags)}}
 	}
 			{{- end}}
+			{{- if .VersionTestTags}}
+	}
+			{{- end}}
+			{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	}
+			{{- end}}
+			{{- else}}
+			{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	if {{testVersionGuardExpr .}} {
+			{{- end}}
+			{{- if .VersionExamples}}
+			{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags {
+			if os.Getenv(_t) != "" {
+				anySet = true
+				break
+			}
+		}
+		if anySet {
+	config += `			{{.TfName}} = ` + {{if eq .Type "String"}}fmt.Sprintf("%q", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "StringList"}}fmt.Sprintf("[%q]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "Int64List"}}fmt.Sprintf("[%s]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else}}fmt.Sprintf("%s", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{end}} + "\n"
+		}
+	}
+			{{- else}}
+			{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		config += `			{{.TfName}} = ` + {{if eq .Type "String"}}fmt.Sprintf("%q", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "StringList"}}fmt.Sprintf("[%q]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "Int64List"}}fmt.Sprintf("[%s]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else}}fmt.Sprintf("%s", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{end}} + "\n"
+	}
+			{{- else}}
+	config += `			{{.TfName}} = ` + {{if eq .Type "String"}}fmt.Sprintf("%q", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "StringList"}}fmt.Sprintf("[%q]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "Int64List"}}fmt.Sprintf("[%s]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else}}fmt.Sprintf("%s", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{end}} + "\n"
+			{{- end}}
+			{{- end}}
+			{{- else}}
+			{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags {
+			if os.Getenv(_t) != "" {
+				anySet = true
+				break
+			}
+		}
+		if anySet {
+	config += `			{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"
+		}
+	}
 			{{- else}}
 			{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
@@ -279,11 +945,93 @@ func testAccDataSourceIosxr{{camelCase .Name}}Config() string {
 			{{- end}}
 			{{- end}}
 			{{- end}}
-			{{- end}}
-	config += `		}]` + "\n"
-			{{- if len .TestTags}}
+			{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
 	}
 			{{- end}}
+			{{- end}}
+			{{- end}}
+			{{- end}}
+	config += `		}]` + "\n"
+			{{- if or .VersionTestTags (len .TestTags)}}
+	}
+			{{- end}}
+			{{- if .VersionTestTags}}
+	}
+			{{- end}}
+		{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	}
+		{{- end}}
+		{{- else}}
+		{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	if {{testVersionGuardExpr .}} {
+		{{- end}}
+		{{- if .VersionExamples}}
+		{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags {
+			if os.Getenv(_t) != "" {
+				anySet = true
+				break
+			}
+		}
+		if anySet {
+	config += `		{{.TfName}} = ` + {{if eq .Type "String"}}fmt.Sprintf("%q", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "StringList"}}fmt.Sprintf("[%q]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "Int64List"}}fmt.Sprintf("[%s]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else}}fmt.Sprintf("%s", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{end}} + "\n"
+		}
+	}
+		{{- else}}
+		{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		config += `		{{.TfName}} = ` + {{if eq .Type "String"}}fmt.Sprintf("%q", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "StringList"}}fmt.Sprintf("[%q]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "Int64List"}}fmt.Sprintf("[%s]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else}}fmt.Sprintf("%s", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{end}} + "\n"
+	}
+		{{- else}}
+	config += `		{{.TfName}} = ` + {{if eq .Type "String"}}fmt.Sprintf("%q", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "StringList"}}fmt.Sprintf("[%q]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "Int64List"}}fmt.Sprintf("[%s]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else}}fmt.Sprintf("%s", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{end}} + "\n"
+		{{- end}}
+		{{- end}}
+		{{- else}}
+		{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags {
+			if os.Getenv(_t) != "" {
+				anySet = true
+				break
+			}
+		}
+		if anySet {
+	config += `		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"
+		}
+	}
 		{{- else}}
 		{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
@@ -294,11 +1042,93 @@ func testAccDataSourceIosxr{{camelCase .Name}}Config() string {
 		{{- end}}
 		{{- end}}
 		{{- end}}
-		{{- end}}
-	config += `	}]` + "\n"
-		{{- if len .TestTags}}
+		{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
 	}
 		{{- end}}
+		{{- end}}
+		{{- end}}
+		{{- end}}
+	config += `	}]` + "\n"
+		{{- if or .VersionTestTags (len .TestTags)}}
+	}
+		{{- end}}
+		{{- if .VersionTestTags}}
+	}
+		{{- end}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	}
+	{{- end}}
+	{{- else}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	if {{testVersionGuardExpr .}} {
+	{{- end}}
+	{{- if .VersionExamples}}
+	{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags {
+			if os.Getenv(_t) != "" {
+				anySet = true
+				break
+			}
+		}
+		if anySet {
+	config += `	{{.TfName}} = ` + {{if eq .Type "String"}}fmt.Sprintf("%q", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "StringList"}}fmt.Sprintf("[%q]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "Int64List"}}fmt.Sprintf("[%s]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else}}fmt.Sprintf("%s", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{end}} + "\n"
+		}
+	}
+	{{- else}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		config += `	{{.TfName}} = ` + {{if eq .Type "String"}}fmt.Sprintf("%q", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "StringList"}}fmt.Sprintf("[%q]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "Int64List"}}fmt.Sprintf("[%s]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else}}fmt.Sprintf("%s", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{end}} + "\n"
+	}
+	{{- else}}
+	config += `	{{.TfName}} = ` + {{if eq .Type "String"}}fmt.Sprintf("%q", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "StringList"}}fmt.Sprintf("[%q]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else if eq .Type "Int64List"}}fmt.Sprintf("[%s]", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{else}}fmt.Sprintf("%s", selectVersionExample(map[string]string{
+	{{formatVersionExamples .VersionExamples}}
+}, "{{.Example}}")){{end}} + "\n"
+	{{- end}}
+	{{- end}}
+	{{- else}}
+	{{- if .VersionTestTags}}
+	{
+		_tags := selectVersionTestTags(map[string][]string{
+			{{formatVersionTestTags .VersionTestTags}}
+		}, []string{ {{range $i,$e := .TestTags}}{{if $i}}, {{end}}"{{$e}}"{{end}} })
+		anySet := len(_tags) == 0
+		for _, _t := range _tags {
+			if os.Getenv(_t) != "" {
+				anySet = true
+				break
+			}
+		}
+		if anySet {
+	config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"
+		}
+	}
 	{{- else}}
 	{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
@@ -309,8 +1139,19 @@ func testAccDataSourceIosxr{{camelCase .Name}}Config() string {
 	{{- end}}
 	{{- end}}
 	{{- end}}
+	{{- if or .AddedInVersion .RemovedInVersion .ExcludeTestFrom}}
+	}
 	{{- end}}
-	{{- if .TestPrerequisites}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- if .VersionTestPrerequisites}}
+	config += selectVersionDependsOn(map[string]string{
+		{{- range $ver, $prereqs := .VersionTestPrerequisites}}
+		"{{$ver}}": `[{{range $i, $_ := $prereqs}}iosxr_yang.PreReq{{$i}}, {{end}}]`,
+		{{- end}}
+	}) + "\n"
+	{{- else if .TestPrerequisites}}
 	config += `	depends_on = [{{range $index, $item := .TestPrerequisites}}iosxr_yang.PreReq{{$index}}, {{end}}]` + "\n"
 	{{- end}}
 	config += `}` + "\n"

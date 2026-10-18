@@ -1,7 +1,7 @@
 resource "iosxr_class_map_traffic" "example" {
   class_map_name = "CM-TRAFFIC"
-  match_all      = true
   description    = "Traffic Class Map"
+  match_all      = true
   match_destination_address_ipv4 = [
     {
       address = "10.1.1.0"

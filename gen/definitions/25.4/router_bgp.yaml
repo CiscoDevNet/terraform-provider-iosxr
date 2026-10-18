@@ -1,0 +1,36 @@
+---
+name: Router BGP
+path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]
+doc_category: BGP
+attributes:
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: bandwidth-groups/bandwidth-group
+    tf_name: bandwidth_groups
+    type: List
+    attributes:
+      - yang_name: bandwidth-group-name
+        id: true
+        example: BWG1
+      - yang_name: bandwidth-ids/bandwidth-id
+        tf_name: bandwidth_ids
+        type: List
+        attributes:
+          - yang_name: bandwidth-id-number
+            id: true
+            example: 1
+          - yang_name: value
+            example: 1000
+          - yang_name: bandwidth-unit
+            example: gbps
+          - yang_name: asn
+            example: 65001
+  - yang_name: bgp/neighbor-down/fast-hold-timer
+    example: 500
+  - yang_name: distance/bgp/external
+    example: 100
+  - yang_name: distance/bgp/internal
+    example: 150
+  - yang_name: distance/bgp/local
+    example: 200

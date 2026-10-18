@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -153,7 +154,7 @@ func (data EthernetCFMData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data EthernetCFM) toBody(ctx context.Context) string {
+func (data EthernetCFM) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.TracerouteCacheHoldTime.IsNull() && !data.TracerouteCacheHoldTime.IsUnknown() {
 		body, _ = sjson.Set(body, "traceroute.cache.hold-time", strconv.FormatInt(data.TracerouteCacheHoldTime.ValueInt64(), 10))
@@ -188,6 +189,7 @@ func (data EthernetCFM) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "domains.domain"+"."+strconv.Itoa(index)+"."+"id.string", item.IdString.ValueString())
 			}
 			if len(item.Services) > 0 {
+				body, _ = sjson.Set(body, "domains.domain"+"."+strconv.Itoa(index)+"."+"services.service", []interface{}{})
 				for cindex, citem := range item.Services {
 					if !citem.ServiceName.IsNull() && !citem.ServiceName.IsUnknown() {
 						body, _ = sjson.Set(body, "domains.domain"+"."+strconv.Itoa(index)+"."+"services.service"+"."+strconv.Itoa(cindex)+"."+"service-name", citem.ServiceName.ValueString())
@@ -405,6 +407,7 @@ func (data EthernetCFM) toBody(ctx context.Context) string {
 						}
 					}
 					if len(citem.MepCrosschecks) > 0 {
+						body, _ = sjson.Set(body, "domains.domain"+"."+strconv.Itoa(index)+"."+"services.service"+"."+strconv.Itoa(cindex)+"."+"mep.crosscheck.mep-ids.mep-id", []interface{}{})
 						for ccindex, ccitem := range citem.MepCrosschecks {
 							if !ccitem.MepId.IsNull() && !ccitem.MepId.IsUnknown() {
 								body, _ = sjson.Set(body, "domains.domain"+"."+strconv.Itoa(index)+"."+"services.service"+"."+strconv.Itoa(cindex)+"."+"mep.crosscheck.mep-ids.mep-id"+"."+strconv.Itoa(ccindex)+"."+"mep-id", strconv.FormatInt(ccitem.MepId.ValueInt64(), 10))
@@ -422,6 +425,1657 @@ func (data EthernetCFM) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
+
+// GetVersionConstraints returns the version constraints for all fields
+func (data EthernetCFM) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data EthernetCFM) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data EthernetCFM) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data EthernetCFM) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data EthernetCFM) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *EthernetCFM) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "traceroute.cache.hold-time"); value.Exists() && !data.TracerouteCacheHoldTime.IsNull() {
+		data.TracerouteCacheHoldTime = types.Int64Value(value.Int())
+	} else if data.TracerouteCacheHoldTime.IsNull() {
+		data.TracerouteCacheHoldTime = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "traceroute.cache.size"); value.Exists() && !data.TracerouteCacheSize.IsNull() {
+		data.TracerouteCacheSize = types.Int64Value(value.Int())
+	} else if data.TracerouteCacheSize.IsNull() {
+		data.TracerouteCacheSize = types.Int64Null()
+	}
+	for i := range data.Domains {
+		keys := [...]string{"domain-name"}
+		keyValues := [...]string{data.Domains[i].DomainName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "domains.domain").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("domain-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].DomainName.IsNull() {
+			data.Domains[i].DomainName = types.StringValue(value.String())
+		} else {
+			data.Domains[i].DomainName = types.StringNull()
+		}
+		if value := r.Get("level"); value.Exists() && !data.Domains[i].Level.IsNull() {
+			data.Domains[i].Level = types.Int64Value(value.Int())
+		} else {
+			data.Domains[i].Level = types.Int64Null()
+		}
+		if value := r.Get("id.dns"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].IdDns.IsNull() {
+			data.Domains[i].IdDns = types.StringValue(value.String())
+		} else {
+			data.Domains[i].IdDns = types.StringNull()
+		}
+		if value := r.Get("id.mac-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].IdMacAddress.IsNull() {
+			data.Domains[i].IdMacAddress = types.StringValue(value.String())
+		} else {
+			data.Domains[i].IdMacAddress = types.StringNull()
+		}
+		if value := r.Get("id.mac-address-two-octet-integer"); value.Exists() && !data.Domains[i].IdMacAddressInteger.IsNull() {
+			data.Domains[i].IdMacAddressInteger = types.Int64Value(value.Int())
+		} else {
+			data.Domains[i].IdMacAddressInteger = types.Int64Null()
+		}
+		if value := r.Get("id.null"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Domains[i].IdNull.IsNull() {
+				data.Domains[i].IdNull = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Domains[i].IdNull.IsNull() {
+				data.Domains[i].IdNull = types.BoolNull()
+			}
+		}
+		if value := r.Get("id.string"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].IdString.IsNull() {
+			data.Domains[i].IdString = types.StringValue(value.String())
+		} else {
+			data.Domains[i].IdString = types.StringNull()
+		}
+		for ci := range data.Domains[i].Services {
+			keys := [...]string{"service-name"}
+			keyValues := [...]string{data.Domains[i].Services[ci].ServiceName.ValueString()}
+
+			var cr gjson.Result
+			r.Get("services.service").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("service-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].Services[ci].ServiceName.IsNull() {
+				data.Domains[i].Services[ci].ServiceName = types.StringValue(value.String())
+			} else {
+				data.Domains[i].Services[ci].ServiceName = types.StringNull()
+			}
+			if value := cr.Get("bridge.group"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].Services[ci].BridgeGroup.IsNull() {
+				data.Domains[i].Services[ci].BridgeGroup = types.StringValue(value.String())
+			} else {
+				data.Domains[i].Services[ci].BridgeGroup = types.StringNull()
+			}
+			if value := cr.Get("bridge.bridge-domain"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].Services[ci].BridgeDomain.IsNull() {
+				data.Domains[i].Services[ci].BridgeDomain = types.StringValue(value.String())
+			} else {
+				data.Domains[i].Services[ci].BridgeDomain = types.StringNull()
+			}
+			if value := cr.Get("down-meps"); value.Exists() {
+				if !data.Domains[i].Services[ci].DownMeps.IsNull() {
+					data.Domains[i].Services[ci].DownMeps = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].DownMeps.IsNull() {
+					data.Domains[i].Services[ci].DownMeps = types.BoolNull()
+				}
+			}
+			if value := cr.Get("flexible-xconnect.vlan-aware.evi"); value.Exists() && !data.Domains[i].Services[ci].FlexibleXconnectVlanAwareEvi.IsNull() {
+				data.Domains[i].Services[ci].FlexibleXconnectVlanAwareEvi = types.Int64Value(value.Int())
+			} else {
+				data.Domains[i].Services[ci].FlexibleXconnectVlanAwareEvi = types.Int64Null()
+			}
+			if value := cr.Get("flexible-xconnect.vlan-unaware.cross-connect-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].Services[ci].FlexibleXconnectVlanUnawareName.IsNull() {
+				data.Domains[i].Services[ci].FlexibleXconnectVlanUnawareName = types.StringValue(value.String())
+			} else {
+				data.Domains[i].Services[ci].FlexibleXconnectVlanUnawareName = types.StringNull()
+			}
+			if value := cr.Get("xconnect.mp2mp.group"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].Services[ci].XconnectMp2mpGroup.IsNull() {
+				data.Domains[i].Services[ci].XconnectMp2mpGroup = types.StringValue(value.String())
+			} else {
+				data.Domains[i].Services[ci].XconnectMp2mpGroup = types.StringNull()
+			}
+			if value := cr.Get("xconnect.mp2mp.cross-connect-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].Services[ci].XconnectMp2mpName.IsNull() {
+				data.Domains[i].Services[ci].XconnectMp2mpName = types.StringValue(value.String())
+			} else {
+				data.Domains[i].Services[ci].XconnectMp2mpName = types.StringNull()
+			}
+			if value := cr.Get("xconnect.mp2mp.ce-id"); value.Exists() && !data.Domains[i].Services[ci].XconnectMp2mpCeId.IsNull() {
+				data.Domains[i].Services[ci].XconnectMp2mpCeId = types.Int64Value(value.Int())
+			} else {
+				data.Domains[i].Services[ci].XconnectMp2mpCeId = types.Int64Null()
+			}
+			if value := cr.Get("xconnect.mp2mp.remote-ce-id"); value.Exists() && !data.Domains[i].Services[ci].XconnectMp2mpRemoteCeId.IsNull() {
+				data.Domains[i].Services[ci].XconnectMp2mpRemoteCeId = types.Int64Value(value.Int())
+			} else {
+				data.Domains[i].Services[ci].XconnectMp2mpRemoteCeId = types.Int64Null()
+			}
+			if value := cr.Get("xconnect.p2p.group"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].Services[ci].XconnectP2pGroupName.IsNull() {
+				data.Domains[i].Services[ci].XconnectP2pGroupName = types.StringValue(value.String())
+			} else {
+				data.Domains[i].Services[ci].XconnectP2pGroupName = types.StringNull()
+			}
+			if value := cr.Get("xconnect.p2p.cross-connect-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].Services[ci].XconnectP2pXcName.IsNull() {
+				data.Domains[i].Services[ci].XconnectP2pXcName = types.StringValue(value.String())
+			} else {
+				data.Domains[i].Services[ci].XconnectP2pXcName = types.StringNull()
+			}
+			if value := cr.Get("id.icc-based.icc"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].Services[ci].IdIccBasedIcc.IsNull() {
+				data.Domains[i].Services[ci].IdIccBasedIcc = types.StringValue(value.String())
+			} else {
+				data.Domains[i].Services[ci].IdIccBasedIcc = types.StringNull()
+			}
+			if value := cr.Get("id.icc-based.umc"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].Services[ci].IdIccBasedUmc.IsNull() {
+				data.Domains[i].Services[ci].IdIccBasedUmc = types.StringValue(value.String())
+			} else {
+				data.Domains[i].Services[ci].IdIccBasedUmc = types.StringNull()
+			}
+			if value := cr.Get("id.vlanid"); value.Exists() && !data.Domains[i].Services[ci].IdVlanId.IsNull() {
+				data.Domains[i].Services[ci].IdVlanId = types.Int64Value(value.Int())
+			} else {
+				data.Domains[i].Services[ci].IdVlanId = types.Int64Null()
+			}
+			if value := cr.Get("id.number"); value.Exists() && !data.Domains[i].Services[ci].IdNumber.IsNull() {
+				data.Domains[i].Services[ci].IdNumber = types.Int64Value(value.Int())
+			} else {
+				data.Domains[i].Services[ci].IdNumber = types.Int64Null()
+			}
+			if value := cr.Get("id.string"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].Services[ci].IdString.IsNull() {
+				data.Domains[i].Services[ci].IdString = types.StringValue(value.String())
+			} else {
+				data.Domains[i].Services[ci].IdString = types.StringNull()
+			}
+			if value := cr.Get("id.vpn-id.vpn-oui"); value.Exists() && !data.Domains[i].Services[ci].IdVpnIdOui.IsNull() {
+				data.Domains[i].Services[ci].IdVpnIdOui = types.Int64Value(value.Int())
+			} else {
+				data.Domains[i].Services[ci].IdVpnIdOui = types.Int64Null()
+			}
+			if value := cr.Get("id.vpn-id.vpn-index"); value.Exists() && !data.Domains[i].Services[ci].IdVpnIdIndex.IsNull() {
+				data.Domains[i].Services[ci].IdVpnIdIndex = types.Int64Value(value.Int())
+			} else {
+				data.Domains[i].Services[ci].IdVpnIdIndex = types.Int64Null()
+			}
+			if value := cr.Get("tags"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].Services[ci].Tags.IsNull() {
+				data.Domains[i].Services[ci].Tags = types.StringValue(value.String())
+			} else {
+				data.Domains[i].Services[ci].Tags = types.StringNull()
+			}
+			if value := cr.Get("mip.auto-create.all"); value.Exists() {
+				if !data.Domains[i].Services[ci].MipAutoCreateAll.IsNull() {
+					data.Domains[i].Services[ci].MipAutoCreateAll = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].MipAutoCreateAll.IsNull() {
+					data.Domains[i].Services[ci].MipAutoCreateAll = types.BoolNull()
+				}
+			}
+			if value := cr.Get("mip.auto-create.lower-mep-only"); value.Exists() {
+				if !data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.IsNull() {
+					data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.IsNull() {
+					data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly = types.BoolNull()
+				}
+			}
+			if value := cr.Get("mip.auto-create.ccm-learning"); value.Exists() {
+				if !data.Domains[i].Services[ci].MipAutoCreateCcmLearning.IsNull() {
+					data.Domains[i].Services[ci].MipAutoCreateCcmLearning = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].MipAutoCreateCcmLearning.IsNull() {
+					data.Domains[i].Services[ci].MipAutoCreateCcmLearning = types.BoolNull()
+				}
+			}
+			if value := cr.Get("efd"); value.Exists() {
+				if !data.Domains[i].Services[ci].Efd.IsNull() {
+					data.Domains[i].Services[ci].Efd = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].Efd.IsNull() {
+					data.Domains[i].Services[ci].Efd = types.BoolNull()
+				}
+			}
+			if value := cr.Get("efd.protection-switching"); value.Exists() {
+				if !data.Domains[i].Services[ci].EfdProtectionSwitching.IsNull() {
+					data.Domains[i].Services[ci].EfdProtectionSwitching = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].EfdProtectionSwitching.IsNull() {
+					data.Domains[i].Services[ci].EfdProtectionSwitching = types.BoolNull()
+				}
+			}
+			if value := cr.Get("continuity-check.interval.interval-time"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].Services[ci].ContinuityCheckInterval.IsNull() {
+				data.Domains[i].Services[ci].ContinuityCheckInterval = types.StringValue(value.String())
+			} else {
+				data.Domains[i].Services[ci].ContinuityCheckInterval = types.StringNull()
+			}
+			if value := cr.Get("continuity-check.interval.loss-threshold"); value.Exists() && !data.Domains[i].Services[ci].ContinuityCheckIntervalLossThreshold.IsNull() {
+				data.Domains[i].Services[ci].ContinuityCheckIntervalLossThreshold = types.Int64Value(value.Int())
+			} else {
+				data.Domains[i].Services[ci].ContinuityCheckIntervalLossThreshold = types.Int64Null()
+			}
+			if value := cr.Get("continuity-check.archive.hold-time"); value.Exists() && !data.Domains[i].Services[ci].ContinuityCheckArchiveHoldTime.IsNull() {
+				data.Domains[i].Services[ci].ContinuityCheckArchiveHoldTime = types.Int64Value(value.Int())
+			} else {
+				data.Domains[i].Services[ci].ContinuityCheckArchiveHoldTime = types.Int64Null()
+			}
+			if value := cr.Get("continuity-check.loss.auto-traceroute"); value.Exists() {
+				if !data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.IsNull() {
+					data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.IsNull() {
+					data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute = types.BoolNull()
+				}
+			}
+			if value := cr.Get("maximum-meps"); value.Exists() && !data.Domains[i].Services[ci].MaximumMeps.IsNull() {
+				data.Domains[i].Services[ci].MaximumMeps = types.Int64Value(value.Int())
+			} else {
+				data.Domains[i].Services[ci].MaximumMeps = types.Int64Null()
+			}
+			if value := cr.Get("ais.transmission.interval"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].Services[ci].AisTransmissionInterval.IsNull() {
+				data.Domains[i].Services[ci].AisTransmissionInterval = types.StringValue(value.String())
+			} else {
+				data.Domains[i].Services[ci].AisTransmissionInterval = types.StringNull()
+			}
+			if value := cr.Get("ais.transmission.cos"); value.Exists() && !data.Domains[i].Services[ci].AisTransmissionCos.IsNull() {
+				data.Domains[i].Services[ci].AisTransmissionCos = types.Int64Value(value.Int())
+			} else {
+				data.Domains[i].Services[ci].AisTransmissionCos = types.Int64Null()
+			}
+			if value := cr.Get("log.continuity-check.mep.changes"); value.Exists() {
+				if !data.Domains[i].Services[ci].LogContinuityCheckMepChanges.IsNull() {
+					data.Domains[i].Services[ci].LogContinuityCheckMepChanges = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].LogContinuityCheckMepChanges.IsNull() {
+					data.Domains[i].Services[ci].LogContinuityCheckMepChanges = types.BoolNull()
+				}
+			}
+			if value := cr.Get("log.continuity-check.errors"); value.Exists() {
+				if !data.Domains[i].Services[ci].LogContinuityCheckErrors.IsNull() {
+					data.Domains[i].Services[ci].LogContinuityCheckErrors = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].LogContinuityCheckErrors.IsNull() {
+					data.Domains[i].Services[ci].LogContinuityCheckErrors = types.BoolNull()
+				}
+			}
+			if value := cr.Get("log.crosscheck.errors"); value.Exists() {
+				if !data.Domains[i].Services[ci].LogCrosscheckErrors.IsNull() {
+					data.Domains[i].Services[ci].LogCrosscheckErrors = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].LogCrosscheckErrors.IsNull() {
+					data.Domains[i].Services[ci].LogCrosscheckErrors = types.BoolNull()
+				}
+			}
+			if value := cr.Get("log.ais"); value.Exists() {
+				if !data.Domains[i].Services[ci].LogAis.IsNull() {
+					data.Domains[i].Services[ci].LogAis = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].LogAis.IsNull() {
+					data.Domains[i].Services[ci].LogAis = types.BoolNull()
+				}
+			}
+			if value := cr.Get("log.csf"); value.Exists() {
+				if !data.Domains[i].Services[ci].LogCsf.IsNull() {
+					data.Domains[i].Services[ci].LogCsf = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].LogCsf.IsNull() {
+					data.Domains[i].Services[ci].LogCsf = types.BoolNull()
+				}
+			}
+			if value := cr.Get("log.efd"); value.Exists() {
+				if !data.Domains[i].Services[ci].LogEfd.IsNull() {
+					data.Domains[i].Services[ci].LogEfd = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].LogEfd.IsNull() {
+					data.Domains[i].Services[ci].LogEfd = types.BoolNull()
+				}
+			}
+			for cci := range data.Domains[i].Services[ci].MepCrosschecks {
+				keys := [...]string{"mep-id"}
+				keyValues := [...]string{strconv.FormatInt(data.Domains[i].Services[ci].MepCrosschecks[cci].MepId.ValueInt64(), 10)}
+
+				var ccr gjson.Result
+				cr.Get("mep.crosscheck.mep-ids.mep-id").ForEach(
+					func(_, v gjson.Result) bool {
+						found := false
+						for ik := range keys {
+							if v.Get(keys[ik]).String() == keyValues[ik] {
+								found = true
+								continue
+							}
+							found = false
+							break
+						}
+						if found {
+							ccr = v
+							return false
+						}
+						return true
+					},
+				)
+				if value := ccr.Get("mep-id"); value.Exists() && !data.Domains[i].Services[ci].MepCrosschecks[cci].MepId.IsNull() {
+					data.Domains[i].Services[ci].MepCrosschecks[cci].MepId = types.Int64Value(value.Int())
+				} else {
+					data.Domains[i].Services[ci].MepCrosschecks[cci].MepId = types.Int64Null()
+				}
+				if value := ccr.Get("mac-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Domains[i].Services[ci].MepCrosschecks[cci].MacAddress.IsNull() {
+					data.Domains[i].Services[ci].MepCrosschecks[cci].MacAddress = types.StringValue(value.String())
+				} else {
+					data.Domains[i].Services[ci].MepCrosschecks[cci].MacAddress = types.StringNull()
+				}
+			}
+			if value := cr.Get("mep.crosscheck.auto"); value.Exists() {
+				if !data.Domains[i].Services[ci].MepCrosscheckAuto.IsNull() {
+					data.Domains[i].Services[ci].MepCrosscheckAuto = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].MepCrosscheckAuto.IsNull() {
+					data.Domains[i].Services[ci].MepCrosscheckAuto = types.BoolNull()
+				}
+			}
+			if value := cr.Get("report.defects.none"); value.Exists() {
+				if !data.Domains[i].Services[ci].ReportDefectsNone.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsNone = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].ReportDefectsNone.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsNone = types.BoolNull()
+				}
+			}
+			if value := cr.Get("report.defects.all"); value.Exists() {
+				if !data.Domains[i].Services[ci].ReportDefectsAll.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsAll = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].ReportDefectsAll.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsAll = types.BoolNull()
+				}
+			}
+			if value := cr.Get("report.defects.ieee.xcon"); value.Exists() {
+				if !data.Domains[i].Services[ci].ReportDefectsIeeeXcon.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsIeeeXcon = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].ReportDefectsIeeeXcon.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsIeeeXcon = types.BoolNull()
+				}
+			}
+			if value := cr.Get("report.defects.ieee.error-xcon"); value.Exists() {
+				if !data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon = types.BoolNull()
+				}
+			}
+			if value := cr.Get("report.defects.ieee.remote-error-xcon"); value.Exists() {
+				if !data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon = types.BoolNull()
+				}
+			}
+			if value := cr.Get("report.defects.ieee.mac-remote-error-xcon"); value.Exists() {
+				if !data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon = types.BoolNull()
+				}
+			}
+			if value := cr.Get("report.defects.wrong-maid"); value.Exists() {
+				if !data.Domains[i].Services[ci].ReportDefectsWrongMaid.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsWrongMaid = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].ReportDefectsWrongMaid.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsWrongMaid = types.BoolNull()
+				}
+			}
+			if value := cr.Get("report.defects.wrong-level"); value.Exists() {
+				if !data.Domains[i].Services[ci].ReportDefectsWrongLevel.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsWrongLevel = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].ReportDefectsWrongLevel.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsWrongLevel = types.BoolNull()
+				}
+			}
+			if value := cr.Get("report.defects.our-mac"); value.Exists() {
+				if !data.Domains[i].Services[ci].ReportDefectsOurMac.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsOurMac = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].ReportDefectsOurMac.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsOurMac = types.BoolNull()
+				}
+			}
+			if value := cr.Get("report.defects.our-mepid"); value.Exists() {
+				if !data.Domains[i].Services[ci].ReportDefectsOurMepid.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsOurMepid = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].ReportDefectsOurMepid.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsOurMepid = types.BoolNull()
+				}
+			}
+			if value := cr.Get("report.defects.wrong-interval"); value.Exists() {
+				if !data.Domains[i].Services[ci].ReportDefectsWrongInterval.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsWrongInterval = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].ReportDefectsWrongInterval.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsWrongInterval = types.BoolNull()
+				}
+			}
+			if value := cr.Get("report.defects.missing"); value.Exists() {
+				if !data.Domains[i].Services[ci].ReportDefectsMissing.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsMissing = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].ReportDefectsMissing.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsMissing = types.BoolNull()
+				}
+			}
+			if value := cr.Get("report.defects.peer-port-down"); value.Exists() {
+				if !data.Domains[i].Services[ci].ReportDefectsPeerPortDown.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsPeerPortDown = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].ReportDefectsPeerPortDown.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsPeerPortDown = types.BoolNull()
+				}
+			}
+			if value := cr.Get("report.defects.rdi"); value.Exists() {
+				if !data.Domains[i].Services[ci].ReportDefectsRdi.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsRdi = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.Domains[i].Services[ci].ReportDefectsRdi.IsNull() {
+					data.Domains[i].Services[ci].ReportDefectsRdi = types.BoolNull()
+				}
+			}
+		}
+	}
+}
+
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *EthernetCFM) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "traceroute.cache.hold-time"); value.Exists() {
+		data.TracerouteCacheHoldTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "traceroute.cache.size"); value.Exists() {
+		data.TracerouteCacheSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "domains.domain"); value.Exists() {
+		data.Domains = make([]EthernetCFMDomains, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EthernetCFMDomains{}
+			if cValue := v.Get("domain-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.DomainName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("level"); cValue.Exists() {
+				item.Level = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("id.dns"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.IdDns = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("id.mac-address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.IdMacAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("id.mac-address-two-octet-integer"); cValue.Exists() {
+				item.IdMacAddressInteger = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("id.null"); cValue.Exists() {
+				item.IdNull = types.BoolValue(true)
+			} else if !item.IdNull.IsNull() {
+				// Only set to false if it was previously set
+				item.IdNull = types.BoolValue(false)
+			}
+			if cValue := v.Get("id.string"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.IdString = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("services.service"); cValue.Exists() {
+				item.Services = make([]EthernetCFMDomainsServices, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := EthernetCFMDomainsServices{}
+					if ccValue := cv.Get("service-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.ServiceName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("bridge.group"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.BridgeGroup = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("bridge.bridge-domain"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.BridgeDomain = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("down-meps"); ccValue.Exists() {
+						cItem.DownMeps = types.BoolValue(true)
+					} else {
+						cItem.DownMeps = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("flexible-xconnect.vlan-aware.evi"); ccValue.Exists() {
+						cItem.FlexibleXconnectVlanAwareEvi = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("flexible-xconnect.vlan-unaware.cross-connect-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.FlexibleXconnectVlanUnawareName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("xconnect.mp2mp.group"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.XconnectMp2mpGroup = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("xconnect.mp2mp.cross-connect-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.XconnectMp2mpName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("xconnect.mp2mp.ce-id"); ccValue.Exists() {
+						cItem.XconnectMp2mpCeId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("xconnect.mp2mp.remote-ce-id"); ccValue.Exists() {
+						cItem.XconnectMp2mpRemoteCeId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("xconnect.p2p.group"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.XconnectP2pGroupName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("xconnect.p2p.cross-connect-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.XconnectP2pXcName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("id.icc-based.icc"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.IdIccBasedIcc = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("id.icc-based.umc"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.IdIccBasedUmc = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("id.vlanid"); ccValue.Exists() {
+						cItem.IdVlanId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("id.number"); ccValue.Exists() {
+						cItem.IdNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("id.string"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.IdString = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("id.vpn-id.vpn-oui"); ccValue.Exists() {
+						cItem.IdVpnIdOui = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("id.vpn-id.vpn-index"); ccValue.Exists() {
+						cItem.IdVpnIdIndex = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("tags"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Tags = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("mip.auto-create.all"); ccValue.Exists() {
+						cItem.MipAutoCreateAll = types.BoolValue(true)
+					} else {
+						cItem.MipAutoCreateAll = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("mip.auto-create.lower-mep-only"); ccValue.Exists() {
+						cItem.MipAutoCreateLowerMepOnly = types.BoolValue(true)
+					} else {
+						cItem.MipAutoCreateLowerMepOnly = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("mip.auto-create.ccm-learning"); ccValue.Exists() {
+						cItem.MipAutoCreateCcmLearning = types.BoolValue(true)
+					} else {
+						cItem.MipAutoCreateCcmLearning = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("efd"); ccValue.Exists() {
+						cItem.Efd = types.BoolValue(true)
+					} else {
+						cItem.Efd = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("efd.protection-switching"); ccValue.Exists() {
+						cItem.EfdProtectionSwitching = types.BoolValue(true)
+					} else {
+						cItem.EfdProtectionSwitching = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("continuity-check.interval.interval-time"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.ContinuityCheckInterval = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("continuity-check.interval.loss-threshold"); ccValue.Exists() {
+						cItem.ContinuityCheckIntervalLossThreshold = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("continuity-check.archive.hold-time"); ccValue.Exists() {
+						cItem.ContinuityCheckArchiveHoldTime = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("continuity-check.loss.auto-traceroute"); ccValue.Exists() {
+						cItem.ContinuityCheckLossAutoTraceroute = types.BoolValue(true)
+					} else {
+						cItem.ContinuityCheckLossAutoTraceroute = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("maximum-meps"); ccValue.Exists() {
+						cItem.MaximumMeps = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("ais.transmission.interval"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.AisTransmissionInterval = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("ais.transmission.cos"); ccValue.Exists() {
+						cItem.AisTransmissionCos = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("log.continuity-check.mep.changes"); ccValue.Exists() {
+						cItem.LogContinuityCheckMepChanges = types.BoolValue(true)
+					} else {
+						cItem.LogContinuityCheckMepChanges = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("log.continuity-check.errors"); ccValue.Exists() {
+						cItem.LogContinuityCheckErrors = types.BoolValue(true)
+					} else {
+						cItem.LogContinuityCheckErrors = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("log.crosscheck.errors"); ccValue.Exists() {
+						cItem.LogCrosscheckErrors = types.BoolValue(true)
+					} else {
+						cItem.LogCrosscheckErrors = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("log.ais"); ccValue.Exists() {
+						cItem.LogAis = types.BoolValue(true)
+					} else {
+						cItem.LogAis = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("log.csf"); ccValue.Exists() {
+						cItem.LogCsf = types.BoolValue(true)
+					} else {
+						cItem.LogCsf = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("log.efd"); ccValue.Exists() {
+						cItem.LogEfd = types.BoolValue(true)
+					} else {
+						cItem.LogEfd = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("mep.crosscheck.mep-ids.mep-id"); ccValue.Exists() {
+						cItem.MepCrosschecks = make([]EthernetCFMDomainsServicesMepCrosschecks, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := EthernetCFMDomainsServicesMepCrosschecks{}
+							if cccValue := ccv.Get("mep-id"); cccValue.Exists() {
+								ccItem.MepId = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("mac-address"); cccValue.Exists() && (cccValue.Type == gjson.String || cccValue.Type == gjson.Number) {
+								ccItem.MacAddress = types.StringValue(cccValue.String())
+							}
+							cItem.MepCrosschecks = append(cItem.MepCrosschecks, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("mep.crosscheck.auto"); ccValue.Exists() {
+						cItem.MepCrosscheckAuto = types.BoolValue(true)
+					} else {
+						cItem.MepCrosscheckAuto = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.none"); ccValue.Exists() {
+						cItem.ReportDefectsNone = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsNone = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.all"); ccValue.Exists() {
+						cItem.ReportDefectsAll = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsAll = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.ieee.xcon"); ccValue.Exists() {
+						cItem.ReportDefectsIeeeXcon = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsIeeeXcon = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.ieee.error-xcon"); ccValue.Exists() {
+						cItem.ReportDefectsIeeeErrorXcon = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsIeeeErrorXcon = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.ieee.remote-error-xcon"); ccValue.Exists() {
+						cItem.ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.ieee.mac-remote-error-xcon"); ccValue.Exists() {
+						cItem.ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.wrong-maid"); ccValue.Exists() {
+						cItem.ReportDefectsWrongMaid = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsWrongMaid = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.wrong-level"); ccValue.Exists() {
+						cItem.ReportDefectsWrongLevel = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsWrongLevel = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.our-mac"); ccValue.Exists() {
+						cItem.ReportDefectsOurMac = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsOurMac = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.our-mepid"); ccValue.Exists() {
+						cItem.ReportDefectsOurMepid = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsOurMepid = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.wrong-interval"); ccValue.Exists() {
+						cItem.ReportDefectsWrongInterval = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsWrongInterval = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.missing"); ccValue.Exists() {
+						cItem.ReportDefectsMissing = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsMissing = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.peer-port-down"); ccValue.Exists() {
+						cItem.ReportDefectsPeerPortDown = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsPeerPortDown = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.rdi"); ccValue.Exists() {
+						cItem.ReportDefectsRdi = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsRdi = types.BoolValue(false)
+					}
+					item.Services = append(item.Services, cItem)
+					return true
+				})
+			}
+			data.Domains = append(data.Domains, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *EthernetCFMData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "traceroute.cache.hold-time"); value.Exists() {
+		data.TracerouteCacheHoldTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "traceroute.cache.size"); value.Exists() {
+		data.TracerouteCacheSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "domains.domain"); value.Exists() {
+		data.Domains = make([]EthernetCFMDomains, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EthernetCFMDomains{}
+			if cValue := v.Get("domain-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.DomainName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("level"); cValue.Exists() {
+				item.Level = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("id.dns"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.IdDns = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("id.mac-address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.IdMacAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("id.mac-address-two-octet-integer"); cValue.Exists() {
+				item.IdMacAddressInteger = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("id.null"); cValue.Exists() {
+				item.IdNull = types.BoolValue(true)
+			} else {
+				item.IdNull = types.BoolValue(false)
+			}
+			if cValue := v.Get("id.string"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.IdString = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("services.service"); cValue.Exists() {
+				item.Services = make([]EthernetCFMDomainsServices, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := EthernetCFMDomainsServices{}
+					if ccValue := cv.Get("service-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.ServiceName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("bridge.group"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.BridgeGroup = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("bridge.bridge-domain"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.BridgeDomain = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("down-meps"); ccValue.Exists() {
+						cItem.DownMeps = types.BoolValue(true)
+					} else {
+						cItem.DownMeps = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("flexible-xconnect.vlan-aware.evi"); ccValue.Exists() {
+						cItem.FlexibleXconnectVlanAwareEvi = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("flexible-xconnect.vlan-unaware.cross-connect-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.FlexibleXconnectVlanUnawareName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("xconnect.mp2mp.group"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.XconnectMp2mpGroup = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("xconnect.mp2mp.cross-connect-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.XconnectMp2mpName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("xconnect.mp2mp.ce-id"); ccValue.Exists() {
+						cItem.XconnectMp2mpCeId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("xconnect.mp2mp.remote-ce-id"); ccValue.Exists() {
+						cItem.XconnectMp2mpRemoteCeId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("xconnect.p2p.group"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.XconnectP2pGroupName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("xconnect.p2p.cross-connect-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.XconnectP2pXcName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("id.icc-based.icc"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.IdIccBasedIcc = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("id.icc-based.umc"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.IdIccBasedUmc = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("id.vlanid"); ccValue.Exists() {
+						cItem.IdVlanId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("id.number"); ccValue.Exists() {
+						cItem.IdNumber = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("id.string"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.IdString = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("id.vpn-id.vpn-oui"); ccValue.Exists() {
+						cItem.IdVpnIdOui = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("id.vpn-id.vpn-index"); ccValue.Exists() {
+						cItem.IdVpnIdIndex = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("tags"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Tags = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("mip.auto-create.all"); ccValue.Exists() {
+						cItem.MipAutoCreateAll = types.BoolValue(true)
+					} else {
+						cItem.MipAutoCreateAll = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("mip.auto-create.lower-mep-only"); ccValue.Exists() {
+						cItem.MipAutoCreateLowerMepOnly = types.BoolValue(true)
+					} else {
+						cItem.MipAutoCreateLowerMepOnly = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("mip.auto-create.ccm-learning"); ccValue.Exists() {
+						cItem.MipAutoCreateCcmLearning = types.BoolValue(true)
+					} else {
+						cItem.MipAutoCreateCcmLearning = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("efd"); ccValue.Exists() {
+						cItem.Efd = types.BoolValue(true)
+					} else {
+						cItem.Efd = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("efd.protection-switching"); ccValue.Exists() {
+						cItem.EfdProtectionSwitching = types.BoolValue(true)
+					} else {
+						cItem.EfdProtectionSwitching = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("continuity-check.interval.interval-time"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.ContinuityCheckInterval = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("continuity-check.interval.loss-threshold"); ccValue.Exists() {
+						cItem.ContinuityCheckIntervalLossThreshold = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("continuity-check.archive.hold-time"); ccValue.Exists() {
+						cItem.ContinuityCheckArchiveHoldTime = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("continuity-check.loss.auto-traceroute"); ccValue.Exists() {
+						cItem.ContinuityCheckLossAutoTraceroute = types.BoolValue(true)
+					} else {
+						cItem.ContinuityCheckLossAutoTraceroute = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("maximum-meps"); ccValue.Exists() {
+						cItem.MaximumMeps = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("ais.transmission.interval"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.AisTransmissionInterval = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("ais.transmission.cos"); ccValue.Exists() {
+						cItem.AisTransmissionCos = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("log.continuity-check.mep.changes"); ccValue.Exists() {
+						cItem.LogContinuityCheckMepChanges = types.BoolValue(true)
+					} else {
+						cItem.LogContinuityCheckMepChanges = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("log.continuity-check.errors"); ccValue.Exists() {
+						cItem.LogContinuityCheckErrors = types.BoolValue(true)
+					} else {
+						cItem.LogContinuityCheckErrors = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("log.crosscheck.errors"); ccValue.Exists() {
+						cItem.LogCrosscheckErrors = types.BoolValue(true)
+					} else {
+						cItem.LogCrosscheckErrors = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("log.ais"); ccValue.Exists() {
+						cItem.LogAis = types.BoolValue(true)
+					} else {
+						cItem.LogAis = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("log.csf"); ccValue.Exists() {
+						cItem.LogCsf = types.BoolValue(true)
+					} else {
+						cItem.LogCsf = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("log.efd"); ccValue.Exists() {
+						cItem.LogEfd = types.BoolValue(true)
+					} else {
+						cItem.LogEfd = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("mep.crosscheck.mep-ids.mep-id"); ccValue.Exists() {
+						cItem.MepCrosschecks = make([]EthernetCFMDomainsServicesMepCrosschecks, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := EthernetCFMDomainsServicesMepCrosschecks{}
+							if cccValue := ccv.Get("mep-id"); cccValue.Exists() {
+								ccItem.MepId = types.Int64Value(cccValue.Int())
+							}
+							if cccValue := ccv.Get("mac-address"); cccValue.Exists() && (cccValue.Type == gjson.String || cccValue.Type == gjson.Number) {
+								ccItem.MacAddress = types.StringValue(cccValue.String())
+							}
+							cItem.MepCrosschecks = append(cItem.MepCrosschecks, ccItem)
+							return true
+						})
+					}
+					if ccValue := cv.Get("mep.crosscheck.auto"); ccValue.Exists() {
+						cItem.MepCrosscheckAuto = types.BoolValue(true)
+					} else {
+						cItem.MepCrosscheckAuto = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.none"); ccValue.Exists() {
+						cItem.ReportDefectsNone = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsNone = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.all"); ccValue.Exists() {
+						cItem.ReportDefectsAll = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsAll = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.ieee.xcon"); ccValue.Exists() {
+						cItem.ReportDefectsIeeeXcon = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsIeeeXcon = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.ieee.error-xcon"); ccValue.Exists() {
+						cItem.ReportDefectsIeeeErrorXcon = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsIeeeErrorXcon = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.ieee.remote-error-xcon"); ccValue.Exists() {
+						cItem.ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.ieee.mac-remote-error-xcon"); ccValue.Exists() {
+						cItem.ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.wrong-maid"); ccValue.Exists() {
+						cItem.ReportDefectsWrongMaid = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsWrongMaid = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.wrong-level"); ccValue.Exists() {
+						cItem.ReportDefectsWrongLevel = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsWrongLevel = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.our-mac"); ccValue.Exists() {
+						cItem.ReportDefectsOurMac = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsOurMac = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.our-mepid"); ccValue.Exists() {
+						cItem.ReportDefectsOurMepid = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsOurMepid = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.wrong-interval"); ccValue.Exists() {
+						cItem.ReportDefectsWrongInterval = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsWrongInterval = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.missing"); ccValue.Exists() {
+						cItem.ReportDefectsMissing = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsMissing = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.peer-port-down"); ccValue.Exists() {
+						cItem.ReportDefectsPeerPortDown = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsPeerPortDown = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("report.defects.rdi"); ccValue.Exists() {
+						cItem.ReportDefectsRdi = types.BoolValue(true)
+					} else {
+						cItem.ReportDefectsRdi = types.BoolValue(false)
+					}
+					item.Services = append(item.Services, cItem)
+					return true
+				})
+			}
+			data.Domains = append(data.Domains, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *EthernetCFM) getDeletedItems(ctx context.Context, state EthernetCFM, version string) []string {
+	deletedItems := make([]string, 0)
+	for i := range state.Domains {
+		keys := [...]string{"domain-name"}
+		stateKeyValues := [...]string{state.Domains[i].DomainName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Domains[i].DomainName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Domains {
+			found = true
+			if state.Domains[i].DomainName.ValueString() != data.Domains[j].DomainName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.Domains[i].Services {
+					ckeys := [...]string{"service-name"}
+					cstateKeyValues := [...]string{state.Domains[i].Services[ci].ServiceName.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Domains[i].Services[ci].ServiceName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Domains[j].Services {
+						found = true
+						if state.Domains[i].Services[ci].ServiceName.ValueString() != data.Domains[j].Services[cj].ServiceName.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.Domains[i].Services[ci].ReportDefectsRdi.IsNull() && data.Domains[j].Services[cj].ReportDefectsRdi.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/rdi"))
+							}
+							if !state.Domains[i].Services[ci].ReportDefectsPeerPortDown.IsNull() && data.Domains[j].Services[cj].ReportDefectsPeerPortDown.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/peer-port-down"))
+							}
+							if !state.Domains[i].Services[ci].ReportDefectsMissing.IsNull() && data.Domains[j].Services[cj].ReportDefectsMissing.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/missing"))
+							}
+							if !state.Domains[i].Services[ci].ReportDefectsWrongInterval.IsNull() && data.Domains[j].Services[cj].ReportDefectsWrongInterval.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/wrong-interval"))
+							}
+							if !state.Domains[i].Services[ci].ReportDefectsOurMepid.IsNull() && data.Domains[j].Services[cj].ReportDefectsOurMepid.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/our-mepid"))
+							}
+							if !state.Domains[i].Services[ci].ReportDefectsOurMac.IsNull() && data.Domains[j].Services[cj].ReportDefectsOurMac.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/our-mac"))
+							}
+							if !state.Domains[i].Services[ci].ReportDefectsWrongLevel.IsNull() && data.Domains[j].Services[cj].ReportDefectsWrongLevel.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/wrong-level"))
+							}
+							if !state.Domains[i].Services[ci].ReportDefectsWrongMaid.IsNull() && data.Domains[j].Services[cj].ReportDefectsWrongMaid.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/wrong-maid"))
+							}
+							if !state.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() && data.Domains[j].Services[cj].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/ieee/mac-remote-error-xcon"))
+							}
+							if !state.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.IsNull() && data.Domains[j].Services[cj].ReportDefectsIeeeRemoteErrorXcon.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/ieee/remote-error-xcon"))
+							}
+							if !state.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.IsNull() && data.Domains[j].Services[cj].ReportDefectsIeeeErrorXcon.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/ieee/error-xcon"))
+							}
+							if !state.Domains[i].Services[ci].ReportDefectsIeeeXcon.IsNull() && data.Domains[j].Services[cj].ReportDefectsIeeeXcon.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/ieee/xcon"))
+							}
+							if !state.Domains[i].Services[ci].ReportDefectsAll.IsNull() && data.Domains[j].Services[cj].ReportDefectsAll.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/all"))
+							}
+							if !state.Domains[i].Services[ci].ReportDefectsNone.IsNull() && data.Domains[j].Services[cj].ReportDefectsNone.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/none"))
+							}
+							if !state.Domains[i].Services[ci].MepCrosscheckAuto.IsNull() && data.Domains[j].Services[cj].MepCrosscheckAuto.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "mep/crosscheck/auto"))
+							}
+							for cci := range state.Domains[i].Services[ci].MepCrosschecks {
+								cckeys := [...]string{"mep-id"}
+								ccstateKeyValues := [...]string{strconv.FormatInt(state.Domains[i].Services[ci].MepCrosschecks[cci].MepId.ValueInt64(), 10)}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.Domains[i].Services[ci].MepCrosschecks[cci].MepId.ValueInt64()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.Domains[j].Services[cj].MepCrosschecks {
+									found = true
+									if state.Domains[i].Services[ci].MepCrosschecks[cci].MepId.ValueInt64() != data.Domains[j].Services[cj].MepCrosschecks[ccj].MepId.ValueInt64() {
+										found = false
+									}
+									if found {
+										if !state.Domains[i].Services[ci].MepCrosschecks[cci].MacAddress.IsNull() && data.Domains[j].Services[cj].MepCrosschecks[ccj].MacAddress.IsNull() {
+											deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString, "mep/crosscheck/mep-ids/mep-id", cckeyString), "mac-address"))
+										}
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString, "mep/crosscheck/mep-ids/mep-id", cckeyString))
+								}
+							}
+							if !state.Domains[i].Services[ci].LogEfd.IsNull() && data.Domains[j].Services[cj].LogEfd.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "log/efd"))
+							}
+							if !state.Domains[i].Services[ci].LogCsf.IsNull() && data.Domains[j].Services[cj].LogCsf.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "log/csf"))
+							}
+							if !state.Domains[i].Services[ci].LogAis.IsNull() && data.Domains[j].Services[cj].LogAis.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "log/ais"))
+							}
+							if !state.Domains[i].Services[ci].LogCrosscheckErrors.IsNull() && data.Domains[j].Services[cj].LogCrosscheckErrors.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "log/crosscheck/errors"))
+							}
+							if !state.Domains[i].Services[ci].LogContinuityCheckErrors.IsNull() && data.Domains[j].Services[cj].LogContinuityCheckErrors.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "log/continuity-check/errors"))
+							}
+							if !state.Domains[i].Services[ci].LogContinuityCheckMepChanges.IsNull() && data.Domains[j].Services[cj].LogContinuityCheckMepChanges.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "log/continuity-check/mep/changes"))
+							}
+							if !state.Domains[i].Services[ci].AisTransmissionCos.IsNull() && data.Domains[j].Services[cj].AisTransmissionCos.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "ais/transmission/cos"))
+							}
+							if !state.Domains[i].Services[ci].AisTransmissionInterval.IsNull() && data.Domains[j].Services[cj].AisTransmissionInterval.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "ais/transmission/interval"))
+							}
+							if !state.Domains[i].Services[ci].MaximumMeps.IsNull() && data.Domains[j].Services[cj].MaximumMeps.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "maximum-meps"))
+							}
+							if !state.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.IsNull() && data.Domains[j].Services[cj].ContinuityCheckLossAutoTraceroute.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "continuity-check/loss/auto-traceroute"))
+							}
+							if !state.Domains[i].Services[ci].ContinuityCheckArchiveHoldTime.IsNull() && data.Domains[j].Services[cj].ContinuityCheckArchiveHoldTime.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "continuity-check/archive/hold-time"))
+							}
+							if !state.Domains[i].Services[ci].ContinuityCheckIntervalLossThreshold.IsNull() && data.Domains[j].Services[cj].ContinuityCheckIntervalLossThreshold.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "continuity-check/interval/loss-threshold"))
+							}
+							if !state.Domains[i].Services[ci].ContinuityCheckInterval.IsNull() && data.Domains[j].Services[cj].ContinuityCheckInterval.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "continuity-check/interval/interval-time"))
+							}
+							if !state.Domains[i].Services[ci].EfdProtectionSwitching.IsNull() && data.Domains[j].Services[cj].EfdProtectionSwitching.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "efd/protection-switching"))
+							}
+							if !state.Domains[i].Services[ci].Efd.IsNull() && data.Domains[j].Services[cj].Efd.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "efd"))
+							}
+							if !state.Domains[i].Services[ci].MipAutoCreateCcmLearning.IsNull() && data.Domains[j].Services[cj].MipAutoCreateCcmLearning.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "mip/auto-create/ccm-learning"))
+							}
+							if !state.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.IsNull() && data.Domains[j].Services[cj].MipAutoCreateLowerMepOnly.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "mip/auto-create/lower-mep-only"))
+							}
+							if !state.Domains[i].Services[ci].MipAutoCreateAll.IsNull() && data.Domains[j].Services[cj].MipAutoCreateAll.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "mip/auto-create/all"))
+							}
+							if !state.Domains[i].Services[ci].Tags.IsNull() && data.Domains[j].Services[cj].Tags.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "tags"))
+							}
+							if !state.Domains[i].Services[ci].IdVpnIdIndex.IsNull() && data.Domains[j].Services[cj].IdVpnIdIndex.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "id/vpn-id/vpn-index"))
+							}
+							if !state.Domains[i].Services[ci].IdVpnIdOui.IsNull() && data.Domains[j].Services[cj].IdVpnIdOui.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "id/vpn-id/vpn-oui"))
+							}
+							if !state.Domains[i].Services[ci].IdString.IsNull() && data.Domains[j].Services[cj].IdString.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "id/string"))
+							}
+							if !state.Domains[i].Services[ci].IdNumber.IsNull() && data.Domains[j].Services[cj].IdNumber.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "id/number"))
+							}
+							if !state.Domains[i].Services[ci].IdVlanId.IsNull() && data.Domains[j].Services[cj].IdVlanId.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "id/vlanid"))
+							}
+							if !state.Domains[i].Services[ci].IdIccBasedUmc.IsNull() && data.Domains[j].Services[cj].IdIccBasedUmc.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "id/icc-based/umc"))
+							}
+							if !state.Domains[i].Services[ci].IdIccBasedIcc.IsNull() && data.Domains[j].Services[cj].IdIccBasedIcc.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "id/icc-based/icc"))
+							}
+							if !state.Domains[i].Services[ci].XconnectP2pXcName.IsNull() && data.Domains[j].Services[cj].XconnectP2pXcName.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "xconnect/p2p/cross-connect-name"))
+							}
+							if !state.Domains[i].Services[ci].XconnectP2pGroupName.IsNull() && data.Domains[j].Services[cj].XconnectP2pGroupName.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "xconnect/p2p/group"))
+							}
+							if !state.Domains[i].Services[ci].XconnectMp2mpRemoteCeId.IsNull() && data.Domains[j].Services[cj].XconnectMp2mpRemoteCeId.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "xconnect/mp2mp/remote-ce-id"))
+							}
+							if !state.Domains[i].Services[ci].XconnectMp2mpCeId.IsNull() && data.Domains[j].Services[cj].XconnectMp2mpCeId.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "xconnect/mp2mp/ce-id"))
+							}
+							if !state.Domains[i].Services[ci].XconnectMp2mpName.IsNull() && data.Domains[j].Services[cj].XconnectMp2mpName.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "xconnect/mp2mp/cross-connect-name"))
+							}
+							if !state.Domains[i].Services[ci].XconnectMp2mpGroup.IsNull() && data.Domains[j].Services[cj].XconnectMp2mpGroup.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "xconnect/mp2mp/group"))
+							}
+							if !state.Domains[i].Services[ci].FlexibleXconnectVlanUnawareName.IsNull() && data.Domains[j].Services[cj].FlexibleXconnectVlanUnawareName.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "flexible-xconnect/vlan-unaware/cross-connect-name"))
+							}
+							if !state.Domains[i].Services[ci].FlexibleXconnectVlanAwareEvi.IsNull() && data.Domains[j].Services[cj].FlexibleXconnectVlanAwareEvi.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "flexible-xconnect/vlan-aware/evi"))
+							}
+							if !state.Domains[i].Services[ci].DownMeps.IsNull() && data.Domains[j].Services[cj].DownMeps.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "down-meps"))
+							}
+							if !state.Domains[i].Services[ci].BridgeDomain.IsNull() && data.Domains[j].Services[cj].BridgeDomain.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "bridge/bridge-domain"))
+							}
+							if !state.Domains[i].Services[ci].BridgeGroup.IsNull() && data.Domains[j].Services[cj].BridgeGroup.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString), "bridge/group"))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "domains/domain", keyString, "services/service", ckeyString))
+					}
+				}
+				if !state.Domains[i].IdString.IsNull() && data.Domains[j].IdString.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "domains/domain", keyString), "id/string"))
+				}
+				if !state.Domains[i].IdNull.IsNull() && data.Domains[j].IdNull.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "domains/domain", keyString), "id/null"))
+				}
+				if !state.Domains[i].IdMacAddressInteger.IsNull() && data.Domains[j].IdMacAddressInteger.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "domains/domain", keyString), "id/mac-address-two-octet-integer"))
+				}
+				if !state.Domains[i].IdMacAddress.IsNull() && data.Domains[j].IdMacAddress.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "domains/domain", keyString), "id/mac-address"))
+				}
+				if !state.Domains[i].IdDns.IsNull() && data.Domains[j].IdDns.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "domains/domain", keyString), "id/dns"))
+				}
+				if !state.Domains[i].Level.IsNull() && data.Domains[j].Level.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "domains/domain", keyString), "level"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "domains/domain", keyString))
+		}
+	}
+	if !state.TracerouteCacheSize.IsNull() && data.TracerouteCacheSize.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "traceroute/cache/size"))
+	}
+	if !state.TracerouteCacheHoldTime.IsNull() && data.TracerouteCacheHoldTime.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "traceroute/cache/hold-time"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *EthernetCFM) getEmptyLeafsDelete(ctx context.Context, state *EthernetCFM, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	for i := range data.Domains {
+		keys := [...]string{"domain-name"}
+		keyValues := [...]string{data.Domains[i].DomainName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.Domains[i].Services {
+			ckeys := [...]string{"service-name"}
+			ckeyValues := [...]string{data.Domains[i].Services[ci].ServiceName.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			if !data.Domains[i].Services[ci].ReportDefectsRdi.IsNull() && !data.Domains[i].Services[ci].ReportDefectsRdi.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsRdi.IsNull() || state.Domains[i].Services[ci].ReportDefectsRdi.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/rdi"))
+				}
+			}
+			if !data.Domains[i].Services[ci].ReportDefectsPeerPortDown.IsNull() && !data.Domains[i].Services[ci].ReportDefectsPeerPortDown.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsPeerPortDown.IsNull() || state.Domains[i].Services[ci].ReportDefectsPeerPortDown.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/peer-port-down"))
+				}
+			}
+			if !data.Domains[i].Services[ci].ReportDefectsMissing.IsNull() && !data.Domains[i].Services[ci].ReportDefectsMissing.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsMissing.IsNull() || state.Domains[i].Services[ci].ReportDefectsMissing.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/missing"))
+				}
+			}
+			if !data.Domains[i].Services[ci].ReportDefectsWrongInterval.IsNull() && !data.Domains[i].Services[ci].ReportDefectsWrongInterval.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsWrongInterval.IsNull() || state.Domains[i].Services[ci].ReportDefectsWrongInterval.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/wrong-interval"))
+				}
+			}
+			if !data.Domains[i].Services[ci].ReportDefectsOurMepid.IsNull() && !data.Domains[i].Services[ci].ReportDefectsOurMepid.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsOurMepid.IsNull() || state.Domains[i].Services[ci].ReportDefectsOurMepid.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/our-mepid"))
+				}
+			}
+			if !data.Domains[i].Services[ci].ReportDefectsOurMac.IsNull() && !data.Domains[i].Services[ci].ReportDefectsOurMac.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsOurMac.IsNull() || state.Domains[i].Services[ci].ReportDefectsOurMac.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/our-mac"))
+				}
+			}
+			if !data.Domains[i].Services[ci].ReportDefectsWrongLevel.IsNull() && !data.Domains[i].Services[ci].ReportDefectsWrongLevel.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsWrongLevel.IsNull() || state.Domains[i].Services[ci].ReportDefectsWrongLevel.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/wrong-level"))
+				}
+			}
+			if !data.Domains[i].Services[ci].ReportDefectsWrongMaid.IsNull() && !data.Domains[i].Services[ci].ReportDefectsWrongMaid.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsWrongMaid.IsNull() || state.Domains[i].Services[ci].ReportDefectsWrongMaid.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/wrong-maid"))
+				}
+			}
+			if !data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() && !data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() || state.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/ieee/mac-remote-error-xcon"))
+				}
+			}
+			if !data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.IsNull() && !data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.IsNull() || state.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/ieee/remote-error-xcon"))
+				}
+			}
+			if !data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.IsNull() && !data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.IsNull() || state.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/ieee/error-xcon"))
+				}
+			}
+			if !data.Domains[i].Services[ci].ReportDefectsIeeeXcon.IsNull() && !data.Domains[i].Services[ci].ReportDefectsIeeeXcon.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsIeeeXcon.IsNull() || state.Domains[i].Services[ci].ReportDefectsIeeeXcon.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/ieee/xcon"))
+				}
+			}
+			if !data.Domains[i].Services[ci].ReportDefectsAll.IsNull() && !data.Domains[i].Services[ci].ReportDefectsAll.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsAll.IsNull() || state.Domains[i].Services[ci].ReportDefectsAll.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/all"))
+				}
+			}
+			if !data.Domains[i].Services[ci].ReportDefectsNone.IsNull() && !data.Domains[i].Services[ci].ReportDefectsNone.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ReportDefectsNone.IsNull() || state.Domains[i].Services[ci].ReportDefectsNone.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "report/defects/none"))
+				}
+			}
+			if !data.Domains[i].Services[ci].MepCrosscheckAuto.IsNull() && !data.Domains[i].Services[ci].MepCrosscheckAuto.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].MepCrosscheckAuto.IsNull() || state.Domains[i].Services[ci].MepCrosscheckAuto.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "mep/crosscheck/auto"))
+				}
+			}
+			for cci := range data.Domains[i].Services[ci].MepCrosschecks {
+				cckeys := [...]string{"mep-id"}
+				cckeyValues := [...]string{strconv.FormatInt(data.Domains[i].Services[ci].MepCrosschecks[cci].MepId.ValueInt64(), 10)}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+			}
+			if !data.Domains[i].Services[ci].LogEfd.IsNull() && !data.Domains[i].Services[ci].LogEfd.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].LogEfd.IsNull() || state.Domains[i].Services[ci].LogEfd.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "log/efd"))
+				}
+			}
+			if !data.Domains[i].Services[ci].LogCsf.IsNull() && !data.Domains[i].Services[ci].LogCsf.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].LogCsf.IsNull() || state.Domains[i].Services[ci].LogCsf.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "log/csf"))
+				}
+			}
+			if !data.Domains[i].Services[ci].LogAis.IsNull() && !data.Domains[i].Services[ci].LogAis.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].LogAis.IsNull() || state.Domains[i].Services[ci].LogAis.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "log/ais"))
+				}
+			}
+			if !data.Domains[i].Services[ci].LogCrosscheckErrors.IsNull() && !data.Domains[i].Services[ci].LogCrosscheckErrors.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].LogCrosscheckErrors.IsNull() || state.Domains[i].Services[ci].LogCrosscheckErrors.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "log/crosscheck/errors"))
+				}
+			}
+			if !data.Domains[i].Services[ci].LogContinuityCheckErrors.IsNull() && !data.Domains[i].Services[ci].LogContinuityCheckErrors.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].LogContinuityCheckErrors.IsNull() || state.Domains[i].Services[ci].LogContinuityCheckErrors.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "log/continuity-check/errors"))
+				}
+			}
+			if !data.Domains[i].Services[ci].LogContinuityCheckMepChanges.IsNull() && !data.Domains[i].Services[ci].LogContinuityCheckMepChanges.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].LogContinuityCheckMepChanges.IsNull() || state.Domains[i].Services[ci].LogContinuityCheckMepChanges.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "log/continuity-check/mep/changes"))
+				}
+			}
+			if !data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.IsNull() && !data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.IsNull() || state.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "continuity-check/loss/auto-traceroute"))
+				}
+			}
+			if !data.Domains[i].Services[ci].EfdProtectionSwitching.IsNull() && !data.Domains[i].Services[ci].EfdProtectionSwitching.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].EfdProtectionSwitching.IsNull() || state.Domains[i].Services[ci].EfdProtectionSwitching.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "efd/protection-switching"))
+				}
+			}
+			if !data.Domains[i].Services[ci].Efd.IsNull() && !data.Domains[i].Services[ci].Efd.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].Efd.IsNull() || state.Domains[i].Services[ci].Efd.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "efd"))
+				}
+			}
+			if !data.Domains[i].Services[ci].MipAutoCreateCcmLearning.IsNull() && !data.Domains[i].Services[ci].MipAutoCreateCcmLearning.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].MipAutoCreateCcmLearning.IsNull() || state.Domains[i].Services[ci].MipAutoCreateCcmLearning.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "mip/auto-create/ccm-learning"))
+				}
+			}
+			if !data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.IsNull() && !data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.IsNull() || state.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "mip/auto-create/lower-mep-only"))
+				}
+			}
+			if !data.Domains[i].Services[ci].MipAutoCreateAll.IsNull() && !data.Domains[i].Services[ci].MipAutoCreateAll.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].MipAutoCreateAll.IsNull() || state.Domains[i].Services[ci].MipAutoCreateAll.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "mip/auto-create/all"))
+				}
+			}
+			if !data.Domains[i].Services[ci].DownMeps.IsNull() && !data.Domains[i].Services[ci].DownMeps.ValueBool() {
+				if state == nil || i >= len(state.Domains) || ci >= len(state.Domains[i].Services) || state.Domains[i].Services[ci].DownMeps.IsNull() || state.Domains[i].Services[ci].DownMeps.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "domains/domain", keyString, "services/service", ckeyString), "down-meps"))
+				}
+			}
+		}
+		if !data.Domains[i].IdNull.IsNull() && !data.Domains[i].IdNull.ValueBool() {
+			if state == nil || i >= len(state.Domains) || state.Domains[i].IdNull.IsNull() || state.Domains[i].IdNull.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "domains/domain", keyString), "id/null"))
+			}
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *EthernetCFM) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	for i := range data.Domains {
+		keys := [...]string{"domain-name"}
+		keyValues := [...]string{data.Domains[i].DomainName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.Domains[i].DomainName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "domains/domain", keyString))
+	}
+	if !data.TracerouteCacheSize.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "traceroute/cache/size"))
+	}
+	if !data.TracerouteCacheHoldTime.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "traceroute/cache/hold-time"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
@@ -718,7 +2372,7 @@ func (data EthernetCFM) toBodyXML(ctx context.Context, stateArg ...*EthernetCFM)
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -726,552 +2380,6 @@ func (data EthernetCFM) toBodyXML(ctx context.Context, stateArg ...*EthernetCFM)
 }
 
 // End of section. //template:end toBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
-
-func (data *EthernetCFM) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("traceroute.cache.hold-time"); value.Exists() && !data.TracerouteCacheHoldTime.IsNull() {
-		data.TracerouteCacheHoldTime = types.Int64Value(value.Int())
-	} else if data.TracerouteCacheHoldTime.IsNull() {
-		data.TracerouteCacheHoldTime = types.Int64Null()
-	}
-	if value := res.Get("traceroute.cache.size"); value.Exists() && !data.TracerouteCacheSize.IsNull() {
-		data.TracerouteCacheSize = types.Int64Value(value.Int())
-	} else if data.TracerouteCacheSize.IsNull() {
-		data.TracerouteCacheSize = types.Int64Null()
-	}
-	for i := range data.Domains {
-		keys := [...]string{"domain-name"}
-		keyValues := [...]string{data.Domains[i].DomainName.ValueString()}
-
-		var r gjson.Result
-		res.Get("domains.domain").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("domain-name"); value.Exists() && !data.Domains[i].DomainName.IsNull() {
-			data.Domains[i].DomainName = types.StringValue(value.String())
-		} else {
-			data.Domains[i].DomainName = types.StringNull()
-		}
-		if value := r.Get("level"); value.Exists() && !data.Domains[i].Level.IsNull() {
-			data.Domains[i].Level = types.Int64Value(value.Int())
-		} else {
-			data.Domains[i].Level = types.Int64Null()
-		}
-		if value := r.Get("id.dns"); value.Exists() && !data.Domains[i].IdDns.IsNull() {
-			data.Domains[i].IdDns = types.StringValue(value.String())
-		} else {
-			data.Domains[i].IdDns = types.StringNull()
-		}
-		if value := r.Get("id.mac-address"); value.Exists() && !data.Domains[i].IdMacAddress.IsNull() {
-			data.Domains[i].IdMacAddress = types.StringValue(value.String())
-		} else {
-			data.Domains[i].IdMacAddress = types.StringNull()
-		}
-		if value := r.Get("id.mac-address-two-octet-integer"); value.Exists() && !data.Domains[i].IdMacAddressInteger.IsNull() {
-			data.Domains[i].IdMacAddressInteger = types.Int64Value(value.Int())
-		} else {
-			data.Domains[i].IdMacAddressInteger = types.Int64Null()
-		}
-		if value := r.Get("id.null"); value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.Domains[i].IdNull.IsNull() {
-				data.Domains[i].IdNull = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.Domains[i].IdNull.IsNull() {
-				data.Domains[i].IdNull = types.BoolNull()
-			}
-		}
-		if value := r.Get("id.string"); value.Exists() && !data.Domains[i].IdString.IsNull() {
-			data.Domains[i].IdString = types.StringValue(value.String())
-		} else {
-			data.Domains[i].IdString = types.StringNull()
-		}
-		for ci := range data.Domains[i].Services {
-			keys := [...]string{"service-name"}
-			keyValues := [...]string{data.Domains[i].Services[ci].ServiceName.ValueString()}
-
-			var cr gjson.Result
-			r.Get("services.service").ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
-						}
-						found = false
-						break
-					}
-					if found {
-						cr = v
-						return false
-					}
-					return true
-				},
-			)
-			if value := cr.Get("service-name"); value.Exists() && !data.Domains[i].Services[ci].ServiceName.IsNull() {
-				data.Domains[i].Services[ci].ServiceName = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].ServiceName = types.StringNull()
-			}
-			if value := cr.Get("bridge.group"); value.Exists() && !data.Domains[i].Services[ci].BridgeGroup.IsNull() {
-				data.Domains[i].Services[ci].BridgeGroup = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].BridgeGroup = types.StringNull()
-			}
-			if value := cr.Get("bridge.bridge-domain"); value.Exists() && !data.Domains[i].Services[ci].BridgeDomain.IsNull() {
-				data.Domains[i].Services[ci].BridgeDomain = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].BridgeDomain = types.StringNull()
-			}
-			if value := cr.Get("down-meps"); value.Exists() {
-				if !data.Domains[i].Services[ci].DownMeps.IsNull() {
-					data.Domains[i].Services[ci].DownMeps = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].DownMeps.IsNull() {
-					data.Domains[i].Services[ci].DownMeps = types.BoolNull()
-				}
-			}
-			if value := cr.Get("flexible-xconnect.vlan-aware.evi"); value.Exists() && !data.Domains[i].Services[ci].FlexibleXconnectVlanAwareEvi.IsNull() {
-				data.Domains[i].Services[ci].FlexibleXconnectVlanAwareEvi = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].FlexibleXconnectVlanAwareEvi = types.Int64Null()
-			}
-			if value := cr.Get("flexible-xconnect.vlan-unaware.cross-connect-name"); value.Exists() && !data.Domains[i].Services[ci].FlexibleXconnectVlanUnawareName.IsNull() {
-				data.Domains[i].Services[ci].FlexibleXconnectVlanUnawareName = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].FlexibleXconnectVlanUnawareName = types.StringNull()
-			}
-			if value := cr.Get("xconnect.mp2mp.group"); value.Exists() && !data.Domains[i].Services[ci].XconnectMp2mpGroup.IsNull() {
-				data.Domains[i].Services[ci].XconnectMp2mpGroup = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].XconnectMp2mpGroup = types.StringNull()
-			}
-			if value := cr.Get("xconnect.mp2mp.cross-connect-name"); value.Exists() && !data.Domains[i].Services[ci].XconnectMp2mpName.IsNull() {
-				data.Domains[i].Services[ci].XconnectMp2mpName = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].XconnectMp2mpName = types.StringNull()
-			}
-			if value := cr.Get("xconnect.mp2mp.ce-id"); value.Exists() && !data.Domains[i].Services[ci].XconnectMp2mpCeId.IsNull() {
-				data.Domains[i].Services[ci].XconnectMp2mpCeId = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].XconnectMp2mpCeId = types.Int64Null()
-			}
-			if value := cr.Get("xconnect.mp2mp.remote-ce-id"); value.Exists() && !data.Domains[i].Services[ci].XconnectMp2mpRemoteCeId.IsNull() {
-				data.Domains[i].Services[ci].XconnectMp2mpRemoteCeId = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].XconnectMp2mpRemoteCeId = types.Int64Null()
-			}
-			if value := cr.Get("xconnect.p2p.group"); value.Exists() && !data.Domains[i].Services[ci].XconnectP2pGroupName.IsNull() {
-				data.Domains[i].Services[ci].XconnectP2pGroupName = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].XconnectP2pGroupName = types.StringNull()
-			}
-			if value := cr.Get("xconnect.p2p.cross-connect-name"); value.Exists() && !data.Domains[i].Services[ci].XconnectP2pXcName.IsNull() {
-				data.Domains[i].Services[ci].XconnectP2pXcName = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].XconnectP2pXcName = types.StringNull()
-			}
-			if value := cr.Get("id.icc-based.icc"); value.Exists() && !data.Domains[i].Services[ci].IdIccBasedIcc.IsNull() {
-				data.Domains[i].Services[ci].IdIccBasedIcc = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].IdIccBasedIcc = types.StringNull()
-			}
-			if value := cr.Get("id.icc-based.umc"); value.Exists() && !data.Domains[i].Services[ci].IdIccBasedUmc.IsNull() {
-				data.Domains[i].Services[ci].IdIccBasedUmc = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].IdIccBasedUmc = types.StringNull()
-			}
-			if value := cr.Get("id.vlanid"); value.Exists() && !data.Domains[i].Services[ci].IdVlanId.IsNull() {
-				data.Domains[i].Services[ci].IdVlanId = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].IdVlanId = types.Int64Null()
-			}
-			if value := cr.Get("id.number"); value.Exists() && !data.Domains[i].Services[ci].IdNumber.IsNull() {
-				data.Domains[i].Services[ci].IdNumber = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].IdNumber = types.Int64Null()
-			}
-			if value := cr.Get("id.string"); value.Exists() && !data.Domains[i].Services[ci].IdString.IsNull() {
-				data.Domains[i].Services[ci].IdString = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].IdString = types.StringNull()
-			}
-			if value := cr.Get("id.vpn-id.vpn-oui"); value.Exists() && !data.Domains[i].Services[ci].IdVpnIdOui.IsNull() {
-				data.Domains[i].Services[ci].IdVpnIdOui = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].IdVpnIdOui = types.Int64Null()
-			}
-			if value := cr.Get("id.vpn-id.vpn-index"); value.Exists() && !data.Domains[i].Services[ci].IdVpnIdIndex.IsNull() {
-				data.Domains[i].Services[ci].IdVpnIdIndex = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].IdVpnIdIndex = types.Int64Null()
-			}
-			if value := cr.Get("tags"); value.Exists() && !data.Domains[i].Services[ci].Tags.IsNull() {
-				data.Domains[i].Services[ci].Tags = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].Tags = types.StringNull()
-			}
-			if value := cr.Get("mip.auto-create.all"); value.Exists() {
-				if !data.Domains[i].Services[ci].MipAutoCreateAll.IsNull() {
-					data.Domains[i].Services[ci].MipAutoCreateAll = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].MipAutoCreateAll.IsNull() {
-					data.Domains[i].Services[ci].MipAutoCreateAll = types.BoolNull()
-				}
-			}
-			if value := cr.Get("mip.auto-create.lower-mep-only"); value.Exists() {
-				if !data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.IsNull() {
-					data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.IsNull() {
-					data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly = types.BoolNull()
-				}
-			}
-			if value := cr.Get("mip.auto-create.ccm-learning"); value.Exists() {
-				if !data.Domains[i].Services[ci].MipAutoCreateCcmLearning.IsNull() {
-					data.Domains[i].Services[ci].MipAutoCreateCcmLearning = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].MipAutoCreateCcmLearning.IsNull() {
-					data.Domains[i].Services[ci].MipAutoCreateCcmLearning = types.BoolNull()
-				}
-			}
-			if value := cr.Get("efd"); value.Exists() {
-				if !data.Domains[i].Services[ci].Efd.IsNull() {
-					data.Domains[i].Services[ci].Efd = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].Efd.IsNull() {
-					data.Domains[i].Services[ci].Efd = types.BoolNull()
-				}
-			}
-			if value := cr.Get("efd.protection-switching"); value.Exists() {
-				if !data.Domains[i].Services[ci].EfdProtectionSwitching.IsNull() {
-					data.Domains[i].Services[ci].EfdProtectionSwitching = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].EfdProtectionSwitching.IsNull() {
-					data.Domains[i].Services[ci].EfdProtectionSwitching = types.BoolNull()
-				}
-			}
-			if value := cr.Get("continuity-check.interval.interval-time"); value.Exists() && !data.Domains[i].Services[ci].ContinuityCheckInterval.IsNull() {
-				data.Domains[i].Services[ci].ContinuityCheckInterval = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].ContinuityCheckInterval = types.StringNull()
-			}
-			if value := cr.Get("continuity-check.interval.loss-threshold"); value.Exists() && !data.Domains[i].Services[ci].ContinuityCheckIntervalLossThreshold.IsNull() {
-				data.Domains[i].Services[ci].ContinuityCheckIntervalLossThreshold = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].ContinuityCheckIntervalLossThreshold = types.Int64Null()
-			}
-			if value := cr.Get("continuity-check.archive.hold-time"); value.Exists() && !data.Domains[i].Services[ci].ContinuityCheckArchiveHoldTime.IsNull() {
-				data.Domains[i].Services[ci].ContinuityCheckArchiveHoldTime = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].ContinuityCheckArchiveHoldTime = types.Int64Null()
-			}
-			if value := cr.Get("continuity-check.loss.auto-traceroute"); value.Exists() {
-				if !data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.IsNull() {
-					data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.IsNull() {
-					data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute = types.BoolNull()
-				}
-			}
-			if value := cr.Get("maximum-meps"); value.Exists() && !data.Domains[i].Services[ci].MaximumMeps.IsNull() {
-				data.Domains[i].Services[ci].MaximumMeps = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].MaximumMeps = types.Int64Null()
-			}
-			if value := cr.Get("ais.transmission.interval"); value.Exists() && !data.Domains[i].Services[ci].AisTransmissionInterval.IsNull() {
-				data.Domains[i].Services[ci].AisTransmissionInterval = types.StringValue(value.String())
-			} else {
-				data.Domains[i].Services[ci].AisTransmissionInterval = types.StringNull()
-			}
-			if value := cr.Get("ais.transmission.cos"); value.Exists() && !data.Domains[i].Services[ci].AisTransmissionCos.IsNull() {
-				data.Domains[i].Services[ci].AisTransmissionCos = types.Int64Value(value.Int())
-			} else {
-				data.Domains[i].Services[ci].AisTransmissionCos = types.Int64Null()
-			}
-			if value := cr.Get("log.continuity-check.mep.changes"); value.Exists() {
-				if !data.Domains[i].Services[ci].LogContinuityCheckMepChanges.IsNull() {
-					data.Domains[i].Services[ci].LogContinuityCheckMepChanges = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].LogContinuityCheckMepChanges.IsNull() {
-					data.Domains[i].Services[ci].LogContinuityCheckMepChanges = types.BoolNull()
-				}
-			}
-			if value := cr.Get("log.continuity-check.errors"); value.Exists() {
-				if !data.Domains[i].Services[ci].LogContinuityCheckErrors.IsNull() {
-					data.Domains[i].Services[ci].LogContinuityCheckErrors = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].LogContinuityCheckErrors.IsNull() {
-					data.Domains[i].Services[ci].LogContinuityCheckErrors = types.BoolNull()
-				}
-			}
-			if value := cr.Get("log.crosscheck.errors"); value.Exists() {
-				if !data.Domains[i].Services[ci].LogCrosscheckErrors.IsNull() {
-					data.Domains[i].Services[ci].LogCrosscheckErrors = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].LogCrosscheckErrors.IsNull() {
-					data.Domains[i].Services[ci].LogCrosscheckErrors = types.BoolNull()
-				}
-			}
-			if value := cr.Get("log.ais"); value.Exists() {
-				if !data.Domains[i].Services[ci].LogAis.IsNull() {
-					data.Domains[i].Services[ci].LogAis = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].LogAis.IsNull() {
-					data.Domains[i].Services[ci].LogAis = types.BoolNull()
-				}
-			}
-			if value := cr.Get("log.csf"); value.Exists() {
-				if !data.Domains[i].Services[ci].LogCsf.IsNull() {
-					data.Domains[i].Services[ci].LogCsf = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].LogCsf.IsNull() {
-					data.Domains[i].Services[ci].LogCsf = types.BoolNull()
-				}
-			}
-			if value := cr.Get("log.efd"); value.Exists() {
-				if !data.Domains[i].Services[ci].LogEfd.IsNull() {
-					data.Domains[i].Services[ci].LogEfd = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].LogEfd.IsNull() {
-					data.Domains[i].Services[ci].LogEfd = types.BoolNull()
-				}
-			}
-			for cci := range data.Domains[i].Services[ci].MepCrosschecks {
-				keys := [...]string{"mep-id"}
-				keyValues := [...]string{strconv.FormatInt(data.Domains[i].Services[ci].MepCrosschecks[cci].MepId.ValueInt64(), 10)}
-
-				var ccr gjson.Result
-				cr.Get("mep.crosscheck.mep-ids.mep-id").ForEach(
-					func(_, v gjson.Result) bool {
-						found := false
-						for ik := range keys {
-							if v.Get(keys[ik]).String() == keyValues[ik] {
-								found = true
-								continue
-							}
-							found = false
-							break
-						}
-						if found {
-							ccr = v
-							return false
-						}
-						return true
-					},
-				)
-				if value := ccr.Get("mep-id"); value.Exists() && !data.Domains[i].Services[ci].MepCrosschecks[cci].MepId.IsNull() {
-					data.Domains[i].Services[ci].MepCrosschecks[cci].MepId = types.Int64Value(value.Int())
-				} else {
-					data.Domains[i].Services[ci].MepCrosschecks[cci].MepId = types.Int64Null()
-				}
-				if value := ccr.Get("mac-address"); value.Exists() && !data.Domains[i].Services[ci].MepCrosschecks[cci].MacAddress.IsNull() {
-					data.Domains[i].Services[ci].MepCrosschecks[cci].MacAddress = types.StringValue(value.String())
-				} else {
-					data.Domains[i].Services[ci].MepCrosschecks[cci].MacAddress = types.StringNull()
-				}
-			}
-			if value := cr.Get("mep.crosscheck.auto"); value.Exists() {
-				if !data.Domains[i].Services[ci].MepCrosscheckAuto.IsNull() {
-					data.Domains[i].Services[ci].MepCrosscheckAuto = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].MepCrosscheckAuto.IsNull() {
-					data.Domains[i].Services[ci].MepCrosscheckAuto = types.BoolNull()
-				}
-			}
-			if value := cr.Get("report.defects.none"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsNone.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsNone = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsNone.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsNone = types.BoolNull()
-				}
-			}
-			if value := cr.Get("report.defects.all"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsAll.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsAll = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsAll.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsAll = types.BoolNull()
-				}
-			}
-			if value := cr.Get("report.defects.ieee.xcon"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsIeeeXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeXcon = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsIeeeXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeXcon = types.BoolNull()
-				}
-			}
-			if value := cr.Get("report.defects.ieee.error-xcon"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon = types.BoolNull()
-				}
-			}
-			if value := cr.Get("report.defects.ieee.remote-error-xcon"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon = types.BoolNull()
-				}
-			}
-			if value := cr.Get("report.defects.ieee.mac-remote-error-xcon"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon = types.BoolNull()
-				}
-			}
-			if value := cr.Get("report.defects.wrong-maid"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsWrongMaid.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsWrongMaid = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsWrongMaid.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsWrongMaid = types.BoolNull()
-				}
-			}
-			if value := cr.Get("report.defects.wrong-level"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsWrongLevel.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsWrongLevel = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsWrongLevel.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsWrongLevel = types.BoolNull()
-				}
-			}
-			if value := cr.Get("report.defects.our-mac"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsOurMac.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsOurMac = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsOurMac.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsOurMac = types.BoolNull()
-				}
-			}
-			if value := cr.Get("report.defects.our-mepid"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsOurMepid.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsOurMepid = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsOurMepid.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsOurMepid = types.BoolNull()
-				}
-			}
-			if value := cr.Get("report.defects.wrong-interval"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsWrongInterval.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsWrongInterval = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsWrongInterval.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsWrongInterval = types.BoolNull()
-				}
-			}
-			if value := cr.Get("report.defects.missing"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsMissing.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsMissing = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsMissing.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsMissing = types.BoolNull()
-				}
-			}
-			if value := cr.Get("report.defects.peer-port-down"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsPeerPortDown.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsPeerPortDown = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsPeerPortDown.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsPeerPortDown = types.BoolNull()
-				}
-			}
-			if value := cr.Get("report.defects.rdi"); value.Exists() {
-				if !data.Domains[i].Services[ci].ReportDefectsRdi.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsRdi = types.BoolValue(true)
-				}
-			} else {
-				// For presence-based booleans, only set to null if the attribute is null in state
-				if data.Domains[i].Services[ci].ReportDefectsRdi.IsNull() {
-					data.Domains[i].Services[ci].ReportDefectsRdi = types.BoolNull()
-				}
-			}
-		}
-	}
-}
-
-// End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
@@ -1784,614 +2892,6 @@ func (data *EthernetCFM) updateFromBodyXML(ctx context.Context, res xmldot.Resul
 }
 
 // End of section. //template:end updateFromBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
-
-func (data *EthernetCFM) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "traceroute.cache.hold-time"); value.Exists() {
-		data.TracerouteCacheHoldTime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "traceroute.cache.size"); value.Exists() {
-		data.TracerouteCacheSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "domains.domain"); value.Exists() {
-		data.Domains = make([]EthernetCFMDomains, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := EthernetCFMDomains{}
-			if cValue := v.Get("domain-name"); cValue.Exists() {
-				item.DomainName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("level"); cValue.Exists() {
-				item.Level = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("id.dns"); cValue.Exists() {
-				item.IdDns = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("id.mac-address"); cValue.Exists() {
-				item.IdMacAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("id.mac-address-two-octet-integer"); cValue.Exists() {
-				item.IdMacAddressInteger = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("id.null"); cValue.Exists() {
-				item.IdNull = types.BoolValue(true)
-			} else if !item.IdNull.IsNull() {
-				// Only set to false if it was previously set
-				item.IdNull = types.BoolValue(false)
-			}
-			if cValue := v.Get("id.string"); cValue.Exists() {
-				item.IdString = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("services.service"); cValue.Exists() {
-				item.Services = make([]EthernetCFMDomainsServices, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := EthernetCFMDomainsServices{}
-					if ccValue := cv.Get("service-name"); ccValue.Exists() {
-						cItem.ServiceName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("bridge.group"); ccValue.Exists() {
-						cItem.BridgeGroup = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("bridge.bridge-domain"); ccValue.Exists() {
-						cItem.BridgeDomain = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("down-meps"); ccValue.Exists() {
-						cItem.DownMeps = types.BoolValue(true)
-					} else if !cItem.DownMeps.IsNull() {
-						// Only set to false if it was previously set
-						cItem.DownMeps = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("flexible-xconnect.vlan-aware.evi"); ccValue.Exists() {
-						cItem.FlexibleXconnectVlanAwareEvi = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("flexible-xconnect.vlan-unaware.cross-connect-name"); ccValue.Exists() {
-						cItem.FlexibleXconnectVlanUnawareName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("xconnect.mp2mp.group"); ccValue.Exists() {
-						cItem.XconnectMp2mpGroup = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("xconnect.mp2mp.cross-connect-name"); ccValue.Exists() {
-						cItem.XconnectMp2mpName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("xconnect.mp2mp.ce-id"); ccValue.Exists() {
-						cItem.XconnectMp2mpCeId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("xconnect.mp2mp.remote-ce-id"); ccValue.Exists() {
-						cItem.XconnectMp2mpRemoteCeId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("xconnect.p2p.group"); ccValue.Exists() {
-						cItem.XconnectP2pGroupName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("xconnect.p2p.cross-connect-name"); ccValue.Exists() {
-						cItem.XconnectP2pXcName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("id.icc-based.icc"); ccValue.Exists() {
-						cItem.IdIccBasedIcc = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("id.icc-based.umc"); ccValue.Exists() {
-						cItem.IdIccBasedUmc = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("id.vlanid"); ccValue.Exists() {
-						cItem.IdVlanId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("id.number"); ccValue.Exists() {
-						cItem.IdNumber = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("id.string"); ccValue.Exists() {
-						cItem.IdString = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("id.vpn-id.vpn-oui"); ccValue.Exists() {
-						cItem.IdVpnIdOui = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("id.vpn-id.vpn-index"); ccValue.Exists() {
-						cItem.IdVpnIdIndex = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("tags"); ccValue.Exists() {
-						cItem.Tags = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("mip.auto-create.all"); ccValue.Exists() {
-						cItem.MipAutoCreateAll = types.BoolValue(true)
-					} else if !cItem.MipAutoCreateAll.IsNull() {
-						// Only set to false if it was previously set
-						cItem.MipAutoCreateAll = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("mip.auto-create.lower-mep-only"); ccValue.Exists() {
-						cItem.MipAutoCreateLowerMepOnly = types.BoolValue(true)
-					} else if !cItem.MipAutoCreateLowerMepOnly.IsNull() {
-						// Only set to false if it was previously set
-						cItem.MipAutoCreateLowerMepOnly = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("mip.auto-create.ccm-learning"); ccValue.Exists() {
-						cItem.MipAutoCreateCcmLearning = types.BoolValue(true)
-					} else if !cItem.MipAutoCreateCcmLearning.IsNull() {
-						// Only set to false if it was previously set
-						cItem.MipAutoCreateCcmLearning = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("efd"); ccValue.Exists() {
-						cItem.Efd = types.BoolValue(true)
-					} else if !cItem.Efd.IsNull() {
-						// Only set to false if it was previously set
-						cItem.Efd = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("efd.protection-switching"); ccValue.Exists() {
-						cItem.EfdProtectionSwitching = types.BoolValue(true)
-					} else if !cItem.EfdProtectionSwitching.IsNull() {
-						// Only set to false if it was previously set
-						cItem.EfdProtectionSwitching = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("continuity-check.interval.interval-time"); ccValue.Exists() {
-						cItem.ContinuityCheckInterval = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("continuity-check.interval.loss-threshold"); ccValue.Exists() {
-						cItem.ContinuityCheckIntervalLossThreshold = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("continuity-check.archive.hold-time"); ccValue.Exists() {
-						cItem.ContinuityCheckArchiveHoldTime = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("continuity-check.loss.auto-traceroute"); ccValue.Exists() {
-						cItem.ContinuityCheckLossAutoTraceroute = types.BoolValue(true)
-					} else if !cItem.ContinuityCheckLossAutoTraceroute.IsNull() {
-						// Only set to false if it was previously set
-						cItem.ContinuityCheckLossAutoTraceroute = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("maximum-meps"); ccValue.Exists() {
-						cItem.MaximumMeps = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("ais.transmission.interval"); ccValue.Exists() {
-						cItem.AisTransmissionInterval = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("ais.transmission.cos"); ccValue.Exists() {
-						cItem.AisTransmissionCos = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("log.continuity-check.mep.changes"); ccValue.Exists() {
-						cItem.LogContinuityCheckMepChanges = types.BoolValue(true)
-					} else if !cItem.LogContinuityCheckMepChanges.IsNull() {
-						// Only set to false if it was previously set
-						cItem.LogContinuityCheckMepChanges = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("log.continuity-check.errors"); ccValue.Exists() {
-						cItem.LogContinuityCheckErrors = types.BoolValue(true)
-					} else if !cItem.LogContinuityCheckErrors.IsNull() {
-						// Only set to false if it was previously set
-						cItem.LogContinuityCheckErrors = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("log.crosscheck.errors"); ccValue.Exists() {
-						cItem.LogCrosscheckErrors = types.BoolValue(true)
-					} else if !cItem.LogCrosscheckErrors.IsNull() {
-						// Only set to false if it was previously set
-						cItem.LogCrosscheckErrors = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("log.ais"); ccValue.Exists() {
-						cItem.LogAis = types.BoolValue(true)
-					} else if !cItem.LogAis.IsNull() {
-						// Only set to false if it was previously set
-						cItem.LogAis = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("log.csf"); ccValue.Exists() {
-						cItem.LogCsf = types.BoolValue(true)
-					} else if !cItem.LogCsf.IsNull() {
-						// Only set to false if it was previously set
-						cItem.LogCsf = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("log.efd"); ccValue.Exists() {
-						cItem.LogEfd = types.BoolValue(true)
-					} else if !cItem.LogEfd.IsNull() {
-						// Only set to false if it was previously set
-						cItem.LogEfd = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("mep.crosscheck.mep-ids.mep-id"); ccValue.Exists() {
-						cItem.MepCrosschecks = make([]EthernetCFMDomainsServicesMepCrosschecks, 0)
-						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
-							ccItem := EthernetCFMDomainsServicesMepCrosschecks{}
-							if cccValue := ccv.Get("mep-id"); cccValue.Exists() {
-								ccItem.MepId = types.Int64Value(cccValue.Int())
-							}
-							if cccValue := ccv.Get("mac-address"); cccValue.Exists() {
-								ccItem.MacAddress = types.StringValue(cccValue.String())
-							}
-							cItem.MepCrosschecks = append(cItem.MepCrosschecks, ccItem)
-							return true
-						})
-					}
-					if ccValue := cv.Get("mep.crosscheck.auto"); ccValue.Exists() {
-						cItem.MepCrosscheckAuto = types.BoolValue(true)
-					} else if !cItem.MepCrosscheckAuto.IsNull() {
-						// Only set to false if it was previously set
-						cItem.MepCrosscheckAuto = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.none"); ccValue.Exists() {
-						cItem.ReportDefectsNone = types.BoolValue(true)
-					} else if !cItem.ReportDefectsNone.IsNull() {
-						// Only set to false if it was previously set
-						cItem.ReportDefectsNone = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.all"); ccValue.Exists() {
-						cItem.ReportDefectsAll = types.BoolValue(true)
-					} else if !cItem.ReportDefectsAll.IsNull() {
-						// Only set to false if it was previously set
-						cItem.ReportDefectsAll = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.ieee.xcon"); ccValue.Exists() {
-						cItem.ReportDefectsIeeeXcon = types.BoolValue(true)
-					} else if !cItem.ReportDefectsIeeeXcon.IsNull() {
-						// Only set to false if it was previously set
-						cItem.ReportDefectsIeeeXcon = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.ieee.error-xcon"); ccValue.Exists() {
-						cItem.ReportDefectsIeeeErrorXcon = types.BoolValue(true)
-					} else if !cItem.ReportDefectsIeeeErrorXcon.IsNull() {
-						// Only set to false if it was previously set
-						cItem.ReportDefectsIeeeErrorXcon = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.ieee.remote-error-xcon"); ccValue.Exists() {
-						cItem.ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(true)
-					} else if !cItem.ReportDefectsIeeeRemoteErrorXcon.IsNull() {
-						// Only set to false if it was previously set
-						cItem.ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.ieee.mac-remote-error-xcon"); ccValue.Exists() {
-						cItem.ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(true)
-					} else if !cItem.ReportDefectsIeeeMacRemoteErrorXcon.IsNull() {
-						// Only set to false if it was previously set
-						cItem.ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.wrong-maid"); ccValue.Exists() {
-						cItem.ReportDefectsWrongMaid = types.BoolValue(true)
-					} else if !cItem.ReportDefectsWrongMaid.IsNull() {
-						// Only set to false if it was previously set
-						cItem.ReportDefectsWrongMaid = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.wrong-level"); ccValue.Exists() {
-						cItem.ReportDefectsWrongLevel = types.BoolValue(true)
-					} else if !cItem.ReportDefectsWrongLevel.IsNull() {
-						// Only set to false if it was previously set
-						cItem.ReportDefectsWrongLevel = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.our-mac"); ccValue.Exists() {
-						cItem.ReportDefectsOurMac = types.BoolValue(true)
-					} else if !cItem.ReportDefectsOurMac.IsNull() {
-						// Only set to false if it was previously set
-						cItem.ReportDefectsOurMac = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.our-mepid"); ccValue.Exists() {
-						cItem.ReportDefectsOurMepid = types.BoolValue(true)
-					} else if !cItem.ReportDefectsOurMepid.IsNull() {
-						// Only set to false if it was previously set
-						cItem.ReportDefectsOurMepid = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.wrong-interval"); ccValue.Exists() {
-						cItem.ReportDefectsWrongInterval = types.BoolValue(true)
-					} else if !cItem.ReportDefectsWrongInterval.IsNull() {
-						// Only set to false if it was previously set
-						cItem.ReportDefectsWrongInterval = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.missing"); ccValue.Exists() {
-						cItem.ReportDefectsMissing = types.BoolValue(true)
-					} else if !cItem.ReportDefectsMissing.IsNull() {
-						// Only set to false if it was previously set
-						cItem.ReportDefectsMissing = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.peer-port-down"); ccValue.Exists() {
-						cItem.ReportDefectsPeerPortDown = types.BoolValue(true)
-					} else if !cItem.ReportDefectsPeerPortDown.IsNull() {
-						// Only set to false if it was previously set
-						cItem.ReportDefectsPeerPortDown = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.rdi"); ccValue.Exists() {
-						cItem.ReportDefectsRdi = types.BoolValue(true)
-					} else if !cItem.ReportDefectsRdi.IsNull() {
-						// Only set to false if it was previously set
-						cItem.ReportDefectsRdi = types.BoolValue(false)
-					}
-					item.Services = append(item.Services, cItem)
-					return true
-				})
-			}
-			data.Domains = append(data.Domains, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *EthernetCFMData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "traceroute.cache.hold-time"); value.Exists() {
-		data.TracerouteCacheHoldTime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "traceroute.cache.size"); value.Exists() {
-		data.TracerouteCacheSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "domains.domain"); value.Exists() {
-		data.Domains = make([]EthernetCFMDomains, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := EthernetCFMDomains{}
-			if cValue := v.Get("domain-name"); cValue.Exists() {
-				item.DomainName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("level"); cValue.Exists() {
-				item.Level = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("id.dns"); cValue.Exists() {
-				item.IdDns = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("id.mac-address"); cValue.Exists() {
-				item.IdMacAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("id.mac-address-two-octet-integer"); cValue.Exists() {
-				item.IdMacAddressInteger = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("id.null"); cValue.Exists() {
-				item.IdNull = types.BoolValue(true)
-			} else {
-				item.IdNull = types.BoolValue(false)
-			}
-			if cValue := v.Get("id.string"); cValue.Exists() {
-				item.IdString = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("services.service"); cValue.Exists() {
-				item.Services = make([]EthernetCFMDomainsServices, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := EthernetCFMDomainsServices{}
-					if ccValue := cv.Get("service-name"); ccValue.Exists() {
-						cItem.ServiceName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("bridge.group"); ccValue.Exists() {
-						cItem.BridgeGroup = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("bridge.bridge-domain"); ccValue.Exists() {
-						cItem.BridgeDomain = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("down-meps"); ccValue.Exists() {
-						cItem.DownMeps = types.BoolValue(true)
-					} else {
-						cItem.DownMeps = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("flexible-xconnect.vlan-aware.evi"); ccValue.Exists() {
-						cItem.FlexibleXconnectVlanAwareEvi = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("flexible-xconnect.vlan-unaware.cross-connect-name"); ccValue.Exists() {
-						cItem.FlexibleXconnectVlanUnawareName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("xconnect.mp2mp.group"); ccValue.Exists() {
-						cItem.XconnectMp2mpGroup = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("xconnect.mp2mp.cross-connect-name"); ccValue.Exists() {
-						cItem.XconnectMp2mpName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("xconnect.mp2mp.ce-id"); ccValue.Exists() {
-						cItem.XconnectMp2mpCeId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("xconnect.mp2mp.remote-ce-id"); ccValue.Exists() {
-						cItem.XconnectMp2mpRemoteCeId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("xconnect.p2p.group"); ccValue.Exists() {
-						cItem.XconnectP2pGroupName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("xconnect.p2p.cross-connect-name"); ccValue.Exists() {
-						cItem.XconnectP2pXcName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("id.icc-based.icc"); ccValue.Exists() {
-						cItem.IdIccBasedIcc = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("id.icc-based.umc"); ccValue.Exists() {
-						cItem.IdIccBasedUmc = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("id.vlanid"); ccValue.Exists() {
-						cItem.IdVlanId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("id.number"); ccValue.Exists() {
-						cItem.IdNumber = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("id.string"); ccValue.Exists() {
-						cItem.IdString = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("id.vpn-id.vpn-oui"); ccValue.Exists() {
-						cItem.IdVpnIdOui = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("id.vpn-id.vpn-index"); ccValue.Exists() {
-						cItem.IdVpnIdIndex = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("tags"); ccValue.Exists() {
-						cItem.Tags = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("mip.auto-create.all"); ccValue.Exists() {
-						cItem.MipAutoCreateAll = types.BoolValue(true)
-					} else {
-						cItem.MipAutoCreateAll = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("mip.auto-create.lower-mep-only"); ccValue.Exists() {
-						cItem.MipAutoCreateLowerMepOnly = types.BoolValue(true)
-					} else {
-						cItem.MipAutoCreateLowerMepOnly = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("mip.auto-create.ccm-learning"); ccValue.Exists() {
-						cItem.MipAutoCreateCcmLearning = types.BoolValue(true)
-					} else {
-						cItem.MipAutoCreateCcmLearning = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("efd"); ccValue.Exists() {
-						cItem.Efd = types.BoolValue(true)
-					} else {
-						cItem.Efd = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("efd.protection-switching"); ccValue.Exists() {
-						cItem.EfdProtectionSwitching = types.BoolValue(true)
-					} else {
-						cItem.EfdProtectionSwitching = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("continuity-check.interval.interval-time"); ccValue.Exists() {
-						cItem.ContinuityCheckInterval = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("continuity-check.interval.loss-threshold"); ccValue.Exists() {
-						cItem.ContinuityCheckIntervalLossThreshold = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("continuity-check.archive.hold-time"); ccValue.Exists() {
-						cItem.ContinuityCheckArchiveHoldTime = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("continuity-check.loss.auto-traceroute"); ccValue.Exists() {
-						cItem.ContinuityCheckLossAutoTraceroute = types.BoolValue(true)
-					} else {
-						cItem.ContinuityCheckLossAutoTraceroute = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("maximum-meps"); ccValue.Exists() {
-						cItem.MaximumMeps = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("ais.transmission.interval"); ccValue.Exists() {
-						cItem.AisTransmissionInterval = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("ais.transmission.cos"); ccValue.Exists() {
-						cItem.AisTransmissionCos = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("log.continuity-check.mep.changes"); ccValue.Exists() {
-						cItem.LogContinuityCheckMepChanges = types.BoolValue(true)
-					} else {
-						cItem.LogContinuityCheckMepChanges = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("log.continuity-check.errors"); ccValue.Exists() {
-						cItem.LogContinuityCheckErrors = types.BoolValue(true)
-					} else {
-						cItem.LogContinuityCheckErrors = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("log.crosscheck.errors"); ccValue.Exists() {
-						cItem.LogCrosscheckErrors = types.BoolValue(true)
-					} else {
-						cItem.LogCrosscheckErrors = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("log.ais"); ccValue.Exists() {
-						cItem.LogAis = types.BoolValue(true)
-					} else {
-						cItem.LogAis = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("log.csf"); ccValue.Exists() {
-						cItem.LogCsf = types.BoolValue(true)
-					} else {
-						cItem.LogCsf = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("log.efd"); ccValue.Exists() {
-						cItem.LogEfd = types.BoolValue(true)
-					} else {
-						cItem.LogEfd = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("mep.crosscheck.mep-ids.mep-id"); ccValue.Exists() {
-						cItem.MepCrosschecks = make([]EthernetCFMDomainsServicesMepCrosschecks, 0)
-						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
-							ccItem := EthernetCFMDomainsServicesMepCrosschecks{}
-							if cccValue := ccv.Get("mep-id"); cccValue.Exists() {
-								ccItem.MepId = types.Int64Value(cccValue.Int())
-							}
-							if cccValue := ccv.Get("mac-address"); cccValue.Exists() {
-								ccItem.MacAddress = types.StringValue(cccValue.String())
-							}
-							cItem.MepCrosschecks = append(cItem.MepCrosschecks, ccItem)
-							return true
-						})
-					}
-					if ccValue := cv.Get("mep.crosscheck.auto"); ccValue.Exists() {
-						cItem.MepCrosscheckAuto = types.BoolValue(true)
-					} else {
-						cItem.MepCrosscheckAuto = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.none"); ccValue.Exists() {
-						cItem.ReportDefectsNone = types.BoolValue(true)
-					} else {
-						cItem.ReportDefectsNone = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.all"); ccValue.Exists() {
-						cItem.ReportDefectsAll = types.BoolValue(true)
-					} else {
-						cItem.ReportDefectsAll = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.ieee.xcon"); ccValue.Exists() {
-						cItem.ReportDefectsIeeeXcon = types.BoolValue(true)
-					} else {
-						cItem.ReportDefectsIeeeXcon = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.ieee.error-xcon"); ccValue.Exists() {
-						cItem.ReportDefectsIeeeErrorXcon = types.BoolValue(true)
-					} else {
-						cItem.ReportDefectsIeeeErrorXcon = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.ieee.remote-error-xcon"); ccValue.Exists() {
-						cItem.ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(true)
-					} else {
-						cItem.ReportDefectsIeeeRemoteErrorXcon = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.ieee.mac-remote-error-xcon"); ccValue.Exists() {
-						cItem.ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(true)
-					} else {
-						cItem.ReportDefectsIeeeMacRemoteErrorXcon = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.wrong-maid"); ccValue.Exists() {
-						cItem.ReportDefectsWrongMaid = types.BoolValue(true)
-					} else {
-						cItem.ReportDefectsWrongMaid = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.wrong-level"); ccValue.Exists() {
-						cItem.ReportDefectsWrongLevel = types.BoolValue(true)
-					} else {
-						cItem.ReportDefectsWrongLevel = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.our-mac"); ccValue.Exists() {
-						cItem.ReportDefectsOurMac = types.BoolValue(true)
-					} else {
-						cItem.ReportDefectsOurMac = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.our-mepid"); ccValue.Exists() {
-						cItem.ReportDefectsOurMepid = types.BoolValue(true)
-					} else {
-						cItem.ReportDefectsOurMepid = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.wrong-interval"); ccValue.Exists() {
-						cItem.ReportDefectsWrongInterval = types.BoolValue(true)
-					} else {
-						cItem.ReportDefectsWrongInterval = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.missing"); ccValue.Exists() {
-						cItem.ReportDefectsMissing = types.BoolValue(true)
-					} else {
-						cItem.ReportDefectsMissing = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.peer-port-down"); ccValue.Exists() {
-						cItem.ReportDefectsPeerPortDown = types.BoolValue(true)
-					} else {
-						cItem.ReportDefectsPeerPortDown = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("report.defects.rdi"); ccValue.Exists() {
-						cItem.ReportDefectsRdi = types.BoolValue(true)
-					} else {
-						cItem.ReportDefectsRdi = types.BoolValue(false)
-					}
-					item.Services = append(item.Services, cItem)
-					return true
-				})
-			}
-			data.Domains = append(data.Domains, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyData
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
@@ -2954,546 +3454,6 @@ func (data *EthernetCFMData) fromBodyXML(ctx context.Context, res xmldot.Result)
 }
 
 // End of section. //template:end fromBodyDataXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data *EthernetCFM) getDeletedItems(ctx context.Context, state EthernetCFM) []string {
-	deletedItems := make([]string, 0)
-	for i := range state.Domains {
-		keys := [...]string{"domain-name"}
-		stateKeyValues := [...]string{state.Domains[i].DomainName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Domains[i].DomainName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Domains {
-			found = true
-			if state.Domains[i].DomainName.ValueString() != data.Domains[j].DomainName.ValueString() {
-				found = false
-			}
-			if found {
-				for ci := range state.Domains[i].Services {
-					ckeys := [...]string{"service-name"}
-					cstateKeyValues := [...]string{state.Domains[i].Services[ci].ServiceName.ValueString()}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.Domains[i].Services[ci].ServiceName.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.Domains[j].Services {
-						found = true
-						if state.Domains[i].Services[ci].ServiceName.ValueString() != data.Domains[j].Services[cj].ServiceName.ValueString() {
-							found = false
-						}
-						if found {
-							if !state.Domains[i].Services[ci].ReportDefectsRdi.IsNull() && data.Domains[j].Services[cj].ReportDefectsRdi.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/rdi", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].ReportDefectsPeerPortDown.IsNull() && data.Domains[j].Services[cj].ReportDefectsPeerPortDown.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/peer-port-down", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].ReportDefectsMissing.IsNull() && data.Domains[j].Services[cj].ReportDefectsMissing.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/missing", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].ReportDefectsWrongInterval.IsNull() && data.Domains[j].Services[cj].ReportDefectsWrongInterval.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/wrong-interval", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].ReportDefectsOurMepid.IsNull() && data.Domains[j].Services[cj].ReportDefectsOurMepid.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/our-mepid", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].ReportDefectsOurMac.IsNull() && data.Domains[j].Services[cj].ReportDefectsOurMac.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/our-mac", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].ReportDefectsWrongLevel.IsNull() && data.Domains[j].Services[cj].ReportDefectsWrongLevel.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/wrong-level", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].ReportDefectsWrongMaid.IsNull() && data.Domains[j].Services[cj].ReportDefectsWrongMaid.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/wrong-maid", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() && data.Domains[j].Services[cj].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/ieee/mac-remote-error-xcon", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.IsNull() && data.Domains[j].Services[cj].ReportDefectsIeeeRemoteErrorXcon.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/ieee/remote-error-xcon", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.IsNull() && data.Domains[j].Services[cj].ReportDefectsIeeeErrorXcon.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/ieee/error-xcon", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].ReportDefectsIeeeXcon.IsNull() && data.Domains[j].Services[cj].ReportDefectsIeeeXcon.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/ieee/xcon", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].ReportDefectsAll.IsNull() && data.Domains[j].Services[cj].ReportDefectsAll.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/all", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].ReportDefectsNone.IsNull() && data.Domains[j].Services[cj].ReportDefectsNone.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/none", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].MepCrosscheckAuto.IsNull() && data.Domains[j].Services[cj].MepCrosscheckAuto.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/mep/crosscheck/auto", state.getPath(), keyString, ckeyString))
-							}
-							for cci := range state.Domains[i].Services[ci].MepCrosschecks {
-								cckeys := [...]string{"mep-id"}
-								ccstateKeyValues := [...]string{strconv.FormatInt(state.Domains[i].Services[ci].MepCrosschecks[cci].MepId.ValueInt64(), 10)}
-								cckeyString := ""
-								for ccki := range cckeys {
-									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
-								}
-
-								ccemptyKeys := true
-								if !reflect.ValueOf(state.Domains[i].Services[ci].MepCrosschecks[cci].MepId.ValueInt64()).IsZero() {
-									ccemptyKeys = false
-								}
-								if ccemptyKeys {
-									continue
-								}
-
-								found := false
-								for ccj := range data.Domains[j].Services[cj].MepCrosschecks {
-									found = true
-									if state.Domains[i].Services[ci].MepCrosschecks[cci].MepId.ValueInt64() != data.Domains[j].Services[cj].MepCrosschecks[ccj].MepId.ValueInt64() {
-										found = false
-									}
-									if found {
-										if !state.Domains[i].Services[ci].MepCrosschecks[cci].MacAddress.IsNull() && data.Domains[j].Services[cj].MepCrosschecks[ccj].MacAddress.IsNull() {
-											deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/mep/crosscheck/mep-ids/mep-id%v/mac-address", state.getPath(), keyString, ckeyString, cckeyString))
-										}
-										break
-									}
-								}
-								if !found {
-									deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/mep/crosscheck/mep-ids/mep-id%v", state.getPath(), keyString, ckeyString, cckeyString))
-								}
-							}
-							if !state.Domains[i].Services[ci].LogEfd.IsNull() && data.Domains[j].Services[cj].LogEfd.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/log/efd", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].LogCsf.IsNull() && data.Domains[j].Services[cj].LogCsf.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/log/csf", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].LogAis.IsNull() && data.Domains[j].Services[cj].LogAis.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/log/ais", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].LogCrosscheckErrors.IsNull() && data.Domains[j].Services[cj].LogCrosscheckErrors.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/log/crosscheck/errors", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].LogContinuityCheckErrors.IsNull() && data.Domains[j].Services[cj].LogContinuityCheckErrors.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/log/continuity-check/errors", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].LogContinuityCheckMepChanges.IsNull() && data.Domains[j].Services[cj].LogContinuityCheckMepChanges.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/log/continuity-check/mep/changes", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].AisTransmissionCos.IsNull() && data.Domains[j].Services[cj].AisTransmissionCos.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/ais/transmission/cos", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].AisTransmissionInterval.IsNull() && data.Domains[j].Services[cj].AisTransmissionInterval.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/ais/transmission/interval", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].MaximumMeps.IsNull() && data.Domains[j].Services[cj].MaximumMeps.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/maximum-meps", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.IsNull() && data.Domains[j].Services[cj].ContinuityCheckLossAutoTraceroute.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/continuity-check/loss/auto-traceroute", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].ContinuityCheckArchiveHoldTime.IsNull() && data.Domains[j].Services[cj].ContinuityCheckArchiveHoldTime.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/continuity-check/archive/hold-time", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].ContinuityCheckIntervalLossThreshold.IsNull() && data.Domains[j].Services[cj].ContinuityCheckIntervalLossThreshold.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/continuity-check/interval/loss-threshold", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].ContinuityCheckInterval.IsNull() && data.Domains[j].Services[cj].ContinuityCheckInterval.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/continuity-check/interval/interval-time", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].EfdProtectionSwitching.IsNull() && data.Domains[j].Services[cj].EfdProtectionSwitching.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/efd/protection-switching", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].Efd.IsNull() && data.Domains[j].Services[cj].Efd.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/efd", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].MipAutoCreateCcmLearning.IsNull() && data.Domains[j].Services[cj].MipAutoCreateCcmLearning.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/mip/auto-create/ccm-learning", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.IsNull() && data.Domains[j].Services[cj].MipAutoCreateLowerMepOnly.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/mip/auto-create/lower-mep-only", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].MipAutoCreateAll.IsNull() && data.Domains[j].Services[cj].MipAutoCreateAll.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/mip/auto-create/all", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].Tags.IsNull() && data.Domains[j].Services[cj].Tags.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/tags", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].IdVpnIdIndex.IsNull() && data.Domains[j].Services[cj].IdVpnIdIndex.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/id/vpn-id/vpn-index", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].IdVpnIdOui.IsNull() && data.Domains[j].Services[cj].IdVpnIdOui.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/id/vpn-id/vpn-oui", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].IdString.IsNull() && data.Domains[j].Services[cj].IdString.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/id/string", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].IdNumber.IsNull() && data.Domains[j].Services[cj].IdNumber.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/id/number", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].IdVlanId.IsNull() && data.Domains[j].Services[cj].IdVlanId.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/id/vlanid", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].IdIccBasedUmc.IsNull() && data.Domains[j].Services[cj].IdIccBasedUmc.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/id/icc-based/umc", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].IdIccBasedIcc.IsNull() && data.Domains[j].Services[cj].IdIccBasedIcc.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/id/icc-based/icc", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].XconnectP2pXcName.IsNull() && data.Domains[j].Services[cj].XconnectP2pXcName.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/xconnect/p2p/cross-connect-name", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].XconnectP2pGroupName.IsNull() && data.Domains[j].Services[cj].XconnectP2pGroupName.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/xconnect/p2p/group", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].XconnectMp2mpRemoteCeId.IsNull() && data.Domains[j].Services[cj].XconnectMp2mpRemoteCeId.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/xconnect/mp2mp/remote-ce-id", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].XconnectMp2mpCeId.IsNull() && data.Domains[j].Services[cj].XconnectMp2mpCeId.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/xconnect/mp2mp/ce-id", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].XconnectMp2mpName.IsNull() && data.Domains[j].Services[cj].XconnectMp2mpName.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/xconnect/mp2mp/cross-connect-name", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].XconnectMp2mpGroup.IsNull() && data.Domains[j].Services[cj].XconnectMp2mpGroup.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/xconnect/mp2mp/group", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].FlexibleXconnectVlanUnawareName.IsNull() && data.Domains[j].Services[cj].FlexibleXconnectVlanUnawareName.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/flexible-xconnect/vlan-unaware/cross-connect-name", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].FlexibleXconnectVlanAwareEvi.IsNull() && data.Domains[j].Services[cj].FlexibleXconnectVlanAwareEvi.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/flexible-xconnect/vlan-aware/evi", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].DownMeps.IsNull() && data.Domains[j].Services[cj].DownMeps.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/down-meps", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].BridgeDomain.IsNull() && data.Domains[j].Services[cj].BridgeDomain.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/bridge/bridge-domain", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Domains[i].Services[ci].BridgeGroup.IsNull() && data.Domains[j].Services[cj].BridgeGroup.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v/bridge/group", state.getPath(), keyString, ckeyString))
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/services/service%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				if !state.Domains[i].IdString.IsNull() && data.Domains[j].IdString.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/id/string", state.getPath(), keyString))
-				}
-				if !state.Domains[i].IdNull.IsNull() && data.Domains[j].IdNull.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/id/null", state.getPath(), keyString))
-				}
-				if !state.Domains[i].IdMacAddressInteger.IsNull() && data.Domains[j].IdMacAddressInteger.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/id/mac-address-two-octet-integer", state.getPath(), keyString))
-				}
-				if !state.Domains[i].IdMacAddress.IsNull() && data.Domains[j].IdMacAddress.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/id/mac-address", state.getPath(), keyString))
-				}
-				if !state.Domains[i].IdDns.IsNull() && data.Domains[j].IdDns.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/id/dns", state.getPath(), keyString))
-				}
-				if !state.Domains[i].Level.IsNull() && data.Domains[j].Level.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v/level", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/domains/domain%v", state.getPath(), keyString))
-		}
-	}
-	if !state.TracerouteCacheSize.IsNull() && data.TracerouteCacheSize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traceroute/cache/size", state.getPath()))
-	}
-	if !state.TracerouteCacheHoldTime.IsNull() && data.TracerouteCacheHoldTime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traceroute/cache/hold-time", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *EthernetCFM) getEmptyLeafsDelete(ctx context.Context, state *EthernetCFM) []string {
-	emptyLeafsDelete := make([]string, 0)
-	for i := range data.Domains {
-		keys := [...]string{"domain-name"}
-		keyValues := [...]string{data.Domains[i].DomainName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		for ci := range data.Domains[i].Services {
-			ckeys := [...]string{"service-name"}
-			ckeyValues := [...]string{data.Domains[i].Services[ci].ServiceName.ValueString()}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].ReportDefectsRdi.IsNull() && !data.Domains[i].Services[ci].ReportDefectsRdi.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsRdi.IsNull() && state.Domains[i].Services[ci].ReportDefectsRdi.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/rdi", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].ReportDefectsPeerPortDown.IsNull() && !data.Domains[i].Services[ci].ReportDefectsPeerPortDown.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsPeerPortDown.IsNull() && state.Domains[i].Services[ci].ReportDefectsPeerPortDown.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/peer-port-down", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].ReportDefectsMissing.IsNull() && !data.Domains[i].Services[ci].ReportDefectsMissing.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsMissing.IsNull() && state.Domains[i].Services[ci].ReportDefectsMissing.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/missing", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].ReportDefectsWrongInterval.IsNull() && !data.Domains[i].Services[ci].ReportDefectsWrongInterval.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsWrongInterval.IsNull() && state.Domains[i].Services[ci].ReportDefectsWrongInterval.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/wrong-interval", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].ReportDefectsOurMepid.IsNull() && !data.Domains[i].Services[ci].ReportDefectsOurMepid.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsOurMepid.IsNull() && state.Domains[i].Services[ci].ReportDefectsOurMepid.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/our-mepid", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].ReportDefectsOurMac.IsNull() && !data.Domains[i].Services[ci].ReportDefectsOurMac.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsOurMac.IsNull() && state.Domains[i].Services[ci].ReportDefectsOurMac.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/our-mac", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].ReportDefectsWrongLevel.IsNull() && !data.Domains[i].Services[ci].ReportDefectsWrongLevel.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsWrongLevel.IsNull() && state.Domains[i].Services[ci].ReportDefectsWrongLevel.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/wrong-level", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].ReportDefectsWrongMaid.IsNull() && !data.Domains[i].Services[ci].ReportDefectsWrongMaid.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsWrongMaid.IsNull() && state.Domains[i].Services[ci].ReportDefectsWrongMaid.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/wrong-maid", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() && !data.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.IsNull() && state.Domains[i].Services[ci].ReportDefectsIeeeMacRemoteErrorXcon.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/ieee/mac-remote-error-xcon", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.IsNull() && !data.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.IsNull() && state.Domains[i].Services[ci].ReportDefectsIeeeRemoteErrorXcon.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/ieee/remote-error-xcon", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.IsNull() && !data.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.IsNull() && state.Domains[i].Services[ci].ReportDefectsIeeeErrorXcon.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/ieee/error-xcon", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].ReportDefectsIeeeXcon.IsNull() && !data.Domains[i].Services[ci].ReportDefectsIeeeXcon.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsIeeeXcon.IsNull() && state.Domains[i].Services[ci].ReportDefectsIeeeXcon.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/ieee/xcon", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].ReportDefectsAll.IsNull() && !data.Domains[i].Services[ci].ReportDefectsAll.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsAll.IsNull() && state.Domains[i].Services[ci].ReportDefectsAll.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/all", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].ReportDefectsNone.IsNull() && !data.Domains[i].Services[ci].ReportDefectsNone.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ReportDefectsNone.IsNull() && state.Domains[i].Services[ci].ReportDefectsNone.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/report/defects/none", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].MepCrosscheckAuto.IsNull() && !data.Domains[i].Services[ci].MepCrosscheckAuto.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].MepCrosscheckAuto.IsNull() && state.Domains[i].Services[ci].MepCrosscheckAuto.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/mep/crosscheck/auto", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			for cci := range data.Domains[i].Services[ci].MepCrosschecks {
-				cckeys := [...]string{"mep-id"}
-				cckeyValues := [...]string{strconv.FormatInt(data.Domains[i].Services[ci].MepCrosschecks[cci].MepId.ValueInt64(), 10)}
-				cckeyString := ""
-				for ccki := range cckeys {
-					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].LogEfd.IsNull() && !data.Domains[i].Services[ci].LogEfd.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].LogEfd.IsNull() && state.Domains[i].Services[ci].LogEfd.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/log/efd", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].LogCsf.IsNull() && !data.Domains[i].Services[ci].LogCsf.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].LogCsf.IsNull() && state.Domains[i].Services[ci].LogCsf.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/log/csf", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].LogAis.IsNull() && !data.Domains[i].Services[ci].LogAis.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].LogAis.IsNull() && state.Domains[i].Services[ci].LogAis.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/log/ais", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].LogCrosscheckErrors.IsNull() && !data.Domains[i].Services[ci].LogCrosscheckErrors.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].LogCrosscheckErrors.IsNull() && state.Domains[i].Services[ci].LogCrosscheckErrors.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/log/crosscheck/errors", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].LogContinuityCheckErrors.IsNull() && !data.Domains[i].Services[ci].LogContinuityCheckErrors.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].LogContinuityCheckErrors.IsNull() && state.Domains[i].Services[ci].LogContinuityCheckErrors.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/log/continuity-check/errors", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].LogContinuityCheckMepChanges.IsNull() && !data.Domains[i].Services[ci].LogContinuityCheckMepChanges.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].LogContinuityCheckMepChanges.IsNull() && state.Domains[i].Services[ci].LogContinuityCheckMepChanges.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/log/continuity-check/mep/changes", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.IsNull() && !data.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.IsNull() && state.Domains[i].Services[ci].ContinuityCheckLossAutoTraceroute.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/continuity-check/loss/auto-traceroute", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].EfdProtectionSwitching.IsNull() && !data.Domains[i].Services[ci].EfdProtectionSwitching.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].EfdProtectionSwitching.IsNull() && state.Domains[i].Services[ci].EfdProtectionSwitching.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/efd/protection-switching", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].Efd.IsNull() && !data.Domains[i].Services[ci].Efd.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].Efd.IsNull() && state.Domains[i].Services[ci].Efd.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/efd", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].MipAutoCreateCcmLearning.IsNull() && !data.Domains[i].Services[ci].MipAutoCreateCcmLearning.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].MipAutoCreateCcmLearning.IsNull() && state.Domains[i].Services[ci].MipAutoCreateCcmLearning.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/mip/auto-create/ccm-learning", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.IsNull() && !data.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.IsNull() && state.Domains[i].Services[ci].MipAutoCreateLowerMepOnly.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/mip/auto-create/lower-mep-only", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].MipAutoCreateAll.IsNull() && !data.Domains[i].Services[ci].MipAutoCreateAll.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].MipAutoCreateAll.IsNull() && state.Domains[i].Services[ci].MipAutoCreateAll.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/mip/auto-create/all", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.Domains[i].Services[ci].DownMeps.IsNull() && !data.Domains[i].Services[ci].DownMeps.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Domains) && ci < len(state.Domains[i].Services) && !state.Domains[i].Services[ci].DownMeps.IsNull() && state.Domains[i].Services[ci].DownMeps.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/services/service%v/down-meps", data.getXPath(), keyString, ckeyString))
-				}
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Domains[i].IdNull.IsNull() && !data.Domains[i].IdNull.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Domains) && !state.Domains[i].IdNull.IsNull() && state.Domains[i].IdNull.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/domains/domain%v/id/null", data.getXPath(), keyString))
-			}
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *EthernetCFM) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	for i := range data.Domains {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[domain-name=" + data.Domains[i].DomainName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/domains/domain%v", data.getPath(), keyPath))
-	}
-	if !data.TracerouteCacheSize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traceroute/cache/size", data.getPath()))
-	}
-	if !data.TracerouteCacheHoldTime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traceroute/cache/hold-time", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 

@@ -10,89 +10,114 @@ description: |-
 
 This resource can manage the Logging configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `archive_frequency_daily` | `25.4` |
+| `archive_frequency_weekly` | `25.4` |
+| `format_bsd` | `25.4` |
+| `format_rfc5424` | `25.4` |
+| `source_interfaces.vrfs` | `25.4` |
+
 ## Example Usage
 
 ```terraform
 resource "iosxr_logging" "example" {
-  console                         = "disable"
-  trap                            = "informational"
-  monitor                         = "disable"
-  console_facility                = "all"
   archive_disk0                   = true
-  archive_frequency_daily         = true
   archive_filesize                = 100
-  archive_size                    = 500
+  archive_frequency               = "daily"
   archive_length                  = 4
   archive_severity                = "informational"
+  archive_size                    = 500
   archive_threshold               = 80
-  ipv4_dscp                       = "cs6"
-  ipv6_dscp                       = "ef"
-  facility_level                  = "local7"
-  buffered_entries_count          = 10000
-  buffered_size                   = 4000000
-  buffered_level                  = "debugging"
   buffered_discriminator_match1   = "BUFFERED1"
   buffered_discriminator_match2   = "BUFFERED2"
   buffered_discriminator_match3   = "BUFFERED3"
   buffered_discriminator_nomatch1 = "BUFFERED_NOMATCH1"
   buffered_discriminator_nomatch2 = "BUFFERED_NOMATCH2"
   buffered_discriminator_nomatch3 = "BUFFERED_NOMATCH3"
-  container_all                   = true
+  buffered_entries_count          = 10000
+  buffered_level                  = "debugging"
+  buffered_size                   = 4000000
+  console                         = "disable"
+  console_discriminator_match1    = "CONSOLE1"
+  console_discriminator_match2    = "CONSOLE2"
+  console_discriminator_match3    = "CONSOLE3"
+  console_discriminator_nomatch1  = "CONSOLE_NOMATCH1"
+  console_discriminator_nomatch2  = "CONSOLE_NOMATCH2"
+  console_discriminator_nomatch3  = "CONSOLE_NOMATCH3"
+  console_facility                = "all"
   container_fetch_timestamp       = true
+  events_buffer_size              = 10000
+  events_display_location         = true
+  events_level                    = "informational"
+  events_threshold                = 80
+  facility_level                  = "local7"
   file = [
     {
-      file_name                                      = "logfile1"
-      path                                           = "/disk0:"
-      maxfilesize                                    = 1024
-      severity                                       = "info"
-      local_accounting_send_to_remote_facility_level = "local0"
       discriminator_match1                           = "MATCH1"
       discriminator_match2                           = "MATCH2"
       discriminator_match3                           = "MATCH3"
       discriminator_nomatch1                         = "NOMATCH1"
       discriminator_nomatch2                         = "NOMATCH2"
       discriminator_nomatch3                         = "NOMATCH3"
+      file_name                                      = "logfile1"
+      local_accounting                               = true
+      local_accounting_send_to_remote                = true
+      local_accounting_send_to_remote_facility_level = "local0"
+      maxfilesize                                    = 1024
+      path                                           = "/disk0:"
+      severity                                       = "informational"
     }
   ]
-  history        = "emergencies"
-  history_size   = 500
-  hostnameprefix = "HOSTNAME01"
-  localfilesize  = 1000
-  source_interfaces = [
-    {
-      name = "Loopback0"
-      vrfs = [
-        {
-          name = "VRF1"
-        }
-      ]
-    }
-  ]
-  suppress_duplicates = true
-  format_rfc5424      = true
-  yang                = "emergencies"
-  suppress_rules = [
-    {
-      rule_name = "RULE1"
-      alarms = [
-        {
-          message_category = "SECURITY"
-          group_name       = "SSHD"
-          message_code     = "INFO"
-        }
-      ]
-      apply_all_of_router = true
-    }
-  ]
-  events_buffer_size = 10000
   filter_matches = [
     {
       match = "MATCH1"
     }
   ]
-  events_display_location = true
-  events_level            = "informational"
-  events_threshold        = 80
+  format         = "rfc5424"
+  history        = "emergencies"
+  history_size   = 500
+  hostnameprefix = "HOSTNAME01"
+  ipv4_dscp      = "cs6"
+  ipv6_dscp      = "ef"
+  localfilesize  = 1000
+  monitor        = "disable"
+  source_interfaces = [
+    {
+      name = "Loopback0"
+      vrf  = "default"
+    }
+  ]
+  suppress_duplicates = true
+  suppress_rules = [
+    {
+      alarms = [
+        {
+          group_name       = "SSHD"
+          message_category = "SECURITY"
+          message_code     = "INFO"
+        }
+      ]
+      apply_all_of_router = true
+      rule_name           = "RULE1"
+    }
+  ]
+  tls_servers = [
+    {
+      address_ipv4     = "1.1.1.1"
+      name             = "TLS-SERVER1"
+      severity         = "informational"
+      source_interface = "Loopback0"
+      trustpoint       = "TRUSTPOINT1"
+      vrf              = "VRF1"
+    }
+  ]
+  trap = "informational"
+  yang = "debugging"
 }
 ```
 
@@ -105,13 +130,18 @@ resource "iosxr_logging" "example" {
 - `archive_disk1` (Boolean) Use disk1 as the archive device
 - `archive_filesize` (Number) The maximum file size for a single log file.
   - Range: `1`-`2047`
+- `archive_frequency` (String) The collection interval for logs
+  - Choices: `daily`, `weekly`
+  - Supported from version: `25.4`
 - `archive_frequency_daily` (Boolean) Collect log in files on a daily basis
+  - **Not supported from version `25.4` and above**
 - `archive_frequency_weekly` (Boolean) Collect log in files on a weekly basis
+  - **Not supported from version `25.4` and above**
 - `archive_harddisk` (Boolean) Use harddisk as the archive device
 - `archive_length` (Number) The maximum no of weeks of log to maintain
   - Range: `1`-`256`
-- `archive_severity` (String) The minimum severity of log messages to archive
-  - Choices: `alerts`, `critical`, `debugging`, `emergencies`, `errors`, `informational`, `notifications`, `warnings`
+- `archive_severity` (String) severity of remote host
+  - Choices: `alerts`, `critical`, `debugging`, `emergencies`, `errors`, `informational`, `notifications`, `warnings` (v24.4), `alerts`, `critical`, `debugging`, `emergencies`, `errors`, `informational`, `notifications`, `warning` (v25.4)
 - `archive_size` (Number) The total size of the archive
   - Range: `1`-`2047`
 - `archive_threshold` (Number) The size threshold at which a syslog is generated
@@ -122,15 +152,27 @@ resource "iosxr_logging" "example" {
 - `buffered_discriminator_nomatch1` (String) Set no-match discriminator 1
 - `buffered_discriminator_nomatch2` (String) Set no-match discriminator 2
 - `buffered_discriminator_nomatch3` (String) Set no-match discriminator 3
-- `buffered_entries_count` (Number) Number of syslog entries in buffer
+- `buffered_entries_count` (Number) Syslog in buffer
   - Range: `2545`-`151699`
-- `buffered_level` (String) configure this node
+- `buffered_level` (String) buffered level
   - Choices: `alerts`, `critical`, `debugging`, `emergencies`, `errors`, `informational`, `notifications`, `warnings`
 - `buffered_size` (Number) Logging buffer size
-  - Range: `307200`-`125000000`
-- `console` (String) Set console logging
+  - Range: `307200`-`125000000` (v24.4), `2097152`-`125000000` (v25.4)
+- `console` (String) console level
   - Choices: `alerts`, `critical`, `debugging`, `disable`, `emergencies`, `errors`, `informational`, `notifications`, `warning`
-- `console_facility` (String) Console message logging facilities
+- `console_discriminator_match1` (String) Set match discriminator 1
+  - Supported from version: `25.4`
+- `console_discriminator_match2` (String) Set match discriminator 2
+  - Supported from version: `25.4`
+- `console_discriminator_match3` (String) Set match discriminator 3
+  - Supported from version: `25.4`
+- `console_discriminator_nomatch1` (String) Set no-match discriminator 1
+  - Supported from version: `25.4`
+- `console_discriminator_nomatch2` (String) Set no-match discriminator 2
+  - Supported from version: `25.4`
+- `console_discriminator_nomatch3` (String) Set no-match discriminator 3
+  - Supported from version: `25.4`
+- `console_facility` (String) All supported facilities
   - Choices: `all`
 - `container_all` (Boolean) Enables log collection from all containers
 - `container_fetch_timestamp` (Boolean) Fetch logs with container timestamp for all containers
@@ -148,23 +190,29 @@ resource "iosxr_logging" "example" {
   - Range: `1`-`60`
 - `events_threshold` (Number) Configure threshold (%) for capacity alarm
   - Range: `10`-`100`
-- `facility_level` (String) configure this node
+- `facility_level` (String) Modify message logging facilities
   - Choices: `all`, `audit`, `auth`, `authpriv`, `console`, `daemon`, `kern`, `local0`, `local1`, `local2`, `local3`, `local4`, `local5`, `local6`, `local7`, `mail`, `ntp`, `syslog`, `user`
 - `file` (Attributes List) Set file logging (see [below for nested schema](#nestedatt--file))
 - `filter_matches` (Attributes List) Configure match string to filter (see [below for nested schema](#nestedatt--filter_matches))
-- `format_bsd` (Boolean) Enable to send the syslog message as BSD format
-- `format_rfc5424` (Boolean) Enable to send the syslog message rfc5424 format
-- `history` (String) Set history logging
+- `format` (String) Specify syslog message format send to the server
+  - Choices: `bsd`, `rfc5424`
+  - Supported from version: `25.4`
+- `format_bsd` (Boolean) Enable to send the syslog message as BSD format 
+  - **Not supported from version `25.4` and above**
+- `format_rfc5424` (Boolean) Enable to send the syslog message rfc5424 format 
+  - **Not supported from version `25.4` and above**
+- `history` (String) history level
   - Choices: `alerts`, `critical`, `debugging`, `disable`, `emergencies`, `errors`, `informational`, `notifications`, `warnings`
 - `history_size` (Number) Logging history size
   - Range: `1`-`500`
 - `hostnameprefix` (String) Hostname prefix to add on msgs to servers
+  - Length: `1`-`800` (v24.4), `1`-`1024` (v25.4)
 - `ipv4_dscp` (String) Set IP DSCP (DiffServ CodePoint)
 - `ipv4_precedence` (String) Set precedence
 - `ipv6_dscp` (String) Set IP DSCP (DiffServ CodePoint)
 - `ipv6_precedence` (String) Set precedence
 - `localfilesize` (Number) Set size of the local log file
-  - Range: `0`-`4294967295`
+  - Range: `0`-`4294967295` (v24.4), `1`-`125000000` (v25.4)
 - `monitor` (String) Set monitor logging
   - Choices: `alerts`, `critical`, `debugging`, `disable`, `emergencies`, `errors`, `informational`, `notifications`, `warning`
 - `monitor_discriminator_match1` (String) Set match discriminator 1
@@ -176,10 +224,12 @@ resource "iosxr_logging" "example" {
 - `source_interfaces` (Attributes List) Specify interface for source address in logging transactions (see [below for nested schema](#nestedatt--source_interfaces))
 - `suppress_duplicates` (Boolean) Suppress consecutive duplicate messages
 - `suppress_rules` (Attributes List) Configure a specified suppression rule (see [below for nested schema](#nestedatt--suppress_rules))
+- `tls_servers` (Attributes List) Secure server over tls
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--tls_servers))
 - `trap` (String) Set trap logging
   - Choices: `alerts`, `critical`, `debugging`, `disable`, `emergencies`, `errors`, `informational`, `notifications`, `warning`
 - `yang` (String) Set yang logging parameters
-  - Choices: `alerts`, `critical`, `debugging`, `emergencies`, `errors`, `informational`, `notifications`, `warnings`
+  - Choices: `alerts`, `critical`, `debugging`, `emergencies`, `errors`, `informational`, `notifications`, `warnings` (v24.4), `alerts`, `critical`, `debugging`, `disable`, `emergencies`, `errors`, `informational`, `notifications`, `warnings` (v25.4)
 
 ### Read-Only
 
@@ -191,6 +241,11 @@ resource "iosxr_logging" "example" {
 Required:
 
 - `file_name` (String) Set file logging
+- `maxfilesize` (Number) Set max file size
+  - Range: `1`-`2097152`
+- `path` (String) File path (e.g. /disk0: )
+- `severity` (String) severity
+  - Choices: `alerts`, `critical`, `debugging`, `emergencies`, `error`, `info`, `notifications`, `warning` (v24.4), `alerts`, `critical`, `debugging`, `disable`, `emergencies`, `errors`, `informational`, `notifications`, `warning` (v25.4)
 
 Optional:
 
@@ -200,13 +255,10 @@ Optional:
 - `discriminator_nomatch1` (String) Set no-match discriminator 1
 - `discriminator_nomatch2` (String) Set no-match discriminator 2
 - `discriminator_nomatch3` (String) Set no-match discriminator 3
-- `local_accounting_send_to_remote_facility_level` (String) configure this node
-  - Choices: `auth`, `cron`, `daemon`, `kern`, `local0`, `local1`, `local2`, `local3`, `local4`, `local5`, `local6`, `local7`, `lpr`, `mail`, `news`, `sys10`, `sys11`, `sys12`, `sys13`, `sys14`, `sys9`, `syslog`, `user`, `uucp`
-- `maxfilesize` (Number) Set max file size
-  - Range: `1`-`2097152`
-- `path` (String) Set file path
-- `severity` (String) Set severity level
-  - Choices: `alerts`, `critical`, `debugging`, `emergencies`, `error`, `info`, `notifications`, `warning`
+- `local_accounting` (Boolean) Store only the command accounting logs
+- `local_accounting_send_to_remote` (Boolean) Send the command accounting logs to syslog server
+- `local_accounting_send_to_remote_facility_level` (String) Modify message logging facilities
+  - Choices: `auth`, `cron`, `daemon`, `kern`, `local0`, `local1`, `local2`, `local3`, `local4`, `local5`, `local6`, `local7`, `lpr`, `mail`, `news`, `sys10`, `sys11`, `sys12`, `sys13`, `sys14`, `sys9`, `syslog`, `user`, `uucp` (v24.4), `auth`, `cron`, `daemon`, `kern`, `local0`, `local1`, `local2`, `local3`, `local4`, `local5`, `local6`, `local7`, `lpr`, `mail`, `news`, `syslog`, `user`, `uucp` (v25.4)
 
 
 <a id="nestedatt--filter_matches"></a>
@@ -226,7 +278,10 @@ Required:
 
 Optional:
 
-- `vrfs` (Attributes List) Set VRF option (see [below for nested schema](#nestedatt--source_interfaces--vrfs))
+- `vrf` (String) Set VRF option
+  - Supported from version: `25.4`
+- `vrfs` (Attributes List) Set VRF option
+  - **Not supported from version `25.4` and above** (see [below for nested schema](#nestedatt--source_interfaces--vrfs))
 
 <a id="nestedatt--source_interfaces--vrfs"></a>
 ### Nested Schema for `source_interfaces.vrfs`
@@ -267,6 +322,40 @@ Required:
 Required:
 
 - `location_name` (String) Location name
+
+
+
+<a id="nestedatt--tls_servers"></a>
+### Nested Schema for `tls_servers`
+
+Optional:
+
+- `address_ipv4` (String) IPv4 Address
+  - Supported from version: `25.4`
+- `address_ipv6` (String) IPv6 Address
+  - Supported from version: `25.4`
+- `name` (String) Name for the tls peer configuration
+  - Supported from version: `25.4`
+- `security_template` (String) Security template to be used for TLS essentials.
+  - Supported from version: `25.4`
+- `severity` (String) severity of remote host
+  - Choices: `alerts`, `critical`, `debugging`, `emergencies`, `errors`, `informational`, `notifications`, `warning`
+  - Supported from version: `25.4`
+- `source_interface` (String) Specify Source interface
+  - Supported from version: `25.4`
+- `tls_hostname` (String) Hostname or FQDN of Secure Log server
+  - Length: `1`-`1024` (v25.4), `1`-`253` (v26.2)
+  - Supported from version: `25.4`
+- `tls_max_version` (String) Max TLS version
+  - Choices: `tls1.0`, `tls1.1`, `tls1.2`, `tls1.3`
+  - Supported from version: `25.4`
+- `tls_min_version` (String) Min TLS version
+  - Choices: `tls1.0`, `tls1.1`, `tls1.2`, `tls1.3`
+  - Supported from version: `25.4`
+- `trustpoint` (String) Trustpoint
+  - Supported from version: `25.4`
+- `vrf` (String) Set VRF option
+  - Supported from version: `25.4`
 
 ## Import
 

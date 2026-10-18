@@ -14,48 +14,51 @@ This resource can manage the Router BGP VRF configuration.
 
 ```terraform
 resource "iosxr_router_bgp_vrf" "example" {
-  as_number = "65001"
-  vrf_name  = "VRF1"
+  as_number                             = "65001"
+  bfd_minimum_interval                  = 10
+  bfd_multiplier                        = 4
+  bgp_auto_policy_soft_reset_disable    = true
+  bgp_bestpath_aigp_ignore              = true
+  bgp_bestpath_as_path_ignore           = true
+  bgp_bestpath_as_path_multipath_relax  = true
+  bgp_bestpath_compare_routerid         = true
+  bgp_bestpath_cost_community_ignore    = true
+  bgp_bestpath_igp_metric_ignore        = true
+  bgp_bestpath_med_missing_as_worst     = true
+  bgp_bestpath_origin_as_allow_invalid  = true
+  bgp_bestpath_origin_as_use_validity   = true
+  bgp_bestpath_sr_policy_prefer         = true
+  bgp_default_local_preference          = 200
+  bgp_enforce_first_as_disable          = true
+  bgp_fast_external_fallover_disable    = true
+  bgp_log_message_disable               = true
+  bgp_log_neighbor_changes_disable      = true
+  bgp_multipath_use_cluster_list_length = true
+  bgp_origin_as_validation_signal_ibgp  = true
+  bgp_redistribute_internal             = true
+  bgp_router_id                         = "22.22.22.22"
+  bgp_unsafe_ebgp_policy                = true
+  default_information_originate         = true
+  default_metric                        = 125
+  distance_bgp_external                 = 100
+  distance_bgp_internal                 = 150
+  distance_bgp_local                    = 200
   mpls_activate_interfaces = [
     {
       interface_name = "GigabitEthernet0/0/0/1"
     }
   ]
-  default_information_originate                    = true
-  default_metric                                   = 125
+  nexthop_mpls_forwarding_ibgp                     = true
+  nexthop_resolution_allow_default                 = true
+  rd_auto                                          = true
   socket_receive_buffer_size                       = 1024
   socket_receive_buffer_size_read                  = 1024
   socket_send_buffer_size                          = 4096
   socket_send_buffer_size_write                    = 4096
-  nexthop_mpls_forwarding_ibgp                     = true
-  nexthop_resolution_allow_default                 = true
-  timers_bgp_keepalive_interval                    = 0
   timers_bgp_holddown_zero                         = true
   timers_bgp_holddown_zero_minimum_acceptable_zero = true
-  bgp_redistribute_internal                        = true
-  bgp_router_id                                    = "22.22.22.22"
-  bgp_unsafe_ebgp_policy                           = true
-  bgp_auto_policy_soft_reset_disable               = true
-  bgp_bestpath_cost_community_ignore               = true
-  bgp_bestpath_compare_routerid                    = true
-  bgp_bestpath_aigp_ignore                         = true
-  bgp_bestpath_igp_metric_ignore                   = true
-  bgp_bestpath_med_missing_as_worst                = true
-  bgp_bestpath_as_path_ignore                      = true
-  bgp_bestpath_as_path_multipath_relax             = true
-  bgp_bestpath_origin_as_use_validity              = true
-  bgp_bestpath_origin_as_allow_invalid             = true
-  bgp_bestpath_sr_policy_prefer                    = true
-  bgp_default_local_preference                     = 200
-  bgp_enforce_first_as_disable                     = true
-  bgp_fast_external_fallover_disable               = true
-  bgp_log_neighbor_changes_disable                 = true
-  bgp_log_message_disable                          = true
-  bgp_multipath_use_cluster_list_length            = true
-  bgp_origin_as_validation_signal_ibgp             = true
-  bfd_minimum_interval                             = 10
-  bfd_multiplier                                   = 4
-  rd_auto                                          = true
+  timers_bgp_keepalive_interval                    = 0
+  vrf_name                                         = "VRF1"
 }
 ```
 
@@ -106,6 +109,15 @@ resource "iosxr_router_bgp_vrf" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `distance_bgp_external` (Number) Distance for routes external to the AS
+  - Range: `1`-`255`
+  - Supported from version: `25.4`
+- `distance_bgp_internal` (Number) Distance for routes internal to the AS
+  - Range: `1`-`255`
+  - Supported from version: `25.4`
+- `distance_bgp_local` (Number) Distance for routes that are locally generated
+  - Range: `1`-`255`
+  - Supported from version: `25.4`
 - `mpls_activate_interfaces` (Attributes List) Interface to enable mpls (see [below for nested schema](#nestedatt--mpls_activate_interfaces))
 - `nexthop_mpls_forwarding_ibgp` (Boolean) Enable mpls forwarding path for ibgp learnt nexthops
 - `nexthop_resolution_allow_default` (Boolean) Enable nexthops resolution using default route

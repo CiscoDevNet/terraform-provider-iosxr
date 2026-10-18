@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -610,6 +609,10 @@ func (d *InterfaceEthernetDataSource) Schema(ctx context.Context, req datasource
 									},
 								},
 							},
+						},
+						"propagate_remote_status_restore_timer": schema.Int64Attribute{
+							MarkdownDescription: "Specify restore timer value" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
 						},
 					},
 				},
@@ -1482,6 +1485,22 @@ func (d *InterfaceEthernetDataSource) Schema(ctx context.Context, req datasource
 					},
 				},
 			},
+			"ipv6_nd_solicited_ra": schema.StringAttribute{
+				MarkdownDescription: "Modify solicited Router Advertisement behaviour" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"ipv6_nd_unsolicited_ra_disable": schema.BoolAttribute{
+				MarkdownDescription: "Do not send unsolicited Router Advertisement message" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"ptp_monitor_sender": schema.BoolAttribute{
+				MarkdownDescription: "Enable monitor-sender packet exchange" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"ptp_monitor_receiver": schema.BoolAttribute{
+				MarkdownDescription: "Enable monitor-receiver packet exchange" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
 		},
 	}
 }
@@ -1529,7 +1548,6 @@ func (d *InterfaceEthernetDataSource) Read(ctx context.Context, req datasource.R
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -1549,7 +1567,7 @@ func (d *InterfaceEthernetDataSource) Read(ctx context.Context, req datasource.R
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

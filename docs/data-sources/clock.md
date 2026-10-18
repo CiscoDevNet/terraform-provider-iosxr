@@ -3,12 +3,12 @@
 page_title: "iosxr_clock Data Source - terraform-provider-iosxr"
 subcategory: "Management"
 description: |-
-  This data source can read the Clock configuration.
+  
 ---
 
 # iosxr_clock (Data Source)
 
-This data source can read the Clock configuration.
+
 
 ## Example Usage
 

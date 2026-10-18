@@ -55,11 +55,11 @@ func TestAccIosxrEVPNSegmentRoutingSRv6StitchingEVI(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIPrerequisitesConfig + testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIConfig_minimum(),
+			Config: testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIPrerequisitesConfig() + testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIPrerequisitesConfig + testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIConfig_all(),
+		Config: testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIPrerequisitesConfig() + testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -91,7 +91,7 @@ func iosxrEVPNSegmentRoutingSRv6StitchingEVIImportStateIdFunc(resourceName strin
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIPrerequisitesConfig = `
+const testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIPrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]"
 	attributes = {
@@ -108,6 +108,15 @@ resource "iosxr_yang" "PreReq1" {
 
 `
 
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIPrerequisitesConfig_V24_4,
+		},
+	)
+}
+
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
@@ -115,7 +124,9 @@ resource "iosxr_yang" "PreReq1" {
 func testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIConfig_minimum() string {
 	config := `resource "iosxr_evpn_segment_routing_srv6_stitching_evi" "test" {` + "\n"
 	config += `	vpn_id = 104` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -147,7 +158,9 @@ func testAccIosxrEVPNSegmentRoutingSRv6StitchingEVIConfig_all() string {
 	config += `	transmit_mtu_zero = true` + "\n"
 	config += `	transmit_mtu_zero_disable = true` + "\n"
 	config += `	re_origination_disable = true` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }

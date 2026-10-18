@@ -42,10 +42,14 @@ import (
 
 // Run the docs generation tool, check its repository for more information on how it works and how docs
 // can be customized.
-//go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
+// GOFLAGS=-buildvcs=false is required when running from a linked git worktree,
+//go:generate env GOFLAGS=-buildvcs=false go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs generate --provider-name iosxr --rendered-provider-name terraform-provider-iosxr
 
 // Update documentation categories.
 //go:generate go run gen/doc_category.go
+
+// Inject Version Compatibility sections into resource docs.
+//go:generate go run gen/doc_version_changes.go
 
 func main() {
 	opts := providerserver.ServeOpts{

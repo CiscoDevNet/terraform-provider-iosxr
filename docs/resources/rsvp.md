@@ -14,48 +14,76 @@ This resource can manage the RSVP configuration.
 
 ```terraform
 resource "iosxr_rsvp" "example" {
+  authentication_key_chain                          = "KEY1"
+  authentication_life_time                          = 60
+  authentication_retransmit                         = 120
+  authentication_window_size                        = 32
+  bandwidth_mam_percentage_max_reservable_bandwidth = 10000
+  bandwidth_mam_percentage_max_reservable_bc0       = 2000
+  bandwidth_mam_percentage_max_reservable_bc1       = 2000
+  bandwidth_rdm_percentage_max_reservable_bc0       = 10000
+  bandwidth_rdm_percentage_max_reservable_bc1       = 2000
+  interfaces = [
+    {
+      authentication_key_chain                                     = "KEY1"
+      authentication_life_time                                     = 60
+      authentication_window_size                                   = 32
+      bandwidth_mam_percentage_bc0_total                           = 80
+      bandwidth_mam_percentage_bc1_total                           = 20
+      bandwidth_mam_percentage_flow                                = 20
+      bandwidth_mam_percentage_total                               = 80
+      interface_name                                               = "GigabitEthernet0/0/0/1"
+      signalling_dscp                                              = 48
+      signalling_hello_graceful_restart_interface_based            = true
+      signalling_rate_limit_enable                                 = true
+      signalling_rate_limit_interval                               = 1000
+      signalling_rate_limit_rate                                   = 200
+      signalling_refresh_interval                                  = 120
+      signalling_refresh_missed                                    = 2
+      signalling_refresh_oob_interval                              = 200
+      signalling_refresh_oob_missed                                = 2
+      signalling_refresh_reduction_bundle_max_size                 = 1000
+      signalling_refresh_reduction_reliable_ack_hold_time          = 1000
+      signalling_refresh_reduction_reliable_ack_max_size           = 2000
+      signalling_refresh_reduction_reliable_retransmit_queue_depth = 100
+      signalling_refresh_reduction_reliable_retransmit_time        = 1000
+      signalling_refresh_reduction_reliable_summary_refresh        = true
+      signalling_refresh_reduction_summary_max_size                = 100
+    }
+  ]
+  latency_threshold                = 120
+  logging_events_issu              = true
+  logging_events_nsr               = true
+  ltrace_buffer_multiplier         = 3
+  ltrace_buffer_multiplier_common  = true
+  ltrace_buffer_multiplier_dbg_err = true
+  ltrace_buffer_multiplier_intf    = true
+  ltrace_buffer_multiplier_rare    = true
+  ltrace_buffer_multiplier_sig     = true
+  ltrace_buffer_multiplier_sig_err = true
+  ltrace_buffer_multiplier_sync    = true
+  neighbors = [
+    {
+      address                    = "192.168.1.1"
+      authentication_key_chain   = "KEY1"
+      authentication_life_time   = 60
+      authentication_window_size = 32
+    }
+  ]
+  signalling_checksum_disable                          = true
+  signalling_event_per_pulse                           = 60
   signalling_graceful_restart                          = true
   signalling_graceful_restart_lsp_ctype                = true
   signalling_graceful_restart_recovery_time            = 300
   signalling_graceful_restart_restart_time             = 220
   signalling_hello_graceful_restart_refresh_interval   = 3000
   signalling_hello_graceful_restart_refresh_misses     = 5
-  signalling_event_per_pulse                           = 60
-  signalling_prefix_filtering_acl                      = "ACL1"
-  signalling_prefix_filtering_default_deny_action_drop = true
   signalling_message_bundle_disable                    = true
   signalling_nodeid_subobject_disable                  = true
-  signalling_patherr_state_removal_disable             = true
-  signalling_checksum_disable                          = true
   signalling_oob_vrf                                   = "VRF1"
-  authentication_key_chain                             = "KEY1"
-  authentication_window_size                           = 32
-  authentication_life_time                             = 60
-  authentication_retransmit                            = 120
-  neighbors = [
-    {
-      address                    = "192.168.1.1"
-      authentication_key_chain   = "KEY1"
-      authentication_window_size = 32
-      authentication_life_time   = 60
-    }
-  ]
-  bandwidth_mam_percentage_max_reservable_bandwidth = 10000
-  bandwidth_mam_percentage_max_reservable_bc0       = 2000
-  bandwidth_mam_percentage_max_reservable_bc1       = 2000
-  bandwidth_rdm_percentage_max_reservable_bc0       = 10000
-  bandwidth_rdm_percentage_max_reservable_bc1       = 2000
-  latency_threshold                                 = 120
-  logging_events_nsr                                = true
-  logging_events_issu                               = true
-  ltrace_buffer_multiplier                          = 3
-  ltrace_buffer_multiplier_rare                     = true
-  ltrace_buffer_multiplier_common                   = true
-  ltrace_buffer_multiplier_sig                      = true
-  ltrace_buffer_multiplier_sig_err                  = true
-  ltrace_buffer_multiplier_intf                     = true
-  ltrace_buffer_multiplier_dbg_err                  = true
-  ltrace_buffer_multiplier_sync                     = true
+  signalling_patherr_state_removal_disable             = true
+  signalling_prefix_filtering_acl                      = "ACL1"
+  signalling_prefix_filtering_default_deny_action_drop = true
 }
 ```
 
@@ -84,6 +112,7 @@ resource "iosxr_rsvp" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `interfaces` (Attributes List) Enable RSVP on an interface (see [below for nested schema](#nestedatt--interfaces))
 - `latency_threshold` (Number) Set the latency threshold to a value in seconds (default 60)
   - Range: `0`-`180`
 - `logging_events_issu` (Boolean) Enable ISSU Status Logging
@@ -121,6 +150,133 @@ resource "iosxr_rsvp" "example" {
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Required:
+
+- `interface_name` (String) Enable RSVP on an interface
+
+Optional:
+
+- `authentication_key_chain` (String) Use key-chain to authenticate RSVP signalling messages
+- `authentication_life_time` (Number) Use to associate life-time for each security association
+  - Range: `30`-`86400`
+- `authentication_window_size` (Number) Use window-size to limit number of out-of-order messages
+  - Range: `1`-`64`
+- `bandwidth_bc0_flow` (Number) Largest reservable flow (in Kbps)
+  - Range: `0`-`10000000000000`
+- `bandwidth_bc0_total` (Number) Total reservable bandwidth (in Kbps)
+  - Range: `0`-`10000000000000`
+- `bandwidth_bc1_total` (Number) Reservable bandwidth in sub-pool
+  - Range: `0`-`10000000000000`
+- `bandwidth_default` (Boolean) Configure RSVP default bandwidth
+- `bandwidth_flow` (Number) Largest reservable flow (in Kbps)
+  - Range: `0`-`10000000000000`
+- `bandwidth_global_pool_flow` (Number) Largest reservable flow (in Kbps)
+  - Range: `0`-`10000000000000`
+- `bandwidth_global_pool_total` (Number) Total reservable bandwidth (in Kbps)
+  - Range: `0`-`10000000000000`
+- `bandwidth_mam_bc0_total` (Number) Reservable bandwidth in bc0
+  - Range: `0`-`10000000000000`
+- `bandwidth_mam_bc1_total` (Number) Reservable bandwidth in bc1
+  - Range: `0`-`10000000000000`
+- `bandwidth_mam_flow` (Number) Largest reservable flow (in Kbps)
+  - Range: `0`-`10000000000000`
+- `bandwidth_mam_percentage_bc0_total` (Number) Reservable bandwidth in bc0
+  - Range: `0`-`10000`
+- `bandwidth_mam_percentage_bc1_total` (Number) Reservable bandwidth in bc1
+  - Range: `0`-`10000`
+- `bandwidth_mam_percentage_flow` (Number) Largest reservable flow as percentage of physical link bandwidth
+  - Range: `0`-`10000`
+- `bandwidth_mam_percentage_total` (Number) Total reservable bandwidth as percentage of physical link bandwidth
+  - Range: `0`-`10000`
+- `bandwidth_mam_total` (Number) Total reservable bandwidth (in Kbps)
+  - Range: `0`-`10000000000000`
+- `bandwidth_percentage_bc0_flow` (Number) Largest reservable flow as percentage of physical link bandwidth
+  - Range: `0`-`10000`
+- `bandwidth_percentage_bc0_total` (Number) Total reservable bandwidth as percentage of physical link bandwidth
+  - Range: `0`-`10000`
+- `bandwidth_percentage_bc1_total` (Number) Reservable bandwidth in sub-pool
+  - Range: `0`-`10000`
+- `bandwidth_percentage_flow` (Number) Largest reservable flow as percentage of physical link bandwidth
+  - Range: `0`-`10000`
+- `bandwidth_percentage_global_pool_flow` (Number) Largest reservable flow as percentage of physical link bandwidth
+  - Range: `0`-`10000`
+- `bandwidth_percentage_global_pool_total` (Number) Total reservable bandwidth as percentage of physical link bandwidth
+  - Range: `0`-`10000`
+- `bandwidth_percentage_sub_pool_total` (Number) Reservable bandwidth in sub-pool
+  - Range: `0`-`10000`
+- `bandwidth_percentage_total` (Number) Total reservable bandwidth as percentage of physical link bandwidth
+  - Range: `0`-`10000`
+- `bandwidth_rdm_bc0_flow` (Number) Largest reservable flow as (in Kbps)
+  - Range: `0`-`10000000000000`
+- `bandwidth_rdm_bc0_total` (Number) Total reservable bandwidth (in Kbps)
+  - Range: `0`-`10000000000000`
+- `bandwidth_rdm_bc1_total` (Number) Reservable bandwidth in sub-pool
+  - Range: `0`-`10000000000000`
+- `bandwidth_rdm_flow` (Number) Largest reservable flow in Kbps
+  - Range: `0`-`10000000000000`
+- `bandwidth_rdm_global_pool_flow` (Number) Largest reservable flow in Kbps
+  - Range: `0`-`10000000000000`
+- `bandwidth_rdm_global_pool_total` (Number) Total reservable bandwidth in Kbps
+  - Range: `0`-`10000000000000`
+- `bandwidth_rdm_percentage_bc0_flow` (Number) Largest reservable flow as percentage of physical link bandwidth
+  - Range: `0`-`10000`
+- `bandwidth_rdm_percentage_bc0_total` (Number) Total reservable bandwidth as percentage of physical link bandwidth
+  - Range: `0`-`10000`
+- `bandwidth_rdm_percentage_bc1_total` (Number) Reservable bandwidth in sub-pool
+  - Range: `0`-`10000`
+- `bandwidth_rdm_percentage_flow` (Number) Largest reservable flow as percentage of physical link bandwidth
+  - Range: `0`-`10000`
+- `bandwidth_rdm_percentage_global_pool_flow` (Number) Largest reservable flow as percentage of physical link bandwidth
+  - Range: `0`-`10000`
+- `bandwidth_rdm_percentage_global_pool_total` (Number) Total reservable bandwidth as percentage of physical link bandwidth
+  - Range: `0`-`10000`
+- `bandwidth_rdm_percentage_sub_pool_total` (Number) Reservable bandwidth in sub-pool
+  - Range: `0`-`10000`
+- `bandwidth_rdm_percentage_total` (Number) Total reservable bandwidth as percentage of physical link bandwidth
+  - Range: `0`-`10000`
+- `bandwidth_rdm_sub_pool_total` (Number) Reservable bandwidth in sub-pool
+  - Range: `0`-`10000000000000`
+- `bandwidth_rdm_total` (Number) Total reservable bandwidth in Kbps
+  - Range: `0`-`10000000000000`
+- `bandwidth_sub_pool_total` (Number) Reservable bandwidth in sub-pool
+  - Range: `0`-`10000000000000`
+- `bandwidth_total` (Number) Total reservable bandwidth (in Kbps)
+  - Range: `0`-`10000000000000`
+- `signalling_dscp` (Number) Set DSCP for RSVP signalling messages
+  - Range: `0`-`63`
+- `signalling_hello_graceful_restart_interface_based` (Boolean) Configure Interface-based Hello
+- `signalling_rate_limit_enable` (Boolean) Enable message rate limit
+- `signalling_rate_limit_interval` (Number) Set scheduling interval
+  - Range: `250`-`2000`
+- `signalling_rate_limit_rate` (Number) Set message rate
+  - Range: `1`-`500`
+- `signalling_refresh_interval` (Number) Set interval between successive refreshes
+  - Range: `10`-`180`
+- `signalling_refresh_missed` (Number) Set max number of consecutive missed messages for state expiry
+  - Range: `1`-`8`
+- `signalling_refresh_oob_interval` (Number) Set interval between successive refreshes
+  - Range: `180`-`86400`
+- `signalling_refresh_oob_missed` (Number) Set max number of consecutive missed messages for state expiry
+  - Range: `1`-`110000`
+- `signalling_refresh_reduction_bundle_max_size` (Number) Set max size of a single RSVP bundle message
+  - Range: `512`-`65000`
+- `signalling_refresh_reduction_disable` (Boolean) Disable refresh reduction
+- `signalling_refresh_reduction_reliable_ack_hold_time` (Number) Set hold time for sending RSVP ACK message(s)
+  - Range: `100`-`5000`
+- `signalling_refresh_reduction_reliable_ack_max_size` (Number) Set max size of a single RSVP ACK message
+  - Range: `20`-`65000`
+- `signalling_refresh_reduction_reliable_retransmit_queue_depth` (Number) Set rapid retransmit queue depth
+  - Range: `0`-`100000`
+- `signalling_refresh_reduction_reliable_retransmit_time` (Number) Set min delay to wait for an ACK before a retransmit
+  - Range: `100`-`10000`
+- `signalling_refresh_reduction_reliable_summary_refresh` (Boolean) Configure use of reliable messaging for summary refresh
+- `signalling_refresh_reduction_summary_max_size` (Number) Set max size of a single RSVP summary refresh message
+  - Range: `20`-`65000`
+
 
 <a id="nestedatt--neighbors"></a>
 ### Nested Schema for `neighbors`

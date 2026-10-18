@@ -39,11 +39,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
-	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
-
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewRouterMLDVRFResource() resource.Resource {
@@ -237,6 +235,263 @@ func (r *RouterMLDVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 					int64validator.Between(256, 10000),
 				},
 			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Select an interface to configure").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Select an interface to configure").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+						"version": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MLD version").AddIntegerRangeDescription(1, 2).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
+							},
+						},
+						"router_enable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable Router side functionality in MLD").String,
+							Optional:            true,
+						},
+						"router_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable Router side functionality in MLD").String,
+							Optional:            true,
+						},
+						"query_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MLD host query interval").AddIntegerRangeDescription(1, 3600).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 3600),
+							},
+						},
+						"query_timeout": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MLD previous querier timeout").AddIntegerRangeDescription(60, 300).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(60, 300),
+							},
+						},
+						"query_max_response_time": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MLD max query response value").AddIntegerRangeDescription(1, 25).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 25),
+							},
+						},
+						"explicit_tracking_enable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable IGMPv3 explicit host tracking").String,
+							Optional:            true,
+						},
+						"explicit_tracking_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable IGMPv3 explicit host tracking").String,
+							Optional:            true,
+						},
+						"explicit_tracking_acl": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access list specifying tracking group range").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"access_group": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MLD group access group").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"maximum_groups_per_interface": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Maxinum number of groups accepted per interface by this router").AddIntegerRangeDescription(1, 40000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 40000),
+							},
+						},
+						"maximum_groups_per_interface_threshold": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Threshold warning").AddIntegerRangeDescription(1, 40000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 40000),
+							},
+						},
+						"maximum_groups_per_interface_acl": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of ACL").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"static_groups": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MLD static multicast group").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP group address").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+										},
+									},
+									"group_address_only": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Group-address without increment mask/source-address").String,
+										Optional:            true,
+									},
+									"suppress_reports": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Suppress IGMP reports").String,
+										Optional:            true,
+									},
+									"group_masks": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"group_inc_mask": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+													},
+												},
+												"group_count": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("No. of group addresses to join").AddIntegerRangeDescription(1, 512).String,
+													Required:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 512),
+													},
+												},
+												"suppress_reports": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Suppress IGMP reports").String,
+													Optional:            true,
+												},
+											},
+										},
+									},
+									"source_addresses": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IGMP static multicast group").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Source address to join").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+													},
+												},
+												"suppress_reports": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Suppress IGMP reports").String,
+													Optional:            true,
+												},
+											},
+										},
+									},
+									"group_masks_source_addresses": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"group_inc_mask": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+													},
+												},
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Source address to join").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+													},
+												},
+												"group_count": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("No. of group addresses to join").AddIntegerRangeDescription(1, 512).String,
+													Required:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 512),
+													},
+												},
+												"suppress_reports": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Suppress IGMP reports").String,
+													Optional:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"join_groups": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MLD join multicast group").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("MLD join multicast group").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+										},
+									},
+									"group_address_only": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Join multicast group without source address").String,
+										Optional:            true,
+									},
+									"source_addresses": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Source address to include or exclude").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Source address to include").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+													},
+												},
+												"include": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Include only the following source address").String,
+													Optional:            true,
+												},
+												"exclude": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Exclude only the following source address").String,
+													Optional:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"dvmrp_enable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MLD Enable dvmrp on specific interface").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -268,7 +523,6 @@ func (r *RouterMLDVRFResource) Create(ctx context.Context, req resource.CreateRe
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
@@ -286,10 +540,10 @@ func (r *RouterMLDVRFResource) Create(ctx context.Context, req resource.CreateRe
 			var ops []gnmi.SetOperation
 
 			// Create object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("gNMI Set body for path %s: %s", plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -344,7 +598,6 @@ func (r *RouterMLDVRFResource) Create(ctx context.Context, req resource.CreateRe
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-
 func (r *RouterMLDVRFResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state RouterMLDVRF
 
@@ -409,10 +662,10 @@ func (r *RouterMLDVRFResource) Read(ctx context.Context, req resource.ReadReques
 				if imp {
 					// After `terraform import` we switch to a full read so all device
 					// attributes are populated in state (fromBody overwrites everything).
-					state.fromBody(ctx, gjson.ParseBytes(respBody))
+					state.fromBody(ctx, respBody, device.Version)
 				} else {
 					// Normal read: preserve config-only fields not returned by the device.
-					state.updateFromBody(ctx, gjson.ParseBytes(respBody))
+					state.updateFromBody(ctx, respBody, device.Version)
 				}
 			}
 		} else {
@@ -453,7 +706,6 @@ func (r *RouterMLDVRFResource) Read(ctx context.Context, req resource.ReadReques
 			}
 		}
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
@@ -465,7 +717,6 @@ func (r *RouterMLDVRFResource) Read(ctx context.Context, req resource.ReadReques
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-
 func (r *RouterMLDVRFResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state RouterMLDVRF
 
@@ -506,16 +757,16 @@ func (r *RouterMLDVRFResource) Update(ctx context.Context, req resource.UpdateRe
 			var ops []gnmi.SetOperation
 
 			// Update object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 
-			deletedListItems := plan.getDeletedItems(ctx, state)
+			deletedListItems := plan.getDeletedItems(ctx, state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
 
 			for _, i := range deletedListItems {
 				ops = append(ops, gnmi.Delete(i))
 			}
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -558,7 +809,6 @@ func (r *RouterMLDVRFResource) Update(ctx context.Context, req resource.UpdateRe
 			}
 		}
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
@@ -568,7 +818,6 @@ func (r *RouterMLDVRFResource) Update(ctx context.Context, req resource.UpdateRe
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-
 func (r *RouterMLDVRFResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state RouterMLDVRF
 
@@ -659,7 +908,7 @@ func (r *RouterMLDVRFResource) Delete(ctx context.Context, req resource.DeleteRe
 				}
 
 				var ops []gnmi.SetOperation
-				deletePaths := state.getDeletePaths(ctx)
+				deletePaths := state.getDeletePaths(ctx, device.Version)
 				tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
 
 				for _, i := range deletePaths {
@@ -707,7 +956,6 @@ func (r *RouterMLDVRFResource) Delete(ctx context.Context, req resource.DeleteRe
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-
 func (r *RouterMLDVRFResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)

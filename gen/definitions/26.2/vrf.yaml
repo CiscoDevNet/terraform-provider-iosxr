@@ -1,0 +1,10 @@
+---
+name: VRF
+path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=%s]
+doc_category: MPLS
+attributes:
+  # ===========================================================
+  # CONSTRAINT CHANGES — range/length widened in 26.2
+  # ===========================================================
+  - yang_name: Cisco-IOS-XR-um-l2vpn-cfg:evpn-route-sync
+    tf_name: evpn_route_sync

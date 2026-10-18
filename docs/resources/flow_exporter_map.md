@@ -14,22 +14,22 @@ This resource can manage the Flow Exporter Map configuration.
 
 ```terraform
 resource "iosxr_flow_exporter_map" "example" {
-  name                                    = "exporter_map1"
   destination_ipv4_address                = "192.0.2.1"
   destination_vrf                         = "VRF1"
-  source                                  = "GigabitEthernet0/0/0/1"
-  dscp                                    = 62
-  transport_udp                           = 1033
-  packet_length                           = 512
   dfbit_set                               = true
+  dscp                                    = 62
+  name                                    = "exporter_map1"
+  packet_length                           = 512
+  source                                  = "GigabitEthernet0/0/0/1"
+  transport_udp                           = 1033
   version_export_format                   = "v9"
+  version_options_class_table_timeout     = 255
+  version_options_interface_table_timeout = 6048
+  version_options_sampler_table_timeout   = 4096
+  version_options_vrf_table_timeout       = 122
   version_template_data_timeout           = 1024
   version_template_options_timeout        = 3033
   version_template_timeout                = 2222
-  version_options_interface_table_timeout = 6048
-  version_options_sampler_table_timeout   = 4096
-  version_options_class_table_timeout     = 255
-  version_options_vrf_table_timeout       = 122
 }
 ```
 
@@ -51,6 +51,9 @@ resource "iosxr_flow_exporter_map" "example" {
 - `dfbit_set` (Boolean) Set Export Packet Do Not Fragment Flag
 - `dscp` (Number) Specify DSCP value for ipv4 export packets or traffic-class for ipv6 export packets
   - Range: `0`-`63`
+- `export_protocol` (String) Specify optional encapsulating protocol
+  - Choices: `gnpsi`
+  - Supported from version: `25.4`
 - `packet_length` (Number) Export Packet maximum L3 length, should conform to outgoing interface mtu
   - Range: `512`-`9000`
 - `router_id_ipv4_address` (String) router-id in IPv4 address format

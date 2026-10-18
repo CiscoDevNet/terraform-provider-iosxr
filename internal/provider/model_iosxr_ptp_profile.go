@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"sort"
 	"strconv"
@@ -109,6 +110,8 @@ type PTPProfile struct {
 	InteropIngressConversionOffsetScaledLogVariance      types.Int64                                            `tfsdk:"interop_ingress_conversion_offset_scaled_log_variance"`
 	InteropIngressConversionClockClassDefault            types.Int64                                            `tfsdk:"interop_ingress_conversion_clock_class_default"`
 	InteropIngressConversionClockClassMappings           []PTPProfileInteropIngressConversionClockClassMappings `tfsdk:"interop_ingress_conversion_clock_class_mappings"`
+	MonitorSender                                        types.Bool                                             `tfsdk:"monitor_sender"`
+	MonitorReceiver                                      types.Bool                                             `tfsdk:"monitor_receiver"`
 }
 
 type PTPProfileData struct {
@@ -179,6 +182,8 @@ type PTPProfileData struct {
 	InteropIngressConversionOffsetScaledLogVariance      types.Int64                                            `tfsdk:"interop_ingress_conversion_offset_scaled_log_variance"`
 	InteropIngressConversionClockClassDefault            types.Int64                                            `tfsdk:"interop_ingress_conversion_clock_class_default"`
 	InteropIngressConversionClockClassMappings           []PTPProfileInteropIngressConversionClockClassMappings `tfsdk:"interop_ingress_conversion_clock_class_mappings"`
+	MonitorSender                                        types.Bool                                             `tfsdk:"monitor_sender"`
+	MonitorReceiver                                      types.Bool                                             `tfsdk:"monitor_receiver"`
 }
 type PTPProfileSlaveIpv4s struct {
 	Address       types.String `tfsdk:"address"`
@@ -266,7 +271,7 @@ func (data PTPProfileData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data PTPProfile) toBody(ctx context.Context) string {
+func (data PTPProfile) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.ProfileName.IsNull() && !data.ProfileName.IsUnknown() {
 		body, _ = sjson.Set(body, "profile-name", data.ProfileName.ValueString())
@@ -483,6 +488,20 @@ func (data PTPProfile) toBody(ctx context.Context) string {
 	if !data.InteropIngressConversionClockClassDefault.IsNull() && !data.InteropIngressConversionClockClassDefault.IsUnknown() {
 		body, _ = sjson.Set(body, "interop.ingress-conversion.clock-class.default", strconv.FormatInt(data.InteropIngressConversionClockClassDefault.ValueInt64(), 10))
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.MonitorSender.IsNull() && !data.MonitorSender.IsUnknown() {
+			if data.MonitorSender.ValueBool() {
+				body, _ = sjson.Set(body, "monitor-sender", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.MonitorReceiver.IsNull() && !data.MonitorReceiver.IsUnknown() {
+			if data.MonitorReceiver.ValueBool() {
+				body, _ = sjson.Set(body, "monitor-receiver", map[string]string{})
+			}
+		}
+	}
 	if len(data.SlaveIpv4s) > 0 {
 		body, _ = sjson.Set(body, "subordinate.ipv4s.ipv4-non-negotiated", []interface{}{})
 		for index, item := range data.SlaveIpv4s {
@@ -690,328 +709,369 @@ func (data PTPProfile) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *PTPProfile) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("port.state.subordinate-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.PortStateSlaveOnly.IsNull() {
+// GetVersionConstraints returns the version constraints for all fields
+func (data PTPProfile) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "monitor_sender",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "monitor_receiver",
+			AddedInVersion: "25.4",
+		},
+	}...)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data PTPProfile) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data PTPProfile) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data PTPProfile) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data PTPProfile) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *PTPProfile) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "port.state.subordinate-only"); !data.PortStateSlaveOnly.IsNull() {
+		if value.Exists() {
 			data.PortStateSlaveOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.PortStateSlaveOnly = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.PortStateSlaveOnly.IsNull() {
-			data.PortStateSlaveOnly = types.BoolNull()
-		}
+	} else if data.PortStateSlaveOnly.IsNull() {
+		data.PortStateSlaveOnly = types.BoolNull()
 	}
-	if value := res.Get("port.state.primary-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.PortStateMasterOnly.IsNull() {
+	if value := gjson.GetBytes(res, "port.state.primary-only"); !data.PortStateMasterOnly.IsNull() {
+		if value.Exists() {
 			data.PortStateMasterOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.PortStateMasterOnly = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.PortStateMasterOnly.IsNull() {
-			data.PortStateMasterOnly = types.BoolNull()
-		}
+	} else if data.PortStateMasterOnly.IsNull() {
+		data.PortStateMasterOnly = types.BoolNull()
 	}
-	if value := res.Get("port.state.any"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.PortStateAny.IsNull() {
+	if value := gjson.GetBytes(res, "port.state.any"); !data.PortStateAny.IsNull() {
+		if value.Exists() {
 			data.PortStateAny = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.PortStateAny = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.PortStateAny.IsNull() {
-			data.PortStateAny = types.BoolNull()
-		}
+	} else if data.PortStateAny.IsNull() {
+		data.PortStateAny = types.BoolNull()
 	}
-	if value := res.Get("source.ipv4.address"); value.Exists() && !data.SourceIpv4Address.IsNull() {
+	if value := gjson.GetBytes(res, "source.ipv4.address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SourceIpv4Address.IsNull() {
 		data.SourceIpv4Address = types.StringValue(value.String())
 	} else if data.SourceIpv4Address.IsNull() {
 		data.SourceIpv4Address = types.StringNull()
 	}
-	if value := res.Get("source.ipv6.address"); value.Exists() && !data.SourceIpv6Address.IsNull() {
+	if value := gjson.GetBytes(res, "source.ipv6.address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SourceIpv6Address.IsNull() {
 		data.SourceIpv6Address = types.StringValue(value.String())
 	} else if data.SourceIpv6Address.IsNull() {
 		data.SourceIpv6Address = types.StringNull()
 	}
-	if value := res.Get("multicast"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Multicast.IsNull() {
+	if value := gjson.GetBytes(res, "multicast"); !data.Multicast.IsNull() {
+		if value.Exists() {
 			data.Multicast = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Multicast = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Multicast.IsNull() {
-			data.Multicast = types.BoolNull()
-		}
+	} else if data.Multicast.IsNull() {
+		data.Multicast = types.BoolNull()
 	}
-	if value := res.Get("multicast.mixed"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MulticastMixed.IsNull() {
+	if value := gjson.GetBytes(res, "multicast.mixed"); !data.MulticastMixed.IsNull() {
+		if value.Exists() {
 			data.MulticastMixed = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MulticastMixed = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MulticastMixed.IsNull() {
-			data.MulticastMixed = types.BoolNull()
-		}
+	} else if data.MulticastMixed.IsNull() {
+		data.MulticastMixed = types.BoolNull()
 	}
-	if value := res.Get("multicast.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MulticastDisable.IsNull() {
+	if value := gjson.GetBytes(res, "multicast.disable"); !data.MulticastDisable.IsNull() {
+		if value.Exists() {
 			data.MulticastDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MulticastDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MulticastDisable.IsNull() {
-			data.MulticastDisable = types.BoolNull()
-		}
+	} else if data.MulticastDisable.IsNull() {
+		data.MulticastDisable = types.BoolNull()
 	}
-	if value := res.Get("multicast.target-address.ethernet.mac-address-01-1b-19-00-00-00"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() {
+	if value := gjson.GetBytes(res, "multicast.target-address.ethernet.mac-address-01-1b-19-00-00-00"); !data.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() {
+		if value.Exists() {
 			data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() {
-			data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolNull()
-		}
+	} else if data.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() {
+		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolNull()
 	}
-	if value := res.Get("multicast.target-address.ethernet.mac-address-01-80-c2-00-00-0e"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() {
+	if value := gjson.GetBytes(res, "multicast.target-address.ethernet.mac-address-01-80-c2-00-00-0e"); !data.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() {
+		if value.Exists() {
 			data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() {
-			data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolNull()
-		}
+	} else if data.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() {
+		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolNull()
 	}
-	if value := res.Get("transport.ipv4"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TransportIpv4.IsNull() {
+	if value := gjson.GetBytes(res, "transport.ipv4"); !data.TransportIpv4.IsNull() {
+		if value.Exists() {
 			data.TransportIpv4 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TransportIpv4 = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TransportIpv4.IsNull() {
-			data.TransportIpv4 = types.BoolNull()
-		}
+	} else if data.TransportIpv4.IsNull() {
+		data.TransportIpv4 = types.BoolNull()
 	}
-	if value := res.Get("transport.ipv6"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TransportIpv6.IsNull() {
+	if value := gjson.GetBytes(res, "transport.ipv6"); !data.TransportIpv6.IsNull() {
+		if value.Exists() {
 			data.TransportIpv6 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TransportIpv6 = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TransportIpv6.IsNull() {
-			data.TransportIpv6 = types.BoolNull()
-		}
+	} else if data.TransportIpv6.IsNull() {
+		data.TransportIpv6 = types.BoolNull()
 	}
-	if value := res.Get("transport.ethernet"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.TransportEthernet.IsNull() {
+	if value := gjson.GetBytes(res, "transport.ethernet"); !data.TransportEthernet.IsNull() {
+		if value.Exists() {
 			data.TransportEthernet = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.TransportEthernet = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.TransportEthernet.IsNull() {
-			data.TransportEthernet = types.BoolNull()
-		}
+	} else if data.TransportEthernet.IsNull() {
+		data.TransportEthernet = types.BoolNull()
 	}
-	if value := res.Get("clock.operation.one-step"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ClockOperationOneStep.IsNull() {
+	if value := gjson.GetBytes(res, "clock.operation.one-step"); !data.ClockOperationOneStep.IsNull() {
+		if value.Exists() {
 			data.ClockOperationOneStep = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ClockOperationOneStep = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ClockOperationOneStep.IsNull() {
-			data.ClockOperationOneStep = types.BoolNull()
-		}
+	} else if data.ClockOperationOneStep.IsNull() {
+		data.ClockOperationOneStep = types.BoolNull()
 	}
-	if value := res.Get("clock.operation.two-step"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ClockOperationTwoStep.IsNull() {
+	if value := gjson.GetBytes(res, "clock.operation.two-step"); !data.ClockOperationTwoStep.IsNull() {
+		if value.Exists() {
 			data.ClockOperationTwoStep = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ClockOperationTwoStep = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ClockOperationTwoStep.IsNull() {
-			data.ClockOperationTwoStep = types.BoolNull()
-		}
+	} else if data.ClockOperationTwoStep.IsNull() {
+		data.ClockOperationTwoStep = types.BoolNull()
 	}
-	if value := res.Get("announce.interval"); value.Exists() && !data.AnnounceInterval.IsNull() {
+	if value := gjson.GetBytes(res, "announce.interval"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AnnounceInterval.IsNull() {
 		data.AnnounceInterval = types.StringValue(value.String())
 	} else if data.AnnounceInterval.IsNull() {
 		data.AnnounceInterval = types.StringNull()
 	}
-	if value := res.Get("announce.frequency"); value.Exists() && !data.AnnounceFrequency.IsNull() {
+	if value := gjson.GetBytes(res, "announce.frequency"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AnnounceFrequency.IsNull() {
 		data.AnnounceFrequency = types.StringValue(value.String())
 	} else if data.AnnounceFrequency.IsNull() {
 		data.AnnounceFrequency = types.StringNull()
 	}
-	if value := res.Get("announce.timeout"); value.Exists() && !data.AnnounceTimeout.IsNull() {
+	if value := gjson.GetBytes(res, "announce.timeout"); value.Exists() && !data.AnnounceTimeout.IsNull() {
 		data.AnnounceTimeout = types.Int64Value(value.Int())
 	} else if data.AnnounceTimeout.IsNull() {
 		data.AnnounceTimeout = types.Int64Null()
 	}
-	if value := res.Get("announce.grant-duration"); value.Exists() && !data.AnnounceGrantDuration.IsNull() {
+	if value := gjson.GetBytes(res, "announce.grant-duration"); value.Exists() && !data.AnnounceGrantDuration.IsNull() {
 		data.AnnounceGrantDuration = types.Int64Value(value.Int())
 	} else if data.AnnounceGrantDuration.IsNull() {
 		data.AnnounceGrantDuration = types.Int64Null()
 	}
-	if value := res.Get("sync.interval"); value.Exists() && !data.SyncInterval.IsNull() {
+	if value := gjson.GetBytes(res, "sync.interval"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SyncInterval.IsNull() {
 		data.SyncInterval = types.StringValue(value.String())
 	} else if data.SyncInterval.IsNull() {
 		data.SyncInterval = types.StringNull()
 	}
-	if value := res.Get("sync.frequency"); value.Exists() && !data.SyncFrequency.IsNull() {
+	if value := gjson.GetBytes(res, "sync.frequency"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SyncFrequency.IsNull() {
 		data.SyncFrequency = types.StringValue(value.String())
 	} else if data.SyncFrequency.IsNull() {
 		data.SyncFrequency = types.StringNull()
 	}
-	if value := res.Get("sync.grant-duration"); value.Exists() && !data.SyncGrantDuration.IsNull() {
+	if value := gjson.GetBytes(res, "sync.grant-duration"); value.Exists() && !data.SyncGrantDuration.IsNull() {
 		data.SyncGrantDuration = types.Int64Value(value.Int())
 	} else if data.SyncGrantDuration.IsNull() {
 		data.SyncGrantDuration = types.Int64Null()
 	}
-	if value := res.Get("sync.timeout"); value.Exists() && !data.SyncTimeout.IsNull() {
+	if value := gjson.GetBytes(res, "sync.timeout"); value.Exists() && !data.SyncTimeout.IsNull() {
 		data.SyncTimeout = types.Int64Value(value.Int())
 	} else if data.SyncTimeout.IsNull() {
 		data.SyncTimeout = types.Int64Null()
 	}
-	if value := res.Get("delay-request.interval"); value.Exists() && !data.DelayRequestInterval.IsNull() {
+	if value := gjson.GetBytes(res, "delay-request.interval"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DelayRequestInterval.IsNull() {
 		data.DelayRequestInterval = types.StringValue(value.String())
 	} else if data.DelayRequestInterval.IsNull() {
 		data.DelayRequestInterval = types.StringNull()
 	}
-	if value := res.Get("delay-request.frequency"); value.Exists() && !data.DelayRequestFrequency.IsNull() {
+	if value := gjson.GetBytes(res, "delay-request.frequency"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DelayRequestFrequency.IsNull() {
 		data.DelayRequestFrequency = types.StringValue(value.String())
 	} else if data.DelayRequestFrequency.IsNull() {
 		data.DelayRequestFrequency = types.StringNull()
 	}
-	if value := res.Get("cos"); value.Exists() && !data.Cos.IsNull() {
+	if value := gjson.GetBytes(res, "cos"); value.Exists() && !data.Cos.IsNull() {
 		data.Cos = types.Int64Value(value.Int())
 	} else if data.Cos.IsNull() {
 		data.Cos = types.Int64Null()
 	}
-	if value := res.Get("event-cos"); value.Exists() && !data.CosEvent.IsNull() {
+	if value := gjson.GetBytes(res, "event-cos"); value.Exists() && !data.CosEvent.IsNull() {
 		data.CosEvent = types.Int64Value(value.Int())
 	} else if data.CosEvent.IsNull() {
 		data.CosEvent = types.Int64Null()
 	}
-	if value := res.Get("general-cos"); value.Exists() && !data.CosGeneral.IsNull() {
+	if value := gjson.GetBytes(res, "general-cos"); value.Exists() && !data.CosGeneral.IsNull() {
 		data.CosGeneral = types.Int64Value(value.Int())
 	} else if data.CosGeneral.IsNull() {
 		data.CosGeneral = types.Int64Null()
 	}
-	if value := res.Get("dscp"); value.Exists() && !data.Dscp.IsNull() {
+	if value := gjson.GetBytes(res, "dscp"); value.Exists() && !data.Dscp.IsNull() {
 		data.Dscp = types.Int64Value(value.Int())
 	} else if data.Dscp.IsNull() {
 		data.Dscp = types.Int64Null()
 	}
-	if value := res.Get("event-dscp"); value.Exists() && !data.DscpEvent.IsNull() {
+	if value := gjson.GetBytes(res, "event-dscp"); value.Exists() && !data.DscpEvent.IsNull() {
 		data.DscpEvent = types.Int64Value(value.Int())
 	} else if data.DscpEvent.IsNull() {
 		data.DscpEvent = types.Int64Null()
 	}
-	if value := res.Get("general-dscp"); value.Exists() && !data.DscpGeneral.IsNull() {
+	if value := gjson.GetBytes(res, "general-dscp"); value.Exists() && !data.DscpGeneral.IsNull() {
 		data.DscpGeneral = types.Int64Value(value.Int())
 	} else if data.DscpGeneral.IsNull() {
 		data.DscpGeneral = types.Int64Null()
 	}
-	if value := res.Get("ipv4-ttl"); value.Exists() && !data.Ipv4Ttl.IsNull() {
+	if value := gjson.GetBytes(res, "ipv4-ttl"); value.Exists() && !data.Ipv4Ttl.IsNull() {
 		data.Ipv4Ttl = types.Int64Value(value.Int())
 	} else if data.Ipv4Ttl.IsNull() {
 		data.Ipv4Ttl = types.Int64Null()
 	}
-	if value := res.Get("ipv6-hop-limit"); value.Exists() && !data.Ipv6HopLimit.IsNull() {
+	if value := gjson.GetBytes(res, "ipv6-hop-limit"); value.Exists() && !data.Ipv6HopLimit.IsNull() {
 		data.Ipv6HopLimit = types.Int64Value(value.Int())
 	} else if data.Ipv6HopLimit.IsNull() {
 		data.Ipv6HopLimit = types.Int64Null()
 	}
-	if value := res.Get("delay-asymmetry"); value.Exists() && !data.DelayAsymmetryValue.IsNull() {
+	if value := gjson.GetBytes(res, "delay-asymmetry"); value.Exists() && !data.DelayAsymmetryValue.IsNull() {
 		data.DelayAsymmetryValue = types.Int64Value(value.Int())
 	} else if data.DelayAsymmetryValue.IsNull() {
 		data.DelayAsymmetryValue = types.Int64Null()
 	}
-	if value := res.Get("nanoseconds"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.DelayAsymmetryUnitNanoseconds.IsNull() {
+	if value := gjson.GetBytes(res, "nanoseconds"); !data.DelayAsymmetryUnitNanoseconds.IsNull() {
+		if value.Exists() {
 			data.DelayAsymmetryUnitNanoseconds = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.DelayAsymmetryUnitNanoseconds = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.DelayAsymmetryUnitNanoseconds.IsNull() {
-			data.DelayAsymmetryUnitNanoseconds = types.BoolNull()
-		}
+	} else if data.DelayAsymmetryUnitNanoseconds.IsNull() {
+		data.DelayAsymmetryUnitNanoseconds = types.BoolNull()
 	}
-	if value := res.Get("microseconds"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.DelayAsymmetryUnitMicroseconds.IsNull() {
+	if value := gjson.GetBytes(res, "microseconds"); !data.DelayAsymmetryUnitMicroseconds.IsNull() {
+		if value.Exists() {
 			data.DelayAsymmetryUnitMicroseconds = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.DelayAsymmetryUnitMicroseconds = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.DelayAsymmetryUnitMicroseconds.IsNull() {
-			data.DelayAsymmetryUnitMicroseconds = types.BoolNull()
-		}
+	} else if data.DelayAsymmetryUnitMicroseconds.IsNull() {
+		data.DelayAsymmetryUnitMicroseconds = types.BoolNull()
 	}
-	if value := res.Get("milliseconds"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.DelayAsymmetryUnitMilliseconds.IsNull() {
+	if value := gjson.GetBytes(res, "milliseconds"); !data.DelayAsymmetryUnitMilliseconds.IsNull() {
+		if value.Exists() {
 			data.DelayAsymmetryUnitMilliseconds = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.DelayAsymmetryUnitMilliseconds = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.DelayAsymmetryUnitMilliseconds.IsNull() {
-			data.DelayAsymmetryUnitMilliseconds = types.BoolNull()
-		}
+	} else if data.DelayAsymmetryUnitMilliseconds.IsNull() {
+		data.DelayAsymmetryUnitMilliseconds = types.BoolNull()
 	}
-	if value := res.Get("delay-response.grant-duration"); value.Exists() && !data.DelayResponseGrantDuration.IsNull() {
+	if value := gjson.GetBytes(res, "delay-response.grant-duration"); value.Exists() && !data.DelayResponseGrantDuration.IsNull() {
 		data.DelayResponseGrantDuration = types.Int64Value(value.Int())
 	} else if data.DelayResponseGrantDuration.IsNull() {
 		data.DelayResponseGrantDuration = types.Int64Null()
 	}
-	if value := res.Get("delay-response.timeout"); value.Exists() && !data.DelayResponseTimeout.IsNull() {
+	if value := gjson.GetBytes(res, "delay-response.timeout"); value.Exists() && !data.DelayResponseTimeout.IsNull() {
 		data.DelayResponseTimeout = types.Int64Value(value.Int())
 	} else if data.DelayResponseTimeout.IsNull() {
 		data.DelayResponseTimeout = types.Int64Null()
 	}
-	if value := res.Get("unicast-grant.invalid-request.reduce"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.UnicastGrantInvalidRequestReduce.IsNull() {
+	if value := gjson.GetBytes(res, "unicast-grant.invalid-request.reduce"); !data.UnicastGrantInvalidRequestReduce.IsNull() {
+		if value.Exists() {
 			data.UnicastGrantInvalidRequestReduce = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.UnicastGrantInvalidRequestReduce = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.UnicastGrantInvalidRequestReduce.IsNull() {
-			data.UnicastGrantInvalidRequestReduce = types.BoolNull()
-		}
+	} else if data.UnicastGrantInvalidRequestReduce.IsNull() {
+		data.UnicastGrantInvalidRequestReduce = types.BoolNull()
 	}
-	if value := res.Get("unicast-grant.invalid-request.deny"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.UnicastGrantInvalidRequestDeny.IsNull() {
+	if value := gjson.GetBytes(res, "unicast-grant.invalid-request.deny"); !data.UnicastGrantInvalidRequestDeny.IsNull() {
+		if value.Exists() {
 			data.UnicastGrantInvalidRequestDeny = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.UnicastGrantInvalidRequestDeny = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.UnicastGrantInvalidRequestDeny.IsNull() {
-			data.UnicastGrantInvalidRequestDeny = types.BoolNull()
-		}
+	} else if data.UnicastGrantInvalidRequestDeny.IsNull() {
+		data.UnicastGrantInvalidRequestDeny = types.BoolNull()
 	}
 	for i := range data.SlaveIpv4s {
 		keys := [...]string{"address"}
 		keyValues := [...]string{data.SlaveIpv4s[i].Address.ValueString()}
 
 		var r gjson.Result
-		res.Get("subordinate.ipv4s.ipv4-non-negotiated").ForEach(
+		gjson.GetBytes(res, "subordinate.ipv4s.ipv4-non-negotiated").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1029,7 +1089,7 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res gjson.Result) {
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() && !data.SlaveIpv4s[i].Address.IsNull() {
+		if value := r.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SlaveIpv4s[i].Address.IsNull() {
 			data.SlaveIpv4s[i].Address = types.StringValue(value.String())
 		} else {
 			data.SlaveIpv4s[i].Address = types.StringNull()
@@ -1052,7 +1112,7 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{data.SlaveIpv6s[i].Address.ValueString()}
 
 		var r gjson.Result
-		res.Get("subordinate.ipv6s.ipv6").ForEach(
+		gjson.GetBytes(res, "subordinate.ipv6s.ipv6").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1070,7 +1130,7 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res gjson.Result) {
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() && !data.SlaveIpv6s[i].Address.IsNull() {
+		if value := r.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SlaveIpv6s[i].Address.IsNull() {
 			data.SlaveIpv6s[i].Address = types.StringValue(value.String())
 		} else {
 			data.SlaveIpv6s[i].Address = types.StringNull()
@@ -1093,7 +1153,7 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{data.SlaveEthernets[i].Address.ValueString()}
 
 		var r gjson.Result
-		res.Get("subordinate.ethernets.ethernet").ForEach(
+		gjson.GetBytes(res, "subordinate.ethernets.ethernet").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1111,7 +1171,7 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res gjson.Result) {
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() && !data.SlaveEthernets[i].Address.IsNull() {
+		if value := r.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SlaveEthernets[i].Address.IsNull() {
 			data.SlaveEthernets[i].Address = types.StringValue(value.String())
 		} else {
 			data.SlaveEthernets[i].Address = types.StringNull()
@@ -1134,7 +1194,7 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{data.MasterIpv4s[i].Address.ValueString()}
 
 		var r gjson.Result
-		res.Get("primary.ipv4s.ipv4").ForEach(
+		gjson.GetBytes(res, "primary.ipv4s.ipv4").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1152,7 +1212,7 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res gjson.Result) {
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() && !data.MasterIpv4s[i].Address.IsNull() {
+		if value := r.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MasterIpv4s[i].Address.IsNull() {
 			data.MasterIpv4s[i].Address = types.StringValue(value.String())
 		} else {
 			data.MasterIpv4s[i].Address = types.StringNull()
@@ -1250,7 +1310,7 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{data.MasterIpv6s[i].Address.ValueString()}
 
 		var r gjson.Result
-		res.Get("primary.ipv6s.ipv6").ForEach(
+		gjson.GetBytes(res, "primary.ipv6s.ipv6").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1268,7 +1328,7 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res gjson.Result) {
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() && !data.MasterIpv6s[i].Address.IsNull() {
+		if value := r.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MasterIpv6s[i].Address.IsNull() {
 			data.MasterIpv6s[i].Address = types.StringValue(value.String())
 		} else {
 			data.MasterIpv6s[i].Address = types.StringNull()
@@ -1366,7 +1426,7 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{data.MasterEthernets[i].Address.ValueString()}
 
 		var r gjson.Result
-		res.Get("primary.ethernets.ethernet").ForEach(
+		gjson.GetBytes(res, "primary.ethernets.ethernet").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1384,7 +1444,7 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res gjson.Result) {
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() && !data.MasterEthernets[i].Address.IsNull() {
+		if value := r.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.MasterEthernets[i].Address.IsNull() {
 			data.MasterEthernets[i].Address = types.StringValue(value.String())
 		} else {
 			data.MasterEthernets[i].Address = types.StringNull()
@@ -1477,76 +1537,72 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res gjson.Result) {
 			}
 		}
 	}
-	if value := res.Get("interop.profile.default"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.InteropProfileDefault.IsNull() {
+	if value := gjson.GetBytes(res, "interop.profile.default"); !data.InteropProfileDefault.IsNull() {
+		if value.Exists() {
 			data.InteropProfileDefault = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.InteropProfileDefault = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.InteropProfileDefault.IsNull() {
-			data.InteropProfileDefault = types.BoolNull()
-		}
+	} else if data.InteropProfileDefault.IsNull() {
+		data.InteropProfileDefault = types.BoolNull()
 	}
-	if value := res.Get("interop.profile.g-8265-1"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.InteropProfileG82651.IsNull() {
+	if value := gjson.GetBytes(res, "interop.profile.g-8265-1"); !data.InteropProfileG82651.IsNull() {
+		if value.Exists() {
 			data.InteropProfileG82651 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.InteropProfileG82651 = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.InteropProfileG82651.IsNull() {
-			data.InteropProfileG82651 = types.BoolNull()
-		}
+	} else if data.InteropProfileG82651.IsNull() {
+		data.InteropProfileG82651 = types.BoolNull()
 	}
-	if value := res.Get("interop.profile.g-8275-1"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.InteropProfileG82751.IsNull() {
+	if value := gjson.GetBytes(res, "interop.profile.g-8275-1"); !data.InteropProfileG82751.IsNull() {
+		if value.Exists() {
 			data.InteropProfileG82751 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.InteropProfileG82751 = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.InteropProfileG82751.IsNull() {
-			data.InteropProfileG82751 = types.BoolNull()
-		}
+	} else if data.InteropProfileG82751.IsNull() {
+		data.InteropProfileG82751 = types.BoolNull()
 	}
-	if value := res.Get("interop.profile.g-8275-2"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.InteropProfileG82752.IsNull() {
+	if value := gjson.GetBytes(res, "interop.profile.g-8275-2"); !data.InteropProfileG82752.IsNull() {
+		if value.Exists() {
 			data.InteropProfileG82752 = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.InteropProfileG82752 = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.InteropProfileG82752.IsNull() {
-			data.InteropProfileG82752 = types.BoolNull()
-		}
+	} else if data.InteropProfileG82752.IsNull() {
+		data.InteropProfileG82752 = types.BoolNull()
 	}
-	if value := res.Get("interop.domain"); value.Exists() && !data.InteropDomain.IsNull() {
+	if value := gjson.GetBytes(res, "interop.domain"); value.Exists() && !data.InteropDomain.IsNull() {
 		data.InteropDomain = types.Int64Value(value.Int())
 	} else if data.InteropDomain.IsNull() {
 		data.InteropDomain = types.Int64Null()
 	}
-	if value := res.Get("interop.egress-conversion.priority1"); value.Exists() && !data.InteropEgressConversionPriority1.IsNull() {
+	if value := gjson.GetBytes(res, "interop.egress-conversion.priority1"); value.Exists() && !data.InteropEgressConversionPriority1.IsNull() {
 		data.InteropEgressConversionPriority1 = types.Int64Value(value.Int())
 	} else if data.InteropEgressConversionPriority1.IsNull() {
 		data.InteropEgressConversionPriority1 = types.Int64Null()
 	}
-	if value := res.Get("interop.egress-conversion.priority2"); value.Exists() && !data.InteropEgressConversionPriority2.IsNull() {
+	if value := gjson.GetBytes(res, "interop.egress-conversion.priority2"); value.Exists() && !data.InteropEgressConversionPriority2.IsNull() {
 		data.InteropEgressConversionPriority2 = types.Int64Value(value.Int())
 	} else if data.InteropEgressConversionPriority2.IsNull() {
 		data.InteropEgressConversionPriority2 = types.Int64Null()
 	}
-	if value := res.Get("interop.egress-conversion.clock-accuracy"); value.Exists() && !data.InteropEgressConversionClockAccuracy.IsNull() {
+	if value := gjson.GetBytes(res, "interop.egress-conversion.clock-accuracy"); value.Exists() && !data.InteropEgressConversionClockAccuracy.IsNull() {
 		data.InteropEgressConversionClockAccuracy = types.Int64Value(value.Int())
 	} else if data.InteropEgressConversionClockAccuracy.IsNull() {
 		data.InteropEgressConversionClockAccuracy = types.Int64Null()
 	}
-	if value := res.Get("interop.egress-conversion.offset-scaled-log-variance"); value.Exists() && !data.InteropEgressConversionOffsetScaledLogVariance.IsNull() {
+	if value := gjson.GetBytes(res, "interop.egress-conversion.offset-scaled-log-variance"); value.Exists() && !data.InteropEgressConversionOffsetScaledLogVariance.IsNull() {
 		data.InteropEgressConversionOffsetScaledLogVariance = types.Int64Value(value.Int())
 	} else if data.InteropEgressConversionOffsetScaledLogVariance.IsNull() {
 		data.InteropEgressConversionOffsetScaledLogVariance = types.Int64Null()
 	}
-	if value := res.Get("interop.egress-conversion.clock-class.default"); value.Exists() && !data.InteropEgressConversionClockClassDefault.IsNull() {
+	if value := gjson.GetBytes(res, "interop.egress-conversion.clock-class.default"); value.Exists() && !data.InteropEgressConversionClockClassDefault.IsNull() {
 		data.InteropEgressConversionClockClassDefault = types.Int64Value(value.Int())
 	} else if data.InteropEgressConversionClockClassDefault.IsNull() {
 		data.InteropEgressConversionClockClassDefault = types.Int64Null()
@@ -1556,7 +1612,7 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.InteropEgressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("interop.egress-conversion.clock-class.mappings.mapping").ForEach(
+		gjson.GetBytes(res, "interop.egress-conversion.clock-class.mappings.mapping").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1585,27 +1641,27 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res gjson.Result) {
 			data.InteropEgressConversionClockClassMappings[i].ClockClassToMapTo = types.Int64Null()
 		}
 	}
-	if value := res.Get("interop.ingress-conversion.priority1"); value.Exists() && !data.InteropIngressConversionPriority1.IsNull() {
+	if value := gjson.GetBytes(res, "interop.ingress-conversion.priority1"); value.Exists() && !data.InteropIngressConversionPriority1.IsNull() {
 		data.InteropIngressConversionPriority1 = types.Int64Value(value.Int())
 	} else if data.InteropIngressConversionPriority1.IsNull() {
 		data.InteropIngressConversionPriority1 = types.Int64Null()
 	}
-	if value := res.Get("interop.ingress-conversion.priority2"); value.Exists() && !data.InteropIngressConversionPriority2.IsNull() {
+	if value := gjson.GetBytes(res, "interop.ingress-conversion.priority2"); value.Exists() && !data.InteropIngressConversionPriority2.IsNull() {
 		data.InteropIngressConversionPriority2 = types.Int64Value(value.Int())
 	} else if data.InteropIngressConversionPriority2.IsNull() {
 		data.InteropIngressConversionPriority2 = types.Int64Null()
 	}
-	if value := res.Get("interop.ingress-conversion.clock-accuracy"); value.Exists() && !data.InteropIngressConversionClockAccuracy.IsNull() {
+	if value := gjson.GetBytes(res, "interop.ingress-conversion.clock-accuracy"); value.Exists() && !data.InteropIngressConversionClockAccuracy.IsNull() {
 		data.InteropIngressConversionClockAccuracy = types.Int64Value(value.Int())
 	} else if data.InteropIngressConversionClockAccuracy.IsNull() {
 		data.InteropIngressConversionClockAccuracy = types.Int64Null()
 	}
-	if value := res.Get("interop.ingress-conversion.offset-scaled-log-variance"); value.Exists() && !data.InteropIngressConversionOffsetScaledLogVariance.IsNull() {
+	if value := gjson.GetBytes(res, "interop.ingress-conversion.offset-scaled-log-variance"); value.Exists() && !data.InteropIngressConversionOffsetScaledLogVariance.IsNull() {
 		data.InteropIngressConversionOffsetScaledLogVariance = types.Int64Value(value.Int())
 	} else if data.InteropIngressConversionOffsetScaledLogVariance.IsNull() {
 		data.InteropIngressConversionOffsetScaledLogVariance = types.Int64Null()
 	}
-	if value := res.Get("interop.ingress-conversion.clock-class.default"); value.Exists() && !data.InteropIngressConversionClockClassDefault.IsNull() {
+	if value := gjson.GetBytes(res, "interop.ingress-conversion.clock-class.default"); value.Exists() && !data.InteropIngressConversionClockClassDefault.IsNull() {
 		data.InteropIngressConversionClockClassDefault = types.Int64Value(value.Int())
 	} else if data.InteropIngressConversionClockClassDefault.IsNull() {
 		data.InteropIngressConversionClockClassDefault = types.Int64Null()
@@ -1615,7 +1671,7 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("interop.ingress-conversion.clock-class.mappings.mapping").ForEach(
+		gjson.GetBytes(res, "interop.ingress-conversion.clock-class.mappings.mapping").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1644,9 +1700,2145 @@ func (data *PTPProfile) updateFromBody(ctx context.Context, res gjson.Result) {
 			data.InteropIngressConversionClockClassMappings[i].ClockClassToMapTo = types.Int64Null()
 		}
 	}
+	if value := gjson.GetBytes(res, "monitor-sender"); helpers.VersionAtLeast(version, "25.4") && !data.MonitorSender.IsNull() {
+		if value.Exists() {
+			data.MonitorSender = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MonitorSender = types.BoolValue(false)
+		}
+	} else if data.MonitorSender.IsNull() {
+		data.MonitorSender = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "monitor-receiver"); helpers.VersionAtLeast(version, "25.4") && !data.MonitorReceiver.IsNull() {
+		if value.Exists() {
+			data.MonitorReceiver = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MonitorReceiver = types.BoolValue(false)
+		}
+	} else if data.MonitorReceiver.IsNull() {
+		data.MonitorReceiver = types.BoolNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *PTPProfile) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "port.state.subordinate-only"); value.Exists() {
+		data.PortStateSlaveOnly = types.BoolValue(true)
+	} else if !data.PortStateSlaveOnly.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PortStateSlaveOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "port.state.primary-only"); value.Exists() {
+		data.PortStateMasterOnly = types.BoolValue(true)
+	} else if !data.PortStateMasterOnly.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PortStateMasterOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "port.state.any"); value.Exists() {
+		data.PortStateAny = types.BoolValue(true)
+	} else if !data.PortStateAny.IsNull() {
+		// Only set to false if it was previously set in state
+		data.PortStateAny = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "source.ipv4.address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SourceIpv4Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "source.ipv6.address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SourceIpv6Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "multicast"); value.Exists() {
+		data.Multicast = types.BoolValue(true)
+	} else if !data.Multicast.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Multicast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "multicast.mixed"); value.Exists() {
+		data.MulticastMixed = types.BoolValue(true)
+	} else if !data.MulticastMixed.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MulticastMixed = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "multicast.disable"); value.Exists() {
+		data.MulticastDisable = types.BoolValue(true)
+	} else if !data.MulticastDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MulticastDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "multicast.target-address.ethernet.mac-address-01-1b-19-00-00-00"); value.Exists() {
+		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(true)
+	} else if !data.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "multicast.target-address.ethernet.mac-address-01-80-c2-00-00-0e"); value.Exists() {
+		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(true)
+	} else if !data.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.ipv4"); value.Exists() {
+		data.TransportIpv4 = types.BoolValue(true)
+	} else if !data.TransportIpv4.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportIpv4 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.ipv6"); value.Exists() {
+		data.TransportIpv6 = types.BoolValue(true)
+	} else if !data.TransportIpv6.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportIpv6 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.ethernet"); value.Exists() {
+		data.TransportEthernet = types.BoolValue(true)
+	} else if !data.TransportEthernet.IsNull() {
+		// Only set to false if it was previously set in state
+		data.TransportEthernet = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "clock.operation.one-step"); value.Exists() {
+		data.ClockOperationOneStep = types.BoolValue(true)
+	} else if !data.ClockOperationOneStep.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockOperationOneStep = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "clock.operation.two-step"); value.Exists() {
+		data.ClockOperationTwoStep = types.BoolValue(true)
+	} else if !data.ClockOperationTwoStep.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ClockOperationTwoStep = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "announce.interval"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AnnounceInterval = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "announce.frequency"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AnnounceFrequency = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "announce.timeout"); value.Exists() {
+		data.AnnounceTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "announce.grant-duration"); value.Exists() {
+		data.AnnounceGrantDuration = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sync.interval"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SyncInterval = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "sync.frequency"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SyncFrequency = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "sync.grant-duration"); value.Exists() {
+		data.SyncGrantDuration = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sync.timeout"); value.Exists() {
+		data.SyncTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "delay-request.interval"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.DelayRequestInterval = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "delay-request.frequency"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.DelayRequestFrequency = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "cos"); value.Exists() {
+		data.Cos = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "event-cos"); value.Exists() {
+		data.CosEvent = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "general-cos"); value.Exists() {
+		data.CosGeneral = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "dscp"); value.Exists() {
+		data.Dscp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "event-dscp"); value.Exists() {
+		data.DscpEvent = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "general-dscp"); value.Exists() {
+		data.DscpGeneral = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ipv4-ttl"); value.Exists() {
+		data.Ipv4Ttl = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ipv6-hop-limit"); value.Exists() {
+		data.Ipv6HopLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "delay-asymmetry"); value.Exists() {
+		data.DelayAsymmetryValue = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "nanoseconds"); value.Exists() {
+		data.DelayAsymmetryUnitNanoseconds = types.BoolValue(true)
+	} else if !data.DelayAsymmetryUnitNanoseconds.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DelayAsymmetryUnitNanoseconds = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "microseconds"); value.Exists() {
+		data.DelayAsymmetryUnitMicroseconds = types.BoolValue(true)
+	} else if !data.DelayAsymmetryUnitMicroseconds.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DelayAsymmetryUnitMicroseconds = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "milliseconds"); value.Exists() {
+		data.DelayAsymmetryUnitMilliseconds = types.BoolValue(true)
+	} else if !data.DelayAsymmetryUnitMilliseconds.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DelayAsymmetryUnitMilliseconds = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "delay-response.grant-duration"); value.Exists() {
+		data.DelayResponseGrantDuration = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "delay-response.timeout"); value.Exists() {
+		data.DelayResponseTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "unicast-grant.invalid-request.reduce"); value.Exists() {
+		data.UnicastGrantInvalidRequestReduce = types.BoolValue(true)
+	} else if !data.UnicastGrantInvalidRequestReduce.IsNull() {
+		// Only set to false if it was previously set in state
+		data.UnicastGrantInvalidRequestReduce = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "unicast-grant.invalid-request.deny"); value.Exists() {
+		data.UnicastGrantInvalidRequestDeny = types.BoolValue(true)
+	} else if !data.UnicastGrantInvalidRequestDeny.IsNull() {
+		// Only set to false if it was previously set in state
+		data.UnicastGrantInvalidRequestDeny = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "subordinate.ipv4s.ipv4-non-negotiated"); value.Exists() {
+		data.SlaveIpv4s = make([]PTPProfileSlaveIpv4s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PTPProfileSlaveIpv4s{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("non-negotiated"); cValue.Exists() {
+				item.NonNegotiated = types.BoolValue(true)
+			} else if !item.NonNegotiated.IsNull() {
+				// Only set to false if it was previously set
+				item.NonNegotiated = types.BoolValue(false)
+			}
+			data.SlaveIpv4s = append(data.SlaveIpv4s, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "subordinate.ipv6s.ipv6"); value.Exists() {
+		data.SlaveIpv6s = make([]PTPProfileSlaveIpv6s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PTPProfileSlaveIpv6s{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("non-negotiated"); cValue.Exists() {
+				item.NonNegotiated = types.BoolValue(true)
+			} else if !item.NonNegotiated.IsNull() {
+				// Only set to false if it was previously set
+				item.NonNegotiated = types.BoolValue(false)
+			}
+			data.SlaveIpv6s = append(data.SlaveIpv6s, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "subordinate.ethernets.ethernet"); value.Exists() {
+		data.SlaveEthernets = make([]PTPProfileSlaveEthernets, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PTPProfileSlaveEthernets{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("non-negotiated"); cValue.Exists() {
+				item.NonNegotiated = types.BoolValue(true)
+			} else if !item.NonNegotiated.IsNull() {
+				// Only set to false if it was previously set
+				item.NonNegotiated = types.BoolValue(false)
+			}
+			data.SlaveEthernets = append(data.SlaveEthernets, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "primary.ipv4s.ipv4"); value.Exists() {
+		data.MasterIpv4s = make([]PTPProfileMasterIpv4s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PTPProfileMasterIpv4s{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("priority"); cValue.Exists() {
+				item.Priority = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("clock-class"); cValue.Exists() {
+				item.ClockClass = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("multicast"); cValue.Exists() {
+				item.Multicast = types.BoolValue(true)
+			} else if !item.Multicast.IsNull() {
+				// Only set to false if it was previously set
+				item.Multicast = types.BoolValue(false)
+			}
+			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
+				item.MulticastMixed = types.BoolValue(true)
+			} else if !item.MulticastMixed.IsNull() {
+				// Only set to false if it was previously set
+				item.MulticastMixed = types.BoolValue(false)
+			}
+			if cValue := v.Get("non-negotiated"); cValue.Exists() {
+				item.NonNegotiated = types.BoolValue(true)
+			} else if !item.NonNegotiated.IsNull() {
+				// Only set to false if it was previously set
+				item.NonNegotiated = types.BoolValue(false)
+			}
+			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
+				item.DelayAsymmetry = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("nanoseconds"); cValue.Exists() {
+				item.Nanoseconds = types.BoolValue(true)
+			} else if !item.Nanoseconds.IsNull() {
+				// Only set to false if it was previously set
+				item.Nanoseconds = types.BoolValue(false)
+			}
+			if cValue := v.Get("microseconds"); cValue.Exists() {
+				item.Microseconds = types.BoolValue(true)
+			} else if !item.Microseconds.IsNull() {
+				// Only set to false if it was previously set
+				item.Microseconds = types.BoolValue(false)
+			}
+			if cValue := v.Get("milliseconds"); cValue.Exists() {
+				item.Milliseconds = types.BoolValue(true)
+			} else if !item.Milliseconds.IsNull() {
+				// Only set to false if it was previously set
+				item.Milliseconds = types.BoolValue(false)
+			}
+			data.MasterIpv4s = append(data.MasterIpv4s, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "primary.ipv6s.ipv6"); value.Exists() {
+		data.MasterIpv6s = make([]PTPProfileMasterIpv6s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PTPProfileMasterIpv6s{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("priority"); cValue.Exists() {
+				item.Priority = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("clock-class"); cValue.Exists() {
+				item.ClockClass = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("multicast"); cValue.Exists() {
+				item.Multicast = types.BoolValue(true)
+			} else if !item.Multicast.IsNull() {
+				// Only set to false if it was previously set
+				item.Multicast = types.BoolValue(false)
+			}
+			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
+				item.MulticastMixed = types.BoolValue(true)
+			} else if !item.MulticastMixed.IsNull() {
+				// Only set to false if it was previously set
+				item.MulticastMixed = types.BoolValue(false)
+			}
+			if cValue := v.Get("non-negotiated"); cValue.Exists() {
+				item.NonNegotiated = types.BoolValue(true)
+			} else if !item.NonNegotiated.IsNull() {
+				// Only set to false if it was previously set
+				item.NonNegotiated = types.BoolValue(false)
+			}
+			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
+				item.DelayAsymmetry = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("nanoseconds"); cValue.Exists() {
+				item.Nanoseconds = types.BoolValue(true)
+			} else if !item.Nanoseconds.IsNull() {
+				// Only set to false if it was previously set
+				item.Nanoseconds = types.BoolValue(false)
+			}
+			if cValue := v.Get("microseconds"); cValue.Exists() {
+				item.Microseconds = types.BoolValue(true)
+			} else if !item.Microseconds.IsNull() {
+				// Only set to false if it was previously set
+				item.Microseconds = types.BoolValue(false)
+			}
+			if cValue := v.Get("milliseconds"); cValue.Exists() {
+				item.Milliseconds = types.BoolValue(true)
+			} else if !item.Milliseconds.IsNull() {
+				// Only set to false if it was previously set
+				item.Milliseconds = types.BoolValue(false)
+			}
+			data.MasterIpv6s = append(data.MasterIpv6s, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "primary.ethernets.ethernet"); value.Exists() {
+		data.MasterEthernets = make([]PTPProfileMasterEthernets, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PTPProfileMasterEthernets{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("priority"); cValue.Exists() {
+				item.Priority = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("clock-class"); cValue.Exists() {
+				item.ClockClass = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("multicast"); cValue.Exists() {
+				item.Multicast = types.BoolValue(true)
+			} else if !item.Multicast.IsNull() {
+				// Only set to false if it was previously set
+				item.Multicast = types.BoolValue(false)
+			}
+			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
+				item.MulticastMixed = types.BoolValue(true)
+			} else if !item.MulticastMixed.IsNull() {
+				// Only set to false if it was previously set
+				item.MulticastMixed = types.BoolValue(false)
+			}
+			if cValue := v.Get("non-negotiated"); cValue.Exists() {
+				item.NonNegotiated = types.BoolValue(true)
+			} else if !item.NonNegotiated.IsNull() {
+				// Only set to false if it was previously set
+				item.NonNegotiated = types.BoolValue(false)
+			}
+			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
+				item.DelayAsymmetry = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("nanoseconds"); cValue.Exists() {
+				item.Nanoseconds = types.BoolValue(true)
+			} else if !item.Nanoseconds.IsNull() {
+				// Only set to false if it was previously set
+				item.Nanoseconds = types.BoolValue(false)
+			}
+			if cValue := v.Get("microseconds"); cValue.Exists() {
+				item.Microseconds = types.BoolValue(true)
+			} else if !item.Microseconds.IsNull() {
+				// Only set to false if it was previously set
+				item.Microseconds = types.BoolValue(false)
+			}
+			if cValue := v.Get("milliseconds"); cValue.Exists() {
+				item.Milliseconds = types.BoolValue(true)
+			} else if !item.Milliseconds.IsNull() {
+				// Only set to false if it was previously set
+				item.Milliseconds = types.BoolValue(false)
+			}
+			data.MasterEthernets = append(data.MasterEthernets, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "interop.profile.default"); value.Exists() {
+		data.InteropProfileDefault = types.BoolValue(true)
+	} else if !data.InteropProfileDefault.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InteropProfileDefault = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interop.profile.g-8265-1"); value.Exists() {
+		data.InteropProfileG82651 = types.BoolValue(true)
+	} else if !data.InteropProfileG82651.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InteropProfileG82651 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interop.profile.g-8275-1"); value.Exists() {
+		data.InteropProfileG82751 = types.BoolValue(true)
+	} else if !data.InteropProfileG82751.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InteropProfileG82751 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interop.profile.g-8275-2"); value.Exists() {
+		data.InteropProfileG82752 = types.BoolValue(true)
+	} else if !data.InteropProfileG82752.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InteropProfileG82752 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interop.domain"); value.Exists() {
+		data.InteropDomain = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.egress-conversion.priority1"); value.Exists() {
+		data.InteropEgressConversionPriority1 = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.egress-conversion.priority2"); value.Exists() {
+		data.InteropEgressConversionPriority2 = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.egress-conversion.clock-accuracy"); value.Exists() {
+		data.InteropEgressConversionClockAccuracy = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.egress-conversion.offset-scaled-log-variance"); value.Exists() {
+		data.InteropEgressConversionOffsetScaledLogVariance = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.egress-conversion.clock-class.default"); value.Exists() {
+		data.InteropEgressConversionClockClassDefault = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.egress-conversion.clock-class.mappings.mapping"); value.Exists() {
+		data.InteropEgressConversionClockClassMappings = make([]PTPProfileInteropEgressConversionClockClassMappings, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PTPProfileInteropEgressConversionClockClassMappings{}
+			if cValue := v.Get("clock-class-to-map-from"); cValue.Exists() {
+				item.ClockClassToMapFrom = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("clock-class-to-map-to"); cValue.Exists() {
+				item.ClockClassToMapTo = types.Int64Value(cValue.Int())
+			}
+			data.InteropEgressConversionClockClassMappings = append(data.InteropEgressConversionClockClassMappings, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "interop.ingress-conversion.priority1"); value.Exists() {
+		data.InteropIngressConversionPriority1 = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.ingress-conversion.priority2"); value.Exists() {
+		data.InteropIngressConversionPriority2 = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.ingress-conversion.clock-accuracy"); value.Exists() {
+		data.InteropIngressConversionClockAccuracy = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.ingress-conversion.offset-scaled-log-variance"); value.Exists() {
+		data.InteropIngressConversionOffsetScaledLogVariance = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.ingress-conversion.clock-class.default"); value.Exists() {
+		data.InteropIngressConversionClockClassDefault = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.ingress-conversion.clock-class.mappings.mapping"); value.Exists() {
+		data.InteropIngressConversionClockClassMappings = make([]PTPProfileInteropIngressConversionClockClassMappings, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PTPProfileInteropIngressConversionClockClassMappings{}
+			if cValue := v.Get("clock-class-to-map-from"); cValue.Exists() {
+				item.ClockClassToMapFrom = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("clock-class-to-map-to"); cValue.Exists() {
+				item.ClockClassToMapTo = types.Int64Value(cValue.Int())
+			}
+			data.InteropIngressConversionClockClassMappings = append(data.InteropIngressConversionClockClassMappings, item)
+			return true
+		})
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "monitor-sender"); value.Exists() {
+			data.MonitorSender = types.BoolValue(true)
+		} else if !data.MonitorSender.IsNull() {
+			// Only set to false if it was previously set in state
+			data.MonitorSender = types.BoolValue(false)
+		}
+	} else {
+		data.MonitorSender = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "monitor-receiver"); value.Exists() {
+			data.MonitorReceiver = types.BoolValue(true)
+		} else if !data.MonitorReceiver.IsNull() {
+			// Only set to false if it was previously set in state
+			data.MonitorReceiver = types.BoolValue(false)
+		}
+	} else {
+		data.MonitorReceiver = types.BoolNull()
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *PTPProfileData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "port.state.subordinate-only"); value.Exists() {
+		data.PortStateSlaveOnly = types.BoolValue(true)
+	} else {
+		data.PortStateSlaveOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "port.state.primary-only"); value.Exists() {
+		data.PortStateMasterOnly = types.BoolValue(true)
+	} else {
+		data.PortStateMasterOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "port.state.any"); value.Exists() {
+		data.PortStateAny = types.BoolValue(true)
+	} else {
+		data.PortStateAny = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "source.ipv4.address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SourceIpv4Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "source.ipv6.address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SourceIpv6Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "multicast"); value.Exists() {
+		data.Multicast = types.BoolValue(true)
+	} else {
+		data.Multicast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "multicast.mixed"); value.Exists() {
+		data.MulticastMixed = types.BoolValue(true)
+	} else {
+		data.MulticastMixed = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "multicast.disable"); value.Exists() {
+		data.MulticastDisable = types.BoolValue(true)
+	} else {
+		data.MulticastDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "multicast.target-address.ethernet.mac-address-01-1b-19-00-00-00"); value.Exists() {
+		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(true)
+	} else {
+		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "multicast.target-address.ethernet.mac-address-01-80-c2-00-00-0e"); value.Exists() {
+		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(true)
+	} else {
+		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.ipv4"); value.Exists() {
+		data.TransportIpv4 = types.BoolValue(true)
+	} else {
+		data.TransportIpv4 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.ipv6"); value.Exists() {
+		data.TransportIpv6 = types.BoolValue(true)
+	} else {
+		data.TransportIpv6 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "transport.ethernet"); value.Exists() {
+		data.TransportEthernet = types.BoolValue(true)
+	} else {
+		data.TransportEthernet = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "clock.operation.one-step"); value.Exists() {
+		data.ClockOperationOneStep = types.BoolValue(true)
+	} else {
+		data.ClockOperationOneStep = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "clock.operation.two-step"); value.Exists() {
+		data.ClockOperationTwoStep = types.BoolValue(true)
+	} else {
+		data.ClockOperationTwoStep = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "announce.interval"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AnnounceInterval = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "announce.frequency"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AnnounceFrequency = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "announce.timeout"); value.Exists() {
+		data.AnnounceTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "announce.grant-duration"); value.Exists() {
+		data.AnnounceGrantDuration = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sync.interval"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SyncInterval = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "sync.frequency"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SyncFrequency = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "sync.grant-duration"); value.Exists() {
+		data.SyncGrantDuration = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sync.timeout"); value.Exists() {
+		data.SyncTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "delay-request.interval"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.DelayRequestInterval = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "delay-request.frequency"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.DelayRequestFrequency = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "cos"); value.Exists() {
+		data.Cos = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "event-cos"); value.Exists() {
+		data.CosEvent = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "general-cos"); value.Exists() {
+		data.CosGeneral = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "dscp"); value.Exists() {
+		data.Dscp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "event-dscp"); value.Exists() {
+		data.DscpEvent = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "general-dscp"); value.Exists() {
+		data.DscpGeneral = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ipv4-ttl"); value.Exists() {
+		data.Ipv4Ttl = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ipv6-hop-limit"); value.Exists() {
+		data.Ipv6HopLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "delay-asymmetry"); value.Exists() {
+		data.DelayAsymmetryValue = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "nanoseconds"); value.Exists() {
+		data.DelayAsymmetryUnitNanoseconds = types.BoolValue(true)
+	} else {
+		data.DelayAsymmetryUnitNanoseconds = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "microseconds"); value.Exists() {
+		data.DelayAsymmetryUnitMicroseconds = types.BoolValue(true)
+	} else {
+		data.DelayAsymmetryUnitMicroseconds = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "milliseconds"); value.Exists() {
+		data.DelayAsymmetryUnitMilliseconds = types.BoolValue(true)
+	} else {
+		data.DelayAsymmetryUnitMilliseconds = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "delay-response.grant-duration"); value.Exists() {
+		data.DelayResponseGrantDuration = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "delay-response.timeout"); value.Exists() {
+		data.DelayResponseTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "unicast-grant.invalid-request.reduce"); value.Exists() {
+		data.UnicastGrantInvalidRequestReduce = types.BoolValue(true)
+	} else {
+		data.UnicastGrantInvalidRequestReduce = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "unicast-grant.invalid-request.deny"); value.Exists() {
+		data.UnicastGrantInvalidRequestDeny = types.BoolValue(true)
+	} else {
+		data.UnicastGrantInvalidRequestDeny = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "subordinate.ipv4s.ipv4-non-negotiated"); value.Exists() {
+		data.SlaveIpv4s = make([]PTPProfileSlaveIpv4s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PTPProfileSlaveIpv4s{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("non-negotiated"); cValue.Exists() {
+				item.NonNegotiated = types.BoolValue(true)
+			} else {
+				item.NonNegotiated = types.BoolValue(false)
+			}
+			data.SlaveIpv4s = append(data.SlaveIpv4s, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "subordinate.ipv6s.ipv6"); value.Exists() {
+		data.SlaveIpv6s = make([]PTPProfileSlaveIpv6s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PTPProfileSlaveIpv6s{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("non-negotiated"); cValue.Exists() {
+				item.NonNegotiated = types.BoolValue(true)
+			} else {
+				item.NonNegotiated = types.BoolValue(false)
+			}
+			data.SlaveIpv6s = append(data.SlaveIpv6s, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "subordinate.ethernets.ethernet"); value.Exists() {
+		data.SlaveEthernets = make([]PTPProfileSlaveEthernets, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PTPProfileSlaveEthernets{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("non-negotiated"); cValue.Exists() {
+				item.NonNegotiated = types.BoolValue(true)
+			} else {
+				item.NonNegotiated = types.BoolValue(false)
+			}
+			data.SlaveEthernets = append(data.SlaveEthernets, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "primary.ipv4s.ipv4"); value.Exists() {
+		data.MasterIpv4s = make([]PTPProfileMasterIpv4s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PTPProfileMasterIpv4s{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("priority"); cValue.Exists() {
+				item.Priority = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("clock-class"); cValue.Exists() {
+				item.ClockClass = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("multicast"); cValue.Exists() {
+				item.Multicast = types.BoolValue(true)
+			} else {
+				item.Multicast = types.BoolValue(false)
+			}
+			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
+				item.MulticastMixed = types.BoolValue(true)
+			} else {
+				item.MulticastMixed = types.BoolValue(false)
+			}
+			if cValue := v.Get("non-negotiated"); cValue.Exists() {
+				item.NonNegotiated = types.BoolValue(true)
+			} else {
+				item.NonNegotiated = types.BoolValue(false)
+			}
+			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
+				item.DelayAsymmetry = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("nanoseconds"); cValue.Exists() {
+				item.Nanoseconds = types.BoolValue(true)
+			} else {
+				item.Nanoseconds = types.BoolValue(false)
+			}
+			if cValue := v.Get("microseconds"); cValue.Exists() {
+				item.Microseconds = types.BoolValue(true)
+			} else {
+				item.Microseconds = types.BoolValue(false)
+			}
+			if cValue := v.Get("milliseconds"); cValue.Exists() {
+				item.Milliseconds = types.BoolValue(true)
+			} else {
+				item.Milliseconds = types.BoolValue(false)
+			}
+			data.MasterIpv4s = append(data.MasterIpv4s, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "primary.ipv6s.ipv6"); value.Exists() {
+		data.MasterIpv6s = make([]PTPProfileMasterIpv6s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PTPProfileMasterIpv6s{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("priority"); cValue.Exists() {
+				item.Priority = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("clock-class"); cValue.Exists() {
+				item.ClockClass = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("multicast"); cValue.Exists() {
+				item.Multicast = types.BoolValue(true)
+			} else {
+				item.Multicast = types.BoolValue(false)
+			}
+			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
+				item.MulticastMixed = types.BoolValue(true)
+			} else {
+				item.MulticastMixed = types.BoolValue(false)
+			}
+			if cValue := v.Get("non-negotiated"); cValue.Exists() {
+				item.NonNegotiated = types.BoolValue(true)
+			} else {
+				item.NonNegotiated = types.BoolValue(false)
+			}
+			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
+				item.DelayAsymmetry = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("nanoseconds"); cValue.Exists() {
+				item.Nanoseconds = types.BoolValue(true)
+			} else {
+				item.Nanoseconds = types.BoolValue(false)
+			}
+			if cValue := v.Get("microseconds"); cValue.Exists() {
+				item.Microseconds = types.BoolValue(true)
+			} else {
+				item.Microseconds = types.BoolValue(false)
+			}
+			if cValue := v.Get("milliseconds"); cValue.Exists() {
+				item.Milliseconds = types.BoolValue(true)
+			} else {
+				item.Milliseconds = types.BoolValue(false)
+			}
+			data.MasterIpv6s = append(data.MasterIpv6s, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "primary.ethernets.ethernet"); value.Exists() {
+		data.MasterEthernets = make([]PTPProfileMasterEthernets, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PTPProfileMasterEthernets{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("priority"); cValue.Exists() {
+				item.Priority = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("clock-class"); cValue.Exists() {
+				item.ClockClass = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("multicast"); cValue.Exists() {
+				item.Multicast = types.BoolValue(true)
+			} else {
+				item.Multicast = types.BoolValue(false)
+			}
+			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
+				item.MulticastMixed = types.BoolValue(true)
+			} else {
+				item.MulticastMixed = types.BoolValue(false)
+			}
+			if cValue := v.Get("non-negotiated"); cValue.Exists() {
+				item.NonNegotiated = types.BoolValue(true)
+			} else {
+				item.NonNegotiated = types.BoolValue(false)
+			}
+			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
+				item.DelayAsymmetry = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("nanoseconds"); cValue.Exists() {
+				item.Nanoseconds = types.BoolValue(true)
+			} else {
+				item.Nanoseconds = types.BoolValue(false)
+			}
+			if cValue := v.Get("microseconds"); cValue.Exists() {
+				item.Microseconds = types.BoolValue(true)
+			} else {
+				item.Microseconds = types.BoolValue(false)
+			}
+			if cValue := v.Get("milliseconds"); cValue.Exists() {
+				item.Milliseconds = types.BoolValue(true)
+			} else {
+				item.Milliseconds = types.BoolValue(false)
+			}
+			data.MasterEthernets = append(data.MasterEthernets, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "interop.profile.default"); value.Exists() {
+		data.InteropProfileDefault = types.BoolValue(true)
+	} else {
+		data.InteropProfileDefault = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interop.profile.g-8265-1"); value.Exists() {
+		data.InteropProfileG82651 = types.BoolValue(true)
+	} else {
+		data.InteropProfileG82651 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interop.profile.g-8275-1"); value.Exists() {
+		data.InteropProfileG82751 = types.BoolValue(true)
+	} else {
+		data.InteropProfileG82751 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interop.profile.g-8275-2"); value.Exists() {
+		data.InteropProfileG82752 = types.BoolValue(true)
+	} else {
+		data.InteropProfileG82752 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interop.domain"); value.Exists() {
+		data.InteropDomain = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.egress-conversion.priority1"); value.Exists() {
+		data.InteropEgressConversionPriority1 = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.egress-conversion.priority2"); value.Exists() {
+		data.InteropEgressConversionPriority2 = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.egress-conversion.clock-accuracy"); value.Exists() {
+		data.InteropEgressConversionClockAccuracy = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.egress-conversion.offset-scaled-log-variance"); value.Exists() {
+		data.InteropEgressConversionOffsetScaledLogVariance = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.egress-conversion.clock-class.default"); value.Exists() {
+		data.InteropEgressConversionClockClassDefault = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.egress-conversion.clock-class.mappings.mapping"); value.Exists() {
+		data.InteropEgressConversionClockClassMappings = make([]PTPProfileInteropEgressConversionClockClassMappings, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PTPProfileInteropEgressConversionClockClassMappings{}
+			if cValue := v.Get("clock-class-to-map-from"); cValue.Exists() {
+				item.ClockClassToMapFrom = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("clock-class-to-map-to"); cValue.Exists() {
+				item.ClockClassToMapTo = types.Int64Value(cValue.Int())
+			}
+			data.InteropEgressConversionClockClassMappings = append(data.InteropEgressConversionClockClassMappings, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "interop.ingress-conversion.priority1"); value.Exists() {
+		data.InteropIngressConversionPriority1 = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.ingress-conversion.priority2"); value.Exists() {
+		data.InteropIngressConversionPriority2 = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.ingress-conversion.clock-accuracy"); value.Exists() {
+		data.InteropIngressConversionClockAccuracy = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.ingress-conversion.offset-scaled-log-variance"); value.Exists() {
+		data.InteropIngressConversionOffsetScaledLogVariance = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.ingress-conversion.clock-class.default"); value.Exists() {
+		data.InteropIngressConversionClockClassDefault = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interop.ingress-conversion.clock-class.mappings.mapping"); value.Exists() {
+		data.InteropIngressConversionClockClassMappings = make([]PTPProfileInteropIngressConversionClockClassMappings, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PTPProfileInteropIngressConversionClockClassMappings{}
+			if cValue := v.Get("clock-class-to-map-from"); cValue.Exists() {
+				item.ClockClassToMapFrom = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("clock-class-to-map-to"); cValue.Exists() {
+				item.ClockClassToMapTo = types.Int64Value(cValue.Int())
+			}
+			data.InteropIngressConversionClockClassMappings = append(data.InteropIngressConversionClockClassMappings, item)
+			return true
+		})
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "monitor-sender"); value.Exists() {
+			data.MonitorSender = types.BoolValue(true)
+		} else {
+			data.MonitorSender = types.BoolValue(false)
+		}
+	} else {
+		data.MonitorSender = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "monitor-receiver"); value.Exists() {
+			data.MonitorReceiver = types.BoolValue(true)
+		} else {
+			data.MonitorReceiver = types.BoolValue(false)
+		}
+	} else {
+		data.MonitorReceiver = types.BoolNull()
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *PTPProfile) getDeletedItems(ctx context.Context, state PTPProfile, version string) []string {
+	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !state.MonitorReceiver.IsNull() && data.MonitorReceiver.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "monitor-receiver"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.MonitorSender.IsNull() && data.MonitorSender.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "monitor-sender"))
+	}
+	for i := range state.InteropIngressConversionClockClassMappings {
+		keys := [...]string{"clock-class-to-map-from"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.InteropIngressConversionClockClassMappings {
+			found = true
+			if state.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64() != data.InteropIngressConversionClockClassMappings[j].ClockClassToMapFrom.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.InteropIngressConversionClockClassMappings[i].ClockClassToMapTo.IsNull() && data.InteropIngressConversionClockClassMappings[j].ClockClassToMapTo.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "interop/ingress-conversion/clock-class/mappings/mapping", keyString), "clock-class-to-map-to"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "interop/ingress-conversion/clock-class/mappings/mapping", keyString))
+		}
+	}
+	if !state.InteropIngressConversionClockClassDefault.IsNull() && data.InteropIngressConversionClockClassDefault.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interop/ingress-conversion/clock-class/default"))
+	}
+	if !state.InteropIngressConversionOffsetScaledLogVariance.IsNull() && data.InteropIngressConversionOffsetScaledLogVariance.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interop/ingress-conversion/offset-scaled-log-variance"))
+	}
+	if !state.InteropIngressConversionClockAccuracy.IsNull() && data.InteropIngressConversionClockAccuracy.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interop/ingress-conversion/clock-accuracy"))
+	}
+	if !state.InteropIngressConversionPriority2.IsNull() && data.InteropIngressConversionPriority2.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interop/ingress-conversion/priority2"))
+	}
+	if !state.InteropIngressConversionPriority1.IsNull() && data.InteropIngressConversionPriority1.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interop/ingress-conversion/priority1"))
+	}
+	for i := range state.InteropEgressConversionClockClassMappings {
+		keys := [...]string{"clock-class-to-map-from"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.InteropEgressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.InteropEgressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.InteropEgressConversionClockClassMappings {
+			found = true
+			if state.InteropEgressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64() != data.InteropEgressConversionClockClassMappings[j].ClockClassToMapFrom.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.InteropEgressConversionClockClassMappings[i].ClockClassToMapTo.IsNull() && data.InteropEgressConversionClockClassMappings[j].ClockClassToMapTo.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "interop/egress-conversion/clock-class/mappings/mapping", keyString), "clock-class-to-map-to"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "interop/egress-conversion/clock-class/mappings/mapping", keyString))
+		}
+	}
+	if !state.InteropEgressConversionClockClassDefault.IsNull() && data.InteropEgressConversionClockClassDefault.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interop/egress-conversion/clock-class/default"))
+	}
+	if !state.InteropEgressConversionOffsetScaledLogVariance.IsNull() && data.InteropEgressConversionOffsetScaledLogVariance.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interop/egress-conversion/offset-scaled-log-variance"))
+	}
+	if !state.InteropEgressConversionClockAccuracy.IsNull() && data.InteropEgressConversionClockAccuracy.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interop/egress-conversion/clock-accuracy"))
+	}
+	if !state.InteropEgressConversionPriority2.IsNull() && data.InteropEgressConversionPriority2.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interop/egress-conversion/priority2"))
+	}
+	if !state.InteropEgressConversionPriority1.IsNull() && data.InteropEgressConversionPriority1.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interop/egress-conversion/priority1"))
+	}
+	if !state.InteropDomain.IsNull() && data.InteropDomain.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interop/domain"))
+	}
+	if !state.InteropProfileG82752.IsNull() && data.InteropProfileG82752.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interop/profile/g-8275-2"))
+	}
+	if !state.InteropProfileG82751.IsNull() && data.InteropProfileG82751.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interop/profile/g-8275-1"))
+	}
+	if !state.InteropProfileG82651.IsNull() && data.InteropProfileG82651.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interop/profile/g-8265-1"))
+	}
+	if !state.InteropProfileDefault.IsNull() && data.InteropProfileDefault.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interop/profile/default"))
+	}
+	for i := range state.MasterEthernets {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MasterEthernets[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MasterEthernets[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MasterEthernets {
+			found = true
+			if state.MasterEthernets[i].Address.ValueString() != data.MasterEthernets[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.MasterEthernets[i].Milliseconds.IsNull() && data.MasterEthernets[j].Milliseconds.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ethernets/ethernet", keyString), "milliseconds"))
+				}
+				if !state.MasterEthernets[i].Microseconds.IsNull() && data.MasterEthernets[j].Microseconds.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ethernets/ethernet", keyString), "microseconds"))
+				}
+				if !state.MasterEthernets[i].Nanoseconds.IsNull() && data.MasterEthernets[j].Nanoseconds.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ethernets/ethernet", keyString), "nanoseconds"))
+				}
+				if !state.MasterEthernets[i].DelayAsymmetry.IsNull() && data.MasterEthernets[j].DelayAsymmetry.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ethernets/ethernet", keyString), "delay-asymmetry"))
+				}
+				if !state.MasterEthernets[i].NonNegotiated.IsNull() && data.MasterEthernets[j].NonNegotiated.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ethernets/ethernet", keyString), "non-negotiated"))
+				}
+				if !state.MasterEthernets[i].MulticastMixed.IsNull() && data.MasterEthernets[j].MulticastMixed.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ethernets/ethernet", keyString), "multicast"))
+				}
+				if !state.MasterEthernets[i].Multicast.IsNull() && data.MasterEthernets[j].Multicast.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ethernets/ethernet", keyString), "multicast"))
+				}
+				if !state.MasterEthernets[i].ClockClass.IsNull() && data.MasterEthernets[j].ClockClass.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ethernets/ethernet", keyString), "clock-class"))
+				}
+				if !state.MasterEthernets[i].Priority.IsNull() && data.MasterEthernets[j].Priority.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ethernets/ethernet", keyString), "priority"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ethernets/ethernet", keyString))
+		}
+	}
+	for i := range state.MasterIpv6s {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MasterIpv6s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MasterIpv6s[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MasterIpv6s {
+			found = true
+			if state.MasterIpv6s[i].Address.ValueString() != data.MasterIpv6s[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.MasterIpv6s[i].Milliseconds.IsNull() && data.MasterIpv6s[j].Milliseconds.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv6s/ipv6", keyString), "milliseconds"))
+				}
+				if !state.MasterIpv6s[i].Microseconds.IsNull() && data.MasterIpv6s[j].Microseconds.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv6s/ipv6", keyString), "microseconds"))
+				}
+				if !state.MasterIpv6s[i].Nanoseconds.IsNull() && data.MasterIpv6s[j].Nanoseconds.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv6s/ipv6", keyString), "nanoseconds"))
+				}
+				if !state.MasterIpv6s[i].DelayAsymmetry.IsNull() && data.MasterIpv6s[j].DelayAsymmetry.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv6s/ipv6", keyString), "delay-asymmetry"))
+				}
+				if !state.MasterIpv6s[i].NonNegotiated.IsNull() && data.MasterIpv6s[j].NonNegotiated.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv6s/ipv6", keyString), "non-negotiated"))
+				}
+				if !state.MasterIpv6s[i].MulticastMixed.IsNull() && data.MasterIpv6s[j].MulticastMixed.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv6s/ipv6", keyString), "multicast"))
+				}
+				if !state.MasterIpv6s[i].Multicast.IsNull() && data.MasterIpv6s[j].Multicast.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv6s/ipv6", keyString), "multicast"))
+				}
+				if !state.MasterIpv6s[i].ClockClass.IsNull() && data.MasterIpv6s[j].ClockClass.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv6s/ipv6", keyString), "clock-class"))
+				}
+				if !state.MasterIpv6s[i].Priority.IsNull() && data.MasterIpv6s[j].Priority.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv6s/ipv6", keyString), "priority"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv6s/ipv6", keyString))
+		}
+	}
+	for i := range state.MasterIpv4s {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.MasterIpv4s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MasterIpv4s[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MasterIpv4s {
+			found = true
+			if state.MasterIpv4s[i].Address.ValueString() != data.MasterIpv4s[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.MasterIpv4s[i].Milliseconds.IsNull() && data.MasterIpv4s[j].Milliseconds.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv4s/ipv4", keyString), "milliseconds"))
+				}
+				if !state.MasterIpv4s[i].Microseconds.IsNull() && data.MasterIpv4s[j].Microseconds.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv4s/ipv4", keyString), "microseconds"))
+				}
+				if !state.MasterIpv4s[i].Nanoseconds.IsNull() && data.MasterIpv4s[j].Nanoseconds.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv4s/ipv4", keyString), "nanoseconds"))
+				}
+				if !state.MasterIpv4s[i].DelayAsymmetry.IsNull() && data.MasterIpv4s[j].DelayAsymmetry.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv4s/ipv4", keyString), "delay-asymmetry"))
+				}
+				if !state.MasterIpv4s[i].NonNegotiated.IsNull() && data.MasterIpv4s[j].NonNegotiated.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv4s/ipv4", keyString), "non-negotiated"))
+				}
+				if !state.MasterIpv4s[i].MulticastMixed.IsNull() && data.MasterIpv4s[j].MulticastMixed.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv4s/ipv4", keyString), "multicast"))
+				}
+				if !state.MasterIpv4s[i].Multicast.IsNull() && data.MasterIpv4s[j].Multicast.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv4s/ipv4", keyString), "multicast"))
+				}
+				if !state.MasterIpv4s[i].ClockClass.IsNull() && data.MasterIpv4s[j].ClockClass.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv4s/ipv4", keyString), "clock-class"))
+				}
+				if !state.MasterIpv4s[i].Priority.IsNull() && data.MasterIpv4s[j].Priority.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv4s/ipv4", keyString), "priority"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "primary/ipv4s/ipv4", keyString))
+		}
+	}
+	for i := range state.SlaveEthernets {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.SlaveEthernets[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SlaveEthernets[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SlaveEthernets {
+			found = true
+			if state.SlaveEthernets[i].Address.ValueString() != data.SlaveEthernets[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.SlaveEthernets[i].NonNegotiated.IsNull() && data.SlaveEthernets[j].NonNegotiated.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "subordinate/ethernets/ethernet", keyString), "non-negotiated"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "subordinate/ethernets/ethernet", keyString))
+		}
+	}
+	for i := range state.SlaveIpv6s {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.SlaveIpv6s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SlaveIpv6s[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SlaveIpv6s {
+			found = true
+			if state.SlaveIpv6s[i].Address.ValueString() != data.SlaveIpv6s[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.SlaveIpv6s[i].NonNegotiated.IsNull() && data.SlaveIpv6s[j].NonNegotiated.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "subordinate/ipv6s/ipv6", keyString), "non-negotiated"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "subordinate/ipv6s/ipv6", keyString))
+		}
+	}
+	for i := range state.SlaveIpv4s {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.SlaveIpv4s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SlaveIpv4s[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SlaveIpv4s {
+			found = true
+			if state.SlaveIpv4s[i].Address.ValueString() != data.SlaveIpv4s[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.SlaveIpv4s[i].NonNegotiated.IsNull() && data.SlaveIpv4s[j].NonNegotiated.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "subordinate/ipv4s/ipv4-non-negotiated", keyString), "non-negotiated"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "subordinate/ipv4s/ipv4-non-negotiated", keyString))
+		}
+	}
+	if !state.UnicastGrantInvalidRequestDeny.IsNull() && data.UnicastGrantInvalidRequestDeny.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "unicast-grant/invalid-request/deny"))
+	}
+	if !state.UnicastGrantInvalidRequestReduce.IsNull() && data.UnicastGrantInvalidRequestReduce.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "unicast-grant/invalid-request/reduce"))
+	}
+	if !state.DelayResponseTimeout.IsNull() && data.DelayResponseTimeout.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "delay-response/timeout"))
+	}
+	if !state.DelayResponseGrantDuration.IsNull() && data.DelayResponseGrantDuration.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "delay-response/grant-duration"))
+	}
+	if !state.DelayAsymmetryUnitMilliseconds.IsNull() && data.DelayAsymmetryUnitMilliseconds.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "milliseconds"))
+	}
+	if !state.DelayAsymmetryUnitMicroseconds.IsNull() && data.DelayAsymmetryUnitMicroseconds.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "microseconds"))
+	}
+	if !state.DelayAsymmetryUnitNanoseconds.IsNull() && data.DelayAsymmetryUnitNanoseconds.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "nanoseconds"))
+	}
+	if !state.DelayAsymmetryValue.IsNull() && data.DelayAsymmetryValue.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "delay-asymmetry"))
+	}
+	if !state.Ipv6HopLimit.IsNull() && data.Ipv6HopLimit.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv6-hop-limit"))
+	}
+	if !state.Ipv4Ttl.IsNull() && data.Ipv4Ttl.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv4-ttl"))
+	}
+	if !state.DscpGeneral.IsNull() && data.DscpGeneral.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "general-dscp"))
+	}
+	if !state.DscpEvent.IsNull() && data.DscpEvent.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "event-dscp"))
+	}
+	if !state.Dscp.IsNull() && data.Dscp.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "dscp"))
+	}
+	if !state.CosGeneral.IsNull() && data.CosGeneral.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "general-cos"))
+	}
+	if !state.CosEvent.IsNull() && data.CosEvent.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "event-cos"))
+	}
+	if !state.Cos.IsNull() && data.Cos.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "cos"))
+	}
+	if !state.DelayRequestFrequency.IsNull() && data.DelayRequestFrequency.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "delay-request/frequency"))
+	}
+	if !state.DelayRequestInterval.IsNull() && data.DelayRequestInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "delay-request/interval"))
+	}
+	if !state.SyncTimeout.IsNull() && data.SyncTimeout.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sync/timeout"))
+	}
+	if !state.SyncGrantDuration.IsNull() && data.SyncGrantDuration.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sync/grant-duration"))
+	}
+	if !state.SyncFrequency.IsNull() && data.SyncFrequency.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sync/frequency"))
+	}
+	if !state.SyncInterval.IsNull() && data.SyncInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sync/interval"))
+	}
+	if !state.AnnounceGrantDuration.IsNull() && data.AnnounceGrantDuration.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "announce/grant-duration"))
+	}
+	if !state.AnnounceTimeout.IsNull() && data.AnnounceTimeout.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "announce/timeout"))
+	}
+	if !state.AnnounceFrequency.IsNull() && data.AnnounceFrequency.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "announce/frequency"))
+	}
+	if !state.AnnounceInterval.IsNull() && data.AnnounceInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "announce/interval"))
+	}
+	if !state.ClockOperationTwoStep.IsNull() && data.ClockOperationTwoStep.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "clock/operation/two-step"))
+	}
+	if !state.ClockOperationOneStep.IsNull() && data.ClockOperationOneStep.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "clock/operation/one-step"))
+	}
+	if !state.TransportEthernet.IsNull() && data.TransportEthernet.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "transport/ethernet"))
+	}
+	if !state.TransportIpv6.IsNull() && data.TransportIpv6.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "transport/ipv6"))
+	}
+	if !state.TransportIpv4.IsNull() && data.TransportIpv4.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "transport/ipv4"))
+	}
+	if !state.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() && data.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "multicast/target-address/ethernet"))
+	}
+	if !state.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() && data.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "multicast/target-address/ethernet"))
+	}
+	if !state.MulticastDisable.IsNull() && data.MulticastDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "multicast"))
+	}
+	if !state.MulticastMixed.IsNull() && data.MulticastMixed.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "multicast"))
+	}
+	if !state.Multicast.IsNull() && data.Multicast.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "multicast"))
+	}
+	if !state.SourceIpv6Address.IsNull() && data.SourceIpv6Address.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "source/ipv6/address"))
+	}
+	if !state.SourceIpv4Address.IsNull() && data.SourceIpv4Address.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "source/ipv4/address"))
+	}
+	if !state.PortStateAny.IsNull() && data.PortStateAny.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "port/state/any"))
+	}
+	if !state.PortStateMasterOnly.IsNull() && data.PortStateMasterOnly.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "port/state/primary-only"))
+	}
+	if !state.PortStateSlaveOnly.IsNull() && data.PortStateSlaveOnly.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "port/state/subordinate-only"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *PTPProfile) getEmptyLeafsDelete(ctx context.Context, state *PTPProfile, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !data.MonitorReceiver.IsNull() && !data.MonitorReceiver.ValueBool() {
+		if state == nil || state.MonitorReceiver.IsNull() || state.MonitorReceiver.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "monitor-receiver"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSender.IsNull() && !data.MonitorSender.ValueBool() {
+		if state == nil || state.MonitorSender.IsNull() || state.MonitorSender.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "monitor-sender"))
+		}
+	}
+	for i := range data.InteropIngressConversionClockClassMappings {
+		keys := [...]string{"clock-class-to-map-from"}
+		keyValues := [...]string{strconv.FormatInt(data.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.InteropEgressConversionClockClassMappings {
+		keys := [...]string{"clock-class-to-map-from"}
+		keyValues := [...]string{strconv.FormatInt(data.InteropEgressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	if !data.InteropProfileG82752.IsNull() && !data.InteropProfileG82752.ValueBool() {
+		if state == nil || state.InteropProfileG82752.IsNull() || state.InteropProfileG82752.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interop/profile/g-8275-2"))
+		}
+	}
+	if !data.InteropProfileG82751.IsNull() && !data.InteropProfileG82751.ValueBool() {
+		if state == nil || state.InteropProfileG82751.IsNull() || state.InteropProfileG82751.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interop/profile/g-8275-1"))
+		}
+	}
+	if !data.InteropProfileG82651.IsNull() && !data.InteropProfileG82651.ValueBool() {
+		if state == nil || state.InteropProfileG82651.IsNull() || state.InteropProfileG82651.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interop/profile/g-8265-1"))
+		}
+	}
+	if !data.InteropProfileDefault.IsNull() && !data.InteropProfileDefault.ValueBool() {
+		if state == nil || state.InteropProfileDefault.IsNull() || state.InteropProfileDefault.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interop/profile/default"))
+		}
+	}
+	for i := range data.MasterEthernets {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MasterEthernets[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.MasterEthernets[i].Milliseconds.IsNull() && !data.MasterEthernets[i].Milliseconds.ValueBool() {
+			if state == nil || i >= len(state.MasterEthernets) || state.MasterEthernets[i].Milliseconds.IsNull() || state.MasterEthernets[i].Milliseconds.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ethernets/ethernet", keyString), "milliseconds"))
+			}
+		}
+		if !data.MasterEthernets[i].Microseconds.IsNull() && !data.MasterEthernets[i].Microseconds.ValueBool() {
+			if state == nil || i >= len(state.MasterEthernets) || state.MasterEthernets[i].Microseconds.IsNull() || state.MasterEthernets[i].Microseconds.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ethernets/ethernet", keyString), "microseconds"))
+			}
+		}
+		if !data.MasterEthernets[i].Nanoseconds.IsNull() && !data.MasterEthernets[i].Nanoseconds.ValueBool() {
+			if state == nil || i >= len(state.MasterEthernets) || state.MasterEthernets[i].Nanoseconds.IsNull() || state.MasterEthernets[i].Nanoseconds.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ethernets/ethernet", keyString), "nanoseconds"))
+			}
+		}
+		if !data.MasterEthernets[i].NonNegotiated.IsNull() && !data.MasterEthernets[i].NonNegotiated.ValueBool() {
+			if state == nil || i >= len(state.MasterEthernets) || state.MasterEthernets[i].NonNegotiated.IsNull() || state.MasterEthernets[i].NonNegotiated.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ethernets/ethernet", keyString), "non-negotiated"))
+			}
+		}
+		if !data.MasterEthernets[i].MulticastMixed.IsNull() && !data.MasterEthernets[i].MulticastMixed.ValueBool() {
+			if state == nil || i >= len(state.MasterEthernets) || state.MasterEthernets[i].MulticastMixed.IsNull() || state.MasterEthernets[i].MulticastMixed.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ethernets/ethernet", keyString), "multicast"))
+			}
+		}
+		if !data.MasterEthernets[i].Multicast.IsNull() && !data.MasterEthernets[i].Multicast.ValueBool() {
+			if state == nil || i >= len(state.MasterEthernets) || state.MasterEthernets[i].Multicast.IsNull() || state.MasterEthernets[i].Multicast.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ethernets/ethernet", keyString), "multicast"))
+			}
+		}
+	}
+	for i := range data.MasterIpv6s {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MasterIpv6s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.MasterIpv6s[i].Milliseconds.IsNull() && !data.MasterIpv6s[i].Milliseconds.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv6s) || state.MasterIpv6s[i].Milliseconds.IsNull() || state.MasterIpv6s[i].Milliseconds.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv6s/ipv6", keyString), "milliseconds"))
+			}
+		}
+		if !data.MasterIpv6s[i].Microseconds.IsNull() && !data.MasterIpv6s[i].Microseconds.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv6s) || state.MasterIpv6s[i].Microseconds.IsNull() || state.MasterIpv6s[i].Microseconds.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv6s/ipv6", keyString), "microseconds"))
+			}
+		}
+		if !data.MasterIpv6s[i].Nanoseconds.IsNull() && !data.MasterIpv6s[i].Nanoseconds.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv6s) || state.MasterIpv6s[i].Nanoseconds.IsNull() || state.MasterIpv6s[i].Nanoseconds.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv6s/ipv6", keyString), "nanoseconds"))
+			}
+		}
+		if !data.MasterIpv6s[i].NonNegotiated.IsNull() && !data.MasterIpv6s[i].NonNegotiated.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv6s) || state.MasterIpv6s[i].NonNegotiated.IsNull() || state.MasterIpv6s[i].NonNegotiated.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv6s/ipv6", keyString), "non-negotiated"))
+			}
+		}
+		if !data.MasterIpv6s[i].MulticastMixed.IsNull() && !data.MasterIpv6s[i].MulticastMixed.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv6s) || state.MasterIpv6s[i].MulticastMixed.IsNull() || state.MasterIpv6s[i].MulticastMixed.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv6s/ipv6", keyString), "multicast"))
+			}
+		}
+		if !data.MasterIpv6s[i].Multicast.IsNull() && !data.MasterIpv6s[i].Multicast.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv6s) || state.MasterIpv6s[i].Multicast.IsNull() || state.MasterIpv6s[i].Multicast.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv6s/ipv6", keyString), "multicast"))
+			}
+		}
+	}
+	for i := range data.MasterIpv4s {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MasterIpv4s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.MasterIpv4s[i].Milliseconds.IsNull() && !data.MasterIpv4s[i].Milliseconds.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv4s) || state.MasterIpv4s[i].Milliseconds.IsNull() || state.MasterIpv4s[i].Milliseconds.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv4s/ipv4", keyString), "milliseconds"))
+			}
+		}
+		if !data.MasterIpv4s[i].Microseconds.IsNull() && !data.MasterIpv4s[i].Microseconds.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv4s) || state.MasterIpv4s[i].Microseconds.IsNull() || state.MasterIpv4s[i].Microseconds.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv4s/ipv4", keyString), "microseconds"))
+			}
+		}
+		if !data.MasterIpv4s[i].Nanoseconds.IsNull() && !data.MasterIpv4s[i].Nanoseconds.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv4s) || state.MasterIpv4s[i].Nanoseconds.IsNull() || state.MasterIpv4s[i].Nanoseconds.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv4s/ipv4", keyString), "nanoseconds"))
+			}
+		}
+		if !data.MasterIpv4s[i].NonNegotiated.IsNull() && !data.MasterIpv4s[i].NonNegotiated.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv4s) || state.MasterIpv4s[i].NonNegotiated.IsNull() || state.MasterIpv4s[i].NonNegotiated.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv4s/ipv4", keyString), "non-negotiated"))
+			}
+		}
+		if !data.MasterIpv4s[i].MulticastMixed.IsNull() && !data.MasterIpv4s[i].MulticastMixed.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv4s) || state.MasterIpv4s[i].MulticastMixed.IsNull() || state.MasterIpv4s[i].MulticastMixed.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv4s/ipv4", keyString), "multicast"))
+			}
+		}
+		if !data.MasterIpv4s[i].Multicast.IsNull() && !data.MasterIpv4s[i].Multicast.ValueBool() {
+			if state == nil || i >= len(state.MasterIpv4s) || state.MasterIpv4s[i].Multicast.IsNull() || state.MasterIpv4s[i].Multicast.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv4s/ipv4", keyString), "multicast"))
+			}
+		}
+	}
+	for i := range data.SlaveEthernets {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.SlaveEthernets[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.SlaveEthernets[i].NonNegotiated.IsNull() && !data.SlaveEthernets[i].NonNegotiated.ValueBool() {
+			if state == nil || i >= len(state.SlaveEthernets) || state.SlaveEthernets[i].NonNegotiated.IsNull() || state.SlaveEthernets[i].NonNegotiated.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "subordinate/ethernets/ethernet", keyString), "non-negotiated"))
+			}
+		}
+	}
+	for i := range data.SlaveIpv6s {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.SlaveIpv6s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.SlaveIpv6s[i].NonNegotiated.IsNull() && !data.SlaveIpv6s[i].NonNegotiated.ValueBool() {
+			if state == nil || i >= len(state.SlaveIpv6s) || state.SlaveIpv6s[i].NonNegotiated.IsNull() || state.SlaveIpv6s[i].NonNegotiated.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "subordinate/ipv6s/ipv6", keyString), "non-negotiated"))
+			}
+		}
+	}
+	for i := range data.SlaveIpv4s {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.SlaveIpv4s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.SlaveIpv4s[i].NonNegotiated.IsNull() && !data.SlaveIpv4s[i].NonNegotiated.ValueBool() {
+			if state == nil || i >= len(state.SlaveIpv4s) || state.SlaveIpv4s[i].NonNegotiated.IsNull() || state.SlaveIpv4s[i].NonNegotiated.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "subordinate/ipv4s/ipv4-non-negotiated", keyString), "non-negotiated"))
+			}
+		}
+	}
+	if !data.UnicastGrantInvalidRequestDeny.IsNull() && !data.UnicastGrantInvalidRequestDeny.ValueBool() {
+		if state == nil || state.UnicastGrantInvalidRequestDeny.IsNull() || state.UnicastGrantInvalidRequestDeny.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "unicast-grant/invalid-request/deny"))
+		}
+	}
+	if !data.UnicastGrantInvalidRequestReduce.IsNull() && !data.UnicastGrantInvalidRequestReduce.ValueBool() {
+		if state == nil || state.UnicastGrantInvalidRequestReduce.IsNull() || state.UnicastGrantInvalidRequestReduce.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "unicast-grant/invalid-request/reduce"))
+		}
+	}
+	if !data.DelayAsymmetryUnitMilliseconds.IsNull() && !data.DelayAsymmetryUnitMilliseconds.ValueBool() {
+		if state == nil || state.DelayAsymmetryUnitMilliseconds.IsNull() || state.DelayAsymmetryUnitMilliseconds.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "milliseconds"))
+		}
+	}
+	if !data.DelayAsymmetryUnitMicroseconds.IsNull() && !data.DelayAsymmetryUnitMicroseconds.ValueBool() {
+		if state == nil || state.DelayAsymmetryUnitMicroseconds.IsNull() || state.DelayAsymmetryUnitMicroseconds.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "microseconds"))
+		}
+	}
+	if !data.DelayAsymmetryUnitNanoseconds.IsNull() && !data.DelayAsymmetryUnitNanoseconds.ValueBool() {
+		if state == nil || state.DelayAsymmetryUnitNanoseconds.IsNull() || state.DelayAsymmetryUnitNanoseconds.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "nanoseconds"))
+		}
+	}
+	if !data.ClockOperationTwoStep.IsNull() && !data.ClockOperationTwoStep.ValueBool() {
+		if state == nil || state.ClockOperationTwoStep.IsNull() || state.ClockOperationTwoStep.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/operation/two-step"))
+		}
+	}
+	if !data.ClockOperationOneStep.IsNull() && !data.ClockOperationOneStep.ValueBool() {
+		if state == nil || state.ClockOperationOneStep.IsNull() || state.ClockOperationOneStep.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "clock/operation/one-step"))
+		}
+	}
+	if !data.TransportEthernet.IsNull() && !data.TransportEthernet.ValueBool() {
+		if state == nil || state.TransportEthernet.IsNull() || state.TransportEthernet.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/ethernet"))
+		}
+	}
+	if !data.TransportIpv6.IsNull() && !data.TransportIpv6.ValueBool() {
+		if state == nil || state.TransportIpv6.IsNull() || state.TransportIpv6.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/ipv6"))
+		}
+	}
+	if !data.TransportIpv4.IsNull() && !data.TransportIpv4.ValueBool() {
+		if state == nil || state.TransportIpv4.IsNull() || state.TransportIpv4.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "transport/ipv4"))
+		}
+	}
+	if !data.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() && !data.MulticastTargetAddressEthernetMacAddress0180C200000e.ValueBool() {
+		if state == nil || state.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() || state.MulticastTargetAddressEthernetMacAddress0180C200000e.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multicast/target-address/ethernet"))
+		}
+	}
+	if !data.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() && !data.MulticastTargetAddressEthernetMacAddress011b19000000.ValueBool() {
+		if state == nil || state.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() || state.MulticastTargetAddressEthernetMacAddress011b19000000.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multicast/target-address/ethernet"))
+		}
+	}
+	if !data.MulticastDisable.IsNull() && !data.MulticastDisable.ValueBool() {
+		if state == nil || state.MulticastDisable.IsNull() || state.MulticastDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multicast"))
+		}
+	}
+	if !data.MulticastMixed.IsNull() && !data.MulticastMixed.ValueBool() {
+		if state == nil || state.MulticastMixed.IsNull() || state.MulticastMixed.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multicast"))
+		}
+	}
+	if !data.Multicast.IsNull() && !data.Multicast.ValueBool() {
+		if state == nil || state.Multicast.IsNull() || state.Multicast.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multicast"))
+		}
+	}
+	if !data.PortStateAny.IsNull() && !data.PortStateAny.ValueBool() {
+		if state == nil || state.PortStateAny.IsNull() || state.PortStateAny.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "port/state/any"))
+		}
+	}
+	if !data.PortStateMasterOnly.IsNull() && !data.PortStateMasterOnly.ValueBool() {
+		if state == nil || state.PortStateMasterOnly.IsNull() || state.PortStateMasterOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "port/state/primary-only"))
+		}
+	}
+	if !data.PortStateSlaveOnly.IsNull() && !data.PortStateSlaveOnly.ValueBool() {
+		if state == nil || state.PortStateSlaveOnly.IsNull() || state.PortStateSlaveOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "port/state/subordinate-only"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *PTPProfile) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") && !data.MonitorReceiver.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "monitor-receiver"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.MonitorSender.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "monitor-sender"))
+	}
+	for i := range data.InteropIngressConversionClockClassMappings {
+		keys := [...]string{"clock-class-to-map-from"}
+		keyValues := [...]string{strconv.FormatInt(data.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "interop/ingress-conversion/clock-class/mappings/mapping", keyString))
+	}
+	if !data.InteropIngressConversionClockClassDefault.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interop/ingress-conversion/clock-class/default"))
+	}
+	if !data.InteropIngressConversionOffsetScaledLogVariance.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interop/ingress-conversion/offset-scaled-log-variance"))
+	}
+	if !data.InteropIngressConversionClockAccuracy.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interop/ingress-conversion/clock-accuracy"))
+	}
+	if !data.InteropIngressConversionPriority2.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interop/ingress-conversion/priority2"))
+	}
+	if !data.InteropIngressConversionPriority1.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interop/ingress-conversion/priority1"))
+	}
+	for i := range data.InteropEgressConversionClockClassMappings {
+		keys := [...]string{"clock-class-to-map-from"}
+		keyValues := [...]string{strconv.FormatInt(data.InteropEgressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.InteropEgressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "interop/egress-conversion/clock-class/mappings/mapping", keyString))
+	}
+	if !data.InteropEgressConversionClockClassDefault.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interop/egress-conversion/clock-class/default"))
+	}
+	if !data.InteropEgressConversionOffsetScaledLogVariance.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interop/egress-conversion/offset-scaled-log-variance"))
+	}
+	if !data.InteropEgressConversionClockAccuracy.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interop/egress-conversion/clock-accuracy"))
+	}
+	if !data.InteropEgressConversionPriority2.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interop/egress-conversion/priority2"))
+	}
+	if !data.InteropEgressConversionPriority1.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interop/egress-conversion/priority1"))
+	}
+	if !data.InteropDomain.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interop/domain"))
+	}
+	if !data.InteropProfileG82752.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interop/profile/g-8275-2"))
+	}
+	if !data.InteropProfileG82751.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interop/profile/g-8275-1"))
+	}
+	if !data.InteropProfileG82651.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interop/profile/g-8265-1"))
+	}
+	if !data.InteropProfileDefault.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interop/profile/default"))
+	}
+	for i := range data.MasterEthernets {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MasterEthernets[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.MasterEthernets[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ethernets/ethernet", keyString))
+	}
+	for i := range data.MasterIpv6s {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MasterIpv6s[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.MasterIpv6s[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv6s/ipv6", keyString))
+	}
+	for i := range data.MasterIpv4s {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.MasterIpv4s[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.MasterIpv4s[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "primary/ipv4s/ipv4", keyString))
+	}
+	for i := range data.SlaveEthernets {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.SlaveEthernets[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.SlaveEthernets[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "subordinate/ethernets/ethernet", keyString))
+	}
+	for i := range data.SlaveIpv6s {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.SlaveIpv6s[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.SlaveIpv6s[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "subordinate/ipv6s/ipv6", keyString))
+	}
+	for i := range data.SlaveIpv4s {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.SlaveIpv4s[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.SlaveIpv4s[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "subordinate/ipv4s/ipv4-non-negotiated", keyString))
+	}
+	if !data.UnicastGrantInvalidRequestDeny.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "unicast-grant/invalid-request/deny"))
+	}
+	if !data.UnicastGrantInvalidRequestReduce.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "unicast-grant/invalid-request/reduce"))
+	}
+	if !data.DelayResponseTimeout.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "delay-response/timeout"))
+	}
+	if !data.DelayResponseGrantDuration.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "delay-response/grant-duration"))
+	}
+	if !data.DelayAsymmetryUnitMilliseconds.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "milliseconds"))
+	}
+	if !data.DelayAsymmetryUnitMicroseconds.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "microseconds"))
+	}
+	if !data.DelayAsymmetryUnitNanoseconds.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "nanoseconds"))
+	}
+	if !data.DelayAsymmetryValue.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "delay-asymmetry"))
+	}
+	if !data.Ipv6HopLimit.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv6-hop-limit"))
+	}
+	if !data.Ipv4Ttl.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv4-ttl"))
+	}
+	if !data.DscpGeneral.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "general-dscp"))
+	}
+	if !data.DscpEvent.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "event-dscp"))
+	}
+	if !data.Dscp.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "dscp"))
+	}
+	if !data.CosGeneral.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "general-cos"))
+	}
+	if !data.CosEvent.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "event-cos"))
+	}
+	if !data.Cos.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "cos"))
+	}
+	if !data.DelayRequestFrequency.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "delay-request/frequency"))
+	}
+	if !data.DelayRequestInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "delay-request/interval"))
+	}
+	if !data.SyncTimeout.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sync/timeout"))
+	}
+	if !data.SyncGrantDuration.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sync/grant-duration"))
+	}
+	if !data.SyncFrequency.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sync/frequency"))
+	}
+	if !data.SyncInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sync/interval"))
+	}
+	if !data.AnnounceGrantDuration.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "announce/grant-duration"))
+	}
+	if !data.AnnounceTimeout.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "announce/timeout"))
+	}
+	if !data.AnnounceFrequency.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "announce/frequency"))
+	}
+	if !data.AnnounceInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "announce/interval"))
+	}
+	if !data.ClockOperationTwoStep.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "clock/operation/two-step"))
+	}
+	if !data.ClockOperationOneStep.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "clock/operation/one-step"))
+	}
+	if !data.TransportEthernet.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "transport/ethernet"))
+	}
+	if !data.TransportIpv6.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "transport/ipv6"))
+	}
+	if !data.TransportIpv4.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "transport/ipv4"))
+	}
+	if !data.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "multicast/target-address/ethernet"))
+	}
+	if !data.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "multicast/target-address/ethernet"))
+	}
+	if !data.MulticastDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "multicast"))
+	}
+	if !data.MulticastMixed.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "multicast"))
+	}
+	if !data.Multicast.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "multicast"))
+	}
+	if !data.SourceIpv6Address.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "source/ipv6/address"))
+	}
+	if !data.SourceIpv4Address.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "source/ipv4/address"))
+	}
+	if !data.PortStateAny.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "port/state/any"))
+	}
+	if !data.PortStateMasterOnly.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "port/state/primary-only"))
+	}
+	if !data.PortStateSlaveOnly.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "port/state/subordinate-only"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data PTPProfile) toBodyXML(ctx context.Context, stateArg ...*PTPProfile) string {
@@ -2069,6 +4261,16 @@ func (data PTPProfile) toBodyXML(ctx context.Context, stateArg ...*PTPProfile) s
 			}
 		}
 	}
+	if !data.MonitorSender.IsNull() && !data.MonitorSender.IsUnknown() {
+		if data.MonitorSender.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/monitor-sender", "")
+		}
+	}
+	if !data.MonitorReceiver.IsNull() && !data.MonitorReceiver.IsUnknown() {
+		if data.MonitorReceiver.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/monitor-receiver", "")
+		}
+	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
 		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
@@ -2091,7 +4293,7 @@ func (data PTPProfile) toBodyXML(ctx context.Context, stateArg ...*PTPProfile) s
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -2099,6 +4301,7 @@ func (data PTPProfile) toBodyXML(ctx context.Context, stateArg ...*PTPProfile) s
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -3053,957 +5256,32 @@ func (data *PTPProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result
 			data.InteropIngressConversionClockClassMappings[i].ClockClassToMapTo = types.Int64Null()
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-sender"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MonitorSender.IsNull() {
+			data.MonitorSender = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MonitorSender.IsNull() {
+			data.MonitorSender = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-receiver"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.MonitorReceiver.IsNull() {
+			data.MonitorReceiver = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.MonitorReceiver.IsNull() {
+			data.MonitorReceiver = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *PTPProfile) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "port.state.subordinate-only"); value.Exists() {
-		data.PortStateSlaveOnly = types.BoolValue(true)
-	} else if !data.PortStateSlaveOnly.IsNull() {
-		// Only set to false if it was previously set in state
-		data.PortStateSlaveOnly = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "port.state.primary-only"); value.Exists() {
-		data.PortStateMasterOnly = types.BoolValue(true)
-	} else if !data.PortStateMasterOnly.IsNull() {
-		// Only set to false if it was previously set in state
-		data.PortStateMasterOnly = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "port.state.any"); value.Exists() {
-		data.PortStateAny = types.BoolValue(true)
-	} else if !data.PortStateAny.IsNull() {
-		// Only set to false if it was previously set in state
-		data.PortStateAny = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "source.ipv4.address"); value.Exists() {
-		data.SourceIpv4Address = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "source.ipv6.address"); value.Exists() {
-		data.SourceIpv6Address = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "multicast"); value.Exists() {
-		data.Multicast = types.BoolValue(true)
-	} else if !data.Multicast.IsNull() {
-		// Only set to false if it was previously set in state
-		data.Multicast = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "multicast.mixed"); value.Exists() {
-		data.MulticastMixed = types.BoolValue(true)
-	} else if !data.MulticastMixed.IsNull() {
-		// Only set to false if it was previously set in state
-		data.MulticastMixed = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "multicast.disable"); value.Exists() {
-		data.MulticastDisable = types.BoolValue(true)
-	} else if !data.MulticastDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.MulticastDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "multicast.target-address.ethernet.mac-address-01-1b-19-00-00-00"); value.Exists() {
-		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(true)
-	} else if !data.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() {
-		// Only set to false if it was previously set in state
-		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "multicast.target-address.ethernet.mac-address-01-80-c2-00-00-0e"); value.Exists() {
-		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(true)
-	} else if !data.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() {
-		// Only set to false if it was previously set in state
-		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.ipv4"); value.Exists() {
-		data.TransportIpv4 = types.BoolValue(true)
-	} else if !data.TransportIpv4.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TransportIpv4 = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.ipv6"); value.Exists() {
-		data.TransportIpv6 = types.BoolValue(true)
-	} else if !data.TransportIpv6.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TransportIpv6 = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.ethernet"); value.Exists() {
-		data.TransportEthernet = types.BoolValue(true)
-	} else if !data.TransportEthernet.IsNull() {
-		// Only set to false if it was previously set in state
-		data.TransportEthernet = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "clock.operation.one-step"); value.Exists() {
-		data.ClockOperationOneStep = types.BoolValue(true)
-	} else if !data.ClockOperationOneStep.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ClockOperationOneStep = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "clock.operation.two-step"); value.Exists() {
-		data.ClockOperationTwoStep = types.BoolValue(true)
-	} else if !data.ClockOperationTwoStep.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ClockOperationTwoStep = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "announce.interval"); value.Exists() {
-		data.AnnounceInterval = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "announce.frequency"); value.Exists() {
-		data.AnnounceFrequency = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "announce.timeout"); value.Exists() {
-		data.AnnounceTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "announce.grant-duration"); value.Exists() {
-		data.AnnounceGrantDuration = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sync.interval"); value.Exists() {
-		data.SyncInterval = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "sync.frequency"); value.Exists() {
-		data.SyncFrequency = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "sync.grant-duration"); value.Exists() {
-		data.SyncGrantDuration = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sync.timeout"); value.Exists() {
-		data.SyncTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "delay-request.interval"); value.Exists() {
-		data.DelayRequestInterval = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "delay-request.frequency"); value.Exists() {
-		data.DelayRequestFrequency = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "cos"); value.Exists() {
-		data.Cos = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "event-cos"); value.Exists() {
-		data.CosEvent = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "general-cos"); value.Exists() {
-		data.CosGeneral = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "dscp"); value.Exists() {
-		data.Dscp = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "event-dscp"); value.Exists() {
-		data.DscpEvent = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "general-dscp"); value.Exists() {
-		data.DscpGeneral = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ipv4-ttl"); value.Exists() {
-		data.Ipv4Ttl = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ipv6-hop-limit"); value.Exists() {
-		data.Ipv6HopLimit = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "delay-asymmetry"); value.Exists() {
-		data.DelayAsymmetryValue = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "nanoseconds"); value.Exists() {
-		data.DelayAsymmetryUnitNanoseconds = types.BoolValue(true)
-	} else if !data.DelayAsymmetryUnitNanoseconds.IsNull() {
-		// Only set to false if it was previously set in state
-		data.DelayAsymmetryUnitNanoseconds = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "microseconds"); value.Exists() {
-		data.DelayAsymmetryUnitMicroseconds = types.BoolValue(true)
-	} else if !data.DelayAsymmetryUnitMicroseconds.IsNull() {
-		// Only set to false if it was previously set in state
-		data.DelayAsymmetryUnitMicroseconds = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "milliseconds"); value.Exists() {
-		data.DelayAsymmetryUnitMilliseconds = types.BoolValue(true)
-	} else if !data.DelayAsymmetryUnitMilliseconds.IsNull() {
-		// Only set to false if it was previously set in state
-		data.DelayAsymmetryUnitMilliseconds = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "delay-response.grant-duration"); value.Exists() {
-		data.DelayResponseGrantDuration = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "delay-response.timeout"); value.Exists() {
-		data.DelayResponseTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "unicast-grant.invalid-request.reduce"); value.Exists() {
-		data.UnicastGrantInvalidRequestReduce = types.BoolValue(true)
-	} else if !data.UnicastGrantInvalidRequestReduce.IsNull() {
-		// Only set to false if it was previously set in state
-		data.UnicastGrantInvalidRequestReduce = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "unicast-grant.invalid-request.deny"); value.Exists() {
-		data.UnicastGrantInvalidRequestDeny = types.BoolValue(true)
-	} else if !data.UnicastGrantInvalidRequestDeny.IsNull() {
-		// Only set to false if it was previously set in state
-		data.UnicastGrantInvalidRequestDeny = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "subordinate.ipv4s.ipv4-non-negotiated"); value.Exists() {
-		data.SlaveIpv4s = make([]PTPProfileSlaveIpv4s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PTPProfileSlaveIpv4s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("non-negotiated"); cValue.Exists() {
-				item.NonNegotiated = types.BoolValue(true)
-			} else if !item.NonNegotiated.IsNull() {
-				// Only set to false if it was previously set
-				item.NonNegotiated = types.BoolValue(false)
-			}
-			data.SlaveIpv4s = append(data.SlaveIpv4s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "subordinate.ipv6s.ipv6"); value.Exists() {
-		data.SlaveIpv6s = make([]PTPProfileSlaveIpv6s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PTPProfileSlaveIpv6s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("non-negotiated"); cValue.Exists() {
-				item.NonNegotiated = types.BoolValue(true)
-			} else if !item.NonNegotiated.IsNull() {
-				// Only set to false if it was previously set
-				item.NonNegotiated = types.BoolValue(false)
-			}
-			data.SlaveIpv6s = append(data.SlaveIpv6s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "subordinate.ethernets.ethernet"); value.Exists() {
-		data.SlaveEthernets = make([]PTPProfileSlaveEthernets, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PTPProfileSlaveEthernets{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("non-negotiated"); cValue.Exists() {
-				item.NonNegotiated = types.BoolValue(true)
-			} else if !item.NonNegotiated.IsNull() {
-				// Only set to false if it was previously set
-				item.NonNegotiated = types.BoolValue(false)
-			}
-			data.SlaveEthernets = append(data.SlaveEthernets, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "primary.ipv4s.ipv4"); value.Exists() {
-		data.MasterIpv4s = make([]PTPProfileMasterIpv4s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PTPProfileMasterIpv4s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("priority"); cValue.Exists() {
-				item.Priority = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("clock-class"); cValue.Exists() {
-				item.ClockClass = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("multicast"); cValue.Exists() {
-				item.Multicast = types.BoolValue(true)
-			} else if !item.Multicast.IsNull() {
-				// Only set to false if it was previously set
-				item.Multicast = types.BoolValue(false)
-			}
-			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
-				item.MulticastMixed = types.BoolValue(true)
-			} else if !item.MulticastMixed.IsNull() {
-				// Only set to false if it was previously set
-				item.MulticastMixed = types.BoolValue(false)
-			}
-			if cValue := v.Get("non-negotiated"); cValue.Exists() {
-				item.NonNegotiated = types.BoolValue(true)
-			} else if !item.NonNegotiated.IsNull() {
-				// Only set to false if it was previously set
-				item.NonNegotiated = types.BoolValue(false)
-			}
-			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
-				item.DelayAsymmetry = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("nanoseconds"); cValue.Exists() {
-				item.Nanoseconds = types.BoolValue(true)
-			} else if !item.Nanoseconds.IsNull() {
-				// Only set to false if it was previously set
-				item.Nanoseconds = types.BoolValue(false)
-			}
-			if cValue := v.Get("microseconds"); cValue.Exists() {
-				item.Microseconds = types.BoolValue(true)
-			} else if !item.Microseconds.IsNull() {
-				// Only set to false if it was previously set
-				item.Microseconds = types.BoolValue(false)
-			}
-			if cValue := v.Get("milliseconds"); cValue.Exists() {
-				item.Milliseconds = types.BoolValue(true)
-			} else if !item.Milliseconds.IsNull() {
-				// Only set to false if it was previously set
-				item.Milliseconds = types.BoolValue(false)
-			}
-			data.MasterIpv4s = append(data.MasterIpv4s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "primary.ipv6s.ipv6"); value.Exists() {
-		data.MasterIpv6s = make([]PTPProfileMasterIpv6s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PTPProfileMasterIpv6s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("priority"); cValue.Exists() {
-				item.Priority = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("clock-class"); cValue.Exists() {
-				item.ClockClass = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("multicast"); cValue.Exists() {
-				item.Multicast = types.BoolValue(true)
-			} else if !item.Multicast.IsNull() {
-				// Only set to false if it was previously set
-				item.Multicast = types.BoolValue(false)
-			}
-			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
-				item.MulticastMixed = types.BoolValue(true)
-			} else if !item.MulticastMixed.IsNull() {
-				// Only set to false if it was previously set
-				item.MulticastMixed = types.BoolValue(false)
-			}
-			if cValue := v.Get("non-negotiated"); cValue.Exists() {
-				item.NonNegotiated = types.BoolValue(true)
-			} else if !item.NonNegotiated.IsNull() {
-				// Only set to false if it was previously set
-				item.NonNegotiated = types.BoolValue(false)
-			}
-			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
-				item.DelayAsymmetry = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("nanoseconds"); cValue.Exists() {
-				item.Nanoseconds = types.BoolValue(true)
-			} else if !item.Nanoseconds.IsNull() {
-				// Only set to false if it was previously set
-				item.Nanoseconds = types.BoolValue(false)
-			}
-			if cValue := v.Get("microseconds"); cValue.Exists() {
-				item.Microseconds = types.BoolValue(true)
-			} else if !item.Microseconds.IsNull() {
-				// Only set to false if it was previously set
-				item.Microseconds = types.BoolValue(false)
-			}
-			if cValue := v.Get("milliseconds"); cValue.Exists() {
-				item.Milliseconds = types.BoolValue(true)
-			} else if !item.Milliseconds.IsNull() {
-				// Only set to false if it was previously set
-				item.Milliseconds = types.BoolValue(false)
-			}
-			data.MasterIpv6s = append(data.MasterIpv6s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "primary.ethernets.ethernet"); value.Exists() {
-		data.MasterEthernets = make([]PTPProfileMasterEthernets, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PTPProfileMasterEthernets{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("priority"); cValue.Exists() {
-				item.Priority = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("clock-class"); cValue.Exists() {
-				item.ClockClass = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("multicast"); cValue.Exists() {
-				item.Multicast = types.BoolValue(true)
-			} else if !item.Multicast.IsNull() {
-				// Only set to false if it was previously set
-				item.Multicast = types.BoolValue(false)
-			}
-			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
-				item.MulticastMixed = types.BoolValue(true)
-			} else if !item.MulticastMixed.IsNull() {
-				// Only set to false if it was previously set
-				item.MulticastMixed = types.BoolValue(false)
-			}
-			if cValue := v.Get("non-negotiated"); cValue.Exists() {
-				item.NonNegotiated = types.BoolValue(true)
-			} else if !item.NonNegotiated.IsNull() {
-				// Only set to false if it was previously set
-				item.NonNegotiated = types.BoolValue(false)
-			}
-			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
-				item.DelayAsymmetry = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("nanoseconds"); cValue.Exists() {
-				item.Nanoseconds = types.BoolValue(true)
-			} else if !item.Nanoseconds.IsNull() {
-				// Only set to false if it was previously set
-				item.Nanoseconds = types.BoolValue(false)
-			}
-			if cValue := v.Get("microseconds"); cValue.Exists() {
-				item.Microseconds = types.BoolValue(true)
-			} else if !item.Microseconds.IsNull() {
-				// Only set to false if it was previously set
-				item.Microseconds = types.BoolValue(false)
-			}
-			if cValue := v.Get("milliseconds"); cValue.Exists() {
-				item.Milliseconds = types.BoolValue(true)
-			} else if !item.Milliseconds.IsNull() {
-				// Only set to false if it was previously set
-				item.Milliseconds = types.BoolValue(false)
-			}
-			data.MasterEthernets = append(data.MasterEthernets, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "interop.profile.default"); value.Exists() {
-		data.InteropProfileDefault = types.BoolValue(true)
-	} else if !data.InteropProfileDefault.IsNull() {
-		// Only set to false if it was previously set in state
-		data.InteropProfileDefault = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interop.profile.g-8265-1"); value.Exists() {
-		data.InteropProfileG82651 = types.BoolValue(true)
-	} else if !data.InteropProfileG82651.IsNull() {
-		// Only set to false if it was previously set in state
-		data.InteropProfileG82651 = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interop.profile.g-8275-1"); value.Exists() {
-		data.InteropProfileG82751 = types.BoolValue(true)
-	} else if !data.InteropProfileG82751.IsNull() {
-		// Only set to false if it was previously set in state
-		data.InteropProfileG82751 = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interop.profile.g-8275-2"); value.Exists() {
-		data.InteropProfileG82752 = types.BoolValue(true)
-	} else if !data.InteropProfileG82752.IsNull() {
-		// Only set to false if it was previously set in state
-		data.InteropProfileG82752 = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interop.domain"); value.Exists() {
-		data.InteropDomain = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.egress-conversion.priority1"); value.Exists() {
-		data.InteropEgressConversionPriority1 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.egress-conversion.priority2"); value.Exists() {
-		data.InteropEgressConversionPriority2 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.egress-conversion.clock-accuracy"); value.Exists() {
-		data.InteropEgressConversionClockAccuracy = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.egress-conversion.offset-scaled-log-variance"); value.Exists() {
-		data.InteropEgressConversionOffsetScaledLogVariance = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.egress-conversion.clock-class.default"); value.Exists() {
-		data.InteropEgressConversionClockClassDefault = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.egress-conversion.clock-class.mappings.mapping"); value.Exists() {
-		data.InteropEgressConversionClockClassMappings = make([]PTPProfileInteropEgressConversionClockClassMappings, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PTPProfileInteropEgressConversionClockClassMappings{}
-			if cValue := v.Get("clock-class-to-map-from"); cValue.Exists() {
-				item.ClockClassToMapFrom = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("clock-class-to-map-to"); cValue.Exists() {
-				item.ClockClassToMapTo = types.Int64Value(cValue.Int())
-			}
-			data.InteropEgressConversionClockClassMappings = append(data.InteropEgressConversionClockClassMappings, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "interop.ingress-conversion.priority1"); value.Exists() {
-		data.InteropIngressConversionPriority1 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.ingress-conversion.priority2"); value.Exists() {
-		data.InteropIngressConversionPriority2 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.ingress-conversion.clock-accuracy"); value.Exists() {
-		data.InteropIngressConversionClockAccuracy = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.ingress-conversion.offset-scaled-log-variance"); value.Exists() {
-		data.InteropIngressConversionOffsetScaledLogVariance = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.ingress-conversion.clock-class.default"); value.Exists() {
-		data.InteropIngressConversionClockClassDefault = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.ingress-conversion.clock-class.mappings.mapping"); value.Exists() {
-		data.InteropIngressConversionClockClassMappings = make([]PTPProfileInteropIngressConversionClockClassMappings, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PTPProfileInteropIngressConversionClockClassMappings{}
-			if cValue := v.Get("clock-class-to-map-from"); cValue.Exists() {
-				item.ClockClassToMapFrom = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("clock-class-to-map-to"); cValue.Exists() {
-				item.ClockClassToMapTo = types.Int64Value(cValue.Int())
-			}
-			data.InteropIngressConversionClockClassMappings = append(data.InteropIngressConversionClockClassMappings, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *PTPProfileData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "port.state.subordinate-only"); value.Exists() {
-		data.PortStateSlaveOnly = types.BoolValue(true)
-	} else {
-		data.PortStateSlaveOnly = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "port.state.primary-only"); value.Exists() {
-		data.PortStateMasterOnly = types.BoolValue(true)
-	} else {
-		data.PortStateMasterOnly = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "port.state.any"); value.Exists() {
-		data.PortStateAny = types.BoolValue(true)
-	} else {
-		data.PortStateAny = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "source.ipv4.address"); value.Exists() {
-		data.SourceIpv4Address = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "source.ipv6.address"); value.Exists() {
-		data.SourceIpv6Address = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "multicast"); value.Exists() {
-		data.Multicast = types.BoolValue(true)
-	} else {
-		data.Multicast = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "multicast.mixed"); value.Exists() {
-		data.MulticastMixed = types.BoolValue(true)
-	} else {
-		data.MulticastMixed = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "multicast.disable"); value.Exists() {
-		data.MulticastDisable = types.BoolValue(true)
-	} else {
-		data.MulticastDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "multicast.target-address.ethernet.mac-address-01-1b-19-00-00-00"); value.Exists() {
-		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(true)
-	} else {
-		data.MulticastTargetAddressEthernetMacAddress011b19000000 = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "multicast.target-address.ethernet.mac-address-01-80-c2-00-00-0e"); value.Exists() {
-		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(true)
-	} else {
-		data.MulticastTargetAddressEthernetMacAddress0180C200000e = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.ipv4"); value.Exists() {
-		data.TransportIpv4 = types.BoolValue(true)
-	} else {
-		data.TransportIpv4 = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.ipv6"); value.Exists() {
-		data.TransportIpv6 = types.BoolValue(true)
-	} else {
-		data.TransportIpv6 = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "transport.ethernet"); value.Exists() {
-		data.TransportEthernet = types.BoolValue(true)
-	} else {
-		data.TransportEthernet = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "clock.operation.one-step"); value.Exists() {
-		data.ClockOperationOneStep = types.BoolValue(true)
-	} else {
-		data.ClockOperationOneStep = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "clock.operation.two-step"); value.Exists() {
-		data.ClockOperationTwoStep = types.BoolValue(true)
-	} else {
-		data.ClockOperationTwoStep = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "announce.interval"); value.Exists() {
-		data.AnnounceInterval = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "announce.frequency"); value.Exists() {
-		data.AnnounceFrequency = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "announce.timeout"); value.Exists() {
-		data.AnnounceTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "announce.grant-duration"); value.Exists() {
-		data.AnnounceGrantDuration = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sync.interval"); value.Exists() {
-		data.SyncInterval = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "sync.frequency"); value.Exists() {
-		data.SyncFrequency = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "sync.grant-duration"); value.Exists() {
-		data.SyncGrantDuration = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sync.timeout"); value.Exists() {
-		data.SyncTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "delay-request.interval"); value.Exists() {
-		data.DelayRequestInterval = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "delay-request.frequency"); value.Exists() {
-		data.DelayRequestFrequency = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "cos"); value.Exists() {
-		data.Cos = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "event-cos"); value.Exists() {
-		data.CosEvent = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "general-cos"); value.Exists() {
-		data.CosGeneral = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "dscp"); value.Exists() {
-		data.Dscp = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "event-dscp"); value.Exists() {
-		data.DscpEvent = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "general-dscp"); value.Exists() {
-		data.DscpGeneral = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ipv4-ttl"); value.Exists() {
-		data.Ipv4Ttl = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ipv6-hop-limit"); value.Exists() {
-		data.Ipv6HopLimit = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "delay-asymmetry"); value.Exists() {
-		data.DelayAsymmetryValue = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "nanoseconds"); value.Exists() {
-		data.DelayAsymmetryUnitNanoseconds = types.BoolValue(true)
-	} else {
-		data.DelayAsymmetryUnitNanoseconds = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "microseconds"); value.Exists() {
-		data.DelayAsymmetryUnitMicroseconds = types.BoolValue(true)
-	} else {
-		data.DelayAsymmetryUnitMicroseconds = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "milliseconds"); value.Exists() {
-		data.DelayAsymmetryUnitMilliseconds = types.BoolValue(true)
-	} else {
-		data.DelayAsymmetryUnitMilliseconds = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "delay-response.grant-duration"); value.Exists() {
-		data.DelayResponseGrantDuration = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "delay-response.timeout"); value.Exists() {
-		data.DelayResponseTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "unicast-grant.invalid-request.reduce"); value.Exists() {
-		data.UnicastGrantInvalidRequestReduce = types.BoolValue(true)
-	} else {
-		data.UnicastGrantInvalidRequestReduce = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "unicast-grant.invalid-request.deny"); value.Exists() {
-		data.UnicastGrantInvalidRequestDeny = types.BoolValue(true)
-	} else {
-		data.UnicastGrantInvalidRequestDeny = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "subordinate.ipv4s.ipv4-non-negotiated"); value.Exists() {
-		data.SlaveIpv4s = make([]PTPProfileSlaveIpv4s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PTPProfileSlaveIpv4s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("non-negotiated"); cValue.Exists() {
-				item.NonNegotiated = types.BoolValue(true)
-			} else {
-				item.NonNegotiated = types.BoolValue(false)
-			}
-			data.SlaveIpv4s = append(data.SlaveIpv4s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "subordinate.ipv6s.ipv6"); value.Exists() {
-		data.SlaveIpv6s = make([]PTPProfileSlaveIpv6s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PTPProfileSlaveIpv6s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("non-negotiated"); cValue.Exists() {
-				item.NonNegotiated = types.BoolValue(true)
-			} else {
-				item.NonNegotiated = types.BoolValue(false)
-			}
-			data.SlaveIpv6s = append(data.SlaveIpv6s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "subordinate.ethernets.ethernet"); value.Exists() {
-		data.SlaveEthernets = make([]PTPProfileSlaveEthernets, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PTPProfileSlaveEthernets{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("non-negotiated"); cValue.Exists() {
-				item.NonNegotiated = types.BoolValue(true)
-			} else {
-				item.NonNegotiated = types.BoolValue(false)
-			}
-			data.SlaveEthernets = append(data.SlaveEthernets, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "primary.ipv4s.ipv4"); value.Exists() {
-		data.MasterIpv4s = make([]PTPProfileMasterIpv4s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PTPProfileMasterIpv4s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("priority"); cValue.Exists() {
-				item.Priority = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("clock-class"); cValue.Exists() {
-				item.ClockClass = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("multicast"); cValue.Exists() {
-				item.Multicast = types.BoolValue(true)
-			} else {
-				item.Multicast = types.BoolValue(false)
-			}
-			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
-				item.MulticastMixed = types.BoolValue(true)
-			} else {
-				item.MulticastMixed = types.BoolValue(false)
-			}
-			if cValue := v.Get("non-negotiated"); cValue.Exists() {
-				item.NonNegotiated = types.BoolValue(true)
-			} else {
-				item.NonNegotiated = types.BoolValue(false)
-			}
-			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
-				item.DelayAsymmetry = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("nanoseconds"); cValue.Exists() {
-				item.Nanoseconds = types.BoolValue(true)
-			} else {
-				item.Nanoseconds = types.BoolValue(false)
-			}
-			if cValue := v.Get("microseconds"); cValue.Exists() {
-				item.Microseconds = types.BoolValue(true)
-			} else {
-				item.Microseconds = types.BoolValue(false)
-			}
-			if cValue := v.Get("milliseconds"); cValue.Exists() {
-				item.Milliseconds = types.BoolValue(true)
-			} else {
-				item.Milliseconds = types.BoolValue(false)
-			}
-			data.MasterIpv4s = append(data.MasterIpv4s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "primary.ipv6s.ipv6"); value.Exists() {
-		data.MasterIpv6s = make([]PTPProfileMasterIpv6s, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PTPProfileMasterIpv6s{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("priority"); cValue.Exists() {
-				item.Priority = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("clock-class"); cValue.Exists() {
-				item.ClockClass = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("multicast"); cValue.Exists() {
-				item.Multicast = types.BoolValue(true)
-			} else {
-				item.Multicast = types.BoolValue(false)
-			}
-			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
-				item.MulticastMixed = types.BoolValue(true)
-			} else {
-				item.MulticastMixed = types.BoolValue(false)
-			}
-			if cValue := v.Get("non-negotiated"); cValue.Exists() {
-				item.NonNegotiated = types.BoolValue(true)
-			} else {
-				item.NonNegotiated = types.BoolValue(false)
-			}
-			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
-				item.DelayAsymmetry = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("nanoseconds"); cValue.Exists() {
-				item.Nanoseconds = types.BoolValue(true)
-			} else {
-				item.Nanoseconds = types.BoolValue(false)
-			}
-			if cValue := v.Get("microseconds"); cValue.Exists() {
-				item.Microseconds = types.BoolValue(true)
-			} else {
-				item.Microseconds = types.BoolValue(false)
-			}
-			if cValue := v.Get("milliseconds"); cValue.Exists() {
-				item.Milliseconds = types.BoolValue(true)
-			} else {
-				item.Milliseconds = types.BoolValue(false)
-			}
-			data.MasterIpv6s = append(data.MasterIpv6s, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "primary.ethernets.ethernet"); value.Exists() {
-		data.MasterEthernets = make([]PTPProfileMasterEthernets, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PTPProfileMasterEthernets{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("priority"); cValue.Exists() {
-				item.Priority = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("clock-class"); cValue.Exists() {
-				item.ClockClass = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("multicast"); cValue.Exists() {
-				item.Multicast = types.BoolValue(true)
-			} else {
-				item.Multicast = types.BoolValue(false)
-			}
-			if cValue := v.Get("multicast.mixed"); cValue.Exists() {
-				item.MulticastMixed = types.BoolValue(true)
-			} else {
-				item.MulticastMixed = types.BoolValue(false)
-			}
-			if cValue := v.Get("non-negotiated"); cValue.Exists() {
-				item.NonNegotiated = types.BoolValue(true)
-			} else {
-				item.NonNegotiated = types.BoolValue(false)
-			}
-			if cValue := v.Get("delay-asymmetry"); cValue.Exists() {
-				item.DelayAsymmetry = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("nanoseconds"); cValue.Exists() {
-				item.Nanoseconds = types.BoolValue(true)
-			} else {
-				item.Nanoseconds = types.BoolValue(false)
-			}
-			if cValue := v.Get("microseconds"); cValue.Exists() {
-				item.Microseconds = types.BoolValue(true)
-			} else {
-				item.Microseconds = types.BoolValue(false)
-			}
-			if cValue := v.Get("milliseconds"); cValue.Exists() {
-				item.Milliseconds = types.BoolValue(true)
-			} else {
-				item.Milliseconds = types.BoolValue(false)
-			}
-			data.MasterEthernets = append(data.MasterEthernets, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "interop.profile.default"); value.Exists() {
-		data.InteropProfileDefault = types.BoolValue(true)
-	} else {
-		data.InteropProfileDefault = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interop.profile.g-8265-1"); value.Exists() {
-		data.InteropProfileG82651 = types.BoolValue(true)
-	} else {
-		data.InteropProfileG82651 = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interop.profile.g-8275-1"); value.Exists() {
-		data.InteropProfileG82751 = types.BoolValue(true)
-	} else {
-		data.InteropProfileG82751 = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interop.profile.g-8275-2"); value.Exists() {
-		data.InteropProfileG82752 = types.BoolValue(true)
-	} else {
-		data.InteropProfileG82752 = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interop.domain"); value.Exists() {
-		data.InteropDomain = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.egress-conversion.priority1"); value.Exists() {
-		data.InteropEgressConversionPriority1 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.egress-conversion.priority2"); value.Exists() {
-		data.InteropEgressConversionPriority2 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.egress-conversion.clock-accuracy"); value.Exists() {
-		data.InteropEgressConversionClockAccuracy = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.egress-conversion.offset-scaled-log-variance"); value.Exists() {
-		data.InteropEgressConversionOffsetScaledLogVariance = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.egress-conversion.clock-class.default"); value.Exists() {
-		data.InteropEgressConversionClockClassDefault = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.egress-conversion.clock-class.mappings.mapping"); value.Exists() {
-		data.InteropEgressConversionClockClassMappings = make([]PTPProfileInteropEgressConversionClockClassMappings, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PTPProfileInteropEgressConversionClockClassMappings{}
-			if cValue := v.Get("clock-class-to-map-from"); cValue.Exists() {
-				item.ClockClassToMapFrom = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("clock-class-to-map-to"); cValue.Exists() {
-				item.ClockClassToMapTo = types.Int64Value(cValue.Int())
-			}
-			data.InteropEgressConversionClockClassMappings = append(data.InteropEgressConversionClockClassMappings, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "interop.ingress-conversion.priority1"); value.Exists() {
-		data.InteropIngressConversionPriority1 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.ingress-conversion.priority2"); value.Exists() {
-		data.InteropIngressConversionPriority2 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.ingress-conversion.clock-accuracy"); value.Exists() {
-		data.InteropIngressConversionClockAccuracy = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.ingress-conversion.offset-scaled-log-variance"); value.Exists() {
-		data.InteropIngressConversionOffsetScaledLogVariance = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.ingress-conversion.clock-class.default"); value.Exists() {
-		data.InteropIngressConversionClockClassDefault = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interop.ingress-conversion.clock-class.mappings.mapping"); value.Exists() {
-		data.InteropIngressConversionClockClassMappings = make([]PTPProfileInteropIngressConversionClockClassMappings, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PTPProfileInteropIngressConversionClockClassMappings{}
-			if cValue := v.Get("clock-class-to-map-from"); cValue.Exists() {
-				item.ClockClassToMapFrom = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("clock-class-to-map-to"); cValue.Exists() {
-				item.ClockClassToMapTo = types.Int64Value(cValue.Int())
-			}
-			data.InteropIngressConversionClockClassMappings = append(data.InteropIngressConversionClockClassMappings, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *PTPProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -4445,9 +5723,20 @@ func (data *PTPProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			return true
 		})
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-sender"); value.Exists() {
+		data.MonitorSender = types.BoolValue(true)
+	} else {
+		data.MonitorSender = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-receiver"); value.Exists() {
+		data.MonitorReceiver = types.BoolValue(true)
+	} else {
+		data.MonitorReceiver = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *PTPProfileData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -4889,1097 +6178,20 @@ func (data *PTPProfileData) fromBodyXML(ctx context.Context, res xmldot.Result) 
 			return true
 		})
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-sender"); value.Exists() {
+		data.MonitorSender = types.BoolValue(true)
+	} else {
+		data.MonitorSender = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/monitor-receiver"); value.Exists() {
+		data.MonitorReceiver = types.BoolValue(true)
+	} else {
+		data.MonitorReceiver = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *PTPProfile) getDeletedItems(ctx context.Context, state PTPProfile) []string {
-	deletedItems := make([]string, 0)
-	for i := range state.InteropIngressConversionClockClassMappings {
-		keys := [...]string{"clock-class-to-map-from"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.InteropIngressConversionClockClassMappings {
-			found = true
-			if state.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64() != data.InteropIngressConversionClockClassMappings[j].ClockClassToMapFrom.ValueInt64() {
-				found = false
-			}
-			if found {
-				if !state.InteropIngressConversionClockClassMappings[i].ClockClassToMapTo.IsNull() && data.InteropIngressConversionClockClassMappings[j].ClockClassToMapTo.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/ingress-conversion/clock-class/mappings/mapping%v/clock-class-to-map-to", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/ingress-conversion/clock-class/mappings/mapping%v", state.getPath(), keyString))
-		}
-	}
-	if !state.InteropIngressConversionClockClassDefault.IsNull() && data.InteropIngressConversionClockClassDefault.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/ingress-conversion/clock-class/default", state.getPath()))
-	}
-	if !state.InteropIngressConversionOffsetScaledLogVariance.IsNull() && data.InteropIngressConversionOffsetScaledLogVariance.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/ingress-conversion/offset-scaled-log-variance", state.getPath()))
-	}
-	if !state.InteropIngressConversionClockAccuracy.IsNull() && data.InteropIngressConversionClockAccuracy.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/ingress-conversion/clock-accuracy", state.getPath()))
-	}
-	if !state.InteropIngressConversionPriority2.IsNull() && data.InteropIngressConversionPriority2.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/ingress-conversion/priority2", state.getPath()))
-	}
-	if !state.InteropIngressConversionPriority1.IsNull() && data.InteropIngressConversionPriority1.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/ingress-conversion/priority1", state.getPath()))
-	}
-	for i := range state.InteropEgressConversionClockClassMappings {
-		keys := [...]string{"clock-class-to-map-from"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.InteropEgressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.InteropEgressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.InteropEgressConversionClockClassMappings {
-			found = true
-			if state.InteropEgressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64() != data.InteropEgressConversionClockClassMappings[j].ClockClassToMapFrom.ValueInt64() {
-				found = false
-			}
-			if found {
-				if !state.InteropEgressConversionClockClassMappings[i].ClockClassToMapTo.IsNull() && data.InteropEgressConversionClockClassMappings[j].ClockClassToMapTo.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/egress-conversion/clock-class/mappings/mapping%v/clock-class-to-map-to", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/egress-conversion/clock-class/mappings/mapping%v", state.getPath(), keyString))
-		}
-	}
-	if !state.InteropEgressConversionClockClassDefault.IsNull() && data.InteropEgressConversionClockClassDefault.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/egress-conversion/clock-class/default", state.getPath()))
-	}
-	if !state.InteropEgressConversionOffsetScaledLogVariance.IsNull() && data.InteropEgressConversionOffsetScaledLogVariance.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/egress-conversion/offset-scaled-log-variance", state.getPath()))
-	}
-	if !state.InteropEgressConversionClockAccuracy.IsNull() && data.InteropEgressConversionClockAccuracy.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/egress-conversion/clock-accuracy", state.getPath()))
-	}
-	if !state.InteropEgressConversionPriority2.IsNull() && data.InteropEgressConversionPriority2.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/egress-conversion/priority2", state.getPath()))
-	}
-	if !state.InteropEgressConversionPriority1.IsNull() && data.InteropEgressConversionPriority1.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/egress-conversion/priority1", state.getPath()))
-	}
-	if !state.InteropDomain.IsNull() && data.InteropDomain.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/domain", state.getPath()))
-	}
-	if !state.InteropProfileG82752.IsNull() && data.InteropProfileG82752.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/profile/g-8275-2", state.getPath()))
-	}
-	if !state.InteropProfileG82751.IsNull() && data.InteropProfileG82751.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/profile/g-8275-1", state.getPath()))
-	}
-	if !state.InteropProfileG82651.IsNull() && data.InteropProfileG82651.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/profile/g-8265-1", state.getPath()))
-	}
-	if !state.InteropProfileDefault.IsNull() && data.InteropProfileDefault.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interop/profile/default", state.getPath()))
-	}
-	for i := range state.MasterEthernets {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.MasterEthernets[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.MasterEthernets[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.MasterEthernets {
-			found = true
-			if state.MasterEthernets[i].Address.ValueString() != data.MasterEthernets[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.MasterEthernets[i].Milliseconds.IsNull() && data.MasterEthernets[j].Milliseconds.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ethernets/ethernet%v/milliseconds", state.getPath(), keyString))
-				}
-				if !state.MasterEthernets[i].Microseconds.IsNull() && data.MasterEthernets[j].Microseconds.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ethernets/ethernet%v/microseconds", state.getPath(), keyString))
-				}
-				if !state.MasterEthernets[i].Nanoseconds.IsNull() && data.MasterEthernets[j].Nanoseconds.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ethernets/ethernet%v/nanoseconds", state.getPath(), keyString))
-				}
-				if !state.MasterEthernets[i].DelayAsymmetry.IsNull() && data.MasterEthernets[j].DelayAsymmetry.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ethernets/ethernet%v/delay-asymmetry", state.getPath(), keyString))
-				}
-				if !state.MasterEthernets[i].NonNegotiated.IsNull() && data.MasterEthernets[j].NonNegotiated.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ethernets/ethernet%v/non-negotiated", state.getPath(), keyString))
-				}
-				if !state.MasterEthernets[i].MulticastMixed.IsNull() && data.MasterEthernets[j].MulticastMixed.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ethernets/ethernet%v/multicast", state.getPath(), keyString))
-				}
-				if !state.MasterEthernets[i].Multicast.IsNull() && data.MasterEthernets[j].Multicast.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ethernets/ethernet%v/multicast", state.getPath(), keyString))
-				}
-				if !state.MasterEthernets[i].ClockClass.IsNull() && data.MasterEthernets[j].ClockClass.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ethernets/ethernet%v/clock-class", state.getPath(), keyString))
-				}
-				if !state.MasterEthernets[i].Priority.IsNull() && data.MasterEthernets[j].Priority.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ethernets/ethernet%v/priority", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ethernets/ethernet%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.MasterIpv6s {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.MasterIpv6s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.MasterIpv6s[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.MasterIpv6s {
-			found = true
-			if state.MasterIpv6s[i].Address.ValueString() != data.MasterIpv6s[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.MasterIpv6s[i].Milliseconds.IsNull() && data.MasterIpv6s[j].Milliseconds.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv6s/ipv6%v/milliseconds", state.getPath(), keyString))
-				}
-				if !state.MasterIpv6s[i].Microseconds.IsNull() && data.MasterIpv6s[j].Microseconds.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv6s/ipv6%v/microseconds", state.getPath(), keyString))
-				}
-				if !state.MasterIpv6s[i].Nanoseconds.IsNull() && data.MasterIpv6s[j].Nanoseconds.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv6s/ipv6%v/nanoseconds", state.getPath(), keyString))
-				}
-				if !state.MasterIpv6s[i].DelayAsymmetry.IsNull() && data.MasterIpv6s[j].DelayAsymmetry.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv6s/ipv6%v/delay-asymmetry", state.getPath(), keyString))
-				}
-				if !state.MasterIpv6s[i].NonNegotiated.IsNull() && data.MasterIpv6s[j].NonNegotiated.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv6s/ipv6%v/non-negotiated", state.getPath(), keyString))
-				}
-				if !state.MasterIpv6s[i].MulticastMixed.IsNull() && data.MasterIpv6s[j].MulticastMixed.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv6s/ipv6%v/multicast", state.getPath(), keyString))
-				}
-				if !state.MasterIpv6s[i].Multicast.IsNull() && data.MasterIpv6s[j].Multicast.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv6s/ipv6%v/multicast", state.getPath(), keyString))
-				}
-				if !state.MasterIpv6s[i].ClockClass.IsNull() && data.MasterIpv6s[j].ClockClass.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv6s/ipv6%v/clock-class", state.getPath(), keyString))
-				}
-				if !state.MasterIpv6s[i].Priority.IsNull() && data.MasterIpv6s[j].Priority.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv6s/ipv6%v/priority", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv6s/ipv6%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.MasterIpv4s {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.MasterIpv4s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.MasterIpv4s[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.MasterIpv4s {
-			found = true
-			if state.MasterIpv4s[i].Address.ValueString() != data.MasterIpv4s[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.MasterIpv4s[i].Milliseconds.IsNull() && data.MasterIpv4s[j].Milliseconds.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv4s/ipv4%v/milliseconds", state.getPath(), keyString))
-				}
-				if !state.MasterIpv4s[i].Microseconds.IsNull() && data.MasterIpv4s[j].Microseconds.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv4s/ipv4%v/microseconds", state.getPath(), keyString))
-				}
-				if !state.MasterIpv4s[i].Nanoseconds.IsNull() && data.MasterIpv4s[j].Nanoseconds.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv4s/ipv4%v/nanoseconds", state.getPath(), keyString))
-				}
-				if !state.MasterIpv4s[i].DelayAsymmetry.IsNull() && data.MasterIpv4s[j].DelayAsymmetry.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv4s/ipv4%v/delay-asymmetry", state.getPath(), keyString))
-				}
-				if !state.MasterIpv4s[i].NonNegotiated.IsNull() && data.MasterIpv4s[j].NonNegotiated.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv4s/ipv4%v/non-negotiated", state.getPath(), keyString))
-				}
-				if !state.MasterIpv4s[i].MulticastMixed.IsNull() && data.MasterIpv4s[j].MulticastMixed.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv4s/ipv4%v/multicast", state.getPath(), keyString))
-				}
-				if !state.MasterIpv4s[i].Multicast.IsNull() && data.MasterIpv4s[j].Multicast.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv4s/ipv4%v/multicast", state.getPath(), keyString))
-				}
-				if !state.MasterIpv4s[i].ClockClass.IsNull() && data.MasterIpv4s[j].ClockClass.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv4s/ipv4%v/clock-class", state.getPath(), keyString))
-				}
-				if !state.MasterIpv4s[i].Priority.IsNull() && data.MasterIpv4s[j].Priority.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv4s/ipv4%v/priority", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/primary/ipv4s/ipv4%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.SlaveEthernets {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.SlaveEthernets[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SlaveEthernets[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SlaveEthernets {
-			found = true
-			if state.SlaveEthernets[i].Address.ValueString() != data.SlaveEthernets[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.SlaveEthernets[i].NonNegotiated.IsNull() && data.SlaveEthernets[j].NonNegotiated.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/subordinate/ethernets/ethernet%v/non-negotiated", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/subordinate/ethernets/ethernet%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.SlaveIpv6s {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.SlaveIpv6s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SlaveIpv6s[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SlaveIpv6s {
-			found = true
-			if state.SlaveIpv6s[i].Address.ValueString() != data.SlaveIpv6s[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.SlaveIpv6s[i].NonNegotiated.IsNull() && data.SlaveIpv6s[j].NonNegotiated.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/subordinate/ipv6s/ipv6%v/non-negotiated", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/subordinate/ipv6s/ipv6%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.SlaveIpv4s {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.SlaveIpv4s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SlaveIpv4s[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SlaveIpv4s {
-			found = true
-			if state.SlaveIpv4s[i].Address.ValueString() != data.SlaveIpv4s[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.SlaveIpv4s[i].NonNegotiated.IsNull() && data.SlaveIpv4s[j].NonNegotiated.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/subordinate/ipv4s/ipv4-non-negotiated%v/non-negotiated", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/subordinate/ipv4s/ipv4-non-negotiated%v", state.getPath(), keyString))
-		}
-	}
-	if !state.UnicastGrantInvalidRequestDeny.IsNull() && data.UnicastGrantInvalidRequestDeny.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/unicast-grant/invalid-request/deny", state.getPath()))
-	}
-	if !state.UnicastGrantInvalidRequestReduce.IsNull() && data.UnicastGrantInvalidRequestReduce.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/unicast-grant/invalid-request/reduce", state.getPath()))
-	}
-	if !state.DelayResponseTimeout.IsNull() && data.DelayResponseTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/delay-response/timeout", state.getPath()))
-	}
-	if !state.DelayResponseGrantDuration.IsNull() && data.DelayResponseGrantDuration.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/delay-response/grant-duration", state.getPath()))
-	}
-	if !state.DelayAsymmetryUnitMilliseconds.IsNull() && data.DelayAsymmetryUnitMilliseconds.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/milliseconds", state.getPath()))
-	}
-	if !state.DelayAsymmetryUnitMicroseconds.IsNull() && data.DelayAsymmetryUnitMicroseconds.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/microseconds", state.getPath()))
-	}
-	if !state.DelayAsymmetryUnitNanoseconds.IsNull() && data.DelayAsymmetryUnitNanoseconds.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/nanoseconds", state.getPath()))
-	}
-	if !state.DelayAsymmetryValue.IsNull() && data.DelayAsymmetryValue.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/delay-asymmetry", state.getPath()))
-	}
-	if !state.Ipv6HopLimit.IsNull() && data.Ipv6HopLimit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6-hop-limit", state.getPath()))
-	}
-	if !state.Ipv4Ttl.IsNull() && data.Ipv4Ttl.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4-ttl", state.getPath()))
-	}
-	if !state.DscpGeneral.IsNull() && data.DscpGeneral.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/general-dscp", state.getPath()))
-	}
-	if !state.DscpEvent.IsNull() && data.DscpEvent.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/event-dscp", state.getPath()))
-	}
-	if !state.Dscp.IsNull() && data.Dscp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/dscp", state.getPath()))
-	}
-	if !state.CosGeneral.IsNull() && data.CosGeneral.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/general-cos", state.getPath()))
-	}
-	if !state.CosEvent.IsNull() && data.CosEvent.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/event-cos", state.getPath()))
-	}
-	if !state.Cos.IsNull() && data.Cos.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/cos", state.getPath()))
-	}
-	if !state.DelayRequestFrequency.IsNull() && data.DelayRequestFrequency.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/delay-request/frequency", state.getPath()))
-	}
-	if !state.DelayRequestInterval.IsNull() && data.DelayRequestInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/delay-request/interval", state.getPath()))
-	}
-	if !state.SyncTimeout.IsNull() && data.SyncTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sync/timeout", state.getPath()))
-	}
-	if !state.SyncGrantDuration.IsNull() && data.SyncGrantDuration.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sync/grant-duration", state.getPath()))
-	}
-	if !state.SyncFrequency.IsNull() && data.SyncFrequency.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sync/frequency", state.getPath()))
-	}
-	if !state.SyncInterval.IsNull() && data.SyncInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sync/interval", state.getPath()))
-	}
-	if !state.AnnounceGrantDuration.IsNull() && data.AnnounceGrantDuration.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/announce/grant-duration", state.getPath()))
-	}
-	if !state.AnnounceTimeout.IsNull() && data.AnnounceTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/announce/timeout", state.getPath()))
-	}
-	if !state.AnnounceFrequency.IsNull() && data.AnnounceFrequency.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/announce/frequency", state.getPath()))
-	}
-	if !state.AnnounceInterval.IsNull() && data.AnnounceInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/announce/interval", state.getPath()))
-	}
-	if !state.ClockOperationTwoStep.IsNull() && data.ClockOperationTwoStep.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/clock/operation/two-step", state.getPath()))
-	}
-	if !state.ClockOperationOneStep.IsNull() && data.ClockOperationOneStep.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/clock/operation/one-step", state.getPath()))
-	}
-	if !state.TransportEthernet.IsNull() && data.TransportEthernet.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/ethernet", state.getPath()))
-	}
-	if !state.TransportIpv6.IsNull() && data.TransportIpv6.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/ipv6", state.getPath()))
-	}
-	if !state.TransportIpv4.IsNull() && data.TransportIpv4.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/ipv4", state.getPath()))
-	}
-	if !state.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() && data.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/multicast/target-address/ethernet", state.getPath()))
-	}
-	if !state.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() && data.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/multicast/target-address/ethernet", state.getPath()))
-	}
-	if !state.MulticastDisable.IsNull() && data.MulticastDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/multicast", state.getPath()))
-	}
-	if !state.MulticastMixed.IsNull() && data.MulticastMixed.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/multicast", state.getPath()))
-	}
-	if !state.Multicast.IsNull() && data.Multicast.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/multicast", state.getPath()))
-	}
-	if !state.SourceIpv6Address.IsNull() && data.SourceIpv6Address.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/source/ipv6/address", state.getPath()))
-	}
-	if !state.SourceIpv4Address.IsNull() && data.SourceIpv4Address.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/source/ipv4/address", state.getPath()))
-	}
-	if !state.PortStateAny.IsNull() && data.PortStateAny.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/port/state/any", state.getPath()))
-	}
-	if !state.PortStateMasterOnly.IsNull() && data.PortStateMasterOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/port/state/primary-only", state.getPath()))
-	}
-	if !state.PortStateSlaveOnly.IsNull() && data.PortStateSlaveOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/port/state/subordinate-only", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *PTPProfile) getEmptyLeafsDelete(ctx context.Context, state *PTPProfile) []string {
-	emptyLeafsDelete := make([]string, 0)
-	for i := range data.InteropIngressConversionClockClassMappings {
-		keys := [...]string{"clock-class-to-map-from"}
-		keyValues := [...]string{strconv.FormatInt(data.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	for i := range data.InteropEgressConversionClockClassMappings {
-		keys := [...]string{"clock-class-to-map-from"}
-		keyValues := [...]string{strconv.FormatInt(data.InteropEgressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.InteropProfileG82752.IsNull() && !data.InteropProfileG82752.ValueBool() {
-		if state != nil && !state.InteropProfileG82752.IsNull() && state.InteropProfileG82752.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interop/profile/g-8275-2", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.InteropProfileG82751.IsNull() && !data.InteropProfileG82751.ValueBool() {
-		if state != nil && !state.InteropProfileG82751.IsNull() && state.InteropProfileG82751.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interop/profile/g-8275-1", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.InteropProfileG82651.IsNull() && !data.InteropProfileG82651.ValueBool() {
-		if state != nil && !state.InteropProfileG82651.IsNull() && state.InteropProfileG82651.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interop/profile/g-8265-1", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.InteropProfileDefault.IsNull() && !data.InteropProfileDefault.ValueBool() {
-		if state != nil && !state.InteropProfileDefault.IsNull() && state.InteropProfileDefault.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interop/profile/default", data.getXPath()))
-		}
-	}
-	for i := range data.MasterEthernets {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MasterEthernets[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.MasterEthernets[i].Milliseconds.IsNull() && !data.MasterEthernets[i].Milliseconds.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MasterEthernets) && !state.MasterEthernets[i].Milliseconds.IsNull() && state.MasterEthernets[i].Milliseconds.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/primary/ethernets/ethernet%v/milliseconds", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MasterEthernets[i].Microseconds.IsNull() && !data.MasterEthernets[i].Microseconds.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MasterEthernets) && !state.MasterEthernets[i].Microseconds.IsNull() && state.MasterEthernets[i].Microseconds.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/primary/ethernets/ethernet%v/microseconds", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MasterEthernets[i].Nanoseconds.IsNull() && !data.MasterEthernets[i].Nanoseconds.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MasterEthernets) && !state.MasterEthernets[i].Nanoseconds.IsNull() && state.MasterEthernets[i].Nanoseconds.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/primary/ethernets/ethernet%v/nanoseconds", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MasterEthernets[i].NonNegotiated.IsNull() && !data.MasterEthernets[i].NonNegotiated.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MasterEthernets) && !state.MasterEthernets[i].NonNegotiated.IsNull() && state.MasterEthernets[i].NonNegotiated.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/primary/ethernets/ethernet%v/non-negotiated", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MasterEthernets[i].MulticastMixed.IsNull() && !data.MasterEthernets[i].MulticastMixed.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MasterEthernets) && !state.MasterEthernets[i].MulticastMixed.IsNull() && state.MasterEthernets[i].MulticastMixed.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/primary/ethernets/ethernet%v/multicast", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MasterEthernets[i].Multicast.IsNull() && !data.MasterEthernets[i].Multicast.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MasterEthernets) && !state.MasterEthernets[i].Multicast.IsNull() && state.MasterEthernets[i].Multicast.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/primary/ethernets/ethernet%v/multicast", data.getXPath(), keyString))
-			}
-		}
-	}
-	for i := range data.MasterIpv6s {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MasterIpv6s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.MasterIpv6s[i].Milliseconds.IsNull() && !data.MasterIpv6s[i].Milliseconds.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MasterIpv6s) && !state.MasterIpv6s[i].Milliseconds.IsNull() && state.MasterIpv6s[i].Milliseconds.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/primary/ipv6s/ipv6%v/milliseconds", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MasterIpv6s[i].Microseconds.IsNull() && !data.MasterIpv6s[i].Microseconds.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MasterIpv6s) && !state.MasterIpv6s[i].Microseconds.IsNull() && state.MasterIpv6s[i].Microseconds.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/primary/ipv6s/ipv6%v/microseconds", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MasterIpv6s[i].Nanoseconds.IsNull() && !data.MasterIpv6s[i].Nanoseconds.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MasterIpv6s) && !state.MasterIpv6s[i].Nanoseconds.IsNull() && state.MasterIpv6s[i].Nanoseconds.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/primary/ipv6s/ipv6%v/nanoseconds", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MasterIpv6s[i].NonNegotiated.IsNull() && !data.MasterIpv6s[i].NonNegotiated.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MasterIpv6s) && !state.MasterIpv6s[i].NonNegotiated.IsNull() && state.MasterIpv6s[i].NonNegotiated.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/primary/ipv6s/ipv6%v/non-negotiated", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MasterIpv6s[i].MulticastMixed.IsNull() && !data.MasterIpv6s[i].MulticastMixed.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MasterIpv6s) && !state.MasterIpv6s[i].MulticastMixed.IsNull() && state.MasterIpv6s[i].MulticastMixed.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/primary/ipv6s/ipv6%v/multicast", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MasterIpv6s[i].Multicast.IsNull() && !data.MasterIpv6s[i].Multicast.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MasterIpv6s) && !state.MasterIpv6s[i].Multicast.IsNull() && state.MasterIpv6s[i].Multicast.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/primary/ipv6s/ipv6%v/multicast", data.getXPath(), keyString))
-			}
-		}
-	}
-	for i := range data.MasterIpv4s {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.MasterIpv4s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.MasterIpv4s[i].Milliseconds.IsNull() && !data.MasterIpv4s[i].Milliseconds.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MasterIpv4s) && !state.MasterIpv4s[i].Milliseconds.IsNull() && state.MasterIpv4s[i].Milliseconds.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/primary/ipv4s/ipv4%v/milliseconds", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MasterIpv4s[i].Microseconds.IsNull() && !data.MasterIpv4s[i].Microseconds.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MasterIpv4s) && !state.MasterIpv4s[i].Microseconds.IsNull() && state.MasterIpv4s[i].Microseconds.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/primary/ipv4s/ipv4%v/microseconds", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MasterIpv4s[i].Nanoseconds.IsNull() && !data.MasterIpv4s[i].Nanoseconds.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MasterIpv4s) && !state.MasterIpv4s[i].Nanoseconds.IsNull() && state.MasterIpv4s[i].Nanoseconds.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/primary/ipv4s/ipv4%v/nanoseconds", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MasterIpv4s[i].NonNegotiated.IsNull() && !data.MasterIpv4s[i].NonNegotiated.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MasterIpv4s) && !state.MasterIpv4s[i].NonNegotiated.IsNull() && state.MasterIpv4s[i].NonNegotiated.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/primary/ipv4s/ipv4%v/non-negotiated", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MasterIpv4s[i].MulticastMixed.IsNull() && !data.MasterIpv4s[i].MulticastMixed.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MasterIpv4s) && !state.MasterIpv4s[i].MulticastMixed.IsNull() && state.MasterIpv4s[i].MulticastMixed.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/primary/ipv4s/ipv4%v/multicast", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.MasterIpv4s[i].Multicast.IsNull() && !data.MasterIpv4s[i].Multicast.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MasterIpv4s) && !state.MasterIpv4s[i].Multicast.IsNull() && state.MasterIpv4s[i].Multicast.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/primary/ipv4s/ipv4%v/multicast", data.getXPath(), keyString))
-			}
-		}
-	}
-	for i := range data.SlaveEthernets {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.SlaveEthernets[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.SlaveEthernets[i].NonNegotiated.IsNull() && !data.SlaveEthernets[i].NonNegotiated.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SlaveEthernets) && !state.SlaveEthernets[i].NonNegotiated.IsNull() && state.SlaveEthernets[i].NonNegotiated.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/subordinate/ethernets/ethernet%v/non-negotiated", data.getXPath(), keyString))
-			}
-		}
-	}
-	for i := range data.SlaveIpv6s {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.SlaveIpv6s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.SlaveIpv6s[i].NonNegotiated.IsNull() && !data.SlaveIpv6s[i].NonNegotiated.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SlaveIpv6s) && !state.SlaveIpv6s[i].NonNegotiated.IsNull() && state.SlaveIpv6s[i].NonNegotiated.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/subordinate/ipv6s/ipv6%v/non-negotiated", data.getXPath(), keyString))
-			}
-		}
-	}
-	for i := range data.SlaveIpv4s {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.SlaveIpv4s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.SlaveIpv4s[i].NonNegotiated.IsNull() && !data.SlaveIpv4s[i].NonNegotiated.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SlaveIpv4s) && !state.SlaveIpv4s[i].NonNegotiated.IsNull() && state.SlaveIpv4s[i].NonNegotiated.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/subordinate/ipv4s/ipv4-non-negotiated%v/non-negotiated", data.getXPath(), keyString))
-			}
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.UnicastGrantInvalidRequestDeny.IsNull() && !data.UnicastGrantInvalidRequestDeny.ValueBool() {
-		if state != nil && !state.UnicastGrantInvalidRequestDeny.IsNull() && state.UnicastGrantInvalidRequestDeny.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/unicast-grant/invalid-request/deny", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.UnicastGrantInvalidRequestReduce.IsNull() && !data.UnicastGrantInvalidRequestReduce.ValueBool() {
-		if state != nil && !state.UnicastGrantInvalidRequestReduce.IsNull() && state.UnicastGrantInvalidRequestReduce.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/unicast-grant/invalid-request/reduce", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.DelayAsymmetryUnitMilliseconds.IsNull() && !data.DelayAsymmetryUnitMilliseconds.ValueBool() {
-		if state != nil && !state.DelayAsymmetryUnitMilliseconds.IsNull() && state.DelayAsymmetryUnitMilliseconds.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/milliseconds", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.DelayAsymmetryUnitMicroseconds.IsNull() && !data.DelayAsymmetryUnitMicroseconds.ValueBool() {
-		if state != nil && !state.DelayAsymmetryUnitMicroseconds.IsNull() && state.DelayAsymmetryUnitMicroseconds.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/microseconds", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.DelayAsymmetryUnitNanoseconds.IsNull() && !data.DelayAsymmetryUnitNanoseconds.ValueBool() {
-		if state != nil && !state.DelayAsymmetryUnitNanoseconds.IsNull() && state.DelayAsymmetryUnitNanoseconds.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nanoseconds", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ClockOperationTwoStep.IsNull() && !data.ClockOperationTwoStep.ValueBool() {
-		if state != nil && !state.ClockOperationTwoStep.IsNull() && state.ClockOperationTwoStep.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/clock/operation/two-step", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ClockOperationOneStep.IsNull() && !data.ClockOperationOneStep.ValueBool() {
-		if state != nil && !state.ClockOperationOneStep.IsNull() && state.ClockOperationOneStep.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/clock/operation/one-step", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TransportEthernet.IsNull() && !data.TransportEthernet.ValueBool() {
-		if state != nil && !state.TransportEthernet.IsNull() && state.TransportEthernet.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/ethernet", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TransportIpv6.IsNull() && !data.TransportIpv6.ValueBool() {
-		if state != nil && !state.TransportIpv6.IsNull() && state.TransportIpv6.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/ipv6", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.TransportIpv4.IsNull() && !data.TransportIpv4.ValueBool() {
-		if state != nil && !state.TransportIpv4.IsNull() && state.TransportIpv4.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/transport/ipv4", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() && !data.MulticastTargetAddressEthernetMacAddress0180C200000e.ValueBool() {
-		if state != nil && !state.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() && state.MulticastTargetAddressEthernetMacAddress0180C200000e.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/multicast/target-address/ethernet", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() && !data.MulticastTargetAddressEthernetMacAddress011b19000000.ValueBool() {
-		if state != nil && !state.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() && state.MulticastTargetAddressEthernetMacAddress011b19000000.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/multicast/target-address/ethernet", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.MulticastDisable.IsNull() && !data.MulticastDisable.ValueBool() {
-		if state != nil && !state.MulticastDisable.IsNull() && state.MulticastDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/multicast", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.MulticastMixed.IsNull() && !data.MulticastMixed.ValueBool() {
-		if state != nil && !state.MulticastMixed.IsNull() && state.MulticastMixed.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/multicast", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.Multicast.IsNull() && !data.Multicast.ValueBool() {
-		if state != nil && !state.Multicast.IsNull() && state.Multicast.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/multicast", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.PortStateAny.IsNull() && !data.PortStateAny.ValueBool() {
-		if state != nil && !state.PortStateAny.IsNull() && state.PortStateAny.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/port/state/any", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.PortStateMasterOnly.IsNull() && !data.PortStateMasterOnly.ValueBool() {
-		if state != nil && !state.PortStateMasterOnly.IsNull() && state.PortStateMasterOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/port/state/primary-only", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.PortStateSlaveOnly.IsNull() && !data.PortStateSlaveOnly.ValueBool() {
-		if state != nil && !state.PortStateSlaveOnly.IsNull() && state.PortStateSlaveOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/port/state/subordinate-only", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *PTPProfile) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	for i := range data.InteropIngressConversionClockClassMappings {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[clock-class-to-map-from=" + strconv.FormatInt(data.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/ingress-conversion/clock-class/mappings/mapping%v", data.getPath(), keyPath))
-	}
-	if !data.InteropIngressConversionClockClassDefault.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/ingress-conversion/clock-class/default", data.getPath()))
-	}
-	if !data.InteropIngressConversionOffsetScaledLogVariance.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/ingress-conversion/offset-scaled-log-variance", data.getPath()))
-	}
-	if !data.InteropIngressConversionClockAccuracy.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/ingress-conversion/clock-accuracy", data.getPath()))
-	}
-	if !data.InteropIngressConversionPriority2.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/ingress-conversion/priority2", data.getPath()))
-	}
-	if !data.InteropIngressConversionPriority1.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/ingress-conversion/priority1", data.getPath()))
-	}
-	for i := range data.InteropEgressConversionClockClassMappings {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[clock-class-to-map-from=" + strconv.FormatInt(data.InteropEgressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/egress-conversion/clock-class/mappings/mapping%v", data.getPath(), keyPath))
-	}
-	if !data.InteropEgressConversionClockClassDefault.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/egress-conversion/clock-class/default", data.getPath()))
-	}
-	if !data.InteropEgressConversionOffsetScaledLogVariance.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/egress-conversion/offset-scaled-log-variance", data.getPath()))
-	}
-	if !data.InteropEgressConversionClockAccuracy.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/egress-conversion/clock-accuracy", data.getPath()))
-	}
-	if !data.InteropEgressConversionPriority2.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/egress-conversion/priority2", data.getPath()))
-	}
-	if !data.InteropEgressConversionPriority1.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/egress-conversion/priority1", data.getPath()))
-	}
-	if !data.InteropDomain.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/domain", data.getPath()))
-	}
-	if !data.InteropProfileG82752.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/profile/g-8275-2", data.getPath()))
-	}
-	if !data.InteropProfileG82751.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/profile/g-8275-1", data.getPath()))
-	}
-	if !data.InteropProfileG82651.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/profile/g-8265-1", data.getPath()))
-	}
-	if !data.InteropProfileDefault.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interop/profile/default", data.getPath()))
-	}
-	for i := range data.MasterEthernets {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.MasterEthernets[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/primary/ethernets/ethernet%v", data.getPath(), keyPath))
-	}
-	for i := range data.MasterIpv6s {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.MasterIpv6s[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/primary/ipv6s/ipv6%v", data.getPath(), keyPath))
-	}
-	for i := range data.MasterIpv4s {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.MasterIpv4s[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/primary/ipv4s/ipv4%v", data.getPath(), keyPath))
-	}
-	for i := range data.SlaveEthernets {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.SlaveEthernets[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/subordinate/ethernets/ethernet%v", data.getPath(), keyPath))
-	}
-	for i := range data.SlaveIpv6s {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.SlaveIpv6s[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/subordinate/ipv6s/ipv6%v", data.getPath(), keyPath))
-	}
-	for i := range data.SlaveIpv4s {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.SlaveIpv4s[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/subordinate/ipv4s/ipv4-non-negotiated%v", data.getPath(), keyPath))
-	}
-	if !data.UnicastGrantInvalidRequestDeny.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/unicast-grant/invalid-request/deny", data.getPath()))
-	}
-	if !data.UnicastGrantInvalidRequestReduce.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/unicast-grant/invalid-request/reduce", data.getPath()))
-	}
-	if !data.DelayResponseTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/delay-response/timeout", data.getPath()))
-	}
-	if !data.DelayResponseGrantDuration.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/delay-response/grant-duration", data.getPath()))
-	}
-	if !data.DelayAsymmetryUnitMilliseconds.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/milliseconds", data.getPath()))
-	}
-	if !data.DelayAsymmetryUnitMicroseconds.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/microseconds", data.getPath()))
-	}
-	if !data.DelayAsymmetryUnitNanoseconds.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nanoseconds", data.getPath()))
-	}
-	if !data.DelayAsymmetryValue.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/delay-asymmetry", data.getPath()))
-	}
-	if !data.Ipv6HopLimit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6-hop-limit", data.getPath()))
-	}
-	if !data.Ipv4Ttl.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4-ttl", data.getPath()))
-	}
-	if !data.DscpGeneral.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/general-dscp", data.getPath()))
-	}
-	if !data.DscpEvent.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/event-dscp", data.getPath()))
-	}
-	if !data.Dscp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/dscp", data.getPath()))
-	}
-	if !data.CosGeneral.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/general-cos", data.getPath()))
-	}
-	if !data.CosEvent.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/event-cos", data.getPath()))
-	}
-	if !data.Cos.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/cos", data.getPath()))
-	}
-	if !data.DelayRequestFrequency.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/delay-request/frequency", data.getPath()))
-	}
-	if !data.DelayRequestInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/delay-request/interval", data.getPath()))
-	}
-	if !data.SyncTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sync/timeout", data.getPath()))
-	}
-	if !data.SyncGrantDuration.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sync/grant-duration", data.getPath()))
-	}
-	if !data.SyncFrequency.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sync/frequency", data.getPath()))
-	}
-	if !data.SyncInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sync/interval", data.getPath()))
-	}
-	if !data.AnnounceGrantDuration.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/announce/grant-duration", data.getPath()))
-	}
-	if !data.AnnounceTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/announce/timeout", data.getPath()))
-	}
-	if !data.AnnounceFrequency.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/announce/frequency", data.getPath()))
-	}
-	if !data.AnnounceInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/announce/interval", data.getPath()))
-	}
-	if !data.ClockOperationTwoStep.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/clock/operation/two-step", data.getPath()))
-	}
-	if !data.ClockOperationOneStep.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/clock/operation/one-step", data.getPath()))
-	}
-	if !data.TransportEthernet.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/ethernet", data.getPath()))
-	}
-	if !data.TransportIpv6.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/ipv6", data.getPath()))
-	}
-	if !data.TransportIpv4.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/ipv4", data.getPath()))
-	}
-	if !data.MulticastTargetAddressEthernetMacAddress0180C200000e.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/multicast/target-address/ethernet", data.getPath()))
-	}
-	if !data.MulticastTargetAddressEthernetMacAddress011b19000000.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/multicast/target-address/ethernet", data.getPath()))
-	}
-	if !data.MulticastDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/multicast", data.getPath()))
-	}
-	if !data.MulticastMixed.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/multicast", data.getPath()))
-	}
-	if !data.Multicast.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/multicast", data.getPath()))
-	}
-	if !data.SourceIpv6Address.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/source/ipv6/address", data.getPath()))
-	}
-	if !data.SourceIpv4Address.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/source/ipv4/address", data.getPath()))
-	}
-	if !data.PortStateAny.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/port/state/any", data.getPath()))
-	}
-	if !data.PortStateMasterOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/port/state/primary-only", data.getPath()))
-	}
-	if !data.PortStateSlaveOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/port/state/subordinate-only", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *PTPProfile) addDeletedItemsXML(ctx context.Context, state PTPProfile, body string) string {
@@ -5987,6 +6199,38 @@ func (data *PTPProfile) addDeletedItemsXML(ctx context.Context, state PTPProfile
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MonitorReceiver.IsNull() && state.MonitorReceiver.ValueBool() && data.MonitorReceiver.IsNull() {
+		deletePath := state.getXPath() + "/monitor-receiver"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.MonitorSender.IsNull() && state.MonitorSender.ValueBool() && data.MonitorSender.IsNull() {
+		deletePath := state.getXPath() + "/monitor-sender"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	for i := range state.InteropIngressConversionClockClassMappings {
 		stateKeys := [...]string{"clock-class-to-map-from"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}
@@ -7240,10 +7484,17 @@ func (data *PTPProfile) addDeletedItemsXML(ctx context.Context, state PTPProfile
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *PTPProfile) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.MonitorReceiver.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/monitor-receiver")
+	}
+	if !data.MonitorSender.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/monitor-sender")
+	}
 	for i := range data.InteropIngressConversionClockClassMappings {
 		keys := [...]string{"clock-class-to-map-from"}
 		keyValues := [...]string{strconv.FormatInt(data.InteropIngressConversionClockClassMappings[i].ClockClassToMapFrom.ValueInt64(), 10)}

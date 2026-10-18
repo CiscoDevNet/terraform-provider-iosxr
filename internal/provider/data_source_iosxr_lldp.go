@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -95,31 +94,31 @@ func (d *LLDPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				Computed:            true,
 			},
 			"chassis_id_type_chassis_component": schema.BoolAttribute{
-				MarkdownDescription: "Value of entPhysicalAlias object defined in IETF RFC 2737",
+				MarkdownDescription: "Value of entPhysicalAlias object defined in IETF RFC 2737" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"chassis_id_type_interface_alias": schema.BoolAttribute{
-				MarkdownDescription: "Value of ifAlias object defined in IETF RFC 2863",
+				MarkdownDescription: "Value of ifAlias object defined in IETF RFC 2863" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"chassis_id_type_port_component": schema.BoolAttribute{
-				MarkdownDescription: "Value of entPhysicalAlias object defined in IETF RFC 2737",
+				MarkdownDescription: "Value of entPhysicalAlias object defined in IETF RFC 2737" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"chassis_id_type_mac_address": schema.BoolAttribute{
-				MarkdownDescription: "Value of a unicast source address",
+				MarkdownDescription: "Value of a unicast source address" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"chassis_id_type_network_address": schema.BoolAttribute{
-				MarkdownDescription: "Network address associated with a particular chassis",
+				MarkdownDescription: "Network address associated with a particular chassis" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"chassis_id_type_interface_name": schema.BoolAttribute{
-				MarkdownDescription: "Value of ifName object defined in IETF RFC 2863",
+				MarkdownDescription: "Value of ifName object defined in IETF RFC 2863" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"chassis_id_type_local": schema.BoolAttribute{
-				MarkdownDescription: "Chassis identifier based on a locally defined value",
+				MarkdownDescription: "Chassis identifier based on a locally defined value" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"subinterfaces_enable": schema.BoolAttribute{
@@ -160,6 +159,14 @@ func (d *LLDPDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 			},
 			"tlv_select_system_name_disable": schema.BoolAttribute{
 				MarkdownDescription: "disable System Name TLV",
+				Computed:            true,
+			},
+			"chassis_id_type": schema.StringAttribute{
+				MarkdownDescription: "LLDP chassis ID type to advertise" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"interface_only": schema.BoolAttribute{
+				MarkdownDescription: "Enable LLDP only based on interface LLDP configuration. No Global enable" + "\n  - Supported from version: `25.4`",
 				Computed:            true,
 			},
 		},
@@ -209,7 +216,6 @@ func (d *LLDPDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -229,7 +235,7 @@ func (d *LLDPDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

@@ -1,0 +1,12 @@
+---
+name: MACSec Policy
+path: Cisco-IOS-XR-um-macsec-cfg:/macsec-policy/policy-names/policy-name[policy-name=%s]
+doc_category: Security
+attributes:
+  # ===========================================================
+  # ADDITIONS - new in 26.2
+  # ===========================================================
+  - yang_name: allow/ptp-in-clear
+    example: true
+  - yang_name: enable-fault-detection
+    example: true

@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -442,6 +441,38 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Schema(ctx context.Context, r
 				MarkdownDescription: "BGP bestpath selection will allow 'invalid' origin-AS",
 				Computed:            true,
 			},
+			"default_policy_action_in": schema.StringAttribute{
+				MarkdownDescription: "Default action if route does not satisfy inbound route-policy" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"default_policy_action_out": schema.StringAttribute{
+				MarkdownDescription: "Default action if route does not satisfy outbound route-policy" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"bandwidth_grp_outbound_name": schema.StringAttribute{
+				MarkdownDescription: "Bandwidth group name" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"bandwidth_grp_outbound_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: "Prevent item being inherited from a parent group" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"bandwidth_grp_inbound_name": schema.StringAttribute{
+				MarkdownDescription: "Bandwidth group name" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"bandwidth_grp_inbound_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: "Prevent item being inherited from a parent group" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"fast_reroute_per_link_multipath_backup_address": schema.StringAttribute{
+				MarkdownDescription: "Backup IP address" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"fast_reroute_per_link_multipath_backup_address_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: "Prevent fast-reroute-per-link from being inherited from the parent" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
 		},
 	}
 }
@@ -489,7 +520,6 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Read(ctx context.Context, req
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -509,7 +539,7 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Read(ctx context.Context, req
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

@@ -10,30 +10,38 @@ description: |-
 
 This resource can manage the Performance Measurement Endpoint IPv4 configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `liveness_detection_collect_hbh` | `25.4` |
+
 ## Example Usage
 
 ```terraform
 resource "iosxr_performance_measurement_endpoint_ipv4" "example" {
   address                        = "10.1.1.1"
-  vrf_name                       = "VRF1"
-  source_address_ipv4            = "10.1.1.100"
-  description                    = "PM Endpoint for testing"
   delay_measurement              = true
   delay_measurement_profile_name = "DELAY_PROFILE_1"
+  description                    = "PM Endpoint for testing"
   segment_list_names = [
     {
       list_name = "SEG_LIST_1"
     }
   ]
-  segment_routing = true
+  segment_routing                               = true
+  segment_routing_te_explicit_reverse_path_list = "SEG_LIST_GLOBAL_REVERSE"
   segment_routing_te_explicit_segment_lists = [
     {
+      insert_srh_sl_zero        = true
       list_name                 = "SEG_LIST_SR_1"
       reverse_path_segment_list = "SEG_LIST_REVERSE_1"
-      insert_srh_sl_zero        = true
     }
   ]
-  segment_routing_te_explicit_reverse_path_list = "SEG_LIST_GLOBAL_REVERSE"
+  source_address_ipv4 = "10.1.1.100"
+  vrf_name            = "VRF1"
 }
 ```
 
@@ -55,6 +63,7 @@ resource "iosxr_performance_measurement_endpoint_ipv4" "example" {
 - `device` (String) A device name from the provider configuration.
 - `liveness_detection` (Boolean) Enable liveness-detection on the endpoint
 - `liveness_detection_collect_hbh` (Boolean) Collect hop by hop data for liveness sessions
+  - **Not supported from version `25.4` and above**
 - `liveness_detection_profile_name` (String) Profile name
 - `segment_list_names` (Attributes List) Segment-list name (see [below for nested schema](#nestedatt--segment_list_names))
 - `segment_routing` (Boolean) Enable segment list on the endpoint

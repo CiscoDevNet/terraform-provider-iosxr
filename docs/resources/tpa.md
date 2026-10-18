@@ -4,45 +4,49 @@ page_title: "iosxr_tpa Resource - terraform-provider-iosxr"
 subcategory: "Management"
 description: |-
   This resource can manage the TPA configuration.
+  **Warning:** This resource is not supported from IOS-XR version 25.4 and above.
 ---
 
 # iosxr_tpa (Resource)
 
 This resource can manage the TPA configuration.
 
+> **Warning:** This resource is not supported from IOS-XR version 25.4 and above.
+
 ## Example Usage
 
 ```terraform
 resource "iosxr_tpa" "example" {
-  statistics_update_frequency = 60
-  statistics_max_lpts_events  = 10000000
-  statistics_max_intf_events  = 10000000
+  # NOTE: Only use with versions earlier than 25.4
   logging_file_max_size_kb    = 1024
   logging_rotation_max_files  = 10
+  statistics_max_intf_events  = 10000000
+  statistics_max_lpts_events  = 10000000
+  statistics_update_frequency = 60
   vrfs = [
     {
-      vrf_name                     = "default"
+      east_west_interfaces = [
+        {
+          interface_name       = "GigabitEthernet0/0/0/1"
+          referenced_interface = "GigabitEthernet0/0/0/1"
+          referenced_vrf       = "default"
+        }
+      ]
       ipv4_update_source_dataports = "GigabitEthernet0/0/0/0"
-      ipv6_update_source_dataports = "GigabitEthernet0/0/0/0"
       ipv4_update_source_destinations = [
         {
           destination_interface = "MgmtEth0/RP0/CPU0/0"
           source_interface      = "GigabitEthernet0/0/0/0"
         }
       ]
+      ipv6_update_source_dataports = "GigabitEthernet0/0/0/0"
       ipv6_update_source_destinations = [
         {
           destination_interface = "MgmtEth0/RP0/CPU0/0"
           source_interface      = "GigabitEthernet0/0/0/0"
         }
       ]
-      east_west_interfaces = [
-        {
-          interface_name       = "GigabitEthernet0/0/0/1"
-          referenced_vrf       = "default"
-          referenced_interface = "GigabitEthernet0/0/0/1"
-        }
-      ]
+      vrf_name = "default"
     }
   ]
 }

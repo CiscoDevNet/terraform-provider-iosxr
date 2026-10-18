@@ -14,36 +14,9 @@ This resource can manage the HW Module Profile configuration.
 
 ```terraform
 resource "iosxr_hw_module_profile" "example" {
-  profile_load_balance_algorithm_hash_polynomial_index = 5
-  profile_qos_max_classmap_size                        = "8"
-  profile_qos_max_classmap_size_locations = [
-    {
-      location_name     = "0/0/CPU0"
-      max_classmap_size = "8"
-    }
-  ]
-  profile_qos_qosg_dscp_mark_enable_first       = 0
-  profile_qos_qosg_dscp_mark_enable_second      = 63
-  profile_qos_free_buffer_int_threshold_set     = 50
-  profile_qos_free_buffer_int_threshold_clear   = 75
-  profile_qos_hqos_enable                       = true
-  profile_qos_stats_collection                  = true
-  profile_qos_ecn_marking_stats                 = true
-  profile_qos_shared_policer_per_class_stats    = true
-  profile_qos_wred_stats_enable                 = true
-  profile_qos_lag_scheduler                     = true
-  profile_qos_conform_aware_policer             = true
-  profile_qos_arp_isis_priority_enable          = true
-  profile_qos_gre_exp_classification_enable     = true
-  profile_qos_egress_compensation_setting_force = true
-  profile_qos_policer_scale                     = "64000"
-  profile_qos_nif_hp_fifo_reserve_percent       = 10
-  profile_qos_nif_hp_fifo_reserve_locations = [
-    {
-      location_name = "0/0/CPU0"
-      percent       = 10
-    }
-  ]
+  bgp_mp_pic_auto_protect_enable    = true
+  fib_bgp_pic_level_3_l2services    = true
+  fib_bgp_pic_multipath_core_enable = true
   netflow_ipfix315_enable_locations = [
     {
       location_name  = "0/0/CPU0"
@@ -56,13 +29,48 @@ resource "iosxr_hw_module_profile" "example" {
       location_name2 = "0/0/CPU0"
     }
   ]
-  stats_tx_scale_enhanced_ingress_sr                          = true
-  srv6_mode_micro_segment_format_f3216                        = true
-  srv6_encapsulation_l3_traffic_class_with_hoplimit_propagate = true
+  oam_four8byte_cfm_maid_enable                 = true
+  profile_qos_arp_isis_priority_enable          = true
+  profile_qos_conform_aware_policer             = true
+  profile_qos_ecn_marking_stats                 = true
+  profile_qos_egress_compensation_setting_force = true
+  profile_qos_egress_exp_mark_disable           = true
+  profile_qos_free_buffer_int_threshold_clear   = 75
+  profile_qos_free_buffer_int_threshold_set     = 50
+  profile_qos_gre_exp_classification_enable     = true
+  profile_qos_hqos_enable                       = true
+  profile_qos_ingress_fadt_set                  = "high"
+  profile_qos_ingress_fadt_set_locations = [
+    {
+      ingress_fadt_set = "high"
+      location_name    = "0/0/CPU0"
+    }
+  ]
+  profile_qos_lag_scheduler     = true
+  profile_qos_max_classmap_size = "8"
+  profile_qos_max_classmap_size_locations = [
+    {
+      location_name     = "0/0/CPU0"
+      max_classmap_size = "8"
+    }
+  ]
+  profile_qos_nif_hp_fifo_reserve_locations = [
+    {
+      location_name = "0/0/CPU0"
+      percent       = 10
+    }
+  ]
+  profile_qos_nif_hp_fifo_reserve_percent                     = 10
+  profile_qos_policer_scale                                   = "64000"
+  profile_qos_qosg_dscp_mark_enable_first                     = 0
+  profile_qos_qosg_dscp_mark_enable_second                    = 63
+  profile_qos_shared_policer_per_class_stats                  = true
+  profile_qos_stats_collection                                = true
+  profile_qos_wred_stats_enable                               = true
   sr_policy_v6_null_label_autopush                            = true
-  oam_four8byte_cfm_maid_enable                               = true
-  fib_bgp_pic_multipath_core_enable                           = true
-  bgp_mp_pic_auto_protect_enable                              = true
+  srv6_encapsulation_l3_traffic_class_with_hoplimit_propagate = true
+  srv6_mode_micro_segment_format_f3216                        = true
+  stats_tx_scale_enhanced_ingress_sr                          = true
 }
 ```
 
@@ -75,7 +83,11 @@ resource "iosxr_hw_module_profile" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `fib_bgp_pic_level_3_l2services` (Boolean) Enable BGP-PIC for l2services over BGP Labelled Unicast (only EVPN is supported)
+  - Supported from version: `25.4`
 - `fib_bgp_pic_multipath_core_enable` (Boolean) Enable pic core in forwarding chain
+- `fib_mpls_php_dscp_preserve` (Boolean) Preserve IPv4.DSCP and IPv6.TC in MPLS PHP flow with TTL being propagated
+  - Supported from version: `25.4`
 - `netflow_ipfix315_enable` (Boolean) IPFIX 315 enable
 - `netflow_ipfix315_enable_locations` (Attributes List) Location of NETFLOW config (see [below for nested schema](#nestedatt--netflow_ipfix315_enable_locations))
 - `netflow_sflow_enable` (Boolean) SFLOW enable
@@ -104,16 +116,31 @@ resource "iosxr_hw_module_profile" "example" {
 - `profile_load_balance_algorithm_mpls_safe_speculative_parsing` (Boolean) MPLS safe Speculative parsing.
 - `profile_load_balance_algorithm_pppoe` (Boolean) PPPoE session based optimized hash. Reload is required for this option
 - `profile_load_balance_algorithm_pppoe_decap_fatbased_hashing` (Boolean) PPPoE session based optimized hash with FAT label based hash. Reload is required for this option
+- `profile_mdb_l2max_se_srv6` (Boolean) l2max-se-srv6 profile for router containing only TCAM cards
+  - Supported from version: `25.4`
+- `profile_mdb_l2max_srv6` (Boolean) l2max-srv6 profile for router containing non-TCAM cards
+  - Supported from version: `25.4`
+- `profile_mdb_l3max_se_srv6` (Boolean) l3max-se-srv6 profile for router containing only TCAM cards
+  - Supported from version: `25.4`
+- `profile_mdb_l3max_srv6` (Boolean) l3max-srv6 profile for router containing non-TCAM cards
+  - Supported from version: `25.4`
 - `profile_qos_arp_isis_priority_enable` (Boolean) Prioritize ISIS and ARP packets
 - `profile_qos_conform_aware_policer` (Boolean) Configure Conform Aware Policer mode
 - `profile_qos_ecn_marking_stats` (Boolean) Enable ECN marking stats mode
 - `profile_qos_egress_compensation_setting_force` (Boolean) Forcefully allows to configure non-unique egress compensation values ignoring ASIC limitation (not recommended).
+- `profile_qos_egress_exp_mark_disable` (Boolean) Disable egress EXP marking
+  - Supported from version: `25.4`
 - `profile_qos_free_buffer_int_threshold_clear` (Number) clear value in percent (must be more than set value)
   - Range: `0`-`100`
 - `profile_qos_free_buffer_int_threshold_set` (Number) Configure free buffer interrupt threshold
   - Range: `0`-`100`
 - `profile_qos_gre_exp_classification_enable` (Boolean) Enable Ingress EXP classification for MPLSoGRE
 - `profile_qos_hqos_enable` (Boolean) Enable Hierarchical QoS
+- `profile_qos_ingress_fadt_set` (String) Change the adaptive drop threshold parameter for VoQs (specific to Jericho/Jericho+ ASIC only
+  - Choices: `disable`, `high`, `low`, `medium`
+  - Supported from version: `25.4`
+- `profile_qos_ingress_fadt_set_locations` (Attributes List) Location of QoS config
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--profile_qos_ingress_fadt_set_locations))
 - `profile_qos_lag_scheduler` (Boolean) Enable QoS Lag Scheduler
 - `profile_qos_max_classmap_size` (String) max class map size
   - Choices: `1`, `16`, `2`, `32`, `4`, `8`
@@ -184,6 +211,18 @@ Required:
   - Choices: `1`, `10`, `11`, `12`, `2`, `3`, `4`, `5`
 - `location_name` (String) Location of bundle-hash polynomial config
 - `location_name2` (String) Location of bundle-hash polynomial config
+
+
+<a id="nestedatt--profile_qos_ingress_fadt_set_locations"></a>
+### Nested Schema for `profile_qos_ingress_fadt_set_locations`
+
+Optional:
+
+- `ingress_fadt_set` (String) set ingress fadt
+  - Choices: `disable`, `high`, `low`, `medium`
+  - Supported from version: `25.4`
+- `location_name` (String) Location of QoS config
+  - Supported from version: `25.4`
 
 
 <a id="nestedatt--profile_qos_max_classmap_size_locations"></a>

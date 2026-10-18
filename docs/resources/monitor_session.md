@@ -10,22 +10,31 @@ description: |-
 
 This resource can manage the Monitor Session configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `monitor_sessions.rate_limit_rx` | `25.4` |
+| `monitor_sessions.rate_limit_tx` | `25.4` |
+
 ## Example Usage
 
 ```terraform
 resource "iosxr_monitor_session" "example" {
+  default_capture_disable = true
   monitor_sessions = [
     {
-      session_name          = "SPAN1"
-      traffic_type          = "ethernet"
       destination_interface = "GigabitEthernet0/0/0/1"
       discard_class         = 1
-      traffic_class         = 5
       mirror_first          = 256
+      session_name          = "SPAN1"
+      traffic_class         = 5
+      traffic_type          = "ethernet"
     }
   ]
-  router_id               = 1
-  default_capture_disable = true
+  router_id = 1
 }
 ```
 
@@ -60,6 +69,8 @@ Required:
 
 Optional:
 
+- `destination_application` (Boolean) Specify an application destination
+  - Supported from version: `25.4`
 - `destination_file_always_on` (Boolean) Start packet capture immediately if configured
 - `destination_file_buffer_type_linear` (Boolean) Specify a linear buffer
 - `destination_file_filter` (String) Specify a pcap filter to apply
@@ -68,6 +79,12 @@ Optional:
   - Range: `1`-`16777216`
 - `destination_interface` (String) Specify a destination interface
 - `destination_pseudowire` (Boolean) Specify a pseudowire
+- `destination_rate_limit` (Number) Specify the maximum mirroring rate
+  - Range: `1`-`4294967295`
+  - Supported from version: `25.4`
+- `destination_rate_limit_units` (String) Specify the units for the maximum mirror rate
+  - Choices: `kbps`, `pps`
+  - Supported from version: `25.4`
 - `discard_class` (Number) Specify the discard class value to be set on all traffic mirrored to the destination
   - Range: `0`-`2`
 - `drops_filter` (String) Specify a pcap filter to apply
@@ -75,6 +92,10 @@ Optional:
 - `drops_rx` (Boolean) Mirror dropped packets in the Rx direction only
 - `drops_traffic_management` (Boolean) Mirror traffic-management dropped packets only
 - `drops_tx` (Boolean) Mirror dropped packets in the Tx direction only
+- `drops_unique_port` (Boolean) Only mirror the first packet for a given port
+  - Supported from version: `25.4`
+- `drops_unique_punt` (Boolean) Only mirror the first packet for a given drop reason
+  - Supported from version: `25.4`
 - `inject_interface` (String) Specify the attachment interface into which traffic may be injected from the SPAN session's destination
 - `mirror_first` (Number) Enable mirroring on the first portion of a packet
   - Range: `1`-`10000`
@@ -85,14 +106,32 @@ Optional:
 - `protocol_capture_tx` (Boolean) Mirror Tx protocol-captured packets
 - `rate_limit_rx` (Number) Rate limit mirroring in the rx direction
   - Range: `0`-`4294967295`
+  - **Not supported from version `25.4` and above**
 - `rate_limit_tx` (Number) Rate limit mirroring in the tx direction
   - Range: `0`-`4294967295`
+  - **Not supported from version `25.4` and above**
+- `rx_application` (Boolean) Specify an application destination
+  - Supported from version: `25.4`
 - `rx_interface` (String) Specify a destination interface
 - `rx_pseudowire` (Boolean) Specify a pseudowire
+- `rx_rate_limit` (Number) Specify the maximum mirroring rate
+  - Range: `1`-`4294967295`
+  - Supported from version: `25.4`
+- `rx_rate_limit_units` (String) Specify the units for the maximum mirror rate
+  - Choices: `kbps`, `pps`
+  - Supported from version: `25.4`
 - `traffic_class` (Number) Specify the traffic class value to be set on all traffic mirrored to the destination
   - Range: `0`-`7`
+- `tx_application` (Boolean) Specify an application destination
+  - Supported from version: `25.4`
 - `tx_interface` (String) Specify a destination interface
 - `tx_pseudowire` (Boolean) Specify a pseudowire
+- `tx_rate_limit` (Number) Specify the maximum mirroring rate
+  - Range: `1`-`4294967295`
+  - Supported from version: `25.4`
+- `tx_rate_limit_units` (String) Specify the units for the maximum mirror rate
+  - Choices: `kbps`, `pps`
+  - Supported from version: `25.4`
 
 ## Import
 

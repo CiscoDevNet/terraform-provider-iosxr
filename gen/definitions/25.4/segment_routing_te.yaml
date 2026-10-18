@@ -1,0 +1,14 @@
+---
+name: Segment Routing TE
+path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering
+doc_category: Segment Routing
+attributes:
+  # ===========================================================
+  # pcc/profiles/profile: list moved to profiles/profile, keys and sub-attrs unchanged
+  # 24.4: pcc/profiles/profile
+  # 25.4: profiles/profile (tf_name preserved as "pcc_profiles"; sub-attrs inherited)
+  # ===========================================================
+  - yang_name: profiles/profile
+    tf_name: pcc_profiles
+    replaces_yang_name: pcc/profiles/profile
+    type: List

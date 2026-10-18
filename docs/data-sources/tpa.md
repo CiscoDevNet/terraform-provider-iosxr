@@ -4,16 +4,20 @@ page_title: "iosxr_tpa Data Source - terraform-provider-iosxr"
 subcategory: "Management"
 description: |-
   This data source can read the TPA configuration.
+  **Warning:** This data source is not supported from IOS-XR version 25.4 and above.
 ---
 
 # iosxr_tpa (Data Source)
 
 This data source can read the TPA configuration.
 
+> **Warning:** This data source is not supported from IOS-XR version 25.4 and above.
+
 ## Example Usage
 
 ```terraform
 data "iosxr_tpa" "example" {
+  # NOTE: Only use with versions earlier than 25.4
 }
 ```
 

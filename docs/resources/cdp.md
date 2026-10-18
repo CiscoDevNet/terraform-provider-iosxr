@@ -14,11 +14,11 @@ This resource can manage the CDP configuration.
 
 ```terraform
 resource "iosxr_cdp" "example" {
+  advertise_v1          = true
   enable                = true
   holdtime              = 12
-  timer                 = 34
-  advertise_v1          = true
   log_adjacency_changes = true
+  timer                 = 34
 }
 ```
 

@@ -1,5 +1,25 @@
 ## Unreleased
 
+- Add `iosxr_hw_module_shutdown_8000` resource and data source
+- Add `iosxr_multicast_routing` resource and data source
+- Add `iosxr_multicast_routing_vrf` resource and data source
+- Fix: Make `maximum_route_interfaces` of the `interfaces` list optional in `iosxr_router_pim_ipv4`, `iosxr_router_pim_ipv6`, `iosxr_router_pim_vrf_ipv4` and `iosxr_router_pim_vrf_ipv6` resources and data sources
+- BREAKING CHANGE: Remove the `iosxr_rsvp_interface` resource and data source. Use the new `interfaces` list of the `iosxr_rsvp` resource and data source instead.
+- BREAKING CHANGE: Remove the `iosxr_router_mld_interface` resource and data source. Use the new `interfaces` list of the `iosxr_router_mld` resource and data source instead.
+- BREAKING CHANGE: Remove the `iosxr_router_mld_vrf_interface` resource and data source. Use the new `interfaces` list of the `iosxr_router_mld_vrf` resource and data source instead.
+- BREAKING CHANGE: Remove the `iosxr_router_igmp_interface` resource and data source. Use the new `interfaces` list of the `iosxr_router_igmp` resource and data source instead.
+- BREAKING CHANGE: Remove the `iosxr_router_igmp_vrf_interface` resource and data source. Use the new `interfaces` list of the `iosxr_router_igmp_vrf` resource and data source instead.
+- Add `iosxr_clock_8000` resource and data source
+- Add `hardware` attribute to the `iosxr_device_info` data source, which returns the auto-detected IOS-XR hardware identifier (the `hardware-info` field of `install/version`, for example `8000` on a Cisco 8000). Auto-detection now fails with a clear error if the device does not report it
+- Add `iosxr_password6` resource and data source
+- Add `speed_host_lanes` to `iosxr_controller_optics` resource and data source (available from 25.4)
+- Add `sak_rekey_interval_minutes` to `iosxr_macsec_policy` resource and data source
+- Add `allow_ptp_in_clear`, `enable_fault_detection` to `iosxr_macsec_policy` resource and data source (available from 26.2)
+- Add multi-version support for IOS-XR 24.4.2, 25.4.2 and 26.2.1. Attributes and YANG paths follow the release of the device. See the Multi-Version Support guide
+- Add `iosxr_version` provider attribute to set the IOS-XR version in `major.minor` format; the patch is ignored. If not set, the provider auto-detects the version of each managed device over gNMI
+- Add `iosxr_device_info` data source, which returns the auto-detected IOS-XR version (`major.minor`) of a device
+- Add `iosxr_grpc` resource and data source
+- Add `iosxr_cef_accounting` resource and data source
 - BREAKING CHANGE: Remove `neighbors` list from `router_bgp` resource and data source. Use the new `router_bgp_neighbor` resource instead.
 - BREAKING CHANGE: Remove `neighbors` list from `router_bgp_vrf` resource and data source. Use the new `router_bgp_vrf_neighbor` resource instead.
 - Add `router_bgp_neighbor` resource and data source
@@ -16,6 +36,7 @@
 - Add NETCONF protocol support (`protocol = "netconf"`) as an alternative to gNMI, with support for NETCONF 1.0/1.1, candidate and running datastore workflows, connection reuse, and automatic capability detection
 - BREAKING CHANGE: Rename resource and data source `iosxr_gnmi` to `iosxr_yang`. Update all HCL references and run `terraform state mv` to migrate existing state.
 - Fix: preserve newlines in multi-line `iosxr_cli` commands by JSON-encoding the gNMI `json_ietf` value and XML-escaping the NETCONF payload, so multi-line CLI submode configuration applies correctly instead of being sent as invalid single-line content
+- Add `timeout` provider attribute (gNMI operation timeout, default 30s, previously 15s)
 
 ## 0.7.1
 

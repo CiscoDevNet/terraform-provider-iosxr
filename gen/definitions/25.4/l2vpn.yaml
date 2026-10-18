@@ -1,0 +1,10 @@
+---
+name: L2VPN
+path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn
+doc_category: L2VPN
+attributes:
+  # ===========================================================
+  # REMOVALS — pw-oam container removed
+  # ===========================================================
+  - yang_name: pw-oam/refresh/transmit
+    legacy: true

@@ -40,11 +40,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
-	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
-
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewInterfaceBundleEtherSubinterfaceResource() resource.Resource {
@@ -221,8 +219,11 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Schema(ctx context.Context, r
 				},
 			},
 			"load_interval": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify interval for load calculation for an interface").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Specify interval for load calculation for an interface").AddIntegerRangeDescription(0, 600).String,
 				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 600),
+				},
 			},
 			"vrf": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set VRF in which the interface operates").String,
@@ -1761,6 +1762,25 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Schema(ctx context.Context, r
 					},
 				},
 			},
+			"ipv6_nd_solicited_ra": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Modify solicited Router Advertisement behaviour").AddStringEnumDescription("disable", "unicast").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "unicast"),
+				},
+			},
+			"ipv6_nd_unsolicited_ra_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not send unsolicited Router Advertisement message").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"ptp_monitor_sender": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable monitor-sender packet exchange").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"ptp_monitor_receiver": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable monitor-receiver packet exchange").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
 		},
 	}
 }
@@ -1792,7 +1812,10 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Create(ctx context.Context, r
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
-
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
@@ -1810,10 +1833,10 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Create(ctx context.Context, r
 			var ops []gnmi.SetOperation
 
 			// Create object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("gNMI Set body for path %s: %s", plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -1868,7 +1891,6 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Create(ctx context.Context, r
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-
 func (r *InterfaceBundleEtherSubinterfaceResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state InterfaceBundleEtherSubinterface
 
@@ -1933,10 +1955,10 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Read(ctx context.Context, req
 				if imp {
 					// After `terraform import` we switch to a full read so all device
 					// attributes are populated in state (fromBody overwrites everything).
-					state.fromBody(ctx, gjson.ParseBytes(respBody))
+					state.fromBody(ctx, respBody, device.Version)
 				} else {
 					// Normal read: preserve config-only fields not returned by the device.
-					state.updateFromBody(ctx, gjson.ParseBytes(respBody))
+					state.updateFromBody(ctx, respBody, device.Version)
 				}
 			}
 		} else {
@@ -1977,7 +1999,6 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Read(ctx context.Context, req
 			}
 		}
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
@@ -1989,7 +2010,6 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Read(ctx context.Context, req
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-
 func (r *InterfaceBundleEtherSubinterfaceResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state InterfaceBundleEtherSubinterface
 
@@ -2012,6 +2032,10 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Update(ctx context.Context, r
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -2030,16 +2054,16 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Update(ctx context.Context, r
 			var ops []gnmi.SetOperation
 
 			// Update object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 
-			deletedListItems := plan.getDeletedItems(ctx, state)
+			deletedListItems := plan.getDeletedItems(ctx, state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
 
 			for _, i := range deletedListItems {
 				ops = append(ops, gnmi.Delete(i))
 			}
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -2082,7 +2106,6 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Update(ctx context.Context, r
 			}
 		}
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
@@ -2092,7 +2115,6 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Update(ctx context.Context, r
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-
 func (r *InterfaceBundleEtherSubinterfaceResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state InterfaceBundleEtherSubinterface
 
@@ -2107,6 +2129,14 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Delete(ctx context.Context, r
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
@@ -2183,7 +2213,7 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Delete(ctx context.Context, r
 				}
 
 				var ops []gnmi.SetOperation
-				deletePaths := state.getDeletePaths(ctx)
+				deletePaths := state.getDeletePaths(ctx, device.Version)
 				tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
 
 				for _, i := range deletePaths {
@@ -2231,7 +2261,6 @@ func (r *InterfaceBundleEtherSubinterfaceResource) Delete(ctx context.Context, r
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-
 func (r *InterfaceBundleEtherSubinterfaceResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)

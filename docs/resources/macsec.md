@@ -14,8 +14,8 @@ This resource can manage the MACSec configuration.
 
 ```terraform
 resource "iosxr_macsec" "example" {
-  shutdown = true
   fips     = true
+  shutdown = true
 }
 ```
 

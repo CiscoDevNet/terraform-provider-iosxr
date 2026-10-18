@@ -10,35 +10,44 @@ description: |-
 
 This resource can manage the Segment Routing V6 configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `encapsulation_source_address` | `26.2` |
+
 ## Example Usage
 
 ```terraform
 resource "iosxr_segment_routing_v6" "example" {
-  enable                 = true
-  sid_holdtime           = 10
-  logging_locator_status = true
+  enable                               = true
+  encapsulation_hop_limit_option       = "count"
+  encapsulation_hop_limit_value        = 1
+  encapsulation_source_address_address = "fccc:0:214::1"
+  encapsulation_source_address_option  = "explicit-address"
+  encapsulation_traffic_class_option   = "value"
+  encapsulation_traffic_class_value    = 1
   formats = [
     {
-      name          = "usid-f3216"
       format_enable = true
+      name          = "usid-f3216"
     }
   ]
   locators = [
     {
+      algorithm              = 128
+      anycast                = true
       locator_enable         = true
-      name                   = "Locator1"
       micro_segment_behavior = "unode-psp-usd"
+      name                   = "Locator1"
       prefix                 = "fccc:0:214::"
       prefix_length          = 48
-      anycast                = true
-      algorithm              = 128
     }
   ]
-  encapsulation_traffic_class_option = "value"
-  encapsulation_traffic_class_value  = 1
-  encapsulation_hop_limit_option     = "count"
-  encapsulation_hop_limit_value      = 1
-  encapsulation_source_address       = "fccc:0:214::1"
+  logging_locator_status = true
+  sid_holdtime           = 10
 }
 ```
 
@@ -57,6 +66,12 @@ resource "iosxr_segment_routing_v6" "example" {
 - `encapsulation_hop_limit_value` (Number) Count for Hop-limit
   - Range: `0`-`255`
 - `encapsulation_source_address` (String) Configure a source address
+  - **Not supported from version `26.2` and above**
+- `encapsulation_source_address_address` (String) Explicit IPv6 address
+  - Supported from version: `26.2`
+- `encapsulation_source_address_option` (String) Source address config option
+  - Choices: `explicit-address`, `locator-address-with-entropy-added`
+  - Supported from version: `26.2`
 - `encapsulation_traffic_class_option` (String) Config option
   - Choices: `propagate`, `propagate-disable`, `value`
 - `encapsulation_traffic_class_value` (Number) Field Value

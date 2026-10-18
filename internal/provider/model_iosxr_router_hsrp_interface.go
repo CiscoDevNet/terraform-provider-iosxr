@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"strconv"
 	"strings"
 
@@ -94,7 +95,7 @@ func (data RouterHSRPInterfaceData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RouterHSRPInterface) toBody(ctx context.Context) string {
+func (data RouterHSRPInterface) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.InterfaceName.IsNull() && !data.InterfaceName.IsUnknown() {
 		body, _ = sjson.Set(body, "interface-name", data.InterfaceName.ValueString())
@@ -128,6 +129,252 @@ func (data RouterHSRPInterface) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
+
+// GetVersionConstraints returns the version constraints for all fields
+func (data RouterHSRPInterface) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data RouterHSRPInterface) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data RouterHSRPInterface) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data RouterHSRPInterface) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data RouterHSRPInterface) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *RouterHSRPInterface) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "hsrp.use-bia"); !data.HsrpUseBia.IsNull() {
+		if value.Exists() {
+			data.HsrpUseBia = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.HsrpUseBia = types.BoolValue(false)
+		}
+	} else if data.HsrpUseBia.IsNull() {
+		data.HsrpUseBia = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "hsrp.redirects.disable"); !data.HsrpRedirectsDisable.IsNull() {
+		if value.Exists() {
+			data.HsrpRedirectsDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.HsrpRedirectsDisable = types.BoolValue(false)
+		}
+	} else if data.HsrpRedirectsDisable.IsNull() {
+		data.HsrpRedirectsDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "hsrp.delay.minimum"); value.Exists() && !data.HsrpDelayMinimum.IsNull() {
+		data.HsrpDelayMinimum = types.Int64Value(value.Int())
+	} else if data.HsrpDelayMinimum.IsNull() {
+		data.HsrpDelayMinimum = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "hsrp.delay.reload"); value.Exists() && !data.HsrpDelayReload.IsNull() {
+		data.HsrpDelayReload = types.Int64Value(value.Int())
+	} else if data.HsrpDelayReload.IsNull() {
+		data.HsrpDelayReload = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "hsrp.bfd.minimum-interval"); value.Exists() && !data.HsrpBfdMinimumInterval.IsNull() {
+		data.HsrpBfdMinimumInterval = types.Int64Value(value.Int())
+	} else if data.HsrpBfdMinimumInterval.IsNull() {
+		data.HsrpBfdMinimumInterval = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "hsrp.bfd.multiplier"); value.Exists() && !data.HsrpBfdMultiplier.IsNull() {
+		data.HsrpBfdMultiplier = types.Int64Value(value.Int())
+	} else if data.HsrpBfdMultiplier.IsNull() {
+		data.HsrpBfdMultiplier = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "hsrp.mac-refresh"); value.Exists() && !data.HsrpMacRefresh.IsNull() {
+		data.HsrpMacRefresh = types.Int64Value(value.Int())
+	} else if data.HsrpMacRefresh.IsNull() {
+		data.HsrpMacRefresh = types.Int64Null()
+	}
+}
+
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *RouterHSRPInterface) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "hsrp.use-bia"); value.Exists() {
+		data.HsrpUseBia = types.BoolValue(true)
+	} else if !data.HsrpUseBia.IsNull() {
+		// Only set to false if it was previously set in state
+		data.HsrpUseBia = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "hsrp.redirects.disable"); value.Exists() {
+		data.HsrpRedirectsDisable = types.BoolValue(true)
+	} else if !data.HsrpRedirectsDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.HsrpRedirectsDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "hsrp.delay.minimum"); value.Exists() {
+		data.HsrpDelayMinimum = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "hsrp.delay.reload"); value.Exists() {
+		data.HsrpDelayReload = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "hsrp.bfd.minimum-interval"); value.Exists() {
+		data.HsrpBfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "hsrp.bfd.multiplier"); value.Exists() {
+		data.HsrpBfdMultiplier = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "hsrp.mac-refresh"); value.Exists() {
+		data.HsrpMacRefresh = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *RouterHSRPInterfaceData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "hsrp.use-bia"); value.Exists() {
+		data.HsrpUseBia = types.BoolValue(true)
+	} else {
+		data.HsrpUseBia = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "hsrp.redirects.disable"); value.Exists() {
+		data.HsrpRedirectsDisable = types.BoolValue(true)
+	} else {
+		data.HsrpRedirectsDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "hsrp.delay.minimum"); value.Exists() {
+		data.HsrpDelayMinimum = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "hsrp.delay.reload"); value.Exists() {
+		data.HsrpDelayReload = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "hsrp.bfd.minimum-interval"); value.Exists() {
+		data.HsrpBfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "hsrp.bfd.multiplier"); value.Exists() {
+		data.HsrpBfdMultiplier = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "hsrp.mac-refresh"); value.Exists() {
+		data.HsrpMacRefresh = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *RouterHSRPInterface) getDeletedItems(ctx context.Context, state RouterHSRPInterface, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.HsrpMacRefresh.IsNull() && data.HsrpMacRefresh.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "hsrp/mac-refresh"))
+	}
+	if !state.HsrpBfdMultiplier.IsNull() && data.HsrpBfdMultiplier.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "hsrp/bfd/multiplier"))
+	}
+	if !state.HsrpBfdMinimumInterval.IsNull() && data.HsrpBfdMinimumInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "hsrp/bfd/minimum-interval"))
+	}
+	if !state.HsrpDelayReload.IsNull() && data.HsrpDelayReload.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "hsrp/delay/reload"))
+	}
+	if !state.HsrpDelayMinimum.IsNull() && data.HsrpDelayMinimum.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "hsrp/delay/minimum"))
+	}
+	if !state.HsrpRedirectsDisable.IsNull() && data.HsrpRedirectsDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "hsrp/redirects/disable"))
+	}
+	if !state.HsrpUseBia.IsNull() && data.HsrpUseBia.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "hsrp/use-bia"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *RouterHSRPInterface) getEmptyLeafsDelete(ctx context.Context, state *RouterHSRPInterface, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if !data.HsrpRedirectsDisable.IsNull() && !data.HsrpRedirectsDisable.ValueBool() {
+		if state == nil || state.HsrpRedirectsDisable.IsNull() || state.HsrpRedirectsDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "hsrp/redirects/disable"))
+		}
+	}
+	if !data.HsrpUseBia.IsNull() && !data.HsrpUseBia.ValueBool() {
+		if state == nil || state.HsrpUseBia.IsNull() || state.HsrpUseBia.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "hsrp/use-bia"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *RouterHSRPInterface) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.HsrpMacRefresh.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "hsrp/mac-refresh"))
+	}
+	if !data.HsrpBfdMultiplier.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "hsrp/bfd/multiplier"))
+	}
+	if !data.HsrpBfdMinimumInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "hsrp/bfd/minimum-interval"))
+	}
+	if !data.HsrpDelayReload.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "hsrp/delay/reload"))
+	}
+	if !data.HsrpDelayMinimum.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "hsrp/delay/minimum"))
+	}
+	if !data.HsrpRedirectsDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "hsrp/redirects/disable"))
+	}
+	if !data.HsrpUseBia.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "hsrp/use-bia"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
@@ -184,7 +431,7 @@ func (data RouterHSRPInterface) toBodyXML(ctx context.Context, stateArg ...*Rout
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -192,60 +439,6 @@ func (data RouterHSRPInterface) toBodyXML(ctx context.Context, stateArg ...*Rout
 }
 
 // End of section. //template:end toBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
-
-func (data *RouterHSRPInterface) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("hsrp.use-bia"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.HsrpUseBia.IsNull() {
-			data.HsrpUseBia = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.HsrpUseBia.IsNull() {
-			data.HsrpUseBia = types.BoolNull()
-		}
-	}
-	if value := res.Get("hsrp.redirects.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.HsrpRedirectsDisable.IsNull() {
-			data.HsrpRedirectsDisable = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.HsrpRedirectsDisable.IsNull() {
-			data.HsrpRedirectsDisable = types.BoolNull()
-		}
-	}
-	if value := res.Get("hsrp.delay.minimum"); value.Exists() && !data.HsrpDelayMinimum.IsNull() {
-		data.HsrpDelayMinimum = types.Int64Value(value.Int())
-	} else if data.HsrpDelayMinimum.IsNull() {
-		data.HsrpDelayMinimum = types.Int64Null()
-	}
-	if value := res.Get("hsrp.delay.reload"); value.Exists() && !data.HsrpDelayReload.IsNull() {
-		data.HsrpDelayReload = types.Int64Value(value.Int())
-	} else if data.HsrpDelayReload.IsNull() {
-		data.HsrpDelayReload = types.Int64Null()
-	}
-	if value := res.Get("hsrp.bfd.minimum-interval"); value.Exists() && !data.HsrpBfdMinimumInterval.IsNull() {
-		data.HsrpBfdMinimumInterval = types.Int64Value(value.Int())
-	} else if data.HsrpBfdMinimumInterval.IsNull() {
-		data.HsrpBfdMinimumInterval = types.Int64Null()
-	}
-	if value := res.Get("hsrp.bfd.multiplier"); value.Exists() && !data.HsrpBfdMultiplier.IsNull() {
-		data.HsrpBfdMultiplier = types.Int64Value(value.Int())
-	} else if data.HsrpBfdMultiplier.IsNull() {
-		data.HsrpBfdMultiplier = types.Int64Null()
-	}
-	if value := res.Get("hsrp.mac-refresh"); value.Exists() && !data.HsrpMacRefresh.IsNull() {
-		data.HsrpMacRefresh = types.Int64Value(value.Int())
-	} else if data.HsrpMacRefresh.IsNull() {
-		data.HsrpMacRefresh = types.Int64Null()
-	}
-}
-
-// End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
@@ -300,87 +493,7 @@ func (data *RouterHSRPInterface) updateFromBodyXML(ctx context.Context, res xmld
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *RouterHSRPInterface) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "hsrp.use-bia"); value.Exists() {
-		data.HsrpUseBia = types.BoolValue(true)
-	} else if !data.HsrpUseBia.IsNull() {
-		// Only set to false if it was previously set in state
-		data.HsrpUseBia = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "hsrp.redirects.disable"); value.Exists() {
-		data.HsrpRedirectsDisable = types.BoolValue(true)
-	} else if !data.HsrpRedirectsDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.HsrpRedirectsDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "hsrp.delay.minimum"); value.Exists() {
-		data.HsrpDelayMinimum = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "hsrp.delay.reload"); value.Exists() {
-		data.HsrpDelayReload = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "hsrp.bfd.minimum-interval"); value.Exists() {
-		data.HsrpBfdMinimumInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "hsrp.bfd.multiplier"); value.Exists() {
-		data.HsrpBfdMultiplier = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "hsrp.mac-refresh"); value.Exists() {
-		data.HsrpMacRefresh = types.Int64Value(value.Int())
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *RouterHSRPInterfaceData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "hsrp.use-bia"); value.Exists() {
-		data.HsrpUseBia = types.BoolValue(true)
-	} else {
-		data.HsrpUseBia = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "hsrp.redirects.disable"); value.Exists() {
-		data.HsrpRedirectsDisable = types.BoolValue(true)
-	} else {
-		data.HsrpRedirectsDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "hsrp.delay.minimum"); value.Exists() {
-		data.HsrpDelayMinimum = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "hsrp.delay.reload"); value.Exists() {
-		data.HsrpDelayReload = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "hsrp.bfd.minimum-interval"); value.Exists() {
-		data.HsrpBfdMinimumInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "hsrp.bfd.multiplier"); value.Exists() {
-		data.HsrpBfdMultiplier = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "hsrp.mac-refresh"); value.Exists() {
-		data.HsrpMacRefresh = types.Int64Value(value.Int())
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RouterHSRPInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -412,6 +525,7 @@ func (data *RouterHSRPInterface) fromBodyXML(ctx context.Context, res xmldot.Res
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RouterHSRPInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -443,85 +557,7 @@ func (data *RouterHSRPInterfaceData) fromBodyXML(ctx context.Context, res xmldot
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *RouterHSRPInterface) getDeletedItems(ctx context.Context, state RouterHSRPInterface) []string {
-	deletedItems := make([]string, 0)
-	if !state.HsrpMacRefresh.IsNull() && data.HsrpMacRefresh.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/mac-refresh", state.getPath()))
-	}
-	if !state.HsrpBfdMultiplier.IsNull() && data.HsrpBfdMultiplier.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/bfd/multiplier", state.getPath()))
-	}
-	if !state.HsrpBfdMinimumInterval.IsNull() && data.HsrpBfdMinimumInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/bfd/minimum-interval", state.getPath()))
-	}
-	if !state.HsrpDelayReload.IsNull() && data.HsrpDelayReload.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/delay/reload", state.getPath()))
-	}
-	if !state.HsrpDelayMinimum.IsNull() && data.HsrpDelayMinimum.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/delay/minimum", state.getPath()))
-	}
-	if !state.HsrpRedirectsDisable.IsNull() && data.HsrpRedirectsDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/redirects/disable", state.getPath()))
-	}
-	if !state.HsrpUseBia.IsNull() && data.HsrpUseBia.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/use-bia", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *RouterHSRPInterface) getEmptyLeafsDelete(ctx context.Context, state *RouterHSRPInterface) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.HsrpRedirectsDisable.IsNull() && !data.HsrpRedirectsDisable.ValueBool() {
-		if state != nil && !state.HsrpRedirectsDisable.IsNull() && state.HsrpRedirectsDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hsrp/redirects/disable", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.HsrpUseBia.IsNull() && !data.HsrpUseBia.ValueBool() {
-		if state != nil && !state.HsrpUseBia.IsNull() && state.HsrpUseBia.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hsrp/use-bia", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *RouterHSRPInterface) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.HsrpMacRefresh.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/mac-refresh", data.getPath()))
-	}
-	if !data.HsrpBfdMultiplier.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/bfd/multiplier", data.getPath()))
-	}
-	if !data.HsrpBfdMinimumInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/bfd/minimum-interval", data.getPath()))
-	}
-	if !data.HsrpDelayReload.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/delay/reload", data.getPath()))
-	}
-	if !data.HsrpDelayMinimum.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/delay/minimum", data.getPath()))
-	}
-	if !data.HsrpRedirectsDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/redirects/disable", data.getPath()))
-	}
-	if !data.HsrpUseBia.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/use-bia", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *RouterHSRPInterface) addDeletedItemsXML(ctx context.Context, state RouterHSRPInterface, body string) string {
@@ -642,6 +678,7 @@ func (data *RouterHSRPInterface) addDeletedItemsXML(ctx context.Context, state R
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *RouterHSRPInterface) addDeletePathsXML(ctx context.Context, body string) string {

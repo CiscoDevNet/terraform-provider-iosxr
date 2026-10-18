@@ -14,10 +14,34 @@ This resource can manage the ICMP configuration.
 
 ```terraform
 resource "iosxr_icmp" "example" {
-  ipv4_source_vrf                     = true
-  ipv4_rate_limit_unreachable_rate    = 1000
+  ipv4_mpls_extended_diagnostics      = true
   ipv4_rate_limit_unreachable_df_rate = 1000
-  ipv6_source_vrf                     = true
+  ipv4_rate_limit_unreachable_rate    = 1000
+  ipv4_source_vrf                     = true
+  ipv4_vrfs = [
+    {
+      extended_diagnostics_permitted_remote_addresses = [
+        {
+          address = "10.0.0.0"
+          length  = 24
+        }
+      ]
+      vrf_name = "VRF1"
+    }
+  ]
+  ipv6_mpls_extended_diagnostics = true
+  ipv6_source_vrf                = true
+  ipv6_vrfs = [
+    {
+      extended_diagnostics_permitted_remote_addresses = [
+        {
+          address = "2001:db8::"
+          length  = 64
+        }
+      ]
+      vrf_name = "VRF1"
+    }
+  ]
 }
 ```
 
@@ -29,6 +53,8 @@ resource "iosxr_icmp" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `ipv4_mpls_extended_diagnostics` (Boolean) Enter the extended diagnostics submode
+  - Supported from version: `25.4`
 - `ipv4_rate_limit_unreachable_df_disable` (Boolean) Disable rate limit of ICMP messages
 - `ipv4_rate_limit_unreachable_df_rate` (Number) One ICMP unreachable message in x milliseconds(default is 500ms)
   - Range: `1`-`4294967295`
@@ -37,12 +63,62 @@ resource "iosxr_icmp" "example" {
   - Range: `1`-`4294967295`
 - `ipv4_source_rfc` (Boolean) Enable RFC compliance for source address selection
 - `ipv4_source_vrf` (Boolean) Enable Strct VRF source address selection
+- `ipv4_vrfs` (Attributes List) Configuration for a particular VRF
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--ipv4_vrfs))
+- `ipv6_mpls_extended_diagnostics` (Boolean) Enter the extended diagnostics submode
+  - Supported from version: `25.4`
 - `ipv6_source_rfc` (Boolean) Enable RFC compliance for source address selection
 - `ipv6_source_vrf` (Boolean) Enable Strct VRF source address selection
+- `ipv6_vrfs` (Attributes List) Configuration for a particular VRF
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--ipv6_vrfs))
 
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--ipv4_vrfs"></a>
+### Nested Schema for `ipv4_vrfs`
+
+Optional:
+
+- `extended_diagnostics_permitted_remote_addresses` (Attributes List) Permitted remote IPv4 prefix
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--ipv4_vrfs--extended_diagnostics_permitted_remote_addresses))
+- `vrf_name` (String) Configuration for a particular VRF
+  - Supported from version: `25.4`
+
+<a id="nestedatt--ipv4_vrfs--extended_diagnostics_permitted_remote_addresses"></a>
+### Nested Schema for `ipv4_vrfs.extended_diagnostics_permitted_remote_addresses`
+
+Optional:
+
+- `address` (String) Permitted remote IPv4 prefix
+  - Supported from version: `25.4`
+- `length` (Number) Permitted remote IPv4 prefix
+  - Range: `0`-`32`
+  - Supported from version: `25.4`
+
+
+
+<a id="nestedatt--ipv6_vrfs"></a>
+### Nested Schema for `ipv6_vrfs`
+
+Optional:
+
+- `extended_diagnostics_permitted_remote_addresses` (Attributes List) Permitted remote IPv6 prefix
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--ipv6_vrfs--extended_diagnostics_permitted_remote_addresses))
+- `vrf_name` (String) Configuration for a particular VRF
+  - Supported from version: `25.4`
+
+<a id="nestedatt--ipv6_vrfs--extended_diagnostics_permitted_remote_addresses"></a>
+### Nested Schema for `ipv6_vrfs.extended_diagnostics_permitted_remote_addresses`
+
+Optional:
+
+- `address` (String) Permitted remote IPv6 prefix
+  - Supported from version: `25.4`
+- `length` (Number) Permitted remote IPv6 prefix
+  - Range: `0`-`128`
+  - Supported from version: `25.4`
 
 ## Import
 

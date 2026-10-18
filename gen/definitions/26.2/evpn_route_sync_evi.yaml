@@ -1,0 +1,9 @@
+---
+name: EVPN Route Sync EVI
+path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/route-sync/evi[vpn-id=%v]
+doc_category: EVPN
+attributes:
+  # ===========================================================
+  # CONSTRAINT CHANGES — range/length widened in 26.2
+  # ===========================================================
+  - yang_name: vpn-id

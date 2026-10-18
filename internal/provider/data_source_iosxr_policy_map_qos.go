@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -351,6 +350,22 @@ func (d *PolicyMapQoSDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "Unit of Excess burst size",
 							Computed:            true,
 						},
+						"police_conform_action_set_ipencap_cos": schema.Int64Attribute{
+							MarkdownDescription: "Set the IP encapsulation class-of-service." + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"police_exceed_action_set_ipencap_cos": schema.Int64Attribute{
+							MarkdownDescription: "Set the IP encapsulation class-of-service." + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"police_violate_action_set_ipencap_cos": schema.Int64Attribute{
+							MarkdownDescription: "Set the IP encapsulation class-of-service." + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"set_ipencap_cos": schema.Int64Attribute{
+							MarkdownDescription: "Set the IP encapsulation class-of-service." + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
 					},
 				},
 			},
@@ -401,7 +416,6 @@ func (d *PolicyMapQoSDataSource) Read(ctx context.Context, req datasource.ReadRe
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -421,7 +435,7 @@ func (d *PolicyMapQoSDataSource) Read(ctx context.Context, req datasource.ReadRe
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

@@ -39,7 +39,9 @@ func TestAccDataSourceIosxrLLDP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "system_name", "Router1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "system_description", "Router1-Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "chassis_id", "FOC22439P72"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "chassis_id_type_local", "true"))
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "chassis_id_type_local", "true"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "subinterfaces_enable", "true"))
 	if os.Getenv("NCS") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "subinterfaces_tagged", "true"))
@@ -54,6 +56,12 @@ func TestAccDataSourceIosxrLLDP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "tlv_select_system_capabilities_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "tlv_select_system_description_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "tlv_select_system_name_disable", "true"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "chassis_id_type", "local"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_lldp.test", "interface_only", "true"))
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -83,7 +91,9 @@ func testAccDataSourceIosxrLLDPConfig() string {
 	config += `	system_name = "Router1"` + "\n"
 	config += `	system_description = "Router1-Description"` + "\n"
 	config += `	chassis_id = "FOC22439P72"` + "\n"
-	config += `	chassis_id_type_local = true` + "\n"
+	if !iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	chassis_id_type_local = true` + "\n"
+	}
 	config += `	subinterfaces_enable = true` + "\n"
 	if os.Getenv("NCS") != "" {
 		config += `	subinterfaces_tagged = true` + "\n"
@@ -98,6 +108,12 @@ func testAccDataSourceIosxrLLDPConfig() string {
 	config += `	tlv_select_system_capabilities_disable = true` + "\n"
 	config += `	tlv_select_system_description_disable = true` + "\n"
 	config += `	tlv_select_system_name_disable = true` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	chassis_id_type = "local"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		config += `	interface_only = true` + "\n"
+	}
 	config += `}` + "\n"
 
 	config += `

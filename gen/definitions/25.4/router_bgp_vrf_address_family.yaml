@@ -1,0 +1,43 @@
+---
+name: Router BGP VRF Address Family
+path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/address-families/address-family[af-name=%s]
+doc_category: BGP
+attributes:
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: redistribute/eigrps/eigrp
+    tf_name: redistribute_eigrp
+    type: List
+    attributes:
+      - yang_name: default-policy-action-in
+        example: accept
+  - yang_name: redistribute/isis-processes/isis-process
+    tf_name: redistribute_isis
+    type: List
+    attributes:
+      - yang_name: default-policy-action-in
+        example: accept
+  - yang_name: redistribute/ospfs/ospf
+    tf_name: redistribute_ospf
+    type: List
+    attributes:
+      - yang_name: default-policy-action-in
+        example: accept
+  - yang_name: redistribute/ospfv3s/ospfv3
+    tf_name: redistribute_ospfv3
+    type: List
+    attributes:
+      - yang_name: default-policy-action-in
+        example: accept
+  - yang_name: redistribute/connected/default-policy-action-in
+    example: accept
+  - yang_name: redistribute/static/default-policy-action-in
+    example: accept
+  - yang_name: redistribute/rip/default-policy-action-in
+    example: accept
+  - yang_name: maximum-paths/ebgp/bestpath-only
+    delete_parent: true
+    example: true
+  - yang_name: update/out/quick-withdraw
+    example: enable

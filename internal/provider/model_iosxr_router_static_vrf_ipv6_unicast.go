@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 
@@ -183,7 +184,7 @@ func (data RouterStaticVRFIPv6UnicastData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RouterStaticVRFIPv6Unicast) toBody(ctx context.Context) string {
+func (data RouterStaticVRFIPv6Unicast) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.PrefixAddress.IsNull() && !data.PrefixAddress.IsUnknown() {
 		body, _ = sjson.Set(body, "prefix-address", data.PrefixAddress.ValueString())
@@ -325,6 +326,7 @@ func (data RouterStaticVRFIPv6Unicast) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"vrf-name", item.VrfName.ValueString())
 			}
 			if len(item.NexthopInterfaces) > 0 {
+				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-interfaces.nexthop-interface", []interface{}{})
 				for cindex, citem := range item.NexthopInterfaces {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-interfaces.nexthop-interface"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -352,6 +354,7 @@ func (data RouterStaticVRFIPv6Unicast) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NexthopInterfaceAddresses) > 0 {
+				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-interface-addresses.nexthop-interface-address", []interface{}{})
 				for cindex, citem := range item.NexthopInterfaceAddresses {
 					if !citem.InterfaceName.IsNull() && !citem.InterfaceName.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-interface-addresses.nexthop-interface-address"+"."+strconv.Itoa(cindex)+"."+"interface-name", citem.InterfaceName.ValueString())
@@ -388,6 +391,7 @@ func (data RouterStaticVRFIPv6Unicast) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.NexthopAddresses) > 0 {
+				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-addresses.nexthop-address", []interface{}{})
 				for cindex, citem := range item.NexthopAddresses {
 					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-addresses.nexthop-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
@@ -421,6 +425,7 @@ func (data RouterStaticVRFIPv6Unicast) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.SrPolicies) > 0 {
+				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"sr-policies.sr-policy", []interface{}{})
 				for cindex, citem := range item.SrPolicies {
 					if !citem.SrPolicyName.IsNull() && !citem.SrPolicyName.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"sr-policies.sr-policy"+"."+strconv.Itoa(cindex)+"."+"sr-policy-name", citem.SrPolicyName.ValueString())
@@ -454,15 +459,64 @@ func (data RouterStaticVRFIPv6Unicast) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res gjson.Result) {
+// GetVersionConstraints returns the version constraints for all fields
+func (data RouterStaticVRFIPv6Unicast) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data RouterStaticVRFIPv6Unicast) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data RouterStaticVRFIPv6Unicast) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data RouterStaticVRFIPv6Unicast) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data RouterStaticVRFIPv6Unicast) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res []byte, version string) {
 	for i := range data.NexthopInterfaces {
 		keys := [...]string{"interface-name"}
 		keyValues := [...]string{data.NexthopInterfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		res.Get("nexthop-interfaces.nexthop-interface").ForEach(
+		gjson.GetBytes(res, "nexthop-interfaces.nexthop-interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -480,12 +534,12 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 				return true
 			},
 		)
-		if value := r.Get("interface-name"); value.Exists() && !data.NexthopInterfaces[i].InterfaceName.IsNull() {
+		if value := r.Get("interface-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.NexthopInterfaces[i].InterfaceName.IsNull() {
 			data.NexthopInterfaces[i].InterfaceName = types.StringValue(value.String())
 		} else {
 			data.NexthopInterfaces[i].InterfaceName = types.StringNull()
 		}
-		if value := r.Get("description"); value.Exists() && !data.NexthopInterfaces[i].Description.IsNull() {
+		if value := r.Get("description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.NexthopInterfaces[i].Description.IsNull() {
 			data.NexthopInterfaces[i].Description = types.StringValue(value.String())
 		} else {
 			data.NexthopInterfaces[i].Description = types.StringNull()
@@ -512,7 +566,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 				data.NexthopInterfaces[i].Permanent = types.BoolNull()
 			}
 		}
-		if value := r.Get("track"); value.Exists() && !data.NexthopInterfaces[i].Track.IsNull() {
+		if value := r.Get("track"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.NexthopInterfaces[i].Track.IsNull() {
 			data.NexthopInterfaces[i].Track = types.StringValue(value.String())
 		} else {
 			data.NexthopInterfaces[i].Track = types.StringNull()
@@ -528,7 +582,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 		keyValues := [...]string{data.NexthopInterfaceAddresses[i].InterfaceName.ValueString(), data.NexthopInterfaceAddresses[i].Address.ValueString()}
 
 		var r gjson.Result
-		res.Get("nexthop-interface-addresses.nexthop-interface-address").ForEach(
+		gjson.GetBytes(res, "nexthop-interface-addresses.nexthop-interface-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -546,17 +600,17 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 				return true
 			},
 		)
-		if value := r.Get("interface-name"); value.Exists() && !data.NexthopInterfaceAddresses[i].InterfaceName.IsNull() {
+		if value := r.Get("interface-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.NexthopInterfaceAddresses[i].InterfaceName.IsNull() {
 			data.NexthopInterfaceAddresses[i].InterfaceName = types.StringValue(value.String())
 		} else {
 			data.NexthopInterfaceAddresses[i].InterfaceName = types.StringNull()
 		}
-		if value := r.Get("address"); value.Exists() && !data.NexthopInterfaceAddresses[i].Address.IsNull() {
+		if value := r.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.NexthopInterfaceAddresses[i].Address.IsNull() {
 			data.NexthopInterfaceAddresses[i].Address = types.StringValue(value.String())
 		} else {
 			data.NexthopInterfaceAddresses[i].Address = types.StringNull()
 		}
-		if value := r.Get("description"); value.Exists() && !data.NexthopInterfaceAddresses[i].Description.IsNull() {
+		if value := r.Get("description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.NexthopInterfaceAddresses[i].Description.IsNull() {
 			data.NexthopInterfaceAddresses[i].Description = types.StringValue(value.String())
 		} else {
 			data.NexthopInterfaceAddresses[i].Description = types.StringNull()
@@ -583,7 +637,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 				data.NexthopInterfaceAddresses[i].Permanent = types.BoolNull()
 			}
 		}
-		if value := r.Get("track"); value.Exists() && !data.NexthopInterfaceAddresses[i].Track.IsNull() {
+		if value := r.Get("track"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.NexthopInterfaceAddresses[i].Track.IsNull() {
 			data.NexthopInterfaceAddresses[i].Track = types.StringValue(value.String())
 		} else {
 			data.NexthopInterfaceAddresses[i].Track = types.StringNull()
@@ -609,7 +663,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 		keyValues := [...]string{data.NexthopAddresses[i].Address.ValueString()}
 
 		var r gjson.Result
-		res.Get("nexthop-addresses.nexthop-address").ForEach(
+		gjson.GetBytes(res, "nexthop-addresses.nexthop-address").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -627,7 +681,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() && !data.NexthopAddresses[i].Address.IsNull() {
+		if value := r.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.NexthopAddresses[i].Address.IsNull() {
 			data.NexthopAddresses[i].Address = types.StringValue(value.String())
 		} else {
 			data.NexthopAddresses[i].Address = types.StringNull()
@@ -642,7 +696,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 		} else {
 			data.NexthopAddresses[i].BfdFastDetectMultiplier = types.Int64Null()
 		}
-		if value := r.Get("description"); value.Exists() && !data.NexthopAddresses[i].Description.IsNull() {
+		if value := r.Get("description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.NexthopAddresses[i].Description.IsNull() {
 			data.NexthopAddresses[i].Description = types.StringValue(value.String())
 		} else {
 			data.NexthopAddresses[i].Description = types.StringNull()
@@ -669,7 +723,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 				data.NexthopAddresses[i].Permanent = types.BoolNull()
 			}
 		}
-		if value := r.Get("track"); value.Exists() && !data.NexthopAddresses[i].Track.IsNull() {
+		if value := r.Get("track"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.NexthopAddresses[i].Track.IsNull() {
 			data.NexthopAddresses[i].Track = types.StringValue(value.String())
 		} else {
 			data.NexthopAddresses[i].Track = types.StringNull()
@@ -685,7 +739,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 		keyValues := [...]string{data.SrPolicies[i].SrPolicyName.ValueString()}
 
 		var r gjson.Result
-		res.Get("sr-policies.sr-policy").ForEach(
+		gjson.GetBytes(res, "sr-policies.sr-policy").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -703,12 +757,12 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 				return true
 			},
 		)
-		if value := r.Get("sr-policy-name"); value.Exists() && !data.SrPolicies[i].SrPolicyName.IsNull() {
+		if value := r.Get("sr-policy-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SrPolicies[i].SrPolicyName.IsNull() {
 			data.SrPolicies[i].SrPolicyName = types.StringValue(value.String())
 		} else {
 			data.SrPolicies[i].SrPolicyName = types.StringNull()
 		}
-		if value := r.Get("description"); value.Exists() && !data.SrPolicies[i].Description.IsNull() {
+		if value := r.Get("description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SrPolicies[i].Description.IsNull() {
 			data.SrPolicies[i].Description = types.StringValue(value.String())
 		} else {
 			data.SrPolicies[i].Description = types.StringNull()
@@ -735,7 +789,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 				data.SrPolicies[i].Permanent = types.BoolNull()
 			}
 		}
-		if value := r.Get("track"); value.Exists() && !data.SrPolicies[i].Track.IsNull() {
+		if value := r.Get("track"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SrPolicies[i].Track.IsNull() {
 			data.SrPolicies[i].Track = types.StringValue(value.String())
 		} else {
 			data.SrPolicies[i].Track = types.StringNull()
@@ -751,7 +805,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
-		res.Get("vrfs.vrf").ForEach(
+		gjson.GetBytes(res, "vrfs.vrf").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -769,7 +823,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 				return true
 			},
 		)
-		if value := r.Get("vrf-name"); value.Exists() && !data.Vrfs[i].VrfName.IsNull() {
+		if value := r.Get("vrf-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Vrfs[i].VrfName.IsNull() {
 			data.Vrfs[i].VrfName = types.StringValue(value.String())
 		} else {
 			data.Vrfs[i].VrfName = types.StringNull()
@@ -797,12 +851,12 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 					return true
 				},
 			)
-			if value := cr.Get("interface-name"); value.Exists() && !data.Vrfs[i].NexthopInterfaces[ci].InterfaceName.IsNull() {
+			if value := cr.Get("interface-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Vrfs[i].NexthopInterfaces[ci].InterfaceName.IsNull() {
 				data.Vrfs[i].NexthopInterfaces[ci].InterfaceName = types.StringValue(value.String())
 			} else {
 				data.Vrfs[i].NexthopInterfaces[ci].InterfaceName = types.StringNull()
 			}
-			if value := cr.Get("description"); value.Exists() && !data.Vrfs[i].NexthopInterfaces[ci].Description.IsNull() {
+			if value := cr.Get("description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Vrfs[i].NexthopInterfaces[ci].Description.IsNull() {
 				data.Vrfs[i].NexthopInterfaces[ci].Description = types.StringValue(value.String())
 			} else {
 				data.Vrfs[i].NexthopInterfaces[ci].Description = types.StringNull()
@@ -827,7 +881,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 					data.Vrfs[i].NexthopInterfaces[ci].Permanent = types.BoolNull()
 				}
 			}
-			if value := cr.Get("track"); value.Exists() && !data.Vrfs[i].NexthopInterfaces[ci].Track.IsNull() {
+			if value := cr.Get("track"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Vrfs[i].NexthopInterfaces[ci].Track.IsNull() {
 				data.Vrfs[i].NexthopInterfaces[ci].Track = types.StringValue(value.String())
 			} else {
 				data.Vrfs[i].NexthopInterfaces[ci].Track = types.StringNull()
@@ -861,12 +915,12 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 					return true
 				},
 			)
-			if value := cr.Get("interface-name"); value.Exists() && !data.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName.IsNull() {
+			if value := cr.Get("interface-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName.IsNull() {
 				data.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName = types.StringValue(value.String())
 			} else {
 				data.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName = types.StringNull()
 			}
-			if value := cr.Get("address"); value.Exists() && !data.Vrfs[i].NexthopInterfaceAddresses[ci].Address.IsNull() {
+			if value := cr.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Vrfs[i].NexthopInterfaceAddresses[ci].Address.IsNull() {
 				data.Vrfs[i].NexthopInterfaceAddresses[ci].Address = types.StringValue(value.String())
 			} else {
 				data.Vrfs[i].NexthopInterfaceAddresses[ci].Address = types.StringNull()
@@ -881,7 +935,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 			} else {
 				data.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMultiplier = types.Int64Null()
 			}
-			if value := cr.Get("description"); value.Exists() && !data.Vrfs[i].NexthopInterfaceAddresses[ci].Description.IsNull() {
+			if value := cr.Get("description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Vrfs[i].NexthopInterfaceAddresses[ci].Description.IsNull() {
 				data.Vrfs[i].NexthopInterfaceAddresses[ci].Description = types.StringValue(value.String())
 			} else {
 				data.Vrfs[i].NexthopInterfaceAddresses[ci].Description = types.StringNull()
@@ -906,7 +960,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 					data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent = types.BoolNull()
 				}
 			}
-			if value := cr.Get("track"); value.Exists() && !data.Vrfs[i].NexthopInterfaceAddresses[ci].Track.IsNull() {
+			if value := cr.Get("track"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Vrfs[i].NexthopInterfaceAddresses[ci].Track.IsNull() {
 				data.Vrfs[i].NexthopInterfaceAddresses[ci].Track = types.StringValue(value.String())
 			} else {
 				data.Vrfs[i].NexthopInterfaceAddresses[ci].Track = types.StringNull()
@@ -940,7 +994,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 					return true
 				},
 			)
-			if value := cr.Get("address"); value.Exists() && !data.Vrfs[i].NexthopAddresses[ci].Address.IsNull() {
+			if value := cr.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Vrfs[i].NexthopAddresses[ci].Address.IsNull() {
 				data.Vrfs[i].NexthopAddresses[ci].Address = types.StringValue(value.String())
 			} else {
 				data.Vrfs[i].NexthopAddresses[ci].Address = types.StringNull()
@@ -955,7 +1009,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 			} else {
 				data.Vrfs[i].NexthopAddresses[ci].BfdFastDetectMultiplier = types.Int64Null()
 			}
-			if value := cr.Get("description"); value.Exists() && !data.Vrfs[i].NexthopAddresses[ci].Description.IsNull() {
+			if value := cr.Get("description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Vrfs[i].NexthopAddresses[ci].Description.IsNull() {
 				data.Vrfs[i].NexthopAddresses[ci].Description = types.StringValue(value.String())
 			} else {
 				data.Vrfs[i].NexthopAddresses[ci].Description = types.StringNull()
@@ -980,7 +1034,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 					data.Vrfs[i].NexthopAddresses[ci].Permanent = types.BoolNull()
 				}
 			}
-			if value := cr.Get("track"); value.Exists() && !data.Vrfs[i].NexthopAddresses[ci].Track.IsNull() {
+			if value := cr.Get("track"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Vrfs[i].NexthopAddresses[ci].Track.IsNull() {
 				data.Vrfs[i].NexthopAddresses[ci].Track = types.StringValue(value.String())
 			} else {
 				data.Vrfs[i].NexthopAddresses[ci].Track = types.StringNull()
@@ -1014,12 +1068,12 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 					return true
 				},
 			)
-			if value := cr.Get("sr-policy-name"); value.Exists() && !data.Vrfs[i].SrPolicies[ci].SrPolicyName.IsNull() {
+			if value := cr.Get("sr-policy-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Vrfs[i].SrPolicies[ci].SrPolicyName.IsNull() {
 				data.Vrfs[i].SrPolicies[ci].SrPolicyName = types.StringValue(value.String())
 			} else {
 				data.Vrfs[i].SrPolicies[ci].SrPolicyName = types.StringNull()
 			}
-			if value := cr.Get("description"); value.Exists() && !data.Vrfs[i].SrPolicies[ci].Description.IsNull() {
+			if value := cr.Get("description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Vrfs[i].SrPolicies[ci].Description.IsNull() {
 				data.Vrfs[i].SrPolicies[ci].Description = types.StringValue(value.String())
 			} else {
 				data.Vrfs[i].SrPolicies[ci].Description = types.StringNull()
@@ -1044,7 +1098,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 					data.Vrfs[i].SrPolicies[ci].Permanent = types.BoolNull()
 				}
 			}
-			if value := cr.Get("track"); value.Exists() && !data.Vrfs[i].SrPolicies[ci].Track.IsNull() {
+			if value := cr.Get("track"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Vrfs[i].SrPolicies[ci].Track.IsNull() {
 				data.Vrfs[i].SrPolicies[ci].Track = types.StringValue(value.String())
 			} else {
 				data.Vrfs[i].SrPolicies[ci].Track = types.StringNull()
@@ -1059,6 +1113,1285 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBody(ctx context.Context, res 
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *RouterStaticVRFIPv6Unicast) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "nexthop-interfaces.nexthop-interface"); value.Exists() {
+		data.NexthopInterfaces = make([]RouterStaticVRFIPv6UnicastNexthopInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterStaticVRFIPv6UnicastNexthopInterfaces{}
+			if cValue := v.Get("interface-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("description"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Description = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("distance-metric"); cValue.Exists() {
+				item.DistanceMetric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permanent"); cValue.Exists() {
+				item.Permanent = types.BoolValue(true)
+			} else if !item.Permanent.IsNull() {
+				// Only set to false if it was previously set
+				item.Permanent = types.BoolValue(false)
+			}
+			if cValue := v.Get("track"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Track = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			data.NexthopInterfaces = append(data.NexthopInterfaces, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "nexthop-interface-addresses.nexthop-interface-address"); value.Exists() {
+		data.NexthopInterfaceAddresses = make([]RouterStaticVRFIPv6UnicastNexthopInterfaceAddresses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterStaticVRFIPv6UnicastNexthopInterfaceAddresses{}
+			if cValue := v.Get("interface-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("description"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Description = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("distance-metric"); cValue.Exists() {
+				item.DistanceMetric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permanent"); cValue.Exists() {
+				item.Permanent = types.BoolValue(true)
+			} else if !item.Permanent.IsNull() {
+				// Only set to false if it was previously set
+				item.Permanent = types.BoolValue(false)
+			}
+			if cValue := v.Get("track"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Track = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("bfd.fast-detect.minimum-interval"); cValue.Exists() {
+				item.BfdFastDetectMinimumInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("bfd.fast-detect.multiplier"); cValue.Exists() {
+				item.BfdFastDetectMultiplier = types.Int64Value(cValue.Int())
+			}
+			data.NexthopInterfaceAddresses = append(data.NexthopInterfaceAddresses, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "nexthop-addresses.nexthop-address"); value.Exists() {
+		data.NexthopAddresses = make([]RouterStaticVRFIPv6UnicastNexthopAddresses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterStaticVRFIPv6UnicastNexthopAddresses{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("bfd.fast-detect.minimum-interval"); cValue.Exists() {
+				item.BfdFastDetectMinimumInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("bfd.fast-detect.multiplier"); cValue.Exists() {
+				item.BfdFastDetectMultiplier = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("description"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Description = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("distance-metric"); cValue.Exists() {
+				item.DistanceMetric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permanent"); cValue.Exists() {
+				item.Permanent = types.BoolValue(true)
+			} else if !item.Permanent.IsNull() {
+				// Only set to false if it was previously set
+				item.Permanent = types.BoolValue(false)
+			}
+			if cValue := v.Get("track"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Track = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			data.NexthopAddresses = append(data.NexthopAddresses, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "sr-policies.sr-policy"); value.Exists() {
+		data.SrPolicies = make([]RouterStaticVRFIPv6UnicastSrPolicies, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterStaticVRFIPv6UnicastSrPolicies{}
+			if cValue := v.Get("sr-policy-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.SrPolicyName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("description"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Description = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("distance-metric"); cValue.Exists() {
+				item.DistanceMetric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permanent"); cValue.Exists() {
+				item.Permanent = types.BoolValue(true)
+			} else if !item.Permanent.IsNull() {
+				// Only set to false if it was previously set
+				item.Permanent = types.BoolValue(false)
+			}
+			if cValue := v.Get("track"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Track = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			data.SrPolicies = append(data.SrPolicies, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
+		data.Vrfs = make([]RouterStaticVRFIPv6UnicastVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterStaticVRFIPv6UnicastVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("nexthop-interfaces.nexthop-interface"); cValue.Exists() {
+				item.NexthopInterfaces = make([]RouterStaticVRFIPv6UnicastVrfsNexthopInterfaces, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterStaticVRFIPv6UnicastVrfsNexthopInterfaces{}
+					if ccValue := cv.Get("interface-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.InterfaceName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("description"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Description = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("tag"); ccValue.Exists() {
+						cItem.Tag = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
+						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("permanent"); ccValue.Exists() {
+						cItem.Permanent = types.BoolValue(true)
+					} else {
+						cItem.Permanent = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("track"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Track = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("metric"); ccValue.Exists() {
+						cItem.Metric = types.Int64Value(ccValue.Int())
+					}
+					item.NexthopInterfaces = append(item.NexthopInterfaces, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("nexthop-interface-addresses.nexthop-interface-address"); cValue.Exists() {
+				item.NexthopInterfaceAddresses = make([]RouterStaticVRFIPv6UnicastVrfsNexthopInterfaceAddresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterStaticVRFIPv6UnicastVrfsNexthopInterfaceAddresses{}
+					if ccValue := cv.Get("interface-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.InterfaceName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("bfd.fast-detect.minimum-interval"); ccValue.Exists() {
+						cItem.BfdFastDetectMinimumInterval = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("bfd.fast-detect.multiplier"); ccValue.Exists() {
+						cItem.BfdFastDetectMultiplier = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("description"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Description = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("tag"); ccValue.Exists() {
+						cItem.Tag = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
+						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("permanent"); ccValue.Exists() {
+						cItem.Permanent = types.BoolValue(true)
+					} else {
+						cItem.Permanent = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("track"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Track = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("metric"); ccValue.Exists() {
+						cItem.Metric = types.Int64Value(ccValue.Int())
+					}
+					item.NexthopInterfaceAddresses = append(item.NexthopInterfaceAddresses, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("nexthop-addresses.nexthop-address"); cValue.Exists() {
+				item.NexthopAddresses = make([]RouterStaticVRFIPv6UnicastVrfsNexthopAddresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterStaticVRFIPv6UnicastVrfsNexthopAddresses{}
+					if ccValue := cv.Get("address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("bfd.fast-detect.minimum-interval"); ccValue.Exists() {
+						cItem.BfdFastDetectMinimumInterval = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("bfd.fast-detect.multiplier"); ccValue.Exists() {
+						cItem.BfdFastDetectMultiplier = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("description"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Description = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("tag"); ccValue.Exists() {
+						cItem.Tag = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
+						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("permanent"); ccValue.Exists() {
+						cItem.Permanent = types.BoolValue(true)
+					} else {
+						cItem.Permanent = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("track"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Track = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("metric"); ccValue.Exists() {
+						cItem.Metric = types.Int64Value(ccValue.Int())
+					}
+					item.NexthopAddresses = append(item.NexthopAddresses, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("sr-policies.sr-policy"); cValue.Exists() {
+				item.SrPolicies = make([]RouterStaticVRFIPv6UnicastVrfsSrPolicies, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterStaticVRFIPv6UnicastVrfsSrPolicies{}
+					if ccValue := cv.Get("sr-policy-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.SrPolicyName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("description"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Description = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("tag"); ccValue.Exists() {
+						cItem.Tag = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
+						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("permanent"); ccValue.Exists() {
+						cItem.Permanent = types.BoolValue(true)
+					} else {
+						cItem.Permanent = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("track"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Track = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("metric"); ccValue.Exists() {
+						cItem.Metric = types.Int64Value(ccValue.Int())
+					}
+					item.SrPolicies = append(item.SrPolicies, cItem)
+					return true
+				})
+			}
+			data.Vrfs = append(data.Vrfs, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *RouterStaticVRFIPv6UnicastData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "nexthop-interfaces.nexthop-interface"); value.Exists() {
+		data.NexthopInterfaces = make([]RouterStaticVRFIPv6UnicastNexthopInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterStaticVRFIPv6UnicastNexthopInterfaces{}
+			if cValue := v.Get("interface-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("description"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Description = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("distance-metric"); cValue.Exists() {
+				item.DistanceMetric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permanent"); cValue.Exists() {
+				item.Permanent = types.BoolValue(true)
+			} else {
+				item.Permanent = types.BoolValue(false)
+			}
+			if cValue := v.Get("track"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Track = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			data.NexthopInterfaces = append(data.NexthopInterfaces, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "nexthop-interface-addresses.nexthop-interface-address"); value.Exists() {
+		data.NexthopInterfaceAddresses = make([]RouterStaticVRFIPv6UnicastNexthopInterfaceAddresses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterStaticVRFIPv6UnicastNexthopInterfaceAddresses{}
+			if cValue := v.Get("interface-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("description"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Description = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("distance-metric"); cValue.Exists() {
+				item.DistanceMetric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permanent"); cValue.Exists() {
+				item.Permanent = types.BoolValue(true)
+			} else {
+				item.Permanent = types.BoolValue(false)
+			}
+			if cValue := v.Get("track"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Track = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("bfd.fast-detect.minimum-interval"); cValue.Exists() {
+				item.BfdFastDetectMinimumInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("bfd.fast-detect.multiplier"); cValue.Exists() {
+				item.BfdFastDetectMultiplier = types.Int64Value(cValue.Int())
+			}
+			data.NexthopInterfaceAddresses = append(data.NexthopInterfaceAddresses, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "nexthop-addresses.nexthop-address"); value.Exists() {
+		data.NexthopAddresses = make([]RouterStaticVRFIPv6UnicastNexthopAddresses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterStaticVRFIPv6UnicastNexthopAddresses{}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("bfd.fast-detect.minimum-interval"); cValue.Exists() {
+				item.BfdFastDetectMinimumInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("bfd.fast-detect.multiplier"); cValue.Exists() {
+				item.BfdFastDetectMultiplier = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("description"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Description = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("distance-metric"); cValue.Exists() {
+				item.DistanceMetric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permanent"); cValue.Exists() {
+				item.Permanent = types.BoolValue(true)
+			} else {
+				item.Permanent = types.BoolValue(false)
+			}
+			if cValue := v.Get("track"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Track = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			data.NexthopAddresses = append(data.NexthopAddresses, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "sr-policies.sr-policy"); value.Exists() {
+		data.SrPolicies = make([]RouterStaticVRFIPv6UnicastSrPolicies, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterStaticVRFIPv6UnicastSrPolicies{}
+			if cValue := v.Get("sr-policy-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.SrPolicyName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("description"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Description = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("distance-metric"); cValue.Exists() {
+				item.DistanceMetric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permanent"); cValue.Exists() {
+				item.Permanent = types.BoolValue(true)
+			} else {
+				item.Permanent = types.BoolValue(false)
+			}
+			if cValue := v.Get("track"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Track = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			data.SrPolicies = append(data.SrPolicies, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
+		data.Vrfs = make([]RouterStaticVRFIPv6UnicastVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterStaticVRFIPv6UnicastVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("nexthop-interfaces.nexthop-interface"); cValue.Exists() {
+				item.NexthopInterfaces = make([]RouterStaticVRFIPv6UnicastVrfsNexthopInterfaces, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterStaticVRFIPv6UnicastVrfsNexthopInterfaces{}
+					if ccValue := cv.Get("interface-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.InterfaceName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("description"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Description = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("tag"); ccValue.Exists() {
+						cItem.Tag = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
+						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("permanent"); ccValue.Exists() {
+						cItem.Permanent = types.BoolValue(true)
+					} else {
+						cItem.Permanent = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("track"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Track = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("metric"); ccValue.Exists() {
+						cItem.Metric = types.Int64Value(ccValue.Int())
+					}
+					item.NexthopInterfaces = append(item.NexthopInterfaces, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("nexthop-interface-addresses.nexthop-interface-address"); cValue.Exists() {
+				item.NexthopInterfaceAddresses = make([]RouterStaticVRFIPv6UnicastVrfsNexthopInterfaceAddresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterStaticVRFIPv6UnicastVrfsNexthopInterfaceAddresses{}
+					if ccValue := cv.Get("interface-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.InterfaceName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("bfd.fast-detect.minimum-interval"); ccValue.Exists() {
+						cItem.BfdFastDetectMinimumInterval = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("bfd.fast-detect.multiplier"); ccValue.Exists() {
+						cItem.BfdFastDetectMultiplier = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("description"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Description = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("tag"); ccValue.Exists() {
+						cItem.Tag = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
+						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("permanent"); ccValue.Exists() {
+						cItem.Permanent = types.BoolValue(true)
+					} else {
+						cItem.Permanent = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("track"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Track = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("metric"); ccValue.Exists() {
+						cItem.Metric = types.Int64Value(ccValue.Int())
+					}
+					item.NexthopInterfaceAddresses = append(item.NexthopInterfaceAddresses, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("nexthop-addresses.nexthop-address"); cValue.Exists() {
+				item.NexthopAddresses = make([]RouterStaticVRFIPv6UnicastVrfsNexthopAddresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterStaticVRFIPv6UnicastVrfsNexthopAddresses{}
+					if ccValue := cv.Get("address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("bfd.fast-detect.minimum-interval"); ccValue.Exists() {
+						cItem.BfdFastDetectMinimumInterval = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("bfd.fast-detect.multiplier"); ccValue.Exists() {
+						cItem.BfdFastDetectMultiplier = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("description"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Description = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("tag"); ccValue.Exists() {
+						cItem.Tag = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
+						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("permanent"); ccValue.Exists() {
+						cItem.Permanent = types.BoolValue(true)
+					} else {
+						cItem.Permanent = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("track"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Track = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("metric"); ccValue.Exists() {
+						cItem.Metric = types.Int64Value(ccValue.Int())
+					}
+					item.NexthopAddresses = append(item.NexthopAddresses, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("sr-policies.sr-policy"); cValue.Exists() {
+				item.SrPolicies = make([]RouterStaticVRFIPv6UnicastVrfsSrPolicies, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterStaticVRFIPv6UnicastVrfsSrPolicies{}
+					if ccValue := cv.Get("sr-policy-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.SrPolicyName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("description"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Description = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("tag"); ccValue.Exists() {
+						cItem.Tag = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
+						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("permanent"); ccValue.Exists() {
+						cItem.Permanent = types.BoolValue(true)
+					} else {
+						cItem.Permanent = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("track"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+						cItem.Track = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("metric"); ccValue.Exists() {
+						cItem.Metric = types.Int64Value(ccValue.Int())
+					}
+					item.SrPolicies = append(item.SrPolicies, cItem)
+					return true
+				})
+			}
+			data.Vrfs = append(data.Vrfs, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *RouterStaticVRFIPv6Unicast) getDeletedItems(ctx context.Context, state RouterStaticVRFIPv6Unicast, version string) []string {
+	deletedItems := make([]string, 0)
+	for i := range state.Vrfs {
+		keys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.Vrfs[i].VrfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Vrfs[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Vrfs {
+			found = true
+			if state.Vrfs[i].VrfName.ValueString() != data.Vrfs[j].VrfName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.Vrfs[i].SrPolicies {
+					ckeys := [...]string{"sr-policy-name"}
+					cstateKeyValues := [...]string{state.Vrfs[i].SrPolicies[ci].SrPolicyName.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Vrfs[i].SrPolicies[ci].SrPolicyName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Vrfs[j].SrPolicies {
+						found = true
+						if state.Vrfs[i].SrPolicies[ci].SrPolicyName.ValueString() != data.Vrfs[j].SrPolicies[cj].SrPolicyName.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.Vrfs[i].SrPolicies[ci].Metric.IsNull() && data.Vrfs[j].SrPolicies[cj].Metric.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "sr-policies/sr-policy", ckeyString), "metric"))
+							}
+							if !state.Vrfs[i].SrPolicies[ci].Track.IsNull() && data.Vrfs[j].SrPolicies[cj].Track.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "sr-policies/sr-policy", ckeyString), "track"))
+							}
+							if !state.Vrfs[i].SrPolicies[ci].Permanent.IsNull() && data.Vrfs[j].SrPolicies[cj].Permanent.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "sr-policies/sr-policy", ckeyString), "permanent"))
+							}
+							if !state.Vrfs[i].SrPolicies[ci].DistanceMetric.IsNull() && data.Vrfs[j].SrPolicies[cj].DistanceMetric.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "sr-policies/sr-policy", ckeyString), "distance-metric"))
+							}
+							if !state.Vrfs[i].SrPolicies[ci].Tag.IsNull() && data.Vrfs[j].SrPolicies[cj].Tag.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "sr-policies/sr-policy", ckeyString), "tag"))
+							}
+							if !state.Vrfs[i].SrPolicies[ci].Description.IsNull() && data.Vrfs[j].SrPolicies[cj].Description.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "sr-policies/sr-policy", ckeyString), "description"))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "sr-policies/sr-policy", ckeyString))
+					}
+				}
+				for ci := range state.Vrfs[i].NexthopAddresses {
+					ckeys := [...]string{"address"}
+					cstateKeyValues := [...]string{state.Vrfs[i].NexthopAddresses[ci].Address.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Vrfs[i].NexthopAddresses[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Vrfs[j].NexthopAddresses {
+						found = true
+						if state.Vrfs[i].NexthopAddresses[ci].Address.ValueString() != data.Vrfs[j].NexthopAddresses[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.Vrfs[i].NexthopAddresses[ci].Metric.IsNull() && data.Vrfs[j].NexthopAddresses[cj].Metric.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-addresses/nexthop-address", ckeyString), "metric"))
+							}
+							if !state.Vrfs[i].NexthopAddresses[ci].Track.IsNull() && data.Vrfs[j].NexthopAddresses[cj].Track.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-addresses/nexthop-address", ckeyString), "track"))
+							}
+							if !state.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() && data.Vrfs[j].NexthopAddresses[cj].Permanent.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-addresses/nexthop-address", ckeyString), "permanent"))
+							}
+							if !state.Vrfs[i].NexthopAddresses[ci].DistanceMetric.IsNull() && data.Vrfs[j].NexthopAddresses[cj].DistanceMetric.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-addresses/nexthop-address", ckeyString), "distance-metric"))
+							}
+							if !state.Vrfs[i].NexthopAddresses[ci].Tag.IsNull() && data.Vrfs[j].NexthopAddresses[cj].Tag.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-addresses/nexthop-address", ckeyString), "tag"))
+							}
+							if !state.Vrfs[i].NexthopAddresses[ci].Description.IsNull() && data.Vrfs[j].NexthopAddresses[cj].Description.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-addresses/nexthop-address", ckeyString), "description"))
+							}
+							if !state.Vrfs[i].NexthopAddresses[ci].BfdFastDetectMultiplier.IsNull() && data.Vrfs[j].NexthopAddresses[cj].BfdFastDetectMultiplier.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-addresses/nexthop-address", ckeyString), "bfd/fast-detect/multiplier"))
+							}
+							if !state.Vrfs[i].NexthopAddresses[ci].BfdFastDetectMinimumInterval.IsNull() && data.Vrfs[j].NexthopAddresses[cj].BfdFastDetectMinimumInterval.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-addresses/nexthop-address", ckeyString), "bfd/fast-detect/minimum-interval"))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-addresses/nexthop-address", ckeyString))
+					}
+				}
+				for ci := range state.Vrfs[i].NexthopInterfaceAddresses {
+					ckeys := [...]string{"interface-name", "address"}
+					cstateKeyValues := [...]string{state.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName.ValueString(), state.Vrfs[i].NexthopInterfaceAddresses[ci].Address.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.Vrfs[i].NexthopInterfaceAddresses[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Vrfs[j].NexthopInterfaceAddresses {
+						found = true
+						if state.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName.ValueString() != data.Vrfs[j].NexthopInterfaceAddresses[cj].InterfaceName.ValueString() {
+							found = false
+						}
+						if state.Vrfs[i].NexthopInterfaceAddresses[ci].Address.ValueString() != data.Vrfs[j].NexthopInterfaceAddresses[cj].Address.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].Metric.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].Metric.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-interface-addresses/nexthop-interface-address", ckeyString), "metric"))
+							}
+							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].Track.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].Track.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-interface-addresses/nexthop-interface-address", ckeyString), "track"))
+							}
+							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].Permanent.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-interface-addresses/nexthop-interface-address", ckeyString), "permanent"))
+							}
+							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].DistanceMetric.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].DistanceMetric.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-interface-addresses/nexthop-interface-address", ckeyString), "distance-metric"))
+							}
+							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].Tag.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].Tag.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-interface-addresses/nexthop-interface-address", ckeyString), "tag"))
+							}
+							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].Description.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].Description.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-interface-addresses/nexthop-interface-address", ckeyString), "description"))
+							}
+							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMultiplier.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].BfdFastDetectMultiplier.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-interface-addresses/nexthop-interface-address", ckeyString), "bfd/fast-detect/multiplier"))
+							}
+							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMinimumInterval.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].BfdFastDetectMinimumInterval.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-interface-addresses/nexthop-interface-address", ckeyString), "bfd/fast-detect/minimum-interval"))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-interface-addresses/nexthop-interface-address", ckeyString))
+					}
+				}
+				for ci := range state.Vrfs[i].NexthopInterfaces {
+					ckeys := [...]string{"interface-name"}
+					cstateKeyValues := [...]string{state.Vrfs[i].NexthopInterfaces[ci].InterfaceName.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Vrfs[i].NexthopInterfaces[ci].InterfaceName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Vrfs[j].NexthopInterfaces {
+						found = true
+						if state.Vrfs[i].NexthopInterfaces[ci].InterfaceName.ValueString() != data.Vrfs[j].NexthopInterfaces[cj].InterfaceName.ValueString() {
+							found = false
+						}
+						if found {
+							if !state.Vrfs[i].NexthopInterfaces[ci].Metric.IsNull() && data.Vrfs[j].NexthopInterfaces[cj].Metric.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-interfaces/nexthop-interface", ckeyString), "metric"))
+							}
+							if !state.Vrfs[i].NexthopInterfaces[ci].Track.IsNull() && data.Vrfs[j].NexthopInterfaces[cj].Track.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-interfaces/nexthop-interface", ckeyString), "track"))
+							}
+							if !state.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() && data.Vrfs[j].NexthopInterfaces[cj].Permanent.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-interfaces/nexthop-interface", ckeyString), "permanent"))
+							}
+							if !state.Vrfs[i].NexthopInterfaces[ci].DistanceMetric.IsNull() && data.Vrfs[j].NexthopInterfaces[cj].DistanceMetric.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-interfaces/nexthop-interface", ckeyString), "distance-metric"))
+							}
+							if !state.Vrfs[i].NexthopInterfaces[ci].Tag.IsNull() && data.Vrfs[j].NexthopInterfaces[cj].Tag.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-interfaces/nexthop-interface", ckeyString), "tag"))
+							}
+							if !state.Vrfs[i].NexthopInterfaces[ci].Description.IsNull() && data.Vrfs[j].NexthopInterfaces[cj].Description.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-interfaces/nexthop-interface", ckeyString), "description"))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "vrfs/vrf", keyString, "nexthop-interfaces/nexthop-interface", ckeyString))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "vrfs/vrf", keyString))
+		}
+	}
+	for i := range state.SrPolicies {
+		keys := [...]string{"sr-policy-name"}
+		stateKeyValues := [...]string{state.SrPolicies[i].SrPolicyName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SrPolicies[i].SrPolicyName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SrPolicies {
+			found = true
+			if state.SrPolicies[i].SrPolicyName.ValueString() != data.SrPolicies[j].SrPolicyName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.SrPolicies[i].Metric.IsNull() && data.SrPolicies[j].Metric.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "sr-policies/sr-policy", keyString), "metric"))
+				}
+				if !state.SrPolicies[i].Track.IsNull() && data.SrPolicies[j].Track.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "sr-policies/sr-policy", keyString), "track"))
+				}
+				if !state.SrPolicies[i].Permanent.IsNull() && data.SrPolicies[j].Permanent.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "sr-policies/sr-policy", keyString), "permanent"))
+				}
+				if !state.SrPolicies[i].DistanceMetric.IsNull() && data.SrPolicies[j].DistanceMetric.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "sr-policies/sr-policy", keyString), "distance-metric"))
+				}
+				if !state.SrPolicies[i].Tag.IsNull() && data.SrPolicies[j].Tag.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "sr-policies/sr-policy", keyString), "tag"))
+				}
+				if !state.SrPolicies[i].Description.IsNull() && data.SrPolicies[j].Description.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "sr-policies/sr-policy", keyString), "description"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "sr-policies/sr-policy", keyString))
+		}
+	}
+	for i := range state.NexthopAddresses {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.NexthopAddresses[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.NexthopAddresses[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.NexthopAddresses {
+			found = true
+			if state.NexthopAddresses[i].Address.ValueString() != data.NexthopAddresses[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.NexthopAddresses[i].Metric.IsNull() && data.NexthopAddresses[j].Metric.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-addresses/nexthop-address", keyString), "metric"))
+				}
+				if !state.NexthopAddresses[i].Track.IsNull() && data.NexthopAddresses[j].Track.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-addresses/nexthop-address", keyString), "track"))
+				}
+				if !state.NexthopAddresses[i].Permanent.IsNull() && data.NexthopAddresses[j].Permanent.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-addresses/nexthop-address", keyString), "permanent"))
+				}
+				if !state.NexthopAddresses[i].DistanceMetric.IsNull() && data.NexthopAddresses[j].DistanceMetric.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-addresses/nexthop-address", keyString), "distance-metric"))
+				}
+				if !state.NexthopAddresses[i].Tag.IsNull() && data.NexthopAddresses[j].Tag.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-addresses/nexthop-address", keyString), "tag"))
+				}
+				if !state.NexthopAddresses[i].Description.IsNull() && data.NexthopAddresses[j].Description.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-addresses/nexthop-address", keyString), "description"))
+				}
+				if !state.NexthopAddresses[i].BfdFastDetectMultiplier.IsNull() && data.NexthopAddresses[j].BfdFastDetectMultiplier.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-addresses/nexthop-address", keyString), "bfd/fast-detect/multiplier"))
+				}
+				if !state.NexthopAddresses[i].BfdFastDetectMinimumInterval.IsNull() && data.NexthopAddresses[j].BfdFastDetectMinimumInterval.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-addresses/nexthop-address", keyString), "bfd/fast-detect/minimum-interval"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-addresses/nexthop-address", keyString))
+		}
+	}
+	for i := range state.NexthopInterfaceAddresses {
+		keys := [...]string{"interface-name", "address"}
+		stateKeyValues := [...]string{state.NexthopInterfaceAddresses[i].InterfaceName.ValueString(), state.NexthopInterfaceAddresses[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.NexthopInterfaceAddresses[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.NexthopInterfaceAddresses[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.NexthopInterfaceAddresses {
+			found = true
+			if state.NexthopInterfaceAddresses[i].InterfaceName.ValueString() != data.NexthopInterfaceAddresses[j].InterfaceName.ValueString() {
+				found = false
+			}
+			if state.NexthopInterfaceAddresses[i].Address.ValueString() != data.NexthopInterfaceAddresses[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.NexthopInterfaceAddresses[i].BfdFastDetectMultiplier.IsNull() && data.NexthopInterfaceAddresses[j].BfdFastDetectMultiplier.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-interface-addresses/nexthop-interface-address", keyString), "bfd/fast-detect/multiplier"))
+				}
+				if !state.NexthopInterfaceAddresses[i].BfdFastDetectMinimumInterval.IsNull() && data.NexthopInterfaceAddresses[j].BfdFastDetectMinimumInterval.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-interface-addresses/nexthop-interface-address", keyString), "bfd/fast-detect/minimum-interval"))
+				}
+				if !state.NexthopInterfaceAddresses[i].Metric.IsNull() && data.NexthopInterfaceAddresses[j].Metric.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-interface-addresses/nexthop-interface-address", keyString), "metric"))
+				}
+				if !state.NexthopInterfaceAddresses[i].Track.IsNull() && data.NexthopInterfaceAddresses[j].Track.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-interface-addresses/nexthop-interface-address", keyString), "track"))
+				}
+				if !state.NexthopInterfaceAddresses[i].Permanent.IsNull() && data.NexthopInterfaceAddresses[j].Permanent.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-interface-addresses/nexthop-interface-address", keyString), "permanent"))
+				}
+				if !state.NexthopInterfaceAddresses[i].DistanceMetric.IsNull() && data.NexthopInterfaceAddresses[j].DistanceMetric.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-interface-addresses/nexthop-interface-address", keyString), "distance-metric"))
+				}
+				if !state.NexthopInterfaceAddresses[i].Tag.IsNull() && data.NexthopInterfaceAddresses[j].Tag.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-interface-addresses/nexthop-interface-address", keyString), "tag"))
+				}
+				if !state.NexthopInterfaceAddresses[i].Description.IsNull() && data.NexthopInterfaceAddresses[j].Description.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-interface-addresses/nexthop-interface-address", keyString), "description"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-interface-addresses/nexthop-interface-address", keyString))
+		}
+	}
+	for i := range state.NexthopInterfaces {
+		keys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.NexthopInterfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.NexthopInterfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.NexthopInterfaces {
+			found = true
+			if state.NexthopInterfaces[i].InterfaceName.ValueString() != data.NexthopInterfaces[j].InterfaceName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.NexthopInterfaces[i].Metric.IsNull() && data.NexthopInterfaces[j].Metric.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-interfaces/nexthop-interface", keyString), "metric"))
+				}
+				if !state.NexthopInterfaces[i].Track.IsNull() && data.NexthopInterfaces[j].Track.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-interfaces/nexthop-interface", keyString), "track"))
+				}
+				if !state.NexthopInterfaces[i].Permanent.IsNull() && data.NexthopInterfaces[j].Permanent.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-interfaces/nexthop-interface", keyString), "permanent"))
+				}
+				if !state.NexthopInterfaces[i].DistanceMetric.IsNull() && data.NexthopInterfaces[j].DistanceMetric.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-interfaces/nexthop-interface", keyString), "distance-metric"))
+				}
+				if !state.NexthopInterfaces[i].Tag.IsNull() && data.NexthopInterfaces[j].Tag.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-interfaces/nexthop-interface", keyString), "tag"))
+				}
+				if !state.NexthopInterfaces[i].Description.IsNull() && data.NexthopInterfaces[j].Description.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-interfaces/nexthop-interface", keyString), "description"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "nexthop-interfaces/nexthop-interface", keyString))
+		}
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *RouterStaticVRFIPv6Unicast) getEmptyLeafsDelete(ctx context.Context, state *RouterStaticVRFIPv6Unicast, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	for i := range data.Vrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.Vrfs[i].SrPolicies {
+			ckeys := [...]string{"sr-policy-name"}
+			ckeyValues := [...]string{data.Vrfs[i].SrPolicies[ci].SrPolicyName.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			if !data.Vrfs[i].SrPolicies[ci].Permanent.IsNull() && !data.Vrfs[i].SrPolicies[ci].Permanent.ValueBool() {
+				if state == nil || i >= len(state.Vrfs) || ci >= len(state.Vrfs[i].SrPolicies) || state.Vrfs[i].SrPolicies[ci].Permanent.IsNull() || state.Vrfs[i].SrPolicies[ci].Permanent.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "vrfs/vrf", keyString, "sr-policies/sr-policy", ckeyString), "permanent"))
+				}
+			}
+		}
+		for ci := range data.Vrfs[i].NexthopAddresses {
+			ckeys := [...]string{"address"}
+			ckeyValues := [...]string{data.Vrfs[i].NexthopAddresses[ci].Address.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			if !data.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() && !data.Vrfs[i].NexthopAddresses[ci].Permanent.ValueBool() {
+				if state == nil || i >= len(state.Vrfs) || ci >= len(state.Vrfs[i].NexthopAddresses) || state.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() || state.Vrfs[i].NexthopAddresses[ci].Permanent.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "vrfs/vrf", keyString, "nexthop-addresses/nexthop-address", ckeyString), "permanent"))
+				}
+			}
+		}
+		for ci := range data.Vrfs[i].NexthopInterfaceAddresses {
+			ckeys := [...]string{"interface-name", "address"}
+			ckeyValues := [...]string{data.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName.ValueString(), data.Vrfs[i].NexthopInterfaceAddresses[ci].Address.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			if !data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() && !data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.ValueBool() {
+				if state == nil || i >= len(state.Vrfs) || ci >= len(state.Vrfs[i].NexthopInterfaceAddresses) || state.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() || state.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "vrfs/vrf", keyString, "nexthop-interface-addresses/nexthop-interface-address", ckeyString), "permanent"))
+				}
+			}
+		}
+		for ci := range data.Vrfs[i].NexthopInterfaces {
+			ckeys := [...]string{"interface-name"}
+			ckeyValues := [...]string{data.Vrfs[i].NexthopInterfaces[ci].InterfaceName.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			if !data.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() && !data.Vrfs[i].NexthopInterfaces[ci].Permanent.ValueBool() {
+				if state == nil || i >= len(state.Vrfs) || ci >= len(state.Vrfs[i].NexthopInterfaces) || state.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() || state.Vrfs[i].NexthopInterfaces[ci].Permanent.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "vrfs/vrf", keyString, "nexthop-interfaces/nexthop-interface", ckeyString), "permanent"))
+				}
+			}
+		}
+	}
+	for i := range data.SrPolicies {
+		keys := [...]string{"sr-policy-name"}
+		keyValues := [...]string{data.SrPolicies[i].SrPolicyName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.SrPolicies[i].Permanent.IsNull() && !data.SrPolicies[i].Permanent.ValueBool() {
+			if state == nil || i >= len(state.SrPolicies) || state.SrPolicies[i].Permanent.IsNull() || state.SrPolicies[i].Permanent.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "sr-policies/sr-policy", keyString), "permanent"))
+			}
+		}
+	}
+	for i := range data.NexthopAddresses {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.NexthopAddresses[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.NexthopAddresses[i].Permanent.IsNull() && !data.NexthopAddresses[i].Permanent.ValueBool() {
+			if state == nil || i >= len(state.NexthopAddresses) || state.NexthopAddresses[i].Permanent.IsNull() || state.NexthopAddresses[i].Permanent.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "nexthop-addresses/nexthop-address", keyString), "permanent"))
+			}
+		}
+	}
+	for i := range data.NexthopInterfaceAddresses {
+		keys := [...]string{"interface-name", "address"}
+		keyValues := [...]string{data.NexthopInterfaceAddresses[i].InterfaceName.ValueString(), data.NexthopInterfaceAddresses[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.NexthopInterfaceAddresses[i].Permanent.IsNull() && !data.NexthopInterfaceAddresses[i].Permanent.ValueBool() {
+			if state == nil || i >= len(state.NexthopInterfaceAddresses) || state.NexthopInterfaceAddresses[i].Permanent.IsNull() || state.NexthopInterfaceAddresses[i].Permanent.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "nexthop-interface-addresses/nexthop-interface-address", keyString), "permanent"))
+			}
+		}
+	}
+	for i := range data.NexthopInterfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.NexthopInterfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.NexthopInterfaces[i].Permanent.IsNull() && !data.NexthopInterfaces[i].Permanent.ValueBool() {
+			if state == nil || i >= len(state.NexthopInterfaces) || state.NexthopInterfaces[i].Permanent.IsNull() || state.NexthopInterfaces[i].Permanent.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "nexthop-interfaces/nexthop-interface", keyString), "permanent"))
+			}
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *RouterStaticVRFIPv6Unicast) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	for i := range data.Vrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.Vrfs[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "vrfs/vrf", keyString))
+	}
+	for i := range data.SrPolicies {
+		keys := [...]string{"sr-policy-name"}
+		keyValues := [...]string{data.SrPolicies[i].SrPolicyName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.SrPolicies[i].SrPolicyName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "sr-policies/sr-policy", keyString))
+	}
+	for i := range data.NexthopAddresses {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.NexthopAddresses[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.NexthopAddresses[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "nexthop-addresses/nexthop-address", keyString))
+	}
+	for i := range data.NexthopInterfaceAddresses {
+		keys := [...]string{"interface-name", "address"}
+		keyValues := [...]string{data.NexthopInterfaceAddresses[i].InterfaceName.ValueString(), data.NexthopInterfaceAddresses[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.NexthopInterfaceAddresses[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(data.NexthopInterfaceAddresses[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "nexthop-interface-addresses/nexthop-interface-address", keyString))
+	}
+	for i := range data.NexthopInterfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.NexthopInterfaces[i].InterfaceName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.NexthopInterfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "nexthop-interfaces/nexthop-interface", keyString))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data RouterStaticVRFIPv6Unicast) toBodyXML(ctx context.Context, stateArg ...*RouterStaticVRFIPv6Unicast) string {
@@ -1351,7 +2684,7 @@ func (data RouterStaticVRFIPv6Unicast) toBodyXML(ctx context.Context, stateArg .
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -1359,6 +2692,7 @@ func (data RouterStaticVRFIPv6Unicast) toBodyXML(ctx context.Context, stateArg .
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RouterStaticVRFIPv6Unicast) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1964,621 +3298,7 @@ func (data *RouterStaticVRFIPv6Unicast) updateFromBodyXML(ctx context.Context, r
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *RouterStaticVRFIPv6Unicast) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "nexthop-interfaces.nexthop-interface"); value.Exists() {
-		data.NexthopInterfaces = make([]RouterStaticVRFIPv6UnicastNexthopInterfaces, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterStaticVRFIPv6UnicastNexthopInterfaces{}
-			if cValue := v.Get("interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("description"); cValue.Exists() {
-				item.Description = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tag"); cValue.Exists() {
-				item.Tag = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("distance-metric"); cValue.Exists() {
-				item.DistanceMetric = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("permanent"); cValue.Exists() {
-				item.Permanent = types.BoolValue(true)
-			} else if !item.Permanent.IsNull() {
-				// Only set to false if it was previously set
-				item.Permanent = types.BoolValue(false)
-			}
-			if cValue := v.Get("track"); cValue.Exists() {
-				item.Track = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("metric"); cValue.Exists() {
-				item.Metric = types.Int64Value(cValue.Int())
-			}
-			data.NexthopInterfaces = append(data.NexthopInterfaces, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "nexthop-interface-addresses.nexthop-interface-address"); value.Exists() {
-		data.NexthopInterfaceAddresses = make([]RouterStaticVRFIPv6UnicastNexthopInterfaceAddresses, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterStaticVRFIPv6UnicastNexthopInterfaceAddresses{}
-			if cValue := v.Get("interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("description"); cValue.Exists() {
-				item.Description = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tag"); cValue.Exists() {
-				item.Tag = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("distance-metric"); cValue.Exists() {
-				item.DistanceMetric = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("permanent"); cValue.Exists() {
-				item.Permanent = types.BoolValue(true)
-			} else if !item.Permanent.IsNull() {
-				// Only set to false if it was previously set
-				item.Permanent = types.BoolValue(false)
-			}
-			if cValue := v.Get("track"); cValue.Exists() {
-				item.Track = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("metric"); cValue.Exists() {
-				item.Metric = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("bfd.fast-detect.minimum-interval"); cValue.Exists() {
-				item.BfdFastDetectMinimumInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("bfd.fast-detect.multiplier"); cValue.Exists() {
-				item.BfdFastDetectMultiplier = types.Int64Value(cValue.Int())
-			}
-			data.NexthopInterfaceAddresses = append(data.NexthopInterfaceAddresses, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "nexthop-addresses.nexthop-address"); value.Exists() {
-		data.NexthopAddresses = make([]RouterStaticVRFIPv6UnicastNexthopAddresses, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterStaticVRFIPv6UnicastNexthopAddresses{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("bfd.fast-detect.minimum-interval"); cValue.Exists() {
-				item.BfdFastDetectMinimumInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("bfd.fast-detect.multiplier"); cValue.Exists() {
-				item.BfdFastDetectMultiplier = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("description"); cValue.Exists() {
-				item.Description = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tag"); cValue.Exists() {
-				item.Tag = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("distance-metric"); cValue.Exists() {
-				item.DistanceMetric = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("permanent"); cValue.Exists() {
-				item.Permanent = types.BoolValue(true)
-			} else if !item.Permanent.IsNull() {
-				// Only set to false if it was previously set
-				item.Permanent = types.BoolValue(false)
-			}
-			if cValue := v.Get("track"); cValue.Exists() {
-				item.Track = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("metric"); cValue.Exists() {
-				item.Metric = types.Int64Value(cValue.Int())
-			}
-			data.NexthopAddresses = append(data.NexthopAddresses, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "sr-policies.sr-policy"); value.Exists() {
-		data.SrPolicies = make([]RouterStaticVRFIPv6UnicastSrPolicies, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterStaticVRFIPv6UnicastSrPolicies{}
-			if cValue := v.Get("sr-policy-name"); cValue.Exists() {
-				item.SrPolicyName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("description"); cValue.Exists() {
-				item.Description = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tag"); cValue.Exists() {
-				item.Tag = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("distance-metric"); cValue.Exists() {
-				item.DistanceMetric = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("permanent"); cValue.Exists() {
-				item.Permanent = types.BoolValue(true)
-			} else if !item.Permanent.IsNull() {
-				// Only set to false if it was previously set
-				item.Permanent = types.BoolValue(false)
-			}
-			if cValue := v.Get("track"); cValue.Exists() {
-				item.Track = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("metric"); cValue.Exists() {
-				item.Metric = types.Int64Value(cValue.Int())
-			}
-			data.SrPolicies = append(data.SrPolicies, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "vrfs.vrf"); value.Exists() {
-		data.Vrfs = make([]RouterStaticVRFIPv6UnicastVrfs, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterStaticVRFIPv6UnicastVrfs{}
-			if cValue := v.Get("vrf-name"); cValue.Exists() {
-				item.VrfName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("nexthop-interfaces.nexthop-interface"); cValue.Exists() {
-				item.NexthopInterfaces = make([]RouterStaticVRFIPv6UnicastVrfsNexthopInterfaces, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := RouterStaticVRFIPv6UnicastVrfsNexthopInterfaces{}
-					if ccValue := cv.Get("interface-name"); ccValue.Exists() {
-						cItem.InterfaceName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("description"); ccValue.Exists() {
-						cItem.Description = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("tag"); ccValue.Exists() {
-						cItem.Tag = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
-						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("permanent"); ccValue.Exists() {
-						cItem.Permanent = types.BoolValue(true)
-					} else if !cItem.Permanent.IsNull() {
-						// Only set to false if it was previously set
-						cItem.Permanent = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("track"); ccValue.Exists() {
-						cItem.Track = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("metric"); ccValue.Exists() {
-						cItem.Metric = types.Int64Value(ccValue.Int())
-					}
-					item.NexthopInterfaces = append(item.NexthopInterfaces, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("nexthop-interface-addresses.nexthop-interface-address"); cValue.Exists() {
-				item.NexthopInterfaceAddresses = make([]RouterStaticVRFIPv6UnicastVrfsNexthopInterfaceAddresses, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := RouterStaticVRFIPv6UnicastVrfsNexthopInterfaceAddresses{}
-					if ccValue := cv.Get("interface-name"); ccValue.Exists() {
-						cItem.InterfaceName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("address"); ccValue.Exists() {
-						cItem.Address = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("bfd.fast-detect.minimum-interval"); ccValue.Exists() {
-						cItem.BfdFastDetectMinimumInterval = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("bfd.fast-detect.multiplier"); ccValue.Exists() {
-						cItem.BfdFastDetectMultiplier = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("description"); ccValue.Exists() {
-						cItem.Description = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("tag"); ccValue.Exists() {
-						cItem.Tag = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
-						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("permanent"); ccValue.Exists() {
-						cItem.Permanent = types.BoolValue(true)
-					} else if !cItem.Permanent.IsNull() {
-						// Only set to false if it was previously set
-						cItem.Permanent = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("track"); ccValue.Exists() {
-						cItem.Track = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("metric"); ccValue.Exists() {
-						cItem.Metric = types.Int64Value(ccValue.Int())
-					}
-					item.NexthopInterfaceAddresses = append(item.NexthopInterfaceAddresses, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("nexthop-addresses.nexthop-address"); cValue.Exists() {
-				item.NexthopAddresses = make([]RouterStaticVRFIPv6UnicastVrfsNexthopAddresses, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := RouterStaticVRFIPv6UnicastVrfsNexthopAddresses{}
-					if ccValue := cv.Get("address"); ccValue.Exists() {
-						cItem.Address = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("bfd.fast-detect.minimum-interval"); ccValue.Exists() {
-						cItem.BfdFastDetectMinimumInterval = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("bfd.fast-detect.multiplier"); ccValue.Exists() {
-						cItem.BfdFastDetectMultiplier = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("description"); ccValue.Exists() {
-						cItem.Description = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("tag"); ccValue.Exists() {
-						cItem.Tag = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
-						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("permanent"); ccValue.Exists() {
-						cItem.Permanent = types.BoolValue(true)
-					} else if !cItem.Permanent.IsNull() {
-						// Only set to false if it was previously set
-						cItem.Permanent = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("track"); ccValue.Exists() {
-						cItem.Track = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("metric"); ccValue.Exists() {
-						cItem.Metric = types.Int64Value(ccValue.Int())
-					}
-					item.NexthopAddresses = append(item.NexthopAddresses, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("sr-policies.sr-policy"); cValue.Exists() {
-				item.SrPolicies = make([]RouterStaticVRFIPv6UnicastVrfsSrPolicies, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := RouterStaticVRFIPv6UnicastVrfsSrPolicies{}
-					if ccValue := cv.Get("sr-policy-name"); ccValue.Exists() {
-						cItem.SrPolicyName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("description"); ccValue.Exists() {
-						cItem.Description = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("tag"); ccValue.Exists() {
-						cItem.Tag = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
-						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("permanent"); ccValue.Exists() {
-						cItem.Permanent = types.BoolValue(true)
-					} else if !cItem.Permanent.IsNull() {
-						// Only set to false if it was previously set
-						cItem.Permanent = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("track"); ccValue.Exists() {
-						cItem.Track = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("metric"); ccValue.Exists() {
-						cItem.Metric = types.Int64Value(ccValue.Int())
-					}
-					item.SrPolicies = append(item.SrPolicies, cItem)
-					return true
-				})
-			}
-			data.Vrfs = append(data.Vrfs, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *RouterStaticVRFIPv6UnicastData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "nexthop-interfaces.nexthop-interface"); value.Exists() {
-		data.NexthopInterfaces = make([]RouterStaticVRFIPv6UnicastNexthopInterfaces, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterStaticVRFIPv6UnicastNexthopInterfaces{}
-			if cValue := v.Get("interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("description"); cValue.Exists() {
-				item.Description = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tag"); cValue.Exists() {
-				item.Tag = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("distance-metric"); cValue.Exists() {
-				item.DistanceMetric = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("permanent"); cValue.Exists() {
-				item.Permanent = types.BoolValue(true)
-			} else {
-				item.Permanent = types.BoolValue(false)
-			}
-			if cValue := v.Get("track"); cValue.Exists() {
-				item.Track = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("metric"); cValue.Exists() {
-				item.Metric = types.Int64Value(cValue.Int())
-			}
-			data.NexthopInterfaces = append(data.NexthopInterfaces, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "nexthop-interface-addresses.nexthop-interface-address"); value.Exists() {
-		data.NexthopInterfaceAddresses = make([]RouterStaticVRFIPv6UnicastNexthopInterfaceAddresses, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterStaticVRFIPv6UnicastNexthopInterfaceAddresses{}
-			if cValue := v.Get("interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("description"); cValue.Exists() {
-				item.Description = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tag"); cValue.Exists() {
-				item.Tag = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("distance-metric"); cValue.Exists() {
-				item.DistanceMetric = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("permanent"); cValue.Exists() {
-				item.Permanent = types.BoolValue(true)
-			} else {
-				item.Permanent = types.BoolValue(false)
-			}
-			if cValue := v.Get("track"); cValue.Exists() {
-				item.Track = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("metric"); cValue.Exists() {
-				item.Metric = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("bfd.fast-detect.minimum-interval"); cValue.Exists() {
-				item.BfdFastDetectMinimumInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("bfd.fast-detect.multiplier"); cValue.Exists() {
-				item.BfdFastDetectMultiplier = types.Int64Value(cValue.Int())
-			}
-			data.NexthopInterfaceAddresses = append(data.NexthopInterfaceAddresses, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "nexthop-addresses.nexthop-address"); value.Exists() {
-		data.NexthopAddresses = make([]RouterStaticVRFIPv6UnicastNexthopAddresses, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterStaticVRFIPv6UnicastNexthopAddresses{}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("bfd.fast-detect.minimum-interval"); cValue.Exists() {
-				item.BfdFastDetectMinimumInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("bfd.fast-detect.multiplier"); cValue.Exists() {
-				item.BfdFastDetectMultiplier = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("description"); cValue.Exists() {
-				item.Description = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tag"); cValue.Exists() {
-				item.Tag = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("distance-metric"); cValue.Exists() {
-				item.DistanceMetric = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("permanent"); cValue.Exists() {
-				item.Permanent = types.BoolValue(true)
-			} else {
-				item.Permanent = types.BoolValue(false)
-			}
-			if cValue := v.Get("track"); cValue.Exists() {
-				item.Track = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("metric"); cValue.Exists() {
-				item.Metric = types.Int64Value(cValue.Int())
-			}
-			data.NexthopAddresses = append(data.NexthopAddresses, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "sr-policies.sr-policy"); value.Exists() {
-		data.SrPolicies = make([]RouterStaticVRFIPv6UnicastSrPolicies, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterStaticVRFIPv6UnicastSrPolicies{}
-			if cValue := v.Get("sr-policy-name"); cValue.Exists() {
-				item.SrPolicyName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("description"); cValue.Exists() {
-				item.Description = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tag"); cValue.Exists() {
-				item.Tag = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("distance-metric"); cValue.Exists() {
-				item.DistanceMetric = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("permanent"); cValue.Exists() {
-				item.Permanent = types.BoolValue(true)
-			} else {
-				item.Permanent = types.BoolValue(false)
-			}
-			if cValue := v.Get("track"); cValue.Exists() {
-				item.Track = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("metric"); cValue.Exists() {
-				item.Metric = types.Int64Value(cValue.Int())
-			}
-			data.SrPolicies = append(data.SrPolicies, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "vrfs.vrf"); value.Exists() {
-		data.Vrfs = make([]RouterStaticVRFIPv6UnicastVrfs, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterStaticVRFIPv6UnicastVrfs{}
-			if cValue := v.Get("vrf-name"); cValue.Exists() {
-				item.VrfName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("nexthop-interfaces.nexthop-interface"); cValue.Exists() {
-				item.NexthopInterfaces = make([]RouterStaticVRFIPv6UnicastVrfsNexthopInterfaces, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := RouterStaticVRFIPv6UnicastVrfsNexthopInterfaces{}
-					if ccValue := cv.Get("interface-name"); ccValue.Exists() {
-						cItem.InterfaceName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("description"); ccValue.Exists() {
-						cItem.Description = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("tag"); ccValue.Exists() {
-						cItem.Tag = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
-						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("permanent"); ccValue.Exists() {
-						cItem.Permanent = types.BoolValue(true)
-					} else {
-						cItem.Permanent = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("track"); ccValue.Exists() {
-						cItem.Track = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("metric"); ccValue.Exists() {
-						cItem.Metric = types.Int64Value(ccValue.Int())
-					}
-					item.NexthopInterfaces = append(item.NexthopInterfaces, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("nexthop-interface-addresses.nexthop-interface-address"); cValue.Exists() {
-				item.NexthopInterfaceAddresses = make([]RouterStaticVRFIPv6UnicastVrfsNexthopInterfaceAddresses, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := RouterStaticVRFIPv6UnicastVrfsNexthopInterfaceAddresses{}
-					if ccValue := cv.Get("interface-name"); ccValue.Exists() {
-						cItem.InterfaceName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("address"); ccValue.Exists() {
-						cItem.Address = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("bfd.fast-detect.minimum-interval"); ccValue.Exists() {
-						cItem.BfdFastDetectMinimumInterval = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("bfd.fast-detect.multiplier"); ccValue.Exists() {
-						cItem.BfdFastDetectMultiplier = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("description"); ccValue.Exists() {
-						cItem.Description = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("tag"); ccValue.Exists() {
-						cItem.Tag = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
-						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("permanent"); ccValue.Exists() {
-						cItem.Permanent = types.BoolValue(true)
-					} else {
-						cItem.Permanent = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("track"); ccValue.Exists() {
-						cItem.Track = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("metric"); ccValue.Exists() {
-						cItem.Metric = types.Int64Value(ccValue.Int())
-					}
-					item.NexthopInterfaceAddresses = append(item.NexthopInterfaceAddresses, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("nexthop-addresses.nexthop-address"); cValue.Exists() {
-				item.NexthopAddresses = make([]RouterStaticVRFIPv6UnicastVrfsNexthopAddresses, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := RouterStaticVRFIPv6UnicastVrfsNexthopAddresses{}
-					if ccValue := cv.Get("address"); ccValue.Exists() {
-						cItem.Address = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("bfd.fast-detect.minimum-interval"); ccValue.Exists() {
-						cItem.BfdFastDetectMinimumInterval = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("bfd.fast-detect.multiplier"); ccValue.Exists() {
-						cItem.BfdFastDetectMultiplier = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("description"); ccValue.Exists() {
-						cItem.Description = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("tag"); ccValue.Exists() {
-						cItem.Tag = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
-						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("permanent"); ccValue.Exists() {
-						cItem.Permanent = types.BoolValue(true)
-					} else {
-						cItem.Permanent = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("track"); ccValue.Exists() {
-						cItem.Track = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("metric"); ccValue.Exists() {
-						cItem.Metric = types.Int64Value(ccValue.Int())
-					}
-					item.NexthopAddresses = append(item.NexthopAddresses, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("sr-policies.sr-policy"); cValue.Exists() {
-				item.SrPolicies = make([]RouterStaticVRFIPv6UnicastVrfsSrPolicies, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := RouterStaticVRFIPv6UnicastVrfsSrPolicies{}
-					if ccValue := cv.Get("sr-policy-name"); ccValue.Exists() {
-						cItem.SrPolicyName = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("description"); ccValue.Exists() {
-						cItem.Description = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("tag"); ccValue.Exists() {
-						cItem.Tag = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
-						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("permanent"); ccValue.Exists() {
-						cItem.Permanent = types.BoolValue(true)
-					} else {
-						cItem.Permanent = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("track"); ccValue.Exists() {
-						cItem.Track = types.StringValue(ccValue.String())
-					}
-					if ccValue := cv.Get("metric"); ccValue.Exists() {
-						cItem.Metric = types.Int64Value(ccValue.Int())
-					}
-					item.SrPolicies = append(item.SrPolicies, cItem)
-					return true
-				})
-			}
-			data.Vrfs = append(data.Vrfs, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RouterStaticVRFIPv6Unicast) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -2874,6 +3594,7 @@ func (data *RouterStaticVRFIPv6Unicast) fromBodyXML(ctx context.Context, res xml
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RouterStaticVRFIPv6UnicastData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -3169,640 +3890,7 @@ func (data *RouterStaticVRFIPv6UnicastData) fromBodyXML(ctx context.Context, res
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *RouterStaticVRFIPv6Unicast) getDeletedItems(ctx context.Context, state RouterStaticVRFIPv6Unicast) []string {
-	deletedItems := make([]string, 0)
-	for i := range state.Vrfs {
-		keys := [...]string{"vrf-name"}
-		stateKeyValues := [...]string{state.Vrfs[i].VrfName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Vrfs[i].VrfName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Vrfs {
-			found = true
-			if state.Vrfs[i].VrfName.ValueString() != data.Vrfs[j].VrfName.ValueString() {
-				found = false
-			}
-			if found {
-				for ci := range state.Vrfs[i].SrPolicies {
-					ckeys := [...]string{"sr-policy-name"}
-					cstateKeyValues := [...]string{state.Vrfs[i].SrPolicies[ci].SrPolicyName.ValueString()}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.Vrfs[i].SrPolicies[ci].SrPolicyName.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.Vrfs[j].SrPolicies {
-						found = true
-						if state.Vrfs[i].SrPolicies[ci].SrPolicyName.ValueString() != data.Vrfs[j].SrPolicies[cj].SrPolicyName.ValueString() {
-							found = false
-						}
-						if found {
-							if !state.Vrfs[i].SrPolicies[ci].Metric.IsNull() && data.Vrfs[j].SrPolicies[cj].Metric.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/sr-policies/sr-policy%v/metric", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].SrPolicies[ci].Track.IsNull() && data.Vrfs[j].SrPolicies[cj].Track.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/sr-policies/sr-policy%v/track", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].SrPolicies[ci].Permanent.IsNull() && data.Vrfs[j].SrPolicies[cj].Permanent.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/sr-policies/sr-policy%v/permanent", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].SrPolicies[ci].DistanceMetric.IsNull() && data.Vrfs[j].SrPolicies[cj].DistanceMetric.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/sr-policies/sr-policy%v/distance-metric", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].SrPolicies[ci].Tag.IsNull() && data.Vrfs[j].SrPolicies[cj].Tag.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/sr-policies/sr-policy%v/tag", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].SrPolicies[ci].Description.IsNull() && data.Vrfs[j].SrPolicies[cj].Description.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/sr-policies/sr-policy%v/description", state.getPath(), keyString, ckeyString))
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/sr-policies/sr-policy%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				for ci := range state.Vrfs[i].NexthopAddresses {
-					ckeys := [...]string{"address"}
-					cstateKeyValues := [...]string{state.Vrfs[i].NexthopAddresses[ci].Address.ValueString()}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.Vrfs[i].NexthopAddresses[ci].Address.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.Vrfs[j].NexthopAddresses {
-						found = true
-						if state.Vrfs[i].NexthopAddresses[ci].Address.ValueString() != data.Vrfs[j].NexthopAddresses[cj].Address.ValueString() {
-							found = false
-						}
-						if found {
-							if !state.Vrfs[i].NexthopAddresses[ci].Metric.IsNull() && data.Vrfs[j].NexthopAddresses[cj].Metric.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-addresses/nexthop-address%v/metric", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopAddresses[ci].Track.IsNull() && data.Vrfs[j].NexthopAddresses[cj].Track.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-addresses/nexthop-address%v/track", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() && data.Vrfs[j].NexthopAddresses[cj].Permanent.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-addresses/nexthop-address%v/permanent", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopAddresses[ci].DistanceMetric.IsNull() && data.Vrfs[j].NexthopAddresses[cj].DistanceMetric.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-addresses/nexthop-address%v/distance-metric", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopAddresses[ci].Tag.IsNull() && data.Vrfs[j].NexthopAddresses[cj].Tag.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-addresses/nexthop-address%v/tag", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopAddresses[ci].Description.IsNull() && data.Vrfs[j].NexthopAddresses[cj].Description.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-addresses/nexthop-address%v/description", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopAddresses[ci].BfdFastDetectMultiplier.IsNull() && data.Vrfs[j].NexthopAddresses[cj].BfdFastDetectMultiplier.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-addresses/nexthop-address%v/bfd/fast-detect/multiplier", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopAddresses[ci].BfdFastDetectMinimumInterval.IsNull() && data.Vrfs[j].NexthopAddresses[cj].BfdFastDetectMinimumInterval.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-addresses/nexthop-address%v/bfd/fast-detect/minimum-interval", state.getPath(), keyString, ckeyString))
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-addresses/nexthop-address%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				for ci := range state.Vrfs[i].NexthopInterfaceAddresses {
-					ckeys := [...]string{"interface-name", "address"}
-					cstateKeyValues := [...]string{state.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName.ValueString(), state.Vrfs[i].NexthopInterfaceAddresses[ci].Address.ValueString()}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if !reflect.ValueOf(state.Vrfs[i].NexthopInterfaceAddresses[ci].Address.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.Vrfs[j].NexthopInterfaceAddresses {
-						found = true
-						if state.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName.ValueString() != data.Vrfs[j].NexthopInterfaceAddresses[cj].InterfaceName.ValueString() {
-							found = false
-						}
-						if state.Vrfs[i].NexthopInterfaceAddresses[ci].Address.ValueString() != data.Vrfs[j].NexthopInterfaceAddresses[cj].Address.ValueString() {
-							found = false
-						}
-						if found {
-							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].Metric.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].Metric.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interface-addresses/nexthop-interface-address%v/metric", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].Track.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].Track.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interface-addresses/nexthop-interface-address%v/track", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].Permanent.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interface-addresses/nexthop-interface-address%v/permanent", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].DistanceMetric.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].DistanceMetric.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interface-addresses/nexthop-interface-address%v/distance-metric", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].Tag.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].Tag.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interface-addresses/nexthop-interface-address%v/tag", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].Description.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].Description.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interface-addresses/nexthop-interface-address%v/description", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMultiplier.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].BfdFastDetectMultiplier.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interface-addresses/nexthop-interface-address%v/bfd/fast-detect/multiplier", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMinimumInterval.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].BfdFastDetectMinimumInterval.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interface-addresses/nexthop-interface-address%v/bfd/fast-detect/minimum-interval", state.getPath(), keyString, ckeyString))
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interface-addresses/nexthop-interface-address%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				for ci := range state.Vrfs[i].NexthopInterfaces {
-					ckeys := [...]string{"interface-name"}
-					cstateKeyValues := [...]string{state.Vrfs[i].NexthopInterfaces[ci].InterfaceName.ValueString()}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.Vrfs[i].NexthopInterfaces[ci].InterfaceName.ValueString()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.Vrfs[j].NexthopInterfaces {
-						found = true
-						if state.Vrfs[i].NexthopInterfaces[ci].InterfaceName.ValueString() != data.Vrfs[j].NexthopInterfaces[cj].InterfaceName.ValueString() {
-							found = false
-						}
-						if found {
-							if !state.Vrfs[i].NexthopInterfaces[ci].Metric.IsNull() && data.Vrfs[j].NexthopInterfaces[cj].Metric.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interfaces/nexthop-interface%v/metric", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopInterfaces[ci].Track.IsNull() && data.Vrfs[j].NexthopInterfaces[cj].Track.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interfaces/nexthop-interface%v/track", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() && data.Vrfs[j].NexthopInterfaces[cj].Permanent.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interfaces/nexthop-interface%v/permanent", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopInterfaces[ci].DistanceMetric.IsNull() && data.Vrfs[j].NexthopInterfaces[cj].DistanceMetric.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interfaces/nexthop-interface%v/distance-metric", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopInterfaces[ci].Tag.IsNull() && data.Vrfs[j].NexthopInterfaces[cj].Tag.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interfaces/nexthop-interface%v/tag", state.getPath(), keyString, ckeyString))
-							}
-							if !state.Vrfs[i].NexthopInterfaces[ci].Description.IsNull() && data.Vrfs[j].NexthopInterfaces[cj].Description.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interfaces/nexthop-interface%v/description", state.getPath(), keyString, ckeyString))
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interfaces/nexthop-interface%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.SrPolicies {
-		keys := [...]string{"sr-policy-name"}
-		stateKeyValues := [...]string{state.SrPolicies[i].SrPolicyName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SrPolicies[i].SrPolicyName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SrPolicies {
-			found = true
-			if state.SrPolicies[i].SrPolicyName.ValueString() != data.SrPolicies[j].SrPolicyName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.SrPolicies[i].Metric.IsNull() && data.SrPolicies[j].Metric.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policies/sr-policy%v/metric", state.getPath(), keyString))
-				}
-				if !state.SrPolicies[i].Track.IsNull() && data.SrPolicies[j].Track.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policies/sr-policy%v/track", state.getPath(), keyString))
-				}
-				if !state.SrPolicies[i].Permanent.IsNull() && data.SrPolicies[j].Permanent.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policies/sr-policy%v/permanent", state.getPath(), keyString))
-				}
-				if !state.SrPolicies[i].DistanceMetric.IsNull() && data.SrPolicies[j].DistanceMetric.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policies/sr-policy%v/distance-metric", state.getPath(), keyString))
-				}
-				if !state.SrPolicies[i].Tag.IsNull() && data.SrPolicies[j].Tag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policies/sr-policy%v/tag", state.getPath(), keyString))
-				}
-				if !state.SrPolicies[i].Description.IsNull() && data.SrPolicies[j].Description.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policies/sr-policy%v/description", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policies/sr-policy%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.NexthopAddresses {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.NexthopAddresses[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.NexthopAddresses[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.NexthopAddresses {
-			found = true
-			if state.NexthopAddresses[i].Address.ValueString() != data.NexthopAddresses[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.NexthopAddresses[i].Metric.IsNull() && data.NexthopAddresses[j].Metric.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-addresses/nexthop-address%v/metric", state.getPath(), keyString))
-				}
-				if !state.NexthopAddresses[i].Track.IsNull() && data.NexthopAddresses[j].Track.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-addresses/nexthop-address%v/track", state.getPath(), keyString))
-				}
-				if !state.NexthopAddresses[i].Permanent.IsNull() && data.NexthopAddresses[j].Permanent.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-addresses/nexthop-address%v/permanent", state.getPath(), keyString))
-				}
-				if !state.NexthopAddresses[i].DistanceMetric.IsNull() && data.NexthopAddresses[j].DistanceMetric.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-addresses/nexthop-address%v/distance-metric", state.getPath(), keyString))
-				}
-				if !state.NexthopAddresses[i].Tag.IsNull() && data.NexthopAddresses[j].Tag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-addresses/nexthop-address%v/tag", state.getPath(), keyString))
-				}
-				if !state.NexthopAddresses[i].Description.IsNull() && data.NexthopAddresses[j].Description.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-addresses/nexthop-address%v/description", state.getPath(), keyString))
-				}
-				if !state.NexthopAddresses[i].BfdFastDetectMultiplier.IsNull() && data.NexthopAddresses[j].BfdFastDetectMultiplier.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-addresses/nexthop-address%v/bfd/fast-detect/multiplier", state.getPath(), keyString))
-				}
-				if !state.NexthopAddresses[i].BfdFastDetectMinimumInterval.IsNull() && data.NexthopAddresses[j].BfdFastDetectMinimumInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-addresses/nexthop-address%v/bfd/fast-detect/minimum-interval", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-addresses/nexthop-address%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.NexthopInterfaceAddresses {
-		keys := [...]string{"interface-name", "address"}
-		stateKeyValues := [...]string{state.NexthopInterfaceAddresses[i].InterfaceName.ValueString(), state.NexthopInterfaceAddresses[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.NexthopInterfaceAddresses[i].InterfaceName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if !reflect.ValueOf(state.NexthopInterfaceAddresses[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.NexthopInterfaceAddresses {
-			found = true
-			if state.NexthopInterfaceAddresses[i].InterfaceName.ValueString() != data.NexthopInterfaceAddresses[j].InterfaceName.ValueString() {
-				found = false
-			}
-			if state.NexthopInterfaceAddresses[i].Address.ValueString() != data.NexthopInterfaceAddresses[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.NexthopInterfaceAddresses[i].BfdFastDetectMultiplier.IsNull() && data.NexthopInterfaceAddresses[j].BfdFastDetectMultiplier.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-interface-addresses/nexthop-interface-address%v/bfd/fast-detect/multiplier", state.getPath(), keyString))
-				}
-				if !state.NexthopInterfaceAddresses[i].BfdFastDetectMinimumInterval.IsNull() && data.NexthopInterfaceAddresses[j].BfdFastDetectMinimumInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-interface-addresses/nexthop-interface-address%v/bfd/fast-detect/minimum-interval", state.getPath(), keyString))
-				}
-				if !state.NexthopInterfaceAddresses[i].Metric.IsNull() && data.NexthopInterfaceAddresses[j].Metric.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-interface-addresses/nexthop-interface-address%v/metric", state.getPath(), keyString))
-				}
-				if !state.NexthopInterfaceAddresses[i].Track.IsNull() && data.NexthopInterfaceAddresses[j].Track.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-interface-addresses/nexthop-interface-address%v/track", state.getPath(), keyString))
-				}
-				if !state.NexthopInterfaceAddresses[i].Permanent.IsNull() && data.NexthopInterfaceAddresses[j].Permanent.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-interface-addresses/nexthop-interface-address%v/permanent", state.getPath(), keyString))
-				}
-				if !state.NexthopInterfaceAddresses[i].DistanceMetric.IsNull() && data.NexthopInterfaceAddresses[j].DistanceMetric.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-interface-addresses/nexthop-interface-address%v/distance-metric", state.getPath(), keyString))
-				}
-				if !state.NexthopInterfaceAddresses[i].Tag.IsNull() && data.NexthopInterfaceAddresses[j].Tag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-interface-addresses/nexthop-interface-address%v/tag", state.getPath(), keyString))
-				}
-				if !state.NexthopInterfaceAddresses[i].Description.IsNull() && data.NexthopInterfaceAddresses[j].Description.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-interface-addresses/nexthop-interface-address%v/description", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-interface-addresses/nexthop-interface-address%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.NexthopInterfaces {
-		keys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.NexthopInterfaces[i].InterfaceName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.NexthopInterfaces[i].InterfaceName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.NexthopInterfaces {
-			found = true
-			if state.NexthopInterfaces[i].InterfaceName.ValueString() != data.NexthopInterfaces[j].InterfaceName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.NexthopInterfaces[i].Metric.IsNull() && data.NexthopInterfaces[j].Metric.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-interfaces/nexthop-interface%v/metric", state.getPath(), keyString))
-				}
-				if !state.NexthopInterfaces[i].Track.IsNull() && data.NexthopInterfaces[j].Track.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-interfaces/nexthop-interface%v/track", state.getPath(), keyString))
-				}
-				if !state.NexthopInterfaces[i].Permanent.IsNull() && data.NexthopInterfaces[j].Permanent.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-interfaces/nexthop-interface%v/permanent", state.getPath(), keyString))
-				}
-				if !state.NexthopInterfaces[i].DistanceMetric.IsNull() && data.NexthopInterfaces[j].DistanceMetric.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-interfaces/nexthop-interface%v/distance-metric", state.getPath(), keyString))
-				}
-				if !state.NexthopInterfaces[i].Tag.IsNull() && data.NexthopInterfaces[j].Tag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-interfaces/nexthop-interface%v/tag", state.getPath(), keyString))
-				}
-				if !state.NexthopInterfaces[i].Description.IsNull() && data.NexthopInterfaces[j].Description.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-interfaces/nexthop-interface%v/description", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop-interfaces/nexthop-interface%v", state.getPath(), keyString))
-		}
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *RouterStaticVRFIPv6Unicast) getEmptyLeafsDelete(ctx context.Context, state *RouterStaticVRFIPv6Unicast) []string {
-	emptyLeafsDelete := make([]string, 0)
-	for i := range data.Vrfs {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		for ci := range data.Vrfs[i].SrPolicies {
-			ckeys := [...]string{"sr-policy-name"}
-			ckeyValues := [...]string{data.Vrfs[i].SrPolicies[ci].SrPolicyName.ValueString()}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-			// Only delete if state has true and plan has false
-			if !data.Vrfs[i].SrPolicies[ci].Permanent.IsNull() && !data.Vrfs[i].SrPolicies[ci].Permanent.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Vrfs) && ci < len(state.Vrfs[i].SrPolicies) && !state.Vrfs[i].SrPolicies[ci].Permanent.IsNull() && state.Vrfs[i].SrPolicies[ci].Permanent.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/sr-policies/sr-policy%v/permanent", data.getXPath(), keyString, ckeyString))
-				}
-			}
-		}
-		for ci := range data.Vrfs[i].NexthopAddresses {
-			ckeys := [...]string{"address"}
-			ckeyValues := [...]string{data.Vrfs[i].NexthopAddresses[ci].Address.ValueString()}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-			// Only delete if state has true and plan has false
-			if !data.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() && !data.Vrfs[i].NexthopAddresses[ci].Permanent.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Vrfs) && ci < len(state.Vrfs[i].NexthopAddresses) && !state.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() && state.Vrfs[i].NexthopAddresses[ci].Permanent.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-addresses/nexthop-address%v/permanent", data.getXPath(), keyString, ckeyString))
-				}
-			}
-		}
-		for ci := range data.Vrfs[i].NexthopInterfaceAddresses {
-			ckeys := [...]string{"interface-name", "address"}
-			ckeyValues := [...]string{data.Vrfs[i].NexthopInterfaceAddresses[ci].InterfaceName.ValueString(), data.Vrfs[i].NexthopInterfaceAddresses[ci].Address.ValueString()}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-			// Only delete if state has true and plan has false
-			if !data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() && !data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Vrfs) && ci < len(state.Vrfs[i].NexthopInterfaceAddresses) && !state.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() && state.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interface-addresses/nexthop-interface-address%v/permanent", data.getXPath(), keyString, ckeyString))
-				}
-			}
-		}
-		for ci := range data.Vrfs[i].NexthopInterfaces {
-			ckeys := [...]string{"interface-name"}
-			ckeyValues := [...]string{data.Vrfs[i].NexthopInterfaces[ci].InterfaceName.ValueString()}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-			// Only delete if state has true and plan has false
-			if !data.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() && !data.Vrfs[i].NexthopInterfaces[ci].Permanent.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.Vrfs) && ci < len(state.Vrfs[i].NexthopInterfaces) && !state.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() && state.Vrfs[i].NexthopInterfaces[ci].Permanent.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interfaces/nexthop-interface%v/permanent", data.getXPath(), keyString, ckeyString))
-				}
-			}
-		}
-	}
-	for i := range data.SrPolicies {
-		keys := [...]string{"sr-policy-name"}
-		keyValues := [...]string{data.SrPolicies[i].SrPolicyName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.SrPolicies[i].Permanent.IsNull() && !data.SrPolicies[i].Permanent.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SrPolicies) && !state.SrPolicies[i].Permanent.IsNull() && state.SrPolicies[i].Permanent.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sr-policies/sr-policy%v/permanent", data.getXPath(), keyString))
-			}
-		}
-	}
-	for i := range data.NexthopAddresses {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.NexthopAddresses[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.NexthopAddresses[i].Permanent.IsNull() && !data.NexthopAddresses[i].Permanent.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.NexthopAddresses) && !state.NexthopAddresses[i].Permanent.IsNull() && state.NexthopAddresses[i].Permanent.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nexthop-addresses/nexthop-address%v/permanent", data.getXPath(), keyString))
-			}
-		}
-	}
-	for i := range data.NexthopInterfaceAddresses {
-		keys := [...]string{"interface-name", "address"}
-		keyValues := [...]string{data.NexthopInterfaceAddresses[i].InterfaceName.ValueString(), data.NexthopInterfaceAddresses[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.NexthopInterfaceAddresses[i].Permanent.IsNull() && !data.NexthopInterfaceAddresses[i].Permanent.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.NexthopInterfaceAddresses) && !state.NexthopInterfaceAddresses[i].Permanent.IsNull() && state.NexthopInterfaceAddresses[i].Permanent.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nexthop-interface-addresses/nexthop-interface-address%v/permanent", data.getXPath(), keyString))
-			}
-		}
-	}
-	for i := range data.NexthopInterfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.NexthopInterfaces[i].InterfaceName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.NexthopInterfaces[i].Permanent.IsNull() && !data.NexthopInterfaces[i].Permanent.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.NexthopInterfaces) && !state.NexthopInterfaces[i].Permanent.IsNull() && state.NexthopInterfaces[i].Permanent.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nexthop-interfaces/nexthop-interface%v/permanent", data.getXPath(), keyString))
-			}
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *RouterStaticVRFIPv6Unicast) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	for i := range data.Vrfs {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[vrf-name=" + data.Vrfs[i].VrfName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/vrfs/vrf%v", data.getPath(), keyPath))
-	}
-	for i := range data.SrPolicies {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[sr-policy-name=" + data.SrPolicies[i].SrPolicyName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policies/sr-policy%v", data.getPath(), keyPath))
-	}
-	for i := range data.NexthopAddresses {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[address=" + data.NexthopAddresses[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nexthop-addresses/nexthop-address%v", data.getPath(), keyPath))
-	}
-	for i := range data.NexthopInterfaceAddresses {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[interface-name=" + data.NexthopInterfaceAddresses[i].InterfaceName.ValueString() + "]"
-		keyPath += "[address=" + data.NexthopInterfaceAddresses[i].Address.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nexthop-interface-addresses/nexthop-interface-address%v", data.getPath(), keyPath))
-	}
-	for i := range data.NexthopInterfaces {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[interface-name=" + data.NexthopInterfaces[i].InterfaceName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nexthop-interfaces/nexthop-interface%v", data.getPath(), keyPath))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *RouterStaticVRFIPv6Unicast) addDeletedItemsXML(ctx context.Context, state RouterStaticVRFIPv6Unicast, body string) string {
@@ -4274,6 +4362,7 @@ func (data *RouterStaticVRFIPv6Unicast) addDeletedItemsXML(ctx context.Context, 
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *RouterStaticVRFIPv6Unicast) addDeletePathsXML(ctx context.Context, body string) string {

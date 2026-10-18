@@ -1,0 +1,85 @@
+---
+name: GRPC
+path: Cisco-IOS-XR-um-grpc-cfg:/grpc
+doc_category: Management
+attributes:
+  # ===========================================================
+  # listen-addresses: leaf-list moved into a choice with a new "any" option
+  # 24.4: listen-addresses/listen-addresses-argument (leaf-list)
+  # 25.4: listen-addresses/LISTEN-ADDRESSES/LISTEN-ADDRESS/listen-address/address (leaf-list)
+  #       listen-addresses/LISTEN-ADDRESSES/ANY/any (new, mutually exclusive with the addresses)
+  # ===========================================================
+  - yang_name: listen-addresses/LISTEN-ADDRESSES/LISTEN-ADDRESS/listen-address/address
+    xpath: listen-addresses/listen-address/address
+    replaces_yang_name: listen-addresses/listen-addresses-argument
+    tf_name: listen_addresses
+    delete_parent: true
+  - yang_name: listen-addresses/LISTEN-ADDRESSES/ANY/any
+    xpath: listen-addresses/any
+    tf_name: listen_addresses_any
+    delete_parent: true
+    exclude_test: true
+    example: true
+
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: aaa/accounting/history-memory
+    example: 100
+  - yang_name: default-server-disable
+    exclude_test: true
+    example: true
+  - yang_name: remote-connection/disable
+    exclude_test: true
+    example: true
+  - yang_name: gnmi/get-limit-multiple
+    example: 10
+  - yang_name: gnpsi
+    example: true
+  - yang_name: gnpsi/stream/queue/size
+    example: 4000
+  - yang_name: segment-routing/traffic-eng/service-instances/service-instance
+    tf_name: segment_routing_traffic_eng_service_instances
+    type: List
+    attributes:
+      - yang_name: service-instance-name
+        id: true
+        example: SERVICE-1
+      - yang_name: addresses/ipv4-address
+        tf_name: ipv4_addresses
+        type: List
+        attributes:
+          - yang_name: ipv4-address
+            id: true
+            example: 192.0.2.10
+          - yang_name: port
+            id: true
+            example: 50051
+          - yang_name: notls
+            tf_name: no_tls
+            example: true
+          - yang_name: source-interface
+            example: Loopback0
+          - yang_name: vrf
+            example: default
+          - yang_name: tls-hostname-override
+            example: service.example.com
+      - yang_name: addresses/ipv6-address
+        tf_name: ipv6_addresses
+        type: List
+        attributes:
+          - yang_name: ipv6-address
+            id: true
+            example: 2001:db8::10
+          - yang_name: port
+            id: true
+            example: 50051
+          - yang_name: notls
+            tf_name: no_tls
+            example: true
+          - yang_name: source-interface
+            example: Loopback0
+          - yang_name: vrf
+            example: default
+          - yang_name: tls-hostname-override
+            example: service.example.com

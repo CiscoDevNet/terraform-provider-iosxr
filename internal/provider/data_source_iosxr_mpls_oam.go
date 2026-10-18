@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -110,6 +109,22 @@ func (d *MPLSOAMDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Report downstream mismatches",
 				Computed:            true,
 			},
+			"oam_echo_revision_five": schema.BoolAttribute{
+				MarkdownDescription: "rfc8029 (initial)" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"oam_address_family_ipv4_reply_ip_header_source": schema.StringAttribute{
+				MarkdownDescription: "Set the IPv4 header source address" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"oam_address_family_ipv6_reply_ip_header_source": schema.StringAttribute{
+				MarkdownDescription: "Set the IPv6 header source address" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"oam_dpm_shutdown": schema.BoolAttribute{
+				MarkdownDescription: "Shutdown DPM operations" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
 		},
 	}
 }
@@ -157,7 +172,6 @@ func (d *MPLSOAMDataSource) Read(ctx context.Context, req datasource.ReadRequest
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -177,7 +191,7 @@ func (d *MPLSOAMDataSource) Read(ctx context.Context, req datasource.ReadRequest
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

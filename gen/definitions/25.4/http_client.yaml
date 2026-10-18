@@ -1,0 +1,12 @@
+---
+name: HTTP Client
+path: Cisco-IOS-XR-um-http-client-cfg:/http/client
+doc_category: Management
+attributes:
+  # ===========================================================
+  # ssl/version/tls1.0, tls1.1: descriptions updated
+  # ===========================================================
+  - yang_name: ssl/version/tls1.0
+    tf_name: ssl_version_tls10
+  - yang_name: ssl/version/tls1.1
+    tf_name: ssl_version_tls11

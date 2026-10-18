@@ -44,7 +44,7 @@ data "iosxr_ssh" "example" {
 - `client_vrf` (String) Source interface VRF for ssh client sessions
 - `id` (String) The path of the retrieved object.
 - `server_algorithms_ciphers` (List of String) cipher algorithms
-- `server_algorithms_host_key_dsa` (Boolean) dsa
+- `server_algorithms_host_key_dsa` (Boolean) dsa. This is deprecated in 25.3.1
 - `server_algorithms_host_key_ecdsa_nistp256` (Boolean) ecdsa-nistp256
 - `server_algorithms_host_key_ecdsa_nistp384` (Boolean) ecdsa-nistp384
 - `server_algorithms_host_key_ecdsa_nistp521` (Boolean) ecdsa-nistp521
@@ -63,9 +63,13 @@ data "iosxr_ssh" "example" {
 - `server_enable_cipher_aes_cbc` (Boolean) Enable ssh server aes-cbc algorithms
 - `server_logging` (Boolean) Enable ssh server logging
 - `server_max_auth_limit` (Number) User Configurable max authentication attempts
+- `server_netconf_disable_ssh_port` (Boolean) SSH-port (Netconf will not work on SSH port)
+  - Supported from version: `25.4`
 - `server_netconf_port` (Number) Port to start ssh netconf subsystem service (Default 830)
 - `server_netconf_vrfs` (Attributes List) Cisco netconf VRF name (see [below for nested schema](#nestedatt--server_netconf_vrfs))
 - `server_netconf_xml` (Boolean) Use Netconf XML stack
+- `server_packet_flow_netio_ingress` (Boolean) incoming Packets
+  - Supported from version: `25.4`
 - `server_port` (Number) User Configurable ssh port (Default 22)
 - `server_port_forwarding_local` (Boolean) Enable local port forwarding for ssh server
 - `server_rate_limit` (Number) Cisco sshd rate-limit of service requests
@@ -73,8 +77,12 @@ data "iosxr_ssh" "example" {
 - `server_rekey_volume` (Number) Configures volume-based rekey (default 1024MB)
 - `server_session_limit` (Number) Cisco sshd session-limit of service requests
 - `server_tcp_window_scale` (Number) Set tcp window-scale factor for High Latency links
+- `server_timeout_channel` (Number) Idle timeout to close ssh channel
+  - Supported from version: `25.4`
+- `server_timeout_connection` (Number) Idle timeout to close ssh connection
+  - Supported from version: `25.4`
 - `server_usernames` (Attributes List) ssh user (see [below for nested schema](#nestedatt--server_usernames))
-- `server_v1` (Boolean) Cisco sshd protocol version 1
+- `server_v1` (Boolean) Cisco sshd protocol version 1. This is deprecated in 25.3.1
 - `server_v2` (Boolean) Cisco sshd protocol version 2
 - `server_vrfs` (Attributes List) Cisco sshd VRF name (see [below for nested schema](#nestedatt--server_vrfs))
 - `timeout` (Number) Set timeout value for SSH

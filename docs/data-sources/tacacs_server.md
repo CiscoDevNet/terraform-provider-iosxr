@@ -49,3 +49,7 @@ Read-Only:
 - `single_connection` (Boolean) Reuse connection to this server for all requests
 - `single_connection_idle_timeout` (Number) Idle timeout for a single-connection to the server
 - `timeout` (Number) Time to wait for this TACACS server to reply (overrides default)
+- `tls_server_name_indicator` (String) SNI extension to include in client hello
+  - Supported from version: `25.4`
+- `tls_trustpoint` (String) Trustpoint to be used for TACACS over TLS
+  - Supported from version: `25.4`

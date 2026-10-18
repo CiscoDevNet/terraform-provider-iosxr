@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -102,6 +101,10 @@ func (d *MACSecPolicyDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "macsec policy exception to allow packets in clear text",
 				Computed:            true,
 			},
+			"sak_rekey_interval_minutes": schema.Int64Attribute{
+				MarkdownDescription: "Interval after which key-server generates new SAK for a Secured Session",
+				Computed:            true,
+			},
 			"sak_rekey_interval_seconds": schema.Int64Attribute{
 				MarkdownDescription: "Interval(in seconds)<60-2592000>, Default: OFF",
 				Computed:            true,
@@ -170,6 +173,14 @@ func (d *MACSecPolicyDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Log summary of sak-rekey in syslogs after every specified Interval(in minutes), range(30,43200)",
 				Computed:            true,
 			},
+			"allow_ptp_in_clear": schema.BoolAttribute{
+				MarkdownDescription: "Allow Precision Time Protocol packets in clear text (unencrypted)" + "\n  - Supported from version: `26.2`",
+				Computed:            true,
+			},
+			"enable_fault_detection": schema.BoolAttribute{
+				MarkdownDescription: "enable fault detection" + "\n  - Supported from version: `26.2`",
+				Computed:            true,
+			},
 		},
 	}
 }
@@ -217,7 +228,6 @@ func (d *MACSecPolicyDataSource) Read(ctx context.Context, req datasource.ReadRe
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -237,7 +247,7 @@ func (d *MACSecPolicyDataSource) Read(ctx context.Context, req datasource.ReadRe
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

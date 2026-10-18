@@ -1,0 +1,12 @@
+---
+name: Flow Exporter Map
+path: Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps/exporter-map[exporter-map-name=%s]
+doc_category: Flow
+attributes:
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: export/protocol
+    tf_name: export_protocol
+    test_tags: [C8000]
+    example: gnpsi

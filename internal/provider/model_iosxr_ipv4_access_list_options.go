@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"strconv"
 	"strings"
 
@@ -84,7 +85,7 @@ func (data IPv4AccessListOptionsData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data IPv4AccessListOptions) toBody(ctx context.Context) string {
+func (data IPv4AccessListOptions) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.LogUpdateThreshold.IsNull() && !data.LogUpdateThreshold.IsUnknown() {
 		body, _ = sjson.Set(body, "log-update.threshold", strconv.FormatInt(data.LogUpdateThreshold.ValueInt64(), 10))
@@ -106,6 +107,201 @@ func (data IPv4AccessListOptions) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
+
+// GetVersionConstraints returns the version constraints for all fields
+func (data IPv4AccessListOptions) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data IPv4AccessListOptions) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data IPv4AccessListOptions) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data IPv4AccessListOptions) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data IPv4AccessListOptions) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *IPv4AccessListOptions) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "log-update.threshold"); value.Exists() && !data.LogUpdateThreshold.IsNull() {
+		data.LogUpdateThreshold = types.Int64Value(value.Int())
+	} else if data.LogUpdateThreshold.IsNull() {
+		data.LogUpdateThreshold = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "log-update.rate"); value.Exists() && !data.LogUpdateRate.IsNull() {
+		data.LogUpdateRate = types.Int64Value(value.Int())
+	} else if data.LogUpdateRate.IsNull() {
+		data.LogUpdateRate = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "log-update.disable"); !data.LogUpdateDisable.IsNull() {
+		if value.Exists() {
+			data.LogUpdateDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LogUpdateDisable = types.BoolValue(false)
+		}
+	} else if data.LogUpdateDisable.IsNull() {
+		data.LogUpdateDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "icmp-off"); !data.IcmpOff.IsNull() {
+		if value.Exists() {
+			data.IcmpOff = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.IcmpOff = types.BoolValue(false)
+		}
+	} else if data.IcmpOff.IsNull() {
+		data.IcmpOff = types.BoolNull()
+	}
+}
+
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *IPv4AccessListOptions) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "log-update.threshold"); value.Exists() {
+		data.LogUpdateThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "log-update.rate"); value.Exists() {
+		data.LogUpdateRate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "log-update.disable"); value.Exists() {
+		data.LogUpdateDisable = types.BoolValue(true)
+	} else if !data.LogUpdateDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LogUpdateDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "icmp-off"); value.Exists() {
+		data.IcmpOff = types.BoolValue(true)
+	} else if !data.IcmpOff.IsNull() {
+		// Only set to false if it was previously set in state
+		data.IcmpOff = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *IPv4AccessListOptionsData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "log-update.threshold"); value.Exists() {
+		data.LogUpdateThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "log-update.rate"); value.Exists() {
+		data.LogUpdateRate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "log-update.disable"); value.Exists() {
+		data.LogUpdateDisable = types.BoolValue(true)
+	} else {
+		data.LogUpdateDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "icmp-off"); value.Exists() {
+		data.IcmpOff = types.BoolValue(true)
+	} else {
+		data.IcmpOff = types.BoolValue(false)
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *IPv4AccessListOptions) getDeletedItems(ctx context.Context, state IPv4AccessListOptions, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.IcmpOff.IsNull() && data.IcmpOff.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "icmp-off"))
+	}
+	if !state.LogUpdateDisable.IsNull() && data.LogUpdateDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "log-update/disable"))
+	}
+	if !state.LogUpdateRate.IsNull() && data.LogUpdateRate.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "log-update/rate"))
+	}
+	if !state.LogUpdateThreshold.IsNull() && data.LogUpdateThreshold.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "log-update/threshold"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *IPv4AccessListOptions) getEmptyLeafsDelete(ctx context.Context, state *IPv4AccessListOptions, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if !data.IcmpOff.IsNull() && !data.IcmpOff.ValueBool() {
+		if state == nil || state.IcmpOff.IsNull() || state.IcmpOff.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "icmp-off"))
+		}
+	}
+	if !data.LogUpdateDisable.IsNull() && !data.LogUpdateDisable.ValueBool() {
+		if state == nil || state.LogUpdateDisable.IsNull() || state.LogUpdateDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "log-update/disable"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *IPv4AccessListOptions) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.IcmpOff.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "icmp-off"))
+	}
+	if !data.LogUpdateDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "log-update/disable"))
+	}
+	if !data.LogUpdateRate.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "log-update/rate"))
+	}
+	if !data.LogUpdateThreshold.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "log-update/threshold"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
@@ -153,7 +349,7 @@ func (data IPv4AccessListOptions) toBodyXML(ctx context.Context, stateArg ...*IP
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -161,45 +357,6 @@ func (data IPv4AccessListOptions) toBodyXML(ctx context.Context, stateArg ...*IP
 }
 
 // End of section. //template:end toBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
-
-func (data *IPv4AccessListOptions) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("log-update.threshold"); value.Exists() && !data.LogUpdateThreshold.IsNull() {
-		data.LogUpdateThreshold = types.Int64Value(value.Int())
-	} else if data.LogUpdateThreshold.IsNull() {
-		data.LogUpdateThreshold = types.Int64Null()
-	}
-	if value := res.Get("log-update.rate"); value.Exists() && !data.LogUpdateRate.IsNull() {
-		data.LogUpdateRate = types.Int64Value(value.Int())
-	} else if data.LogUpdateRate.IsNull() {
-		data.LogUpdateRate = types.Int64Null()
-	}
-	if value := res.Get("log-update.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LogUpdateDisable.IsNull() {
-			data.LogUpdateDisable = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LogUpdateDisable.IsNull() {
-			data.LogUpdateDisable = types.BoolNull()
-		}
-	}
-	if value := res.Get("icmp-off"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.IcmpOff.IsNull() {
-			data.IcmpOff = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.IcmpOff.IsNull() {
-			data.IcmpOff = types.BoolNull()
-		}
-	}
-}
-
-// End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
@@ -239,69 +396,7 @@ func (data *IPv4AccessListOptions) updateFromBodyXML(ctx context.Context, res xm
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *IPv4AccessListOptions) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "log-update.threshold"); value.Exists() {
-		data.LogUpdateThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "log-update.rate"); value.Exists() {
-		data.LogUpdateRate = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "log-update.disable"); value.Exists() {
-		data.LogUpdateDisable = types.BoolValue(true)
-	} else if !data.LogUpdateDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LogUpdateDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "icmp-off"); value.Exists() {
-		data.IcmpOff = types.BoolValue(true)
-	} else if !data.IcmpOff.IsNull() {
-		// Only set to false if it was previously set in state
-		data.IcmpOff = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *IPv4AccessListOptionsData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "log-update.threshold"); value.Exists() {
-		data.LogUpdateThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "log-update.rate"); value.Exists() {
-		data.LogUpdateRate = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "log-update.disable"); value.Exists() {
-		data.LogUpdateDisable = types.BoolValue(true)
-	} else {
-		data.LogUpdateDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "icmp-off"); value.Exists() {
-		data.IcmpOff = types.BoolValue(true)
-	} else {
-		data.IcmpOff = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *IPv4AccessListOptions) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -324,6 +419,7 @@ func (data *IPv4AccessListOptions) fromBodyXML(ctx context.Context, res xmldot.R
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *IPv4AccessListOptionsData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -346,67 +442,7 @@ func (data *IPv4AccessListOptionsData) fromBodyXML(ctx context.Context, res xmld
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *IPv4AccessListOptions) getDeletedItems(ctx context.Context, state IPv4AccessListOptions) []string {
-	deletedItems := make([]string, 0)
-	if !state.IcmpOff.IsNull() && data.IcmpOff.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/icmp-off", state.getPath()))
-	}
-	if !state.LogUpdateDisable.IsNull() && data.LogUpdateDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/log-update/disable", state.getPath()))
-	}
-	if !state.LogUpdateRate.IsNull() && data.LogUpdateRate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/log-update/rate", state.getPath()))
-	}
-	if !state.LogUpdateThreshold.IsNull() && data.LogUpdateThreshold.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/log-update/threshold", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *IPv4AccessListOptions) getEmptyLeafsDelete(ctx context.Context, state *IPv4AccessListOptions) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.IcmpOff.IsNull() && !data.IcmpOff.ValueBool() {
-		if state != nil && !state.IcmpOff.IsNull() && state.IcmpOff.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/icmp-off", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LogUpdateDisable.IsNull() && !data.LogUpdateDisable.ValueBool() {
-		if state != nil && !state.LogUpdateDisable.IsNull() && state.LogUpdateDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log-update/disable", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *IPv4AccessListOptions) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.IcmpOff.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/icmp-off", data.getPath()))
-	}
-	if !data.LogUpdateDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log-update/disable", data.getPath()))
-	}
-	if !data.LogUpdateRate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log-update/rate", data.getPath()))
-	}
-	if !data.LogUpdateThreshold.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log-update/threshold", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *IPv4AccessListOptions) addDeletedItemsXML(ctx context.Context, state IPv4AccessListOptions, body string) string {
@@ -482,6 +518,7 @@ func (data *IPv4AccessListOptions) addDeletedItemsXML(ctx context.Context, state
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *IPv4AccessListOptions) addDeletePathsXML(ctx context.Context, body string) string {

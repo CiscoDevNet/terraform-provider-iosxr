@@ -14,12 +14,13 @@ This resource can manage the Controller Optics configuration.
 
 ```terraform
 resource "iosxr_controller_optics" "example" {
-  type     = "Optics"
-  name     = "0/0/0/1"
-  active   = "act"
-  shutdown = true
-  speed    = "10g"
-  breakout = "4x25"
+  active           = "act"
+  breakout         = "4x25"
+  name             = "0/0/0/1"
+  shutdown         = true
+  speed            = "400g"
+  speed_host_lanes = 4
+  type             = "Optics"
 }
 ```
 
@@ -44,7 +45,10 @@ resource "iosxr_controller_optics" "example" {
 - `link_status` (Boolean) Enable interface and line-protocol state change alarms
 - `performance_monitoring` (Boolean) Select Performance Monitoring as Enable or Disable
 - `shutdown` (Boolean) The existence of this configuration indicates the interface is shut down
-- `speed` (String) optics speed set configuration
+- `speed` (String) Speed config for optics
+- `speed_host_lanes` (Number) Host lanes config for optics
+  - Range: `0`-`16`
+  - Supported from version: `25.4`
 - `transceiver_disable` (Boolean) Disable the transceiver module, treating it as not inserted.  When the configuration is removed, the transceiver module on that port, if present, would be initialized as if it is just inserted
 
 ### Read-Only

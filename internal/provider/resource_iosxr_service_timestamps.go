@@ -35,11 +35,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
-	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
-
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewServiceTimestampsResource() resource.Resource {
@@ -72,7 +70,7 @@ func (r *ServiceTimestampsResource) Schema(ctx context.Context, req resource.Sch
 				},
 			},
 			"debug_datetime_localtime_only": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Timestamp with date and time").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Timestamp with date and time").String + "\n  - **Not supported from version `25.4` and above**",
 				Optional:            true,
 			},
 			"debug_datetime_localtime": schema.BoolAttribute{
@@ -100,7 +98,7 @@ func (r *ServiceTimestampsResource) Schema(ctx context.Context, req resource.Sch
 				Optional:            true,
 			},
 			"log_datetime_localtime_only": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Timestamp with date and time").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Timestamp with date and time").String + "\n  - **Not supported from version `25.4` and above**",
 				Optional:            true,
 			},
 			"log_datetime_localtime": schema.BoolAttribute{
@@ -125,6 +123,14 @@ func (r *ServiceTimestampsResource) Schema(ctx context.Context, req resource.Sch
 			},
 			"log_disable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Disable timestamp log messages").String,
+				Optional:            true,
+			},
+			"debug_datetime_usec": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Include microseconds in timestamp").String + "\n  - Supported from version: `25.4`",
+				Optional:            true,
+			},
+			"log_datetime_usec": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Include microseconds in timestamp").String + "\n  - Supported from version: `25.4`",
 				Optional:            true,
 			},
 		},
@@ -158,8 +164,11 @@ func (r *ServiceTimestampsResource) Create(ctx context.Context, req resource.Cre
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
-
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPathForVersion(device.Version)))
 
 	if device.Managed {
 		if device.Protocol == "gnmi" {
@@ -176,10 +185,10 @@ func (r *ServiceTimestampsResource) Create(ctx context.Context, req resource.Cre
 			var ops []gnmi.SetOperation
 
 			// Create object
-			body := plan.toBody(ctx)
-			tflog.Debug(ctx, fmt.Sprintf("gNMI Set body for path %s: %s", plan.getPath(), body))
+			body := plan.toBody(ctx, device.Version)
+			tflog.Debug(ctx, fmt.Sprintf("gNMI Set body for path %s: %s", plan.getPathForVersion(device.Version), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -190,7 +199,7 @@ func (r *ServiceTimestampsResource) Create(ctx context.Context, req resource.Cre
 			// rejects a "{}" update); still send it when it's the only op so bare
 			// containers are created and the SetRequest isn't empty.
 			if body != "{}" || len(ops) == 0 {
-				ops = append(ops, gnmi.Update(plan.getPath(), body))
+				ops = append(ops, gnmi.Update(plan.getPathForVersion(device.Version), body))
 			}
 
 			_, err := device.GnmiClient.Set(ctx, ops)
@@ -221,9 +230,9 @@ func (r *ServiceTimestampsResource) Create(ctx context.Context, req resource.Cre
 		}
 	}
 
-	plan.Id = types.StringValue(plan.getPath())
+	plan.Id = types.StringValue(plan.getPathForVersion(device.Version))
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getPath()))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getPathForVersion(device.Version)))
 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
@@ -234,7 +243,6 @@ func (r *ServiceTimestampsResource) Create(ctx context.Context, req resource.Cre
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-
 func (r *ServiceTimestampsResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state ServiceTimestamps
 
@@ -276,7 +284,8 @@ func (r *ServiceTimestampsResource) Read(ctx context.Context, req resource.ReadR
 			}
 
 			// Use GetWithRetry to handle device sync delays
-			getResp, notFound, err := helpers.GetWithRetry(ctx, device.GnmiClient, []string{state.Id.ValueString()}, state.Id.ValueString())
+			readPath := state.getPathForVersion(device.Version)
+			getResp, notFound, err := helpers.GetWithRetry(ctx, device.GnmiClient, []string{readPath}, readPath)
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
 				return
@@ -299,10 +308,10 @@ func (r *ServiceTimestampsResource) Read(ctx context.Context, req resource.ReadR
 				if imp {
 					// After `terraform import` we switch to a full read so all device
 					// attributes are populated in state (fromBody overwrites everything).
-					state.fromBody(ctx, gjson.ParseBytes(respBody))
+					state.fromBody(ctx, respBody, device.Version)
 				} else {
 					// Normal read: preserve config-only fields not returned by the device.
-					state.updateFromBody(ctx, gjson.ParseBytes(respBody))
+					state.updateFromBody(ctx, respBody, device.Version)
 				}
 			}
 		} else {
@@ -343,7 +352,7 @@ func (r *ServiceTimestampsResource) Read(ctx context.Context, req resource.ReadR
 			}
 		}
 	}
-
+	state.Id = types.StringValue(state.getPathForVersion(device.Version))
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
@@ -355,7 +364,6 @@ func (r *ServiceTimestampsResource) Read(ctx context.Context, req resource.ReadR
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-
 func (r *ServiceTimestampsResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state ServiceTimestamps
 
@@ -378,6 +386,10 @@ func (r *ServiceTimestampsResource) Update(ctx context.Context, req resource.Upd
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
+	// Validate version compatibility using device-specific version
+	if !helpers.Validate(device.Version, plan, &resp.Diagnostics) {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
@@ -396,16 +408,16 @@ func (r *ServiceTimestampsResource) Update(ctx context.Context, req resource.Upd
 			var ops []gnmi.SetOperation
 
 			// Update object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 
-			deletedListItems := plan.getDeletedItems(ctx, state)
+			deletedListItems := plan.getDeletedItems(ctx, state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
 
 			for _, i := range deletedListItems {
 				ops = append(ops, gnmi.Delete(i))
 			}
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -415,7 +427,7 @@ func (r *ServiceTimestampsResource) Update(ctx context.Context, req resource.Upd
 			// Skip an empty "{}" body when other ops carry the intent; still send it
 			// when it's the only op (see Create for rationale).
 			if body != "{}" || len(ops) == 0 {
-				ops = append(ops, gnmi.Update(plan.getPath(), body))
+				ops = append(ops, gnmi.Update(plan.getPathForVersion(device.Version), body))
 			}
 
 			_, err := device.GnmiClient.Set(ctx, ops)
@@ -448,7 +460,7 @@ func (r *ServiceTimestampsResource) Update(ctx context.Context, req resource.Upd
 			}
 		}
 	}
-
+	plan.Id = types.StringValue(plan.getPathForVersion(device.Version))
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
@@ -458,7 +470,6 @@ func (r *ServiceTimestampsResource) Update(ctx context.Context, req resource.Upd
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-
 func (r *ServiceTimestampsResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state ServiceTimestamps
 
@@ -473,6 +484,14 @@ func (r *ServiceTimestampsResource) Delete(ctx context.Context, req resource.Del
 	if !ok {
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	// Validate version compatibility (only check if resource/fields are supported)
+	if len(state.GetVersionConstraints()) > 0 {
+		helpers.ValidateVersionConstraints(device.Version, state, state.GetVersionConstraints(), &resp.Diagnostics)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
@@ -544,7 +563,7 @@ func (r *ServiceTimestampsResource) Delete(ctx context.Context, req resource.Del
 				}
 
 				var ops []gnmi.SetOperation
-				deletePaths := state.getDeletePaths(ctx)
+				deletePaths := state.getDeletePaths(ctx, device.Version)
 				tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
 
 				for _, i := range deletePaths {
@@ -592,7 +611,6 @@ func (r *ServiceTimestampsResource) Delete(ctx context.Context, req resource.Del
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-
 func (r *ServiceTimestampsResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)

@@ -1,0 +1,1078 @@
+---
+name: Multicast Routing VRF
+path: Cisco-IOS-XR-um-multicast-routing-cfg:/multicast-routing/vrfs/vrf[vrf-name=%s]
+doc_category: Multicast
+attributes:
+  - yang_name: vrf-name
+    reference: true
+    example: "VRF1"
+  - yang_name: address-family/ipv4
+    tf_name: ipv4
+    example: true
+  - yang_name: address-family/ipv4/ssm/range
+    tf_name: ipv4_ssm_range
+    example: "SSM_ACL"
+  - yang_name: address-family/ipv4/ssm/disable
+    tf_name: ipv4_ssm_disable
+    # Mutually exclusive with ssm/range (YANG must)
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/ssm/allow-override
+    tf_name: ipv4_ssm_allow_override
+    example: true
+  - yang_name: address-family/ipv4/mdt/source
+    tf_name: ipv4_mdt_source
+    example: "Loopback0"
+  - yang_name: address-family/ipv4/mdt/mtu
+    tf_name: ipv4_mdt_mtu
+    example: 1500
+  - yang_name: address-family/ipv4/mdt/default/ipv4/ipv4-address
+    tf_name: ipv4_mdt_default_ipv4_address
+    optional: true
+    delete_parent: true
+    example: "232.111.1.1"
+  - yang_name: address-family/ipv4/mdt/data/maximum-data-mdts/maximum-number
+    tf_name: ipv4_mdt_data_maximum_number
+    optional: true
+    delete_parent: true
+    example: 100
+  - yang_name: address-family/ipv4/mdt/data/maximum-data-mdts/access-list-name
+    tf_name: ipv4_mdt_data_maximum_access_list
+    delete_parent: true
+    example: "DATA_MDT_ACL"
+  - yang_name: address-family/ipv4/mdt/data/maximum-data-mdts/immediate-switch
+    tf_name: ipv4_mdt_data_maximum_immediate_switch
+    delete_parent: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/data/maximum-data-mdts/route-policy
+    tf_name: ipv4_mdt_data_maximum_route_policy
+    delete_parent: true
+    example: "PIM_POLICY"
+  - yang_name: address-family/ipv4/mdt/data/maximum-data-mdts/threshold
+    tf_name: ipv4_mdt_data_maximum_threshold
+    delete_parent: true
+    example: 5
+  - yang_name: address-family/ipv4/mdt/data/data-mdt-group/ip-address
+    tf_name: ipv4_mdt_data_group_address
+    optional: true
+    delete_parent: true
+    example: "232.111.1.2"
+  - yang_name: address-family/ipv4/mdt/data/data-mdt-group/prefix-length
+    tf_name: ipv4_mdt_data_group_prefix_length
+    optional: true
+    delete_parent: true
+    example: 32
+  - yang_name: address-family/ipv4/mdt/data/data-mdt-group/access-list-name
+    tf_name: ipv4_mdt_data_group_access_list
+    delete_parent: true
+    example: "DATA_MDT_GROUP_ACL"
+  - yang_name: address-family/ipv4/mdt/data/data-mdt-group/immediate-switch
+    tf_name: ipv4_mdt_data_group_immediate_switch
+    delete_parent: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/data/data-mdt-group/route-policy
+    tf_name: ipv4_mdt_data_group_route_policy
+    delete_parent: true
+    example: "PIM_POLICY"
+  - yang_name: address-family/ipv4/mdt/data/data-mdt-group/threshold
+    tf_name: ipv4_mdt_data_group_threshold
+    delete_parent: true
+    example: 10
+  - yang_name: address-family/ipv4/rate-per-route
+    tf_name: ipv4_rate_per_route
+    example: true
+  - yang_name: address-family/ipv4/multipath
+    tf_name: ipv4_multipath
+    example: true
+  - yang_name: address-family/ipv4/multipath/hash/source
+    tf_name: ipv4_multipath_hash_source
+    delete_parent: true
+    example: true
+  - yang_name: address-family/ipv4/multipath/hash/source-nexthop
+    tf_name: ipv4_multipath_hash_source_nexthop
+    # Mutually exclusive with the other multipath hash options (YANG must)
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/multipath/hash/source-group
+    tf_name: ipv4_multipath_hash_source_group
+    # Mutually exclusive with the other multipath hash options (YANG must)
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/accounting/per-prefix
+    tf_name: ipv4_accounting_per_prefix
+    example: true
+  - yang_name: address-family/ipv4/accounting/per-prefix/forward-only
+    tf_name: ipv4_accounting_per_prefix_forward_only
+    example: true
+  - yang_name: address-family/ipv4/log-traps
+    tf_name: ipv4_log_traps
+    example: true
+  - yang_name: address-family/ipv4/export-rt/two-byte-as-rt
+    tf_name: ipv4_export_rt_two_byte_as
+    type: List
+    attributes:
+      - yang_name: two-byte-as-number
+        id: true
+        example: 65001
+      - yang_name: index-number
+        id: true
+        example: 1
+  - yang_name: address-family/ipv4/export-rt/four-byte-as-rt
+    tf_name: ipv4_export_rt_four_byte_as
+    type: List
+    attributes:
+      - yang_name: four-byte-as-number
+        id: true
+        example: 65537
+      - yang_name: index-number
+        id: true
+        example: 2
+  - yang_name: address-family/ipv4/export-rt/ip-address-rt
+    tf_name: ipv4_export_rt_ip_address
+    type: List
+    attributes:
+      - yang_name: ip-address
+        id: true
+        example: "10.1.1.1"
+      - yang_name: index-number
+        id: true
+        example: 3
+  - yang_name: address-family/ipv4/import-rt/two-byte-as-rt
+    tf_name: ipv4_import_rt_two_byte_as
+    type: List
+    attributes:
+      - yang_name: two-byte-as-number
+        id: true
+        example: 65001
+      - yang_name: index-number
+        id: true
+        example: 1
+  - yang_name: address-family/ipv4/import-rt/four-byte-as-rt
+    tf_name: ipv4_import_rt_four_byte_as
+    type: List
+    attributes:
+      - yang_name: four-byte-as-number
+        id: true
+        example: 65537
+      - yang_name: index-number
+        id: true
+        example: 2
+  - yang_name: address-family/ipv4/import-rt/ip-address-rt
+    tf_name: ipv4_import_rt_ip_address
+    type: List
+    attributes:
+      - yang_name: ip-address
+        id: true
+        example: "10.1.1.1"
+      - yang_name: index-number
+        id: true
+        example: 3
+  - yang_name: address-family/ipv4/interfaces/all/enable
+    tf_name: ipv4_interfaces_all_enable
+    example: true
+  - yang_name: address-family/ipv4/interfaces/interface
+    tf_name: ipv4_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: "GigabitEthernet0/0/0/2"
+      - yang_name: enable
+        example: true
+      - yang_name: disable
+        # Mutually exclusive with enable (YANG must)
+        exclude_test: true
+        example: false
+      - yang_name: boundary
+        example: "BOUNDARY_ACL"
+      - yang_name: ttl-threshold
+        test_tags: [XRV9K, NCS]
+        include_example: true
+        example: 100
+  - yang_name: address-family/ipv4/bgp/auto-discovery/core-tree
+    tf_name: ipv4_bgp_auto_discovery_core_tree
+    optional: true
+    delete_parent: true
+    example: "pim"
+  - yang_name: address-family/ipv4/bgp/auto-discovery/leaf-info-required
+    tf_name: ipv4_bgp_auto_discovery_leaf_info_required
+    delete_parent: true
+    example: true
+  - yang_name: address-family/ipv4/bgp/auto-discovery/dynamic-ssm-translation
+    tf_name: ipv4_bgp_auto_discovery_dynamic_ssm_translation
+    delete_parent: true
+    example: true
+  - yang_name: address-family/ipv4/bgp/auto-discovery/inter-as
+    tf_name: ipv4_bgp_auto_discovery_inter_as
+    delete_parent: true
+    example: true
+  - yang_name: address-family/ipv4/bgp/auto-discovery/receiver-site
+    tf_name: ipv4_bgp_auto_discovery_receiver_site
+    delete_parent: true
+    example: true
+  - yang_name: address-family/ipv4/bgp/auto-discovery/anycast-rp
+    tf_name: ipv4_bgp_auto_discovery_anycast_rp
+    delete_parent: true
+    # Mutually exclusive with dynamic-ssm-translation
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/bgp/auto-discovery/anycast-rp/route-policy
+    tf_name: ipv4_bgp_auto_discovery_anycast_rp_route_policy
+    delete_grandparent: true
+    # Mutually exclusive with dynamic-ssm-translation
+    exclude_test: true
+    example: "PIM_POLICY"
+  - yang_name: address-family/ipv4/bgp/auto-discovery/pmsi-timer/change-delay
+    tf_name: ipv4_bgp_auto_discovery_pmsi_timer_change_delay
+    delete_grandparent: true
+    # YANG when: only valid if core-tree is not pim
+    exclude_test: true
+    example: 10
+  - yang_name: address-family/ipv4/bgp/auto-discovery/pmsi-timer/stop-forwarding
+    tf_name: ipv4_bgp_auto_discovery_pmsi_timer_stop_forwarding
+    delete_grandparent: true
+    # YANG when: only valid if core-tree is not pim
+    exclude_test: true
+    example: 10
+  - yang_name: address-family/ipv4/bgp/auto-discovery/segmented
+    tf_name: ipv4_bgp_auto_discovery_segmented
+    delete_parent: true
+    # YANG must: only valid if core-tree is not pim
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/bgp/auto-discovery/segmented/bandwidth-threshold
+    tf_name: ipv4_bgp_auto_discovery_segmented_bandwidth_threshold
+    delete_grandparent: true
+    # YANG must: only valid if core-tree is ingress-replication
+    exclude_test: true
+    example: 1000
+  - yang_name: address-family/ipv4/bgp/auto-discovery/segmented/color
+    tf_name: ipv4_bgp_auto_discovery_segmented_color
+    delete_grandparent: true
+    # YANG must: segmented requires core-tree other than pim
+    exclude_test: true
+    example: 100
+  - yang_name: address-family/ipv4/bgp/auto-discovery/inherit-vrf-ri/vrf
+    tf_name: ipv4_bgp_auto_discovery_inherit_vrf_ri_vrf
+    delete_grandparent: true
+    example: "VRF2"
+  - yang_name: address-family/ipv4/static-rpf/address-range
+    tf_name: ipv4_static_rpf_address_ranges
+    type: List
+    attributes:
+      - yang_name: prefix-address
+        id: true
+        example: "10.10.10.10"
+      - yang_name: prefix-length
+        id: true
+        example: 32
+      - yang_name: interface
+        example: "GigabitEthernet0/0/0/2"
+      - yang_name: next-hop-address
+        example: "10.1.1.1"
+  - yang_name: address-family/ipv4/core-tree-protocol/rsvp-te
+    tf_name: ipv4_core_tree_protocol_rsvp_te
+    example: true
+  - yang_name: address-family/ipv4/core-tree-protocol/rsvp-te/group-list
+    tf_name: ipv4_core_tree_protocol_rsvp_te_group_list
+    example: "RSVP_ACL"
+  - yang_name: address-family/ipv4/mdt/data/ingress-replication
+    tf_name: ipv4_mdt_data_ingress_replication
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/data/ingress-replication/auto-tunnel
+    tf_name: ipv4_mdt_data_ingress_replication_auto_tunnel
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/data/ingress-replication/auto-tunnel/attribute-set
+    tf_name: ipv4_mdt_data_ingress_replication_auto_tunnel_attribute_set
+    exclude_test: true
+    example: "ATTR_SET1"
+  - yang_name: address-family/ipv4/mdt/data/ingress-replication/number
+    tf_name: ipv4_mdt_data_ingress_replication_number
+    exclude_test: true
+    example: 10
+  - yang_name: address-family/ipv4/mdt/data/ingress-replication/access-list-name
+    tf_name: ipv4_mdt_data_ingress_replication_access_list_name
+    exclude_test: true
+    example: "DATA_MDT_ACL"
+  - yang_name: address-family/ipv4/mdt/data/ingress-replication/immediate-switch
+    tf_name: ipv4_mdt_data_ingress_replication_immediate_switch
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/data/ingress-replication/route-policy
+    tf_name: ipv4_mdt_data_ingress_replication_route_policy
+    exclude_test: true
+    example: "PIM_POLICY"
+  - yang_name: address-family/ipv4/mdt/data/ingress-replication/threshold
+    tf_name: ipv4_mdt_data_ingress_replication_threshold
+    exclude_test: true
+    example: 10
+  - yang_name: address-family/ipv4/mdt/data/mldp/maximum-number
+    tf_name: ipv4_mdt_data_mldp_maximum_number
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 10
+  - yang_name: address-family/ipv4/mdt/data/mldp/access-list-name
+    tf_name: ipv4_mdt_data_mldp_access_list_name
+    delete_parent: true
+    exclude_test: true
+    example: "DATA_MDT_ACL"
+  - yang_name: address-family/ipv4/mdt/data/mldp/immediate-switch
+    tf_name: ipv4_mdt_data_mldp_immediate_switch
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/data/mldp/route-policy
+    tf_name: ipv4_mdt_data_mldp_route_policy
+    delete_parent: true
+    exclude_test: true
+    example: "PIM_POLICY"
+  - yang_name: address-family/ipv4/mdt/data/mldp/threshold
+    tf_name: ipv4_mdt_data_mldp_threshold
+    delete_parent: true
+    exclude_test: true
+    example: 10
+  - yang_name: address-family/ipv4/mdt/data/mldp/flex-algo
+    tf_name: ipv4_mdt_data_mldp_flex_algo
+    delete_parent: true
+    exclude_test: true
+    example: 130
+  - yang_name: address-family/ipv4/mdt/data/p2mp-te
+    tf_name: ipv4_mdt_data_p2mp_te
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/data/p2mp-te/maximum-number
+    tf_name: ipv4_mdt_data_p2mp_te_maximum_number
+    delete_parent: true
+    # Data P2MP-TE.YANG must: set either maximum-number or route-policy
+    exclude_test: true
+    example: 10
+  - yang_name: address-family/ipv4/mdt/data/p2mp-te/attribute-set
+    tf_name: ipv4_mdt_data_p2mp_te_attribute_set
+    delete_parent: true
+    # Device rule, not in the YANG: needs maximum-number, and is refused together with route-policy
+    exclude_test: true
+    example: "ATTR_SET1"
+  - yang_name: address-family/ipv4/mdt/data/p2mp-te/access-list-name
+    tf_name: ipv4_mdt_data_p2mp_te_access_list_name
+    delete_parent: true
+    exclude_test: true
+    example: "DATA_MDT_ACL"
+  - yang_name: address-family/ipv4/mdt/data/p2mp-te/immediate-switch
+    tf_name: ipv4_mdt_data_p2mp_te_immediate_switch
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/data/p2mp-te/route-policy
+    tf_name: ipv4_mdt_data_p2mp_te_route_policy
+    delete_parent: true
+    # YANG must: set either route-policy or maximum-number
+    exclude_test: true
+    example: "PIM_POLICY"
+  - yang_name: address-family/ipv4/mdt/data/p2mp-te/threshold
+    tf_name: ipv4_mdt_data_p2mp_te_threshold
+    delete_parent: true
+    exclude_test: true
+    example: 10
+  - yang_name: address-family/ipv4/mdt/data/segment-routing/mpls/maximum-number
+    tf_name: ipv4_mdt_data_segment_routing_mpls_maximum_number
+    optional: true
+    delete_parent: true
+    # Data Tree-SID.YANG must: set either maximum-number or route-policy
+    exclude_test: true
+    example: 10
+  - yang_name: address-family/ipv4/mdt/data/segment-routing/mpls/color
+    tf_name: ipv4_mdt_data_segment_routing_mpls_color
+    delete_parent: true
+    # Mutually exclusive with route-policy
+    exclude_test: true
+    example: 100
+  - yang_name: address-family/ipv4/mdt/data/segment-routing/mpls/fast-reroute/lfa
+    tf_name: ipv4_mdt_data_segment_routing_mpls_fast_reroute_lfa
+    delete_grandparent: true
+    # Mutually exclusive with route-policy
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/data/segment-routing/mpls/route-policy
+    tf_name: ipv4_mdt_data_segment_routing_mpls_route_policy
+    delete_parent: true
+    # Mutually exclusive with color and fast-reroute/lfa
+    exclude_test: true
+    example: "PIM_POLICY"
+  - yang_name: address-family/ipv4/mdt/data/segment-routing/mpls/threshold
+    tf_name: ipv4_mdt_data_segment_routing_mpls_threshold
+    delete_parent: true
+    exclude_test: true
+    example: 10
+  - yang_name: address-family/ipv4/mdt/data/segment-routing/mpls/access-list-name
+    tf_name: ipv4_mdt_data_segment_routing_mpls_access_list_name
+    delete_parent: true
+    exclude_test: true
+    example: "DATA_MDT_ACL"
+  - yang_name: address-family/ipv4/mdt/data/segment-routing/mpls/immediate-switch
+    tf_name: ipv4_mdt_data_segment_routing_mpls_immediate_switch
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/default/ipv4/partitioned/bidir
+    tf_name: ipv4_mdt_default_ipv4_partitioned_bidir
+    delete_grandparent: true
+    # Needs mdt default ipv4 set
+    exclude_test: true
+    example: "232.111.1.3"
+  - yang_name: address-family/ipv4/mdt/default/mldp/ipv4s/ipv4
+    tf_name: ipv4_mdt_default_mldp_ipv4s
+    type: List
+    # Default mLDP (Rosen, root address list) profile.
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "10.1.1.1"
+      - yang_name: flex-algo
+        example: 130
+      - yang_name: partitioned/bidir
+        tf_name: partitioned_bidir
+        example: true
+  - yang_name: address-family/ipv4/mdt/default/mldp/p2mp
+    tf_name: ipv4_mdt_default_mldp_p2mp
+    # Default mLDP P2MP profile.
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/default/mldp/p2mp/partitioned/bidir
+    tf_name: ipv4_mdt_default_mldp_p2mp_partitioned_bidir
+    # Part of the P2MP flavor
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/default/mldp/p2mp/flex-algo
+    tf_name: ipv4_mdt_default_mldp_p2mp_flex_algo
+    # Part of the P2MP flavor
+    exclude_test: true
+    example: 130
+  - yang_name: address-family/ipv4/mdt/default/p2mp-te/attribute-set
+    tf_name: ipv4_mdt_default_p2mp_te_attribute_set
+    # Default P2MP-TE profile.
+    exclude_test: true
+    example: "ATTR_SET1"
+  - yang_name: address-family/ipv4/mdt/default/p2mp-te/static
+    tf_name: ipv4_mdt_default_p2mp_te_static
+    exclude_test: true
+    example: "tunnel-mte1"
+  - yang_name: address-family/ipv4/mdt/default/ingress-replication
+    tf_name: ipv4_mdt_default_ingress_replication
+    # Default ingress-replication profile.
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/default/ingress-replication/auto-tunnel
+    tf_name: ipv4_mdt_default_ingress_replication_auto_tunnel
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/default/ingress-replication/auto-tunnel/attribute-set
+    tf_name: ipv4_mdt_default_ingress_replication_auto_tunnel_attribute_set
+    exclude_test: true
+    example: "ATTR_SET1"
+  - yang_name: address-family/ipv4/mdt/default/segment-routing/mpls/color
+    tf_name: ipv4_mdt_default_segment_routing_mpls_color
+    optional: true
+    delete_parent: true
+    # Default Tree-SID profile
+    example: "100"
+  - yang_name: address-family/ipv4/mdt/default/segment-routing/mpls/fast-reroute/lfa
+    tf_name: ipv4_mdt_default_segment_routing_mpls_fast_reroute_lfa
+    delete_grandparent: true
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/partitioned/p2mp-te/attribute-set
+    tf_name: ipv4_mdt_partitioned_p2mp_te_attribute_set
+    # Partitioned P2MP-TE profile.
+    exclude_test: true
+    example: "ATTR_SET1"
+  - yang_name: address-family/ipv4/mdt/partitioned/mldp/ipv4/mp2mp
+    tf_name: ipv4_mdt_partitioned_mldp_ipv4_mp2mp
+    # Partitioned mLDP profile.YANG must: mp2mp and p2mp are mutually exclusive.
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/partitioned/mldp/ipv4/mp2mp/bidir
+    tf_name: ipv4_mdt_partitioned_mldp_ipv4_mp2mp_bidir
+    # Part of mp2mp
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/partitioned/mldp/ipv4/p2mp
+    tf_name: ipv4_mdt_partitioned_mldp_ipv4_p2mp
+    # YANG must: mp2mp and p2mp are mutually exclusive.
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/partitioned/mldp/ipv4/p2mp/bidir
+    tf_name: ipv4_mdt_partitioned_mldp_ipv4_p2mp_bidir
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/partitioned/mldp/ipv4/flex-algo
+    tf_name: ipv4_mdt_partitioned_mldp_ipv4_flex_algo
+    exclude_test: true
+    example: 130
+  - yang_name: address-family/ipv4/mdt/partitioned/ingress-replication
+    tf_name: ipv4_mdt_partitioned_ingress_replication
+    # Partitioned ingress-replication profile.
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/partitioned/ingress-replication/auto-tunnel
+    tf_name: ipv4_mdt_partitioned_ingress_replication_auto_tunnel
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/partitioned/ingress-replication/auto-tunnel/attribute-set
+    tf_name: ipv4_mdt_partitioned_ingress_replication_auto_tunnel_attribute_set
+    exclude_test: true
+    example: "ATTR_SET1"
+  - yang_name: address-family/ipv4/mdt/partitioned/segment-routing/mpls/color
+    tf_name: ipv4_mdt_partitioned_segment_routing_mpls_color
+    optional: true
+    delete_parent: true
+    # Partitioned Tree-SID profile.
+    exclude_test: true
+    example: "100"
+  - yang_name: address-family/ipv4/mdt/partitioned/segment-routing/mpls/fast-reroute/lfa
+    tf_name: ipv4_mdt_partitioned_segment_routing_mpls_fast_reroute_lfa
+    delete_grandparent: true
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/mldp/in-band-signaling/ipv4
+    tf_name: ipv4_mdt_mldp_in_band_signaling_ipv4
+    # In-band mLDP profile.
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/static/segment-routing
+    tf_name: ipv4_mdt_static_segment_routing
+    # Static Tree-SID profile.
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/static/segment-routing/strict-rpf
+    tf_name: ipv4_mdt_static_segment_routing_strict_rpf
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv4/mdt/static/p2mp-te/interfaces/interface
+    tf_name: ipv4_mdt_static_p2mp_te_interfaces
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: "tunnel-mte1"
+  - yang_name: address-family/ipv4/static/sr-policy
+    tf_name: ipv4_static_sr_policies
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: sr-policy-name
+        id: true
+        example: "SR_POLICY1"
+      - yang_name: ingress
+        example: "10.1.1.1"
+  - yang_name: address-family/ipv6
+    tf_name: ipv6
+    example: true
+  - yang_name: address-family/ipv6/ssm/range
+    tf_name: ipv6_ssm_range
+    example: "SSM_ACL"
+  - yang_name: address-family/ipv6/ssm/disable
+    tf_name: ipv6_ssm_disable
+    # Mutually exclusive with ssm/range (YANG must)
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/ssm/allow-override
+    tf_name: ipv6_ssm_allow_override
+    example: true
+  - yang_name: address-family/ipv6/mdt/source
+    tf_name: ipv6_mdt_source
+    example: "Loopback0"
+  - yang_name: address-family/ipv6/mdt/mtu
+    tf_name: ipv6_mdt_mtu
+    example: 1500
+  - yang_name: address-family/ipv6/mdt/default/ipv4/ipv4-address
+    tf_name: ipv6_mdt_default_ipv4_address
+    optional: true
+    delete_parent: true
+    example: "232.111.1.1"
+  - yang_name: address-family/ipv6/mdt/data/maximum-data-mdts/maximum-number
+    tf_name: ipv6_mdt_data_maximum_number
+    optional: true
+    delete_parent: true
+    example: 100
+  - yang_name: address-family/ipv6/mdt/data/maximum-data-mdts/access-list-name
+    tf_name: ipv6_mdt_data_maximum_access_list
+    delete_parent: true
+    example: "DATA_MDT_ACL"
+  - yang_name: address-family/ipv6/mdt/data/maximum-data-mdts/immediate-switch
+    tf_name: ipv6_mdt_data_maximum_immediate_switch
+    delete_parent: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/data/maximum-data-mdts/route-policy
+    tf_name: ipv6_mdt_data_maximum_route_policy
+    delete_parent: true
+    example: "PIM_POLICY"
+  - yang_name: address-family/ipv6/mdt/data/maximum-data-mdts/threshold
+    tf_name: ipv6_mdt_data_maximum_threshold
+    delete_parent: true
+    example: 5
+  - yang_name: address-family/ipv6/mdt/data/data-mdt-group/ip-address
+    tf_name: ipv6_mdt_data_group_address
+    optional: true
+    delete_parent: true
+    example: "232.111.1.2"
+  - yang_name: address-family/ipv6/mdt/data/data-mdt-group/prefix-length
+    tf_name: ipv6_mdt_data_group_prefix_length
+    optional: true
+    delete_parent: true
+    example: 32
+  - yang_name: address-family/ipv6/mdt/data/data-mdt-group/access-list-name
+    tf_name: ipv6_mdt_data_group_access_list
+    delete_parent: true
+    example: "DATA_MDT_GROUP_ACL"
+  - yang_name: address-family/ipv6/mdt/data/data-mdt-group/immediate-switch
+    tf_name: ipv6_mdt_data_group_immediate_switch
+    delete_parent: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/data/data-mdt-group/route-policy
+    tf_name: ipv6_mdt_data_group_route_policy
+    delete_parent: true
+    example: "PIM_POLICY"
+  - yang_name: address-family/ipv6/mdt/data/data-mdt-group/threshold
+    tf_name: ipv6_mdt_data_group_threshold
+    delete_parent: true
+    example: 10
+  - yang_name: address-family/ipv6/rate-per-route
+    tf_name: ipv6_rate_per_route
+    example: true
+  - yang_name: address-family/ipv6/multipath
+    tf_name: ipv6_multipath
+    example: true
+  - yang_name: address-family/ipv6/multipath/hash/source-nexthop
+    tf_name: ipv6_multipath_hash_source_nexthop
+    delete_parent: true
+    example: true
+  - yang_name: address-family/ipv6/multipath/hash/interface-extended
+    tf_name: ipv6_multipath_hash_interface_extended
+    # Mutually exclusive with the other multipath hash options (YANG must)
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/multipath/hash/source-group
+    tf_name: ipv6_multipath_hash_source_group
+    # Mutually exclusive with the other multipath hash options (YANG must)
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/accounting/per-prefix
+    tf_name: ipv6_accounting_per_prefix
+    example: true
+  - yang_name: address-family/ipv6/accounting/per-prefix/forward-only
+    tf_name: ipv6_accounting_per_prefix_forward_only
+    example: true
+  - yang_name: address-family/ipv6/log-traps
+    tf_name: ipv6_log_traps
+    example: true
+  - yang_name: address-family/ipv6/export-rt/two-byte-as-rt
+    tf_name: ipv6_export_rt_two_byte_as
+    type: List
+    attributes:
+      - yang_name: two-byte-as-number
+        id: true
+        example: 65001
+      - yang_name: index-number
+        id: true
+        example: 1
+  - yang_name: address-family/ipv6/export-rt/four-byte-as-rt
+    tf_name: ipv6_export_rt_four_byte_as
+    type: List
+    attributes:
+      - yang_name: four-byte-as-number
+        id: true
+        example: 65537
+      - yang_name: index-number
+        id: true
+        example: 2
+  - yang_name: address-family/ipv6/export-rt/ip-address-rt
+    tf_name: ipv6_export_rt_ip_address
+    type: List
+    attributes:
+      - yang_name: ip-address
+        id: true
+        example: "10.1.1.1"
+      - yang_name: index-number
+        id: true
+        example: 3
+  - yang_name: address-family/ipv6/import-rt/two-byte-as-rt
+    tf_name: ipv6_import_rt_two_byte_as
+    type: List
+    attributes:
+      - yang_name: two-byte-as-number
+        id: true
+        example: 65001
+      - yang_name: index-number
+        id: true
+        example: 1
+  - yang_name: address-family/ipv6/import-rt/four-byte-as-rt
+    tf_name: ipv6_import_rt_four_byte_as
+    type: List
+    attributes:
+      - yang_name: four-byte-as-number
+        id: true
+        example: 65537
+      - yang_name: index-number
+        id: true
+        example: 2
+  - yang_name: address-family/ipv6/import-rt/ip-address-rt
+    tf_name: ipv6_import_rt_ip_address
+    type: List
+    attributes:
+      - yang_name: ip-address
+        id: true
+        example: "10.1.1.1"
+      - yang_name: index-number
+        id: true
+        example: 3
+  - yang_name: address-family/ipv6/interfaces/all/enable
+    tf_name: ipv6_interfaces_all_enable
+    example: true
+  - yang_name: address-family/ipv6/interfaces/interface
+    tf_name: ipv6_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: "GigabitEthernet0/0/0/2"
+      - yang_name: enable
+        example: true
+      - yang_name: disable
+        # Mutually exclusive with enable (YANG must)
+        exclude_test: true
+        example: false
+      - yang_name: boundary
+        example: "BOUNDARY_ACL"
+      - yang_name: ttl-threshold
+        test_tags: [XRV9K, NCS]
+        include_example: true
+        example: 100
+  - yang_name: address-family/ipv6/bgp/auto-discovery/core-tree
+    tf_name: ipv6_bgp_auto_discovery_core_tree
+    optional: true
+    delete_parent: true
+    example: "pim"
+  - yang_name: address-family/ipv6/bgp/auto-discovery/leaf-info-required
+    tf_name: ipv6_bgp_auto_discovery_leaf_info_required
+    delete_parent: true
+    example: true
+  - yang_name: address-family/ipv6/bgp/auto-discovery/dynamic-ssm-translation
+    tf_name: ipv6_bgp_auto_discovery_dynamic_ssm_translation
+    delete_parent: true
+    example: true
+  - yang_name: address-family/ipv6/bgp/auto-discovery/inter-as
+    tf_name: ipv6_bgp_auto_discovery_inter_as
+    delete_parent: true
+    example: true
+  - yang_name: address-family/ipv6/bgp/auto-discovery/receiver-site
+    tf_name: ipv6_bgp_auto_discovery_receiver_site
+    delete_parent: true
+    example: true
+  - yang_name: address-family/ipv6/bgp/auto-discovery/anycast-rp
+    tf_name: ipv6_bgp_auto_discovery_anycast_rp
+    delete_parent: true
+    # Mutually exclusive with dynamic-ssm-translation
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/bgp/auto-discovery/anycast-rp/route-policy
+    tf_name: ipv6_bgp_auto_discovery_anycast_rp_route_policy
+    delete_grandparent: true
+    # Mutually exclusive with dynamic-ssm-translation
+    exclude_test: true
+    example: "PIM_POLICY"
+  - yang_name: address-family/ipv6/bgp/auto-discovery/pmsi-timer/change-delay
+    tf_name: ipv6_bgp_auto_discovery_pmsi_timer_change_delay
+    delete_grandparent: true
+    # YANG when: only valid if core-tree is not pim
+    exclude_test: true
+    example: 10
+  - yang_name: address-family/ipv6/bgp/auto-discovery/pmsi-timer/stop-forwarding
+    tf_name: ipv6_bgp_auto_discovery_pmsi_timer_stop_forwarding
+    delete_grandparent: true
+    # YANG when: only valid if core-tree is not pim
+    exclude_test: true
+    example: 10
+  - yang_name: address-family/ipv6/bgp/auto-discovery/segmented
+    tf_name: ipv6_bgp_auto_discovery_segmented
+    delete_parent: true
+    # YANG must: only valid if core-tree is not pim
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/bgp/auto-discovery/segmented/bandwidth-threshold
+    tf_name: ipv6_bgp_auto_discovery_segmented_bandwidth_threshold
+    delete_grandparent: true
+    # YANG must: only valid if core-tree is ingress-replication
+    exclude_test: true
+    example: 1000
+  - yang_name: address-family/ipv6/bgp/auto-discovery/segmented/color
+    tf_name: ipv6_bgp_auto_discovery_segmented_color
+    delete_grandparent: true
+    # YANG must: segmented requires core-tree other than pim
+    exclude_test: true
+    example: 100
+  - yang_name: address-family/ipv6/bgp/auto-discovery/inherit-vrf-ri/vrf
+    tf_name: ipv6_bgp_auto_discovery_inherit_vrf_ri_vrf
+    delete_grandparent: true
+    example: "VRF2"
+  - yang_name: address-family/ipv6/static-rpf/address-range
+    tf_name: ipv6_static_rpf_address_ranges
+    type: List
+    attributes:
+      - yang_name: prefix-address
+        id: true
+        example: "2001:db8:10::10"
+      - yang_name: prefix-length
+        id: true
+        example: 128
+      - yang_name: interface
+        example: "GigabitEthernet0/0/0/2"
+      - yang_name: next-hop-address
+        example: "2001:db8:1::1"
+  - yang_name: address-family/ipv6/core-tree-protocol/rsvp-te
+    tf_name: ipv6_core_tree_protocol_rsvp_te
+    example: true
+  - yang_name: address-family/ipv6/core-tree-protocol/rsvp-te/group-list
+    tf_name: ipv6_core_tree_protocol_rsvp_te_group_list
+    example: "RSVP_ACL"
+  - yang_name: address-family/ipv6/mdt/data/ingress-replication
+    tf_name: ipv6_mdt_data_ingress_replication
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/data/ingress-replication/auto-tunnel
+    tf_name: ipv6_mdt_data_ingress_replication_auto_tunnel
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/data/ingress-replication/auto-tunnel/attribute-set
+    tf_name: ipv6_mdt_data_ingress_replication_auto_tunnel_attribute_set
+    exclude_test: true
+    example: "ATTR_SET1"
+  - yang_name: address-family/ipv6/mdt/data/ingress-replication/number
+    tf_name: ipv6_mdt_data_ingress_replication_number
+    exclude_test: true
+    example: 10
+  - yang_name: address-family/ipv6/mdt/data/ingress-replication/access-list-name
+    tf_name: ipv6_mdt_data_ingress_replication_access_list_name
+    exclude_test: true
+    example: "DATA_MDT_ACL"
+  - yang_name: address-family/ipv6/mdt/data/ingress-replication/immediate-switch
+    tf_name: ipv6_mdt_data_ingress_replication_immediate_switch
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/data/ingress-replication/route-policy
+    tf_name: ipv6_mdt_data_ingress_replication_route_policy
+    exclude_test: true
+    example: "PIM_POLICY"
+  - yang_name: address-family/ipv6/mdt/data/ingress-replication/threshold
+    tf_name: ipv6_mdt_data_ingress_replication_threshold
+    exclude_test: true
+    example: 10
+  - yang_name: address-family/ipv6/mdt/data/mldp/maximum-number
+    tf_name: ipv6_mdt_data_mldp_maximum_number
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: 10
+  - yang_name: address-family/ipv6/mdt/data/mldp/access-list-name
+    tf_name: ipv6_mdt_data_mldp_access_list_name
+    delete_parent: true
+    exclude_test: true
+    example: "DATA_MDT_ACL"
+  - yang_name: address-family/ipv6/mdt/data/mldp/immediate-switch
+    tf_name: ipv6_mdt_data_mldp_immediate_switch
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/data/mldp/route-policy
+    tf_name: ipv6_mdt_data_mldp_route_policy
+    delete_parent: true
+    exclude_test: true
+    example: "PIM_POLICY"
+  - yang_name: address-family/ipv6/mdt/data/mldp/threshold
+    tf_name: ipv6_mdt_data_mldp_threshold
+    delete_parent: true
+    exclude_test: true
+    example: 10
+  - yang_name: address-family/ipv6/mdt/data/mldp/flex-algo
+    tf_name: ipv6_mdt_data_mldp_flex_algo
+    delete_parent: true
+    exclude_test: true
+    example: 130
+  - yang_name: address-family/ipv6/mdt/data/p2mp-te
+    tf_name: ipv6_mdt_data_p2mp_te
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/data/p2mp-te/maximum-number
+    tf_name: ipv6_mdt_data_p2mp_te_maximum_number
+    delete_parent: true
+    # Data P2MP-TE. YANG must: set either maximum-number or route-policy
+    exclude_test: true
+    example: 10
+  - yang_name: address-family/ipv6/mdt/data/p2mp-te/attribute-set
+    tf_name: ipv6_mdt_data_p2mp_te_attribute_set
+    delete_parent: true
+    # Device rule, not in the YANG: needs maximum-number, and is refused together with route-policy
+    exclude_test: true
+    example: "ATTR_SET1"
+  - yang_name: address-family/ipv6/mdt/data/p2mp-te/access-list-name
+    tf_name: ipv6_mdt_data_p2mp_te_access_list_name
+    delete_parent: true
+    exclude_test: true
+    example: "DATA_MDT_ACL"
+  - yang_name: address-family/ipv6/mdt/data/p2mp-te/immediate-switch
+    tf_name: ipv6_mdt_data_p2mp_te_immediate_switch
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/data/p2mp-te/route-policy
+    tf_name: ipv6_mdt_data_p2mp_te_route_policy
+    delete_parent: true
+    # YANG must: set either route-policy or maximum-number
+    exclude_test: true
+    example: "PIM_POLICY"
+  - yang_name: address-family/ipv6/mdt/data/p2mp-te/threshold
+    tf_name: ipv6_mdt_data_p2mp_te_threshold
+    delete_parent: true
+    exclude_test: true
+    example: 10
+  - yang_name: address-family/ipv6/mdt/default/ipv4/partitioned/bidir
+    tf_name: ipv6_mdt_default_ipv4_partitioned_bidir
+    delete_grandparent: true
+    exclude_test: true
+    example: "232.111.1.3"
+  - yang_name: address-family/ipv6/mdt/default/mldp/ipv4s/ipv4
+    tf_name: ipv6_mdt_default_mldp_ipv4s
+    type: List
+    # Default mLDP (Rosen, root address list) profile.
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "10.1.1.1"
+      - yang_name: flex-algo
+        example: 130
+      - yang_name: partitioned/bidir
+        tf_name: partitioned_bidir
+        example: true
+  - yang_name: address-family/ipv6/mdt/default/mldp/p2mp
+    tf_name: ipv6_mdt_default_mldp_p2mp
+    # Default mLDP P2MP profile.
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/default/mldp/p2mp/partitioned/bidir
+    tf_name: ipv6_mdt_default_mldp_p2mp_partitioned_bidir
+    # Part of the P2MP flavor
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/default/mldp/p2mp/flex-algo
+    tf_name: ipv6_mdt_default_mldp_p2mp_flex_algo
+    # Part of the P2MP flavor
+    exclude_test: true
+    example: 130
+  - yang_name: address-family/ipv6/mdt/default/p2mp-te/attribute-set
+    tf_name: ipv6_mdt_default_p2mp_te_attribute_set
+    # Default P2MP-TE profile.
+    exclude_test: true
+    example: "ATTR_SET1"
+  - yang_name: address-family/ipv6/mdt/default/p2mp-te/static
+    tf_name: ipv6_mdt_default_p2mp_te_static
+    exclude_test: true
+    example: "tunnel-mte1"
+  - yang_name: address-family/ipv6/mdt/default/ingress-replication
+    tf_name: ipv6_mdt_default_ingress_replication
+    # Default ingress-replication profile.
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/default/ingress-replication/auto-tunnel
+    tf_name: ipv6_mdt_default_ingress_replication_auto_tunnel
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/default/ingress-replication/auto-tunnel/attribute-set
+    tf_name: ipv6_mdt_default_ingress_replication_auto_tunnel_attribute_set
+    exclude_test: true
+    example: "ATTR_SET1"
+  - yang_name: address-family/ipv6/mdt/partitioned/p2mp-te/attribute-set
+    tf_name: ipv6_mdt_partitioned_p2mp_te_attribute_set
+    # Partitioned P2MP-TE profile.
+    exclude_test: true
+    example: "ATTR_SET1"
+  - yang_name: address-family/ipv6/mdt/partitioned/mldp/ipv4/mp2mp
+    tf_name: ipv6_mdt_partitioned_mldp_ipv4_mp2mp
+    # Partitioned mLDP profile.YANG must: mp2mp and p2mp are mutually exclusive.
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/partitioned/mldp/ipv4/mp2mp/bidir
+    tf_name: ipv6_mdt_partitioned_mldp_ipv4_mp2mp_bidir
+    # Part of mp2mp
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/partitioned/mldp/ipv4/p2mp
+    tf_name: ipv6_mdt_partitioned_mldp_ipv4_p2mp
+    # YANG must: mp2mp and p2mp are mutually exclusive.
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/partitioned/mldp/ipv4/p2mp/bidir
+    tf_name: ipv6_mdt_partitioned_mldp_ipv4_p2mp_bidir
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/partitioned/mldp/ipv4/flex-algo
+    tf_name: ipv6_mdt_partitioned_mldp_ipv4_flex_algo
+    exclude_test: true
+    example: 130
+  - yang_name: address-family/ipv6/mdt/partitioned/ingress-replication
+    tf_name: ipv6_mdt_partitioned_ingress_replication
+    # Partitioned ingress-replication profile.
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/partitioned/ingress-replication/auto-tunnel
+    tf_name: ipv6_mdt_partitioned_ingress_replication_auto_tunnel
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/partitioned/ingress-replication/auto-tunnel/attribute-set
+    tf_name: ipv6_mdt_partitioned_ingress_replication_auto_tunnel_attribute_set
+    exclude_test: true
+    example: "ATTR_SET1"
+  - yang_name: address-family/ipv6/mdt/mldp/in-band-signaling/ipv4
+    tf_name: ipv6_mdt_mldp_in_band_signaling_ipv4
+    # In-band mLDP profile.
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/static/segment-routing
+    tf_name: ipv6_mdt_static_segment_routing
+    # Static Tree-SID profile.
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/mdt/static/segment-routing/strict-rpf
+    tf_name: ipv6_mdt_static_segment_routing_strict_rpf
+    exclude_test: true
+    example: true
+  - yang_name: address-family/ipv6/static/sr-policy
+    tf_name: ipv6_static_sr_policies
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: sr-policy-name
+        id: true
+        example: "SR_POLICY1"
+      - yang_name: ingress
+        example: "10.1.1.1"
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies
+    lists:
+      - name: route-policy
+        key: route-policy-name
+        items:
+          - attributes:
+              - name: route-policy-name
+                value: PIM_POLICY
+              - name: rpl-route-policy
+                value: "route-policy PIM_POLICY\\n  pass\\nend-policy\\n"

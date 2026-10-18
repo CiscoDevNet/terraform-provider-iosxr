@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -119,6 +120,13 @@ type PerformanceMeasurementDelayProfile struct {
 	EndpointDefaultAdvertisementAnomalyCheckLowerBound     types.Int64                                  `tfsdk:"endpoint_default_advertisement_anomaly_check_lower_bound"`
 	EndpointDefaultAdvertisementAnomalyLossUpperBound      types.Int64                                  `tfsdk:"endpoint_default_advertisement_anomaly_loss_upper_bound"`
 	Profiles                                               []PerformanceMeasurementDelayProfileProfiles `tfsdk:"profiles"`
+	EndpointDefaultHistogramDelayBinsExplicit              types.List                                   `tfsdk:"endpoint_default_histogram_delay_bins_explicit"`
+	EndpointDefaultProbeCollectHbh                         types.Bool                                   `tfsdk:"endpoint_default_probe_collect_hbh"`
+	SrPolicyDefaultProbeCollectHbh                         types.Bool                                   `tfsdk:"sr_policy_default_probe_collect_hbh"`
+	EndpointDefaultProbeTimestampFormatNtp                 types.Bool                                   `tfsdk:"endpoint_default_probe_timestamp_format_ntp"`
+	InterfacesDefaultProbeTimestampFormatNtp               types.Bool                                   `tfsdk:"interfaces_default_probe_timestamp_format_ntp"`
+	RsvpTeDefaultProbeTimestampFormatNtp                   types.Bool                                   `tfsdk:"rsvp_te_default_probe_timestamp_format_ntp"`
+	SrPolicyDefaultProbeTimestampFormatNtp                 types.Bool                                   `tfsdk:"sr_policy_default_probe_timestamp_format_ntp"`
 }
 
 type PerformanceMeasurementDelayProfileData struct {
@@ -200,6 +208,13 @@ type PerformanceMeasurementDelayProfileData struct {
 	EndpointDefaultAdvertisementAnomalyCheckLowerBound     types.Int64                                  `tfsdk:"endpoint_default_advertisement_anomaly_check_lower_bound"`
 	EndpointDefaultAdvertisementAnomalyLossUpperBound      types.Int64                                  `tfsdk:"endpoint_default_advertisement_anomaly_loss_upper_bound"`
 	Profiles                                               []PerformanceMeasurementDelayProfileProfiles `tfsdk:"profiles"`
+	EndpointDefaultHistogramDelayBinsExplicit              types.List                                   `tfsdk:"endpoint_default_histogram_delay_bins_explicit"`
+	EndpointDefaultProbeCollectHbh                         types.Bool                                   `tfsdk:"endpoint_default_probe_collect_hbh"`
+	SrPolicyDefaultProbeCollectHbh                         types.Bool                                   `tfsdk:"sr_policy_default_probe_collect_hbh"`
+	EndpointDefaultProbeTimestampFormatNtp                 types.Bool                                   `tfsdk:"endpoint_default_probe_timestamp_format_ntp"`
+	InterfacesDefaultProbeTimestampFormatNtp               types.Bool                                   `tfsdk:"interfaces_default_probe_timestamp_format_ntp"`
+	RsvpTeDefaultProbeTimestampFormatNtp                   types.Bool                                   `tfsdk:"rsvp_te_default_probe_timestamp_format_ntp"`
+	SrPolicyDefaultProbeTimestampFormatNtp                 types.Bool                                   `tfsdk:"sr_policy_default_probe_timestamp_format_ntp"`
 }
 type PerformanceMeasurementDelayProfileProfiles struct {
 	ProfileName                         types.String `tfsdk:"profile_name"`
@@ -235,6 +250,8 @@ type PerformanceMeasurementDelayProfileProfiles struct {
 	AdvertiseAnomalyCheckLowerBound     types.Int64  `tfsdk:"advertise_anomaly_check_lower_bound"`
 	AdvertiseAnomalyLossUpperBound      types.Int64  `tfsdk:"advertise_anomaly_loss_upper_bound"`
 	AdvertiseAnomalyLossLowerBound      types.Int64  `tfsdk:"advertise_anomaly_loss_lower_bound"`
+	ProbeCollectHbh                     types.Bool   `tfsdk:"probe_collect_hbh"`
+	ProbeTimestampFormatNtp             types.Bool   `tfsdk:"probe_timestamp_format_ntp"`
 }
 
 // End of section. //template:end types
@@ -264,7 +281,7 @@ func (data PerformanceMeasurementDelayProfileData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data PerformanceMeasurementDelayProfile) toBody(ctx context.Context) string {
+func (data PerformanceMeasurementDelayProfile) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.InterfacesDefault.IsNull() && !data.InterfacesDefault.IsUnknown() {
 		if data.InterfacesDefault.ValueBool() {
@@ -555,6 +572,55 @@ func (data PerformanceMeasurementDelayProfile) toBody(ctx context.Context) strin
 	if !data.EndpointDefaultAdvertisementAnomalyLossUpperBound.IsNull() && !data.EndpointDefaultAdvertisementAnomalyLossUpperBound.IsUnknown() {
 		body, _ = sjson.Set(body, "endpoint.default.advertisement.anomaly-loss.upper-bound", strconv.FormatInt(data.EndpointDefaultAdvertisementAnomalyLossUpperBound.ValueInt64(), 10))
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") && (providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "26.2")) {
+		if !data.EndpointDefaultHistogramDelayBinsExplicit.IsNull() && !data.EndpointDefaultHistogramDelayBinsExplicit.IsUnknown() {
+			var values []int
+			data.EndpointDefaultHistogramDelayBinsExplicit.ElementsAs(ctx, &values, false)
+			body, _ = sjson.Set(body, "endpoint.default.histogram.delay-bins.explicit", values)
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.EndpointDefaultProbeCollectHbh.IsNull() && !data.EndpointDefaultProbeCollectHbh.IsUnknown() {
+			if data.EndpointDefaultProbeCollectHbh.ValueBool() {
+				body, _ = sjson.Set(body, "endpoint.default.probe.collect-hbh", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.SrPolicyDefaultProbeCollectHbh.IsNull() && !data.SrPolicyDefaultProbeCollectHbh.IsUnknown() {
+			if data.SrPolicyDefaultProbeCollectHbh.ValueBool() {
+				body, _ = sjson.Set(body, "sr-policy.default.probe.collect-hbh", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.EndpointDefaultProbeTimestampFormatNtp.IsNull() && !data.EndpointDefaultProbeTimestampFormatNtp.IsUnknown() {
+			if data.EndpointDefaultProbeTimestampFormatNtp.ValueBool() {
+				body, _ = sjson.Set(body, "endpoint.default.probe.measurement-mode.timestamp-format.ntp", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.InterfacesDefaultProbeTimestampFormatNtp.IsNull() && !data.InterfacesDefaultProbeTimestampFormatNtp.IsUnknown() {
+			if data.InterfacesDefaultProbeTimestampFormatNtp.ValueBool() {
+				body, _ = sjson.Set(body, "interfaces.default.probe.timestamp-format.ntp", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() && !data.RsvpTeDefaultProbeTimestampFormatNtp.IsUnknown() {
+			if data.RsvpTeDefaultProbeTimestampFormatNtp.ValueBool() {
+				body, _ = sjson.Set(body, "rsvp-te.default.probe.timestamp-format.ntp", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() && !data.SrPolicyDefaultProbeTimestampFormatNtp.IsUnknown() {
+			if data.SrPolicyDefaultProbeTimestampFormatNtp.ValueBool() {
+				body, _ = sjson.Set(body, "sr-policy.default.probe.timestamp-format.ntp", map[string]string{})
+			}
+		}
+	}
 	if len(data.Profiles) > 0 {
 		body, _ = sjson.Set(body, "names.name", []interface{}{})
 		for index, item := range data.Profiles {
@@ -683,6 +749,20 @@ func (data PerformanceMeasurementDelayProfile) toBody(ctx context.Context) strin
 			if !item.AdvertiseAnomalyLossLowerBound.IsNull() && !item.AdvertiseAnomalyLossLowerBound.IsUnknown() {
 				body, _ = sjson.Set(body, "names.name"+"."+strconv.Itoa(index)+"."+"advertisement.anomaly-loss.lower-bound", strconv.FormatInt(item.AdvertiseAnomalyLossLowerBound.ValueInt64(), 10))
 			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.ProbeCollectHbh.IsNull() && !item.ProbeCollectHbh.IsUnknown() {
+					if item.ProbeCollectHbh.ValueBool() {
+						body, _ = sjson.Set(body, "names.name"+"."+strconv.Itoa(index)+"."+"probe.collect-hbh", map[string]string{})
+					}
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.ProbeTimestampFormatNtp.IsNull() && !item.ProbeTimestampFormatNtp.IsUnknown() {
+					if item.ProbeTimestampFormatNtp.ValueBool() {
+						body, _ = sjson.Set(body, "names.name"+"."+strconv.Itoa(index)+"."+"probe.timestamp-format.ntp", map[string]string{})
+					}
+				}
+			}
 		}
 	}
 	return body
@@ -690,566 +770,624 @@ func (data PerformanceMeasurementDelayProfile) toBody(ctx context.Context) strin
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *PerformanceMeasurementDelayProfile) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("interfaces.default"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.InterfacesDefault.IsNull() {
-			data.InterfacesDefault = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.InterfacesDefault.IsNull() {
-			data.InterfacesDefault = types.BoolNull()
-		}
+// GetVersionConstraints returns the version constraints for all fields
+func (data PerformanceMeasurementDelayProfile) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "profiles.probe_collect_hbh",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profiles.probe_timestamp_format_ntp",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "endpoint_default_histogram_delay_bins_explicit",
+			AddedInVersion: "25.4",
+
+			RemovedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "endpoint_default_probe_collect_hbh",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "sr_policy_default_probe_collect_hbh",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "endpoint_default_probe_timestamp_format_ntp",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "interfaces_default_probe_timestamp_format_ntp",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "rsvp_te_default_probe_timestamp_format_ntp",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "sr_policy_default_probe_timestamp_format_ntp",
+			AddedInVersion: "25.4",
+		},
+	}...)
+	if len(constraints) == 0 {
+		return nil
 	}
-	if value := res.Get("interfaces.default.probe.computation-interval"); value.Exists() && !data.InterfacesDefaultProbeComputationInterval.IsNull() {
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data PerformanceMeasurementDelayProfile) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data PerformanceMeasurementDelayProfile) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data PerformanceMeasurementDelayProfile) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data PerformanceMeasurementDelayProfile) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *PerformanceMeasurementDelayProfile) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "interfaces.default"); !data.InterfacesDefault.IsNull() {
+		if value.Exists() {
+			data.InterfacesDefault = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.InterfacesDefault = types.BoolValue(false)
+		}
+	} else if data.InterfacesDefault.IsNull() {
+		data.InterfacesDefault = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.probe.computation-interval"); value.Exists() && !data.InterfacesDefaultProbeComputationInterval.IsNull() {
 		data.InterfacesDefaultProbeComputationInterval = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultProbeComputationInterval.IsNull() {
 		data.InterfacesDefaultProbeComputationInterval = types.Int64Null()
 	}
-	if value := res.Get("interfaces.default.probe.tx-interval"); value.Exists() && !data.InterfacesDefaultProbeTxInterval.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.default.probe.tx-interval"); value.Exists() && !data.InterfacesDefaultProbeTxInterval.IsNull() {
 		data.InterfacesDefaultProbeTxInterval = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultProbeTxInterval.IsNull() {
 		data.InterfacesDefaultProbeTxInterval = types.Int64Null()
 	}
-	if value := res.Get("interfaces.default.probe.protocol.pm-mpls"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.InterfacesDefaultProbeProtocolPmMpls.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.default.probe.protocol.pm-mpls"); !data.InterfacesDefaultProbeProtocolPmMpls.IsNull() {
+		if value.Exists() {
 			data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.InterfacesDefaultProbeProtocolPmMpls.IsNull() {
-			data.InterfacesDefaultProbeProtocolPmMpls = types.BoolNull()
-		}
+	} else if data.InterfacesDefaultProbeProtocolPmMpls.IsNull() {
+		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolNull()
 	}
-	if value := res.Get("interfaces.default.probe.protocol.twamp-light"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.InterfacesDefaultProbeProtocolTwampLight.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.default.probe.protocol.twamp-light"); !data.InterfacesDefaultProbeProtocolTwampLight.IsNull() {
+		if value.Exists() {
 			data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.InterfacesDefaultProbeProtocolTwampLight.IsNull() {
-			data.InterfacesDefaultProbeProtocolTwampLight = types.BoolNull()
-		}
+	} else if data.InterfacesDefaultProbeProtocolTwampLight.IsNull() {
+		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolNull()
 	}
-	if value := res.Get("interfaces.default.probe.tos.traffic-class"); value.Exists() && !data.InterfacesDefaultProbeTosTrafficClass.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.default.probe.tos.traffic-class"); value.Exists() && !data.InterfacesDefaultProbeTosTrafficClass.IsNull() {
 		data.InterfacesDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultProbeTosTrafficClass.IsNull() {
 		data.InterfacesDefaultProbeTosTrafficClass = types.Int64Null()
 	}
-	if value := res.Get("interfaces.default.probe.tos.dscp"); value.Exists() && !data.InterfacesDefaultProbeTosDscp.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.default.probe.tos.dscp"); value.Exists() && !data.InterfacesDefaultProbeTosDscp.IsNull() {
 		data.InterfacesDefaultProbeTosDscp = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultProbeTosDscp.IsNull() {
 		data.InterfacesDefaultProbeTosDscp = types.Int64Null()
 	}
-	if value := res.Get("interfaces.default.probe.measurement-mode.one-way"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.default.probe.measurement-mode.one-way"); !data.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() {
+		if value.Exists() {
 			data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() {
-			data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolNull()
-		}
+	} else if data.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() {
+		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolNull()
 	}
-	if value := res.Get("interfaces.default.probe.measurement-mode.two-way"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.default.probe.measurement-mode.two-way"); !data.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() {
+		if value.Exists() {
 			data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() {
-			data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolNull()
-		}
+	} else if data.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() {
+		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolNull()
 	}
-	if value := res.Get("interfaces.default.advertisement.periodic.disabled"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.periodic.disabled"); !data.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() {
+		if value.Exists() {
 			data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() {
-			data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolNull()
-		}
+	} else if data.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() {
+		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolNull()
 	}
-	if value := res.Get("interfaces.default.advertisement.periodic.interval"); value.Exists() && !data.InterfacesDefaultAdvertisementPeriodicInterval.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.periodic.interval"); value.Exists() && !data.InterfacesDefaultAdvertisementPeriodicInterval.IsNull() {
 		data.InterfacesDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultAdvertisementPeriodicInterval.IsNull() {
 		data.InterfacesDefaultAdvertisementPeriodicInterval = types.Int64Null()
 	}
-	if value := res.Get("interfaces.default.advertisement.periodic.threshold"); value.Exists() && !data.InterfacesDefaultAdvertisementPeriodicThreshold.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.periodic.threshold"); value.Exists() && !data.InterfacesDefaultAdvertisementPeriodicThreshold.IsNull() {
 		data.InterfacesDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultAdvertisementPeriodicThreshold.IsNull() {
 		data.InterfacesDefaultAdvertisementPeriodicThreshold = types.Int64Null()
 	}
-	if value := res.Get("interfaces.default.advertisement.periodic.minimum-change"); value.Exists() && !data.InterfacesDefaultAdvertisementPeriodicMinimumChange.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.periodic.minimum-change"); value.Exists() && !data.InterfacesDefaultAdvertisementPeriodicMinimumChange.IsNull() {
 		data.InterfacesDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultAdvertisementPeriodicMinimumChange.IsNull() {
 		data.InterfacesDefaultAdvertisementPeriodicMinimumChange = types.Int64Null()
 	}
-	if value := res.Get("interfaces.default.advertisement.logging.delay-exceeded"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.logging.delay-exceeded"); !data.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+		if value.Exists() {
 			data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() {
-			data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
-		}
+	} else if data.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
 	}
-	if value := res.Get("interfaces.default.advertisement.accelerated"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.InterfacesDefaultAdvertisementAccelerated.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.accelerated"); !data.InterfacesDefaultAdvertisementAccelerated.IsNull() {
+		if value.Exists() {
 			data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.InterfacesDefaultAdvertisementAccelerated.IsNull() {
-			data.InterfacesDefaultAdvertisementAccelerated = types.BoolNull()
-		}
+	} else if data.InterfacesDefaultAdvertisementAccelerated.IsNull() {
+		data.InterfacesDefaultAdvertisementAccelerated = types.BoolNull()
 	}
-	if value := res.Get("interfaces.default.advertisement.accelerated.threshold"); value.Exists() && !data.InterfacesDefaultAdvertisementAcceleratedThreshold.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.accelerated.threshold"); value.Exists() && !data.InterfacesDefaultAdvertisementAcceleratedThreshold.IsNull() {
 		data.InterfacesDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultAdvertisementAcceleratedThreshold.IsNull() {
 		data.InterfacesDefaultAdvertisementAcceleratedThreshold = types.Int64Null()
 	}
-	if value := res.Get("interfaces.default.advertisement.accelerated.minimum-change"); value.Exists() && !data.InterfacesDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.accelerated.minimum-change"); value.Exists() && !data.InterfacesDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
 		data.InterfacesDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
 		data.InterfacesDefaultAdvertisementAcceleratedMinimumChange = types.Int64Null()
 	}
-	if value := res.Get("interfaces.default.advertisement.anomaly-loss.upper-bound"); value.Exists() && !data.InterfacesDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.anomaly-loss.upper-bound"); value.Exists() && !data.InterfacesDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
 		data.InterfacesDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
 		data.InterfacesDefaultAdvertisementAnomalyLossUpperBound = types.Int64Null()
 	}
-	if value := res.Get("interfaces.default.advertisement.anomaly-loss.lower-bound"); value.Exists() && !data.InterfacesDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.anomaly-loss.lower-bound"); value.Exists() && !data.InterfacesDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
 		data.InterfacesDefaultAdvertisementAnomalyLossLowerBound = types.Int64Value(value.Int())
 	} else if data.InterfacesDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
 		data.InterfacesDefaultAdvertisementAnomalyLossLowerBound = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SrPolicyDefault.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default"); !data.SrPolicyDefault.IsNull() {
+		if value.Exists() {
 			data.SrPolicyDefault = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SrPolicyDefault = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SrPolicyDefault.IsNull() {
-			data.SrPolicyDefault = types.BoolNull()
-		}
+	} else if data.SrPolicyDefault.IsNull() {
+		data.SrPolicyDefault = types.BoolNull()
 	}
-	if value := res.Get("sr-policy.default.probe.computation-interval"); value.Exists() && !data.SrPolicyDefaultProbeComputationInterval.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.computation-interval"); value.Exists() && !data.SrPolicyDefaultProbeComputationInterval.IsNull() {
 		data.SrPolicyDefaultProbeComputationInterval = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeComputationInterval.IsNull() {
 		data.SrPolicyDefaultProbeComputationInterval = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.probe.tx-interval"); value.Exists() && !data.SrPolicyDefaultProbeTxInterval.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.tx-interval"); value.Exists() && !data.SrPolicyDefaultProbeTxInterval.IsNull() {
 		data.SrPolicyDefaultProbeTxInterval = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeTxInterval.IsNull() {
 		data.SrPolicyDefaultProbeTxInterval = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.probe.static-delay"); value.Exists() && !data.SrPolicyDefaultProbeStaticDelay.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.static-delay"); value.Exists() && !data.SrPolicyDefaultProbeStaticDelay.IsNull() {
 		data.SrPolicyDefaultProbeStaticDelay = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeStaticDelay.IsNull() {
 		data.SrPolicyDefaultProbeStaticDelay = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.probe.sweep.destination.ipv4"); value.Exists() && !data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.sweep.destination.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
 	} else if data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringNull()
 	}
-	if value := res.Get("sr-policy.default.probe.sweep.destination.range"); value.Exists() && !data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.sweep.destination.range"); value.Exists() && !data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
 		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.probe.protocol.pm-mpls"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SrPolicyDefaultProbeProtocolPmMpls.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.protocol.pm-mpls"); !data.SrPolicyDefaultProbeProtocolPmMpls.IsNull() {
+		if value.Exists() {
 			data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SrPolicyDefaultProbeProtocolPmMpls.IsNull() {
-			data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolNull()
-		}
+	} else if data.SrPolicyDefaultProbeProtocolPmMpls.IsNull() {
+		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolNull()
 	}
-	if value := res.Get("sr-policy.default.probe.protocol.twamp-light"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SrPolicyDefaultProbeProtocolTwampLight.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.protocol.twamp-light"); !data.SrPolicyDefaultProbeProtocolTwampLight.IsNull() {
+		if value.Exists() {
 			data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SrPolicyDefaultProbeProtocolTwampLight.IsNull() {
-			data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolNull()
-		}
+	} else if data.SrPolicyDefaultProbeProtocolTwampLight.IsNull() {
+		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolNull()
 	}
-	if value := res.Get("sr-policy.default.probe.tos.traffic-class"); value.Exists() && !data.SrPolicyDefaultProbeTosTrafficClass.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.tos.traffic-class"); value.Exists() && !data.SrPolicyDefaultProbeTosTrafficClass.IsNull() {
 		data.SrPolicyDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeTosTrafficClass.IsNull() {
 		data.SrPolicyDefaultProbeTosTrafficClass = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.probe.tos.dscp"); value.Exists() && !data.SrPolicyDefaultProbeTosDscp.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.tos.dscp"); value.Exists() && !data.SrPolicyDefaultProbeTosDscp.IsNull() {
 		data.SrPolicyDefaultProbeTosDscp = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultProbeTosDscp.IsNull() {
 		data.SrPolicyDefaultProbeTosDscp = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.probe.measurement-mode.one-way"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.measurement-mode.one-way"); !data.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() {
+		if value.Exists() {
 			data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() {
-			data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolNull()
-		}
+	} else if data.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() {
+		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolNull()
 	}
-	if value := res.Get("sr-policy.default.probe.measurement-mode.two-way"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.measurement-mode.two-way"); !data.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() {
+		if value.Exists() {
 			data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() {
-			data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolNull()
-		}
+	} else if data.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() {
+		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolNull()
 	}
-	if value := res.Get("sr-policy.default.probe.measurement-mode.loopback"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.measurement-mode.loopback"); !data.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() {
+		if value.Exists() {
 			data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() {
-			data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolNull()
-		}
+	} else if data.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() {
+		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolNull()
 	}
-	if value := res.Get("sr-policy.default.advertisement.logging.delay-exceeded"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.logging.delay-exceeded"); !data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+		if value.Exists() {
 			data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() {
-			data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
-		}
+	} else if data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
 	}
-	if value := res.Get("sr-policy.default.advertisement.threshold-check.average-delay"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.threshold-check.average-delay"); !data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
+		if value.Exists() {
 			data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
-			data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolNull()
-		}
+	} else if data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
+		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolNull()
 	}
-	if value := res.Get("sr-policy.default.advertisement.threshold-check.minimum-delay"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.threshold-check.minimum-delay"); !data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
+		if value.Exists() {
 			data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
-			data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolNull()
-		}
+	} else if data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
+		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolNull()
 	}
-	if value := res.Get("sr-policy.default.advertisement.threshold-check.maximum-delay"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.threshold-check.maximum-delay"); !data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
+		if value.Exists() {
 			data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
-			data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolNull()
-		}
+	} else if data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
+		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolNull()
 	}
-	if value := res.Get("sr-policy.default.advertisement.periodic.disabled"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.periodic.disabled"); !data.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() {
+		if value.Exists() {
 			data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() {
-			data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolNull()
-		}
+	} else if data.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() {
+		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolNull()
 	}
-	if value := res.Get("sr-policy.default.advertisement.periodic.interval"); value.Exists() && !data.SrPolicyDefaultAdvertisementPeriodicInterval.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.periodic.interval"); value.Exists() && !data.SrPolicyDefaultAdvertisementPeriodicInterval.IsNull() {
 		data.SrPolicyDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultAdvertisementPeriodicInterval.IsNull() {
 		data.SrPolicyDefaultAdvertisementPeriodicInterval = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.advertisement.periodic.threshold"); value.Exists() && !data.SrPolicyDefaultAdvertisementPeriodicThreshold.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.periodic.threshold"); value.Exists() && !data.SrPolicyDefaultAdvertisementPeriodicThreshold.IsNull() {
 		data.SrPolicyDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultAdvertisementPeriodicThreshold.IsNull() {
 		data.SrPolicyDefaultAdvertisementPeriodicThreshold = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.advertisement.periodic.minimum-change"); value.Exists() && !data.SrPolicyDefaultAdvertisementPeriodicMinimumChange.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.periodic.minimum-change"); value.Exists() && !data.SrPolicyDefaultAdvertisementPeriodicMinimumChange.IsNull() {
 		data.SrPolicyDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultAdvertisementPeriodicMinimumChange.IsNull() {
 		data.SrPolicyDefaultAdvertisementPeriodicMinimumChange = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.advertisement.accelerated"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SrPolicyDefaultAdvertisementAccelerated.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.accelerated"); !data.SrPolicyDefaultAdvertisementAccelerated.IsNull() {
+		if value.Exists() {
 			data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SrPolicyDefaultAdvertisementAccelerated.IsNull() {
-			data.SrPolicyDefaultAdvertisementAccelerated = types.BoolNull()
-		}
+	} else if data.SrPolicyDefaultAdvertisementAccelerated.IsNull() {
+		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolNull()
 	}
-	if value := res.Get("sr-policy.default.advertisement.accelerated.threshold"); value.Exists() && !data.SrPolicyDefaultAdvertisementAcceleratedThreshold.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.accelerated.threshold"); value.Exists() && !data.SrPolicyDefaultAdvertisementAcceleratedThreshold.IsNull() {
 		data.SrPolicyDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultAdvertisementAcceleratedThreshold.IsNull() {
 		data.SrPolicyDefaultAdvertisementAcceleratedThreshold = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.advertisement.accelerated.minimum-change"); value.Exists() && !data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.accelerated.minimum-change"); value.Exists() && !data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
 		data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
 		data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.advertisement.anomaly-check.upper-bound"); value.Exists() && !data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.anomaly-check.upper-bound"); value.Exists() && !data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.advertisement.anomaly-check.lower-bound"); value.Exists() && !data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.anomaly-check.lower-bound"); value.Exists() && !data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.advertisement.anomaly-loss.upper-bound"); value.Exists() && !data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.anomaly-loss.upper-bound"); value.Exists() && !data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound = types.Int64Null()
 	}
-	if value := res.Get("sr-policy.default.advertisement.anomaly-loss.lower-bound"); value.Exists() && !data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.anomaly-loss.lower-bound"); value.Exists() && !data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound = types.Int64Value(value.Int())
 	} else if data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
 		data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.EndpointDefault.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default"); !data.EndpointDefault.IsNull() {
+		if value.Exists() {
 			data.EndpointDefault = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefault = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.EndpointDefault.IsNull() {
-			data.EndpointDefault = types.BoolNull()
-		}
+	} else if data.EndpointDefault.IsNull() {
+		data.EndpointDefault = types.BoolNull()
 	}
-	if value := res.Get("endpoint.default.probe.tx-interval"); value.Exists() && !data.EndpointDefaultProbeTxInterval.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.tx-interval"); value.Exists() && !data.EndpointDefaultProbeTxInterval.IsNull() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeTxInterval.IsNull() {
 		data.EndpointDefaultProbeTxInterval = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.probe.computation-interval"); value.Exists() && !data.EndpointDefaultProbeComputationInterval.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.computation-interval"); value.Exists() && !data.EndpointDefaultProbeComputationInterval.IsNull() {
 		data.EndpointDefaultProbeComputationInterval = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeComputationInterval.IsNull() {
 		data.EndpointDefaultProbeComputationInterval = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.probe.flow-label.explicits"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.explicits"); !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
+		if value.Exists() {
 			data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
-			data.EndpointDefaultProbeFlowLabelExplicit = types.BoolNull()
-		}
+	} else if data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
+		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolNull()
 	}
-	if value := res.Get("endpoint.default.probe.flow-label.explicits.explicit"); value.Exists() && !data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.explicits.explicit"); value.Exists() && !data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
 	} else if data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
 		data.EndpointDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
 	}
-	if value := res.Get("endpoint.default.probe.flow-label.from"); value.Exists() && !data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.from"); value.Exists() && !data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
 		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
 		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.probe.flow-label.to"); value.Exists() && !data.EndpointDefaultProbeFlowLabelTo.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.to"); value.Exists() && !data.EndpointDefaultProbeFlowLabelTo.IsNull() {
 		data.EndpointDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeFlowLabelTo.IsNull() {
 		data.EndpointDefaultProbeFlowLabelTo = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.probe.flow-label.increment"); value.Exists() && !data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.increment"); value.Exists() && !data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
 		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
 		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.probe.sweep.destination.ipv4"); value.Exists() && !data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.sweep.destination.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
 	} else if data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringNull()
 	}
-	if value := res.Get("endpoint.default.probe.sweep.destination.range"); value.Exists() && !data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.sweep.destination.range"); value.Exists() && !data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
 		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.probe.measurement-mode.one-way"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.EndpointDefaultProbeMeasurementModeOneWay.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.one-way"); !data.EndpointDefaultProbeMeasurementModeOneWay.IsNull() {
+		if value.Exists() {
 			data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.EndpointDefaultProbeMeasurementModeOneWay.IsNull() {
-			data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolNull()
-		}
+	} else if data.EndpointDefaultProbeMeasurementModeOneWay.IsNull() {
+		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolNull()
 	}
-	if value := res.Get("endpoint.default.probe.measurement-mode.two-way"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.two-way"); !data.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() {
+		if value.Exists() {
 			data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() {
-			data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolNull()
-		}
+	} else if data.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() {
+		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolNull()
 	}
-	if value := res.Get("endpoint.default.probe.measurement-mode.loopback"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.EndpointDefaultProbeMeasurementModeLoopback.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.loopback"); !data.EndpointDefaultProbeMeasurementModeLoopback.IsNull() {
+		if value.Exists() {
 			data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.EndpointDefaultProbeMeasurementModeLoopback.IsNull() {
-			data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolNull()
-		}
+	} else if data.EndpointDefaultProbeMeasurementModeLoopback.IsNull() {
+		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolNull()
 	}
-	if value := res.Get("endpoint.default.probe.tos.dscp"); value.Exists() && !data.EndpointDefaultProbeTosDscp.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.probe.tos.dscp"); value.Exists() && !data.EndpointDefaultProbeTosDscp.IsNull() {
 		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultProbeTosDscp.IsNull() {
 		data.EndpointDefaultProbeTosDscp = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.advertisement.logging.delay-exceeded"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.logging.delay-exceeded"); !data.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+		if value.Exists() {
 			data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() {
-			data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
-		}
+	} else if data.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolNull()
 	}
-	if value := res.Get("endpoint.default.advertisement.threshold-check.average-delay"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.threshold-check.average-delay"); !data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
+		if value.Exists() {
 			data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
-			data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolNull()
-		}
+	} else if data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
+		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolNull()
 	}
-	if value := res.Get("endpoint.default.advertisement.threshold-check.minimum-delay"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.threshold-check.minimum-delay"); !data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
+		if value.Exists() {
 			data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
-			data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolNull()
-		}
+	} else if data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
+		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolNull()
 	}
-	if value := res.Get("endpoint.default.advertisement.threshold-check.maximum-delay"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.threshold-check.maximum-delay"); !data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
+		if value.Exists() {
 			data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
-			data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolNull()
-		}
+	} else if data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
+		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolNull()
 	}
-	if value := res.Get("endpoint.default.advertisement.periodic.disabled"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.periodic.disabled"); !data.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() {
+		if value.Exists() {
 			data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() {
-			data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolNull()
-		}
+	} else if data.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() {
+		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolNull()
 	}
-	if value := res.Get("endpoint.default.advertisement.periodic.interval"); value.Exists() && !data.EndpointDefaultAdvertisementPeriodicInterval.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.periodic.interval"); value.Exists() && !data.EndpointDefaultAdvertisementPeriodicInterval.IsNull() {
 		data.EndpointDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultAdvertisementPeriodicInterval.IsNull() {
 		data.EndpointDefaultAdvertisementPeriodicInterval = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.advertisement.periodic.threshold"); value.Exists() && !data.EndpointDefaultAdvertisementPeriodicThreshold.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.periodic.threshold"); value.Exists() && !data.EndpointDefaultAdvertisementPeriodicThreshold.IsNull() {
 		data.EndpointDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultAdvertisementPeriodicThreshold.IsNull() {
 		data.EndpointDefaultAdvertisementPeriodicThreshold = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.advertisement.periodic.minimum-change"); value.Exists() && !data.EndpointDefaultAdvertisementPeriodicMinimumChange.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.periodic.minimum-change"); value.Exists() && !data.EndpointDefaultAdvertisementPeriodicMinimumChange.IsNull() {
 		data.EndpointDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultAdvertisementPeriodicMinimumChange.IsNull() {
 		data.EndpointDefaultAdvertisementPeriodicMinimumChange = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.advertisement.accelerated"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.EndpointDefaultAdvertisementAccelerated.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.accelerated"); !data.EndpointDefaultAdvertisementAccelerated.IsNull() {
+		if value.Exists() {
 			data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.EndpointDefaultAdvertisementAccelerated.IsNull() {
-			data.EndpointDefaultAdvertisementAccelerated = types.BoolNull()
-		}
+	} else if data.EndpointDefaultAdvertisementAccelerated.IsNull() {
+		data.EndpointDefaultAdvertisementAccelerated = types.BoolNull()
 	}
-	if value := res.Get("endpoint.default.advertisement.accelerated.threshold"); value.Exists() && !data.EndpointDefaultAdvertisementAcceleratedThreshold.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.accelerated.threshold"); value.Exists() && !data.EndpointDefaultAdvertisementAcceleratedThreshold.IsNull() {
 		data.EndpointDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultAdvertisementAcceleratedThreshold.IsNull() {
 		data.EndpointDefaultAdvertisementAcceleratedThreshold = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.advertisement.accelerated.minimum-change"); value.Exists() && !data.EndpointDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.accelerated.minimum-change"); value.Exists() && !data.EndpointDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
 		data.EndpointDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
 		data.EndpointDefaultAdvertisementAcceleratedMinimumChange = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.advertisement.anomaly-check.upper-bound"); value.Exists() && !data.EndpointDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.anomaly-check.upper-bound"); value.Exists() && !data.EndpointDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
 		data.EndpointDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
 		data.EndpointDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.advertisement.anomaly-check.lower-bound"); value.Exists() && !data.EndpointDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.anomaly-check.lower-bound"); value.Exists() && !data.EndpointDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
 		data.EndpointDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
 		data.EndpointDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Null()
 	}
-	if value := res.Get("endpoint.default.advertisement.anomaly-loss.upper-bound"); value.Exists() && !data.EndpointDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.anomaly-loss.upper-bound"); value.Exists() && !data.EndpointDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
 		data.EndpointDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
 	} else if data.EndpointDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
 		data.EndpointDefaultAdvertisementAnomalyLossUpperBound = types.Int64Null()
@@ -1259,7 +1397,7 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBody(ctx context.Conte
 		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}
 
 		var r gjson.Result
-		res.Get("names.name").ForEach(
+		gjson.GetBytes(res, "names.name").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1277,7 +1415,7 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBody(ctx context.Conte
 				return true
 			},
 		)
-		if value := r.Get("profile-name"); value.Exists() && !data.Profiles[i].ProfileName.IsNull() {
+		if value := r.Get("profile-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Profiles[i].ProfileName.IsNull() {
 			data.Profiles[i].ProfileName = types.StringValue(value.String())
 		} else {
 			data.Profiles[i].ProfileName = types.StringNull()
@@ -1297,7 +1435,7 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBody(ctx context.Conte
 		} else {
 			data.Profiles[i].ProbeStaticDelay = types.Int64Null()
 		}
-		if value := r.Get("probe.sweep.destination.ipv4"); value.Exists() && !data.Profiles[i].ProbeSweepDestinationIpv4.IsNull() {
+		if value := r.Get("probe.sweep.destination.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Profiles[i].ProbeSweepDestinationIpv4.IsNull() {
 			data.Profiles[i].ProbeSweepDestinationIpv4 = types.StringValue(value.String())
 		} else {
 			data.Profiles[i].ProbeSweepDestinationIpv4 = types.StringNull()
@@ -1526,10 +1664,2103 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBody(ctx context.Conte
 		} else {
 			data.Profiles[i].AdvertiseAnomalyLossLowerBound = types.Int64Null()
 		}
+		if value := r.Get("probe.collect-hbh"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ProbeCollectHbh.IsNull() {
+				data.Profiles[i].ProbeCollectHbh = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Profiles[i].ProbeCollectHbh.IsNull() {
+				data.Profiles[i].ProbeCollectHbh = types.BoolNull()
+			}
+		}
+		if value := r.Get("probe.timestamp-format.ntp"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ProbeTimestampFormatNtp.IsNull() {
+				data.Profiles[i].ProbeTimestampFormatNtp = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Profiles[i].ProbeTimestampFormatNtp.IsNull() {
+				data.Profiles[i].ProbeTimestampFormatNtp = types.BoolNull()
+			}
+		}
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.histogram.delay-bins.explicit"); helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) && value.Exists() && !data.EndpointDefaultHistogramDelayBinsExplicit.IsNull() {
+		data.EndpointDefaultHistogramDelayBinsExplicit = helpers.GetInt64List(value.Array())
+	} else if data.EndpointDefaultHistogramDelayBinsExplicit.IsNull() {
+		data.EndpointDefaultHistogramDelayBinsExplicit = types.ListNull(types.Int64Type)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.collect-hbh"); helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultProbeCollectHbh.IsNull() {
+		if value.Exists() {
+			data.EndpointDefaultProbeCollectHbh = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefaultProbeCollectHbh = types.BoolValue(false)
+		}
+	} else if data.EndpointDefaultProbeCollectHbh.IsNull() {
+		data.EndpointDefaultProbeCollectHbh = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.collect-hbh"); helpers.VersionAtLeast(version, "25.4") && !data.SrPolicyDefaultProbeCollectHbh.IsNull() {
+		if value.Exists() {
+			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(false)
+		}
+	} else if data.SrPolicyDefaultProbeCollectHbh.IsNull() {
+		data.SrPolicyDefaultProbeCollectHbh = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.timestamp-format.ntp"); helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultProbeTimestampFormatNtp.IsNull() {
+		if value.Exists() {
+			data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+		}
+	} else if data.EndpointDefaultProbeTimestampFormatNtp.IsNull() {
+		data.EndpointDefaultProbeTimestampFormatNtp = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.probe.timestamp-format.ntp"); helpers.VersionAtLeast(version, "25.4") && !data.InterfacesDefaultProbeTimestampFormatNtp.IsNull() {
+		if value.Exists() {
+			data.InterfacesDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.InterfacesDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+		}
+	} else if data.InterfacesDefaultProbeTimestampFormatNtp.IsNull() {
+		data.InterfacesDefaultProbeTimestampFormatNtp = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "rsvp-te.default.probe.timestamp-format.ntp"); helpers.VersionAtLeast(version, "25.4") && !data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() {
+		if value.Exists() {
+			data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+		}
+	} else if data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() {
+		data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.timestamp-format.ntp"); helpers.VersionAtLeast(version, "25.4") && !data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() {
+		if value.Exists() {
+			data.SrPolicyDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SrPolicyDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+		}
+	} else if data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() {
+		data.SrPolicyDefaultProbeTimestampFormatNtp = types.BoolNull()
 	}
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "interfaces.default"); value.Exists() {
+		data.InterfacesDefault = types.BoolValue(true)
+	} else if !data.InterfacesDefault.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InterfacesDefault = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.probe.computation-interval"); value.Exists() {
+		data.InterfacesDefaultProbeComputationInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.probe.tx-interval"); value.Exists() {
+		data.InterfacesDefaultProbeTxInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.probe.protocol.pm-mpls"); value.Exists() {
+		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(true)
+	} else if !data.InterfacesDefaultProbeProtocolPmMpls.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.probe.protocol.twamp-light"); value.Exists() {
+		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(true)
+	} else if !data.InterfacesDefaultProbeProtocolTwampLight.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.probe.tos.traffic-class"); value.Exists() {
+		data.InterfacesDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.probe.tos.dscp"); value.Exists() {
+		data.InterfacesDefaultProbeTosDscp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.probe.measurement-mode.one-way"); value.Exists() {
+		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
+	} else if !data.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.probe.measurement-mode.two-way"); value.Exists() {
+		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
+	} else if !data.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.periodic.disabled"); value.Exists() {
+		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
+	} else if !data.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.periodic.interval"); value.Exists() {
+		data.InterfacesDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.periodic.threshold"); value.Exists() {
+		data.InterfacesDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.periodic.minimum-change"); value.Exists() {
+		data.InterfacesDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.logging.delay-exceeded"); value.Exists() {
+		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
+	} else if !data.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.accelerated"); value.Exists() {
+		data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(true)
+	} else if !data.InterfacesDefaultAdvertisementAccelerated.IsNull() {
+		// Only set to false if it was previously set in state
+		data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.accelerated.threshold"); value.Exists() {
+		data.InterfacesDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.accelerated.minimum-change"); value.Exists() {
+		data.InterfacesDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.anomaly-loss.upper-bound"); value.Exists() {
+		data.InterfacesDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.anomaly-loss.lower-bound"); value.Exists() {
+		data.InterfacesDefaultAdvertisementAnomalyLossLowerBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default"); value.Exists() {
+		data.SrPolicyDefault = types.BoolValue(true)
+	} else if !data.SrPolicyDefault.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefault = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.computation-interval"); value.Exists() {
+		data.SrPolicyDefaultProbeComputationInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.tx-interval"); value.Exists() {
+		data.SrPolicyDefaultProbeTxInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.static-delay"); value.Exists() {
+		data.SrPolicyDefaultProbeStaticDelay = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.sweep.destination.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.sweep.destination.range"); value.Exists() {
+		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.protocol.pm-mpls"); value.Exists() {
+		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(true)
+	} else if !data.SrPolicyDefaultProbeProtocolPmMpls.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.protocol.twamp-light"); value.Exists() {
+		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(true)
+	} else if !data.SrPolicyDefaultProbeProtocolTwampLight.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.tos.traffic-class"); value.Exists() {
+		data.SrPolicyDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.tos.dscp"); value.Exists() {
+		data.SrPolicyDefaultProbeTosDscp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.measurement-mode.one-way"); value.Exists() {
+		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
+	} else if !data.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.measurement-mode.two-way"); value.Exists() {
+		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
+	} else if !data.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.measurement-mode.loopback"); value.Exists() {
+		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
+	} else if !data.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.logging.delay-exceeded"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
+	} else if !data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.threshold-check.average-delay"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
+	} else if !data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.threshold-check.minimum-delay"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
+	} else if !data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.threshold-check.maximum-delay"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
+	} else if !data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.periodic.disabled"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
+	} else if !data.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.periodic.interval"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.periodic.threshold"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.periodic.minimum-change"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.accelerated"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(true)
+	} else if !data.SrPolicyDefaultAdvertisementAccelerated.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.accelerated.threshold"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.accelerated.minimum-change"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.anomaly-check.upper-bound"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.anomaly-check.lower-bound"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.anomaly-loss.upper-bound"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.anomaly-loss.lower-bound"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default"); value.Exists() {
+		data.EndpointDefault = types.BoolValue(true)
+	} else if !data.EndpointDefault.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefault = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.tx-interval"); value.Exists() {
+		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.computation-interval"); value.Exists() {
+		data.EndpointDefaultProbeComputationInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.explicits"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
+	} else if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.explicits.explicit"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
+	} else {
+		data.EndpointDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.from"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.to"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.increment"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.sweep.destination.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.sweep.destination.range"); value.Exists() {
+		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.one-way"); value.Exists() {
+		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
+	} else if !data.EndpointDefaultProbeMeasurementModeOneWay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.two-way"); value.Exists() {
+		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
+	} else if !data.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.loopback"); value.Exists() {
+		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
+	} else if !data.EndpointDefaultProbeMeasurementModeLoopback.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.tos.dscp"); value.Exists() {
+		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.logging.delay-exceeded"); value.Exists() {
+		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
+	} else if !data.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.threshold-check.average-delay"); value.Exists() {
+		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
+	} else if !data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.threshold-check.minimum-delay"); value.Exists() {
+		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
+	} else if !data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.threshold-check.maximum-delay"); value.Exists() {
+		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
+	} else if !data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.periodic.disabled"); value.Exists() {
+		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
+	} else if !data.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.periodic.interval"); value.Exists() {
+		data.EndpointDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.periodic.threshold"); value.Exists() {
+		data.EndpointDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.periodic.minimum-change"); value.Exists() {
+		data.EndpointDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.accelerated"); value.Exists() {
+		data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(true)
+	} else if !data.EndpointDefaultAdvertisementAccelerated.IsNull() {
+		// Only set to false if it was previously set in state
+		data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.accelerated.threshold"); value.Exists() {
+		data.EndpointDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.accelerated.minimum-change"); value.Exists() {
+		data.EndpointDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.anomaly-check.upper-bound"); value.Exists() {
+		data.EndpointDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.anomaly-check.lower-bound"); value.Exists() {
+		data.EndpointDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.anomaly-loss.upper-bound"); value.Exists() {
+		data.EndpointDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "names.name"); value.Exists() {
+		data.Profiles = make([]PerformanceMeasurementDelayProfileProfiles, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PerformanceMeasurementDelayProfileProfiles{}
+			if cValue := v.Get("profile-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.ProfileName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("probe.computation-interval"); cValue.Exists() {
+				item.ProbeComputationInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.tx-interval"); cValue.Exists() {
+				item.ProbeTxInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.static-delay"); cValue.Exists() {
+				item.ProbeStaticDelay = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.sweep.destination.ipv4"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.ProbeSweepDestinationIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("probe.sweep.destination.range"); cValue.Exists() {
+				item.ProbeSweepDestinationRange = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.flow-label.explicits"); cValue.Exists() {
+				item.ProbeFlowLabelExplicit = types.BoolValue(true)
+			} else if !item.ProbeFlowLabelExplicit.IsNull() {
+				// Only set to false if it was previously set
+				item.ProbeFlowLabelExplicit = types.BoolValue(false)
+			}
+			if cValue := v.Get("probe.flow-label.explicits.explicit"); cValue.Exists() {
+				item.ProbeFlowLabelExplicitList = helpers.GetInt64List(cValue.Array())
+			} else {
+				item.ProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
+			}
+			if cValue := v.Get("probe.flow-label.from"); cValue.Exists() {
+				item.ProbeFlowLabelFrom = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.flow-label.to"); cValue.Exists() {
+				item.ProbeFlowLabelTo = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.flow-label.increment"); cValue.Exists() {
+				item.ProbeFlowLabelIncrement = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.protocol.pm-mpls"); cValue.Exists() {
+				item.ProbeProtocolPmMpls = types.BoolValue(true)
+			} else if !item.ProbeProtocolPmMpls.IsNull() {
+				// Only set to false if it was previously set
+				item.ProbeProtocolPmMpls = types.BoolValue(false)
+			}
+			if cValue := v.Get("probe.protocol.twamp-light"); cValue.Exists() {
+				item.ProbeProtocolTwampLight = types.BoolValue(true)
+			} else if !item.ProbeProtocolTwampLight.IsNull() {
+				// Only set to false if it was previously set
+				item.ProbeProtocolTwampLight = types.BoolValue(false)
+			}
+			if cValue := v.Get("probe.tos.traffic-class"); cValue.Exists() {
+				item.ProbeTosTrafficClass = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.tos.dscp"); cValue.Exists() {
+				item.ProbeTosDscp = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.measurement-mode.one-way"); cValue.Exists() {
+				item.ProbeMeasurementModeOneWay = types.BoolValue(true)
+			} else if !item.ProbeMeasurementModeOneWay.IsNull() {
+				// Only set to false if it was previously set
+				item.ProbeMeasurementModeOneWay = types.BoolValue(false)
+			}
+			if cValue := v.Get("probe.measurement-mode.two-way"); cValue.Exists() {
+				item.ProbeMeasurementModeTwoWay = types.BoolValue(true)
+			} else if !item.ProbeMeasurementModeTwoWay.IsNull() {
+				// Only set to false if it was previously set
+				item.ProbeMeasurementModeTwoWay = types.BoolValue(false)
+			}
+			if cValue := v.Get("probe.measurement-mode.loopback"); cValue.Exists() {
+				item.ProbeMeasurementModeLoopback = types.BoolValue(true)
+			} else if !item.ProbeMeasurementModeLoopback.IsNull() {
+				// Only set to false if it was previously set
+				item.ProbeMeasurementModeLoopback = types.BoolValue(false)
+			}
+			if cValue := v.Get("advertisement.logging.delay-exceeded"); cValue.Exists() {
+				item.AdvertiseLoggingDelayExceeded = types.BoolValue(true)
+			} else if !item.AdvertiseLoggingDelayExceeded.IsNull() {
+				// Only set to false if it was previously set
+				item.AdvertiseLoggingDelayExceeded = types.BoolValue(false)
+			}
+			if cValue := v.Get("advertisement.threshold-check.average-delay"); cValue.Exists() {
+				item.AdvertiseThresholdCheckAverageDelay = types.BoolValue(true)
+			} else if !item.AdvertiseThresholdCheckAverageDelay.IsNull() {
+				// Only set to false if it was previously set
+				item.AdvertiseThresholdCheckAverageDelay = types.BoolValue(false)
+			}
+			if cValue := v.Get("advertisement.threshold-check.minimum-delay"); cValue.Exists() {
+				item.AdvertiseThresholdCheckMinimumDelay = types.BoolValue(true)
+			} else if !item.AdvertiseThresholdCheckMinimumDelay.IsNull() {
+				// Only set to false if it was previously set
+				item.AdvertiseThresholdCheckMinimumDelay = types.BoolValue(false)
+			}
+			if cValue := v.Get("advertisement.threshold-check.maximum-delay"); cValue.Exists() {
+				item.AdvertiseThresholdCheckMaximumDelay = types.BoolValue(true)
+			} else if !item.AdvertiseThresholdCheckMaximumDelay.IsNull() {
+				// Only set to false if it was previously set
+				item.AdvertiseThresholdCheckMaximumDelay = types.BoolValue(false)
+			}
+			if cValue := v.Get("advertisement.periodic.disabled"); cValue.Exists() {
+				item.AdvertisePeriodicDisabled = types.BoolValue(true)
+			} else if !item.AdvertisePeriodicDisabled.IsNull() {
+				// Only set to false if it was previously set
+				item.AdvertisePeriodicDisabled = types.BoolValue(false)
+			}
+			if cValue := v.Get("advertisement.periodic.interval"); cValue.Exists() {
+				item.AdvertisePeriodicInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement.periodic.threshold"); cValue.Exists() {
+				item.AdvertisePeriodicThreshold = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement.periodic.minimum-change"); cValue.Exists() {
+				item.AdvertisePeriodicMinimumChange = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement.accelerated"); cValue.Exists() {
+				item.AdvertiseAccelerated = types.BoolValue(true)
+			} else if !item.AdvertiseAccelerated.IsNull() {
+				// Only set to false if it was previously set
+				item.AdvertiseAccelerated = types.BoolValue(false)
+			}
+			if cValue := v.Get("advertisement.accelerated.threshold"); cValue.Exists() {
+				item.AdvertiseAcceleratedThreshold = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement.accelerated.minimum-change"); cValue.Exists() {
+				item.AdvertiseAcceleratedMinimumChange = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement.anomaly-check.upper-bound"); cValue.Exists() {
+				item.AdvertiseAnomalyCheckUpperBound = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement.anomaly-check.lower-bound"); cValue.Exists() {
+				item.AdvertiseAnomalyCheckLowerBound = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement.anomaly-loss.upper-bound"); cValue.Exists() {
+				item.AdvertiseAnomalyLossUpperBound = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement.anomaly-loss.lower-bound"); cValue.Exists() {
+				item.AdvertiseAnomalyLossLowerBound = types.Int64Value(cValue.Int())
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("probe.collect-hbh"); cValue.Exists() {
+					item.ProbeCollectHbh = types.BoolValue(true)
+				} else if !item.ProbeCollectHbh.IsNull() {
+					// Only set to false if it was previously set
+					item.ProbeCollectHbh = types.BoolValue(false)
+				}
+			} else {
+				item.ProbeCollectHbh = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("probe.timestamp-format.ntp"); cValue.Exists() {
+					item.ProbeTimestampFormatNtp = types.BoolValue(true)
+				} else if !item.ProbeTimestampFormatNtp.IsNull() {
+					// Only set to false if it was previously set
+					item.ProbeTimestampFormatNtp = types.BoolValue(false)
+				}
+			} else {
+				item.ProbeTimestampFormatNtp = types.BoolNull()
+			}
+			data.Profiles = append(data.Profiles, item)
+			return true
+		})
+	}
+	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) {
+		if value := gjson.GetBytes(res, "endpoint.default.histogram.delay-bins.explicit"); value.Exists() {
+			data.EndpointDefaultHistogramDelayBinsExplicit = helpers.GetInt64List(value.Array())
+		} else {
+			data.EndpointDefaultHistogramDelayBinsExplicit = types.ListNull(types.Int64Type)
+		}
+	} else {
+		data.EndpointDefaultHistogramDelayBinsExplicit = types.ListNull(types.Int64Type)
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "endpoint.default.probe.collect-hbh"); value.Exists() {
+			data.EndpointDefaultProbeCollectHbh = types.BoolValue(true)
+		} else if !data.EndpointDefaultProbeCollectHbh.IsNull() {
+			// Only set to false if it was previously set in state
+			data.EndpointDefaultProbeCollectHbh = types.BoolValue(false)
+		}
+	} else {
+		data.EndpointDefaultProbeCollectHbh = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "sr-policy.default.probe.collect-hbh"); value.Exists() {
+			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(true)
+		} else if !data.SrPolicyDefaultProbeCollectHbh.IsNull() {
+			// Only set to false if it was previously set in state
+			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(false)
+		}
+	} else {
+		data.SrPolicyDefaultProbeCollectHbh = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.timestamp-format.ntp"); value.Exists() {
+			data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		} else if !data.EndpointDefaultProbeTimestampFormatNtp.IsNull() {
+			// Only set to false if it was previously set in state
+			data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+		}
+	} else {
+		data.EndpointDefaultProbeTimestampFormatNtp = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "interfaces.default.probe.timestamp-format.ntp"); value.Exists() {
+			data.InterfacesDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		} else if !data.InterfacesDefaultProbeTimestampFormatNtp.IsNull() {
+			// Only set to false if it was previously set in state
+			data.InterfacesDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+		}
+	} else {
+		data.InterfacesDefaultProbeTimestampFormatNtp = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "rsvp-te.default.probe.timestamp-format.ntp"); value.Exists() {
+			data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		} else if !data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() {
+			// Only set to false if it was previously set in state
+			data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+		}
+	} else {
+		data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "sr-policy.default.probe.timestamp-format.ntp"); value.Exists() {
+			data.SrPolicyDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		} else if !data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() {
+			// Only set to false if it was previously set in state
+			data.SrPolicyDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+		}
+	} else {
+		data.SrPolicyDefaultProbeTimestampFormatNtp = types.BoolNull()
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "interfaces.default"); value.Exists() {
+		data.InterfacesDefault = types.BoolValue(true)
+	} else {
+		data.InterfacesDefault = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.probe.computation-interval"); value.Exists() {
+		data.InterfacesDefaultProbeComputationInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.probe.tx-interval"); value.Exists() {
+		data.InterfacesDefaultProbeTxInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.probe.protocol.pm-mpls"); value.Exists() {
+		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(true)
+	} else {
+		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.probe.protocol.twamp-light"); value.Exists() {
+		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(true)
+	} else {
+		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.probe.tos.traffic-class"); value.Exists() {
+		data.InterfacesDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.probe.tos.dscp"); value.Exists() {
+		data.InterfacesDefaultProbeTosDscp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.probe.measurement-mode.one-way"); value.Exists() {
+		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
+	} else {
+		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.probe.measurement-mode.two-way"); value.Exists() {
+		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
+	} else {
+		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.periodic.disabled"); value.Exists() {
+		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
+	} else {
+		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.periodic.interval"); value.Exists() {
+		data.InterfacesDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.periodic.threshold"); value.Exists() {
+		data.InterfacesDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.periodic.minimum-change"); value.Exists() {
+		data.InterfacesDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.logging.delay-exceeded"); value.Exists() {
+		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
+	} else {
+		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.accelerated"); value.Exists() {
+		data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(true)
+	} else {
+		data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.accelerated.threshold"); value.Exists() {
+		data.InterfacesDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.accelerated.minimum-change"); value.Exists() {
+		data.InterfacesDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.anomaly-loss.upper-bound"); value.Exists() {
+		data.InterfacesDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.default.advertisement.anomaly-loss.lower-bound"); value.Exists() {
+		data.InterfacesDefaultAdvertisementAnomalyLossLowerBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default"); value.Exists() {
+		data.SrPolicyDefault = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefault = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.computation-interval"); value.Exists() {
+		data.SrPolicyDefaultProbeComputationInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.tx-interval"); value.Exists() {
+		data.SrPolicyDefaultProbeTxInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.static-delay"); value.Exists() {
+		data.SrPolicyDefaultProbeStaticDelay = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.sweep.destination.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.sweep.destination.range"); value.Exists() {
+		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.protocol.pm-mpls"); value.Exists() {
+		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.protocol.twamp-light"); value.Exists() {
+		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.tos.traffic-class"); value.Exists() {
+		data.SrPolicyDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.tos.dscp"); value.Exists() {
+		data.SrPolicyDefaultProbeTosDscp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.measurement-mode.one-way"); value.Exists() {
+		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.measurement-mode.two-way"); value.Exists() {
+		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.probe.measurement-mode.loopback"); value.Exists() {
+		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.logging.delay-exceeded"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.threshold-check.average-delay"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.threshold-check.minimum-delay"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.threshold-check.maximum-delay"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.periodic.disabled"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.periodic.interval"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.periodic.threshold"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.periodic.minimum-change"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.accelerated"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.accelerated.threshold"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.accelerated.minimum-change"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.anomaly-check.upper-bound"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.anomaly-check.lower-bound"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.anomaly-loss.upper-bound"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sr-policy.default.advertisement.anomaly-loss.lower-bound"); value.Exists() {
+		data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default"); value.Exists() {
+		data.EndpointDefault = types.BoolValue(true)
+	} else {
+		data.EndpointDefault = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.tx-interval"); value.Exists() {
+		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.computation-interval"); value.Exists() {
+		data.EndpointDefaultProbeComputationInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.explicits"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.explicits.explicit"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
+	} else {
+		data.EndpointDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.from"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.to"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.flow-label.increment"); value.Exists() {
+		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.sweep.destination.ipv4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.sweep.destination.range"); value.Exists() {
+		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.one-way"); value.Exists() {
+		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.two-way"); value.Exists() {
+		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.loopback"); value.Exists() {
+		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.probe.tos.dscp"); value.Exists() {
+		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.logging.delay-exceeded"); value.Exists() {
+		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.threshold-check.average-delay"); value.Exists() {
+		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.threshold-check.minimum-delay"); value.Exists() {
+		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.threshold-check.maximum-delay"); value.Exists() {
+		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.periodic.disabled"); value.Exists() {
+		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.periodic.interval"); value.Exists() {
+		data.EndpointDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.periodic.threshold"); value.Exists() {
+		data.EndpointDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.periodic.minimum-change"); value.Exists() {
+		data.EndpointDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.accelerated"); value.Exists() {
+		data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.accelerated.threshold"); value.Exists() {
+		data.EndpointDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.accelerated.minimum-change"); value.Exists() {
+		data.EndpointDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.anomaly-check.upper-bound"); value.Exists() {
+		data.EndpointDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.anomaly-check.lower-bound"); value.Exists() {
+		data.EndpointDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "endpoint.default.advertisement.anomaly-loss.upper-bound"); value.Exists() {
+		data.EndpointDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "names.name"); value.Exists() {
+		data.Profiles = make([]PerformanceMeasurementDelayProfileProfiles, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PerformanceMeasurementDelayProfileProfiles{}
+			if cValue := v.Get("profile-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.ProfileName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("probe.computation-interval"); cValue.Exists() {
+				item.ProbeComputationInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.tx-interval"); cValue.Exists() {
+				item.ProbeTxInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.static-delay"); cValue.Exists() {
+				item.ProbeStaticDelay = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.sweep.destination.ipv4"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.ProbeSweepDestinationIpv4 = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("probe.sweep.destination.range"); cValue.Exists() {
+				item.ProbeSweepDestinationRange = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.flow-label.explicits"); cValue.Exists() {
+				item.ProbeFlowLabelExplicit = types.BoolValue(true)
+			} else {
+				item.ProbeFlowLabelExplicit = types.BoolValue(false)
+			}
+			if cValue := v.Get("probe.flow-label.explicits.explicit"); cValue.Exists() {
+				item.ProbeFlowLabelExplicitList = helpers.GetInt64List(cValue.Array())
+			} else {
+				item.ProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
+			}
+			if cValue := v.Get("probe.flow-label.from"); cValue.Exists() {
+				item.ProbeFlowLabelFrom = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.flow-label.to"); cValue.Exists() {
+				item.ProbeFlowLabelTo = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.flow-label.increment"); cValue.Exists() {
+				item.ProbeFlowLabelIncrement = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.protocol.pm-mpls"); cValue.Exists() {
+				item.ProbeProtocolPmMpls = types.BoolValue(true)
+			} else {
+				item.ProbeProtocolPmMpls = types.BoolValue(false)
+			}
+			if cValue := v.Get("probe.protocol.twamp-light"); cValue.Exists() {
+				item.ProbeProtocolTwampLight = types.BoolValue(true)
+			} else {
+				item.ProbeProtocolTwampLight = types.BoolValue(false)
+			}
+			if cValue := v.Get("probe.tos.traffic-class"); cValue.Exists() {
+				item.ProbeTosTrafficClass = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.tos.dscp"); cValue.Exists() {
+				item.ProbeTosDscp = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("probe.measurement-mode.one-way"); cValue.Exists() {
+				item.ProbeMeasurementModeOneWay = types.BoolValue(true)
+			} else {
+				item.ProbeMeasurementModeOneWay = types.BoolValue(false)
+			}
+			if cValue := v.Get("probe.measurement-mode.two-way"); cValue.Exists() {
+				item.ProbeMeasurementModeTwoWay = types.BoolValue(true)
+			} else {
+				item.ProbeMeasurementModeTwoWay = types.BoolValue(false)
+			}
+			if cValue := v.Get("probe.measurement-mode.loopback"); cValue.Exists() {
+				item.ProbeMeasurementModeLoopback = types.BoolValue(true)
+			} else {
+				item.ProbeMeasurementModeLoopback = types.BoolValue(false)
+			}
+			if cValue := v.Get("advertisement.logging.delay-exceeded"); cValue.Exists() {
+				item.AdvertiseLoggingDelayExceeded = types.BoolValue(true)
+			} else {
+				item.AdvertiseLoggingDelayExceeded = types.BoolValue(false)
+			}
+			if cValue := v.Get("advertisement.threshold-check.average-delay"); cValue.Exists() {
+				item.AdvertiseThresholdCheckAverageDelay = types.BoolValue(true)
+			} else {
+				item.AdvertiseThresholdCheckAverageDelay = types.BoolValue(false)
+			}
+			if cValue := v.Get("advertisement.threshold-check.minimum-delay"); cValue.Exists() {
+				item.AdvertiseThresholdCheckMinimumDelay = types.BoolValue(true)
+			} else {
+				item.AdvertiseThresholdCheckMinimumDelay = types.BoolValue(false)
+			}
+			if cValue := v.Get("advertisement.threshold-check.maximum-delay"); cValue.Exists() {
+				item.AdvertiseThresholdCheckMaximumDelay = types.BoolValue(true)
+			} else {
+				item.AdvertiseThresholdCheckMaximumDelay = types.BoolValue(false)
+			}
+			if cValue := v.Get("advertisement.periodic.disabled"); cValue.Exists() {
+				item.AdvertisePeriodicDisabled = types.BoolValue(true)
+			} else {
+				item.AdvertisePeriodicDisabled = types.BoolValue(false)
+			}
+			if cValue := v.Get("advertisement.periodic.interval"); cValue.Exists() {
+				item.AdvertisePeriodicInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement.periodic.threshold"); cValue.Exists() {
+				item.AdvertisePeriodicThreshold = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement.periodic.minimum-change"); cValue.Exists() {
+				item.AdvertisePeriodicMinimumChange = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement.accelerated"); cValue.Exists() {
+				item.AdvertiseAccelerated = types.BoolValue(true)
+			} else {
+				item.AdvertiseAccelerated = types.BoolValue(false)
+			}
+			if cValue := v.Get("advertisement.accelerated.threshold"); cValue.Exists() {
+				item.AdvertiseAcceleratedThreshold = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement.accelerated.minimum-change"); cValue.Exists() {
+				item.AdvertiseAcceleratedMinimumChange = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement.anomaly-check.upper-bound"); cValue.Exists() {
+				item.AdvertiseAnomalyCheckUpperBound = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement.anomaly-check.lower-bound"); cValue.Exists() {
+				item.AdvertiseAnomalyCheckLowerBound = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement.anomaly-loss.upper-bound"); cValue.Exists() {
+				item.AdvertiseAnomalyLossUpperBound = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement.anomaly-loss.lower-bound"); cValue.Exists() {
+				item.AdvertiseAnomalyLossLowerBound = types.Int64Value(cValue.Int())
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("probe.collect-hbh"); cValue.Exists() {
+					item.ProbeCollectHbh = types.BoolValue(true)
+				} else {
+					item.ProbeCollectHbh = types.BoolValue(false)
+				}
+			} else {
+				item.ProbeCollectHbh = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("probe.timestamp-format.ntp"); cValue.Exists() {
+					item.ProbeTimestampFormatNtp = types.BoolValue(true)
+				} else {
+					item.ProbeTimestampFormatNtp = types.BoolValue(false)
+				}
+			} else {
+				item.ProbeTimestampFormatNtp = types.BoolNull()
+			}
+			data.Profiles = append(data.Profiles, item)
+			return true
+		})
+	}
+	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) {
+		if value := gjson.GetBytes(res, "endpoint.default.histogram.delay-bins.explicit"); value.Exists() {
+			data.EndpointDefaultHistogramDelayBinsExplicit = helpers.GetInt64List(value.Array())
+		} else {
+			data.EndpointDefaultHistogramDelayBinsExplicit = types.ListNull(types.Int64Type)
+		}
+	} else {
+		data.EndpointDefaultHistogramDelayBinsExplicit = types.ListNull(types.Int64Type)
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "endpoint.default.probe.collect-hbh"); value.Exists() {
+			data.EndpointDefaultProbeCollectHbh = types.BoolValue(true)
+		} else {
+			data.EndpointDefaultProbeCollectHbh = types.BoolValue(false)
+		}
+	} else {
+		data.EndpointDefaultProbeCollectHbh = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "sr-policy.default.probe.collect-hbh"); value.Exists() {
+			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(true)
+		} else {
+			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(false)
+		}
+	} else {
+		data.SrPolicyDefaultProbeCollectHbh = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "endpoint.default.probe.measurement-mode.timestamp-format.ntp"); value.Exists() {
+			data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		} else {
+			data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+		}
+	} else {
+		data.EndpointDefaultProbeTimestampFormatNtp = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "interfaces.default.probe.timestamp-format.ntp"); value.Exists() {
+			data.InterfacesDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		} else {
+			data.InterfacesDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+		}
+	} else {
+		data.InterfacesDefaultProbeTimestampFormatNtp = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "rsvp-te.default.probe.timestamp-format.ntp"); value.Exists() {
+			data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		} else {
+			data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+		}
+	} else {
+		data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "sr-policy.default.probe.timestamp-format.ntp"); value.Exists() {
+			data.SrPolicyDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		} else {
+			data.SrPolicyDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+		}
+	} else {
+		data.SrPolicyDefaultProbeTimestampFormatNtp = types.BoolNull()
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *PerformanceMeasurementDelayProfile) getDeletedItems(ctx context.Context, state PerformanceMeasurementDelayProfile, version string) []string {
+	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !state.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() && data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/timestamp-format/ntp"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() && data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "rsvp-te/default/probe/timestamp-format/ntp"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.InterfacesDefaultProbeTimestampFormatNtp.IsNull() && data.InterfacesDefaultProbeTimestampFormatNtp.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/probe/timestamp-format/ntp"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.EndpointDefaultProbeTimestampFormatNtp.IsNull() && data.EndpointDefaultProbeTimestampFormatNtp.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/measurement-mode/timestamp-format/ntp"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.SrPolicyDefaultProbeCollectHbh.IsNull() && data.SrPolicyDefaultProbeCollectHbh.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/collect-hbh"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.EndpointDefaultProbeCollectHbh.IsNull() && data.EndpointDefaultProbeCollectHbh.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/collect-hbh"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) && !state.EndpointDefaultHistogramDelayBinsExplicit.IsNull() && data.EndpointDefaultHistogramDelayBinsExplicit.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/histogram/delay-bins/explicit"))
+	}
+	for i := range state.Profiles {
+		keys := [...]string{"profile-name"}
+		stateKeyValues := [...]string{state.Profiles[i].ProfileName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Profiles[i].ProfileName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Profiles {
+			found = true
+			if state.Profiles[i].ProfileName.ValueString() != data.Profiles[j].ProfileName.ValueString() {
+				found = false
+			}
+			if found {
+				if helpers.VersionAtLeast(version, "25.4") && !state.Profiles[i].ProbeTimestampFormatNtp.IsNull() && data.Profiles[j].ProbeTimestampFormatNtp.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/timestamp-format/ntp"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.Profiles[i].ProbeCollectHbh.IsNull() && data.Profiles[j].ProbeCollectHbh.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/collect-hbh"))
+				}
+				if !state.Profiles[i].AdvertiseAnomalyLossLowerBound.IsNull() && data.Profiles[j].AdvertiseAnomalyLossLowerBound.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "advertisement/anomaly-loss/lower-bound"))
+				}
+				if !state.Profiles[i].AdvertiseAnomalyLossUpperBound.IsNull() && data.Profiles[j].AdvertiseAnomalyLossUpperBound.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "advertisement/anomaly-loss/upper-bound"))
+				}
+				if !state.Profiles[i].AdvertiseAnomalyCheckLowerBound.IsNull() && data.Profiles[j].AdvertiseAnomalyCheckLowerBound.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "advertisement/anomaly-check/lower-bound"))
+				}
+				if !state.Profiles[i].AdvertiseAnomalyCheckUpperBound.IsNull() && data.Profiles[j].AdvertiseAnomalyCheckUpperBound.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "advertisement/anomaly-check/upper-bound"))
+				}
+				if !state.Profiles[i].AdvertiseAcceleratedMinimumChange.IsNull() && data.Profiles[j].AdvertiseAcceleratedMinimumChange.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "advertisement/accelerated/minimum-change"))
+				}
+				if !state.Profiles[i].AdvertiseAcceleratedThreshold.IsNull() && data.Profiles[j].AdvertiseAcceleratedThreshold.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "advertisement/accelerated/threshold"))
+				}
+				if !state.Profiles[i].AdvertiseAccelerated.IsNull() && data.Profiles[j].AdvertiseAccelerated.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "advertisement/accelerated"))
+				}
+				if !state.Profiles[i].AdvertisePeriodicMinimumChange.IsNull() && data.Profiles[j].AdvertisePeriodicMinimumChange.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "advertisement/periodic/minimum-change"))
+				}
+				if !state.Profiles[i].AdvertisePeriodicThreshold.IsNull() && data.Profiles[j].AdvertisePeriodicThreshold.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "advertisement/periodic/threshold"))
+				}
+				if !state.Profiles[i].AdvertisePeriodicInterval.IsNull() && data.Profiles[j].AdvertisePeriodicInterval.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "advertisement/periodic/interval"))
+				}
+				if !state.Profiles[i].AdvertisePeriodicDisabled.IsNull() && data.Profiles[j].AdvertisePeriodicDisabled.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "advertisement/periodic/disabled"))
+				}
+				if !state.Profiles[i].AdvertiseThresholdCheckMaximumDelay.IsNull() && data.Profiles[j].AdvertiseThresholdCheckMaximumDelay.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "advertisement/threshold-check/maximum-delay"))
+				}
+				if !state.Profiles[i].AdvertiseThresholdCheckMinimumDelay.IsNull() && data.Profiles[j].AdvertiseThresholdCheckMinimumDelay.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "advertisement/threshold-check/minimum-delay"))
+				}
+				if !state.Profiles[i].AdvertiseThresholdCheckAverageDelay.IsNull() && data.Profiles[j].AdvertiseThresholdCheckAverageDelay.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "advertisement/threshold-check/average-delay"))
+				}
+				if !state.Profiles[i].AdvertiseLoggingDelayExceeded.IsNull() && data.Profiles[j].AdvertiseLoggingDelayExceeded.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "advertisement/logging/delay-exceeded"))
+				}
+				if !state.Profiles[i].ProbeMeasurementModeLoopback.IsNull() && data.Profiles[j].ProbeMeasurementModeLoopback.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/measurement-mode/loopback"))
+				}
+				if !state.Profiles[i].ProbeMeasurementModeTwoWay.IsNull() && data.Profiles[j].ProbeMeasurementModeTwoWay.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/measurement-mode/two-way"))
+				}
+				if !state.Profiles[i].ProbeMeasurementModeOneWay.IsNull() && data.Profiles[j].ProbeMeasurementModeOneWay.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/measurement-mode/one-way"))
+				}
+				if !state.Profiles[i].ProbeTosDscp.IsNull() && data.Profiles[j].ProbeTosDscp.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/tos/dscp"))
+				}
+				if !state.Profiles[i].ProbeTosTrafficClass.IsNull() && data.Profiles[j].ProbeTosTrafficClass.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/tos/traffic-class"))
+				}
+				if !state.Profiles[i].ProbeProtocolTwampLight.IsNull() && data.Profiles[j].ProbeProtocolTwampLight.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/protocol/twamp-light"))
+				}
+				if !state.Profiles[i].ProbeProtocolPmMpls.IsNull() && data.Profiles[j].ProbeProtocolPmMpls.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/protocol/pm-mpls"))
+				}
+				if !state.Profiles[i].ProbeFlowLabelIncrement.IsNull() && data.Profiles[j].ProbeFlowLabelIncrement.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/flow-label/increment"))
+				}
+				if !state.Profiles[i].ProbeFlowLabelTo.IsNull() && data.Profiles[j].ProbeFlowLabelTo.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/flow-label/to"))
+				}
+				if !state.Profiles[i].ProbeFlowLabelFrom.IsNull() && data.Profiles[j].ProbeFlowLabelFrom.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/flow-label/from"))
+				}
+				if !state.Profiles[i].ProbeFlowLabelExplicitList.IsNull() && data.Profiles[j].ProbeFlowLabelExplicitList.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/flow-label/explicits/explicit"))
+				}
+				if !state.Profiles[i].ProbeFlowLabelExplicit.IsNull() && data.Profiles[j].ProbeFlowLabelExplicit.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/flow-label/explicits"))
+				}
+				if !state.Profiles[i].ProbeSweepDestinationRange.IsNull() && data.Profiles[j].ProbeSweepDestinationRange.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/sweep/destination/range"))
+				}
+				if !state.Profiles[i].ProbeSweepDestinationIpv4.IsNull() && data.Profiles[j].ProbeSweepDestinationIpv4.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/sweep/destination/ipv4"))
+				}
+				if !state.Profiles[i].ProbeStaticDelay.IsNull() && data.Profiles[j].ProbeStaticDelay.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/static-delay"))
+				}
+				if !state.Profiles[i].ProbeTxInterval.IsNull() && data.Profiles[j].ProbeTxInterval.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/tx-interval"))
+				}
+				if !state.Profiles[i].ProbeComputationInterval.IsNull() && data.Profiles[j].ProbeComputationInterval.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString), "probe/computation-interval"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "names/name", keyString))
+		}
+	}
+	if !state.EndpointDefaultAdvertisementAnomalyLossUpperBound.IsNull() && data.EndpointDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/advertisement/anomaly-loss/upper-bound"))
+	}
+	if !state.EndpointDefaultAdvertisementAnomalyCheckLowerBound.IsNull() && data.EndpointDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/advertisement/anomaly-check/lower-bound"))
+	}
+	if !state.EndpointDefaultAdvertisementAnomalyCheckUpperBound.IsNull() && data.EndpointDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/advertisement/anomaly-check/upper-bound"))
+	}
+	if !state.EndpointDefaultAdvertisementAcceleratedMinimumChange.IsNull() && data.EndpointDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/advertisement/accelerated/minimum-change"))
+	}
+	if !state.EndpointDefaultAdvertisementAcceleratedThreshold.IsNull() && data.EndpointDefaultAdvertisementAcceleratedThreshold.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/advertisement/accelerated/threshold"))
+	}
+	if !state.EndpointDefaultAdvertisementAccelerated.IsNull() && data.EndpointDefaultAdvertisementAccelerated.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/advertisement/accelerated"))
+	}
+	if !state.EndpointDefaultAdvertisementPeriodicMinimumChange.IsNull() && data.EndpointDefaultAdvertisementPeriodicMinimumChange.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/advertisement/periodic/minimum-change"))
+	}
+	if !state.EndpointDefaultAdvertisementPeriodicThreshold.IsNull() && data.EndpointDefaultAdvertisementPeriodicThreshold.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/advertisement/periodic/threshold"))
+	}
+	if !state.EndpointDefaultAdvertisementPeriodicInterval.IsNull() && data.EndpointDefaultAdvertisementPeriodicInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/advertisement/periodic/interval"))
+	}
+	if !state.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() && data.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/advertisement/periodic/disabled"))
+	}
+	if !state.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() && data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/advertisement/threshold-check/maximum-delay"))
+	}
+	if !state.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() && data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/advertisement/threshold-check/minimum-delay"))
+	}
+	if !state.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() && data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/advertisement/threshold-check/average-delay"))
+	}
+	if !state.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() && data.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/advertisement/logging/delay-exceeded"))
+	}
+	if !state.EndpointDefaultProbeTosDscp.IsNull() && data.EndpointDefaultProbeTosDscp.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/tos/dscp"))
+	}
+	if !state.EndpointDefaultProbeMeasurementModeLoopback.IsNull() && data.EndpointDefaultProbeMeasurementModeLoopback.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/measurement-mode/loopback"))
+	}
+	if !state.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() && data.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/measurement-mode/two-way"))
+	}
+	if !state.EndpointDefaultProbeMeasurementModeOneWay.IsNull() && data.EndpointDefaultProbeMeasurementModeOneWay.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/measurement-mode/one-way"))
+	}
+	if !state.EndpointDefaultProbeSweepDestinationRange.IsNull() && data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/sweep/destination/range"))
+	}
+	if !state.EndpointDefaultProbeSweepDestinationIpv4.IsNull() && data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/sweep/destination/ipv4"))
+	}
+	if !state.EndpointDefaultProbeFlowLabelIncrement.IsNull() && data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/flow-label/increment"))
+	}
+	if !state.EndpointDefaultProbeFlowLabelTo.IsNull() && data.EndpointDefaultProbeFlowLabelTo.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/flow-label/to"))
+	}
+	if !state.EndpointDefaultProbeFlowLabelFrom.IsNull() && data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/flow-label/from"))
+	}
+	if !state.EndpointDefaultProbeFlowLabelExplicitList.IsNull() && data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/flow-label/explicits/explicit"))
+	}
+	if !state.EndpointDefaultProbeFlowLabelExplicit.IsNull() && data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/flow-label/explicits"))
+	}
+	if !state.EndpointDefaultProbeComputationInterval.IsNull() && data.EndpointDefaultProbeComputationInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/computation-interval"))
+	}
+	if !state.EndpointDefaultProbeTxInterval.IsNull() && data.EndpointDefaultProbeTxInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default/probe/tx-interval"))
+	}
+	if !state.EndpointDefault.IsNull() && data.EndpointDefault.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "endpoint/default"))
+	}
+	if !state.SrPolicyDefaultAdvertisementAnomalyLossLowerBound.IsNull() && data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/advertisement/anomaly-loss/lower-bound"))
+	}
+	if !state.SrPolicyDefaultAdvertisementAnomalyLossUpperBound.IsNull() && data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/advertisement/anomaly-loss/upper-bound"))
+	}
+	if !state.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound.IsNull() && data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/advertisement/anomaly-check/lower-bound"))
+	}
+	if !state.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound.IsNull() && data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/advertisement/anomaly-check/upper-bound"))
+	}
+	if !state.SrPolicyDefaultAdvertisementAcceleratedMinimumChange.IsNull() && data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/advertisement/accelerated/minimum-change"))
+	}
+	if !state.SrPolicyDefaultAdvertisementAcceleratedThreshold.IsNull() && data.SrPolicyDefaultAdvertisementAcceleratedThreshold.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/advertisement/accelerated/threshold"))
+	}
+	if !state.SrPolicyDefaultAdvertisementAccelerated.IsNull() && data.SrPolicyDefaultAdvertisementAccelerated.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/advertisement/accelerated"))
+	}
+	if !state.SrPolicyDefaultAdvertisementPeriodicMinimumChange.IsNull() && data.SrPolicyDefaultAdvertisementPeriodicMinimumChange.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/advertisement/periodic/minimum-change"))
+	}
+	if !state.SrPolicyDefaultAdvertisementPeriodicThreshold.IsNull() && data.SrPolicyDefaultAdvertisementPeriodicThreshold.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/advertisement/periodic/threshold"))
+	}
+	if !state.SrPolicyDefaultAdvertisementPeriodicInterval.IsNull() && data.SrPolicyDefaultAdvertisementPeriodicInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/advertisement/periodic/interval"))
+	}
+	if !state.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() && data.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/advertisement/periodic/disabled"))
+	}
+	if !state.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() && data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/advertisement/threshold-check/maximum-delay"))
+	}
+	if !state.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() && data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/advertisement/threshold-check/minimum-delay"))
+	}
+	if !state.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() && data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/advertisement/threshold-check/average-delay"))
+	}
+	if !state.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() && data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/advertisement/logging/delay-exceeded"))
+	}
+	if !state.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() && data.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/measurement-mode/loopback"))
+	}
+	if !state.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() && data.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/measurement-mode/two-way"))
+	}
+	if !state.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() && data.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/measurement-mode/one-way"))
+	}
+	if !state.SrPolicyDefaultProbeTosDscp.IsNull() && data.SrPolicyDefaultProbeTosDscp.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/tos/dscp"))
+	}
+	if !state.SrPolicyDefaultProbeTosTrafficClass.IsNull() && data.SrPolicyDefaultProbeTosTrafficClass.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/tos/traffic-class"))
+	}
+	if !state.SrPolicyDefaultProbeProtocolTwampLight.IsNull() && data.SrPolicyDefaultProbeProtocolTwampLight.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/protocol/twamp-light"))
+	}
+	if !state.SrPolicyDefaultProbeProtocolPmMpls.IsNull() && data.SrPolicyDefaultProbeProtocolPmMpls.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/protocol/pm-mpls"))
+	}
+	if !state.SrPolicyDefaultProbeSweepDestinationRange.IsNull() && data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/sweep/destination/range"))
+	}
+	if !state.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() && data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/sweep/destination/ipv4"))
+	}
+	if !state.SrPolicyDefaultProbeStaticDelay.IsNull() && data.SrPolicyDefaultProbeStaticDelay.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/static-delay"))
+	}
+	if !state.SrPolicyDefaultProbeTxInterval.IsNull() && data.SrPolicyDefaultProbeTxInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/tx-interval"))
+	}
+	if !state.SrPolicyDefaultProbeComputationInterval.IsNull() && data.SrPolicyDefaultProbeComputationInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default/probe/computation-interval"))
+	}
+	if !state.SrPolicyDefault.IsNull() && data.SrPolicyDefault.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "sr-policy/default"))
+	}
+	if !state.InterfacesDefaultAdvertisementAnomalyLossLowerBound.IsNull() && data.InterfacesDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/advertisement/anomaly-loss/lower-bound"))
+	}
+	if !state.InterfacesDefaultAdvertisementAnomalyLossUpperBound.IsNull() && data.InterfacesDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/advertisement/anomaly-loss/upper-bound"))
+	}
+	if !state.InterfacesDefaultAdvertisementAcceleratedMinimumChange.IsNull() && data.InterfacesDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/advertisement/accelerated/minimum-change"))
+	}
+	if !state.InterfacesDefaultAdvertisementAcceleratedThreshold.IsNull() && data.InterfacesDefaultAdvertisementAcceleratedThreshold.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/advertisement/accelerated/threshold"))
+	}
+	if !state.InterfacesDefaultAdvertisementAccelerated.IsNull() && data.InterfacesDefaultAdvertisementAccelerated.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/advertisement/accelerated"))
+	}
+	if !state.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() && data.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/advertisement/logging/delay-exceeded"))
+	}
+	if !state.InterfacesDefaultAdvertisementPeriodicMinimumChange.IsNull() && data.InterfacesDefaultAdvertisementPeriodicMinimumChange.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/advertisement/periodic/minimum-change"))
+	}
+	if !state.InterfacesDefaultAdvertisementPeriodicThreshold.IsNull() && data.InterfacesDefaultAdvertisementPeriodicThreshold.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/advertisement/periodic/threshold"))
+	}
+	if !state.InterfacesDefaultAdvertisementPeriodicInterval.IsNull() && data.InterfacesDefaultAdvertisementPeriodicInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/advertisement/periodic/interval"))
+	}
+	if !state.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() && data.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/advertisement/periodic/disabled"))
+	}
+	if !state.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() && data.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/probe/measurement-mode/two-way"))
+	}
+	if !state.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() && data.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/probe/measurement-mode/one-way"))
+	}
+	if !state.InterfacesDefaultProbeTosDscp.IsNull() && data.InterfacesDefaultProbeTosDscp.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/probe/tos/dscp"))
+	}
+	if !state.InterfacesDefaultProbeTosTrafficClass.IsNull() && data.InterfacesDefaultProbeTosTrafficClass.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/probe/tos/traffic-class"))
+	}
+	if !state.InterfacesDefaultProbeProtocolTwampLight.IsNull() && data.InterfacesDefaultProbeProtocolTwampLight.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/probe/protocol/twamp-light"))
+	}
+	if !state.InterfacesDefaultProbeProtocolPmMpls.IsNull() && data.InterfacesDefaultProbeProtocolPmMpls.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/probe/protocol/pm-mpls"))
+	}
+	if !state.InterfacesDefaultProbeTxInterval.IsNull() && data.InterfacesDefaultProbeTxInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/probe/tx-interval"))
+	}
+	if !state.InterfacesDefaultProbeComputationInterval.IsNull() && data.InterfacesDefaultProbeComputationInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default/probe/computation-interval"))
+	}
+	if !state.InterfacesDefault.IsNull() && data.InterfacesDefault.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "interfaces/default"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *PerformanceMeasurementDelayProfile) getEmptyLeafsDelete(ctx context.Context, state *PerformanceMeasurementDelayProfile, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() && !data.SrPolicyDefaultProbeTimestampFormatNtp.ValueBool() {
+		if state == nil || state.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() || state.SrPolicyDefaultProbeTimestampFormatNtp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/timestamp-format/ntp"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() && !data.RsvpTeDefaultProbeTimestampFormatNtp.ValueBool() {
+		if state == nil || state.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() || state.RsvpTeDefaultProbeTimestampFormatNtp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "rsvp-te/default/probe/timestamp-format/ntp"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.InterfacesDefaultProbeTimestampFormatNtp.IsNull() && !data.InterfacesDefaultProbeTimestampFormatNtp.ValueBool() {
+		if state == nil || state.InterfacesDefaultProbeTimestampFormatNtp.IsNull() || state.InterfacesDefaultProbeTimestampFormatNtp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default/probe/timestamp-format/ntp"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultProbeTimestampFormatNtp.IsNull() && !data.EndpointDefaultProbeTimestampFormatNtp.ValueBool() {
+		if state == nil || state.EndpointDefaultProbeTimestampFormatNtp.IsNull() || state.EndpointDefaultProbeTimestampFormatNtp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/probe/measurement-mode/timestamp-format/ntp"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.SrPolicyDefaultProbeCollectHbh.IsNull() && !data.SrPolicyDefaultProbeCollectHbh.ValueBool() {
+		if state == nil || state.SrPolicyDefaultProbeCollectHbh.IsNull() || state.SrPolicyDefaultProbeCollectHbh.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/collect-hbh"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultProbeCollectHbh.IsNull() && !data.EndpointDefaultProbeCollectHbh.ValueBool() {
+		if state == nil || state.EndpointDefaultProbeCollectHbh.IsNull() || state.EndpointDefaultProbeCollectHbh.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/probe/collect-hbh"))
+		}
+	}
+	for i := range data.Profiles {
+		keys := [...]string{"profile-name"}
+		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.Profiles[i].ProbeTimestampFormatNtp.IsNull() && !data.Profiles[i].ProbeTimestampFormatNtp.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ProbeTimestampFormatNtp.IsNull() || state.Profiles[i].ProbeTimestampFormatNtp.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "probe/timestamp-format/ntp"))
+			}
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.Profiles[i].ProbeCollectHbh.IsNull() && !data.Profiles[i].ProbeCollectHbh.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ProbeCollectHbh.IsNull() || state.Profiles[i].ProbeCollectHbh.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "probe/collect-hbh"))
+			}
+		}
+		if !data.Profiles[i].AdvertiseAccelerated.IsNull() && !data.Profiles[i].AdvertiseAccelerated.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].AdvertiseAccelerated.IsNull() || state.Profiles[i].AdvertiseAccelerated.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "advertisement/accelerated"))
+			}
+		}
+		if !data.Profiles[i].AdvertisePeriodicDisabled.IsNull() && !data.Profiles[i].AdvertisePeriodicDisabled.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].AdvertisePeriodicDisabled.IsNull() || state.Profiles[i].AdvertisePeriodicDisabled.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "advertisement/periodic/disabled"))
+			}
+		}
+		if !data.Profiles[i].AdvertiseThresholdCheckMaximumDelay.IsNull() && !data.Profiles[i].AdvertiseThresholdCheckMaximumDelay.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].AdvertiseThresholdCheckMaximumDelay.IsNull() || state.Profiles[i].AdvertiseThresholdCheckMaximumDelay.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "advertisement/threshold-check/maximum-delay"))
+			}
+		}
+		if !data.Profiles[i].AdvertiseThresholdCheckMinimumDelay.IsNull() && !data.Profiles[i].AdvertiseThresholdCheckMinimumDelay.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].AdvertiseThresholdCheckMinimumDelay.IsNull() || state.Profiles[i].AdvertiseThresholdCheckMinimumDelay.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "advertisement/threshold-check/minimum-delay"))
+			}
+		}
+		if !data.Profiles[i].AdvertiseThresholdCheckAverageDelay.IsNull() && !data.Profiles[i].AdvertiseThresholdCheckAverageDelay.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].AdvertiseThresholdCheckAverageDelay.IsNull() || state.Profiles[i].AdvertiseThresholdCheckAverageDelay.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "advertisement/threshold-check/average-delay"))
+			}
+		}
+		if !data.Profiles[i].AdvertiseLoggingDelayExceeded.IsNull() && !data.Profiles[i].AdvertiseLoggingDelayExceeded.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].AdvertiseLoggingDelayExceeded.IsNull() || state.Profiles[i].AdvertiseLoggingDelayExceeded.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "advertisement/logging/delay-exceeded"))
+			}
+		}
+		if !data.Profiles[i].ProbeMeasurementModeLoopback.IsNull() && !data.Profiles[i].ProbeMeasurementModeLoopback.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ProbeMeasurementModeLoopback.IsNull() || state.Profiles[i].ProbeMeasurementModeLoopback.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "probe/measurement-mode/loopback"))
+			}
+		}
+		if !data.Profiles[i].ProbeMeasurementModeTwoWay.IsNull() && !data.Profiles[i].ProbeMeasurementModeTwoWay.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ProbeMeasurementModeTwoWay.IsNull() || state.Profiles[i].ProbeMeasurementModeTwoWay.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "probe/measurement-mode/two-way"))
+			}
+		}
+		if !data.Profiles[i].ProbeMeasurementModeOneWay.IsNull() && !data.Profiles[i].ProbeMeasurementModeOneWay.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ProbeMeasurementModeOneWay.IsNull() || state.Profiles[i].ProbeMeasurementModeOneWay.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "probe/measurement-mode/one-way"))
+			}
+		}
+		if !data.Profiles[i].ProbeProtocolTwampLight.IsNull() && !data.Profiles[i].ProbeProtocolTwampLight.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ProbeProtocolTwampLight.IsNull() || state.Profiles[i].ProbeProtocolTwampLight.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "probe/protocol/twamp-light"))
+			}
+		}
+		if !data.Profiles[i].ProbeProtocolPmMpls.IsNull() && !data.Profiles[i].ProbeProtocolPmMpls.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ProbeProtocolPmMpls.IsNull() || state.Profiles[i].ProbeProtocolPmMpls.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "probe/protocol/pm-mpls"))
+			}
+		}
+		if !data.Profiles[i].ProbeFlowLabelExplicit.IsNull() && !data.Profiles[i].ProbeFlowLabelExplicit.ValueBool() {
+			if state == nil || i >= len(state.Profiles) || state.Profiles[i].ProbeFlowLabelExplicit.IsNull() || state.Profiles[i].ProbeFlowLabelExplicit.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString), "probe/flow-label/explicits"))
+			}
+		}
+	}
+	if !data.EndpointDefaultAdvertisementAccelerated.IsNull() && !data.EndpointDefaultAdvertisementAccelerated.ValueBool() {
+		if state == nil || state.EndpointDefaultAdvertisementAccelerated.IsNull() || state.EndpointDefaultAdvertisementAccelerated.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/advertisement/accelerated"))
+		}
+	}
+	if !data.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() && !data.EndpointDefaultAdvertisementPeriodicDisabled.ValueBool() {
+		if state == nil || state.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() || state.EndpointDefaultAdvertisementPeriodicDisabled.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/advertisement/periodic/disabled"))
+		}
+	}
+	if !data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() && !data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.ValueBool() {
+		if state == nil || state.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() || state.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/advertisement/threshold-check/maximum-delay"))
+		}
+	}
+	if !data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() && !data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.ValueBool() {
+		if state == nil || state.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() || state.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/advertisement/threshold-check/minimum-delay"))
+		}
+	}
+	if !data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() && !data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.ValueBool() {
+		if state == nil || state.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() || state.EndpointDefaultAdvertisementThresholdCheckAverageDelay.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/advertisement/threshold-check/average-delay"))
+		}
+	}
+	if !data.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() && !data.EndpointDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
+		if state == nil || state.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() || state.EndpointDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/advertisement/logging/delay-exceeded"))
+		}
+	}
+	if !data.EndpointDefaultProbeMeasurementModeLoopback.IsNull() && !data.EndpointDefaultProbeMeasurementModeLoopback.ValueBool() {
+		if state == nil || state.EndpointDefaultProbeMeasurementModeLoopback.IsNull() || state.EndpointDefaultProbeMeasurementModeLoopback.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/probe/measurement-mode/loopback"))
+		}
+	}
+	if !data.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() && !data.EndpointDefaultProbeMeasurementModeTwoWay.ValueBool() {
+		if state == nil || state.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() || state.EndpointDefaultProbeMeasurementModeTwoWay.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/probe/measurement-mode/two-way"))
+		}
+	}
+	if !data.EndpointDefaultProbeMeasurementModeOneWay.IsNull() && !data.EndpointDefaultProbeMeasurementModeOneWay.ValueBool() {
+		if state == nil || state.EndpointDefaultProbeMeasurementModeOneWay.IsNull() || state.EndpointDefaultProbeMeasurementModeOneWay.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/probe/measurement-mode/one-way"))
+		}
+	}
+	if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() && !data.EndpointDefaultProbeFlowLabelExplicit.ValueBool() {
+		if state == nil || state.EndpointDefaultProbeFlowLabelExplicit.IsNull() || state.EndpointDefaultProbeFlowLabelExplicit.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default/probe/flow-label/explicits"))
+		}
+	}
+	if !data.EndpointDefault.IsNull() && !data.EndpointDefault.ValueBool() {
+		if state == nil || state.EndpointDefault.IsNull() || state.EndpointDefault.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "endpoint/default"))
+		}
+	}
+	if !data.SrPolicyDefaultAdvertisementAccelerated.IsNull() && !data.SrPolicyDefaultAdvertisementAccelerated.ValueBool() {
+		if state == nil || state.SrPolicyDefaultAdvertisementAccelerated.IsNull() || state.SrPolicyDefaultAdvertisementAccelerated.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/advertisement/accelerated"))
+		}
+	}
+	if !data.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() && !data.SrPolicyDefaultAdvertisementPeriodicDisabled.ValueBool() {
+		if state == nil || state.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() || state.SrPolicyDefaultAdvertisementPeriodicDisabled.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/advertisement/periodic/disabled"))
+		}
+	}
+	if !data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() && !data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.ValueBool() {
+		if state == nil || state.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() || state.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/advertisement/threshold-check/maximum-delay"))
+		}
+	}
+	if !data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() && !data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.ValueBool() {
+		if state == nil || state.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() || state.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/advertisement/threshold-check/minimum-delay"))
+		}
+	}
+	if !data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() && !data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.ValueBool() {
+		if state == nil || state.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() || state.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/advertisement/threshold-check/average-delay"))
+		}
+	}
+	if !data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() && !data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
+		if state == nil || state.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() || state.SrPolicyDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/advertisement/logging/delay-exceeded"))
+		}
+	}
+	if !data.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() && !data.SrPolicyDefaultProbeMeasurementModeLoopback.ValueBool() {
+		if state == nil || state.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() || state.SrPolicyDefaultProbeMeasurementModeLoopback.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/measurement-mode/loopback"))
+		}
+	}
+	if !data.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() && !data.SrPolicyDefaultProbeMeasurementModeTwoWay.ValueBool() {
+		if state == nil || state.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() || state.SrPolicyDefaultProbeMeasurementModeTwoWay.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/measurement-mode/two-way"))
+		}
+	}
+	if !data.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() && !data.SrPolicyDefaultProbeMeasurementModeOneWay.ValueBool() {
+		if state == nil || state.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() || state.SrPolicyDefaultProbeMeasurementModeOneWay.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/measurement-mode/one-way"))
+		}
+	}
+	if !data.SrPolicyDefaultProbeProtocolTwampLight.IsNull() && !data.SrPolicyDefaultProbeProtocolTwampLight.ValueBool() {
+		if state == nil || state.SrPolicyDefaultProbeProtocolTwampLight.IsNull() || state.SrPolicyDefaultProbeProtocolTwampLight.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/protocol/twamp-light"))
+		}
+	}
+	if !data.SrPolicyDefaultProbeProtocolPmMpls.IsNull() && !data.SrPolicyDefaultProbeProtocolPmMpls.ValueBool() {
+		if state == nil || state.SrPolicyDefaultProbeProtocolPmMpls.IsNull() || state.SrPolicyDefaultProbeProtocolPmMpls.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default/probe/protocol/pm-mpls"))
+		}
+	}
+	if !data.SrPolicyDefault.IsNull() && !data.SrPolicyDefault.ValueBool() {
+		if state == nil || state.SrPolicyDefault.IsNull() || state.SrPolicyDefault.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "sr-policy/default"))
+		}
+	}
+	if !data.InterfacesDefaultAdvertisementAccelerated.IsNull() && !data.InterfacesDefaultAdvertisementAccelerated.ValueBool() {
+		if state == nil || state.InterfacesDefaultAdvertisementAccelerated.IsNull() || state.InterfacesDefaultAdvertisementAccelerated.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default/advertisement/accelerated"))
+		}
+	}
+	if !data.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() && !data.InterfacesDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
+		if state == nil || state.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() || state.InterfacesDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default/advertisement/logging/delay-exceeded"))
+		}
+	}
+	if !data.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() && !data.InterfacesDefaultAdvertisementPeriodicDisabled.ValueBool() {
+		if state == nil || state.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() || state.InterfacesDefaultAdvertisementPeriodicDisabled.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default/advertisement/periodic/disabled"))
+		}
+	}
+	if !data.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() && !data.InterfacesDefaultProbeMeasurementModeTwoWay.ValueBool() {
+		if state == nil || state.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() || state.InterfacesDefaultProbeMeasurementModeTwoWay.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default/probe/measurement-mode/two-way"))
+		}
+	}
+	if !data.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() && !data.InterfacesDefaultProbeMeasurementModeOneWay.ValueBool() {
+		if state == nil || state.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() || state.InterfacesDefaultProbeMeasurementModeOneWay.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default/probe/measurement-mode/one-way"))
+		}
+	}
+	if !data.InterfacesDefaultProbeProtocolTwampLight.IsNull() && !data.InterfacesDefaultProbeProtocolTwampLight.ValueBool() {
+		if state == nil || state.InterfacesDefaultProbeProtocolTwampLight.IsNull() || state.InterfacesDefaultProbeProtocolTwampLight.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default/probe/protocol/twamp-light"))
+		}
+	}
+	if !data.InterfacesDefaultProbeProtocolPmMpls.IsNull() && !data.InterfacesDefaultProbeProtocolPmMpls.ValueBool() {
+		if state == nil || state.InterfacesDefaultProbeProtocolPmMpls.IsNull() || state.InterfacesDefaultProbeProtocolPmMpls.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default/probe/protocol/pm-mpls"))
+		}
+	}
+	if !data.InterfacesDefault.IsNull() && !data.InterfacesDefault.ValueBool() {
+		if state == nil || state.InterfacesDefault.IsNull() || state.InterfacesDefault.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "interfaces/default"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *PerformanceMeasurementDelayProfile) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") && !data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/timestamp-format/ntp"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "rsvp-te/default/probe/timestamp-format/ntp"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.InterfacesDefaultProbeTimestampFormatNtp.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/probe/timestamp-format/ntp"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultProbeTimestampFormatNtp.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/measurement-mode/timestamp-format/ntp"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.SrPolicyDefaultProbeCollectHbh.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/collect-hbh"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.EndpointDefaultProbeCollectHbh.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/collect-hbh"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) && !data.EndpointDefaultHistogramDelayBinsExplicit.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/histogram/delay-bins/explicit"))
+	}
+	for i := range data.Profiles {
+		keys := [...]string{"profile-name"}
+		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.Profiles[i].ProfileName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "names/name", keyString))
+	}
+	if !data.EndpointDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/advertisement/anomaly-loss/upper-bound"))
+	}
+	if !data.EndpointDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/advertisement/anomaly-check/lower-bound"))
+	}
+	if !data.EndpointDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/advertisement/anomaly-check/upper-bound"))
+	}
+	if !data.EndpointDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/advertisement/accelerated/minimum-change"))
+	}
+	if !data.EndpointDefaultAdvertisementAcceleratedThreshold.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/advertisement/accelerated/threshold"))
+	}
+	if !data.EndpointDefaultAdvertisementAccelerated.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/advertisement/accelerated"))
+	}
+	if !data.EndpointDefaultAdvertisementPeriodicMinimumChange.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/advertisement/periodic/minimum-change"))
+	}
+	if !data.EndpointDefaultAdvertisementPeriodicThreshold.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/advertisement/periodic/threshold"))
+	}
+	if !data.EndpointDefaultAdvertisementPeriodicInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/advertisement/periodic/interval"))
+	}
+	if !data.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/advertisement/periodic/disabled"))
+	}
+	if !data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/advertisement/threshold-check/maximum-delay"))
+	}
+	if !data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/advertisement/threshold-check/minimum-delay"))
+	}
+	if !data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/advertisement/threshold-check/average-delay"))
+	}
+	if !data.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/advertisement/logging/delay-exceeded"))
+	}
+	if !data.EndpointDefaultProbeTosDscp.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/tos/dscp"))
+	}
+	if !data.EndpointDefaultProbeMeasurementModeLoopback.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/measurement-mode/loopback"))
+	}
+	if !data.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/measurement-mode/two-way"))
+	}
+	if !data.EndpointDefaultProbeMeasurementModeOneWay.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/measurement-mode/one-way"))
+	}
+	if !data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/sweep/destination/range"))
+	}
+	if !data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/sweep/destination/ipv4"))
+	}
+	if !data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/flow-label/increment"))
+	}
+	if !data.EndpointDefaultProbeFlowLabelTo.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/flow-label/to"))
+	}
+	if !data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/flow-label/from"))
+	}
+	if !data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/flow-label/explicits/explicit"))
+	}
+	if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/flow-label/explicits"))
+	}
+	if !data.EndpointDefaultProbeComputationInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/computation-interval"))
+	}
+	if !data.EndpointDefaultProbeTxInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default/probe/tx-interval"))
+	}
+	if !data.EndpointDefault.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "endpoint/default"))
+	}
+	if !data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/advertisement/anomaly-loss/lower-bound"))
+	}
+	if !data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/advertisement/anomaly-loss/upper-bound"))
+	}
+	if !data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/advertisement/anomaly-check/lower-bound"))
+	}
+	if !data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/advertisement/anomaly-check/upper-bound"))
+	}
+	if !data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/advertisement/accelerated/minimum-change"))
+	}
+	if !data.SrPolicyDefaultAdvertisementAcceleratedThreshold.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/advertisement/accelerated/threshold"))
+	}
+	if !data.SrPolicyDefaultAdvertisementAccelerated.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/advertisement/accelerated"))
+	}
+	if !data.SrPolicyDefaultAdvertisementPeriodicMinimumChange.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/advertisement/periodic/minimum-change"))
+	}
+	if !data.SrPolicyDefaultAdvertisementPeriodicThreshold.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/advertisement/periodic/threshold"))
+	}
+	if !data.SrPolicyDefaultAdvertisementPeriodicInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/advertisement/periodic/interval"))
+	}
+	if !data.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/advertisement/periodic/disabled"))
+	}
+	if !data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/advertisement/threshold-check/maximum-delay"))
+	}
+	if !data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/advertisement/threshold-check/minimum-delay"))
+	}
+	if !data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/advertisement/threshold-check/average-delay"))
+	}
+	if !data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/advertisement/logging/delay-exceeded"))
+	}
+	if !data.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/measurement-mode/loopback"))
+	}
+	if !data.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/measurement-mode/two-way"))
+	}
+	if !data.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/measurement-mode/one-way"))
+	}
+	if !data.SrPolicyDefaultProbeTosDscp.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/tos/dscp"))
+	}
+	if !data.SrPolicyDefaultProbeTosTrafficClass.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/tos/traffic-class"))
+	}
+	if !data.SrPolicyDefaultProbeProtocolTwampLight.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/protocol/twamp-light"))
+	}
+	if !data.SrPolicyDefaultProbeProtocolPmMpls.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/protocol/pm-mpls"))
+	}
+	if !data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/sweep/destination/range"))
+	}
+	if !data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/sweep/destination/ipv4"))
+	}
+	if !data.SrPolicyDefaultProbeStaticDelay.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/static-delay"))
+	}
+	if !data.SrPolicyDefaultProbeTxInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/tx-interval"))
+	}
+	if !data.SrPolicyDefaultProbeComputationInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default/probe/computation-interval"))
+	}
+	if !data.SrPolicyDefault.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "sr-policy/default"))
+	}
+	if !data.InterfacesDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/advertisement/anomaly-loss/lower-bound"))
+	}
+	if !data.InterfacesDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/advertisement/anomaly-loss/upper-bound"))
+	}
+	if !data.InterfacesDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/advertisement/accelerated/minimum-change"))
+	}
+	if !data.InterfacesDefaultAdvertisementAcceleratedThreshold.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/advertisement/accelerated/threshold"))
+	}
+	if !data.InterfacesDefaultAdvertisementAccelerated.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/advertisement/accelerated"))
+	}
+	if !data.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/advertisement/logging/delay-exceeded"))
+	}
+	if !data.InterfacesDefaultAdvertisementPeriodicMinimumChange.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/advertisement/periodic/minimum-change"))
+	}
+	if !data.InterfacesDefaultAdvertisementPeriodicThreshold.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/advertisement/periodic/threshold"))
+	}
+	if !data.InterfacesDefaultAdvertisementPeriodicInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/advertisement/periodic/interval"))
+	}
+	if !data.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/advertisement/periodic/disabled"))
+	}
+	if !data.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/probe/measurement-mode/two-way"))
+	}
+	if !data.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/probe/measurement-mode/one-way"))
+	}
+	if !data.InterfacesDefaultProbeTosDscp.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/probe/tos/dscp"))
+	}
+	if !data.InterfacesDefaultProbeTosTrafficClass.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/probe/tos/traffic-class"))
+	}
+	if !data.InterfacesDefaultProbeProtocolTwampLight.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/probe/protocol/twamp-light"))
+	}
+	if !data.InterfacesDefaultProbeProtocolPmMpls.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/probe/protocol/pm-mpls"))
+	}
+	if !data.InterfacesDefaultProbeTxInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/probe/tx-interval"))
+	}
+	if !data.InterfacesDefaultProbeComputationInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default/probe/computation-interval"))
+	}
+	if !data.InterfacesDefault.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "interfaces/default"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data PerformanceMeasurementDelayProfile) toBodyXML(ctx context.Context, stateArg ...*PerformanceMeasurementDelayProfile) string {
@@ -1959,6 +4190,53 @@ func (data PerformanceMeasurementDelayProfile) toBodyXML(ctx context.Context, st
 			if !item.AdvertiseAnomalyLossLowerBound.IsNull() && !item.AdvertiseAnomalyLossLowerBound.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/advertisement/anomaly-loss/lower-bound", strconv.FormatInt(item.AdvertiseAnomalyLossLowerBound.ValueInt64(), 10))
 			}
+			if !item.ProbeCollectHbh.IsNull() && !item.ProbeCollectHbh.IsUnknown() {
+				if item.ProbeCollectHbh.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/probe/collect-hbh", "")
+				}
+			}
+			if !item.ProbeTimestampFormatNtp.IsNull() && !item.ProbeTimestampFormatNtp.IsUnknown() {
+				if item.ProbeTimestampFormatNtp.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/probe/timestamp-format/ntp", "")
+				}
+			}
+		}
+	}
+	if !data.EndpointDefaultHistogramDelayBinsExplicit.IsNull() && !data.EndpointDefaultHistogramDelayBinsExplicit.IsUnknown() {
+		var values []int
+		data.EndpointDefaultHistogramDelayBinsExplicit.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			body = helpers.AppendFromXPath(body, data.getXPath()+"/endpoint/default/histogram/delay-bins/explicit", v)
+		}
+	}
+	if !data.EndpointDefaultProbeCollectHbh.IsNull() && !data.EndpointDefaultProbeCollectHbh.IsUnknown() {
+		if data.EndpointDefaultProbeCollectHbh.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/endpoint/default/probe/collect-hbh", "")
+		}
+	}
+	if !data.SrPolicyDefaultProbeCollectHbh.IsNull() && !data.SrPolicyDefaultProbeCollectHbh.IsUnknown() {
+		if data.SrPolicyDefaultProbeCollectHbh.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/sr-policy/default/probe/collect-hbh", "")
+		}
+	}
+	if !data.EndpointDefaultProbeTimestampFormatNtp.IsNull() && !data.EndpointDefaultProbeTimestampFormatNtp.IsUnknown() {
+		if data.EndpointDefaultProbeTimestampFormatNtp.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/endpoint/default/probe/measurement-mode/timestamp-format/ntp", "")
+		}
+	}
+	if !data.InterfacesDefaultProbeTimestampFormatNtp.IsNull() && !data.InterfacesDefaultProbeTimestampFormatNtp.IsUnknown() {
+		if data.InterfacesDefaultProbeTimestampFormatNtp.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/interfaces/default/probe/timestamp-format/ntp", "")
+		}
+	}
+	if !data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() && !data.RsvpTeDefaultProbeTimestampFormatNtp.IsUnknown() {
+		if data.RsvpTeDefaultProbeTimestampFormatNtp.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/rsvp-te/default/probe/timestamp-format/ntp", "")
+		}
+	}
+	if !data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() && !data.SrPolicyDefaultProbeTimestampFormatNtp.IsUnknown() {
+		if data.SrPolicyDefaultProbeTimestampFormatNtp.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/sr-policy/default/probe/timestamp-format/ntp", "")
 		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
@@ -1983,7 +4261,7 @@ func (data PerformanceMeasurementDelayProfile) toBodyXML(ctx context.Context, st
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -1991,6 +4269,7 @@ func (data PerformanceMeasurementDelayProfile) toBodyXML(ctx context.Context, st
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *PerformanceMeasurementDelayProfile) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -2827,926 +5106,106 @@ func (data *PerformanceMeasurementDelayProfile) updateFromBodyXML(ctx context.Co
 		} else if data.Profiles[i].AdvertiseAnomalyLossLowerBound.IsNull() {
 			data.Profiles[i].AdvertiseAnomalyLossLowerBound = types.Int64Null()
 		}
+		if value := helpers.GetFromXPath(r, "probe/collect-hbh"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ProbeCollectHbh.IsNull() {
+				data.Profiles[i].ProbeCollectHbh = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Profiles[i].ProbeCollectHbh.IsNull() {
+				data.Profiles[i].ProbeCollectHbh = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "probe/timestamp-format/ntp"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Profiles[i].ProbeTimestampFormatNtp.IsNull() {
+				data.Profiles[i].ProbeTimestampFormatNtp = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Profiles[i].ProbeTimestampFormatNtp.IsNull() {
+				data.Profiles[i].ProbeTimestampFormatNtp = types.BoolNull()
+			}
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/histogram/delay-bins/explicit"); value.Exists() && !data.EndpointDefaultHistogramDelayBinsExplicit.IsNull() {
+		data.EndpointDefaultHistogramDelayBinsExplicit = helpers.GetInt64ListXML(value.Array())
+	} else if data.EndpointDefaultHistogramDelayBinsExplicit.IsNull() {
+		data.EndpointDefaultHistogramDelayBinsExplicit = types.ListNull(types.Int64Type)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/collect-hbh"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefaultProbeCollectHbh.IsNull() {
+			data.EndpointDefaultProbeCollectHbh = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EndpointDefaultProbeCollectHbh.IsNull() {
+			data.EndpointDefaultProbeCollectHbh = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/collect-hbh"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyDefaultProbeCollectHbh.IsNull() {
+			data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.SrPolicyDefaultProbeCollectHbh.IsNull() {
+			data.SrPolicyDefaultProbeCollectHbh = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/measurement-mode/timestamp-format/ntp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.EndpointDefaultProbeTimestampFormatNtp.IsNull() {
+			data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.EndpointDefaultProbeTimestampFormatNtp.IsNull() {
+			data.EndpointDefaultProbeTimestampFormatNtp = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/timestamp-format/ntp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.InterfacesDefaultProbeTimestampFormatNtp.IsNull() {
+			data.InterfacesDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.InterfacesDefaultProbeTimestampFormatNtp.IsNull() {
+			data.InterfacesDefaultProbeTimestampFormatNtp = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rsvp-te/default/probe/timestamp-format/ntp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() {
+			data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() {
+			data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/timestamp-format/ntp"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() {
+			data.SrPolicyDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() {
+			data.SrPolicyDefaultProbeTimestampFormatNtp = types.BoolNull()
+		}
 	}
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *PerformanceMeasurementDelayProfile) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "interfaces.default"); value.Exists() {
-		data.InterfacesDefault = types.BoolValue(true)
-	} else if !data.InterfacesDefault.IsNull() {
-		// Only set to false if it was previously set in state
-		data.InterfacesDefault = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interfaces.default.probe.computation-interval"); value.Exists() {
-		data.InterfacesDefaultProbeComputationInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.probe.tx-interval"); value.Exists() {
-		data.InterfacesDefaultProbeTxInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.probe.protocol.pm-mpls"); value.Exists() {
-		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(true)
-	} else if !data.InterfacesDefaultProbeProtocolPmMpls.IsNull() {
-		// Only set to false if it was previously set in state
-		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interfaces.default.probe.protocol.twamp-light"); value.Exists() {
-		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(true)
-	} else if !data.InterfacesDefaultProbeProtocolTwampLight.IsNull() {
-		// Only set to false if it was previously set in state
-		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interfaces.default.probe.tos.traffic-class"); value.Exists() {
-		data.InterfacesDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.probe.tos.dscp"); value.Exists() {
-		data.InterfacesDefaultProbeTosDscp = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.probe.measurement-mode.one-way"); value.Exists() {
-		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
-	} else if !data.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() {
-		// Only set to false if it was previously set in state
-		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interfaces.default.probe.measurement-mode.two-way"); value.Exists() {
-		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
-	} else if !data.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() {
-		// Only set to false if it was previously set in state
-		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.periodic.disabled"); value.Exists() {
-		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
-	} else if !data.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() {
-		// Only set to false if it was previously set in state
-		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.periodic.interval"); value.Exists() {
-		data.InterfacesDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.periodic.threshold"); value.Exists() {
-		data.InterfacesDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.periodic.minimum-change"); value.Exists() {
-		data.InterfacesDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.logging.delay-exceeded"); value.Exists() {
-		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
-	} else if !data.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() {
-		// Only set to false if it was previously set in state
-		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.accelerated"); value.Exists() {
-		data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(true)
-	} else if !data.InterfacesDefaultAdvertisementAccelerated.IsNull() {
-		// Only set to false if it was previously set in state
-		data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.accelerated.threshold"); value.Exists() {
-		data.InterfacesDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.accelerated.minimum-change"); value.Exists() {
-		data.InterfacesDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.anomaly-loss.upper-bound"); value.Exists() {
-		data.InterfacesDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.anomaly-loss.lower-bound"); value.Exists() {
-		data.InterfacesDefaultAdvertisementAnomalyLossLowerBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default"); value.Exists() {
-		data.SrPolicyDefault = types.BoolValue(true)
-	} else if !data.SrPolicyDefault.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrPolicyDefault = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.computation-interval"); value.Exists() {
-		data.SrPolicyDefaultProbeComputationInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.tx-interval"); value.Exists() {
-		data.SrPolicyDefaultProbeTxInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.static-delay"); value.Exists() {
-		data.SrPolicyDefaultProbeStaticDelay = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.sweep.destination.ipv4"); value.Exists() {
-		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.sweep.destination.range"); value.Exists() {
-		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.protocol.pm-mpls"); value.Exists() {
-		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(true)
-	} else if !data.SrPolicyDefaultProbeProtocolPmMpls.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.protocol.twamp-light"); value.Exists() {
-		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(true)
-	} else if !data.SrPolicyDefaultProbeProtocolTwampLight.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.tos.traffic-class"); value.Exists() {
-		data.SrPolicyDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.tos.dscp"); value.Exists() {
-		data.SrPolicyDefaultProbeTosDscp = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.measurement-mode.one-way"); value.Exists() {
-		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
-	} else if !data.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.measurement-mode.two-way"); value.Exists() {
-		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
-	} else if !data.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.measurement-mode.loopback"); value.Exists() {
-		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
-	} else if !data.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.logging.delay-exceeded"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
-	} else if !data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.threshold-check.average-delay"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
-	} else if !data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.threshold-check.minimum-delay"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
-	} else if !data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.threshold-check.maximum-delay"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
-	} else if !data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.periodic.disabled"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
-	} else if !data.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.periodic.interval"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.periodic.threshold"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.periodic.minimum-change"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.accelerated"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(true)
-	} else if !data.SrPolicyDefaultAdvertisementAccelerated.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.accelerated.threshold"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.accelerated.minimum-change"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.anomaly-check.upper-bound"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.anomaly-check.lower-bound"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.anomaly-loss.upper-bound"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.anomaly-loss.lower-bound"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default"); value.Exists() {
-		data.EndpointDefault = types.BoolValue(true)
-	} else if !data.EndpointDefault.IsNull() {
-		// Only set to false if it was previously set in state
-		data.EndpointDefault = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.tx-interval"); value.Exists() {
-		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.computation-interval"); value.Exists() {
-		data.EndpointDefaultProbeComputationInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.explicits"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
-	} else if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
-		// Only set to false if it was previously set in state
-		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.explicits.explicit"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
-	} else {
-		data.EndpointDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.from"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.to"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.increment"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.sweep.destination.ipv4"); value.Exists() {
-		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.sweep.destination.range"); value.Exists() {
-		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.measurement-mode.one-way"); value.Exists() {
-		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
-	} else if !data.EndpointDefaultProbeMeasurementModeOneWay.IsNull() {
-		// Only set to false if it was previously set in state
-		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.measurement-mode.two-way"); value.Exists() {
-		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
-	} else if !data.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() {
-		// Only set to false if it was previously set in state
-		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.measurement-mode.loopback"); value.Exists() {
-		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
-	} else if !data.EndpointDefaultProbeMeasurementModeLoopback.IsNull() {
-		// Only set to false if it was previously set in state
-		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.tos.dscp"); value.Exists() {
-		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.logging.delay-exceeded"); value.Exists() {
-		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
-	} else if !data.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() {
-		// Only set to false if it was previously set in state
-		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.threshold-check.average-delay"); value.Exists() {
-		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
-	} else if !data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
-		// Only set to false if it was previously set in state
-		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.threshold-check.minimum-delay"); value.Exists() {
-		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
-	} else if !data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
-		// Only set to false if it was previously set in state
-		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.threshold-check.maximum-delay"); value.Exists() {
-		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
-	} else if !data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
-		// Only set to false if it was previously set in state
-		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.periodic.disabled"); value.Exists() {
-		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
-	} else if !data.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() {
-		// Only set to false if it was previously set in state
-		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.periodic.interval"); value.Exists() {
-		data.EndpointDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.periodic.threshold"); value.Exists() {
-		data.EndpointDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.periodic.minimum-change"); value.Exists() {
-		data.EndpointDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.accelerated"); value.Exists() {
-		data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(true)
-	} else if !data.EndpointDefaultAdvertisementAccelerated.IsNull() {
-		// Only set to false if it was previously set in state
-		data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.accelerated.threshold"); value.Exists() {
-		data.EndpointDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.accelerated.minimum-change"); value.Exists() {
-		data.EndpointDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.anomaly-check.upper-bound"); value.Exists() {
-		data.EndpointDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.anomaly-check.lower-bound"); value.Exists() {
-		data.EndpointDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.anomaly-loss.upper-bound"); value.Exists() {
-		data.EndpointDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "names.name"); value.Exists() {
-		data.Profiles = make([]PerformanceMeasurementDelayProfileProfiles, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PerformanceMeasurementDelayProfileProfiles{}
-			if cValue := v.Get("profile-name"); cValue.Exists() {
-				item.ProfileName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("probe.computation-interval"); cValue.Exists() {
-				item.ProbeComputationInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.tx-interval"); cValue.Exists() {
-				item.ProbeTxInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.static-delay"); cValue.Exists() {
-				item.ProbeStaticDelay = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.sweep.destination.ipv4"); cValue.Exists() {
-				item.ProbeSweepDestinationIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("probe.sweep.destination.range"); cValue.Exists() {
-				item.ProbeSweepDestinationRange = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.flow-label.explicits"); cValue.Exists() {
-				item.ProbeFlowLabelExplicit = types.BoolValue(true)
-			} else if !item.ProbeFlowLabelExplicit.IsNull() {
-				// Only set to false if it was previously set
-				item.ProbeFlowLabelExplicit = types.BoolValue(false)
-			}
-			if cValue := v.Get("probe.flow-label.explicits.explicit"); cValue.Exists() {
-				item.ProbeFlowLabelExplicitList = helpers.GetInt64List(cValue.Array())
-			} else {
-				item.ProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
-			}
-			if cValue := v.Get("probe.flow-label.from"); cValue.Exists() {
-				item.ProbeFlowLabelFrom = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.flow-label.to"); cValue.Exists() {
-				item.ProbeFlowLabelTo = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.flow-label.increment"); cValue.Exists() {
-				item.ProbeFlowLabelIncrement = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.protocol.pm-mpls"); cValue.Exists() {
-				item.ProbeProtocolPmMpls = types.BoolValue(true)
-			} else if !item.ProbeProtocolPmMpls.IsNull() {
-				// Only set to false if it was previously set
-				item.ProbeProtocolPmMpls = types.BoolValue(false)
-			}
-			if cValue := v.Get("probe.protocol.twamp-light"); cValue.Exists() {
-				item.ProbeProtocolTwampLight = types.BoolValue(true)
-			} else if !item.ProbeProtocolTwampLight.IsNull() {
-				// Only set to false if it was previously set
-				item.ProbeProtocolTwampLight = types.BoolValue(false)
-			}
-			if cValue := v.Get("probe.tos.traffic-class"); cValue.Exists() {
-				item.ProbeTosTrafficClass = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.tos.dscp"); cValue.Exists() {
-				item.ProbeTosDscp = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.measurement-mode.one-way"); cValue.Exists() {
-				item.ProbeMeasurementModeOneWay = types.BoolValue(true)
-			} else if !item.ProbeMeasurementModeOneWay.IsNull() {
-				// Only set to false if it was previously set
-				item.ProbeMeasurementModeOneWay = types.BoolValue(false)
-			}
-			if cValue := v.Get("probe.measurement-mode.two-way"); cValue.Exists() {
-				item.ProbeMeasurementModeTwoWay = types.BoolValue(true)
-			} else if !item.ProbeMeasurementModeTwoWay.IsNull() {
-				// Only set to false if it was previously set
-				item.ProbeMeasurementModeTwoWay = types.BoolValue(false)
-			}
-			if cValue := v.Get("probe.measurement-mode.loopback"); cValue.Exists() {
-				item.ProbeMeasurementModeLoopback = types.BoolValue(true)
-			} else if !item.ProbeMeasurementModeLoopback.IsNull() {
-				// Only set to false if it was previously set
-				item.ProbeMeasurementModeLoopback = types.BoolValue(false)
-			}
-			if cValue := v.Get("advertisement.logging.delay-exceeded"); cValue.Exists() {
-				item.AdvertiseLoggingDelayExceeded = types.BoolValue(true)
-			} else if !item.AdvertiseLoggingDelayExceeded.IsNull() {
-				// Only set to false if it was previously set
-				item.AdvertiseLoggingDelayExceeded = types.BoolValue(false)
-			}
-			if cValue := v.Get("advertisement.threshold-check.average-delay"); cValue.Exists() {
-				item.AdvertiseThresholdCheckAverageDelay = types.BoolValue(true)
-			} else if !item.AdvertiseThresholdCheckAverageDelay.IsNull() {
-				// Only set to false if it was previously set
-				item.AdvertiseThresholdCheckAverageDelay = types.BoolValue(false)
-			}
-			if cValue := v.Get("advertisement.threshold-check.minimum-delay"); cValue.Exists() {
-				item.AdvertiseThresholdCheckMinimumDelay = types.BoolValue(true)
-			} else if !item.AdvertiseThresholdCheckMinimumDelay.IsNull() {
-				// Only set to false if it was previously set
-				item.AdvertiseThresholdCheckMinimumDelay = types.BoolValue(false)
-			}
-			if cValue := v.Get("advertisement.threshold-check.maximum-delay"); cValue.Exists() {
-				item.AdvertiseThresholdCheckMaximumDelay = types.BoolValue(true)
-			} else if !item.AdvertiseThresholdCheckMaximumDelay.IsNull() {
-				// Only set to false if it was previously set
-				item.AdvertiseThresholdCheckMaximumDelay = types.BoolValue(false)
-			}
-			if cValue := v.Get("advertisement.periodic.disabled"); cValue.Exists() {
-				item.AdvertisePeriodicDisabled = types.BoolValue(true)
-			} else if !item.AdvertisePeriodicDisabled.IsNull() {
-				// Only set to false if it was previously set
-				item.AdvertisePeriodicDisabled = types.BoolValue(false)
-			}
-			if cValue := v.Get("advertisement.periodic.interval"); cValue.Exists() {
-				item.AdvertisePeriodicInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("advertisement.periodic.threshold"); cValue.Exists() {
-				item.AdvertisePeriodicThreshold = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("advertisement.periodic.minimum-change"); cValue.Exists() {
-				item.AdvertisePeriodicMinimumChange = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("advertisement.accelerated"); cValue.Exists() {
-				item.AdvertiseAccelerated = types.BoolValue(true)
-			} else if !item.AdvertiseAccelerated.IsNull() {
-				// Only set to false if it was previously set
-				item.AdvertiseAccelerated = types.BoolValue(false)
-			}
-			if cValue := v.Get("advertisement.accelerated.threshold"); cValue.Exists() {
-				item.AdvertiseAcceleratedThreshold = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("advertisement.accelerated.minimum-change"); cValue.Exists() {
-				item.AdvertiseAcceleratedMinimumChange = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("advertisement.anomaly-check.upper-bound"); cValue.Exists() {
-				item.AdvertiseAnomalyCheckUpperBound = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("advertisement.anomaly-check.lower-bound"); cValue.Exists() {
-				item.AdvertiseAnomalyCheckLowerBound = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("advertisement.anomaly-loss.upper-bound"); cValue.Exists() {
-				item.AdvertiseAnomalyLossUpperBound = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("advertisement.anomaly-loss.lower-bound"); cValue.Exists() {
-				item.AdvertiseAnomalyLossLowerBound = types.Int64Value(cValue.Int())
-			}
-			data.Profiles = append(data.Profiles, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *PerformanceMeasurementDelayProfileData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "interfaces.default"); value.Exists() {
-		data.InterfacesDefault = types.BoolValue(true)
-	} else {
-		data.InterfacesDefault = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interfaces.default.probe.computation-interval"); value.Exists() {
-		data.InterfacesDefaultProbeComputationInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.probe.tx-interval"); value.Exists() {
-		data.InterfacesDefaultProbeTxInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.probe.protocol.pm-mpls"); value.Exists() {
-		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(true)
-	} else {
-		data.InterfacesDefaultProbeProtocolPmMpls = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interfaces.default.probe.protocol.twamp-light"); value.Exists() {
-		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(true)
-	} else {
-		data.InterfacesDefaultProbeProtocolTwampLight = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interfaces.default.probe.tos.traffic-class"); value.Exists() {
-		data.InterfacesDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.probe.tos.dscp"); value.Exists() {
-		data.InterfacesDefaultProbeTosDscp = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.probe.measurement-mode.one-way"); value.Exists() {
-		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
-	} else {
-		data.InterfacesDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interfaces.default.probe.measurement-mode.two-way"); value.Exists() {
-		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
-	} else {
-		data.InterfacesDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.periodic.disabled"); value.Exists() {
-		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
-	} else {
-		data.InterfacesDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.periodic.interval"); value.Exists() {
-		data.InterfacesDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.periodic.threshold"); value.Exists() {
-		data.InterfacesDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.periodic.minimum-change"); value.Exists() {
-		data.InterfacesDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.logging.delay-exceeded"); value.Exists() {
-		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
-	} else {
-		data.InterfacesDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.accelerated"); value.Exists() {
-		data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(true)
-	} else {
-		data.InterfacesDefaultAdvertisementAccelerated = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.accelerated.threshold"); value.Exists() {
-		data.InterfacesDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.accelerated.minimum-change"); value.Exists() {
-		data.InterfacesDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.anomaly-loss.upper-bound"); value.Exists() {
-		data.InterfacesDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "interfaces.default.advertisement.anomaly-loss.lower-bound"); value.Exists() {
-		data.InterfacesDefaultAdvertisementAnomalyLossLowerBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default"); value.Exists() {
-		data.SrPolicyDefault = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefault = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.computation-interval"); value.Exists() {
-		data.SrPolicyDefaultProbeComputationInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.tx-interval"); value.Exists() {
-		data.SrPolicyDefaultProbeTxInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.static-delay"); value.Exists() {
-		data.SrPolicyDefaultProbeStaticDelay = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.sweep.destination.ipv4"); value.Exists() {
-		data.SrPolicyDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.sweep.destination.range"); value.Exists() {
-		data.SrPolicyDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.protocol.pm-mpls"); value.Exists() {
-		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultProbeProtocolPmMpls = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.protocol.twamp-light"); value.Exists() {
-		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultProbeProtocolTwampLight = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.tos.traffic-class"); value.Exists() {
-		data.SrPolicyDefaultProbeTosTrafficClass = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.tos.dscp"); value.Exists() {
-		data.SrPolicyDefaultProbeTosDscp = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.measurement-mode.one-way"); value.Exists() {
-		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.measurement-mode.two-way"); value.Exists() {
-		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.probe.measurement-mode.loopback"); value.Exists() {
-		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultProbeMeasurementModeLoopback = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.logging.delay-exceeded"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.threshold-check.average-delay"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.threshold-check.minimum-delay"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.threshold-check.maximum-delay"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.periodic.disabled"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.periodic.interval"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.periodic.threshold"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.periodic.minimum-change"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.accelerated"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(true)
-	} else {
-		data.SrPolicyDefaultAdvertisementAccelerated = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.accelerated.threshold"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.accelerated.minimum-change"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.anomaly-check.upper-bound"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.anomaly-check.lower-bound"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.anomaly-loss.upper-bound"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "sr-policy.default.advertisement.anomaly-loss.lower-bound"); value.Exists() {
-		data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default"); value.Exists() {
-		data.EndpointDefault = types.BoolValue(true)
-	} else {
-		data.EndpointDefault = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.tx-interval"); value.Exists() {
-		data.EndpointDefaultProbeTxInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.computation-interval"); value.Exists() {
-		data.EndpointDefaultProbeComputationInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.explicits"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultProbeFlowLabelExplicit = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.explicits.explicit"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelExplicitList = helpers.GetInt64List(value.Array())
-	} else {
-		data.EndpointDefaultProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.from"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelFrom = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.to"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelTo = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.flow-label.increment"); value.Exists() {
-		data.EndpointDefaultProbeFlowLabelIncrement = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.sweep.destination.ipv4"); value.Exists() {
-		data.EndpointDefaultProbeSweepDestinationIpv4 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.sweep.destination.range"); value.Exists() {
-		data.EndpointDefaultProbeSweepDestinationRange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.measurement-mode.one-way"); value.Exists() {
-		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultProbeMeasurementModeOneWay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.measurement-mode.two-way"); value.Exists() {
-		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultProbeMeasurementModeTwoWay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.measurement-mode.loopback"); value.Exists() {
-		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultProbeMeasurementModeLoopback = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.probe.tos.dscp"); value.Exists() {
-		data.EndpointDefaultProbeTosDscp = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.logging.delay-exceeded"); value.Exists() {
-		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultAdvertisementLoggingDelayExceeded = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.threshold-check.average-delay"); value.Exists() {
-		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultAdvertisementThresholdCheckAverageDelay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.threshold-check.minimum-delay"); value.Exists() {
-		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.threshold-check.maximum-delay"); value.Exists() {
-		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.periodic.disabled"); value.Exists() {
-		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultAdvertisementPeriodicDisabled = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.periodic.interval"); value.Exists() {
-		data.EndpointDefaultAdvertisementPeriodicInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.periodic.threshold"); value.Exists() {
-		data.EndpointDefaultAdvertisementPeriodicThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.periodic.minimum-change"); value.Exists() {
-		data.EndpointDefaultAdvertisementPeriodicMinimumChange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.accelerated"); value.Exists() {
-		data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(true)
-	} else {
-		data.EndpointDefaultAdvertisementAccelerated = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.accelerated.threshold"); value.Exists() {
-		data.EndpointDefaultAdvertisementAcceleratedThreshold = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.accelerated.minimum-change"); value.Exists() {
-		data.EndpointDefaultAdvertisementAcceleratedMinimumChange = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.anomaly-check.upper-bound"); value.Exists() {
-		data.EndpointDefaultAdvertisementAnomalyCheckUpperBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.anomaly-check.lower-bound"); value.Exists() {
-		data.EndpointDefaultAdvertisementAnomalyCheckLowerBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "endpoint.default.advertisement.anomaly-loss.upper-bound"); value.Exists() {
-		data.EndpointDefaultAdvertisementAnomalyLossUpperBound = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "names.name"); value.Exists() {
-		data.Profiles = make([]PerformanceMeasurementDelayProfileProfiles, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := PerformanceMeasurementDelayProfileProfiles{}
-			if cValue := v.Get("profile-name"); cValue.Exists() {
-				item.ProfileName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("probe.computation-interval"); cValue.Exists() {
-				item.ProbeComputationInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.tx-interval"); cValue.Exists() {
-				item.ProbeTxInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.static-delay"); cValue.Exists() {
-				item.ProbeStaticDelay = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.sweep.destination.ipv4"); cValue.Exists() {
-				item.ProbeSweepDestinationIpv4 = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("probe.sweep.destination.range"); cValue.Exists() {
-				item.ProbeSweepDestinationRange = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.flow-label.explicits"); cValue.Exists() {
-				item.ProbeFlowLabelExplicit = types.BoolValue(true)
-			} else {
-				item.ProbeFlowLabelExplicit = types.BoolValue(false)
-			}
-			if cValue := v.Get("probe.flow-label.explicits.explicit"); cValue.Exists() {
-				item.ProbeFlowLabelExplicitList = helpers.GetInt64List(cValue.Array())
-			} else {
-				item.ProbeFlowLabelExplicitList = types.ListNull(types.Int64Type)
-			}
-			if cValue := v.Get("probe.flow-label.from"); cValue.Exists() {
-				item.ProbeFlowLabelFrom = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.flow-label.to"); cValue.Exists() {
-				item.ProbeFlowLabelTo = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.flow-label.increment"); cValue.Exists() {
-				item.ProbeFlowLabelIncrement = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.protocol.pm-mpls"); cValue.Exists() {
-				item.ProbeProtocolPmMpls = types.BoolValue(true)
-			} else {
-				item.ProbeProtocolPmMpls = types.BoolValue(false)
-			}
-			if cValue := v.Get("probe.protocol.twamp-light"); cValue.Exists() {
-				item.ProbeProtocolTwampLight = types.BoolValue(true)
-			} else {
-				item.ProbeProtocolTwampLight = types.BoolValue(false)
-			}
-			if cValue := v.Get("probe.tos.traffic-class"); cValue.Exists() {
-				item.ProbeTosTrafficClass = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.tos.dscp"); cValue.Exists() {
-				item.ProbeTosDscp = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("probe.measurement-mode.one-way"); cValue.Exists() {
-				item.ProbeMeasurementModeOneWay = types.BoolValue(true)
-			} else {
-				item.ProbeMeasurementModeOneWay = types.BoolValue(false)
-			}
-			if cValue := v.Get("probe.measurement-mode.two-way"); cValue.Exists() {
-				item.ProbeMeasurementModeTwoWay = types.BoolValue(true)
-			} else {
-				item.ProbeMeasurementModeTwoWay = types.BoolValue(false)
-			}
-			if cValue := v.Get("probe.measurement-mode.loopback"); cValue.Exists() {
-				item.ProbeMeasurementModeLoopback = types.BoolValue(true)
-			} else {
-				item.ProbeMeasurementModeLoopback = types.BoolValue(false)
-			}
-			if cValue := v.Get("advertisement.logging.delay-exceeded"); cValue.Exists() {
-				item.AdvertiseLoggingDelayExceeded = types.BoolValue(true)
-			} else {
-				item.AdvertiseLoggingDelayExceeded = types.BoolValue(false)
-			}
-			if cValue := v.Get("advertisement.threshold-check.average-delay"); cValue.Exists() {
-				item.AdvertiseThresholdCheckAverageDelay = types.BoolValue(true)
-			} else {
-				item.AdvertiseThresholdCheckAverageDelay = types.BoolValue(false)
-			}
-			if cValue := v.Get("advertisement.threshold-check.minimum-delay"); cValue.Exists() {
-				item.AdvertiseThresholdCheckMinimumDelay = types.BoolValue(true)
-			} else {
-				item.AdvertiseThresholdCheckMinimumDelay = types.BoolValue(false)
-			}
-			if cValue := v.Get("advertisement.threshold-check.maximum-delay"); cValue.Exists() {
-				item.AdvertiseThresholdCheckMaximumDelay = types.BoolValue(true)
-			} else {
-				item.AdvertiseThresholdCheckMaximumDelay = types.BoolValue(false)
-			}
-			if cValue := v.Get("advertisement.periodic.disabled"); cValue.Exists() {
-				item.AdvertisePeriodicDisabled = types.BoolValue(true)
-			} else {
-				item.AdvertisePeriodicDisabled = types.BoolValue(false)
-			}
-			if cValue := v.Get("advertisement.periodic.interval"); cValue.Exists() {
-				item.AdvertisePeriodicInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("advertisement.periodic.threshold"); cValue.Exists() {
-				item.AdvertisePeriodicThreshold = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("advertisement.periodic.minimum-change"); cValue.Exists() {
-				item.AdvertisePeriodicMinimumChange = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("advertisement.accelerated"); cValue.Exists() {
-				item.AdvertiseAccelerated = types.BoolValue(true)
-			} else {
-				item.AdvertiseAccelerated = types.BoolValue(false)
-			}
-			if cValue := v.Get("advertisement.accelerated.threshold"); cValue.Exists() {
-				item.AdvertiseAcceleratedThreshold = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("advertisement.accelerated.minimum-change"); cValue.Exists() {
-				item.AdvertiseAcceleratedMinimumChange = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("advertisement.anomaly-check.upper-bound"); cValue.Exists() {
-				item.AdvertiseAnomalyCheckUpperBound = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("advertisement.anomaly-check.lower-bound"); cValue.Exists() {
-				item.AdvertiseAnomalyCheckLowerBound = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("advertisement.anomaly-loss.upper-bound"); cValue.Exists() {
-				item.AdvertiseAnomalyLossUpperBound = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("advertisement.anomaly-loss.lower-bound"); cValue.Exists() {
-				item.AdvertiseAnomalyLossLowerBound = types.Int64Value(cValue.Int())
-			}
-			data.Profiles = append(data.Profiles, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *PerformanceMeasurementDelayProfile) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -4168,13 +5627,59 @@ func (data *PerformanceMeasurementDelayProfile) fromBodyXML(ctx context.Context,
 			if cValue := helpers.GetFromXPath(v, "advertisement/anomaly-loss/lower-bound"); cValue.Exists() {
 				item.AdvertiseAnomalyLossLowerBound = types.Int64Value(cValue.Int())
 			}
+			if cValue := helpers.GetFromXPath(v, "probe/collect-hbh"); cValue.Exists() {
+				item.ProbeCollectHbh = types.BoolValue(true)
+			} else {
+				item.ProbeCollectHbh = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "probe/timestamp-format/ntp"); cValue.Exists() {
+				item.ProbeTimestampFormatNtp = types.BoolValue(true)
+			} else {
+				item.ProbeTimestampFormatNtp = types.BoolValue(false)
+			}
 			data.Profiles = append(data.Profiles, item)
 			return true
 		})
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/histogram/delay-bins/explicit"); value.Exists() {
+		data.EndpointDefaultHistogramDelayBinsExplicit = helpers.GetInt64ListXML(value.Array())
+	} else {
+		data.EndpointDefaultHistogramDelayBinsExplicit = types.ListNull(types.Int64Type)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/collect-hbh"); value.Exists() {
+		data.EndpointDefaultProbeCollectHbh = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultProbeCollectHbh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/collect-hbh"); value.Exists() {
+		data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/measurement-mode/timestamp-format/ntp"); value.Exists() {
+		data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/timestamp-format/ntp"); value.Exists() {
+		data.InterfacesDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+	} else {
+		data.InterfacesDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rsvp-te/default/probe/timestamp-format/ntp"); value.Exists() {
+		data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+	} else {
+		data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/timestamp-format/ntp"); value.Exists() {
+		data.SrPolicyDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *PerformanceMeasurementDelayProfileData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -4596,898 +6101,59 @@ func (data *PerformanceMeasurementDelayProfileData) fromBodyXML(ctx context.Cont
 			if cValue := helpers.GetFromXPath(v, "advertisement/anomaly-loss/lower-bound"); cValue.Exists() {
 				item.AdvertiseAnomalyLossLowerBound = types.Int64Value(cValue.Int())
 			}
+			if cValue := helpers.GetFromXPath(v, "probe/collect-hbh"); cValue.Exists() {
+				item.ProbeCollectHbh = types.BoolValue(true)
+			} else {
+				item.ProbeCollectHbh = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "probe/timestamp-format/ntp"); cValue.Exists() {
+				item.ProbeTimestampFormatNtp = types.BoolValue(true)
+			} else {
+				item.ProbeTimestampFormatNtp = types.BoolValue(false)
+			}
 			data.Profiles = append(data.Profiles, item)
 			return true
 		})
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/histogram/delay-bins/explicit"); value.Exists() {
+		data.EndpointDefaultHistogramDelayBinsExplicit = helpers.GetInt64ListXML(value.Array())
+	} else {
+		data.EndpointDefaultHistogramDelayBinsExplicit = types.ListNull(types.Int64Type)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/collect-hbh"); value.Exists() {
+		data.EndpointDefaultProbeCollectHbh = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultProbeCollectHbh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/collect-hbh"); value.Exists() {
+		data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefaultProbeCollectHbh = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/endpoint/default/probe/measurement-mode/timestamp-format/ntp"); value.Exists() {
+		data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+	} else {
+		data.EndpointDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/interfaces/default/probe/timestamp-format/ntp"); value.Exists() {
+		data.InterfacesDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+	} else {
+		data.InterfacesDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/rsvp-te/default/probe/timestamp-format/ntp"); value.Exists() {
+		data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+	} else {
+		data.RsvpTeDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/sr-policy/default/probe/timestamp-format/ntp"); value.Exists() {
+		data.SrPolicyDefaultProbeTimestampFormatNtp = types.BoolValue(true)
+	} else {
+		data.SrPolicyDefaultProbeTimestampFormatNtp = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *PerformanceMeasurementDelayProfile) getDeletedItems(ctx context.Context, state PerformanceMeasurementDelayProfile) []string {
-	deletedItems := make([]string, 0)
-	for i := range state.Profiles {
-		keys := [...]string{"profile-name"}
-		stateKeyValues := [...]string{state.Profiles[i].ProfileName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Profiles[i].ProfileName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Profiles {
-			found = true
-			if state.Profiles[i].ProfileName.ValueString() != data.Profiles[j].ProfileName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.Profiles[i].AdvertiseAnomalyLossLowerBound.IsNull() && data.Profiles[j].AdvertiseAnomalyLossLowerBound.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/advertisement/anomaly-loss/lower-bound", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].AdvertiseAnomalyLossUpperBound.IsNull() && data.Profiles[j].AdvertiseAnomalyLossUpperBound.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/advertisement/anomaly-loss/upper-bound", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].AdvertiseAnomalyCheckLowerBound.IsNull() && data.Profiles[j].AdvertiseAnomalyCheckLowerBound.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/advertisement/anomaly-check/lower-bound", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].AdvertiseAnomalyCheckUpperBound.IsNull() && data.Profiles[j].AdvertiseAnomalyCheckUpperBound.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/advertisement/anomaly-check/upper-bound", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].AdvertiseAcceleratedMinimumChange.IsNull() && data.Profiles[j].AdvertiseAcceleratedMinimumChange.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/advertisement/accelerated/minimum-change", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].AdvertiseAcceleratedThreshold.IsNull() && data.Profiles[j].AdvertiseAcceleratedThreshold.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/advertisement/accelerated/threshold", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].AdvertiseAccelerated.IsNull() && data.Profiles[j].AdvertiseAccelerated.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/advertisement/accelerated", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].AdvertisePeriodicMinimumChange.IsNull() && data.Profiles[j].AdvertisePeriodicMinimumChange.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/advertisement/periodic/minimum-change", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].AdvertisePeriodicThreshold.IsNull() && data.Profiles[j].AdvertisePeriodicThreshold.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/advertisement/periodic/threshold", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].AdvertisePeriodicInterval.IsNull() && data.Profiles[j].AdvertisePeriodicInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/advertisement/periodic/interval", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].AdvertisePeriodicDisabled.IsNull() && data.Profiles[j].AdvertisePeriodicDisabled.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/advertisement/periodic/disabled", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].AdvertiseThresholdCheckMaximumDelay.IsNull() && data.Profiles[j].AdvertiseThresholdCheckMaximumDelay.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/advertisement/threshold-check/maximum-delay", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].AdvertiseThresholdCheckMinimumDelay.IsNull() && data.Profiles[j].AdvertiseThresholdCheckMinimumDelay.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/advertisement/threshold-check/minimum-delay", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].AdvertiseThresholdCheckAverageDelay.IsNull() && data.Profiles[j].AdvertiseThresholdCheckAverageDelay.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/advertisement/threshold-check/average-delay", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].AdvertiseLoggingDelayExceeded.IsNull() && data.Profiles[j].AdvertiseLoggingDelayExceeded.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/advertisement/logging/delay-exceeded", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeMeasurementModeLoopback.IsNull() && data.Profiles[j].ProbeMeasurementModeLoopback.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/measurement-mode/loopback", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeMeasurementModeTwoWay.IsNull() && data.Profiles[j].ProbeMeasurementModeTwoWay.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/measurement-mode/two-way", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeMeasurementModeOneWay.IsNull() && data.Profiles[j].ProbeMeasurementModeOneWay.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/measurement-mode/one-way", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeTosDscp.IsNull() && data.Profiles[j].ProbeTosDscp.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/tos/dscp", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeTosTrafficClass.IsNull() && data.Profiles[j].ProbeTosTrafficClass.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/tos/traffic-class", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeProtocolTwampLight.IsNull() && data.Profiles[j].ProbeProtocolTwampLight.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/protocol/twamp-light", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeProtocolPmMpls.IsNull() && data.Profiles[j].ProbeProtocolPmMpls.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/protocol/pm-mpls", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeFlowLabelIncrement.IsNull() && data.Profiles[j].ProbeFlowLabelIncrement.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/flow-label/increment", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeFlowLabelTo.IsNull() && data.Profiles[j].ProbeFlowLabelTo.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/flow-label/to", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeFlowLabelFrom.IsNull() && data.Profiles[j].ProbeFlowLabelFrom.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/flow-label/from", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeFlowLabelExplicitList.IsNull() && data.Profiles[j].ProbeFlowLabelExplicitList.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/flow-label/explicits/explicit", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeFlowLabelExplicit.IsNull() && data.Profiles[j].ProbeFlowLabelExplicit.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/flow-label/explicits", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeSweepDestinationRange.IsNull() && data.Profiles[j].ProbeSweepDestinationRange.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/sweep/destination/range", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeSweepDestinationIpv4.IsNull() && data.Profiles[j].ProbeSweepDestinationIpv4.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/sweep/destination/ipv4", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeStaticDelay.IsNull() && data.Profiles[j].ProbeStaticDelay.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/static-delay", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeTxInterval.IsNull() && data.Profiles[j].ProbeTxInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/tx-interval", state.getPath(), keyString))
-				}
-				if !state.Profiles[i].ProbeComputationInterval.IsNull() && data.Profiles[j].ProbeComputationInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v/probe/computation-interval", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/names/name%v", state.getPath(), keyString))
-		}
-	}
-	if !state.EndpointDefaultAdvertisementAnomalyLossUpperBound.IsNull() && data.EndpointDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/advertisement/anomaly-loss/upper-bound", state.getPath()))
-	}
-	if !state.EndpointDefaultAdvertisementAnomalyCheckLowerBound.IsNull() && data.EndpointDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/advertisement/anomaly-check/lower-bound", state.getPath()))
-	}
-	if !state.EndpointDefaultAdvertisementAnomalyCheckUpperBound.IsNull() && data.EndpointDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/advertisement/anomaly-check/upper-bound", state.getPath()))
-	}
-	if !state.EndpointDefaultAdvertisementAcceleratedMinimumChange.IsNull() && data.EndpointDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/advertisement/accelerated/minimum-change", state.getPath()))
-	}
-	if !state.EndpointDefaultAdvertisementAcceleratedThreshold.IsNull() && data.EndpointDefaultAdvertisementAcceleratedThreshold.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/advertisement/accelerated/threshold", state.getPath()))
-	}
-	if !state.EndpointDefaultAdvertisementAccelerated.IsNull() && data.EndpointDefaultAdvertisementAccelerated.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/advertisement/accelerated", state.getPath()))
-	}
-	if !state.EndpointDefaultAdvertisementPeriodicMinimumChange.IsNull() && data.EndpointDefaultAdvertisementPeriodicMinimumChange.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/advertisement/periodic/minimum-change", state.getPath()))
-	}
-	if !state.EndpointDefaultAdvertisementPeriodicThreshold.IsNull() && data.EndpointDefaultAdvertisementPeriodicThreshold.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/advertisement/periodic/threshold", state.getPath()))
-	}
-	if !state.EndpointDefaultAdvertisementPeriodicInterval.IsNull() && data.EndpointDefaultAdvertisementPeriodicInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/advertisement/periodic/interval", state.getPath()))
-	}
-	if !state.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() && data.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/advertisement/periodic/disabled", state.getPath()))
-	}
-	if !state.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() && data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/advertisement/threshold-check/maximum-delay", state.getPath()))
-	}
-	if !state.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() && data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/advertisement/threshold-check/minimum-delay", state.getPath()))
-	}
-	if !state.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() && data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/advertisement/threshold-check/average-delay", state.getPath()))
-	}
-	if !state.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() && data.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/advertisement/logging/delay-exceeded", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeTosDscp.IsNull() && data.EndpointDefaultProbeTosDscp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/tos/dscp", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeMeasurementModeLoopback.IsNull() && data.EndpointDefaultProbeMeasurementModeLoopback.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/measurement-mode/loopback", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() && data.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/measurement-mode/two-way", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeMeasurementModeOneWay.IsNull() && data.EndpointDefaultProbeMeasurementModeOneWay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/measurement-mode/one-way", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeSweepDestinationRange.IsNull() && data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/sweep/destination/range", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeSweepDestinationIpv4.IsNull() && data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/sweep/destination/ipv4", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeFlowLabelIncrement.IsNull() && data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/flow-label/increment", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeFlowLabelTo.IsNull() && data.EndpointDefaultProbeFlowLabelTo.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/flow-label/to", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeFlowLabelFrom.IsNull() && data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/flow-label/from", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeFlowLabelExplicitList.IsNull() && data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/flow-label/explicits/explicit", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeFlowLabelExplicit.IsNull() && data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/flow-label/explicits", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeComputationInterval.IsNull() && data.EndpointDefaultProbeComputationInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/computation-interval", state.getPath()))
-	}
-	if !state.EndpointDefaultProbeTxInterval.IsNull() && data.EndpointDefaultProbeTxInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default/probe/tx-interval", state.getPath()))
-	}
-	if !state.EndpointDefault.IsNull() && data.EndpointDefault.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/endpoint/default", state.getPath()))
-	}
-	if !state.SrPolicyDefaultAdvertisementAnomalyLossLowerBound.IsNull() && data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/advertisement/anomaly-loss/lower-bound", state.getPath()))
-	}
-	if !state.SrPolicyDefaultAdvertisementAnomalyLossUpperBound.IsNull() && data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/advertisement/anomaly-loss/upper-bound", state.getPath()))
-	}
-	if !state.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound.IsNull() && data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/advertisement/anomaly-check/lower-bound", state.getPath()))
-	}
-	if !state.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound.IsNull() && data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/advertisement/anomaly-check/upper-bound", state.getPath()))
-	}
-	if !state.SrPolicyDefaultAdvertisementAcceleratedMinimumChange.IsNull() && data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/advertisement/accelerated/minimum-change", state.getPath()))
-	}
-	if !state.SrPolicyDefaultAdvertisementAcceleratedThreshold.IsNull() && data.SrPolicyDefaultAdvertisementAcceleratedThreshold.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/advertisement/accelerated/threshold", state.getPath()))
-	}
-	if !state.SrPolicyDefaultAdvertisementAccelerated.IsNull() && data.SrPolicyDefaultAdvertisementAccelerated.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/advertisement/accelerated", state.getPath()))
-	}
-	if !state.SrPolicyDefaultAdvertisementPeriodicMinimumChange.IsNull() && data.SrPolicyDefaultAdvertisementPeriodicMinimumChange.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/advertisement/periodic/minimum-change", state.getPath()))
-	}
-	if !state.SrPolicyDefaultAdvertisementPeriodicThreshold.IsNull() && data.SrPolicyDefaultAdvertisementPeriodicThreshold.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/advertisement/periodic/threshold", state.getPath()))
-	}
-	if !state.SrPolicyDefaultAdvertisementPeriodicInterval.IsNull() && data.SrPolicyDefaultAdvertisementPeriodicInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/advertisement/periodic/interval", state.getPath()))
-	}
-	if !state.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() && data.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/advertisement/periodic/disabled", state.getPath()))
-	}
-	if !state.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() && data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/advertisement/threshold-check/maximum-delay", state.getPath()))
-	}
-	if !state.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() && data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/advertisement/threshold-check/minimum-delay", state.getPath()))
-	}
-	if !state.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() && data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/advertisement/threshold-check/average-delay", state.getPath()))
-	}
-	if !state.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() && data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/advertisement/logging/delay-exceeded", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() && data.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/measurement-mode/loopback", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() && data.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/measurement-mode/two-way", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() && data.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/measurement-mode/one-way", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeTosDscp.IsNull() && data.SrPolicyDefaultProbeTosDscp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/tos/dscp", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeTosTrafficClass.IsNull() && data.SrPolicyDefaultProbeTosTrafficClass.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/tos/traffic-class", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeProtocolTwampLight.IsNull() && data.SrPolicyDefaultProbeProtocolTwampLight.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/protocol/twamp-light", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeProtocolPmMpls.IsNull() && data.SrPolicyDefaultProbeProtocolPmMpls.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/protocol/pm-mpls", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeSweepDestinationRange.IsNull() && data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/sweep/destination/range", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() && data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/sweep/destination/ipv4", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeStaticDelay.IsNull() && data.SrPolicyDefaultProbeStaticDelay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/static-delay", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeTxInterval.IsNull() && data.SrPolicyDefaultProbeTxInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/tx-interval", state.getPath()))
-	}
-	if !state.SrPolicyDefaultProbeComputationInterval.IsNull() && data.SrPolicyDefaultProbeComputationInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default/probe/computation-interval", state.getPath()))
-	}
-	if !state.SrPolicyDefault.IsNull() && data.SrPolicyDefault.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sr-policy/default", state.getPath()))
-	}
-	if !state.InterfacesDefaultAdvertisementAnomalyLossLowerBound.IsNull() && data.InterfacesDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default/advertisement/anomaly-loss/lower-bound", state.getPath()))
-	}
-	if !state.InterfacesDefaultAdvertisementAnomalyLossUpperBound.IsNull() && data.InterfacesDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default/advertisement/anomaly-loss/upper-bound", state.getPath()))
-	}
-	if !state.InterfacesDefaultAdvertisementAcceleratedMinimumChange.IsNull() && data.InterfacesDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default/advertisement/accelerated/minimum-change", state.getPath()))
-	}
-	if !state.InterfacesDefaultAdvertisementAcceleratedThreshold.IsNull() && data.InterfacesDefaultAdvertisementAcceleratedThreshold.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default/advertisement/accelerated/threshold", state.getPath()))
-	}
-	if !state.InterfacesDefaultAdvertisementAccelerated.IsNull() && data.InterfacesDefaultAdvertisementAccelerated.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default/advertisement/accelerated", state.getPath()))
-	}
-	if !state.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() && data.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default/advertisement/logging/delay-exceeded", state.getPath()))
-	}
-	if !state.InterfacesDefaultAdvertisementPeriodicMinimumChange.IsNull() && data.InterfacesDefaultAdvertisementPeriodicMinimumChange.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default/advertisement/periodic/minimum-change", state.getPath()))
-	}
-	if !state.InterfacesDefaultAdvertisementPeriodicThreshold.IsNull() && data.InterfacesDefaultAdvertisementPeriodicThreshold.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default/advertisement/periodic/threshold", state.getPath()))
-	}
-	if !state.InterfacesDefaultAdvertisementPeriodicInterval.IsNull() && data.InterfacesDefaultAdvertisementPeriodicInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default/advertisement/periodic/interval", state.getPath()))
-	}
-	if !state.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() && data.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default/advertisement/periodic/disabled", state.getPath()))
-	}
-	if !state.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() && data.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default/probe/measurement-mode/two-way", state.getPath()))
-	}
-	if !state.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() && data.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default/probe/measurement-mode/one-way", state.getPath()))
-	}
-	if !state.InterfacesDefaultProbeTosDscp.IsNull() && data.InterfacesDefaultProbeTosDscp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default/probe/tos/dscp", state.getPath()))
-	}
-	if !state.InterfacesDefaultProbeTosTrafficClass.IsNull() && data.InterfacesDefaultProbeTosTrafficClass.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default/probe/tos/traffic-class", state.getPath()))
-	}
-	if !state.InterfacesDefaultProbeProtocolTwampLight.IsNull() && data.InterfacesDefaultProbeProtocolTwampLight.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default/probe/protocol/twamp-light", state.getPath()))
-	}
-	if !state.InterfacesDefaultProbeProtocolPmMpls.IsNull() && data.InterfacesDefaultProbeProtocolPmMpls.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default/probe/protocol/pm-mpls", state.getPath()))
-	}
-	if !state.InterfacesDefaultProbeTxInterval.IsNull() && data.InterfacesDefaultProbeTxInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default/probe/tx-interval", state.getPath()))
-	}
-	if !state.InterfacesDefaultProbeComputationInterval.IsNull() && data.InterfacesDefaultProbeComputationInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default/probe/computation-interval", state.getPath()))
-	}
-	if !state.InterfacesDefault.IsNull() && data.InterfacesDefault.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/default", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *PerformanceMeasurementDelayProfile) getEmptyLeafsDelete(ctx context.Context, state *PerformanceMeasurementDelayProfile) []string {
-	emptyLeafsDelete := make([]string, 0)
-	for i := range data.Profiles {
-		keys := [...]string{"profile-name"}
-		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.Profiles[i].AdvertiseAccelerated.IsNull() && !data.Profiles[i].AdvertiseAccelerated.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].AdvertiseAccelerated.IsNull() && state.Profiles[i].AdvertiseAccelerated.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/names/name%v/advertisement/accelerated", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Profiles[i].AdvertisePeriodicDisabled.IsNull() && !data.Profiles[i].AdvertisePeriodicDisabled.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].AdvertisePeriodicDisabled.IsNull() && state.Profiles[i].AdvertisePeriodicDisabled.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/names/name%v/advertisement/periodic/disabled", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Profiles[i].AdvertiseThresholdCheckMaximumDelay.IsNull() && !data.Profiles[i].AdvertiseThresholdCheckMaximumDelay.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].AdvertiseThresholdCheckMaximumDelay.IsNull() && state.Profiles[i].AdvertiseThresholdCheckMaximumDelay.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/names/name%v/advertisement/threshold-check/maximum-delay", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Profiles[i].AdvertiseThresholdCheckMinimumDelay.IsNull() && !data.Profiles[i].AdvertiseThresholdCheckMinimumDelay.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].AdvertiseThresholdCheckMinimumDelay.IsNull() && state.Profiles[i].AdvertiseThresholdCheckMinimumDelay.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/names/name%v/advertisement/threshold-check/minimum-delay", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Profiles[i].AdvertiseThresholdCheckAverageDelay.IsNull() && !data.Profiles[i].AdvertiseThresholdCheckAverageDelay.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].AdvertiseThresholdCheckAverageDelay.IsNull() && state.Profiles[i].AdvertiseThresholdCheckAverageDelay.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/names/name%v/advertisement/threshold-check/average-delay", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Profiles[i].AdvertiseLoggingDelayExceeded.IsNull() && !data.Profiles[i].AdvertiseLoggingDelayExceeded.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].AdvertiseLoggingDelayExceeded.IsNull() && state.Profiles[i].AdvertiseLoggingDelayExceeded.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/names/name%v/advertisement/logging/delay-exceeded", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Profiles[i].ProbeMeasurementModeLoopback.IsNull() && !data.Profiles[i].ProbeMeasurementModeLoopback.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ProbeMeasurementModeLoopback.IsNull() && state.Profiles[i].ProbeMeasurementModeLoopback.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/names/name%v/probe/measurement-mode/loopback", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Profiles[i].ProbeMeasurementModeTwoWay.IsNull() && !data.Profiles[i].ProbeMeasurementModeTwoWay.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ProbeMeasurementModeTwoWay.IsNull() && state.Profiles[i].ProbeMeasurementModeTwoWay.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/names/name%v/probe/measurement-mode/two-way", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Profiles[i].ProbeMeasurementModeOneWay.IsNull() && !data.Profiles[i].ProbeMeasurementModeOneWay.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ProbeMeasurementModeOneWay.IsNull() && state.Profiles[i].ProbeMeasurementModeOneWay.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/names/name%v/probe/measurement-mode/one-way", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Profiles[i].ProbeProtocolTwampLight.IsNull() && !data.Profiles[i].ProbeProtocolTwampLight.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ProbeProtocolTwampLight.IsNull() && state.Profiles[i].ProbeProtocolTwampLight.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/names/name%v/probe/protocol/twamp-light", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Profiles[i].ProbeProtocolPmMpls.IsNull() && !data.Profiles[i].ProbeProtocolPmMpls.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ProbeProtocolPmMpls.IsNull() && state.Profiles[i].ProbeProtocolPmMpls.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/names/name%v/probe/protocol/pm-mpls", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Profiles[i].ProbeFlowLabelExplicit.IsNull() && !data.Profiles[i].ProbeFlowLabelExplicit.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Profiles) && !state.Profiles[i].ProbeFlowLabelExplicit.IsNull() && state.Profiles[i].ProbeFlowLabelExplicit.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/names/name%v/probe/flow-label/explicits", data.getXPath(), keyString))
-			}
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.EndpointDefaultAdvertisementAccelerated.IsNull() && !data.EndpointDefaultAdvertisementAccelerated.ValueBool() {
-		if state != nil && !state.EndpointDefaultAdvertisementAccelerated.IsNull() && state.EndpointDefaultAdvertisementAccelerated.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/endpoint/default/advertisement/accelerated", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() && !data.EndpointDefaultAdvertisementPeriodicDisabled.ValueBool() {
-		if state != nil && !state.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() && state.EndpointDefaultAdvertisementPeriodicDisabled.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/endpoint/default/advertisement/periodic/disabled", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() && !data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.ValueBool() {
-		if state != nil && !state.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() && state.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/endpoint/default/advertisement/threshold-check/maximum-delay", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() && !data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.ValueBool() {
-		if state != nil && !state.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() && state.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/endpoint/default/advertisement/threshold-check/minimum-delay", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() && !data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.ValueBool() {
-		if state != nil && !state.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() && state.EndpointDefaultAdvertisementThresholdCheckAverageDelay.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/endpoint/default/advertisement/threshold-check/average-delay", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() && !data.EndpointDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
-		if state != nil && !state.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() && state.EndpointDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/endpoint/default/advertisement/logging/delay-exceeded", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.EndpointDefaultProbeMeasurementModeLoopback.IsNull() && !data.EndpointDefaultProbeMeasurementModeLoopback.ValueBool() {
-		if state != nil && !state.EndpointDefaultProbeMeasurementModeLoopback.IsNull() && state.EndpointDefaultProbeMeasurementModeLoopback.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/endpoint/default/probe/measurement-mode/loopback", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() && !data.EndpointDefaultProbeMeasurementModeTwoWay.ValueBool() {
-		if state != nil && !state.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() && state.EndpointDefaultProbeMeasurementModeTwoWay.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/endpoint/default/probe/measurement-mode/two-way", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.EndpointDefaultProbeMeasurementModeOneWay.IsNull() && !data.EndpointDefaultProbeMeasurementModeOneWay.ValueBool() {
-		if state != nil && !state.EndpointDefaultProbeMeasurementModeOneWay.IsNull() && state.EndpointDefaultProbeMeasurementModeOneWay.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/endpoint/default/probe/measurement-mode/one-way", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() && !data.EndpointDefaultProbeFlowLabelExplicit.ValueBool() {
-		if state != nil && !state.EndpointDefaultProbeFlowLabelExplicit.IsNull() && state.EndpointDefaultProbeFlowLabelExplicit.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/endpoint/default/probe/flow-label/explicits", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.EndpointDefault.IsNull() && !data.EndpointDefault.ValueBool() {
-		if state != nil && !state.EndpointDefault.IsNull() && state.EndpointDefault.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/endpoint/default", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrPolicyDefaultAdvertisementAccelerated.IsNull() && !data.SrPolicyDefaultAdvertisementAccelerated.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultAdvertisementAccelerated.IsNull() && state.SrPolicyDefaultAdvertisementAccelerated.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sr-policy/default/advertisement/accelerated", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() && !data.SrPolicyDefaultAdvertisementPeriodicDisabled.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() && state.SrPolicyDefaultAdvertisementPeriodicDisabled.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sr-policy/default/advertisement/periodic/disabled", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() && !data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() && state.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sr-policy/default/advertisement/threshold-check/maximum-delay", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() && !data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() && state.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sr-policy/default/advertisement/threshold-check/minimum-delay", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() && !data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() && state.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sr-policy/default/advertisement/threshold-check/average-delay", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() && !data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() && state.SrPolicyDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sr-policy/default/advertisement/logging/delay-exceeded", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() && !data.SrPolicyDefaultProbeMeasurementModeLoopback.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() && state.SrPolicyDefaultProbeMeasurementModeLoopback.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sr-policy/default/probe/measurement-mode/loopback", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() && !data.SrPolicyDefaultProbeMeasurementModeTwoWay.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() && state.SrPolicyDefaultProbeMeasurementModeTwoWay.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sr-policy/default/probe/measurement-mode/two-way", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() && !data.SrPolicyDefaultProbeMeasurementModeOneWay.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() && state.SrPolicyDefaultProbeMeasurementModeOneWay.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sr-policy/default/probe/measurement-mode/one-way", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrPolicyDefaultProbeProtocolTwampLight.IsNull() && !data.SrPolicyDefaultProbeProtocolTwampLight.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultProbeProtocolTwampLight.IsNull() && state.SrPolicyDefaultProbeProtocolTwampLight.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sr-policy/default/probe/protocol/twamp-light", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrPolicyDefaultProbeProtocolPmMpls.IsNull() && !data.SrPolicyDefaultProbeProtocolPmMpls.ValueBool() {
-		if state != nil && !state.SrPolicyDefaultProbeProtocolPmMpls.IsNull() && state.SrPolicyDefaultProbeProtocolPmMpls.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sr-policy/default/probe/protocol/pm-mpls", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SrPolicyDefault.IsNull() && !data.SrPolicyDefault.ValueBool() {
-		if state != nil && !state.SrPolicyDefault.IsNull() && state.SrPolicyDefault.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sr-policy/default", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.InterfacesDefaultAdvertisementAccelerated.IsNull() && !data.InterfacesDefaultAdvertisementAccelerated.ValueBool() {
-		if state != nil && !state.InterfacesDefaultAdvertisementAccelerated.IsNull() && state.InterfacesDefaultAdvertisementAccelerated.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/default/advertisement/accelerated", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() && !data.InterfacesDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
-		if state != nil && !state.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() && state.InterfacesDefaultAdvertisementLoggingDelayExceeded.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/default/advertisement/logging/delay-exceeded", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() && !data.InterfacesDefaultAdvertisementPeriodicDisabled.ValueBool() {
-		if state != nil && !state.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() && state.InterfacesDefaultAdvertisementPeriodicDisabled.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/default/advertisement/periodic/disabled", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() && !data.InterfacesDefaultProbeMeasurementModeTwoWay.ValueBool() {
-		if state != nil && !state.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() && state.InterfacesDefaultProbeMeasurementModeTwoWay.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/default/probe/measurement-mode/two-way", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() && !data.InterfacesDefaultProbeMeasurementModeOneWay.ValueBool() {
-		if state != nil && !state.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() && state.InterfacesDefaultProbeMeasurementModeOneWay.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/default/probe/measurement-mode/one-way", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.InterfacesDefaultProbeProtocolTwampLight.IsNull() && !data.InterfacesDefaultProbeProtocolTwampLight.ValueBool() {
-		if state != nil && !state.InterfacesDefaultProbeProtocolTwampLight.IsNull() && state.InterfacesDefaultProbeProtocolTwampLight.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/default/probe/protocol/twamp-light", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.InterfacesDefaultProbeProtocolPmMpls.IsNull() && !data.InterfacesDefaultProbeProtocolPmMpls.ValueBool() {
-		if state != nil && !state.InterfacesDefaultProbeProtocolPmMpls.IsNull() && state.InterfacesDefaultProbeProtocolPmMpls.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/default/probe/protocol/pm-mpls", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.InterfacesDefault.IsNull() && !data.InterfacesDefault.ValueBool() {
-		if state != nil && !state.InterfacesDefault.IsNull() && state.InterfacesDefault.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/default", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *PerformanceMeasurementDelayProfile) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	for i := range data.Profiles {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[profile-name=" + data.Profiles[i].ProfileName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/names/name%v", data.getPath(), keyPath))
-	}
-	if !data.EndpointDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/advertisement/anomaly-loss/upper-bound", data.getPath()))
-	}
-	if !data.EndpointDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/advertisement/anomaly-check/lower-bound", data.getPath()))
-	}
-	if !data.EndpointDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/advertisement/anomaly-check/upper-bound", data.getPath()))
-	}
-	if !data.EndpointDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/advertisement/accelerated/minimum-change", data.getPath()))
-	}
-	if !data.EndpointDefaultAdvertisementAcceleratedThreshold.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/advertisement/accelerated/threshold", data.getPath()))
-	}
-	if !data.EndpointDefaultAdvertisementAccelerated.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/advertisement/accelerated", data.getPath()))
-	}
-	if !data.EndpointDefaultAdvertisementPeriodicMinimumChange.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/advertisement/periodic/minimum-change", data.getPath()))
-	}
-	if !data.EndpointDefaultAdvertisementPeriodicThreshold.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/advertisement/periodic/threshold", data.getPath()))
-	}
-	if !data.EndpointDefaultAdvertisementPeriodicInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/advertisement/periodic/interval", data.getPath()))
-	}
-	if !data.EndpointDefaultAdvertisementPeriodicDisabled.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/advertisement/periodic/disabled", data.getPath()))
-	}
-	if !data.EndpointDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/advertisement/threshold-check/maximum-delay", data.getPath()))
-	}
-	if !data.EndpointDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/advertisement/threshold-check/minimum-delay", data.getPath()))
-	}
-	if !data.EndpointDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/advertisement/threshold-check/average-delay", data.getPath()))
-	}
-	if !data.EndpointDefaultAdvertisementLoggingDelayExceeded.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/advertisement/logging/delay-exceeded", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeTosDscp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/tos/dscp", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeMeasurementModeLoopback.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/measurement-mode/loopback", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeMeasurementModeTwoWay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/measurement-mode/two-way", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeMeasurementModeOneWay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/measurement-mode/one-way", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeSweepDestinationRange.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/sweep/destination/range", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeSweepDestinationIpv4.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/sweep/destination/ipv4", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeFlowLabelIncrement.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/flow-label/increment", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeFlowLabelTo.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/flow-label/to", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeFlowLabelFrom.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/flow-label/from", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeFlowLabelExplicitList.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/flow-label/explicits/explicit", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeFlowLabelExplicit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/flow-label/explicits", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeComputationInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/computation-interval", data.getPath()))
-	}
-	if !data.EndpointDefaultProbeTxInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default/probe/tx-interval", data.getPath()))
-	}
-	if !data.EndpointDefault.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/endpoint/default", data.getPath()))
-	}
-	if !data.SrPolicyDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/advertisement/anomaly-loss/lower-bound", data.getPath()))
-	}
-	if !data.SrPolicyDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/advertisement/anomaly-loss/upper-bound", data.getPath()))
-	}
-	if !data.SrPolicyDefaultAdvertisementAnomalyCheckLowerBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/advertisement/anomaly-check/lower-bound", data.getPath()))
-	}
-	if !data.SrPolicyDefaultAdvertisementAnomalyCheckUpperBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/advertisement/anomaly-check/upper-bound", data.getPath()))
-	}
-	if !data.SrPolicyDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/advertisement/accelerated/minimum-change", data.getPath()))
-	}
-	if !data.SrPolicyDefaultAdvertisementAcceleratedThreshold.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/advertisement/accelerated/threshold", data.getPath()))
-	}
-	if !data.SrPolicyDefaultAdvertisementAccelerated.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/advertisement/accelerated", data.getPath()))
-	}
-	if !data.SrPolicyDefaultAdvertisementPeriodicMinimumChange.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/advertisement/periodic/minimum-change", data.getPath()))
-	}
-	if !data.SrPolicyDefaultAdvertisementPeriodicThreshold.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/advertisement/periodic/threshold", data.getPath()))
-	}
-	if !data.SrPolicyDefaultAdvertisementPeriodicInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/advertisement/periodic/interval", data.getPath()))
-	}
-	if !data.SrPolicyDefaultAdvertisementPeriodicDisabled.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/advertisement/periodic/disabled", data.getPath()))
-	}
-	if !data.SrPolicyDefaultAdvertisementThresholdCheckMaximumDelay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/advertisement/threshold-check/maximum-delay", data.getPath()))
-	}
-	if !data.SrPolicyDefaultAdvertisementThresholdCheckMinimumDelay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/advertisement/threshold-check/minimum-delay", data.getPath()))
-	}
-	if !data.SrPolicyDefaultAdvertisementThresholdCheckAverageDelay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/advertisement/threshold-check/average-delay", data.getPath()))
-	}
-	if !data.SrPolicyDefaultAdvertisementLoggingDelayExceeded.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/advertisement/logging/delay-exceeded", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeMeasurementModeLoopback.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/measurement-mode/loopback", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeMeasurementModeTwoWay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/measurement-mode/two-way", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeMeasurementModeOneWay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/measurement-mode/one-way", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeTosDscp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/tos/dscp", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeTosTrafficClass.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/tos/traffic-class", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeProtocolTwampLight.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/protocol/twamp-light", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeProtocolPmMpls.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/protocol/pm-mpls", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeSweepDestinationRange.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/sweep/destination/range", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeSweepDestinationIpv4.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/sweep/destination/ipv4", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeStaticDelay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/static-delay", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeTxInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/tx-interval", data.getPath()))
-	}
-	if !data.SrPolicyDefaultProbeComputationInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default/probe/computation-interval", data.getPath()))
-	}
-	if !data.SrPolicyDefault.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sr-policy/default", data.getPath()))
-	}
-	if !data.InterfacesDefaultAdvertisementAnomalyLossLowerBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default/advertisement/anomaly-loss/lower-bound", data.getPath()))
-	}
-	if !data.InterfacesDefaultAdvertisementAnomalyLossUpperBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default/advertisement/anomaly-loss/upper-bound", data.getPath()))
-	}
-	if !data.InterfacesDefaultAdvertisementAcceleratedMinimumChange.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default/advertisement/accelerated/minimum-change", data.getPath()))
-	}
-	if !data.InterfacesDefaultAdvertisementAcceleratedThreshold.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default/advertisement/accelerated/threshold", data.getPath()))
-	}
-	if !data.InterfacesDefaultAdvertisementAccelerated.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default/advertisement/accelerated", data.getPath()))
-	}
-	if !data.InterfacesDefaultAdvertisementLoggingDelayExceeded.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default/advertisement/logging/delay-exceeded", data.getPath()))
-	}
-	if !data.InterfacesDefaultAdvertisementPeriodicMinimumChange.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default/advertisement/periodic/minimum-change", data.getPath()))
-	}
-	if !data.InterfacesDefaultAdvertisementPeriodicThreshold.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default/advertisement/periodic/threshold", data.getPath()))
-	}
-	if !data.InterfacesDefaultAdvertisementPeriodicInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default/advertisement/periodic/interval", data.getPath()))
-	}
-	if !data.InterfacesDefaultAdvertisementPeriodicDisabled.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default/advertisement/periodic/disabled", data.getPath()))
-	}
-	if !data.InterfacesDefaultProbeMeasurementModeTwoWay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default/probe/measurement-mode/two-way", data.getPath()))
-	}
-	if !data.InterfacesDefaultProbeMeasurementModeOneWay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default/probe/measurement-mode/one-way", data.getPath()))
-	}
-	if !data.InterfacesDefaultProbeTosDscp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default/probe/tos/dscp", data.getPath()))
-	}
-	if !data.InterfacesDefaultProbeTosTrafficClass.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default/probe/tos/traffic-class", data.getPath()))
-	}
-	if !data.InterfacesDefaultProbeProtocolTwampLight.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default/probe/protocol/twamp-light", data.getPath()))
-	}
-	if !data.InterfacesDefaultProbeProtocolPmMpls.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default/probe/protocol/pm-mpls", data.getPath()))
-	}
-	if !data.InterfacesDefaultProbeTxInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default/probe/tx-interval", data.getPath()))
-	}
-	if !data.InterfacesDefaultProbeComputationInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default/probe/computation-interval", data.getPath()))
-	}
-	if !data.InterfacesDefault.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/default", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *PerformanceMeasurementDelayProfile) addDeletedItemsXML(ctx context.Context, state PerformanceMeasurementDelayProfile, body string) string {
@@ -5495,6 +6161,127 @@ func (data *PerformanceMeasurementDelayProfile) addDeletedItemsXML(ctx context.C
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() && state.SrPolicyDefaultProbeTimestampFormatNtp.ValueBool() && data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() {
+		deletePath := state.getXPath() + "/sr-policy/default/probe/timestamp-format/ntp"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() && state.RsvpTeDefaultProbeTimestampFormatNtp.ValueBool() && data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() {
+		deletePath := state.getXPath() + "/rsvp-te/default/probe/timestamp-format/ntp"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.InterfacesDefaultProbeTimestampFormatNtp.IsNull() && state.InterfacesDefaultProbeTimestampFormatNtp.ValueBool() && data.InterfacesDefaultProbeTimestampFormatNtp.IsNull() {
+		deletePath := state.getXPath() + "/interfaces/default/probe/timestamp-format/ntp"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EndpointDefaultProbeTimestampFormatNtp.IsNull() && state.EndpointDefaultProbeTimestampFormatNtp.ValueBool() && data.EndpointDefaultProbeTimestampFormatNtp.IsNull() {
+		deletePath := state.getXPath() + "/endpoint/default/probe/measurement-mode/timestamp-format/ntp"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.SrPolicyDefaultProbeCollectHbh.IsNull() && state.SrPolicyDefaultProbeCollectHbh.ValueBool() && data.SrPolicyDefaultProbeCollectHbh.IsNull() {
+		deletePath := state.getXPath() + "/sr-policy/default/probe/collect-hbh"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.EndpointDefaultProbeCollectHbh.IsNull() && state.EndpointDefaultProbeCollectHbh.ValueBool() && data.EndpointDefaultProbeCollectHbh.IsNull() {
+		deletePath := state.getXPath() + "/endpoint/default/probe/collect-hbh"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.EndpointDefaultHistogramDelayBinsExplicit.IsNull() {
+		if data.EndpointDefaultHistogramDelayBinsExplicit.IsNull() {
+			var values []string
+			state.EndpointDefaultHistogramDelayBinsExplicit.ElementsAs(ctx, &values, false)
+			for _, v := range values {
+				b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/endpoint/default/histogram/delay-bins/explicit[.=%v]", v))
+			}
+		} else {
+			var dataValues, stateValues []int
+			data.EndpointDefaultHistogramDelayBinsExplicit.ElementsAs(ctx, &dataValues, false)
+			state.EndpointDefaultHistogramDelayBinsExplicit.ElementsAs(ctx, &stateValues, false)
+			for _, v := range stateValues {
+				found := false
+				for _, vv := range dataValues {
+					if v == vv {
+						found = true
+						break
+					}
+				}
+				if !found {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/endpoint/default/histogram/delay-bins/explicit[.=%v]", v))
+				}
+			}
+		}
+	}
 	for i := range state.Profiles {
 		stateKeys := [...]string{"profile-name"}
 		stateKeyValues := [...]string{state.Profiles[i].ProfileName.ValueString()}
@@ -5518,6 +6305,14 @@ func (data *PerformanceMeasurementDelayProfile) addDeletedItemsXML(ctx context.C
 				found = false
 			}
 			if found {
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Profiles[i].ProbeTimestampFormatNtp.IsNull() && state.Profiles[i].ProbeTimestampFormatNtp.ValueBool() && data.Profiles[j].ProbeTimestampFormatNtp.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/timestamp-format/ntp", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Profiles[i].ProbeCollectHbh.IsNull() && state.Profiles[i].ProbeCollectHbh.ValueBool() && data.Profiles[j].ProbeCollectHbh.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v/probe/collect-hbh", predicates))
+				}
 				if !state.Profiles[i].AdvertiseAnomalyLossLowerBound.IsNull() && data.Profiles[j].AdvertiseAnomalyLossLowerBound.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/names/name%v/advertisement/anomaly-loss/lower-bound", predicates))
 				}
@@ -6827,10 +7622,36 @@ func (data *PerformanceMeasurementDelayProfile) addDeletedItemsXML(ctx context.C
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *PerformanceMeasurementDelayProfile) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.SrPolicyDefaultProbeTimestampFormatNtp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/sr-policy/default/probe/timestamp-format/ntp")
+	}
+	if !data.RsvpTeDefaultProbeTimestampFormatNtp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/rsvp-te/default/probe/timestamp-format/ntp")
+	}
+	if !data.InterfacesDefaultProbeTimestampFormatNtp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/interfaces/default/probe/timestamp-format/ntp")
+	}
+	if !data.EndpointDefaultProbeTimestampFormatNtp.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/endpoint/default/probe/measurement-mode/timestamp-format/ntp")
+	}
+	if !data.SrPolicyDefaultProbeCollectHbh.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/sr-policy/default/probe/collect-hbh")
+	}
+	if !data.EndpointDefaultProbeCollectHbh.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/endpoint/default/probe/collect-hbh")
+	}
+	if !data.EndpointDefaultHistogramDelayBinsExplicit.IsNull() {
+		var values []int64
+		data.EndpointDefaultHistogramDelayBinsExplicit.ElementsAs(ctx, &values, false)
+		for _, v := range values {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/endpoint/default/histogram/delay-bins/explicit[.=%v]", v))
+		}
+	}
 	for i := range data.Profiles {
 		keys := [...]string{"profile-name"}
 		keyValues := [...]string{data.Profiles[i].ProfileName.ValueString()}

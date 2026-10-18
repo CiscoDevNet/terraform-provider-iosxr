@@ -10,6 +10,14 @@ description: |-
 
 This data source can read the Crypto configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `ca_trustpoints.method_est_credential_certificate` | `25.4` |
+
 ## Example Usage
 
 ```terraform
@@ -43,6 +51,8 @@ data "iosxr_crypto" "example" {
 - `ca_trustpoint_system_ca_keypair_rsa` (String) Self enrollment, rsa key pair
 - `ca_trustpoint_system_crl_optional` (Boolean) CRL verification as optional
 - `ca_trustpoint_system_description` (String) Description for the trustpoint
+- `ca_trustpoint_system_enrollment_local` (Boolean) Enroll via file present on local filesystem
+  - Supported from version: `25.4`
 - `ca_trustpoint_system_enrollment_retry_count` (Number) How many times to poll CA for our certificate
 - `ca_trustpoint_system_enrollment_retry_period` (Number) How long to wait between requests to CA for our certificate
 - `ca_trustpoint_system_enrollment_self` (Boolean) Enroll self create self signed CA cert and the router cert signed using the same
@@ -93,6 +103,10 @@ Read-Only:
 - `auto_enroll` (Number) Set auto-enroll percentage at which renewal will be triggered
 - `crl_optional` (Boolean) CRL verification as optional
 - `description` (String) Description for the trustpoint
+- `enrollment_authentication_profile` (String) Authentication profile used during certificate enrollment
+  - Supported from version: `25.4`
+- `enrollment_local` (Boolean) Enroll via file present on local filesystem
+  - Supported from version: `25.4`
 - `enrollment_retry_count` (Number) How many times to poll CA for our certificate
 - `enrollment_retry_period` (Number) How long to wait between requests to CA for our certificate
 - `enrollment_terminal` (Boolean) Enroll via the terminal (cut-and-paste)
@@ -101,7 +115,10 @@ Read-Only:
 - `ip_address_none` (Boolean) do not include ip address
 - `message_digest` (String) Certificate message digesti self enrollment
 - `method_est_credential_certificate` (String) Certificate based authentication in TLS handshake during bootstrap
+  - **Not supported from version `25.4` and above**
 - `query_url` (String) CA server query URL
+- `re_enrollment_authentication_profile` (String) Authentication profile used during certificate re-enrollment
+  - Supported from version: `25.4`
 - `renewal_message_type_pkcsreq` (Boolean) Message type PKCSReq(Default)
 - `renewal_message_type_renewalreq` (Boolean) Message type RenewalReq
 - `rsakeypair` (String) RSA key pair
@@ -110,6 +127,8 @@ Read-Only:
 - `sftp_password` (String, Sensitive) Enter password in encrypted form
 - `sftp_username` (String) Secure FTP username
 - `skip_challenge_password` (Boolean) Skip challenge password attribute for manual enrollment request
+- `ssl_profile` (String) SSL profile parameters used during TLS/mTLS handshake
+  - Supported from version: `25.4`
 - `subject_alternative_name` (String) Include Subject Alternative Name(SAN) in CSR request
 - `subject_name` (String) Subject Name
 - `trustpoint_name` (String) Trustpoint Name

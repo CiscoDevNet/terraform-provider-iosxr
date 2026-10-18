@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -102,7 +103,7 @@ func (data MPLSLDPInterfaceData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data MPLSLDPInterface) toBody(ctx context.Context) string {
+func (data MPLSLDPInterface) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.InterfaceName.IsNull() && !data.InterfaceName.IsUnknown() {
 		body, _ = sjson.Set(body, "interface-name", data.InterfaceName.ValueString())
@@ -160,57 +161,104 @@ func (data MPLSLDPInterface) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *MPLSLDPInterface) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("discovery.hello.holdtime"); value.Exists() && !data.DiscoveryHelloHoldtime.IsNull() {
+// GetVersionConstraints returns the version constraints for all fields
+func (data MPLSLDPInterface) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data MPLSLDPInterface) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data MPLSLDPInterface) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data MPLSLDPInterface) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data MPLSLDPInterface) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *MPLSLDPInterface) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "discovery.hello.holdtime"); value.Exists() && !data.DiscoveryHelloHoldtime.IsNull() {
 		data.DiscoveryHelloHoldtime = types.Int64Value(value.Int())
 	} else if data.DiscoveryHelloHoldtime.IsNull() {
 		data.DiscoveryHelloHoldtime = types.Int64Null()
 	}
-	if value := res.Get("discovery.hello.interval"); value.Exists() && !data.DiscoveryHelloInterval.IsNull() {
+	if value := gjson.GetBytes(res, "discovery.hello.interval"); value.Exists() && !data.DiscoveryHelloInterval.IsNull() {
 		data.DiscoveryHelloInterval = types.Int64Value(value.Int())
 	} else if data.DiscoveryHelloInterval.IsNull() {
 		data.DiscoveryHelloInterval = types.Int64Null()
 	}
-	if value := res.Get("discovery.hello.dual-stack-tlv"); value.Exists() && !data.DiscoveryHelloDualStackTlv.IsNull() {
+	if value := gjson.GetBytes(res, "discovery.hello.dual-stack-tlv"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DiscoveryHelloDualStackTlv.IsNull() {
 		data.DiscoveryHelloDualStackTlv = types.StringValue(value.String())
 	} else if data.DiscoveryHelloDualStackTlv.IsNull() {
 		data.DiscoveryHelloDualStackTlv = types.StringNull()
 	}
-	if value := res.Get("discovery.quick-start.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.DiscoveryQuickStartDisable.IsNull() {
+	if value := gjson.GetBytes(res, "discovery.quick-start.disable"); !data.DiscoveryQuickStartDisable.IsNull() {
+		if value.Exists() {
 			data.DiscoveryQuickStartDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.DiscoveryQuickStartDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.DiscoveryQuickStartDisable.IsNull() {
-			data.DiscoveryQuickStartDisable = types.BoolNull()
-		}
+	} else if data.DiscoveryQuickStartDisable.IsNull() {
+		data.DiscoveryQuickStartDisable = types.BoolNull()
 	}
-	if value := res.Get("igp.sync.delay.on-session-up.interface-sync-up-delay"); value.Exists() && !data.IgpSyncDelayOnSessionUp.IsNull() {
+	if value := gjson.GetBytes(res, "igp.sync.delay.on-session-up.interface-sync-up-delay"); value.Exists() && !data.IgpSyncDelayOnSessionUp.IsNull() {
 		data.IgpSyncDelayOnSessionUp = types.Int64Value(value.Int())
 	} else if data.IgpSyncDelayOnSessionUp.IsNull() {
 		data.IgpSyncDelayOnSessionUp = types.Int64Null()
 	}
-	if value := res.Get("igp.sync.delay.on-session-up.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.IgpSyncDelayOnSessionUpDisable.IsNull() {
+	if value := gjson.GetBytes(res, "igp.sync.delay.on-session-up.disable"); !data.IgpSyncDelayOnSessionUpDisable.IsNull() {
+		if value.Exists() {
 			data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.IgpSyncDelayOnSessionUpDisable.IsNull() {
-			data.IgpSyncDelayOnSessionUpDisable = types.BoolNull()
-		}
+	} else if data.IgpSyncDelayOnSessionUpDisable.IsNull() {
+		data.IgpSyncDelayOnSessionUpDisable = types.BoolNull()
 	}
 	for i := range data.AddressFamily {
 		keys := [...]string{"af-name"}
 		keyValues := [...]string{data.AddressFamily[i].AfName.ValueString()}
 
 		var r gjson.Result
-		res.Get("address-families.address-family").ForEach(
+		gjson.GetBytes(res, "address-families.address-family").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -228,7 +276,7 @@ func (data *MPLSLDPInterface) updateFromBody(ctx context.Context, res gjson.Resu
 				return true
 			},
 		)
-		if value := r.Get("af-name"); value.Exists() && !data.AddressFamily[i].AfName.IsNull() {
+		if value := r.Get("af-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AddressFamily[i].AfName.IsNull() {
 			data.AddressFamily[i].AfName = types.StringValue(value.String())
 		} else {
 			data.AddressFamily[i].AfName = types.StringNull()
@@ -245,7 +293,7 @@ func (data *MPLSLDPInterface) updateFromBody(ctx context.Context, res gjson.Resu
 				data.AddressFamily[i].DiscoveryTransportAddressInterface = types.BoolNull()
 			}
 		}
-		if value := r.Get("discovery.transport-address.ip-address"); value.Exists() && !data.AddressFamily[i].DiscoveryTransportAddressIp.IsNull() {
+		if value := r.Get("discovery.transport-address.ip-address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AddressFamily[i].DiscoveryTransportAddressIp.IsNull() {
 			data.AddressFamily[i].DiscoveryTransportAddressIp = types.StringValue(value.String())
 		} else {
 			data.AddressFamily[i].DiscoveryTransportAddressIp = types.StringNull()
@@ -278,6 +326,284 @@ func (data *MPLSLDPInterface) updateFromBody(ctx context.Context, res gjson.Resu
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *MPLSLDPInterface) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "discovery.hello.holdtime"); value.Exists() {
+		data.DiscoveryHelloHoldtime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "discovery.hello.interval"); value.Exists() {
+		data.DiscoveryHelloInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "discovery.hello.dual-stack-tlv"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.DiscoveryHelloDualStackTlv = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "discovery.quick-start.disable"); value.Exists() {
+		data.DiscoveryQuickStartDisable = types.BoolValue(true)
+	} else if !data.DiscoveryQuickStartDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DiscoveryQuickStartDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "igp.sync.delay.on-session-up.interface-sync-up-delay"); value.Exists() {
+		data.IgpSyncDelayOnSessionUp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "igp.sync.delay.on-session-up.disable"); value.Exists() {
+		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(true)
+	} else if !data.IgpSyncDelayOnSessionUpDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-families.address-family"); value.Exists() {
+		data.AddressFamily = make([]MPLSLDPInterfaceAddressFamily, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := MPLSLDPInterfaceAddressFamily{}
+			if cValue := v.Get("af-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.AfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("discovery.transport-address.interface"); cValue.Exists() {
+				item.DiscoveryTransportAddressInterface = types.BoolValue(true)
+			} else if !item.DiscoveryTransportAddressInterface.IsNull() {
+				// Only set to false if it was previously set
+				item.DiscoveryTransportAddressInterface = types.BoolValue(false)
+			}
+			if cValue := v.Get("discovery.transport-address.ip-address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.DiscoveryTransportAddressIp = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("igp.auto-config.disable"); cValue.Exists() {
+				item.IgpAutoConfigDisable = types.BoolValue(true)
+			} else if !item.IgpAutoConfigDisable.IsNull() {
+				// Only set to false if it was previously set
+				item.IgpAutoConfigDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("mldp.disable"); cValue.Exists() {
+				item.MldpDisable = types.BoolValue(true)
+			} else if !item.MldpDisable.IsNull() {
+				// Only set to false if it was previously set
+				item.MldpDisable = types.BoolValue(false)
+			}
+			data.AddressFamily = append(data.AddressFamily, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *MPLSLDPInterfaceData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "discovery.hello.holdtime"); value.Exists() {
+		data.DiscoveryHelloHoldtime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "discovery.hello.interval"); value.Exists() {
+		data.DiscoveryHelloInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "discovery.hello.dual-stack-tlv"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.DiscoveryHelloDualStackTlv = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "discovery.quick-start.disable"); value.Exists() {
+		data.DiscoveryQuickStartDisable = types.BoolValue(true)
+	} else {
+		data.DiscoveryQuickStartDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "igp.sync.delay.on-session-up.interface-sync-up-delay"); value.Exists() {
+		data.IgpSyncDelayOnSessionUp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "igp.sync.delay.on-session-up.disable"); value.Exists() {
+		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(true)
+	} else {
+		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-families.address-family"); value.Exists() {
+		data.AddressFamily = make([]MPLSLDPInterfaceAddressFamily, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := MPLSLDPInterfaceAddressFamily{}
+			if cValue := v.Get("af-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.AfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("discovery.transport-address.interface"); cValue.Exists() {
+				item.DiscoveryTransportAddressInterface = types.BoolValue(true)
+			} else {
+				item.DiscoveryTransportAddressInterface = types.BoolValue(false)
+			}
+			if cValue := v.Get("discovery.transport-address.ip-address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.DiscoveryTransportAddressIp = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("igp.auto-config.disable"); cValue.Exists() {
+				item.IgpAutoConfigDisable = types.BoolValue(true)
+			} else {
+				item.IgpAutoConfigDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("mldp.disable"); cValue.Exists() {
+				item.MldpDisable = types.BoolValue(true)
+			} else {
+				item.MldpDisable = types.BoolValue(false)
+			}
+			data.AddressFamily = append(data.AddressFamily, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *MPLSLDPInterface) getDeletedItems(ctx context.Context, state MPLSLDPInterface, version string) []string {
+	deletedItems := make([]string, 0)
+	for i := range state.AddressFamily {
+		keys := [...]string{"af-name"}
+		stateKeyValues := [...]string{state.AddressFamily[i].AfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.AddressFamily[i].AfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.AddressFamily {
+			found = true
+			if state.AddressFamily[i].AfName.ValueString() != data.AddressFamily[j].AfName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.AddressFamily[i].MldpDisable.IsNull() && data.AddressFamily[j].MldpDisable.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "mldp/disable"))
+				}
+				if !state.AddressFamily[i].IgpAutoConfigDisable.IsNull() && data.AddressFamily[j].IgpAutoConfigDisable.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "igp/auto-config/disable"))
+				}
+				if !state.AddressFamily[i].DiscoveryTransportAddressIp.IsNull() && data.AddressFamily[j].DiscoveryTransportAddressIp.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "discovery/transport-address/ip-address"))
+				}
+				if !state.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() && data.AddressFamily[j].DiscoveryTransportAddressInterface.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString), "discovery/transport-address/interface"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "address-families/address-family", keyString))
+		}
+	}
+	if !state.IgpSyncDelayOnSessionUpDisable.IsNull() && data.IgpSyncDelayOnSessionUpDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "igp/sync/delay/on-session-up/disable"))
+	}
+	if !state.IgpSyncDelayOnSessionUp.IsNull() && data.IgpSyncDelayOnSessionUp.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "igp/sync/delay/on-session-up/interface-sync-up-delay"))
+	}
+	if !state.DiscoveryQuickStartDisable.IsNull() && data.DiscoveryQuickStartDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "discovery/quick-start/disable"))
+	}
+	if !state.DiscoveryHelloDualStackTlv.IsNull() && data.DiscoveryHelloDualStackTlv.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "discovery/hello/dual-stack-tlv"))
+	}
+	if !state.DiscoveryHelloInterval.IsNull() && data.DiscoveryHelloInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "discovery/hello/interval"))
+	}
+	if !state.DiscoveryHelloHoldtime.IsNull() && data.DiscoveryHelloHoldtime.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "discovery/hello/holdtime"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *MPLSLDPInterface) getEmptyLeafsDelete(ctx context.Context, state *MPLSLDPInterface, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	for i := range data.AddressFamily {
+		keys := [...]string{"af-name"}
+		keyValues := [...]string{data.AddressFamily[i].AfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.AddressFamily[i].MldpDisable.IsNull() && !data.AddressFamily[i].MldpDisable.ValueBool() {
+			if state == nil || i >= len(state.AddressFamily) || state.AddressFamily[i].MldpDisable.IsNull() || state.AddressFamily[i].MldpDisable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "mldp/disable"))
+			}
+		}
+		if !data.AddressFamily[i].IgpAutoConfigDisable.IsNull() && !data.AddressFamily[i].IgpAutoConfigDisable.ValueBool() {
+			if state == nil || i >= len(state.AddressFamily) || state.AddressFamily[i].IgpAutoConfigDisable.IsNull() || state.AddressFamily[i].IgpAutoConfigDisable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "igp/auto-config/disable"))
+			}
+		}
+		if !data.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() && !data.AddressFamily[i].DiscoveryTransportAddressInterface.ValueBool() {
+			if state == nil || i >= len(state.AddressFamily) || state.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() || state.AddressFamily[i].DiscoveryTransportAddressInterface.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString), "discovery/transport-address/interface"))
+			}
+		}
+	}
+	if !data.IgpSyncDelayOnSessionUpDisable.IsNull() && !data.IgpSyncDelayOnSessionUpDisable.ValueBool() {
+		if state == nil || state.IgpSyncDelayOnSessionUpDisable.IsNull() || state.IgpSyncDelayOnSessionUpDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "igp/sync/delay/on-session-up/disable"))
+		}
+	}
+	if !data.DiscoveryQuickStartDisable.IsNull() && !data.DiscoveryQuickStartDisable.ValueBool() {
+		if state == nil || state.DiscoveryQuickStartDisable.IsNull() || state.DiscoveryQuickStartDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "discovery/quick-start/disable"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *MPLSLDPInterface) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	for i := range data.AddressFamily {
+		keys := [...]string{"af-name"}
+		keyValues := [...]string{data.AddressFamily[i].AfName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.AddressFamily[i].AfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "address-families/address-family", keyString))
+	}
+	if !data.IgpSyncDelayOnSessionUpDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "igp/sync/delay/on-session-up/disable"))
+	}
+	if !data.IgpSyncDelayOnSessionUp.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "igp/sync/delay/on-session-up/interface-sync-up-delay"))
+	}
+	if !data.DiscoveryQuickStartDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "discovery/quick-start/disable"))
+	}
+	if !data.DiscoveryHelloDualStackTlv.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "discovery/hello/dual-stack-tlv"))
+	}
+	if !data.DiscoveryHelloInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "discovery/hello/interval"))
+	}
+	if !data.DiscoveryHelloHoldtime.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "discovery/hello/holdtime"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data MPLSLDPInterface) toBodyXML(ctx context.Context, stateArg ...*MPLSLDPInterface) string {
@@ -356,7 +682,7 @@ func (data MPLSLDPInterface) toBodyXML(ctx context.Context, stateArg ...*MPLSLDP
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -364,6 +690,7 @@ func (data MPLSLDPInterface) toBodyXML(ctx context.Context, stateArg ...*MPLSLDP
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *MPLSLDPInterface) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -482,142 +809,7 @@ func (data *MPLSLDPInterface) updateFromBodyXML(ctx context.Context, res xmldot.
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *MPLSLDPInterface) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "discovery.hello.holdtime"); value.Exists() {
-		data.DiscoveryHelloHoldtime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "discovery.hello.interval"); value.Exists() {
-		data.DiscoveryHelloInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "discovery.hello.dual-stack-tlv"); value.Exists() {
-		data.DiscoveryHelloDualStackTlv = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "discovery.quick-start.disable"); value.Exists() {
-		data.DiscoveryQuickStartDisable = types.BoolValue(true)
-	} else if !data.DiscoveryQuickStartDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.DiscoveryQuickStartDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "igp.sync.delay.on-session-up.interface-sync-up-delay"); value.Exists() {
-		data.IgpSyncDelayOnSessionUp = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "igp.sync.delay.on-session-up.disable"); value.Exists() {
-		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(true)
-	} else if !data.IgpSyncDelayOnSessionUpDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "address-families.address-family"); value.Exists() {
-		data.AddressFamily = make([]MPLSLDPInterfaceAddressFamily, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := MPLSLDPInterfaceAddressFamily{}
-			if cValue := v.Get("af-name"); cValue.Exists() {
-				item.AfName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("discovery.transport-address.interface"); cValue.Exists() {
-				item.DiscoveryTransportAddressInterface = types.BoolValue(true)
-			} else if !item.DiscoveryTransportAddressInterface.IsNull() {
-				// Only set to false if it was previously set
-				item.DiscoveryTransportAddressInterface = types.BoolValue(false)
-			}
-			if cValue := v.Get("discovery.transport-address.ip-address"); cValue.Exists() {
-				item.DiscoveryTransportAddressIp = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("igp.auto-config.disable"); cValue.Exists() {
-				item.IgpAutoConfigDisable = types.BoolValue(true)
-			} else if !item.IgpAutoConfigDisable.IsNull() {
-				// Only set to false if it was previously set
-				item.IgpAutoConfigDisable = types.BoolValue(false)
-			}
-			if cValue := v.Get("mldp.disable"); cValue.Exists() {
-				item.MldpDisable = types.BoolValue(true)
-			} else if !item.MldpDisable.IsNull() {
-				// Only set to false if it was previously set
-				item.MldpDisable = types.BoolValue(false)
-			}
-			data.AddressFamily = append(data.AddressFamily, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *MPLSLDPInterfaceData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "discovery.hello.holdtime"); value.Exists() {
-		data.DiscoveryHelloHoldtime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "discovery.hello.interval"); value.Exists() {
-		data.DiscoveryHelloInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "discovery.hello.dual-stack-tlv"); value.Exists() {
-		data.DiscoveryHelloDualStackTlv = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "discovery.quick-start.disable"); value.Exists() {
-		data.DiscoveryQuickStartDisable = types.BoolValue(true)
-	} else {
-		data.DiscoveryQuickStartDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "igp.sync.delay.on-session-up.interface-sync-up-delay"); value.Exists() {
-		data.IgpSyncDelayOnSessionUp = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "igp.sync.delay.on-session-up.disable"); value.Exists() {
-		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(true)
-	} else {
-		data.IgpSyncDelayOnSessionUpDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "address-families.address-family"); value.Exists() {
-		data.AddressFamily = make([]MPLSLDPInterfaceAddressFamily, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := MPLSLDPInterfaceAddressFamily{}
-			if cValue := v.Get("af-name"); cValue.Exists() {
-				item.AfName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("discovery.transport-address.interface"); cValue.Exists() {
-				item.DiscoveryTransportAddressInterface = types.BoolValue(true)
-			} else {
-				item.DiscoveryTransportAddressInterface = types.BoolValue(false)
-			}
-			if cValue := v.Get("discovery.transport-address.ip-address"); cValue.Exists() {
-				item.DiscoveryTransportAddressIp = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("igp.auto-config.disable"); cValue.Exists() {
-				item.IgpAutoConfigDisable = types.BoolValue(true)
-			} else {
-				item.IgpAutoConfigDisable = types.BoolValue(false)
-			}
-			if cValue := v.Get("mldp.disable"); cValue.Exists() {
-				item.MldpDisable = types.BoolValue(true)
-			} else {
-				item.MldpDisable = types.BoolValue(false)
-			}
-			data.AddressFamily = append(data.AddressFamily, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *MPLSLDPInterface) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -675,6 +867,7 @@ func (data *MPLSLDPInterface) fromBodyXML(ctx context.Context, res xmldot.Result
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *MPLSLDPInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -732,156 +925,7 @@ func (data *MPLSLDPInterfaceData) fromBodyXML(ctx context.Context, res xmldot.Re
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *MPLSLDPInterface) getDeletedItems(ctx context.Context, state MPLSLDPInterface) []string {
-	deletedItems := make([]string, 0)
-	for i := range state.AddressFamily {
-		keys := [...]string{"af-name"}
-		stateKeyValues := [...]string{state.AddressFamily[i].AfName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamily[i].AfName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.AddressFamily {
-			found = true
-			if state.AddressFamily[i].AfName.ValueString() != data.AddressFamily[j].AfName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.AddressFamily[i].MldpDisable.IsNull() && data.AddressFamily[j].MldpDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/mldp/disable", state.getPath(), keyString))
-				}
-				if !state.AddressFamily[i].IgpAutoConfigDisable.IsNull() && data.AddressFamily[j].IgpAutoConfigDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/igp/auto-config/disable", state.getPath(), keyString))
-				}
-				if !state.AddressFamily[i].DiscoveryTransportAddressIp.IsNull() && data.AddressFamily[j].DiscoveryTransportAddressIp.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/discovery/transport-address/ip-address", state.getPath(), keyString))
-				}
-				if !state.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() && data.AddressFamily[j].DiscoveryTransportAddressInterface.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/discovery/transport-address/interface", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v", state.getPath(), keyString))
-		}
-	}
-	if !state.IgpSyncDelayOnSessionUpDisable.IsNull() && data.IgpSyncDelayOnSessionUpDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/igp/sync/delay/on-session-up/disable", state.getPath()))
-	}
-	if !state.IgpSyncDelayOnSessionUp.IsNull() && data.IgpSyncDelayOnSessionUp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/igp/sync/delay/on-session-up/interface-sync-up-delay", state.getPath()))
-	}
-	if !state.DiscoveryQuickStartDisable.IsNull() && data.DiscoveryQuickStartDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/discovery/quick-start/disable", state.getPath()))
-	}
-	if !state.DiscoveryHelloDualStackTlv.IsNull() && data.DiscoveryHelloDualStackTlv.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/discovery/hello/dual-stack-tlv", state.getPath()))
-	}
-	if !state.DiscoveryHelloInterval.IsNull() && data.DiscoveryHelloInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/discovery/hello/interval", state.getPath()))
-	}
-	if !state.DiscoveryHelloHoldtime.IsNull() && data.DiscoveryHelloHoldtime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/discovery/hello/holdtime", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *MPLSLDPInterface) getEmptyLeafsDelete(ctx context.Context, state *MPLSLDPInterface) []string {
-	emptyLeafsDelete := make([]string, 0)
-	for i := range data.AddressFamily {
-		keys := [...]string{"af-name"}
-		keyValues := [...]string{data.AddressFamily[i].AfName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.AddressFamily[i].MldpDisable.IsNull() && !data.AddressFamily[i].MldpDisable.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].MldpDisable.IsNull() && state.AddressFamily[i].MldpDisable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/mldp/disable", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.AddressFamily[i].IgpAutoConfigDisable.IsNull() && !data.AddressFamily[i].IgpAutoConfigDisable.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].IgpAutoConfigDisable.IsNull() && state.AddressFamily[i].IgpAutoConfigDisable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/igp/auto-config/disable", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() && !data.AddressFamily[i].DiscoveryTransportAddressInterface.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.AddressFamily) && !state.AddressFamily[i].DiscoveryTransportAddressInterface.IsNull() && state.AddressFamily[i].DiscoveryTransportAddressInterface.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/discovery/transport-address/interface", data.getXPath(), keyString))
-			}
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.IgpSyncDelayOnSessionUpDisable.IsNull() && !data.IgpSyncDelayOnSessionUpDisable.ValueBool() {
-		if state != nil && !state.IgpSyncDelayOnSessionUpDisable.IsNull() && state.IgpSyncDelayOnSessionUpDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/igp/sync/delay/on-session-up/disable", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.DiscoveryQuickStartDisable.IsNull() && !data.DiscoveryQuickStartDisable.ValueBool() {
-		if state != nil && !state.DiscoveryQuickStartDisable.IsNull() && state.DiscoveryQuickStartDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/discovery/quick-start/disable", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *MPLSLDPInterface) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	for i := range data.AddressFamily {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[af-name=" + data.AddressFamily[i].AfName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-families/address-family%v", data.getPath(), keyPath))
-	}
-	if !data.IgpSyncDelayOnSessionUpDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/igp/sync/delay/on-session-up/disable", data.getPath()))
-	}
-	if !data.IgpSyncDelayOnSessionUp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/igp/sync/delay/on-session-up/interface-sync-up-delay", data.getPath()))
-	}
-	if !data.DiscoveryQuickStartDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/discovery/quick-start/disable", data.getPath()))
-	}
-	if !data.DiscoveryHelloDualStackTlv.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/discovery/hello/dual-stack-tlv", data.getPath()))
-	}
-	if !data.DiscoveryHelloInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/discovery/hello/interval", data.getPath()))
-	}
-	if !data.DiscoveryHelloHoldtime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/discovery/hello/holdtime", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *MPLSLDPInterface) addDeletedItemsXML(ctx context.Context, state MPLSLDPInterface, body string) string {
@@ -1032,6 +1076,7 @@ func (data *MPLSLDPInterface) addDeletedItemsXML(ctx context.Context, state MPLS
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *MPLSLDPInterface) addDeletePathsXML(ctx context.Context, body string) string {

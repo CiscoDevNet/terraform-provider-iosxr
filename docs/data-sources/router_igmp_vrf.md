@@ -37,6 +37,7 @@ data "iosxr_router_igmp_vrf" "example" {
 - `explicit_tracking_acl` (String) Access list specifying tracking group range
 - `explicit_tracking_disable` (Boolean) Disable IGMPv3 explicit host tracking
 - `id` (String) The path of the retrieved object.
+- `interfaces` (Attributes List) Select an interface to configure (see [below for nested schema](#nestedatt--interfaces))
 - `maximum_groups` (Number) Maximum number of groups accepted by this router
 - `maximum_groups_per_interface` (Number) Maximum number of groups accepted per interface by this router
 - `maximum_groups_per_interface_acl` (String) Name of ACL
@@ -53,6 +54,93 @@ data "iosxr_router_igmp_vrf" "example" {
 - `ssm_map_statics` (Attributes List) Configure a static mapping of a source to a set of SSM groups (see [below for nested schema](#nestedatt--ssm_map_statics))
 - `traffic_profile` (String) Configure route-policy to be used to map the bandwidth profile
 - `version` (Number) IGMP version
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Read-Only:
+
+- `access_group` (String) IGMP group access group
+- `dvmrp_enable` (Boolean) Configure dvmrp to allow dvmrp processing on all interfaces
+- `explicit_tracking_acl` (String) Access list specifying tracking group range
+- `explicit_tracking_disable` (Boolean) Disable IGMPv3 explicit host tracking
+- `explicit_tracking_enable` (Boolean) Disable IGMPv3 explicit host tracking
+- `interface_name` (String) Select an interface to configure
+- `join_groups` (Attributes List) IGMP join multicast group (see [below for nested schema](#nestedatt--interfaces--join_groups))
+- `maximum_groups_per_interface` (Number) Maxinum number of groups accepted per interface by this router
+- `maximum_groups_per_interface_acl` (String) Name of ACL
+- `maximum_groups_per_interface_threshold` (Number) Threshold warning
+- `query_interval` (Number) IGMP host query interval
+- `query_max_response_time` (Number) IGMP max query response value
+- `query_timeout` (Number) IGMP previous querier timeout
+- `router_disable` (Boolean) Disable Router side functionality in IGMP
+- `router_enable` (Boolean) Enable Router side functionality in IGMP
+- `static_groups` (Attributes List) IGMP static multicast group (see [below for nested schema](#nestedatt--interfaces--static_groups))
+- `version` (Number) IGMP version
+
+<a id="nestedatt--interfaces--join_groups"></a>
+### Nested Schema for `interfaces.join_groups`
+
+Read-Only:
+
+- `group_address` (String) IP group address
+- `group_address_only` (Boolean) Join multicast group without source address
+- `source_addresses` (Attributes List) Source address to include or exclude (see [below for nested schema](#nestedatt--interfaces--join_groups--source_addresses))
+
+<a id="nestedatt--interfaces--join_groups--source_addresses"></a>
+### Nested Schema for `interfaces.join_groups.source_addresses`
+
+Read-Only:
+
+- `exclude` (Boolean) Exclude only the following source address
+- `include` (Boolean) Include only the following source address
+- `source_ip` (String) Source address to include
+
+
+
+<a id="nestedatt--interfaces--static_groups"></a>
+### Nested Schema for `interfaces.static_groups`
+
+Read-Only:
+
+- `group_address` (String) IP group address
+- `group_address_only` (Boolean) Group-address without increment mask/source-address
+- `group_masks` (Attributes List) Increment mask for group address (see [below for nested schema](#nestedatt--interfaces--static_groups--group_masks))
+- `group_masks_source_addresses` (Attributes List) Increment mask for group address (see [below for nested schema](#nestedatt--interfaces--static_groups--group_masks_source_addresses))
+- `source_addresses` (Attributes List) IGMP static multicast group (see [below for nested schema](#nestedatt--interfaces--static_groups--source_addresses))
+- `suppress_reports` (Boolean) Suppress IGMP reports
+
+<a id="nestedatt--interfaces--static_groups--group_masks"></a>
+### Nested Schema for `interfaces.static_groups.group_masks`
+
+Read-Only:
+
+- `group_count` (Number) No. of group addresses to join
+- `group_inc_mask` (String) Increment mask for group address
+- `suppress_reports` (Boolean) Suppress IGMP reports
+
+
+<a id="nestedatt--interfaces--static_groups--group_masks_source_addresses"></a>
+### Nested Schema for `interfaces.static_groups.group_masks_source_addresses`
+
+Read-Only:
+
+- `group_count` (Number) No. of group addresses to join
+- `group_inc_mask` (String) Increment mask for group address
+- `source_ip` (String) Source address to join
+- `suppress_reports` (Boolean) Suppress IGMP reports
+
+
+<a id="nestedatt--interfaces--static_groups--source_addresses"></a>
+### Nested Schema for `interfaces.static_groups.source_addresses`
+
+Read-Only:
+
+- `source_ip` (String) Source address to join
+- `suppress_reports` (Boolean) Suppress IGMP reports
+
+
+
 
 <a id="nestedatt--ssm_map_statics"></a>
 ### Nested Schema for `ssm_map_statics`

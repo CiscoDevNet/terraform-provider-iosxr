@@ -10,30 +10,33 @@ description: |-
 
 This resource can manage the L2VPN configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `pw_oam_refresh_transmit` | `25.4` |
+
 ## Example Usage
 
 ```terraform
 resource "iosxr_l2vpn" "example" {
-  description = "My L2VPN Description"
-  router_id   = "1.2.3.4"
-  redundancy_iccp_groups = [
+  autodiscovery_bgp_signaling_protocol_bgp_mtu_mismatch_ignore = true
+  capability_high_mode                                         = true
+  description                                                  = "My L2VPN Description"
+  flexible_xconnect_service_vlan_aware_evis = [
     {
-      group_number = 100
       interfaces = [
         {
-          interface_name    = "Bundle-Ether20"
-          primary_vlan      = "10-15"
-          secondary_vlan    = "20-25"
-          mac_flush_stp_tcn = true
-          recovery_delay    = 60
+          interface_name = "GigabitEthernet0/0/0/2.200"
         }
       ]
-      multi_homing_node_id = 1
+      vpn_id = 200
     }
   ]
   flexible_xconnect_service_vlan_unaware = [
     {
-      service_name = "XC-1"
       interfaces = [
         {
           interface_name = "GigabitEthernet0/0/0/1.100"
@@ -41,44 +44,48 @@ resource "iosxr_l2vpn" "example" {
       ]
       neighbor_evpn_evis = [
         {
-          vpn_id       = 100
           remote_ac_id = 1000
+          vpn_id       = 100
         }
       ]
+      service_name = "XC-1"
     }
   ]
-  flexible_xconnect_service_vlan_aware_evis = [
+  ignore_mtu_mismatch                            = true
+  ignore_mtu_mismatch_ad                         = true
+  load_balancing_flow_src_dst_ip                 = true
+  load_balancing_flow_src_dst_mac                = false
+  logging_bridge_domain                          = true
+  logging_nsr                                    = true
+  logging_pseudowire                             = true
+  logging_pwhe_replication_disable               = true
+  logging_vfi                                    = true
+  mac_limit_threshold                            = 50
+  neighbors_all_ldp_flap                         = true
+  pw_grouping                                    = true
+  pw_routing_bgp_rd_four_byte_as_assigned_number = 1
+  pw_routing_bgp_rd_four_byte_as_number          = 65536
+  pw_routing_global_id                           = 100
+  pw_status_disable                              = true
+  redundancy_iccp_groups = [
     {
-      vpn_id = 200
+      group_number = 100
       interfaces = [
         {
-          interface_name = "GigabitEthernet0/0/0/2.200"
+          interface_name    = "Bundle-Ether20"
+          mac_flush_stp_tcn = true
+          primary_vlan      = "10-15"
+          recovery_delay    = 60
+          secondary_vlan    = "20-25"
         }
       ]
+      multi_homing_node_id = 1
     }
   ]
-  ignore_mtu_mismatch                                          = true
-  ignore_mtu_mismatch_ad                                       = true
-  pw_status_disable                                            = true
-  load_balancing_flow_src_dst_mac                              = false
-  load_balancing_flow_src_dst_ip                               = true
-  capability_high_mode                                         = true
-  pw_oam_refresh_transmit                                      = 20
-  tcn_propagation                                              = true
-  pw_grouping                                                  = true
-  neighbors_all_ldp_flap                                       = true
-  mac_limit_threshold                                          = 50
-  logging_pseudowire                                           = true
-  logging_bridge_domain                                        = true
-  logging_vfi                                                  = true
-  logging_nsr                                                  = true
-  logging_pwhe_replication_disable                             = true
-  autodiscovery_bgp_signaling_protocol_bgp_mtu_mismatch_ignore = true
-  pw_routing_global_id                                         = 100
-  pw_routing_bgp_rd_four_byte_as_number                        = 65536
-  pw_routing_bgp_rd_four_byte_as_assigned_number               = 1
-  snmp_mib_interface_format_external                           = true
-  snmp_mib_pseudowire_statistics                               = true
+  router_id                          = "1.2.3.4"
+  snmp_mib_interface_format_external = true
+  snmp_mib_pseudowire_statistics     = true
+  tcn_propagation                    = true
 }
 ```
 
@@ -111,6 +118,7 @@ resource "iosxr_l2vpn" "example" {
 - `pw_grouping` (Boolean) Enable PW-Grouping
 - `pw_oam_refresh_transmit` (Number) Transmit
   - Range: `1`-`4095`
+  - **Not supported from version `25.4` and above**
 - `pw_routing_bgp_rd_four_byte_as_assigned_number` (Number) AS:nn (hex or decimal format)
   - Range: `0`-`65535`
 - `pw_routing_bgp_rd_four_byte_as_number` (Number) Four Byte AS number

@@ -14,8 +14,8 @@ This data source can read the Router BGP Address Family configuration.
 
 ```terraform
 data "iosxr_router_bgp_address_family" "example" {
-  as_number = "65001"
   af_name   = "ipv4-unicast"
+  as_number = "65001"
 }
 ```
 
@@ -68,16 +68,30 @@ data "iosxr_router_bgp_address_family" "example" {
 - `bgp_origin_as_validation_signal_ibgp` (Boolean) Signal origin-AS validity towards iBGP peers
 - `bgp_scan_time` (Number) Configure background scanner interval for this address-family
 - `default_martian_check_disable` (Boolean) Disable
+- `delay_route_inbound` (Number) Delay the advertisement of the inbound routes by delaying the best path calculation
+  - Supported from version: `25.4`
 - `distance_bgp_external_route` (Number) Distance for routes external to the AS
 - `distance_bgp_internal_route` (Number) Distance for routes internal to the AS
 - `distance_bgp_local_route` (Number) Distance for local routes
 - `domain_distinguisher_as` (Number) 4 octet ASN
 - `domain_distinguisher_router_id` (String) 4 octet router-id
 - `dynamic_med_interval` (Number) Update generation delay (in minutes) after a MED change
+- `ecmp_delay_as_based_as_list` (String) Enable ECMP delay for neighbor AS'es included in the AS list
+  - Supported from version: `25.4`
+- `ecmp_delay_as_based_delay` (Number) Provide a delay interval in msecs
+  - Supported from version: `25.4`
+- `ecmp_delay_fixed_delay` (Number) Provide a delay interval in msecs
+  - Supported from version: `25.4`
+- `ecmp_delay_platform_oor_based_delay` (Number) Provide a delay interval in msecs
+  - Supported from version: `25.4`
+- `ecmp_delay_platform_oor_based_threshold` (Number) Delay only when platform resource usage is above specified threshold
+  - Supported from version: `25.4`
 - `epe_backup_enable` (Boolean) Enable the EPE backup under current AFI
 - `event_prefix_route_policy` (String) Policy for per-prefix tracing
 - `export_to_vrf_allow_backup` (Boolean) Allow Export of backup path
 - `export_to_vrf_allow_best_external` (Boolean) Allow Export of best-external
+- `fast_reroute_per_link` (Boolean) Enable fast reroute per-link
+  - Supported from version: `25.4`
 - `global_table_multicast` (Boolean) Enable global table multicast
 - `id` (String) The path of the retrieved object.
 - `import_from_bridge_domain` (Boolean) Import IP hosts from EVPN bridge-domain
@@ -90,6 +104,8 @@ data "iosxr_router_bgp_address_family" "example" {
 - `label_mode_per_vrf_46` (Boolean) Set per VRF 46 label mode
 - `label_mode_route_policy` (String) Use a route policy to select prefixes for label allocation mode
 - `label_security_asbr_rpf` (Boolean) RPF Label Security for Option-B
+- `maximum_paths_ebgp_bestpath_only` (Boolean) Apply policy only for bestpath. This is needed if user doesnt want to deprefer any paths and apply certain attributes to bestpath only
+  - Supported from version: `25.4`
 - `maximum_paths_ebgp_multipath` (Number) Number of paths (limit includes backup path)
 - `maximum_paths_ebgp_route_policy` (String) Route policy to specify ORF and inbound filter
 - `maximum_paths_ebgp_selective` (Boolean) Allow multipaths only from marked neighbors
@@ -114,18 +130,24 @@ data "iosxr_router_bgp_address_family" "example" {
 - `prefix_ecmp_delay` (Number) Interval(ms)
 - `prefix_ecmp_delay_oor_threshold` (Number) Delay only when platform resource usage is above threshold
 - `redistribute_connected` (Boolean) Redistribute connected routes
+- `redistribute_connected_default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Supported from version: `25.4`
 - `redistribute_connected_metric` (Number) Metric for redistributed routes
 - `redistribute_connected_multipath` (Boolean) Enable installation of multiple paths from RIB
 - `redistribute_connected_route_policy` (String) Route policy reference
-- `redistribute_eigrp` (Attributes List) Redistribute EIGRP routes (see [below for nested schema](#nestedatt--redistribute_eigrp))
-- `redistribute_isis` (Attributes List) Redistribute ISIS routes (see [below for nested schema](#nestedatt--redistribute_isis))
-- `redistribute_ospf` (Attributes List) Redistribute OSPF routes (see [below for nested schema](#nestedatt--redistribute_ospf))
-- `redistribute_ospfv3` (Attributes List) Redistribute OSPFv3 routes (see [below for nested schema](#nestedatt--redistribute_ospfv3))
+- `redistribute_eigrp` (Attributes List) Enhanced Interior Gateway Routing Protocol (EIGRP) (see [below for nested schema](#nestedatt--redistribute_eigrp))
+- `redistribute_isis` (Attributes List) ISO IS-IS (see [below for nested schema](#nestedatt--redistribute_isis))
+- `redistribute_ospf` (Attributes List) Open Shortest Path First (OSPF) (see [below for nested schema](#nestedatt--redistribute_ospf))
+- `redistribute_ospfv3` (Attributes List) IPv6 Open Shortest Path First (OSPFv3) (see [below for nested schema](#nestedatt--redistribute_ospfv3))
 - `redistribute_rip` (Boolean) Redistribute RIP routes
+- `redistribute_rip_default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Supported from version: `25.4`
 - `redistribute_rip_metric` (Number) Metric for redistributed routes
 - `redistribute_rip_multipath` (Boolean) Enable installation of multiple paths from RIB
 - `redistribute_rip_route_policy` (String) Route policy reference
 - `redistribute_static` (Boolean) Redistribute static routes
+- `redistribute_static_default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Supported from version: `25.4`
 - `redistribute_static_metric` (Number) Metric for redistributed routes
 - `redistribute_static_multipath` (Boolean) Enable installation of multiple paths from RIB
 - `redistribute_static_route_policy` (String) Route policy reference
@@ -146,6 +168,8 @@ data "iosxr_router_bgp_address_family" "example" {
 - `update_limit_address_family` (Number) Update limit for address-family
 - `update_limit_sub_group_ebgp` (Number) Update limit for eBGP sub-groups
 - `update_limit_sub_group_ibgp` (Number) Update limit for iBGP sub-groups
+- `update_out_quick_withdraw_disable` (Boolean) Disable
+  - Supported from version: `25.4`
 - `update_wait_install` (Boolean) Wait for route install
 - `update_wait_install_delay_startup` (Number) Configure a delay for the startup phase
 - `vrf_all_label_mode_per_ce` (Boolean) Set per CE label mode
@@ -161,6 +185,8 @@ data "iosxr_router_bgp_address_family" "example" {
 - `vrf_all_segment_routing_srv6_usid_allocation_wide_local_id_block` (Boolean) Wide LIB allocation
 - `vrf_all_source_rt_import_policy` (Boolean) Source import route-targets from import-policy
 - `vrf_all_table_policy` (String) Configure policy for installation of routes to RIB
+- `vrf_all_update_out_quick_withdraw_disable` (Boolean) Generation of quick withdraw messages
+  - Supported from version: `25.4`
 - `weight_reset_on_import` (Boolean) Reset weight of paths on import
 
 <a id="nestedatt--aggregate_addresses"></a>
@@ -222,6 +248,8 @@ Read-Only:
 
 Read-Only:
 
+- `default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Supported from version: `25.4`
 - `instance_name` (String) EIGRP instance name
 - `match_external` (Boolean) Redistribute EIGRP external routes
 - `match_internal` (Boolean) Redistribute EIGRP internal routes
@@ -236,6 +264,8 @@ Read-Only:
 
 Read-Only:
 
+- `default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Supported from version: `25.4`
 - `instance_name` (String) ISIS instance name
 - `level_1` (Boolean) Redistribute ISIS level 1 routes
 - `level_1_inter_area` (Boolean) Redistribute ISIS level 1 inter-area routes
@@ -254,6 +284,8 @@ Read-Only:
 
 Read-Only:
 
+- `default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Supported from version: `25.4`
 - `match_external` (Boolean) Redistribute OSPF external routes
 - `match_external_1` (Boolean) Redistribute OSPF external type 1 routes
 - `match_external_1_nssa_external` (Boolean) Redistribute OSPF external type 1 and NSSA external routes
@@ -296,6 +328,8 @@ Read-Only:
 
 Read-Only:
 
+- `default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Supported from version: `25.4`
 - `match_external` (Boolean) Redistribute OSPFv3 external routes
 - `match_external_1` (Boolean) Redistribute OSPFv3 external type 1 routes
 - `match_external_1_nssa_external` (Boolean) Redistribute OSPFv3 external type 1 and NSSA external routes

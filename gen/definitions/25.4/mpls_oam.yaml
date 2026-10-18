@@ -1,0 +1,21 @@
+---
+name: MPLS OAM
+path: Cisco-IOS-XR-um-mpls-oam-cfg:/mpls
+doc_category: MPLS
+attributes:
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: oam/echo/revision/five
+    tf_name: oam_echo_revision_five
+    exclude_test: true
+    example: true
+  - yang_name: oam/address-family/ipv4/reply/ip-header-source
+    tf_name: oam_address_family_ipv4_reply_ip_header_source
+    example: 1.1.1.1
+  - yang_name: oam/address-family/ipv6/reply/ip-header-source
+    tf_name: oam_address_family_ipv6_reply_ip_header_source
+    example: "2001:db8::1"
+  - yang_name: oam/dpm/shutdown
+    tf_name: oam_dpm_shutdown
+    example: true

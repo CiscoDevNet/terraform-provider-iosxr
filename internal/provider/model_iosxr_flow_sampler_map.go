@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"strconv"
 	"strings"
 
@@ -83,7 +84,7 @@ func (data FlowSamplerMapData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data FlowSamplerMap) toBody(ctx context.Context) string {
+func (data FlowSamplerMap) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.Name.IsNull() && !data.Name.IsUnknown() {
 		body, _ = sjson.Set(body, "sampler-map-name", data.Name.ValueString())
@@ -98,6 +99,145 @@ func (data FlowSamplerMap) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
+
+// GetVersionConstraints returns the version constraints for all fields
+func (data FlowSamplerMap) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data FlowSamplerMap) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return []helpers.FieldRangeConstraint{
+		{
+			FieldPath: "out_of",
+			VersionRanges: map[string]helpers.VersionRange{
+				"24.4": {Min: 1, Max: 262144},
+				"26.2": {Min: 1, Max: 8000000},
+			},
+		},
+	}
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data FlowSamplerMap) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data FlowSamplerMap) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data FlowSamplerMap) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *FlowSamplerMap) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "random"); value.Exists() && !data.Random.IsNull() {
+		data.Random = types.Int64Value(value.Int())
+	} else if data.Random.IsNull() {
+		data.Random = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "out-of"); value.Exists() && !data.OutOf.IsNull() {
+		data.OutOf = types.Int64Value(value.Int())
+	} else if data.OutOf.IsNull() {
+		data.OutOf = types.Int64Null()
+	}
+}
+
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *FlowSamplerMap) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "random"); value.Exists() {
+		data.Random = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "out-of"); value.Exists() {
+		data.OutOf = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *FlowSamplerMapData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "random"); value.Exists() {
+		data.Random = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "out-of"); value.Exists() {
+		data.OutOf = types.Int64Value(value.Int())
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *FlowSamplerMap) getDeletedItems(ctx context.Context, state FlowSamplerMap, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.OutOf.IsNull() && data.OutOf.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "out-of"))
+	}
+	if !state.Random.IsNull() && data.Random.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "random"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *FlowSamplerMap) getEmptyLeafsDelete(ctx context.Context, state *FlowSamplerMap, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *FlowSamplerMap) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.OutOf.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "out-of"))
+	}
+	if !data.Random.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "random"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
@@ -135,7 +275,7 @@ func (data FlowSamplerMap) toBodyXML(ctx context.Context, stateArg ...*FlowSampl
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -143,23 +283,6 @@ func (data FlowSamplerMap) toBodyXML(ctx context.Context, stateArg ...*FlowSampl
 }
 
 // End of section. //template:end toBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
-
-func (data *FlowSamplerMap) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("random"); value.Exists() && !data.Random.IsNull() {
-		data.Random = types.Int64Value(value.Int())
-	} else if data.Random.IsNull() {
-		data.Random = types.Int64Null()
-	}
-	if value := res.Get("out-of"); value.Exists() && !data.OutOf.IsNull() {
-		data.OutOf = types.Int64Value(value.Int())
-	} else if data.OutOf.IsNull() {
-		data.OutOf = types.Int64Null()
-	}
-}
-
-// End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
@@ -177,49 +300,6 @@ func (data *FlowSamplerMap) updateFromBodyXML(ctx context.Context, res xmldot.Re
 }
 
 // End of section. //template:end updateFromBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
-
-func (data *FlowSamplerMap) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "random"); value.Exists() {
-		data.Random = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "out-of"); value.Exists() {
-		data.OutOf = types.Int64Value(value.Int())
-	}
-}
-
-// End of section. //template:end fromBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *FlowSamplerMapData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "random"); value.Exists() {
-		data.Random = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "out-of"); value.Exists() {
-		data.OutOf = types.Int64Value(value.Int())
-	}
-}
-
-// End of section. //template:end fromBodyData
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
@@ -246,46 +326,6 @@ func (data *FlowSamplerMapData) fromBodyXML(ctx context.Context, res xmldot.Resu
 }
 
 // End of section. //template:end fromBodyDataXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data *FlowSamplerMap) getDeletedItems(ctx context.Context, state FlowSamplerMap) []string {
-	deletedItems := make([]string, 0)
-	if !state.OutOf.IsNull() && data.OutOf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/out-of", state.getPath()))
-	}
-	if !state.Random.IsNull() && data.Random.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/random", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *FlowSamplerMap) getEmptyLeafsDelete(ctx context.Context, state *FlowSamplerMap) []string {
-	emptyLeafsDelete := make([]string, 0)
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *FlowSamplerMap) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.OutOf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/out-of", data.getPath()))
-	}
-	if !data.Random.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/random", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 

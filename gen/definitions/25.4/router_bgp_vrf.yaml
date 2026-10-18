@@ -1,0 +1,14 @@
+---
+name: Router BGP VRF
+path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]
+doc_category: BGP
+attributes:
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: distance/bgp/external
+    example: 100
+  - yang_name: distance/bgp/internal
+    example: 150
+  - yang_name: distance/bgp/local
+    example: 200

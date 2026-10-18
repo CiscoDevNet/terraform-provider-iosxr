@@ -10,6 +10,14 @@ description: |-
 
 This data source can read the Performance Measurement Endpoint IPv4 configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `liveness_detection_collect_hbh` | `25.4` |
+
 ## Example Usage
 
 ```terraform
@@ -39,6 +47,7 @@ data "iosxr_performance_measurement_endpoint_ipv4" "example" {
 - `id` (String) The path of the retrieved object.
 - `liveness_detection` (Boolean) Enable liveness-detection on the endpoint
 - `liveness_detection_collect_hbh` (Boolean) Collect hop by hop data for liveness sessions
+  - **Not supported from version `25.4` and above**
 - `liveness_detection_profile_name` (String) Profile name
 - `segment_list_names` (Attributes List) Segment-list name (see [below for nested schema](#nestedatt--segment_list_names))
 - `segment_routing` (Boolean) Enable segment list on the endpoint

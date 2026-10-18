@@ -14,9 +14,9 @@ This data source can read the Router BGP VRF Address Family configuration.
 
 ```terraform
 data "iosxr_router_bgp_vrf_address_family" "example" {
+  af_name   = "ipv4-unicast"
   as_number = "65001"
   vrf_name  = "VRF2"
-  af_name   = "ipv4-unicast"
 }
 ```
 
@@ -83,6 +83,8 @@ data "iosxr_router_bgp_vrf_address_family" "example" {
 - `label_mode_per_vrf_46` (Boolean) Set per VRF 46 label mode
 - `label_mode_route_policy` (String) Use a route policy to select prefixes for label allocation mode
 - `label_security_asbr_rpf` (Boolean) RPF Label Security for Option-B
+- `maximum_paths_ebgp_bestpath_only` (Boolean) Apply policy only for bestpath. This is needed if user doesnt want to deprefer any paths and apply certain attributes to bestpath only
+  - Supported from version: `25.4`
 - `maximum_paths_ebgp_multipath` (Number) Number of paths (limit includes backup path)
 - `maximum_paths_ebgp_route_policy` (String) Route policy to specify ORF and inbound filter
 - `maximum_paths_ebgp_selective` (Boolean) Allow multipaths only from marked neighbors
@@ -103,18 +105,24 @@ data "iosxr_router_bgp_vrf_address_family" "example" {
 - `originator_pe_id` (String) Set and send originator PE ID.
 - `permanent_network_route_policy` (String) Route policy to read the prefixes from
 - `redistribute_connected` (Boolean) Redistribute connected routes
+- `redistribute_connected_default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Supported from version: `25.4`
 - `redistribute_connected_metric` (Number) Metric for redistributed routes
 - `redistribute_connected_multipath` (Boolean) Enable installation of multiple paths from RIB
 - `redistribute_connected_route_policy` (String) Route policy reference
-- `redistribute_eigrp` (Attributes List) Redistribute EIGRP routes (see [below for nested schema](#nestedatt--redistribute_eigrp))
-- `redistribute_isis` (Attributes List) Redistribute ISIS routes (see [below for nested schema](#nestedatt--redistribute_isis))
-- `redistribute_ospf` (Attributes List) Redistribute OSPF routes (see [below for nested schema](#nestedatt--redistribute_ospf))
-- `redistribute_ospfv3` (Attributes List) Redistribute OSPFv3 routes (see [below for nested schema](#nestedatt--redistribute_ospfv3))
+- `redistribute_eigrp` (Attributes List) Enhanced Interior Gateway Routing Protocol (EIGRP) (see [below for nested schema](#nestedatt--redistribute_eigrp))
+- `redistribute_isis` (Attributes List) ISO IS-IS (see [below for nested schema](#nestedatt--redistribute_isis))
+- `redistribute_ospf` (Attributes List) Open Shortest Path First (OSPF) (see [below for nested schema](#nestedatt--redistribute_ospf))
+- `redistribute_ospfv3` (Attributes List) IPv6 Open Shortest Path First (OSPFv3) (see [below for nested schema](#nestedatt--redistribute_ospfv3))
 - `redistribute_rip` (Boolean) Redistribute RIP routes
+- `redistribute_rip_default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Supported from version: `25.4`
 - `redistribute_rip_metric` (Number) Metric for redistributed routes
 - `redistribute_rip_multipath` (Boolean) Enable installation of multiple paths from RIB
 - `redistribute_rip_route_policy` (String) Route policy reference
 - `redistribute_static` (Boolean) Redistribute static routes
+- `redistribute_static_default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Supported from version: `25.4`
 - `redistribute_static_metric` (Number) Metric for redistributed routes
 - `redistribute_static_multipath` (Boolean) Enable installation of multiple paths from RIB
 - `redistribute_static_route_policy` (String) Route policy reference
@@ -126,6 +134,8 @@ data "iosxr_router_bgp_vrf_address_family" "example" {
 - `segment_routing_srv6_usid_allocation_wide_local_id_block` (Boolean) Wide LIB allocation
 - `segmented_multicast` (Boolean) Enable segmented multicast
 - `table_policy` (String) Configure policy for installation of routes to RIB
+- `update_out_quick_withdraw` (String) Generation of quick withdraw messages
+  - Supported from version: `25.4`
 - `weight_reset_on_import` (Boolean) Reset weight of paths on import
 
 <a id="nestedatt--aggregate_addresses"></a>
@@ -160,6 +170,8 @@ Read-Only:
 
 Read-Only:
 
+- `default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Supported from version: `25.4`
 - `instance_name` (String) EIGRP instance name
 - `match_external` (Boolean) Redistribute EIGRP external routes
 - `match_internal` (Boolean) Redistribute EIGRP internal routes
@@ -174,6 +186,8 @@ Read-Only:
 
 Read-Only:
 
+- `default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Supported from version: `25.4`
 - `instance_name` (String) ISIS instance name
 - `level_1` (Boolean) Redistribute ISIS level 1 routes
 - `level_1_inter_area` (Boolean) Redistribute ISIS level 1 inter-area routes
@@ -192,6 +206,8 @@ Read-Only:
 
 Read-Only:
 
+- `default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Supported from version: `25.4`
 - `match_external` (Boolean) Redistribute OSPF external routes
 - `match_external_1` (Boolean) Redistribute OSPF external type 1 routes
 - `match_external_1_nssa_external` (Boolean) Redistribute OSPF external type 1 and NSSA external routes
@@ -234,6 +250,8 @@ Read-Only:
 
 Read-Only:
 
+- `default_policy_action_in` (String) Set a default action if a route does not satify the policy definition
+  - Supported from version: `25.4`
 - `match_external` (Boolean) Redistribute OSPFv3 external routes
 - `match_external_1` (Boolean) Redistribute OSPFv3 external type 1 routes
 - `match_external_1_nssa_external` (Boolean) Redistribute OSPFv3 external type 1 and NSSA external routes

@@ -14,22 +14,22 @@ This resource can manage the EVPN Route Sync Stitching EVI configuration.
 
 ```terraform
 resource "iosxr_evpn_route_sync_stitching_evi" "example" {
-  vpn_id                     = 108
-  description                = "My Description"
-  bgp_rd_four_byte_as_number = 65536
   bgp_rd_four_byte_as_index  = 108
-  bgp_route_target_import_four_byte_as_format = [
-    {
-      as_number       = 65536
-      assigned_number = 108
-    }
-  ]
+  bgp_rd_four_byte_as_number = 65536
   bgp_route_target_export_four_byte_as_format = [
     {
       as_number       = 65536
       assigned_number = 108
     }
   ]
+  bgp_route_target_import_four_byte_as_format = [
+    {
+      as_number       = 65536
+      assigned_number = 108
+    }
+  ]
+  description = "My Description"
+  vpn_id      = 108
 }
 ```
 
@@ -39,7 +39,7 @@ resource "iosxr_evpn_route_sync_stitching_evi" "example" {
 ### Required
 
 - `vpn_id` (Number) Configure EVPN Instance VPN ID
-  - Range: `1`-`65534`
+  - Range: `1`-`65534` (v24.4), `1`-`16777215` (v26.2)
 
 ### Optional
 

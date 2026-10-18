@@ -39,11 +39,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-gnmi"
 	"github.com/netascode/go-netconf"
-	"github.com/tidwall/gjson"
 )
 
 // End of section. //template:end imports
-
 // Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewRouterIGMPResource() resource.Resource {
@@ -250,6 +248,256 @@ func (r *RouterIGMPResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringvalidator.LengthBetween(1, 255),
 				},
 			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Select an interface to configure").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Select an interface to configure").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+						"version": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IGMP version").AddIntegerRangeDescription(1, 3).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 3),
+							},
+						},
+						"router_enable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable Router side functionality in IGMP").String,
+							Optional:            true,
+						},
+						"router_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable Router side functionality in IGMP").String,
+							Optional:            true,
+						},
+						"dvmrp_enable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure dvmrp to allow dvmrp processing on all interfaces").String,
+							Optional:            true,
+						},
+						"query_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IGMP host query interval").AddIntegerRangeDescription(1, 3600).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 3600),
+							},
+						},
+						"query_timeout": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IGMP previous querier timeout").AddIntegerRangeDescription(60, 300).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(60, 300),
+							},
+						},
+						"query_max_response_time": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IGMP max query response value").AddIntegerRangeDescription(1, 25).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 25),
+							},
+						},
+						"explicit_tracking_enable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable IGMPv3 explicit host tracking").String,
+							Optional:            true,
+						},
+						"explicit_tracking_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable IGMPv3 explicit host tracking").String,
+							Optional:            true,
+						},
+						"explicit_tracking_acl": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Access list specifying tracking group range").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"access_group": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IGMP group access group").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"maximum_groups_per_interface": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Maxinum number of groups accepted per interface by this router").AddIntegerRangeDescription(1, 40000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 40000),
+							},
+						},
+						"maximum_groups_per_interface_threshold": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Threshold warning").AddIntegerRangeDescription(1, 40000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 40000),
+							},
+						},
+						"maximum_groups_per_interface_acl": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of ACL").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"static_groups": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IGMP static multicast group").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP group address").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+										},
+									},
+									"group_address_only": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Group-address without increment mask/source-address").String,
+										Optional:            true,
+									},
+									"suppress_reports": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Suppress IGMP reports").String,
+										Optional:            true,
+									},
+									"group_masks": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"group_inc_mask": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"group_count": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("No. of group addresses to join").AddIntegerRangeDescription(1, 512).String,
+													Required:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 512),
+													},
+												},
+												"suppress_reports": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Suppress IGMP reports").String,
+													Optional:            true,
+												},
+											},
+										},
+									},
+									"source_addresses": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IGMP static multicast group").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Source address to join").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"suppress_reports": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Suppress IGMP reports").String,
+													Optional:            true,
+												},
+											},
+										},
+									},
+									"group_masks_source_addresses": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"group_inc_mask": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Increment mask for group address").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Source address to join").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"group_count": schema.Int64Attribute{
+													MarkdownDescription: helpers.NewAttributeDescription("No. of group addresses to join").AddIntegerRangeDescription(1, 512).String,
+													Required:            true,
+													Validators: []validator.Int64{
+														int64validator.Between(1, 512),
+													},
+												},
+												"suppress_reports": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Suppress IGMP reports").String,
+													Optional:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"join_groups": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IGMP join multicast group").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IP group address").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+										},
+									},
+									"group_address_only": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Join multicast group without source address").String,
+										Optional:            true,
+									},
+									"source_addresses": schema.ListNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Source address to include or exclude").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Source address to include").String,
+													Required:            true,
+													Validators: []validator.String{
+														stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+														stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+													},
+												},
+												"include": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Include only the following source address").String,
+													Optional:            true,
+												},
+												"exclude": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Exclude only the following source address").String,
+													Optional:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -281,7 +529,6 @@ func (r *RouterIGMPResource) Create(ctx context.Context, req resource.CreateRequ
 		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
 		return
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
@@ -299,10 +546,10 @@ func (r *RouterIGMPResource) Create(ctx context.Context, req resource.CreateRequ
 			var ops []gnmi.SetOperation
 
 			// Create object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("gNMI Set body for path %s: %s", plan.getPath(), body))
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, nil, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -357,7 +604,6 @@ func (r *RouterIGMPResource) Create(ctx context.Context, req resource.CreateRequ
 // End of section. //template:end create
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
-
 func (r *RouterIGMPResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state RouterIGMP
 
@@ -422,10 +668,10 @@ func (r *RouterIGMPResource) Read(ctx context.Context, req resource.ReadRequest,
 				if imp {
 					// After `terraform import` we switch to a full read so all device
 					// attributes are populated in state (fromBody overwrites everything).
-					state.fromBody(ctx, gjson.ParseBytes(respBody))
+					state.fromBody(ctx, respBody, device.Version)
 				} else {
 					// Normal read: preserve config-only fields not returned by the device.
-					state.updateFromBody(ctx, gjson.ParseBytes(respBody))
+					state.updateFromBody(ctx, respBody, device.Version)
 				}
 			}
 		} else {
@@ -466,7 +712,6 @@ func (r *RouterIGMPResource) Read(ctx context.Context, req resource.ReadRequest,
 			}
 		}
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
@@ -478,7 +723,6 @@ func (r *RouterIGMPResource) Read(ctx context.Context, req resource.ReadRequest,
 // End of section. //template:end read
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
-
 func (r *RouterIGMPResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state RouterIGMP
 
@@ -519,16 +763,16 @@ func (r *RouterIGMPResource) Update(ctx context.Context, req resource.UpdateRequ
 			var ops []gnmi.SetOperation
 
 			// Update object
-			body := plan.toBody(ctx)
+			body := plan.toBody(ctx, device.Version)
 
-			deletedListItems := plan.getDeletedItems(ctx, state)
+			deletedListItems := plan.getDeletedItems(ctx, state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
 
 			for _, i := range deletedListItems {
 				ops = append(ops, gnmi.Delete(i))
 			}
 
-			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state)
+			emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx, &state, device.Version)
 			tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 			for _, i := range emptyLeafsDelete {
@@ -571,7 +815,6 @@ func (r *RouterIGMPResource) Update(ctx context.Context, req resource.UpdateRequ
 			}
 		}
 	}
-
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
@@ -581,7 +824,6 @@ func (r *RouterIGMPResource) Update(ctx context.Context, req resource.UpdateRequ
 // End of section. //template:end update
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
-
 func (r *RouterIGMPResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state RouterIGMP
 
@@ -672,7 +914,7 @@ func (r *RouterIGMPResource) Delete(ctx context.Context, req resource.DeleteRequ
 				}
 
 				var ops []gnmi.SetOperation
-				deletePaths := state.getDeletePaths(ctx)
+				deletePaths := state.getDeletePaths(ctx, device.Version)
 				tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
 
 				for _, i := range deletePaths {
@@ -720,7 +962,6 @@ func (r *RouterIGMPResource) Delete(ctx context.Context, req resource.DeleteRequ
 // End of section. //template:end delete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin import
-
 func (r *RouterIGMPResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 	idParts = helpers.RemoveEmptyStrings(idParts)

@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -109,7 +110,7 @@ func (data BMPServerData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data BMPServer) toBody(ctx context.Context) string {
+func (data BMPServer) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.AllRouteMirroringInboundPrePolicy.IsNull() && !data.AllRouteMirroringInboundPrePolicy.IsUnknown() {
 		if data.AllRouteMirroringInboundPrePolicy.ValueBool() {
@@ -197,6 +198,652 @@ func (data BMPServer) toBody(ctx context.Context) string {
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
+
+// GetVersionConstraints returns the version constraints for all fields
+func (data BMPServer) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data BMPServer) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data BMPServer) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data BMPServer) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data BMPServer) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *BMPServer) updateFromBody(ctx context.Context, res []byte, version string) {
+	for i := range data.AllRouteMonitorings {
+		keys := [...]string{"route-mon"}
+		keyValues := [...]string{data.AllRouteMonitorings[i].RouteMon.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "all.route-monitorings.route-monitoring").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("route-mon"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AllRouteMonitorings[i].RouteMon.IsNull() {
+			data.AllRouteMonitorings[i].RouteMon = types.StringValue(value.String())
+		} else {
+			data.AllRouteMonitorings[i].RouteMon = types.StringNull()
+		}
+		if value := r.Get("advertisement-interval"); value.Exists() && !data.AllRouteMonitorings[i].AdvertisementInterval.IsNull() {
+			data.AllRouteMonitorings[i].AdvertisementInterval = types.Int64Value(value.Int())
+		} else {
+			data.AllRouteMonitorings[i].AdvertisementInterval = types.Int64Null()
+		}
+		if value := r.Get("scan-time"); value.Exists() && !data.AllRouteMonitorings[i].ScanTime.IsNull() {
+			data.AllRouteMonitorings[i].ScanTime = types.Int64Value(value.Int())
+		} else {
+			data.AllRouteMonitorings[i].ScanTime = types.Int64Null()
+		}
+	}
+	if value := gjson.GetBytes(res, "all.route-mirroring.inbound.pre-policy"); !data.AllRouteMirroringInboundPrePolicy.IsNull() {
+		if value.Exists() {
+			data.AllRouteMirroringInboundPrePolicy = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.AllRouteMirroringInboundPrePolicy = types.BoolValue(false)
+		}
+	} else if data.AllRouteMirroringInboundPrePolicy.IsNull() {
+		data.AllRouteMirroringInboundPrePolicy = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "all.max-buffer-size"); value.Exists() && !data.AllMaxBufferSize.IsNull() {
+		data.AllMaxBufferSize = types.Int64Value(value.Int())
+	} else if data.AllMaxBufferSize.IsNull() {
+		data.AllMaxBufferSize = types.Int64Null()
+	}
+	for i := range data.Servers {
+		keys := [...]string{"server-number"}
+		keyValues := [...]string{strconv.FormatInt(data.Servers[i].Number.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "server").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("server-number"); value.Exists() && !data.Servers[i].Number.IsNull() {
+			data.Servers[i].Number = types.Int64Value(value.Int())
+		} else {
+			data.Servers[i].Number = types.Int64Null()
+		}
+		if value := r.Get("shutdown"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Servers[i].Shutdown.IsNull() {
+				data.Servers[i].Shutdown = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Servers[i].Shutdown.IsNull() {
+				data.Servers[i].Shutdown = types.BoolNull()
+			}
+		}
+		if value := r.Get("host.host-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Servers[i].Host.IsNull() {
+			data.Servers[i].Host = types.StringValue(value.String())
+		} else {
+			data.Servers[i].Host = types.StringNull()
+		}
+		if value := r.Get("host.port"); value.Exists() && !data.Servers[i].Port.IsNull() {
+			data.Servers[i].Port = types.Int64Value(value.Int())
+		} else {
+			data.Servers[i].Port = types.Int64Null()
+		}
+		if value := r.Get("initial-delay"); value.Exists() && !data.Servers[i].InitialDelay.IsNull() {
+			data.Servers[i].InitialDelay = types.Int64Value(value.Int())
+		} else {
+			data.Servers[i].InitialDelay = types.Int64Null()
+		}
+		if value := r.Get("flapping-delay"); value.Exists() && !data.Servers[i].FlappingDelay.IsNull() {
+			data.Servers[i].FlappingDelay = types.Int64Value(value.Int())
+		} else {
+			data.Servers[i].FlappingDelay = types.Int64Null()
+		}
+		if value := r.Get("initial-refresh.delay"); value.Exists() && !data.Servers[i].InitialRefreshDelay.IsNull() {
+			data.Servers[i].InitialRefreshDelay = types.Int64Value(value.Int())
+		} else {
+			data.Servers[i].InitialRefreshDelay = types.Int64Null()
+		}
+		if value := r.Get("initial-refresh.spread"); value.Exists() && !data.Servers[i].InitialRefreshSpread.IsNull() {
+			data.Servers[i].InitialRefreshSpread = types.Int64Value(value.Int())
+		} else {
+			data.Servers[i].InitialRefreshSpread = types.Int64Null()
+		}
+		if value := r.Get("initial-refresh.skip"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Servers[i].InitialRefreshSkip.IsNull() {
+				data.Servers[i].InitialRefreshSkip = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Servers[i].InitialRefreshSkip.IsNull() {
+				data.Servers[i].InitialRefreshSkip = types.BoolNull()
+			}
+		}
+		if value := r.Get("stats-reporting-period"); value.Exists() && !data.Servers[i].StatsReportingPeriod.IsNull() {
+			data.Servers[i].StatsReportingPeriod = types.Int64Value(value.Int())
+		} else {
+			data.Servers[i].StatsReportingPeriod = types.Int64Null()
+		}
+		if value := r.Get("description"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Servers[i].Description.IsNull() {
+			data.Servers[i].Description = types.StringValue(value.String())
+		} else {
+			data.Servers[i].Description = types.StringNull()
+		}
+		if value := r.Get("dscp.dscp-value"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Servers[i].DscpValue.IsNull() {
+			data.Servers[i].DscpValue = types.StringValue(value.String())
+		} else {
+			data.Servers[i].DscpValue = types.StringNull()
+		}
+		if value := r.Get("precedence.precedence-value"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Servers[i].PrecedenceValue.IsNull() {
+			data.Servers[i].PrecedenceValue = types.StringValue(value.String())
+		} else {
+			data.Servers[i].PrecedenceValue = types.StringNull()
+		}
+		if value := r.Get("update-source"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Servers[i].UpdateSource.IsNull() {
+			data.Servers[i].UpdateSource = types.StringValue(value.String())
+		} else {
+			data.Servers[i].UpdateSource = types.StringNull()
+		}
+		if value := r.Get("vrf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Servers[i].Vrf.IsNull() {
+			data.Servers[i].Vrf = types.StringValue(value.String())
+		} else {
+			data.Servers[i].Vrf = types.StringNull()
+		}
+		if value := r.Get("tcp.mss"); value.Exists() && !data.Servers[i].TcpMss.IsNull() {
+			data.Servers[i].TcpMss = types.Int64Value(value.Int())
+		} else {
+			data.Servers[i].TcpMss = types.Int64Null()
+		}
+		if value := r.Get("tcp.keep-alive"); value.Exists() && !data.Servers[i].TcpKeepAlive.IsNull() {
+			data.Servers[i].TcpKeepAlive = types.Int64Value(value.Int())
+		} else {
+			data.Servers[i].TcpKeepAlive = types.Int64Null()
+		}
+	}
+}
+
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *BMPServer) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "all.route-monitorings.route-monitoring"); value.Exists() {
+		data.AllRouteMonitorings = make([]BMPServerAllRouteMonitorings, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := BMPServerAllRouteMonitorings{}
+			if cValue := v.Get("route-mon"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RouteMon = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("advertisement-interval"); cValue.Exists() {
+				item.AdvertisementInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("scan-time"); cValue.Exists() {
+				item.ScanTime = types.Int64Value(cValue.Int())
+			}
+			data.AllRouteMonitorings = append(data.AllRouteMonitorings, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "all.route-mirroring.inbound.pre-policy"); value.Exists() {
+		data.AllRouteMirroringInboundPrePolicy = types.BoolValue(true)
+	} else if !data.AllRouteMirroringInboundPrePolicy.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AllRouteMirroringInboundPrePolicy = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "all.max-buffer-size"); value.Exists() {
+		data.AllMaxBufferSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "server"); value.Exists() {
+		data.Servers = make([]BMPServerServers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := BMPServerServers{}
+			if cValue := v.Get("server-number"); cValue.Exists() {
+				item.Number = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("shutdown"); cValue.Exists() {
+				item.Shutdown = types.BoolValue(true)
+			} else if !item.Shutdown.IsNull() {
+				// Only set to false if it was previously set
+				item.Shutdown = types.BoolValue(false)
+			}
+			if cValue := v.Get("host.host-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Host = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("host.port"); cValue.Exists() {
+				item.Port = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("initial-delay"); cValue.Exists() {
+				item.InitialDelay = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("flapping-delay"); cValue.Exists() {
+				item.FlappingDelay = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("initial-refresh.delay"); cValue.Exists() {
+				item.InitialRefreshDelay = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("initial-refresh.spread"); cValue.Exists() {
+				item.InitialRefreshSpread = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("initial-refresh.skip"); cValue.Exists() {
+				item.InitialRefreshSkip = types.BoolValue(true)
+			} else if !item.InitialRefreshSkip.IsNull() {
+				// Only set to false if it was previously set
+				item.InitialRefreshSkip = types.BoolValue(false)
+			}
+			if cValue := v.Get("stats-reporting-period"); cValue.Exists() {
+				item.StatsReportingPeriod = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("description"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Description = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("dscp.dscp-value"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.DscpValue = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("precedence.precedence-value"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.PrecedenceValue = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("update-source"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.UpdateSource = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("vrf"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tcp.mss"); cValue.Exists() {
+				item.TcpMss = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("tcp.keep-alive"); cValue.Exists() {
+				item.TcpKeepAlive = types.Int64Value(cValue.Int())
+			}
+			data.Servers = append(data.Servers, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *BMPServerData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "all.route-monitorings.route-monitoring"); value.Exists() {
+		data.AllRouteMonitorings = make([]BMPServerAllRouteMonitorings, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := BMPServerAllRouteMonitorings{}
+			if cValue := v.Get("route-mon"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RouteMon = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("advertisement-interval"); cValue.Exists() {
+				item.AdvertisementInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("scan-time"); cValue.Exists() {
+				item.ScanTime = types.Int64Value(cValue.Int())
+			}
+			data.AllRouteMonitorings = append(data.AllRouteMonitorings, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "all.route-mirroring.inbound.pre-policy"); value.Exists() {
+		data.AllRouteMirroringInboundPrePolicy = types.BoolValue(true)
+	} else {
+		data.AllRouteMirroringInboundPrePolicy = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "all.max-buffer-size"); value.Exists() {
+		data.AllMaxBufferSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "server"); value.Exists() {
+		data.Servers = make([]BMPServerServers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := BMPServerServers{}
+			if cValue := v.Get("server-number"); cValue.Exists() {
+				item.Number = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("shutdown"); cValue.Exists() {
+				item.Shutdown = types.BoolValue(true)
+			} else {
+				item.Shutdown = types.BoolValue(false)
+			}
+			if cValue := v.Get("host.host-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Host = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("host.port"); cValue.Exists() {
+				item.Port = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("initial-delay"); cValue.Exists() {
+				item.InitialDelay = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("flapping-delay"); cValue.Exists() {
+				item.FlappingDelay = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("initial-refresh.delay"); cValue.Exists() {
+				item.InitialRefreshDelay = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("initial-refresh.spread"); cValue.Exists() {
+				item.InitialRefreshSpread = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("initial-refresh.skip"); cValue.Exists() {
+				item.InitialRefreshSkip = types.BoolValue(true)
+			} else {
+				item.InitialRefreshSkip = types.BoolValue(false)
+			}
+			if cValue := v.Get("stats-reporting-period"); cValue.Exists() {
+				item.StatsReportingPeriod = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("description"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Description = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("dscp.dscp-value"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.DscpValue = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("precedence.precedence-value"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.PrecedenceValue = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("update-source"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.UpdateSource = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("vrf"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tcp.mss"); cValue.Exists() {
+				item.TcpMss = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("tcp.keep-alive"); cValue.Exists() {
+				item.TcpKeepAlive = types.Int64Value(cValue.Int())
+			}
+			data.Servers = append(data.Servers, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *BMPServer) getDeletedItems(ctx context.Context, state BMPServer, version string) []string {
+	deletedItems := make([]string, 0)
+	for i := range state.Servers {
+		keys := [...]string{"server-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Servers[i].Number.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Servers[i].Number.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Servers {
+			found = true
+			if state.Servers[i].Number.ValueInt64() != data.Servers[j].Number.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.Servers[i].TcpKeepAlive.IsNull() && data.Servers[j].TcpKeepAlive.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "server", keyString), "tcp/keep-alive"))
+				}
+				if !state.Servers[i].TcpMss.IsNull() && data.Servers[j].TcpMss.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "server", keyString), "tcp/mss"))
+				}
+				if !state.Servers[i].Vrf.IsNull() && data.Servers[j].Vrf.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "server", keyString), "vrf"))
+				}
+				if !state.Servers[i].UpdateSource.IsNull() && data.Servers[j].UpdateSource.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "server", keyString), "update-source"))
+				}
+				if !state.Servers[i].PrecedenceValue.IsNull() && data.Servers[j].PrecedenceValue.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "server", keyString), "precedence"))
+				}
+				if !state.Servers[i].DscpValue.IsNull() && data.Servers[j].DscpValue.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "server", keyString), "dscp"))
+				}
+				if !state.Servers[i].Description.IsNull() && data.Servers[j].Description.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "server", keyString), "description"))
+				}
+				if !state.Servers[i].StatsReportingPeriod.IsNull() && data.Servers[j].StatsReportingPeriod.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "server", keyString), "stats-reporting-period"))
+				}
+				if !state.Servers[i].InitialRefreshSkip.IsNull() && data.Servers[j].InitialRefreshSkip.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "server", keyString), "initial-refresh"))
+				}
+				if !state.Servers[i].InitialRefreshSpread.IsNull() && data.Servers[j].InitialRefreshSpread.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "server", keyString), "initial-refresh"))
+				}
+				if !state.Servers[i].InitialRefreshDelay.IsNull() && data.Servers[j].InitialRefreshDelay.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "server", keyString), "initial-refresh"))
+				}
+				if !state.Servers[i].FlappingDelay.IsNull() && data.Servers[j].FlappingDelay.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "server", keyString), "flapping-delay"))
+				}
+				if !state.Servers[i].InitialDelay.IsNull() && data.Servers[j].InitialDelay.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "server", keyString), "initial-delay"))
+				}
+				if !state.Servers[i].Port.IsNull() && data.Servers[j].Port.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "server", keyString), "host/port"))
+				}
+				if !state.Servers[i].Host.IsNull() && data.Servers[j].Host.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "server", keyString), "host/host-name"))
+				}
+				if !state.Servers[i].Shutdown.IsNull() && data.Servers[j].Shutdown.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "server", keyString), "shutdown"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "server", keyString))
+		}
+	}
+	if !state.AllMaxBufferSize.IsNull() && data.AllMaxBufferSize.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "all/max-buffer-size"))
+	}
+	if !state.AllRouteMirroringInboundPrePolicy.IsNull() && data.AllRouteMirroringInboundPrePolicy.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "all/route-mirroring/inbound/pre-policy"))
+	}
+	for i := range state.AllRouteMonitorings {
+		keys := [...]string{"route-mon"}
+		stateKeyValues := [...]string{state.AllRouteMonitorings[i].RouteMon.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.AllRouteMonitorings[i].RouteMon.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.AllRouteMonitorings {
+			found = true
+			if state.AllRouteMonitorings[i].RouteMon.ValueString() != data.AllRouteMonitorings[j].RouteMon.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.AllRouteMonitorings[i].ScanTime.IsNull() && data.AllRouteMonitorings[j].ScanTime.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "all/route-monitorings/route-monitoring", keyString), "scan-time"))
+				}
+				if !state.AllRouteMonitorings[i].AdvertisementInterval.IsNull() && data.AllRouteMonitorings[j].AdvertisementInterval.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "all/route-monitorings/route-monitoring", keyString), "advertisement-interval"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "all/route-monitorings/route-monitoring", keyString))
+		}
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *BMPServer) getEmptyLeafsDelete(ctx context.Context, state *BMPServer, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	for i := range data.Servers {
+		keys := [...]string{"server-number"}
+		keyValues := [...]string{strconv.FormatInt(data.Servers[i].Number.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Servers[i].InitialRefreshSkip.IsNull() && !data.Servers[i].InitialRefreshSkip.ValueBool() {
+			if state == nil || i >= len(state.Servers) || state.Servers[i].InitialRefreshSkip.IsNull() || state.Servers[i].InitialRefreshSkip.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "server", keyString), "initial-refresh"))
+			}
+		}
+		if !data.Servers[i].Shutdown.IsNull() && !data.Servers[i].Shutdown.ValueBool() {
+			if state == nil || i >= len(state.Servers) || state.Servers[i].Shutdown.IsNull() || state.Servers[i].Shutdown.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "server", keyString), "shutdown"))
+			}
+		}
+	}
+	if !data.AllRouteMirroringInboundPrePolicy.IsNull() && !data.AllRouteMirroringInboundPrePolicy.ValueBool() {
+		if state == nil || state.AllRouteMirroringInboundPrePolicy.IsNull() || state.AllRouteMirroringInboundPrePolicy.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "all/route-mirroring/inbound/pre-policy"))
+		}
+	}
+	for i := range data.AllRouteMonitorings {
+		keys := [...]string{"route-mon"}
+		keyValues := [...]string{data.AllRouteMonitorings[i].RouteMon.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *BMPServer) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	for i := range data.Servers {
+		keys := [...]string{"server-number"}
+		keyValues := [...]string{strconv.FormatInt(data.Servers[i].Number.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.Servers[i].Number.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "server", keyString))
+	}
+	if !data.AllMaxBufferSize.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "all/max-buffer-size"))
+	}
+	if !data.AllRouteMirroringInboundPrePolicy.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "all/route-mirroring/inbound/pre-policy"))
+	}
+	for i := range data.AllRouteMonitorings {
+		keys := [...]string{"route-mon"}
+		keyValues := [...]string{data.AllRouteMonitorings[i].RouteMon.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.AllRouteMonitorings[i].RouteMon.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "all/route-monitorings/route-monitoring", keyString))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
@@ -310,7 +957,7 @@ func (data BMPServer) toBodyXML(ctx context.Context, stateArg ...*BMPServer) str
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -318,191 +965,6 @@ func (data BMPServer) toBodyXML(ctx context.Context, stateArg ...*BMPServer) str
 }
 
 // End of section. //template:end toBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
-
-func (data *BMPServer) updateFromBody(ctx context.Context, res gjson.Result) {
-	for i := range data.AllRouteMonitorings {
-		keys := [...]string{"route-mon"}
-		keyValues := [...]string{data.AllRouteMonitorings[i].RouteMon.ValueString()}
-
-		var r gjson.Result
-		res.Get("all.route-monitorings.route-monitoring").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("route-mon"); value.Exists() && !data.AllRouteMonitorings[i].RouteMon.IsNull() {
-			data.AllRouteMonitorings[i].RouteMon = types.StringValue(value.String())
-		} else {
-			data.AllRouteMonitorings[i].RouteMon = types.StringNull()
-		}
-		if value := r.Get("advertisement-interval"); value.Exists() && !data.AllRouteMonitorings[i].AdvertisementInterval.IsNull() {
-			data.AllRouteMonitorings[i].AdvertisementInterval = types.Int64Value(value.Int())
-		} else {
-			data.AllRouteMonitorings[i].AdvertisementInterval = types.Int64Null()
-		}
-		if value := r.Get("scan-time"); value.Exists() && !data.AllRouteMonitorings[i].ScanTime.IsNull() {
-			data.AllRouteMonitorings[i].ScanTime = types.Int64Value(value.Int())
-		} else {
-			data.AllRouteMonitorings[i].ScanTime = types.Int64Null()
-		}
-	}
-	if value := res.Get("all.route-mirroring.inbound.pre-policy"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.AllRouteMirroringInboundPrePolicy.IsNull() {
-			data.AllRouteMirroringInboundPrePolicy = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.AllRouteMirroringInboundPrePolicy.IsNull() {
-			data.AllRouteMirroringInboundPrePolicy = types.BoolNull()
-		}
-	}
-	if value := res.Get("all.max-buffer-size"); value.Exists() && !data.AllMaxBufferSize.IsNull() {
-		data.AllMaxBufferSize = types.Int64Value(value.Int())
-	} else if data.AllMaxBufferSize.IsNull() {
-		data.AllMaxBufferSize = types.Int64Null()
-	}
-	for i := range data.Servers {
-		keys := [...]string{"server-number"}
-		keyValues := [...]string{strconv.FormatInt(data.Servers[i].Number.ValueInt64(), 10)}
-
-		var r gjson.Result
-		res.Get("server").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("server-number"); value.Exists() && !data.Servers[i].Number.IsNull() {
-			data.Servers[i].Number = types.Int64Value(value.Int())
-		} else {
-			data.Servers[i].Number = types.Int64Null()
-		}
-		if value := r.Get("shutdown"); value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.Servers[i].Shutdown.IsNull() {
-				data.Servers[i].Shutdown = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.Servers[i].Shutdown.IsNull() {
-				data.Servers[i].Shutdown = types.BoolNull()
-			}
-		}
-		if value := r.Get("host.host-name"); value.Exists() && !data.Servers[i].Host.IsNull() {
-			data.Servers[i].Host = types.StringValue(value.String())
-		} else {
-			data.Servers[i].Host = types.StringNull()
-		}
-		if value := r.Get("host.port"); value.Exists() && !data.Servers[i].Port.IsNull() {
-			data.Servers[i].Port = types.Int64Value(value.Int())
-		} else {
-			data.Servers[i].Port = types.Int64Null()
-		}
-		if value := r.Get("initial-delay"); value.Exists() && !data.Servers[i].InitialDelay.IsNull() {
-			data.Servers[i].InitialDelay = types.Int64Value(value.Int())
-		} else {
-			data.Servers[i].InitialDelay = types.Int64Null()
-		}
-		if value := r.Get("flapping-delay"); value.Exists() && !data.Servers[i].FlappingDelay.IsNull() {
-			data.Servers[i].FlappingDelay = types.Int64Value(value.Int())
-		} else {
-			data.Servers[i].FlappingDelay = types.Int64Null()
-		}
-		if value := r.Get("initial-refresh.delay"); value.Exists() && !data.Servers[i].InitialRefreshDelay.IsNull() {
-			data.Servers[i].InitialRefreshDelay = types.Int64Value(value.Int())
-		} else {
-			data.Servers[i].InitialRefreshDelay = types.Int64Null()
-		}
-		if value := r.Get("initial-refresh.spread"); value.Exists() && !data.Servers[i].InitialRefreshSpread.IsNull() {
-			data.Servers[i].InitialRefreshSpread = types.Int64Value(value.Int())
-		} else {
-			data.Servers[i].InitialRefreshSpread = types.Int64Null()
-		}
-		if value := r.Get("initial-refresh.skip"); value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.Servers[i].InitialRefreshSkip.IsNull() {
-				data.Servers[i].InitialRefreshSkip = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.Servers[i].InitialRefreshSkip.IsNull() {
-				data.Servers[i].InitialRefreshSkip = types.BoolNull()
-			}
-		}
-		if value := r.Get("stats-reporting-period"); value.Exists() && !data.Servers[i].StatsReportingPeriod.IsNull() {
-			data.Servers[i].StatsReportingPeriod = types.Int64Value(value.Int())
-		} else {
-			data.Servers[i].StatsReportingPeriod = types.Int64Null()
-		}
-		if value := r.Get("description"); value.Exists() && !data.Servers[i].Description.IsNull() {
-			data.Servers[i].Description = types.StringValue(value.String())
-		} else {
-			data.Servers[i].Description = types.StringNull()
-		}
-		if value := r.Get("dscp.dscp-value"); value.Exists() && !data.Servers[i].DscpValue.IsNull() {
-			data.Servers[i].DscpValue = types.StringValue(value.String())
-		} else {
-			data.Servers[i].DscpValue = types.StringNull()
-		}
-		if value := r.Get("precedence.precedence-value"); value.Exists() && !data.Servers[i].PrecedenceValue.IsNull() {
-			data.Servers[i].PrecedenceValue = types.StringValue(value.String())
-		} else {
-			data.Servers[i].PrecedenceValue = types.StringNull()
-		}
-		if value := r.Get("update-source"); value.Exists() && !data.Servers[i].UpdateSource.IsNull() {
-			data.Servers[i].UpdateSource = types.StringValue(value.String())
-		} else {
-			data.Servers[i].UpdateSource = types.StringNull()
-		}
-		if value := r.Get("vrf"); value.Exists() && !data.Servers[i].Vrf.IsNull() {
-			data.Servers[i].Vrf = types.StringValue(value.String())
-		} else {
-			data.Servers[i].Vrf = types.StringNull()
-		}
-		if value := r.Get("tcp.mss"); value.Exists() && !data.Servers[i].TcpMss.IsNull() {
-			data.Servers[i].TcpMss = types.Int64Value(value.Int())
-		} else {
-			data.Servers[i].TcpMss = types.Int64Null()
-		}
-		if value := r.Get("tcp.keep-alive"); value.Exists() && !data.Servers[i].TcpKeepAlive.IsNull() {
-			data.Servers[i].TcpKeepAlive = types.Int64Value(value.Int())
-		} else {
-			data.Servers[i].TcpKeepAlive = types.Int64Null()
-		}
-	}
-}
-
-// End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
@@ -688,216 +1150,6 @@ func (data *BMPServer) updateFromBodyXML(ctx context.Context, res xmldot.Result)
 }
 
 // End of section. //template:end updateFromBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
-
-func (data *BMPServer) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "all.route-monitorings.route-monitoring"); value.Exists() {
-		data.AllRouteMonitorings = make([]BMPServerAllRouteMonitorings, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := BMPServerAllRouteMonitorings{}
-			if cValue := v.Get("route-mon"); cValue.Exists() {
-				item.RouteMon = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("advertisement-interval"); cValue.Exists() {
-				item.AdvertisementInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("scan-time"); cValue.Exists() {
-				item.ScanTime = types.Int64Value(cValue.Int())
-			}
-			data.AllRouteMonitorings = append(data.AllRouteMonitorings, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "all.route-mirroring.inbound.pre-policy"); value.Exists() {
-		data.AllRouteMirroringInboundPrePolicy = types.BoolValue(true)
-	} else if !data.AllRouteMirroringInboundPrePolicy.IsNull() {
-		// Only set to false if it was previously set in state
-		data.AllRouteMirroringInboundPrePolicy = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "all.max-buffer-size"); value.Exists() {
-		data.AllMaxBufferSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "server"); value.Exists() {
-		data.Servers = make([]BMPServerServers, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := BMPServerServers{}
-			if cValue := v.Get("server-number"); cValue.Exists() {
-				item.Number = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("shutdown"); cValue.Exists() {
-				item.Shutdown = types.BoolValue(true)
-			} else if !item.Shutdown.IsNull() {
-				// Only set to false if it was previously set
-				item.Shutdown = types.BoolValue(false)
-			}
-			if cValue := v.Get("host.host-name"); cValue.Exists() {
-				item.Host = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("host.port"); cValue.Exists() {
-				item.Port = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("initial-delay"); cValue.Exists() {
-				item.InitialDelay = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("flapping-delay"); cValue.Exists() {
-				item.FlappingDelay = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("initial-refresh.delay"); cValue.Exists() {
-				item.InitialRefreshDelay = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("initial-refresh.spread"); cValue.Exists() {
-				item.InitialRefreshSpread = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("initial-refresh.skip"); cValue.Exists() {
-				item.InitialRefreshSkip = types.BoolValue(true)
-			} else if !item.InitialRefreshSkip.IsNull() {
-				// Only set to false if it was previously set
-				item.InitialRefreshSkip = types.BoolValue(false)
-			}
-			if cValue := v.Get("stats-reporting-period"); cValue.Exists() {
-				item.StatsReportingPeriod = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("description"); cValue.Exists() {
-				item.Description = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("dscp.dscp-value"); cValue.Exists() {
-				item.DscpValue = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("precedence.precedence-value"); cValue.Exists() {
-				item.PrecedenceValue = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("update-source"); cValue.Exists() {
-				item.UpdateSource = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("vrf"); cValue.Exists() {
-				item.Vrf = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tcp.mss"); cValue.Exists() {
-				item.TcpMss = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("tcp.keep-alive"); cValue.Exists() {
-				item.TcpKeepAlive = types.Int64Value(cValue.Int())
-			}
-			data.Servers = append(data.Servers, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *BMPServerData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "all.route-monitorings.route-monitoring"); value.Exists() {
-		data.AllRouteMonitorings = make([]BMPServerAllRouteMonitorings, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := BMPServerAllRouteMonitorings{}
-			if cValue := v.Get("route-mon"); cValue.Exists() {
-				item.RouteMon = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("advertisement-interval"); cValue.Exists() {
-				item.AdvertisementInterval = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("scan-time"); cValue.Exists() {
-				item.ScanTime = types.Int64Value(cValue.Int())
-			}
-			data.AllRouteMonitorings = append(data.AllRouteMonitorings, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "all.route-mirroring.inbound.pre-policy"); value.Exists() {
-		data.AllRouteMirroringInboundPrePolicy = types.BoolValue(true)
-	} else {
-		data.AllRouteMirroringInboundPrePolicy = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "all.max-buffer-size"); value.Exists() {
-		data.AllMaxBufferSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "server"); value.Exists() {
-		data.Servers = make([]BMPServerServers, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := BMPServerServers{}
-			if cValue := v.Get("server-number"); cValue.Exists() {
-				item.Number = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("shutdown"); cValue.Exists() {
-				item.Shutdown = types.BoolValue(true)
-			} else {
-				item.Shutdown = types.BoolValue(false)
-			}
-			if cValue := v.Get("host.host-name"); cValue.Exists() {
-				item.Host = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("host.port"); cValue.Exists() {
-				item.Port = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("initial-delay"); cValue.Exists() {
-				item.InitialDelay = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("flapping-delay"); cValue.Exists() {
-				item.FlappingDelay = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("initial-refresh.delay"); cValue.Exists() {
-				item.InitialRefreshDelay = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("initial-refresh.spread"); cValue.Exists() {
-				item.InitialRefreshSpread = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("initial-refresh.skip"); cValue.Exists() {
-				item.InitialRefreshSkip = types.BoolValue(true)
-			} else {
-				item.InitialRefreshSkip = types.BoolValue(false)
-			}
-			if cValue := v.Get("stats-reporting-period"); cValue.Exists() {
-				item.StatsReportingPeriod = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("description"); cValue.Exists() {
-				item.Description = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("dscp.dscp-value"); cValue.Exists() {
-				item.DscpValue = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("precedence.precedence-value"); cValue.Exists() {
-				item.PrecedenceValue = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("update-source"); cValue.Exists() {
-				item.UpdateSource = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("vrf"); cValue.Exists() {
-				item.Vrf = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("tcp.mss"); cValue.Exists() {
-				item.TcpMss = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("tcp.keep-alive"); cValue.Exists() {
-				item.TcpKeepAlive = types.Int64Value(cValue.Int())
-			}
-			data.Servers = append(data.Servers, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyData
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
@@ -1088,208 +1340,6 @@ func (data *BMPServerData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyDataXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data *BMPServer) getDeletedItems(ctx context.Context, state BMPServer) []string {
-	deletedItems := make([]string, 0)
-	for i := range state.Servers {
-		keys := [...]string{"server-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.Servers[i].Number.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Servers[i].Number.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Servers {
-			found = true
-			if state.Servers[i].Number.ValueInt64() != data.Servers[j].Number.ValueInt64() {
-				found = false
-			}
-			if found {
-				if !state.Servers[i].TcpKeepAlive.IsNull() && data.Servers[j].TcpKeepAlive.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/server%v/tcp/keep-alive", state.getPath(), keyString))
-				}
-				if !state.Servers[i].TcpMss.IsNull() && data.Servers[j].TcpMss.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/server%v/tcp/mss", state.getPath(), keyString))
-				}
-				if !state.Servers[i].Vrf.IsNull() && data.Servers[j].Vrf.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/server%v/vrf", state.getPath(), keyString))
-				}
-				if !state.Servers[i].UpdateSource.IsNull() && data.Servers[j].UpdateSource.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/server%v/update-source", state.getPath(), keyString))
-				}
-				if !state.Servers[i].PrecedenceValue.IsNull() && data.Servers[j].PrecedenceValue.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/server%v/precedence", state.getPath(), keyString))
-				}
-				if !state.Servers[i].DscpValue.IsNull() && data.Servers[j].DscpValue.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/server%v/dscp", state.getPath(), keyString))
-				}
-				if !state.Servers[i].Description.IsNull() && data.Servers[j].Description.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/server%v/description", state.getPath(), keyString))
-				}
-				if !state.Servers[i].StatsReportingPeriod.IsNull() && data.Servers[j].StatsReportingPeriod.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/server%v/stats-reporting-period", state.getPath(), keyString))
-				}
-				if !state.Servers[i].InitialRefreshSkip.IsNull() && data.Servers[j].InitialRefreshSkip.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/server%v/initial-refresh", state.getPath(), keyString))
-				}
-				if !state.Servers[i].InitialRefreshSpread.IsNull() && data.Servers[j].InitialRefreshSpread.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/server%v/initial-refresh", state.getPath(), keyString))
-				}
-				if !state.Servers[i].InitialRefreshDelay.IsNull() && data.Servers[j].InitialRefreshDelay.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/server%v/initial-refresh", state.getPath(), keyString))
-				}
-				if !state.Servers[i].FlappingDelay.IsNull() && data.Servers[j].FlappingDelay.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/server%v/flapping-delay", state.getPath(), keyString))
-				}
-				if !state.Servers[i].InitialDelay.IsNull() && data.Servers[j].InitialDelay.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/server%v/initial-delay", state.getPath(), keyString))
-				}
-				if !state.Servers[i].Port.IsNull() && data.Servers[j].Port.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/server%v/host/port", state.getPath(), keyString))
-				}
-				if !state.Servers[i].Host.IsNull() && data.Servers[j].Host.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/server%v/host/host-name", state.getPath(), keyString))
-				}
-				if !state.Servers[i].Shutdown.IsNull() && data.Servers[j].Shutdown.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/server%v/shutdown", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/server%v", state.getPath(), keyString))
-		}
-	}
-	if !state.AllMaxBufferSize.IsNull() && data.AllMaxBufferSize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/all/max-buffer-size", state.getPath()))
-	}
-	if !state.AllRouteMirroringInboundPrePolicy.IsNull() && data.AllRouteMirroringInboundPrePolicy.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/all/route-mirroring/inbound/pre-policy", state.getPath()))
-	}
-	for i := range state.AllRouteMonitorings {
-		keys := [...]string{"route-mon"}
-		stateKeyValues := [...]string{state.AllRouteMonitorings[i].RouteMon.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.AllRouteMonitorings[i].RouteMon.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.AllRouteMonitorings {
-			found = true
-			if state.AllRouteMonitorings[i].RouteMon.ValueString() != data.AllRouteMonitorings[j].RouteMon.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.AllRouteMonitorings[i].ScanTime.IsNull() && data.AllRouteMonitorings[j].ScanTime.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/all/route-monitorings/route-monitoring%v/scan-time", state.getPath(), keyString))
-				}
-				if !state.AllRouteMonitorings[i].AdvertisementInterval.IsNull() && data.AllRouteMonitorings[j].AdvertisementInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/all/route-monitorings/route-monitoring%v/advertisement-interval", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/all/route-monitorings/route-monitoring%v", state.getPath(), keyString))
-		}
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *BMPServer) getEmptyLeafsDelete(ctx context.Context, state *BMPServer) []string {
-	emptyLeafsDelete := make([]string, 0)
-	for i := range data.Servers {
-		keys := [...]string{"server-number"}
-		keyValues := [...]string{strconv.FormatInt(data.Servers[i].Number.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.Servers[i].InitialRefreshSkip.IsNull() && !data.Servers[i].InitialRefreshSkip.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Servers) && !state.Servers[i].InitialRefreshSkip.IsNull() && state.Servers[i].InitialRefreshSkip.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server%v/initial-refresh", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Servers[i].Shutdown.IsNull() && !data.Servers[i].Shutdown.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Servers) && !state.Servers[i].Shutdown.IsNull() && state.Servers[i].Shutdown.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server%v/shutdown", data.getXPath(), keyString))
-			}
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.AllRouteMirroringInboundPrePolicy.IsNull() && !data.AllRouteMirroringInboundPrePolicy.ValueBool() {
-		if state != nil && !state.AllRouteMirroringInboundPrePolicy.IsNull() && state.AllRouteMirroringInboundPrePolicy.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/all/route-mirroring/inbound/pre-policy", data.getXPath()))
-		}
-	}
-	for i := range data.AllRouteMonitorings {
-		keys := [...]string{"route-mon"}
-		keyValues := [...]string{data.AllRouteMonitorings[i].RouteMon.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *BMPServer) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	for i := range data.Servers {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[server-number=" + strconv.FormatInt(data.Servers[i].Number.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/server%v", data.getPath(), keyPath))
-	}
-	if !data.AllMaxBufferSize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/all/max-buffer-size", data.getPath()))
-	}
-	if !data.AllRouteMirroringInboundPrePolicy.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/all/route-mirroring/inbound/pre-policy", data.getPath()))
-	}
-	for i := range data.AllRouteMonitorings {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[route-mon=" + data.AllRouteMonitorings[i].RouteMon.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/all/route-monitorings/route-monitoring%v", data.getPath(), keyPath))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 

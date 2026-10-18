@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -131,6 +130,14 @@ func (d *RadiusServerDataSource) Schema(ctx context.Context, req datasource.Sche
 						},
 						"radsec_server_trustpoint": schema.StringAttribute{
 							MarkdownDescription: "Trustpoint to be used for RADIUS over TLS",
+							Computed:            true,
+						},
+						"attribute_message_authenticator_mandate": schema.BoolAttribute{
+							MarkdownDescription: "Enforce message-authenticator attribute validation mandatorily in all radius packets received" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"attribute_message_authenticator_optional": schema.BoolAttribute{
+							MarkdownDescription: "Enforce message-authenticator attribute validation optional in all radius packets received (Default)" + "\n  - Supported from version: `25.4`",
 							Computed:            true,
 						},
 					},
@@ -247,6 +254,38 @@ func (d *RadiusServerDataSource) Schema(ctx context.Context, req datasource.Sche
 								},
 							},
 						},
+						"attribute_vendor_cisco_vendor_types": schema.ListNestedAttribute{
+							MarkdownDescription: "Vendor 9 vendor-type entry" + "\n  - Supported from version: `26.2`",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"vendor_type_id": schema.Int64Attribute{
+										MarkdownDescription: "Vendor 9 vendor-type id." + "\n  - Supported from version: `26.2`",
+										Computed:            true,
+									},
+									"all_avpairs": schema.BoolAttribute{
+										MarkdownDescription: "Apply to all avpairs with vendor 9 type 1 special semantics." + "\n  - Supported from version: `26.2`",
+										Computed:            true,
+									},
+									"all_attributes": schema.BoolAttribute{
+										MarkdownDescription: "Apply to all attributes for this vendor 9 vendor-type." + "\n  - Supported from version: `26.2`",
+										Computed:            true,
+									},
+									"avpairs": schema.ListNestedAttribute{
+										MarkdownDescription: "Named Av-Pair entry for vendor 9 type 1." + "\n  - Supported from version: `26.2`",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"avpair_name": schema.StringAttribute{
+													MarkdownDescription: "Av-Pair name for vendor 9 type 1." + "\n  - Supported from version: `26.2`",
+													Computed:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -260,6 +299,10 @@ func (d *RadiusServerDataSource) Schema(ctx context.Context, req datasource.Sche
 			},
 			"attribute_filter_id_11_default_direction": schema.StringAttribute{
 				MarkdownDescription: "Set the attribute default direction",
+				Computed:            true,
+			},
+			"attribute_message_authenticator": schema.BoolAttribute{
+				MarkdownDescription: "Enable Message-authenticator attribute(80) validation in all radius packets" + "\n  - Supported from version: `25.4`",
 				Computed:            true,
 			},
 		},
@@ -309,7 +352,6 @@ func (d *RadiusServerDataSource) Read(ctx context.Context, req datasource.ReadRe
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -329,7 +371,7 @@ func (d *RadiusServerDataSource) Read(ctx context.Context, req datasource.ReadRe
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

@@ -1,0 +1,13 @@
+---
+name: CEF Load Balancing 8000
+path: Cisco-IOS-XR-8000-fib-platform-cfg:/cef
+doc_category: Cisco 8000 Series
+ds_description: This data source can read the CEF Load Balancing configuration on Cisco 8000 series routers.
+res_description: This resource can manage the CEF Load Balancing configuration on Cisco 8000 series routers.
+test_tags: [C8000]
+attributes:
+  # ===========================================================
+  # ADDITIONS - new in 26.2
+  # ===========================================================
+  - yang_name: platform-load-balance/nvgre-payload-exclude
+    example: true

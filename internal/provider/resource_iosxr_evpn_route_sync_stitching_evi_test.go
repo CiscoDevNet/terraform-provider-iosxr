@@ -49,11 +49,11 @@ func TestAccIosxrEVPNRouteSyncStitchingEVI(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrEVPNRouteSyncStitchingEVIPrerequisitesConfig + testAccIosxrEVPNRouteSyncStitchingEVIConfig_minimum(),
+			Config: testAccIosxrEVPNRouteSyncStitchingEVIPrerequisitesConfig() + testAccIosxrEVPNRouteSyncStitchingEVIConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrEVPNRouteSyncStitchingEVIPrerequisitesConfig + testAccIosxrEVPNRouteSyncStitchingEVIConfig_all(),
+		Config: testAccIosxrEVPNRouteSyncStitchingEVIPrerequisitesConfig() + testAccIosxrEVPNRouteSyncStitchingEVIConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -85,7 +85,7 @@ func iosxrEVPNRouteSyncStitchingEVIImportStateIdFunc(resourceName string) resour
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrEVPNRouteSyncStitchingEVIPrerequisitesConfig = `
+const testAccIosxrEVPNRouteSyncStitchingEVIPrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]"
 	attributes = {
@@ -102,6 +102,15 @@ resource "iosxr_yang" "PreReq1" {
 
 `
 
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccIosxrEVPNRouteSyncStitchingEVIPrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccIosxrEVPNRouteSyncStitchingEVIPrerequisitesConfig_V24_4,
+		},
+	)
+}
+
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
@@ -109,7 +118,9 @@ resource "iosxr_yang" "PreReq1" {
 func testAccIosxrEVPNRouteSyncStitchingEVIConfig_minimum() string {
 	config := `resource "iosxr_evpn_route_sync_stitching_evi" "test" {` + "\n"
 	config += `	vpn_id = 108` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -135,7 +146,9 @@ func testAccIosxrEVPNRouteSyncStitchingEVIConfig_all() string {
 	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
 		config += `	vrf_default = true` + "\n"
 	}
-	config += `	depends_on = [iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]` + "\n"
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, iosxr_yang.PreReq1, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 	return config
 }

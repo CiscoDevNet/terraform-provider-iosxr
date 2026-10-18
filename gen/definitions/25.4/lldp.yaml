@@ -1,0 +1,55 @@
+---
+name: LLDP
+path: Cisco-IOS-XR-um-lldp-cfg:/lldp
+doc_category: Management
+attributes:
+  # ===========================================================
+  # Presence containers restructured to empty leaves at the same path
+  # 24.4: presence container (no children)
+  # 25.4: leaf, type empty
+  # ===========================================================
+  - yang_name: subinterfaces/enable
+  - yang_name: management/enable
+  - yang_name: priorityaddr/enable
+  - yang_name: subinterfaces-tagged
+  - yang_name: extended-show-width/enable
+  - yang_name: tlv-select/system-name/disable
+  - yang_name: tlv-select/management-address/disable
+  - yang_name: tlv-select/system-capabilities/disable
+  - yang_name: tlv-select/port-description/disable
+  - yang_name: tlv-select/system-description/disable
+  # ===========================================================
+  # system-name, system-description, chassis-id: string length tightened
+  # 24.4: length 1..256
+  # 25.4: length 1..255 (pattern regex also re-derived)
+  # ===========================================================
+  - yang_name: system-name
+  - yang_name: system-description
+  - yang_name: chassis-id
+  # ===========================================================
+  # chassis-id-type: 7 mutually-exclusive presence containers merged into one enumeration leaf
+  # 24.4: chassis-id-type/{chassis-component,interface-alias,port-component,mac-address,
+  #       network-address,interface-name,local} (7 separate presence containers)
+  # 25.4: chassis-id-type (single leaf, type enumeration)
+  # ===========================================================
+  - yang_name: chassis-id-type/chassis-component
+    legacy: true
+  - yang_name: chassis-id-type/interface-alias
+    legacy: true
+  - yang_name: chassis-id-type/interface-name
+    legacy: true
+  - yang_name: chassis-id-type/local
+    legacy: true
+  - yang_name: chassis-id-type/mac-address
+    legacy: true
+  - yang_name: chassis-id-type/network-address
+    legacy: true
+  - yang_name: chassis-id-type/port-component
+    legacy: true
+  - yang_name: chassis-id-type
+    example: "local"
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  - yang_name: interface-only
+    example: true

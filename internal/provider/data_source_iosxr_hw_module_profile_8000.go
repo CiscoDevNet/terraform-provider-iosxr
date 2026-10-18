@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -75,11 +74,11 @@ func (d *HWModuleProfile8000DataSource) Schema(ctx context.Context, req datasour
 				Computed:            true,
 			},
 			"profile_tcam_fib_ipv4_unicast_percent": schema.Int64Attribute{
-				MarkdownDescription: "percent to configure",
+				MarkdownDescription: "percent to configure" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"profile_tcam_fib_ipv6_unicast_percent": schema.Int64Attribute{
-				MarkdownDescription: "percent to configure",
+				MarkdownDescription: "percent to configure" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"profile_tcam_format_access_list_ipv4_src_addr": schema.BoolAttribute{
@@ -316,7 +315,7 @@ func (d *HWModuleProfile8000DataSource) Schema(ctx context.Context, req datasour
 				Computed:            true,
 			},
 			"profile_cef_mplsoudp_scale": schema.BoolAttribute{
-				MarkdownDescription: "Enable mplsoudp scale",
+				MarkdownDescription: "Enable mplsoudp scale" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"profile_cef_stats_label_app_default": schema.StringAttribute{
@@ -492,19 +491,31 @@ func (d *HWModuleProfile8000DataSource) Schema(ctx context.Context, req datasour
 								},
 							},
 						},
+						"non_pfc_tcs": schema.BoolAttribute{
+							MarkdownDescription: "configure to allow lossy TCs to evict." + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"non_pfc_tcs_max_non_pfc_voqs_number_of_evict_voqs": schema.Int64Attribute{
+							MarkdownDescription: "number of evict voqs" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
+						"non_pfc_tcs_max_non_pfc_voqs_hbm_buffers_percentage": schema.Int64Attribute{
+							MarkdownDescription: "configure hbm-buffers-percentage for non-pfc-tcs" + "\n  - Supported from version: `25.4`",
+							Computed:            true,
+						},
 					},
 				},
 			},
 			"profile_gue_udp_dest_port_ipv4": schema.Int64Attribute{
-				MarkdownDescription: "Configure unreserved udp port number for ipv4 payload",
+				MarkdownDescription: "Configure unreserved udp port number for ipv4 payload" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"profile_gue_udp_dest_port_ipv6": schema.Int64Attribute{
-				MarkdownDescription: "Configure unreserved udp port number for ipv6 payload",
+				MarkdownDescription: "Configure unreserved udp port number for ipv6 payload" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"profile_gue_udp_dest_port_mpls": schema.Int64Attribute{
-				MarkdownDescription: "Configure unreserved udp port number for mpls payload",
+				MarkdownDescription: "Configure unreserved udp port number for mpls payload" + "\n  - **Not supported from version `25.4` and above**",
 				Computed:            true,
 			},
 			"profile_npu_buffer_extended_locations": schema.ListNestedAttribute{
@@ -559,6 +570,42 @@ func (d *HWModuleProfile8000DataSource) Schema(ctx context.Context, req datasour
 				MarkdownDescription: "Configure BVI throughput-optimized mode",
 				Computed:            true,
 			},
+			"profile_tcam_format_og_compr_id_extension": schema.BoolAttribute{
+				MarkdownDescription: "Enable wide compression result of OG ACL" + "\n  - Supported from version: `25.4`" + "\n  - **Not supported from version `26.2` and above**",
+				Computed:            true,
+			},
+			"profile_qos_mode": schema.StringAttribute{
+				MarkdownDescription: "Configure QOS Mode" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"profile_cef_iptunnel_scale": schema.BoolAttribute{
+				MarkdownDescription: "Enable iptunnel scale" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"profile_cef_hash_ip_field_duplication": schema.BoolAttribute{
+				MarkdownDescription: "Enable IP field duplication for hash" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"profile_l2fib_evpn_aging": schema.BoolAttribute{
+				MarkdownDescription: "Configure evpn-aging profile" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"profile_route_scale_host_route": schema.BoolAttribute{
+				MarkdownDescription: "Enable host route scale for ARP/ND" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"profile_route_scale_lpm_full_scale": schema.BoolAttribute{
+				MarkdownDescription: "Enable full scale for LPM" + "\n  - Supported from version: `25.4`",
+				Computed:            true,
+			},
+			"profile_tcam_format_og_compr_id_extension_ingress": schema.BoolAttribute{
+				MarkdownDescription: "Enable wide compression result of ingress OG ACL" + "\n  - Supported from version: `26.2`",
+				Computed:            true,
+			},
+			"profile_tcam_format_og_compr_id_extension_egress": schema.BoolAttribute{
+				MarkdownDescription: "Enable wide compression result of egress OG ACL" + "\n  - Supported from version: `26.2`",
+				Computed:            true,
+			},
 		},
 	}
 }
@@ -606,7 +653,6 @@ func (d *HWModuleProfile8000DataSource) Read(ctx context.Context, req datasource
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -626,7 +672,7 @@ func (d *HWModuleProfile8000DataSource) Read(ctx context.Context, req datasource
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

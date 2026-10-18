@@ -44,10 +44,8 @@ func TestAccIosxrEVPNInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_esi_zero", "01.01.01.01.01.01.01.01.04"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_load_balancing_mode_port_active", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_force_single_homed", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_service_carving_hrw", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_service_carving_multicast_hrw_s_g", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_service_carving_preference_based_weight", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_service_carving_preference_based_access_driven", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_bgp_rt", "01:01:01:01:01:04"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_convergence_reroute", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_convergence_mac_mobility", "true"))
@@ -128,10 +126,8 @@ func testAccIosxrEVPNInterfaceConfig_all() string {
 	config += `	ethernet_segment_esi_zero = "01.01.01.01.01.01.01.01.04"` + "\n"
 	config += `	ethernet_segment_load_balancing_mode_port_active = true` + "\n"
 	config += `	ethernet_segment_force_single_homed = true` + "\n"
-	config += `	ethernet_segment_service_carving_hrw = true` + "\n"
 	config += `	ethernet_segment_service_carving_multicast_hrw_s_g = true` + "\n"
 	config += `	ethernet_segment_service_carving_preference_based_weight = 100` + "\n"
-	config += `	ethernet_segment_service_carving_preference_based_access_driven = true` + "\n"
 	config += `	ethernet_segment_bgp_rt = "01:01:01:01:01:04"` + "\n"
 	config += `	ethernet_segment_convergence_reroute = true` + "\n"
 	config += `	ethernet_segment_convergence_mac_mobility = true` + "\n"

@@ -23,6 +23,8 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -40,30 +42,54 @@ import (
 
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 type ICMP struct {
-	Device                            types.String `tfsdk:"device"`
-	Id                                types.String `tfsdk:"id"`
-	DeleteMode                        types.String `tfsdk:"delete_mode"`
-	Ipv4SourceVrf                     types.Bool   `tfsdk:"ipv4_source_vrf"`
-	Ipv4SourceRfc                     types.Bool   `tfsdk:"ipv4_source_rfc"`
-	Ipv4RateLimitUnreachableRate      types.Int64  `tfsdk:"ipv4_rate_limit_unreachable_rate"`
-	Ipv4RateLimitUnreachableDisable   types.Bool   `tfsdk:"ipv4_rate_limit_unreachable_disable"`
-	Ipv4RateLimitUnreachableDfRate    types.Int64  `tfsdk:"ipv4_rate_limit_unreachable_df_rate"`
-	Ipv4RateLimitUnreachableDfDisable types.Bool   `tfsdk:"ipv4_rate_limit_unreachable_df_disable"`
-	Ipv6SourceVrf                     types.Bool   `tfsdk:"ipv6_source_vrf"`
-	Ipv6SourceRfc                     types.Bool   `tfsdk:"ipv6_source_rfc"`
+	Device                            types.String   `tfsdk:"device"`
+	Id                                types.String   `tfsdk:"id"`
+	DeleteMode                        types.String   `tfsdk:"delete_mode"`
+	Ipv4SourceVrf                     types.Bool     `tfsdk:"ipv4_source_vrf"`
+	Ipv4SourceRfc                     types.Bool     `tfsdk:"ipv4_source_rfc"`
+	Ipv4RateLimitUnreachableRate      types.Int64    `tfsdk:"ipv4_rate_limit_unreachable_rate"`
+	Ipv4RateLimitUnreachableDisable   types.Bool     `tfsdk:"ipv4_rate_limit_unreachable_disable"`
+	Ipv4RateLimitUnreachableDfRate    types.Int64    `tfsdk:"ipv4_rate_limit_unreachable_df_rate"`
+	Ipv4RateLimitUnreachableDfDisable types.Bool     `tfsdk:"ipv4_rate_limit_unreachable_df_disable"`
+	Ipv6SourceVrf                     types.Bool     `tfsdk:"ipv6_source_vrf"`
+	Ipv6SourceRfc                     types.Bool     `tfsdk:"ipv6_source_rfc"`
+	Ipv4MplsExtendedDiagnostics       types.Bool     `tfsdk:"ipv4_mpls_extended_diagnostics"`
+	Ipv6MplsExtendedDiagnostics       types.Bool     `tfsdk:"ipv6_mpls_extended_diagnostics"`
+	Ipv4Vrfs                          []ICMPIpv4Vrfs `tfsdk:"ipv4_vrfs"`
+	Ipv6Vrfs                          []ICMPIpv6Vrfs `tfsdk:"ipv6_vrfs"`
 }
 
 type ICMPData struct {
-	Device                            types.String `tfsdk:"device"`
-	Id                                types.String `tfsdk:"id"`
-	Ipv4SourceVrf                     types.Bool   `tfsdk:"ipv4_source_vrf"`
-	Ipv4SourceRfc                     types.Bool   `tfsdk:"ipv4_source_rfc"`
-	Ipv4RateLimitUnreachableRate      types.Int64  `tfsdk:"ipv4_rate_limit_unreachable_rate"`
-	Ipv4RateLimitUnreachableDisable   types.Bool   `tfsdk:"ipv4_rate_limit_unreachable_disable"`
-	Ipv4RateLimitUnreachableDfRate    types.Int64  `tfsdk:"ipv4_rate_limit_unreachable_df_rate"`
-	Ipv4RateLimitUnreachableDfDisable types.Bool   `tfsdk:"ipv4_rate_limit_unreachable_df_disable"`
-	Ipv6SourceVrf                     types.Bool   `tfsdk:"ipv6_source_vrf"`
-	Ipv6SourceRfc                     types.Bool   `tfsdk:"ipv6_source_rfc"`
+	Device                            types.String   `tfsdk:"device"`
+	Id                                types.String   `tfsdk:"id"`
+	Ipv4SourceVrf                     types.Bool     `tfsdk:"ipv4_source_vrf"`
+	Ipv4SourceRfc                     types.Bool     `tfsdk:"ipv4_source_rfc"`
+	Ipv4RateLimitUnreachableRate      types.Int64    `tfsdk:"ipv4_rate_limit_unreachable_rate"`
+	Ipv4RateLimitUnreachableDisable   types.Bool     `tfsdk:"ipv4_rate_limit_unreachable_disable"`
+	Ipv4RateLimitUnreachableDfRate    types.Int64    `tfsdk:"ipv4_rate_limit_unreachable_df_rate"`
+	Ipv4RateLimitUnreachableDfDisable types.Bool     `tfsdk:"ipv4_rate_limit_unreachable_df_disable"`
+	Ipv6SourceVrf                     types.Bool     `tfsdk:"ipv6_source_vrf"`
+	Ipv6SourceRfc                     types.Bool     `tfsdk:"ipv6_source_rfc"`
+	Ipv4MplsExtendedDiagnostics       types.Bool     `tfsdk:"ipv4_mpls_extended_diagnostics"`
+	Ipv6MplsExtendedDiagnostics       types.Bool     `tfsdk:"ipv6_mpls_extended_diagnostics"`
+	Ipv4Vrfs                          []ICMPIpv4Vrfs `tfsdk:"ipv4_vrfs"`
+	Ipv6Vrfs                          []ICMPIpv6Vrfs `tfsdk:"ipv6_vrfs"`
+}
+type ICMPIpv4Vrfs struct {
+	VrfName                                     types.String                                              `tfsdk:"vrf_name"`
+	ExtendedDiagnosticsPermittedRemoteAddresses []ICMPIpv4VrfsExtendedDiagnosticsPermittedRemoteAddresses `tfsdk:"extended_diagnostics_permitted_remote_addresses"`
+}
+type ICMPIpv6Vrfs struct {
+	VrfName                                     types.String                                              `tfsdk:"vrf_name"`
+	ExtendedDiagnosticsPermittedRemoteAddresses []ICMPIpv6VrfsExtendedDiagnosticsPermittedRemoteAddresses `tfsdk:"extended_diagnostics_permitted_remote_addresses"`
+}
+type ICMPIpv4VrfsExtendedDiagnosticsPermittedRemoteAddresses struct {
+	Address types.String `tfsdk:"address"`
+	Length  types.Int64  `tfsdk:"length"`
+}
+type ICMPIpv6VrfsExtendedDiagnosticsPermittedRemoteAddresses struct {
+	Address types.String `tfsdk:"address"`
+	Length  types.Int64  `tfsdk:"length"`
 }
 
 // End of section. //template:end types
@@ -93,7 +119,7 @@ func (data ICMPData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data ICMP) toBody(ctx context.Context) string {
+func (data ICMP) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.Ipv4SourceVrf.IsNull() && !data.Ipv4SourceVrf.IsUnknown() {
 		if data.Ipv4SourceVrf.ValueBool() {
@@ -131,93 +157,1102 @@ func (data ICMP) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "ipv6.source.rfc", map[string]string{})
 		}
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.Ipv4MplsExtendedDiagnostics.IsNull() && !data.Ipv4MplsExtendedDiagnostics.IsUnknown() {
+			if data.Ipv4MplsExtendedDiagnostics.ValueBool() {
+				body, _ = sjson.Set(body, "ipv4.mpls.extended-diagnostics", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.Ipv6MplsExtendedDiagnostics.IsNull() && !data.Ipv6MplsExtendedDiagnostics.IsUnknown() {
+			if data.Ipv6MplsExtendedDiagnostics.ValueBool() {
+				body, _ = sjson.Set(body, "ipv6.mpls.extended-diagnostics", map[string]string{})
+			}
+		}
+	}
+	if (helpers.VersionAtLeast(providerVersion, "25.4")) && len(data.Ipv4Vrfs) > 0 {
+		body, _ = sjson.Set(body, "ipv4.vrfs.vrf", []interface{}{})
+		for index, item := range data.Ipv4Vrfs {
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
+					body, _ = sjson.Set(body, "ipv4.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"vrf-name", item.VrfName.ValueString())
+				}
+			}
+			if (helpers.VersionAtLeast(providerVersion, "25.4")) && len(item.ExtendedDiagnosticsPermittedRemoteAddresses) > 0 {
+				body, _ = sjson.Set(body, "ipv4.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"extended-diagnostics.permitted-remote-address.ip-addresses.ip-address", []interface{}{})
+				for cindex, citem := range item.ExtendedDiagnosticsPermittedRemoteAddresses {
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+							body, _ = sjson.Set(body, "ipv4.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"extended-diagnostics.permitted-remote-address.ip-addresses.ip-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+							body, _ = sjson.Set(body, "ipv4.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"extended-diagnostics.permitted-remote-address.ip-addresses.ip-address"+"."+strconv.Itoa(cindex)+"."+"length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+						}
+					}
+				}
+			}
+		}
+	}
+	if (helpers.VersionAtLeast(providerVersion, "25.4")) && len(data.Ipv6Vrfs) > 0 {
+		body, _ = sjson.Set(body, "ipv6.vrfs.vrf", []interface{}{})
+		for index, item := range data.Ipv6Vrfs {
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
+					body, _ = sjson.Set(body, "ipv6.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"vrf-name", item.VrfName.ValueString())
+				}
+			}
+			if (helpers.VersionAtLeast(providerVersion, "25.4")) && len(item.ExtendedDiagnosticsPermittedRemoteAddresses) > 0 {
+				body, _ = sjson.Set(body, "ipv6.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"extended-diagnostics.permitted-remote-address.ip-addresses.ip-address", []interface{}{})
+				for cindex, citem := range item.ExtendedDiagnosticsPermittedRemoteAddresses {
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+							body, _ = sjson.Set(body, "ipv6.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"extended-diagnostics.permitted-remote-address.ip-addresses.ip-address"+"."+strconv.Itoa(cindex)+"."+"address", citem.Address.ValueString())
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "25.4") {
+						if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+							body, _ = sjson.Set(body, "ipv6.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"extended-diagnostics.permitted-remote-address.ip-addresses.ip-address"+"."+strconv.Itoa(cindex)+"."+"length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+						}
+					}
+				}
+			}
+		}
+	}
 	return body
 }
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *ICMP) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("ipv4.source.vrf"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Ipv4SourceVrf.IsNull() {
+// GetVersionConstraints returns the version constraints for all fields
+func (data ICMP) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "ipv4_mpls_extended_diagnostics",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ipv6_mpls_extended_diagnostics",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ipv4_vrfs",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ipv4_vrfs.vrf_name",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ipv4_vrfs.extended_diagnostics_permitted_remote_addresses",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ipv4_vrfs.extended_diagnostics_permitted_remote_addresses.address",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ipv4_vrfs.extended_diagnostics_permitted_remote_addresses.length",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ipv6_vrfs",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ipv6_vrfs.vrf_name",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ipv6_vrfs.extended_diagnostics_permitted_remote_addresses",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ipv6_vrfs.extended_diagnostics_permitted_remote_addresses.address",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "ipv6_vrfs.extended_diagnostics_permitted_remote_addresses.length",
+			AddedInVersion: "25.4",
+		},
+	}...)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data ICMP) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data ICMP) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data ICMP) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data ICMP) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *ICMP) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "ipv4.source.vrf"); !data.Ipv4SourceVrf.IsNull() {
+		if value.Exists() {
 			data.Ipv4SourceVrf = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Ipv4SourceVrf = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Ipv4SourceVrf.IsNull() {
-			data.Ipv4SourceVrf = types.BoolNull()
-		}
+	} else if data.Ipv4SourceVrf.IsNull() {
+		data.Ipv4SourceVrf = types.BoolNull()
 	}
-	if value := res.Get("ipv4.source.rfc"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Ipv4SourceRfc.IsNull() {
+	if value := gjson.GetBytes(res, "ipv4.source.rfc"); !data.Ipv4SourceRfc.IsNull() {
+		if value.Exists() {
 			data.Ipv4SourceRfc = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Ipv4SourceRfc = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Ipv4SourceRfc.IsNull() {
-			data.Ipv4SourceRfc = types.BoolNull()
-		}
+	} else if data.Ipv4SourceRfc.IsNull() {
+		data.Ipv4SourceRfc = types.BoolNull()
 	}
-	if value := res.Get("ipv4.rate-limit.unreachable.rate"); value.Exists() && !data.Ipv4RateLimitUnreachableRate.IsNull() {
+	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.rate"); value.Exists() && !data.Ipv4RateLimitUnreachableRate.IsNull() {
 		data.Ipv4RateLimitUnreachableRate = types.Int64Value(value.Int())
 	} else if data.Ipv4RateLimitUnreachableRate.IsNull() {
 		data.Ipv4RateLimitUnreachableRate = types.Int64Null()
 	}
-	if value := res.Get("ipv4.rate-limit.unreachable.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Ipv4RateLimitUnreachableDisable.IsNull() {
+	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.disable"); !data.Ipv4RateLimitUnreachableDisable.IsNull() {
+		if value.Exists() {
 			data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Ipv4RateLimitUnreachableDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Ipv4RateLimitUnreachableDisable.IsNull() {
-			data.Ipv4RateLimitUnreachableDisable = types.BoolNull()
-		}
+	} else if data.Ipv4RateLimitUnreachableDisable.IsNull() {
+		data.Ipv4RateLimitUnreachableDisable = types.BoolNull()
 	}
-	if value := res.Get("ipv4.rate-limit.unreachable.df.rate"); value.Exists() && !data.Ipv4RateLimitUnreachableDfRate.IsNull() {
+	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.df.rate"); value.Exists() && !data.Ipv4RateLimitUnreachableDfRate.IsNull() {
 		data.Ipv4RateLimitUnreachableDfRate = types.Int64Value(value.Int())
 	} else if data.Ipv4RateLimitUnreachableDfRate.IsNull() {
 		data.Ipv4RateLimitUnreachableDfRate = types.Int64Null()
 	}
-	if value := res.Get("ipv4.rate-limit.unreachable.df.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
+	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.df.disable"); !data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
+		if value.Exists() {
 			data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
-			data.Ipv4RateLimitUnreachableDfDisable = types.BoolNull()
-		}
+	} else if data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
+		data.Ipv4RateLimitUnreachableDfDisable = types.BoolNull()
 	}
-	if value := res.Get("ipv6.source.vrf"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Ipv6SourceVrf.IsNull() {
+	if value := gjson.GetBytes(res, "ipv6.source.vrf"); !data.Ipv6SourceVrf.IsNull() {
+		if value.Exists() {
 			data.Ipv6SourceVrf = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Ipv6SourceVrf = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Ipv6SourceVrf.IsNull() {
-			data.Ipv6SourceVrf = types.BoolNull()
+	} else if data.Ipv6SourceVrf.IsNull() {
+		data.Ipv6SourceVrf = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv6.source.rfc"); !data.Ipv6SourceRfc.IsNull() {
+		if value.Exists() {
+			data.Ipv6SourceRfc = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Ipv6SourceRfc = types.BoolValue(false)
+		}
+	} else if data.Ipv6SourceRfc.IsNull() {
+		data.Ipv6SourceRfc = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv4.mpls.extended-diagnostics"); helpers.VersionAtLeast(version, "25.4") && !data.Ipv4MplsExtendedDiagnostics.IsNull() {
+		if value.Exists() {
+			data.Ipv4MplsExtendedDiagnostics = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Ipv4MplsExtendedDiagnostics = types.BoolValue(false)
+		}
+	} else if data.Ipv4MplsExtendedDiagnostics.IsNull() {
+		data.Ipv4MplsExtendedDiagnostics = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv6.mpls.extended-diagnostics"); helpers.VersionAtLeast(version, "25.4") && !data.Ipv6MplsExtendedDiagnostics.IsNull() {
+		if value.Exists() {
+			data.Ipv6MplsExtendedDiagnostics = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Ipv6MplsExtendedDiagnostics = types.BoolValue(false)
+		}
+	} else if data.Ipv6MplsExtendedDiagnostics.IsNull() {
+		data.Ipv6MplsExtendedDiagnostics = types.BoolNull()
+	}
+	for i := range data.Ipv4Vrfs {
+		var keys []string
+		var keyValues []string
+		if helpers.VersionAtLeast(version, "25.4") {
+			keys = append(keys, "vrf-name")
+			keyValues = append(keyValues, data.Ipv4Vrfs[i].VrfName.ValueString())
+		}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "ipv4.vrfs.vrf").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("vrf-name"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Ipv4Vrfs[i].VrfName.IsNull() {
+			data.Ipv4Vrfs[i].VrfName = types.StringValue(value.String())
+		} else {
+			data.Ipv4Vrfs[i].VrfName = types.StringNull()
+		}
+		for ci := range data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "address")
+				keyValues = append(keyValues, data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.ValueString())
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "length")
+				keyValues = append(keyValues, strconv.FormatInt(data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.ValueInt64(), 10))
+			}
+
+			var cr gjson.Result
+			r.Get("extended-diagnostics.permitted-remote-address.ip-addresses.ip-address").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("address"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.IsNull() {
+				data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address = types.StringValue(value.String())
+			} else {
+				data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address = types.StringNull()
+			}
+			if value := cr.Get("length"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.IsNull() {
+				data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length = types.Int64Value(value.Int())
+			} else {
+				data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length = types.Int64Null()
+			}
 		}
 	}
-	if value := res.Get("ipv6.source.rfc"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Ipv6SourceRfc.IsNull() {
-			data.Ipv6SourceRfc = types.BoolValue(true)
+	for i := range data.Ipv6Vrfs {
+		var keys []string
+		var keyValues []string
+		if helpers.VersionAtLeast(version, "25.4") {
+			keys = append(keys, "vrf-name")
+			keyValues = append(keyValues, data.Ipv6Vrfs[i].VrfName.ValueString())
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Ipv6SourceRfc.IsNull() {
-			data.Ipv6SourceRfc = types.BoolNull()
+
+		var r gjson.Result
+		gjson.GetBytes(res, "ipv6.vrfs.vrf").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("vrf-name"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Ipv6Vrfs[i].VrfName.IsNull() {
+			data.Ipv6Vrfs[i].VrfName = types.StringValue(value.String())
+		} else {
+			data.Ipv6Vrfs[i].VrfName = types.StringNull()
+		}
+		for ci := range data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "address")
+				keyValues = append(keyValues, data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.ValueString())
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "length")
+				keyValues = append(keyValues, strconv.FormatInt(data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.ValueInt64(), 10))
+			}
+
+			var cr gjson.Result
+			r.Get("extended-diagnostics.permitted-remote-address.ip-addresses.ip-address").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("address"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.IsNull() {
+				data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address = types.StringValue(value.String())
+			} else {
+				data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address = types.StringNull()
+			}
+			if value := cr.Get("length"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.IsNull() {
+				data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length = types.Int64Value(value.Int())
+			} else {
+				data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length = types.Int64Null()
+			}
 		}
 	}
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *ICMP) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "ipv4.source.vrf"); value.Exists() {
+		data.Ipv4SourceVrf = types.BoolValue(true)
+	} else if !data.Ipv4SourceVrf.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv4SourceVrf = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.source.rfc"); value.Exists() {
+		data.Ipv4SourceRfc = types.BoolValue(true)
+	} else if !data.Ipv4SourceRfc.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv4SourceRfc = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.rate"); value.Exists() {
+		data.Ipv4RateLimitUnreachableRate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.disable"); value.Exists() {
+		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
+	} else if !data.Ipv4RateLimitUnreachableDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.df.rate"); value.Exists() {
+		data.Ipv4RateLimitUnreachableDfRate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.df.disable"); value.Exists() {
+		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
+	} else if !data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv6.source.vrf"); value.Exists() {
+		data.Ipv6SourceVrf = types.BoolValue(true)
+	} else if !data.Ipv6SourceVrf.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv6SourceVrf = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv6.source.rfc"); value.Exists() {
+		data.Ipv6SourceRfc = types.BoolValue(true)
+	} else if !data.Ipv6SourceRfc.IsNull() {
+		// Only set to false if it was previously set in state
+		data.Ipv6SourceRfc = types.BoolValue(false)
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "ipv4.mpls.extended-diagnostics"); value.Exists() {
+			data.Ipv4MplsExtendedDiagnostics = types.BoolValue(true)
+		} else if !data.Ipv4MplsExtendedDiagnostics.IsNull() {
+			// Only set to false if it was previously set in state
+			data.Ipv4MplsExtendedDiagnostics = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4MplsExtendedDiagnostics = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "ipv6.mpls.extended-diagnostics"); value.Exists() {
+			data.Ipv6MplsExtendedDiagnostics = types.BoolValue(true)
+		} else if !data.Ipv6MplsExtendedDiagnostics.IsNull() {
+			// Only set to false if it was previously set in state
+			data.Ipv6MplsExtendedDiagnostics = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6MplsExtendedDiagnostics = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv4.vrfs.vrf"); value.Exists() {
+		data.Ipv4Vrfs = make([]ICMPIpv4Vrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := ICMPIpv4Vrfs{}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("vrf-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.VrfName = types.StringValue(cValue.String())
+				}
+			} else {
+				item.VrfName = types.StringNull()
+			}
+			if cValue := v.Get("extended-diagnostics.permitted-remote-address.ip-addresses.ip-address"); cValue.Exists() {
+				item.ExtendedDiagnosticsPermittedRemoteAddresses = make([]ICMPIpv4VrfsExtendedDiagnosticsPermittedRemoteAddresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := ICMPIpv4VrfsExtendedDiagnosticsPermittedRemoteAddresses{}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.Address = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.Address = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("length"); ccValue.Exists() {
+							cItem.Length = types.Int64Value(ccValue.Int())
+						}
+					} else {
+						cItem.Length = types.Int64Null()
+					}
+					item.ExtendedDiagnosticsPermittedRemoteAddresses = append(item.ExtendedDiagnosticsPermittedRemoteAddresses, cItem)
+					return true
+				})
+			}
+			data.Ipv4Vrfs = append(data.Ipv4Vrfs, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "ipv6.vrfs.vrf"); value.Exists() {
+		data.Ipv6Vrfs = make([]ICMPIpv6Vrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := ICMPIpv6Vrfs{}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("vrf-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.VrfName = types.StringValue(cValue.String())
+				}
+			} else {
+				item.VrfName = types.StringNull()
+			}
+			if cValue := v.Get("extended-diagnostics.permitted-remote-address.ip-addresses.ip-address"); cValue.Exists() {
+				item.ExtendedDiagnosticsPermittedRemoteAddresses = make([]ICMPIpv6VrfsExtendedDiagnosticsPermittedRemoteAddresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := ICMPIpv6VrfsExtendedDiagnosticsPermittedRemoteAddresses{}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.Address = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.Address = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("length"); ccValue.Exists() {
+							cItem.Length = types.Int64Value(ccValue.Int())
+						}
+					} else {
+						cItem.Length = types.Int64Null()
+					}
+					item.ExtendedDiagnosticsPermittedRemoteAddresses = append(item.ExtendedDiagnosticsPermittedRemoteAddresses, cItem)
+					return true
+				})
+			}
+			data.Ipv6Vrfs = append(data.Ipv6Vrfs, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *ICMPData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "ipv4.source.vrf"); value.Exists() {
+		data.Ipv4SourceVrf = types.BoolValue(true)
+	} else {
+		data.Ipv4SourceVrf = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.source.rfc"); value.Exists() {
+		data.Ipv4SourceRfc = types.BoolValue(true)
+	} else {
+		data.Ipv4SourceRfc = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.rate"); value.Exists() {
+		data.Ipv4RateLimitUnreachableRate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.disable"); value.Exists() {
+		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
+	} else {
+		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.df.rate"); value.Exists() {
+		data.Ipv4RateLimitUnreachableDfRate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ipv4.rate-limit.unreachable.df.disable"); value.Exists() {
+		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
+	} else {
+		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv6.source.vrf"); value.Exists() {
+		data.Ipv6SourceVrf = types.BoolValue(true)
+	} else {
+		data.Ipv6SourceVrf = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv6.source.rfc"); value.Exists() {
+		data.Ipv6SourceRfc = types.BoolValue(true)
+	} else {
+		data.Ipv6SourceRfc = types.BoolValue(false)
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "ipv4.mpls.extended-diagnostics"); value.Exists() {
+			data.Ipv4MplsExtendedDiagnostics = types.BoolValue(true)
+		} else {
+			data.Ipv4MplsExtendedDiagnostics = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4MplsExtendedDiagnostics = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "ipv6.mpls.extended-diagnostics"); value.Exists() {
+			data.Ipv6MplsExtendedDiagnostics = types.BoolValue(true)
+		} else {
+			data.Ipv6MplsExtendedDiagnostics = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6MplsExtendedDiagnostics = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv4.vrfs.vrf"); value.Exists() {
+		data.Ipv4Vrfs = make([]ICMPIpv4Vrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := ICMPIpv4Vrfs{}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("vrf-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.VrfName = types.StringValue(cValue.String())
+				}
+			} else {
+				item.VrfName = types.StringNull()
+			}
+			if cValue := v.Get("extended-diagnostics.permitted-remote-address.ip-addresses.ip-address"); cValue.Exists() {
+				item.ExtendedDiagnosticsPermittedRemoteAddresses = make([]ICMPIpv4VrfsExtendedDiagnosticsPermittedRemoteAddresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := ICMPIpv4VrfsExtendedDiagnosticsPermittedRemoteAddresses{}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.Address = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.Address = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("length"); ccValue.Exists() {
+							cItem.Length = types.Int64Value(ccValue.Int())
+						}
+					} else {
+						cItem.Length = types.Int64Null()
+					}
+					item.ExtendedDiagnosticsPermittedRemoteAddresses = append(item.ExtendedDiagnosticsPermittedRemoteAddresses, cItem)
+					return true
+				})
+			}
+			data.Ipv4Vrfs = append(data.Ipv4Vrfs, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "ipv6.vrfs.vrf"); value.Exists() {
+		data.Ipv6Vrfs = make([]ICMPIpv6Vrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := ICMPIpv6Vrfs{}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("vrf-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+					item.VrfName = types.StringValue(cValue.String())
+				}
+			} else {
+				item.VrfName = types.StringNull()
+			}
+			if cValue := v.Get("extended-diagnostics.permitted-remote-address.ip-addresses.ip-address"); cValue.Exists() {
+				item.ExtendedDiagnosticsPermittedRemoteAddresses = make([]ICMPIpv6VrfsExtendedDiagnosticsPermittedRemoteAddresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := ICMPIpv6VrfsExtendedDiagnosticsPermittedRemoteAddresses{}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("address"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
+							cItem.Address = types.StringValue(ccValue.String())
+						}
+					} else {
+						cItem.Address = types.StringNull()
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						if ccValue := cv.Get("length"); ccValue.Exists() {
+							cItem.Length = types.Int64Value(ccValue.Int())
+						}
+					} else {
+						cItem.Length = types.Int64Null()
+					}
+					item.ExtendedDiagnosticsPermittedRemoteAddresses = append(item.ExtendedDiagnosticsPermittedRemoteAddresses, cItem)
+					return true
+				})
+			}
+			data.Ipv6Vrfs = append(data.Ipv6Vrfs, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *ICMP) getDeletedItems(ctx context.Context, state ICMP, version string) []string {
+	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") {
+		for i := range state.Ipv6Vrfs {
+			var keys []string
+			var stateKeyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "vrf-name")
+				stateKeyValues = append(stateKeyValues, state.Ipv6Vrfs[i].VrfName.ValueString())
+			}
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+
+			emptyKeys := true
+			if !reflect.ValueOf(state.Ipv6Vrfs[i].VrfName.ValueString()).IsZero() {
+				emptyKeys = false
+			}
+			if emptyKeys {
+				continue
+			}
+
+			found := false
+			for j := range data.Ipv6Vrfs {
+				found = true
+				if state.Ipv6Vrfs[i].VrfName.ValueString() != data.Ipv6Vrfs[j].VrfName.ValueString() {
+					found = false
+				}
+				if found {
+					if helpers.VersionAtLeast(version, "25.4") {
+						for ci := range state.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses {
+							var ckeys []string
+							var cstateKeyValues []string
+							if helpers.VersionAtLeast(version, "25.4") {
+								ckeys = append(ckeys, "address")
+								cstateKeyValues = append(cstateKeyValues, state.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.ValueString())
+							}
+							if helpers.VersionAtLeast(version, "25.4") {
+								ckeys = append(ckeys, "length")
+								cstateKeyValues = append(cstateKeyValues, strconv.FormatInt(state.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.ValueInt64(), 10))
+							}
+							ckeyString := ""
+							for cki := range ckeys {
+								ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+							}
+
+							cemptyKeys := true
+							if !reflect.ValueOf(state.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.ValueString()).IsZero() {
+								cemptyKeys = false
+							}
+							if !reflect.ValueOf(state.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.ValueInt64()).IsZero() {
+								cemptyKeys = false
+							}
+							if cemptyKeys {
+								continue
+							}
+
+							found := false
+							for cj := range data.Ipv6Vrfs[j].ExtendedDiagnosticsPermittedRemoteAddresses {
+								found = true
+								if state.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.ValueString() != data.Ipv6Vrfs[j].ExtendedDiagnosticsPermittedRemoteAddresses[cj].Address.ValueString() {
+									found = false
+								}
+								if state.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.ValueInt64() != data.Ipv6Vrfs[j].ExtendedDiagnosticsPermittedRemoteAddresses[cj].Length.ValueInt64() {
+									found = false
+								}
+								if found {
+									break
+								}
+							}
+							if !found {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "ipv6/vrfs/vrf", keyString, "extended-diagnostics/permitted-remote-address/ip-addresses/ip-address", ckeyString))
+							}
+						}
+					}
+					break
+				}
+			}
+			if !found {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "ipv6/vrfs/vrf", keyString))
+			}
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		for i := range state.Ipv4Vrfs {
+			var keys []string
+			var stateKeyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "vrf-name")
+				stateKeyValues = append(stateKeyValues, state.Ipv4Vrfs[i].VrfName.ValueString())
+			}
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+
+			emptyKeys := true
+			if !reflect.ValueOf(state.Ipv4Vrfs[i].VrfName.ValueString()).IsZero() {
+				emptyKeys = false
+			}
+			if emptyKeys {
+				continue
+			}
+
+			found := false
+			for j := range data.Ipv4Vrfs {
+				found = true
+				if state.Ipv4Vrfs[i].VrfName.ValueString() != data.Ipv4Vrfs[j].VrfName.ValueString() {
+					found = false
+				}
+				if found {
+					if helpers.VersionAtLeast(version, "25.4") {
+						for ci := range state.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses {
+							var ckeys []string
+							var cstateKeyValues []string
+							if helpers.VersionAtLeast(version, "25.4") {
+								ckeys = append(ckeys, "address")
+								cstateKeyValues = append(cstateKeyValues, state.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.ValueString())
+							}
+							if helpers.VersionAtLeast(version, "25.4") {
+								ckeys = append(ckeys, "length")
+								cstateKeyValues = append(cstateKeyValues, strconv.FormatInt(state.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.ValueInt64(), 10))
+							}
+							ckeyString := ""
+							for cki := range ckeys {
+								ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+							}
+
+							cemptyKeys := true
+							if !reflect.ValueOf(state.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.ValueString()).IsZero() {
+								cemptyKeys = false
+							}
+							if !reflect.ValueOf(state.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.ValueInt64()).IsZero() {
+								cemptyKeys = false
+							}
+							if cemptyKeys {
+								continue
+							}
+
+							found := false
+							for cj := range data.Ipv4Vrfs[j].ExtendedDiagnosticsPermittedRemoteAddresses {
+								found = true
+								if state.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.ValueString() != data.Ipv4Vrfs[j].ExtendedDiagnosticsPermittedRemoteAddresses[cj].Address.ValueString() {
+									found = false
+								}
+								if state.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.ValueInt64() != data.Ipv4Vrfs[j].ExtendedDiagnosticsPermittedRemoteAddresses[cj].Length.ValueInt64() {
+									found = false
+								}
+								if found {
+									break
+								}
+							}
+							if !found {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "ipv4/vrfs/vrf", keyString, "extended-diagnostics/permitted-remote-address/ip-addresses/ip-address", ckeyString))
+							}
+						}
+					}
+					break
+				}
+			}
+			if !found {
+				deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "ipv4/vrfs/vrf", keyString))
+			}
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.Ipv6MplsExtendedDiagnostics.IsNull() && data.Ipv6MplsExtendedDiagnostics.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv6/mpls/extended-diagnostics"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.Ipv4MplsExtendedDiagnostics.IsNull() && data.Ipv4MplsExtendedDiagnostics.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv4/mpls/extended-diagnostics"))
+	}
+	if !state.Ipv6SourceRfc.IsNull() && data.Ipv6SourceRfc.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv6/source"))
+	}
+	if !state.Ipv6SourceVrf.IsNull() && data.Ipv6SourceVrf.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv6/source"))
+	}
+	if !state.Ipv4RateLimitUnreachableDfDisable.IsNull() && data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv4/rate-limit/unreachable/df"))
+	}
+	if !state.Ipv4RateLimitUnreachableDfRate.IsNull() && data.Ipv4RateLimitUnreachableDfRate.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv4/rate-limit/unreachable/df"))
+	}
+	if !state.Ipv4RateLimitUnreachableDisable.IsNull() && data.Ipv4RateLimitUnreachableDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv4/rate-limit/unreachable/disable"))
+	}
+	if !state.Ipv4RateLimitUnreachableRate.IsNull() && data.Ipv4RateLimitUnreachableRate.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv4/rate-limit/unreachable/rate"))
+	}
+	if !state.Ipv4SourceRfc.IsNull() && data.Ipv4SourceRfc.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv4/source"))
+	}
+	if !state.Ipv4SourceVrf.IsNull() && data.Ipv4SourceVrf.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv4/source"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *ICMP) getEmptyLeafsDelete(ctx context.Context, state *ICMP, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") {
+		for i := range data.Ipv6Vrfs {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "vrf-name")
+				keyValues = append(keyValues, data.Ipv6Vrfs[i].VrfName.ValueString())
+			}
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				for ci := range data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses {
+					var ckeys []string
+					var ckeyValues []string
+					if helpers.VersionAtLeast(version, "25.4") {
+						ckeys = append(ckeys, "address")
+						ckeyValues = append(ckeyValues, data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.ValueString())
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						ckeys = append(ckeys, "length")
+						ckeyValues = append(ckeyValues, strconv.FormatInt(data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.ValueInt64(), 10))
+					}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+					}
+				}
+			}
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		for i := range data.Ipv4Vrfs {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "vrf-name")
+				keyValues = append(keyValues, data.Ipv4Vrfs[i].VrfName.ValueString())
+			}
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				for ci := range data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses {
+					var ckeys []string
+					var ckeyValues []string
+					if helpers.VersionAtLeast(version, "25.4") {
+						ckeys = append(ckeys, "address")
+						ckeyValues = append(ckeyValues, data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.ValueString())
+					}
+					if helpers.VersionAtLeast(version, "25.4") {
+						ckeys = append(ckeys, "length")
+						ckeyValues = append(ckeyValues, strconv.FormatInt(data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.ValueInt64(), 10))
+					}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+					}
+				}
+			}
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.Ipv6MplsExtendedDiagnostics.IsNull() && !data.Ipv6MplsExtendedDiagnostics.ValueBool() {
+		if state == nil || state.Ipv6MplsExtendedDiagnostics.IsNull() || state.Ipv6MplsExtendedDiagnostics.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/mpls/extended-diagnostics"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.Ipv4MplsExtendedDiagnostics.IsNull() && !data.Ipv4MplsExtendedDiagnostics.ValueBool() {
+		if state == nil || state.Ipv4MplsExtendedDiagnostics.IsNull() || state.Ipv4MplsExtendedDiagnostics.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/mpls/extended-diagnostics"))
+		}
+	}
+	if !data.Ipv6SourceRfc.IsNull() && !data.Ipv6SourceRfc.ValueBool() {
+		if state == nil || state.Ipv6SourceRfc.IsNull() || state.Ipv6SourceRfc.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/source"))
+		}
+	}
+	if !data.Ipv6SourceVrf.IsNull() && !data.Ipv6SourceVrf.ValueBool() {
+		if state == nil || state.Ipv6SourceVrf.IsNull() || state.Ipv6SourceVrf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv6/source"))
+		}
+	}
+	if !data.Ipv4RateLimitUnreachableDfDisable.IsNull() && !data.Ipv4RateLimitUnreachableDfDisable.ValueBool() {
+		if state == nil || state.Ipv4RateLimitUnreachableDfDisable.IsNull() || state.Ipv4RateLimitUnreachableDfDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/rate-limit/unreachable/df"))
+		}
+	}
+	if !data.Ipv4RateLimitUnreachableDisable.IsNull() && !data.Ipv4RateLimitUnreachableDisable.ValueBool() {
+		if state == nil || state.Ipv4RateLimitUnreachableDisable.IsNull() || state.Ipv4RateLimitUnreachableDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/rate-limit/unreachable/disable"))
+		}
+	}
+	if !data.Ipv4SourceRfc.IsNull() && !data.Ipv4SourceRfc.ValueBool() {
+		if state == nil || state.Ipv4SourceRfc.IsNull() || state.Ipv4SourceRfc.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/source"))
+		}
+	}
+	if !data.Ipv4SourceVrf.IsNull() && !data.Ipv4SourceVrf.ValueBool() {
+		if state == nil || state.Ipv4SourceVrf.IsNull() || state.Ipv4SourceVrf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ipv4/source"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *ICMP) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") {
+		for i := range data.Ipv6Vrfs {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "vrf-name")
+				keyValues = append(keyValues, data.Ipv6Vrfs[i].VrfName.ValueString())
+			}
+
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			}
+
+			emptyKeys := true
+			if !reflect.ValueOf(data.Ipv6Vrfs[i].VrfName.ValueString()).IsZero() {
+				emptyKeys = false
+			}
+			if emptyKeys {
+				continue
+			}
+			deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "ipv6/vrfs/vrf", keyString))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		for i := range data.Ipv4Vrfs {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "25.4") {
+				keys = append(keys, "vrf-name")
+				keyValues = append(keyValues, data.Ipv4Vrfs[i].VrfName.ValueString())
+			}
+
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+			}
+
+			emptyKeys := true
+			if !reflect.ValueOf(data.Ipv4Vrfs[i].VrfName.ValueString()).IsZero() {
+				emptyKeys = false
+			}
+			if emptyKeys {
+				continue
+			}
+			deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "ipv4/vrfs/vrf", keyString))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.Ipv6MplsExtendedDiagnostics.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv6/mpls/extended-diagnostics"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.Ipv4MplsExtendedDiagnostics.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv4/mpls/extended-diagnostics"))
+	}
+	if !data.Ipv6SourceRfc.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv6/source"))
+	}
+	if !data.Ipv6SourceVrf.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv6/source"))
+	}
+	if !data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv4/rate-limit/unreachable/df"))
+	}
+	if !data.Ipv4RateLimitUnreachableDfRate.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv4/rate-limit/unreachable/df"))
+	}
+	if !data.Ipv4RateLimitUnreachableDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv4/rate-limit/unreachable/disable"))
+	}
+	if !data.Ipv4RateLimitUnreachableRate.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv4/rate-limit/unreachable/rate"))
+	}
+	if !data.Ipv4SourceRfc.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv4/source"))
+	}
+	if !data.Ipv4SourceVrf.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv4/source"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data ICMP) toBodyXML(ctx context.Context, stateArg ...*ICMP) string {
@@ -262,6 +1297,54 @@ func (data ICMP) toBodyXML(ctx context.Context, stateArg ...*ICMP) string {
 			body = helpers.SetFromXPath(body, data.getXPath()+"/ipv6/source/rfc", "")
 		}
 	}
+	if !data.Ipv4MplsExtendedDiagnostics.IsNull() && !data.Ipv4MplsExtendedDiagnostics.IsUnknown() {
+		if data.Ipv4MplsExtendedDiagnostics.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ipv4/mpls/extended-diagnostics", "")
+		}
+	}
+	if !data.Ipv6MplsExtendedDiagnostics.IsNull() && !data.Ipv6MplsExtendedDiagnostics.IsUnknown() {
+		if data.Ipv6MplsExtendedDiagnostics.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/ipv6/mpls/extended-diagnostics", "")
+		}
+	}
+	if len(data.Ipv4Vrfs) > 0 {
+		for _, item := range data.Ipv4Vrfs {
+			basePath := data.getXPath() + "/ipv4/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
+			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
+			}
+			if len(item.ExtendedDiagnosticsPermittedRemoteAddresses) > 0 {
+				for _, citem := range item.ExtendedDiagnosticsPermittedRemoteAddresses {
+					cbasePath := basePath + "/extended-diagnostics/permitted-remote-address/ip-addresses/ip-address[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+		}
+	}
+	if len(data.Ipv6Vrfs) > 0 {
+		for _, item := range data.Ipv6Vrfs {
+			basePath := data.getXPath() + "/ipv6/vrfs/vrf[vrf-name='" + item.VrfName.ValueString() + "']"
+			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/vrf-name", item.VrfName.ValueString())
+			}
+			if len(item.ExtendedDiagnosticsPermittedRemoteAddresses) > 0 {
+				for _, citem := range item.ExtendedDiagnosticsPermittedRemoteAddresses {
+					cbasePath := basePath + "/extended-diagnostics/permitted-remote-address/ip-addresses/ip-address[address='" + citem.Address.ValueString() + "' and length='" + strconv.FormatInt(citem.Length.ValueInt64(), 10) + "']"
+					if !citem.Address.IsNull() && !citem.Address.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/address", citem.Address.ValueString())
+					}
+					if !citem.Length.IsNull() && !citem.Length.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/length", strconv.FormatInt(citem.Length.ValueInt64(), 10))
+					}
+				}
+			}
+		}
+	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
 		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
@@ -284,7 +1367,7 @@ func (data ICMP) toBodyXML(ctx context.Context, stateArg ...*ICMP) string {
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -292,6 +1375,7 @@ func (data ICMP) toBodyXML(ctx context.Context, stateArg ...*ICMP) string {
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *ICMP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -371,116 +1455,158 @@ func (data *ICMP) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
 			data.Ipv6SourceRfc = types.BoolNull()
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/mpls/extended-diagnostics"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv4MplsExtendedDiagnostics.IsNull() {
+			data.Ipv4MplsExtendedDiagnostics = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ipv4MplsExtendedDiagnostics.IsNull() {
+			data.Ipv4MplsExtendedDiagnostics = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/mpls/extended-diagnostics"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.Ipv6MplsExtendedDiagnostics.IsNull() {
+			data.Ipv6MplsExtendedDiagnostics = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.Ipv6MplsExtendedDiagnostics.IsNull() {
+			data.Ipv6MplsExtendedDiagnostics = types.BoolNull()
+		}
+	}
+	for i := range data.Ipv4Vrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Ipv4Vrfs[i].VrfName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/vrfs/vrf").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "vrf-name"); value.Exists() && !data.Ipv4Vrfs[i].VrfName.IsNull() {
+			data.Ipv4Vrfs[i].VrfName = types.StringValue(value.String())
+		} else if data.Ipv4Vrfs[i].VrfName.IsNull() {
+			data.Ipv4Vrfs[i].VrfName = types.StringNull()
+		}
+		for ci := range data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.ValueString(), strconv.FormatInt(data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "extended-diagnostics/permitted-remote-address/ip-addresses/ip-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() && !data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.IsNull() {
+				data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address = types.StringValue(value.String())
+			} else if data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.IsNull() {
+				data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() && !data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.IsNull() {
+				data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length = types.Int64Value(value.Int())
+			} else if data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.IsNull() {
+				data.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length = types.Int64Null()
+			}
+		}
+	}
+	for i := range data.Ipv6Vrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Ipv6Vrfs[i].VrfName.ValueString()}
+
+		var r xmldot.Result
+		helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/vrfs/vrf").ForEach(
+			func(_ int, v xmldot.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := helpers.GetFromXPath(r, "vrf-name"); value.Exists() && !data.Ipv6Vrfs[i].VrfName.IsNull() {
+			data.Ipv6Vrfs[i].VrfName = types.StringValue(value.String())
+		} else if data.Ipv6Vrfs[i].VrfName.IsNull() {
+			data.Ipv6Vrfs[i].VrfName = types.StringNull()
+		}
+		for ci := range data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses {
+			keys := [...]string{"address", "length"}
+			keyValues := [...]string{data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.ValueString(), strconv.FormatInt(data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "extended-diagnostics/permitted-remote-address/ip-addresses/ip-address").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "address"); value.Exists() && !data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.IsNull() {
+				data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address = types.StringValue(value.String())
+			} else if data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.IsNull() {
+				data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address = types.StringNull()
+			}
+			if value := helpers.GetFromXPath(cr, "length"); value.Exists() && !data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.IsNull() {
+				data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length = types.Int64Value(value.Int())
+			} else if data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.IsNull() {
+				data.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length = types.Int64Null()
+			}
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *ICMP) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "ipv4.source.vrf"); value.Exists() {
-		data.Ipv4SourceVrf = types.BoolValue(true)
-	} else if !data.Ipv4SourceVrf.IsNull() {
-		// Only set to false if it was previously set in state
-		data.Ipv4SourceVrf = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ipv4.source.rfc"); value.Exists() {
-		data.Ipv4SourceRfc = types.BoolValue(true)
-	} else if !data.Ipv4SourceRfc.IsNull() {
-		// Only set to false if it was previously set in state
-		data.Ipv4SourceRfc = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.rate"); value.Exists() {
-		data.Ipv4RateLimitUnreachableRate = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.disable"); value.Exists() {
-		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
-	} else if !data.Ipv4RateLimitUnreachableDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.df.rate"); value.Exists() {
-		data.Ipv4RateLimitUnreachableDfRate = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.df.disable"); value.Exists() {
-		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
-	} else if !data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ipv6.source.vrf"); value.Exists() {
-		data.Ipv6SourceVrf = types.BoolValue(true)
-	} else if !data.Ipv6SourceVrf.IsNull() {
-		// Only set to false if it was previously set in state
-		data.Ipv6SourceVrf = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ipv6.source.rfc"); value.Exists() {
-		data.Ipv6SourceRfc = types.BoolValue(true)
-	} else if !data.Ipv6SourceRfc.IsNull() {
-		// Only set to false if it was previously set in state
-		data.Ipv6SourceRfc = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *ICMPData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "ipv4.source.vrf"); value.Exists() {
-		data.Ipv4SourceVrf = types.BoolValue(true)
-	} else {
-		data.Ipv4SourceVrf = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ipv4.source.rfc"); value.Exists() {
-		data.Ipv4SourceRfc = types.BoolValue(true)
-	} else {
-		data.Ipv4SourceRfc = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.rate"); value.Exists() {
-		data.Ipv4RateLimitUnreachableRate = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.disable"); value.Exists() {
-		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(true)
-	} else {
-		data.Ipv4RateLimitUnreachableDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.df.rate"); value.Exists() {
-		data.Ipv4RateLimitUnreachableDfRate = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "ipv4.rate-limit.unreachable.df.disable"); value.Exists() {
-		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(true)
-	} else {
-		data.Ipv4RateLimitUnreachableDfDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ipv6.source.vrf"); value.Exists() {
-		data.Ipv6SourceVrf = types.BoolValue(true)
-	} else {
-		data.Ipv6SourceVrf = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ipv6.source.rfc"); value.Exists() {
-		data.Ipv6SourceRfc = types.BoolValue(true)
-	} else {
-		data.Ipv6SourceRfc = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *ICMP) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -520,9 +1646,70 @@ func (data *ICMP) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	} else {
 		data.Ipv6SourceRfc = types.BoolValue(false)
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/mpls/extended-diagnostics"); value.Exists() {
+		data.Ipv4MplsExtendedDiagnostics = types.BoolValue(true)
+	} else {
+		data.Ipv4MplsExtendedDiagnostics = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/mpls/extended-diagnostics"); value.Exists() {
+		data.Ipv6MplsExtendedDiagnostics = types.BoolValue(true)
+	} else {
+		data.Ipv6MplsExtendedDiagnostics = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/vrfs/vrf"); value.Exists() {
+		data.Ipv4Vrfs = make([]ICMPIpv4Vrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ICMPIpv4Vrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "extended-diagnostics/permitted-remote-address/ip-addresses/ip-address"); cValue.Exists() {
+				item.ExtendedDiagnosticsPermittedRemoteAddresses = make([]ICMPIpv4VrfsExtendedDiagnosticsPermittedRemoteAddresses, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ICMPIpv4VrfsExtendedDiagnosticsPermittedRemoteAddresses{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.ExtendedDiagnosticsPermittedRemoteAddresses = append(item.ExtendedDiagnosticsPermittedRemoteAddresses, cItem)
+					return true
+				})
+			}
+			data.Ipv4Vrfs = append(data.Ipv4Vrfs, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/vrfs/vrf"); value.Exists() {
+		data.Ipv6Vrfs = make([]ICMPIpv6Vrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ICMPIpv6Vrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "extended-diagnostics/permitted-remote-address/ip-addresses/ip-address"); cValue.Exists() {
+				item.ExtendedDiagnosticsPermittedRemoteAddresses = make([]ICMPIpv6VrfsExtendedDiagnosticsPermittedRemoteAddresses, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ICMPIpv6VrfsExtendedDiagnosticsPermittedRemoteAddresses{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.ExtendedDiagnosticsPermittedRemoteAddresses = append(item.ExtendedDiagnosticsPermittedRemoteAddresses, cItem)
+					return true
+				})
+			}
+			data.Ipv6Vrfs = append(data.Ipv6Vrfs, item)
+			return true
+		})
+	}
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *ICMPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -562,118 +1749,70 @@ func (data *ICMPData) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	} else {
 		data.Ipv6SourceRfc = types.BoolValue(false)
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/mpls/extended-diagnostics"); value.Exists() {
+		data.Ipv4MplsExtendedDiagnostics = types.BoolValue(true)
+	} else {
+		data.Ipv4MplsExtendedDiagnostics = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/mpls/extended-diagnostics"); value.Exists() {
+		data.Ipv6MplsExtendedDiagnostics = types.BoolValue(true)
+	} else {
+		data.Ipv6MplsExtendedDiagnostics = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv4/vrfs/vrf"); value.Exists() {
+		data.Ipv4Vrfs = make([]ICMPIpv4Vrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ICMPIpv4Vrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "extended-diagnostics/permitted-remote-address/ip-addresses/ip-address"); cValue.Exists() {
+				item.ExtendedDiagnosticsPermittedRemoteAddresses = make([]ICMPIpv4VrfsExtendedDiagnosticsPermittedRemoteAddresses, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ICMPIpv4VrfsExtendedDiagnosticsPermittedRemoteAddresses{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.ExtendedDiagnosticsPermittedRemoteAddresses = append(item.ExtendedDiagnosticsPermittedRemoteAddresses, cItem)
+					return true
+				})
+			}
+			data.Ipv4Vrfs = append(data.Ipv4Vrfs, item)
+			return true
+		})
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/ipv6/vrfs/vrf"); value.Exists() {
+		data.Ipv6Vrfs = make([]ICMPIpv6Vrfs, 0)
+		value.ForEach(func(_ int, v xmldot.Result) bool {
+			item := ICMPIpv6Vrfs{}
+			if cValue := helpers.GetFromXPath(v, "vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := helpers.GetFromXPath(v, "extended-diagnostics/permitted-remote-address/ip-addresses/ip-address"); cValue.Exists() {
+				item.ExtendedDiagnosticsPermittedRemoteAddresses = make([]ICMPIpv6VrfsExtendedDiagnosticsPermittedRemoteAddresses, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := ICMPIpv6VrfsExtendedDiagnosticsPermittedRemoteAddresses{}
+					if ccValue := helpers.GetFromXPath(cv, "address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "length"); ccValue.Exists() {
+						cItem.Length = types.Int64Value(ccValue.Int())
+					}
+					item.ExtendedDiagnosticsPermittedRemoteAddresses = append(item.ExtendedDiagnosticsPermittedRemoteAddresses, cItem)
+					return true
+				})
+			}
+			data.Ipv6Vrfs = append(data.Ipv6Vrfs, item)
+			return true
+		})
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *ICMP) getDeletedItems(ctx context.Context, state ICMP) []string {
-	deletedItems := make([]string, 0)
-	if !state.Ipv6SourceRfc.IsNull() && data.Ipv6SourceRfc.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/source", state.getPath()))
-	}
-	if !state.Ipv6SourceVrf.IsNull() && data.Ipv6SourceVrf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/source", state.getPath()))
-	}
-	if !state.Ipv4RateLimitUnreachableDfDisable.IsNull() && data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/rate-limit/unreachable/df", state.getPath()))
-	}
-	if !state.Ipv4RateLimitUnreachableDfRate.IsNull() && data.Ipv4RateLimitUnreachableDfRate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/rate-limit/unreachable/df", state.getPath()))
-	}
-	if !state.Ipv4RateLimitUnreachableDisable.IsNull() && data.Ipv4RateLimitUnreachableDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/rate-limit/unreachable/disable", state.getPath()))
-	}
-	if !state.Ipv4RateLimitUnreachableRate.IsNull() && data.Ipv4RateLimitUnreachableRate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/rate-limit/unreachable/rate", state.getPath()))
-	}
-	if !state.Ipv4SourceRfc.IsNull() && data.Ipv4SourceRfc.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/source", state.getPath()))
-	}
-	if !state.Ipv4SourceVrf.IsNull() && data.Ipv4SourceVrf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/source", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *ICMP) getEmptyLeafsDelete(ctx context.Context, state *ICMP) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.Ipv6SourceRfc.IsNull() && !data.Ipv6SourceRfc.ValueBool() {
-		if state != nil && !state.Ipv6SourceRfc.IsNull() && state.Ipv6SourceRfc.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/source", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.Ipv6SourceVrf.IsNull() && !data.Ipv6SourceVrf.ValueBool() {
-		if state != nil && !state.Ipv6SourceVrf.IsNull() && state.Ipv6SourceVrf.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/source", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.Ipv4RateLimitUnreachableDfDisable.IsNull() && !data.Ipv4RateLimitUnreachableDfDisable.ValueBool() {
-		if state != nil && !state.Ipv4RateLimitUnreachableDfDisable.IsNull() && state.Ipv4RateLimitUnreachableDfDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/rate-limit/unreachable/df", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.Ipv4RateLimitUnreachableDisable.IsNull() && !data.Ipv4RateLimitUnreachableDisable.ValueBool() {
-		if state != nil && !state.Ipv4RateLimitUnreachableDisable.IsNull() && state.Ipv4RateLimitUnreachableDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/rate-limit/unreachable/disable", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.Ipv4SourceRfc.IsNull() && !data.Ipv4SourceRfc.ValueBool() {
-		if state != nil && !state.Ipv4SourceRfc.IsNull() && state.Ipv4SourceRfc.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/source", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.Ipv4SourceVrf.IsNull() && !data.Ipv4SourceVrf.ValueBool() {
-		if state != nil && !state.Ipv4SourceVrf.IsNull() && state.Ipv4SourceVrf.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/source", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *ICMP) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.Ipv6SourceRfc.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/source", data.getPath()))
-	}
-	if !data.Ipv6SourceVrf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/source", data.getPath()))
-	}
-	if !data.Ipv4RateLimitUnreachableDfDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/rate-limit/unreachable/df", data.getPath()))
-	}
-	if !data.Ipv4RateLimitUnreachableDfRate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/rate-limit/unreachable/df", data.getPath()))
-	}
-	if !data.Ipv4RateLimitUnreachableDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/rate-limit/unreachable/disable", data.getPath()))
-	}
-	if !data.Ipv4RateLimitUnreachableRate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/rate-limit/unreachable/rate", data.getPath()))
-	}
-	if !data.Ipv4SourceRfc.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/source", data.getPath()))
-	}
-	if !data.Ipv4SourceVrf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/source", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *ICMP) addDeletedItemsXML(ctx context.Context, state ICMP, body string) string {
@@ -681,6 +1820,170 @@ func (data *ICMP) addDeletedItemsXML(ctx context.Context, state ICMP, body strin
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	for i := range state.Ipv6Vrfs {
+		stateKeys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.Ipv6Vrfs[i].VrfName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv6Vrfs[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv6Vrfs {
+			found = true
+			if state.Ipv6Vrfs[i].VrfName.ValueString() != data.Ipv6Vrfs[j].VrfName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.ValueString(), strconv.FormatInt(state.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Ipv6Vrfs[j].ExtendedDiagnosticsPermittedRemoteAddresses {
+						found = true
+						if state.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.ValueString() != data.Ipv6Vrfs[j].ExtendedDiagnosticsPermittedRemoteAddresses[cj].Address.ValueString() {
+							found = false
+						}
+						if state.Ipv6Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.ValueInt64() != data.Ipv6Vrfs[j].ExtendedDiagnosticsPermittedRemoteAddresses[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ipv6/vrfs/vrf%v/extended-diagnostics/permitted-remote-address/ip-addresses/ip-address%v", predicates, cpredicates))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ipv6/vrfs/vrf%v", predicates))
+		}
+	}
+	for i := range state.Ipv4Vrfs {
+		stateKeys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.Ipv4Vrfs[i].VrfName.ValueString()}
+		predicates := ""
+		for i := range stateKeys {
+			predicates += fmt.Sprintf("[%s='%s']", stateKeys[i], stateKeyValues[i])
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv4Vrfs[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv4Vrfs {
+			found = true
+			if state.Ipv4Vrfs[i].VrfName.ValueString() != data.Ipv4Vrfs[j].VrfName.ValueString() {
+				found = false
+			}
+			if found {
+				for ci := range state.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses {
+					cstateKeys := [...]string{"address", "length"}
+					cstateKeyValues := [...]string{state.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.ValueString(), strconv.FormatInt(state.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Ipv4Vrfs[j].ExtendedDiagnosticsPermittedRemoteAddresses {
+						found = true
+						if state.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Address.ValueString() != data.Ipv4Vrfs[j].ExtendedDiagnosticsPermittedRemoteAddresses[cj].Address.ValueString() {
+							found = false
+						}
+						if state.Ipv4Vrfs[i].ExtendedDiagnosticsPermittedRemoteAddresses[ci].Length.ValueInt64() != data.Ipv4Vrfs[j].ExtendedDiagnosticsPermittedRemoteAddresses[cj].Length.ValueInt64() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ipv4/vrfs/vrf%v/extended-diagnostics/permitted-remote-address/ip-addresses/ip-address%v", predicates, cpredicates))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/ipv4/vrfs/vrf%v", predicates))
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Ipv6MplsExtendedDiagnostics.IsNull() && state.Ipv6MplsExtendedDiagnostics.ValueBool() && data.Ipv6MplsExtendedDiagnostics.IsNull() {
+		deletePath := state.getXPath() + "/ipv6/mpls/extended-diagnostics"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.Ipv4MplsExtendedDiagnostics.IsNull() && state.Ipv4MplsExtendedDiagnostics.ValueBool() && data.Ipv4MplsExtendedDiagnostics.IsNull() {
+		deletePath := state.getXPath() + "/ipv4/mpls/extended-diagnostics"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.Ipv6SourceRfc.IsNull() && state.Ipv6SourceRfc.ValueBool() && data.Ipv6SourceRfc.IsNull() {
 		// Build predicates for delete_parent by finding sibling attributes with same parent path
@@ -855,10 +2158,37 @@ func (data *ICMP) addDeletedItemsXML(ctx context.Context, state ICMP, body strin
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *ICMP) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	for i := range data.Ipv6Vrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Ipv6Vrfs[i].VrfName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/ipv6/vrfs/vrf%v", predicates))
+	}
+	for i := range data.Ipv4Vrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Ipv4Vrfs[i].VrfName.ValueString()}
+		predicates := ""
+		for i := range keys {
+			predicates += fmt.Sprintf("[%s='%s']", keys[i], keyValues[i])
+		}
+
+		b = helpers.RemoveFromXPath(b, fmt.Sprintf(data.getXPath()+"/ipv4/vrfs/vrf%v", predicates))
+	}
+	if !data.Ipv6MplsExtendedDiagnostics.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv6/mpls/extended-diagnostics")
+	}
+	if !data.Ipv4MplsExtendedDiagnostics.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv4/mpls/extended-diagnostics")
+	}
 	if !data.Ipv6SourceRfc.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/ipv6/source")
 	}

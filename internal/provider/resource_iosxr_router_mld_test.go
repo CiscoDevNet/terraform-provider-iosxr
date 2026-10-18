@@ -55,6 +55,25 @@ func TestAccIosxrRouterMLD(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "missed_packets_grp_spec_query", "5000"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "missed_packets_ssm_query", "5000"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "missed_packets_member_report", "5000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.version", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.router_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.query_interval", "125"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.query_timeout", "255"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.query_max_response_time", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.explicit_tracking_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.explicit_tracking_acl", "MLD_ACL"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.access_group", "MLD_ACL"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.maximum_groups_per_interface", "25000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.maximum_groups_per_interface_threshold", "20000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.maximum_groups_per_interface_acl", "MLD_ACL"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.static_groups.0.group_address", "ff3e::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.static_groups.0.group_address_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.static_groups.0.suppress_reports", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.join_groups.0.group_address", "ff3e::100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.join_groups.0.source_addresses.0.source_ip", "2001:db8::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.join_groups.0.source_addresses.0.include", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_mld.test", "interfaces.0.dvmrp_enable", "true"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -141,6 +160,33 @@ func testAccIosxrRouterMLDConfig_all() string {
 	config += `	missed_packets_grp_spec_query = 5000` + "\n"
 	config += `	missed_packets_ssm_query = 5000` + "\n"
 	config += `	missed_packets_member_report = 5000` + "\n"
+	config += `	interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `		version = 2` + "\n"
+	config += `		router_enable = true` + "\n"
+	config += `		query_interval = 125` + "\n"
+	config += `		query_timeout = 255` + "\n"
+	config += `		query_max_response_time = 10` + "\n"
+	config += `		explicit_tracking_enable = true` + "\n"
+	config += `		explicit_tracking_acl = "MLD_ACL"` + "\n"
+	config += `		access_group = "MLD_ACL"` + "\n"
+	config += `		maximum_groups_per_interface = 25000` + "\n"
+	config += `		maximum_groups_per_interface_threshold = 20000` + "\n"
+	config += `		maximum_groups_per_interface_acl = "MLD_ACL"` + "\n"
+	config += `		static_groups = [{` + "\n"
+	config += `			group_address = "ff3e::1"` + "\n"
+	config += `			group_address_only = true` + "\n"
+	config += `			suppress_reports = true` + "\n"
+	config += `		}]` + "\n"
+	config += `		join_groups = [{` + "\n"
+	config += `			group_address = "ff3e::100"` + "\n"
+	config += `			source_addresses = [{` + "\n"
+	config += `				source_ip = "2001:db8::1"` + "\n"
+	config += `				include = true` + "\n"
+	config += `			}]` + "\n"
+	config += `		}]` + "\n"
+	config += `		dvmrp_enable = true` + "\n"
+	config += `		}]` + "\n"
 	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

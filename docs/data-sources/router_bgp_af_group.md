@@ -14,9 +14,9 @@ This data source can read the Router BGP AF Group configuration.
 
 ```terraform
 data "iosxr_router_bgp_af_group" "example" {
-  as_number     = "65001"
   af_group_name = "AFGROUP1"
   af_name       = "vpnv4-unicast"
+  as_number     = "65001"
 }
 ```
 
@@ -63,6 +63,14 @@ data "iosxr_router_bgp_af_group" "example" {
 - `allowconfedas_in` (Number) Number of occurrences of Confederation AS number
 - `as_override` (Boolean) Override matching AS-number while sending update
 - `as_override_inheritance_disable` (Boolean) Prevent as-override from being inherited from the parent
+- `bandwidth_grp_inbound_inheritance_disable` (Boolean) Prevent item being inherited from a parent group
+  - Supported from version: `25.4`
+- `bandwidth_grp_inbound_name` (String) Bandwidth group name
+  - Supported from version: `25.4`
+- `bandwidth_grp_outbound_inheritance_disable` (Boolean) Prevent item being inherited from a parent group
+  - Supported from version: `25.4`
+- `bandwidth_grp_outbound_name` (String) Bandwidth group name
+  - Supported from version: `25.4`
 - `bestpath_origin_as_allow_invalid` (Boolean) BGP bestpath selection will allow 'invalid' origin-AS
 - `capability_orf_prefix` (String) Capability to RECEIVE the ORF from this neighbor
 - `cluster_id_allow_equal` (Boolean) Accept routes with first cluster-id in list is same as the router's cluster id
@@ -70,7 +78,15 @@ data "iosxr_router_bgp_af_group" "example" {
 - `default_originate` (Boolean) Originate default route to this neighbor
 - `default_originate_inheritance_disable` (Boolean) Prevent default-originate being inherited from a parent group
 - `default_originate_route_policy` (String) Route policy to specify criteria to originate default
+- `default_policy_action_in` (String) Default action if route does not satisfy inbound route-policy
+  - Supported from version: `25.4`
+- `default_policy_action_out` (String) Default action if route does not satisfy outbound route-policy
+  - Supported from version: `25.4`
 - `encapsulation_type` (String) Specify encapsulation type
+- `fast_reroute_per_link_multipath_backup_address` (String) Backup IP address
+  - Supported from version: `25.4`
+- `fast_reroute_per_link_multipath_backup_address_inheritance_disable` (Boolean) Prevent fast-reroute-per-link from being inherited from the parent
+  - Supported from version: `25.4`
 - `id` (String) The path of the retrieved object.
 - `import_re_originate` (Boolean) Reoriginate imported routes by attaching stitching RTs
 - `import_stitching_rt` (Boolean) Import routes using stitching RTs

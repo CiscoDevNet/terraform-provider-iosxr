@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"sort"
 	"strconv"
@@ -402,7 +403,7 @@ func (data RouterISISData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RouterISIS) toBody(ctx context.Context) string {
+func (data RouterISIS) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.ProcessId.IsNull() && !data.ProcessId.IsUnknown() {
 		body, _ = sjson.Set(body, "process-id", data.ProcessId.ValueString())
@@ -1032,6 +1033,7 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "srlg.names.name"+"."+strconv.Itoa(index)+"."+"admin-weight", strconv.FormatInt(item.AdminWeight.ValueInt64(), 10))
 			}
 			if len(item.StaticIpv4Addresses) > 0 {
+				body, _ = sjson.Set(body, "srlg.names.name"+"."+strconv.Itoa(index)+"."+"static.ipv4.addresses.addresss", []interface{}{})
 				for cindex, citem := range item.StaticIpv4Addresses {
 					if !citem.LocalEndPoint.IsNull() && !citem.LocalEndPoint.IsUnknown() {
 						body, _ = sjson.Set(body, "srlg.names.name"+"."+strconv.Itoa(index)+"."+"static.ipv4.addresses.addresss"+"."+strconv.Itoa(cindex)+"."+"local-end-point", citem.LocalEndPoint.ValueString())
@@ -1143,6 +1145,7 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.AddressFamily) > 0 {
+				body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"address-families.address-family", []interface{}{})
 				for cindex, citem := range item.AddressFamily {
 					if !citem.AfName.IsNull() && !citem.AfName.IsUnknown() {
 						body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"address-families.address-family"+"."+strconv.Itoa(cindex)+"."+"af-name", citem.AfName.ValueString())
@@ -1165,31 +1168,79 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("segment-routing.global-block.lower-bound-of-srgb"); value.Exists() && !data.SegmentRoutingGlobalBlockLowerBound.IsNull() {
+// GetVersionConstraints returns the version constraints for all fields
+func (data RouterISIS) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data RouterISIS) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data RouterISIS) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data RouterISIS) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data RouterISIS) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "segment-routing.global-block.lower-bound-of-srgb"); value.Exists() && !data.SegmentRoutingGlobalBlockLowerBound.IsNull() {
 		data.SegmentRoutingGlobalBlockLowerBound = types.Int64Value(value.Int())
 	} else if data.SegmentRoutingGlobalBlockLowerBound.IsNull() {
 		data.SegmentRoutingGlobalBlockLowerBound = types.Int64Null()
 	}
-	if value := res.Get("segment-routing.global-block.upper-bound-of-srgb"); value.Exists() && !data.SegmentRoutingGlobalBlockUpperBound.IsNull() {
+	if value := gjson.GetBytes(res, "segment-routing.global-block.upper-bound-of-srgb"); value.Exists() && !data.SegmentRoutingGlobalBlockUpperBound.IsNull() {
 		data.SegmentRoutingGlobalBlockUpperBound = types.Int64Value(value.Int())
 	} else if data.SegmentRoutingGlobalBlockUpperBound.IsNull() {
 		data.SegmentRoutingGlobalBlockUpperBound = types.Int64Null()
 	}
-	if value := res.Get("receive.application.flex-algo.delay.app-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ReceiveApplicationFlexAlgoDelayAppOnly.IsNull() {
+	if value := gjson.GetBytes(res, "receive.application.flex-algo.delay.app-only"); !data.ReceiveApplicationFlexAlgoDelayAppOnly.IsNull() {
+		if value.Exists() {
 			data.ReceiveApplicationFlexAlgoDelayAppOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ReceiveApplicationFlexAlgoDelayAppOnly = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ReceiveApplicationFlexAlgoDelayAppOnly.IsNull() {
-			data.ReceiveApplicationFlexAlgoDelayAppOnly = types.BoolNull()
-		}
+	} else if data.ReceiveApplicationFlexAlgoDelayAppOnly.IsNull() {
+		data.ReceiveApplicationFlexAlgoDelayAppOnly = types.BoolNull()
 	}
-	if value := res.Get("lsp-refresh-interval"); value.Exists() && !data.LspRefreshInterval.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-refresh-interval"); value.Exists() && !data.LspRefreshInterval.IsNull() {
 		data.LspRefreshInterval = types.Int64Value(value.Int())
 	} else if data.LspRefreshInterval.IsNull() {
 		data.LspRefreshInterval = types.Int64Null()
@@ -1199,7 +1250,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.LspRefreshIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("lsp-refresh-interval-levels.lsp-refresh-interval-level").ForEach(
+		gjson.GetBytes(res, "lsp-refresh-interval-levels.lsp-refresh-interval-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1228,72 +1279,67 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 			data.LspRefreshIntervalLevels[i].LspRefreshInterval = types.Int64Null()
 		}
 	}
-	if value := res.Get("oor-set-overload-bit.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.OorSetOverloadBitDisable.IsNull() {
+	if value := gjson.GetBytes(res, "oor-set-overload-bit.disable"); !data.OorSetOverloadBitDisable.IsNull() {
+		if value.Exists() {
 			data.OorSetOverloadBitDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.OorSetOverloadBitDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.OorSetOverloadBitDisable.IsNull() {
-			data.OorSetOverloadBitDisable = types.BoolNull()
-		}
+	} else if data.OorSetOverloadBitDisable.IsNull() {
+		data.OorSetOverloadBitDisable = types.BoolNull()
 	}
-	if value := res.Get("set-overload-bit"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SetOverloadBit.IsNull() {
+	if value := gjson.GetBytes(res, "set-overload-bit"); !data.SetOverloadBit.IsNull() {
+		if value.Exists() {
 			data.SetOverloadBit = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SetOverloadBit = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SetOverloadBit.IsNull() {
-			data.SetOverloadBit = types.BoolNull()
-		}
+	} else if data.SetOverloadBit.IsNull() {
+		data.SetOverloadBit = types.BoolNull()
 	}
-	if value := res.Get("set-overload-bit.on-startup.time-to-advertise.time-to-advertise-number"); value.Exists() && !data.SetOverloadBitOnStartupTimeToAdvertise.IsNull() {
+	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.time-to-advertise.time-to-advertise-number"); value.Exists() && !data.SetOverloadBitOnStartupTimeToAdvertise.IsNull() {
 		data.SetOverloadBitOnStartupTimeToAdvertise = types.Int64Value(value.Int())
 	} else if data.SetOverloadBitOnStartupTimeToAdvertise.IsNull() {
 		data.SetOverloadBitOnStartupTimeToAdvertise = types.Int64Null()
 	}
-	if value := res.Get("set-overload-bit.on-startup.wait-for-bgp"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
+	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.wait-for-bgp"); !data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
+		if value.Exists() {
 			data.SetOverloadBitOnStartupWaitForBgp = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SetOverloadBitOnStartupWaitForBgp = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
-			data.SetOverloadBitOnStartupWaitForBgp = types.BoolNull()
-		}
+	} else if data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
+		data.SetOverloadBitOnStartupWaitForBgp = types.BoolNull()
 	}
-	if value := res.Get("set-overload-bit.advertise.external"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SetOverloadBitAdvertiseExternal.IsNull() {
+	if value := gjson.GetBytes(res, "set-overload-bit.advertise.external"); !data.SetOverloadBitAdvertiseExternal.IsNull() {
+		if value.Exists() {
 			data.SetOverloadBitAdvertiseExternal = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SetOverloadBitAdvertiseExternal = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SetOverloadBitAdvertiseExternal.IsNull() {
-			data.SetOverloadBitAdvertiseExternal = types.BoolNull()
-		}
+	} else if data.SetOverloadBitAdvertiseExternal.IsNull() {
+		data.SetOverloadBitAdvertiseExternal = types.BoolNull()
 	}
-	if value := res.Get("set-overload-bit.advertise.interlevel"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SetOverloadBitAdvertiseInterlevel.IsNull() {
+	if value := gjson.GetBytes(res, "set-overload-bit.advertise.interlevel"); !data.SetOverloadBitAdvertiseInterlevel.IsNull() {
+		if value.Exists() {
 			data.SetOverloadBitAdvertiseInterlevel = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SetOverloadBitAdvertiseInterlevel = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SetOverloadBitAdvertiseInterlevel.IsNull() {
-			data.SetOverloadBitAdvertiseInterlevel = types.BoolNull()
-		}
+	} else if data.SetOverloadBitAdvertiseInterlevel.IsNull() {
+		data.SetOverloadBitAdvertiseInterlevel = types.BoolNull()
 	}
 	for i := range data.SetOverloadBitLevels {
 		keys := [...]string{"level-number"}
 		keyValues := [...]string{strconv.FormatInt(data.SetOverloadBitLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("set-overload-bit-levels.set-overload-bit-level").ForEach(
+		gjson.GetBytes(res, "set-overload-bit-levels.set-overload-bit-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1358,7 +1404,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 			}
 		}
 	}
-	if value := res.Get("lsp-mtu"); value.Exists() && !data.LspMtu.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-mtu"); value.Exists() && !data.LspMtu.IsNull() {
 		data.LspMtu = types.Int64Value(value.Int())
 	} else if data.LspMtu.IsNull() {
 		data.LspMtu = types.Int64Null()
@@ -1368,7 +1414,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.LspMtuLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("lsp-mtu-levels.lsp-mtu-level").ForEach(
+		gjson.GetBytes(res, "lsp-mtu-levels.lsp-mtu-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1397,65 +1443,62 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 			data.LspMtuLevels[i].LspMtu = types.Int64Null()
 		}
 	}
-	if value := res.Get("extended-admin-group"); value.Exists() && !data.ExtendedAdminGroup.IsNull() {
+	if value := gjson.GetBytes(res, "extended-admin-group"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ExtendedAdminGroup.IsNull() {
 		data.ExtendedAdminGroup = types.StringValue(value.String())
 	} else if data.ExtendedAdminGroup.IsNull() {
 		data.ExtendedAdminGroup = types.StringNull()
 	}
-	if value := res.Get("nsr"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.Nsr.IsNull() {
+	if value := gjson.GetBytes(res, "nsr"); !data.Nsr.IsNull() {
+		if value.Exists() {
 			data.Nsr = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.Nsr = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.Nsr.IsNull() {
-			data.Nsr = types.BoolNull()
-		}
+	} else if data.Nsr.IsNull() {
+		data.Nsr = types.BoolNull()
 	}
-	if value := res.Get("nsr-restart-time"); value.Exists() && !data.NsrRestartTime.IsNull() {
+	if value := gjson.GetBytes(res, "nsr-restart-time"); value.Exists() && !data.NsrRestartTime.IsNull() {
 		data.NsrRestartTime = types.Int64Value(value.Int())
 	} else if data.NsrRestartTime.IsNull() {
 		data.NsrRestartTime = types.Int64Null()
 	}
-	if value := res.Get("nsf.cisco"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.NsfCisco.IsNull() {
+	if value := gjson.GetBytes(res, "nsf.cisco"); !data.NsfCisco.IsNull() {
+		if value.Exists() {
 			data.NsfCisco = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.NsfCisco = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.NsfCisco.IsNull() {
-			data.NsfCisco = types.BoolNull()
-		}
+	} else if data.NsfCisco.IsNull() {
+		data.NsfCisco = types.BoolNull()
 	}
-	if value := res.Get("nsf.ietf"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.NsfIetf.IsNull() {
+	if value := gjson.GetBytes(res, "nsf.ietf"); !data.NsfIetf.IsNull() {
+		if value.Exists() {
 			data.NsfIetf = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.NsfIetf = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.NsfIetf.IsNull() {
-			data.NsfIetf = types.BoolNull()
-		}
+	} else if data.NsfIetf.IsNull() {
+		data.NsfIetf = types.BoolNull()
 	}
-	if value := res.Get("nsf.lifetime"); value.Exists() && !data.NsfLifetime.IsNull() {
+	if value := gjson.GetBytes(res, "nsf.lifetime"); value.Exists() && !data.NsfLifetime.IsNull() {
 		data.NsfLifetime = types.Int64Value(value.Int())
 	} else if data.NsfLifetime.IsNull() {
 		data.NsfLifetime = types.Int64Null()
 	}
-	if value := res.Get("nsf.interface-timer"); value.Exists() && !data.NsfInterfaceTimer.IsNull() {
+	if value := gjson.GetBytes(res, "nsf.interface-timer"); value.Exists() && !data.NsfInterfaceTimer.IsNull() {
 		data.NsfInterfaceTimer = types.Int64Value(value.Int())
 	} else if data.NsfInterfaceTimer.IsNull() {
 		data.NsfInterfaceTimer = types.Int64Null()
 	}
-	if value := res.Get("nsf.interface-expires"); value.Exists() && !data.NsfInterfaceExpires.IsNull() {
+	if value := gjson.GetBytes(res, "nsf.interface-expires"); value.Exists() && !data.NsfInterfaceExpires.IsNull() {
 		data.NsfInterfaceExpires = types.Int64Value(value.Int())
 	} else if data.NsfInterfaceExpires.IsNull() {
 		data.NsfInterfaceExpires = types.Int64Null()
 	}
-	if value := res.Get("lsp-check-interval"); value.Exists() && !data.LspCheckInterval.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-check-interval"); value.Exists() && !data.LspCheckInterval.IsNull() {
 		data.LspCheckInterval = types.Int64Value(value.Int())
 	} else if data.LspCheckInterval.IsNull() {
 		data.LspCheckInterval = types.Int64Null()
@@ -1465,7 +1508,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.LspCheckIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("lsp-check-interval-levels.lsp-check-interval-level").ForEach(
+		gjson.GetBytes(res, "lsp-check-interval-levels.lsp-check-interval-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1494,17 +1537,17 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 			data.LspCheckIntervalLevels[i].LspCheckInterval = types.Int64Null()
 		}
 	}
-	if value := res.Get("lsp-gen-interval.maximum-wait"); value.Exists() && !data.LspGenIntervalMaximumWait.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-gen-interval.maximum-wait"); value.Exists() && !data.LspGenIntervalMaximumWait.IsNull() {
 		data.LspGenIntervalMaximumWait = types.Int64Value(value.Int())
 	} else if data.LspGenIntervalMaximumWait.IsNull() {
 		data.LspGenIntervalMaximumWait = types.Int64Null()
 	}
-	if value := res.Get("lsp-gen-interval.initial-wait"); value.Exists() && !data.LspGenIntervalInitialWait.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-gen-interval.initial-wait"); value.Exists() && !data.LspGenIntervalInitialWait.IsNull() {
 		data.LspGenIntervalInitialWait = types.Int64Value(value.Int())
 	} else if data.LspGenIntervalInitialWait.IsNull() {
 		data.LspGenIntervalInitialWait = types.Int64Null()
 	}
-	if value := res.Get("lsp-gen-interval.secondary-wait"); value.Exists() && !data.LspGenIntervalSecondaryWait.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-gen-interval.secondary-wait"); value.Exists() && !data.LspGenIntervalSecondaryWait.IsNull() {
 		data.LspGenIntervalSecondaryWait = types.Int64Value(value.Int())
 	} else if data.LspGenIntervalSecondaryWait.IsNull() {
 		data.LspGenIntervalSecondaryWait = types.Int64Null()
@@ -1514,7 +1557,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.LspGenIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("lsp-gen-interval-levels.lsp-gen-interval-level").ForEach(
+		gjson.GetBytes(res, "lsp-gen-interval-levels.lsp-gen-interval-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1553,93 +1596,87 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 			data.LspGenIntervalLevels[i].MaximumWait = types.Int64Null()
 		}
 	}
-	if value := res.Get("adjacency.stagger"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.AdjacencyStagger.IsNull() {
+	if value := gjson.GetBytes(res, "adjacency.stagger"); !data.AdjacencyStagger.IsNull() {
+		if value.Exists() {
 			data.AdjacencyStagger = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.AdjacencyStagger = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.AdjacencyStagger.IsNull() {
-			data.AdjacencyStagger = types.BoolNull()
-		}
+	} else if data.AdjacencyStagger.IsNull() {
+		data.AdjacencyStagger = types.BoolNull()
 	}
-	if value := res.Get("adjacency.stagger.initial-neighbors"); value.Exists() && !data.AdjacencyStaggerInitialNeighbors.IsNull() {
+	if value := gjson.GetBytes(res, "adjacency.stagger.initial-neighbors"); value.Exists() && !data.AdjacencyStaggerInitialNeighbors.IsNull() {
 		data.AdjacencyStaggerInitialNeighbors = types.Int64Value(value.Int())
 	} else if data.AdjacencyStaggerInitialNeighbors.IsNull() {
 		data.AdjacencyStaggerInitialNeighbors = types.Int64Null()
 	}
-	if value := res.Get("adjacency.stagger.max-neighbors"); value.Exists() && !data.AdjacencyStaggerMaxNeighbors.IsNull() {
+	if value := gjson.GetBytes(res, "adjacency.stagger.max-neighbors"); value.Exists() && !data.AdjacencyStaggerMaxNeighbors.IsNull() {
 		data.AdjacencyStaggerMaxNeighbors = types.Int64Value(value.Int())
 	} else if data.AdjacencyStaggerMaxNeighbors.IsNull() {
 		data.AdjacencyStaggerMaxNeighbors = types.Int64Null()
 	}
-	if value := res.Get("hostname.dynamic.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.HostnameDynamicDisable.IsNull() {
+	if value := gjson.GetBytes(res, "hostname.dynamic.disable"); !data.HostnameDynamicDisable.IsNull() {
+		if value.Exists() {
 			data.HostnameDynamicDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.HostnameDynamicDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.HostnameDynamicDisable.IsNull() {
-			data.HostnameDynamicDisable = types.BoolNull()
-		}
+	} else if data.HostnameDynamicDisable.IsNull() {
+		data.HostnameDynamicDisable = types.BoolNull()
 	}
-	if value := res.Get("is-type"); value.Exists() && !data.IsType.IsNull() {
+	if value := gjson.GetBytes(res, "is-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.IsType.IsNull() {
 		data.IsType = types.StringValue(value.String())
 	} else if data.IsType.IsNull() {
 		data.IsType = types.StringNull()
 	}
-	if value := res.Get("multi-part-tlv.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MultiPartTlvDisable.IsNull() {
+	if value := gjson.GetBytes(res, "multi-part-tlv.disable"); !data.MultiPartTlvDisable.IsNull() {
+		if value.Exists() {
 			data.MultiPartTlvDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MultiPartTlvDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MultiPartTlvDisable.IsNull() {
-			data.MultiPartTlvDisable = types.BoolNull()
-		}
+	} else if data.MultiPartTlvDisable.IsNull() {
+		data.MultiPartTlvDisable = types.BoolNull()
 	}
-	if value := res.Get("multi-part-tlv.disable.neighbor"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MultiPartTlvDisableNeighbor.IsNull() {
+	if value := gjson.GetBytes(res, "multi-part-tlv.disable.neighbor"); !data.MultiPartTlvDisableNeighbor.IsNull() {
+		if value.Exists() {
 			data.MultiPartTlvDisableNeighbor = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MultiPartTlvDisableNeighbor = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MultiPartTlvDisableNeighbor.IsNull() {
-			data.MultiPartTlvDisableNeighbor = types.BoolNull()
-		}
+	} else if data.MultiPartTlvDisableNeighbor.IsNull() {
+		data.MultiPartTlvDisableNeighbor = types.BoolNull()
 	}
-	if value := res.Get("multi-part-tlv.disable.prefix-tlvs"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MultiPartTlvDisablePrefixTlvs.IsNull() {
+	if value := gjson.GetBytes(res, "multi-part-tlv.disable.prefix-tlvs"); !data.MultiPartTlvDisablePrefixTlvs.IsNull() {
+		if value.Exists() {
 			data.MultiPartTlvDisablePrefixTlvs = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MultiPartTlvDisablePrefixTlvs = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MultiPartTlvDisablePrefixTlvs.IsNull() {
-			data.MultiPartTlvDisablePrefixTlvs = types.BoolNull()
-		}
+	} else if data.MultiPartTlvDisablePrefixTlvs.IsNull() {
+		data.MultiPartTlvDisablePrefixTlvs = types.BoolNull()
 	}
-	if value := res.Get("multi-part-tlv.disable.router-capability"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MultiPartTlvDisableRouterCapability.IsNull() {
+	if value := gjson.GetBytes(res, "multi-part-tlv.disable.router-capability"); !data.MultiPartTlvDisableRouterCapability.IsNull() {
+		if value.Exists() {
 			data.MultiPartTlvDisableRouterCapability = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MultiPartTlvDisableRouterCapability = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MultiPartTlvDisableRouterCapability.IsNull() {
-			data.MultiPartTlvDisableRouterCapability = types.BoolNull()
-		}
+	} else if data.MultiPartTlvDisableRouterCapability.IsNull() {
+		data.MultiPartTlvDisableRouterCapability = types.BoolNull()
 	}
 	for i := range data.MultiPartTlvDisableLevels {
 		keys := [...]string{"level-number"}
 		keyValues := [...]string{strconv.FormatInt(data.MultiPartTlvDisableLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("multi-part-tlv.disable-levels.disable-level").ForEach(
+		gjson.GetBytes(res, "multi-part-tlv.disable-levels.disable-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1699,45 +1736,42 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 			}
 		}
 	}
-	if value := res.Get("log.adjacency.changes"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LogAdjacencyChanges.IsNull() {
+	if value := gjson.GetBytes(res, "log.adjacency.changes"); !data.LogAdjacencyChanges.IsNull() {
+		if value.Exists() {
 			data.LogAdjacencyChanges = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LogAdjacencyChanges = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LogAdjacencyChanges.IsNull() {
-			data.LogAdjacencyChanges = types.BoolNull()
-		}
+	} else if data.LogAdjacencyChanges.IsNull() {
+		data.LogAdjacencyChanges = types.BoolNull()
 	}
-	if value := res.Get("log.pdu.drops"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LogPduDrops.IsNull() {
+	if value := gjson.GetBytes(res, "log.pdu.drops"); !data.LogPduDrops.IsNull() {
+		if value.Exists() {
 			data.LogPduDrops = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LogPduDrops = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LogPduDrops.IsNull() {
-			data.LogPduDrops = types.BoolNull()
-		}
+	} else if data.LogPduDrops.IsNull() {
+		data.LogPduDrops = types.BoolNull()
 	}
-	if value := res.Get("log.format.brief"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LogFormatBrief.IsNull() {
+	if value := gjson.GetBytes(res, "log.format.brief"); !data.LogFormatBrief.IsNull() {
+		if value.Exists() {
 			data.LogFormatBrief = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LogFormatBrief = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LogFormatBrief.IsNull() {
-			data.LogFormatBrief = types.BoolNull()
-		}
+	} else if data.LogFormatBrief.IsNull() {
+		data.LogFormatBrief = types.BoolNull()
 	}
 	for i := range data.LogSizes {
 		keys := [...]string{"log-type"}
 		keyValues := [...]string{data.LogSizes[i].LogType.ValueString()}
 
 		var r gjson.Result
-		res.Get("log.sizes.size").ForEach(
+		gjson.GetBytes(res, "log.sizes.size").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1755,7 +1789,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 				return true
 			},
 		)
-		if value := r.Get("log-type"); value.Exists() && !data.LogSizes[i].LogType.IsNull() {
+		if value := r.Get("log-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.LogSizes[i].LogType.IsNull() {
 			data.LogSizes[i].LogType = types.StringValue(value.String())
 		} else {
 			data.LogSizes[i].LogType = types.StringNull()
@@ -1771,7 +1805,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.LspPasswordAcceptLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("lsp-password.accept-levels.accept-level").ForEach(
+		gjson.GetBytes(res, "lsp-password.accept-levels.accept-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1795,116 +1829,107 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 			data.LspPasswordAcceptLevels[i].LevelNumber = types.Int64Null()
 		}
 	}
-	if value := res.Get("lsp-password.lsp-password-option.text.password-options.send-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LspPasswordTextSendOnly.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.text.password-options.send-only"); !data.LspPasswordTextSendOnly.IsNull() {
+		if value.Exists() {
 			data.LspPasswordTextSendOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LspPasswordTextSendOnly = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LspPasswordTextSendOnly.IsNull() {
-			data.LspPasswordTextSendOnly = types.BoolNull()
-		}
+	} else if data.LspPasswordTextSendOnly.IsNull() {
+		data.LspPasswordTextSendOnly = types.BoolNull()
 	}
-	if value := res.Get("lsp-password.lsp-password-option.text.password-options.snp.send-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LspPasswordTextSnpSendOnly.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.text.password-options.snp.send-only"); !data.LspPasswordTextSnpSendOnly.IsNull() {
+		if value.Exists() {
 			data.LspPasswordTextSnpSendOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LspPasswordTextSnpSendOnly = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LspPasswordTextSnpSendOnly.IsNull() {
-			data.LspPasswordTextSnpSendOnly = types.BoolNull()
-		}
+	} else if data.LspPasswordTextSnpSendOnly.IsNull() {
+		data.LspPasswordTextSnpSendOnly = types.BoolNull()
 	}
-	if value := res.Get("lsp-password.lsp-password-option.text.password-options.enable-poi"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LspPasswordTextEnablePoi.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.text.password-options.enable-poi"); !data.LspPasswordTextEnablePoi.IsNull() {
+		if value.Exists() {
 			data.LspPasswordTextEnablePoi = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LspPasswordTextEnablePoi = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LspPasswordTextEnablePoi.IsNull() {
-			data.LspPasswordTextEnablePoi = types.BoolNull()
-		}
+	} else if data.LspPasswordTextEnablePoi.IsNull() {
+		data.LspPasswordTextEnablePoi = types.BoolNull()
 	}
-	if value := res.Get("lsp-password.lsp-password-option.hmac-md5.password-options.send-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LspPasswordHmacMd5SendOnly.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.hmac-md5.password-options.send-only"); !data.LspPasswordHmacMd5SendOnly.IsNull() {
+		if value.Exists() {
 			data.LspPasswordHmacMd5SendOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LspPasswordHmacMd5SendOnly = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LspPasswordHmacMd5SendOnly.IsNull() {
-			data.LspPasswordHmacMd5SendOnly = types.BoolNull()
-		}
+	} else if data.LspPasswordHmacMd5SendOnly.IsNull() {
+		data.LspPasswordHmacMd5SendOnly = types.BoolNull()
 	}
-	if value := res.Get("lsp-password.lsp-password-option.hmac-md5.password-options.snp.send-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LspPasswordHmacMd5SnpSendOnly.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.hmac-md5.password-options.snp.send-only"); !data.LspPasswordHmacMd5SnpSendOnly.IsNull() {
+		if value.Exists() {
 			data.LspPasswordHmacMd5SnpSendOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LspPasswordHmacMd5SnpSendOnly = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LspPasswordHmacMd5SnpSendOnly.IsNull() {
-			data.LspPasswordHmacMd5SnpSendOnly = types.BoolNull()
-		}
+	} else if data.LspPasswordHmacMd5SnpSendOnly.IsNull() {
+		data.LspPasswordHmacMd5SnpSendOnly = types.BoolNull()
 	}
-	if value := res.Get("lsp-password.lsp-password-option.hmac-md5.password-options.enable-poi"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LspPasswordHmacMd5EnablePoi.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.hmac-md5.password-options.enable-poi"); !data.LspPasswordHmacMd5EnablePoi.IsNull() {
+		if value.Exists() {
 			data.LspPasswordHmacMd5EnablePoi = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LspPasswordHmacMd5EnablePoi = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LspPasswordHmacMd5EnablePoi.IsNull() {
-			data.LspPasswordHmacMd5EnablePoi = types.BoolNull()
-		}
+	} else if data.LspPasswordHmacMd5EnablePoi.IsNull() {
+		data.LspPasswordHmacMd5EnablePoi = types.BoolNull()
 	}
-	if value := res.Get("lsp-password.lsp-password-option.keychain.keychain-name"); value.Exists() && !data.LspPasswordKeychain.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.keychain-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.LspPasswordKeychain.IsNull() {
 		data.LspPasswordKeychain = types.StringValue(value.String())
 	} else if data.LspPasswordKeychain.IsNull() {
 		data.LspPasswordKeychain = types.StringNull()
 	}
-	if value := res.Get("lsp-password.lsp-password-option.keychain.send-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LspPasswordKeychainSendOnly.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.send-only"); !data.LspPasswordKeychainSendOnly.IsNull() {
+		if value.Exists() {
 			data.LspPasswordKeychainSendOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LspPasswordKeychainSendOnly = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LspPasswordKeychainSendOnly.IsNull() {
-			data.LspPasswordKeychainSendOnly = types.BoolNull()
-		}
+	} else if data.LspPasswordKeychainSendOnly.IsNull() {
+		data.LspPasswordKeychainSendOnly = types.BoolNull()
 	}
-	if value := res.Get("lsp-password.lsp-password-option.keychain.snp.send-only"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LspPasswordKeychainSnpSendOnly.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.snp.send-only"); !data.LspPasswordKeychainSnpSendOnly.IsNull() {
+		if value.Exists() {
 			data.LspPasswordKeychainSnpSendOnly = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LspPasswordKeychainSnpSendOnly = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LspPasswordKeychainSnpSendOnly.IsNull() {
-			data.LspPasswordKeychainSnpSendOnly = types.BoolNull()
-		}
+	} else if data.LspPasswordKeychainSnpSendOnly.IsNull() {
+		data.LspPasswordKeychainSnpSendOnly = types.BoolNull()
 	}
-	if value := res.Get("lsp-password.lsp-password-option.keychain.enable-poi"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LspPasswordKeychainEnablePoi.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.enable-poi"); !data.LspPasswordKeychainEnablePoi.IsNull() {
+		if value.Exists() {
 			data.LspPasswordKeychainEnablePoi = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LspPasswordKeychainEnablePoi = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LspPasswordKeychainEnablePoi.IsNull() {
-			data.LspPasswordKeychainEnablePoi = types.BoolNull()
-		}
+	} else if data.LspPasswordKeychainEnablePoi.IsNull() {
+		data.LspPasswordKeychainEnablePoi = types.BoolNull()
 	}
 	for i := range data.LspPasswordLevels {
 		keys := [...]string{"level-number"}
 		keyValues := [...]string{strconv.FormatInt(data.LspPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("lsp-password-levels.lsp-password-level").ForEach(
+		gjson.GetBytes(res, "lsp-password-levels.lsp-password-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1999,7 +2024,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 				data.LspPasswordLevels[i].HmacMd5EnablePoi = types.BoolNull()
 			}
 		}
-		if value := r.Get("keychain.keychain-name"); value.Exists() && !data.LspPasswordLevels[i].KeychainName.IsNull() {
+		if value := r.Get("keychain.keychain-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.LspPasswordLevels[i].KeychainName.IsNull() {
 			data.LspPasswordLevels[i].KeychainName = types.StringValue(value.String())
 		} else {
 			data.LspPasswordLevels[i].KeychainName = types.StringNull()
@@ -2041,66 +2066,62 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 			}
 		}
 	}
-	if value := res.Get("authentication-check.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.AuthenticationCheckDisable.IsNull() {
+	if value := gjson.GetBytes(res, "authentication-check.disable"); !data.AuthenticationCheckDisable.IsNull() {
+		if value.Exists() {
 			data.AuthenticationCheckDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.AuthenticationCheckDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.AuthenticationCheckDisable.IsNull() {
-			data.AuthenticationCheckDisable = types.BoolNull()
-		}
+	} else if data.AuthenticationCheckDisable.IsNull() {
+		data.AuthenticationCheckDisable = types.BoolNull()
 	}
-	if value := res.Get("iid.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.IidDisable.IsNull() {
+	if value := gjson.GetBytes(res, "iid.disable"); !data.IidDisable.IsNull() {
+		if value.Exists() {
 			data.IidDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.IidDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.IidDisable.IsNull() {
-			data.IidDisable = types.BoolNull()
-		}
+	} else if data.IidDisable.IsNull() {
+		data.IidDisable = types.BoolNull()
 	}
-	if value := res.Get("mpls.ldp.sync"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MplsLdpSync.IsNull() {
+	if value := gjson.GetBytes(res, "mpls.ldp.sync"); !data.MplsLdpSync.IsNull() {
+		if value.Exists() {
 			data.MplsLdpSync = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MplsLdpSync = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MplsLdpSync.IsNull() {
-			data.MplsLdpSync = types.BoolNull()
-		}
+	} else if data.MplsLdpSync.IsNull() {
+		data.MplsLdpSync = types.BoolNull()
 	}
-	if value := res.Get("mpls.ldp.sync.level"); value.Exists() && !data.MplsLdpSyncLevel.IsNull() {
+	if value := gjson.GetBytes(res, "mpls.ldp.sync.level"); value.Exists() && !data.MplsLdpSyncLevel.IsNull() {
 		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
 	} else if data.MplsLdpSyncLevel.IsNull() {
 		data.MplsLdpSyncLevel = types.Int64Null()
 	}
-	if value := res.Get("protocol.shutdown"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProtocolShutdown.IsNull() {
+	if value := gjson.GetBytes(res, "protocol.shutdown"); !data.ProtocolShutdown.IsNull() {
+		if value.Exists() {
 			data.ProtocolShutdown = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProtocolShutdown = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProtocolShutdown.IsNull() {
-			data.ProtocolShutdown = types.BoolNull()
-		}
+	} else if data.ProtocolShutdown.IsNull() {
+		data.ProtocolShutdown = types.BoolNull()
 	}
-	if value := res.Get("min-lsp-arrivaltime.initial-wait"); value.Exists() && !data.MinLspArrivalInitialWait.IsNull() {
+	if value := gjson.GetBytes(res, "min-lsp-arrivaltime.initial-wait"); value.Exists() && !data.MinLspArrivalInitialWait.IsNull() {
 		data.MinLspArrivalInitialWait = types.Int64Value(value.Int())
 	} else if data.MinLspArrivalInitialWait.IsNull() {
 		data.MinLspArrivalInitialWait = types.Int64Null()
 	}
-	if value := res.Get("min-lsp-arrivaltime.secondary-wait"); value.Exists() && !data.MinLspArrivalSecondaryWait.IsNull() {
+	if value := gjson.GetBytes(res, "min-lsp-arrivaltime.secondary-wait"); value.Exists() && !data.MinLspArrivalSecondaryWait.IsNull() {
 		data.MinLspArrivalSecondaryWait = types.Int64Value(value.Int())
 	} else if data.MinLspArrivalSecondaryWait.IsNull() {
 		data.MinLspArrivalSecondaryWait = types.Int64Null()
 	}
-	if value := res.Get("min-lsp-arrivaltime.maximum-wait"); value.Exists() && !data.MinLspArrivalMaximumWait.IsNull() {
+	if value := gjson.GetBytes(res, "min-lsp-arrivaltime.maximum-wait"); value.Exists() && !data.MinLspArrivalMaximumWait.IsNull() {
 		data.MinLspArrivalMaximumWait = types.Int64Value(value.Int())
 	} else if data.MinLspArrivalMaximumWait.IsNull() {
 		data.MinLspArrivalMaximumWait = types.Int64Null()
@@ -2110,7 +2131,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.MinLspArrivalLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("min-lsp-arrivaltime-levels.min-lsp-arrivaltime-level").ForEach(
+		gjson.GetBytes(res, "min-lsp-arrivaltime-levels.min-lsp-arrivaltime-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2149,105 +2170,97 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 			data.MinLspArrivalLevels[i].MaximumWait = types.Int64Null()
 		}
 	}
-	if value := res.Get("max-metric"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MaxMetric.IsNull() {
+	if value := gjson.GetBytes(res, "max-metric"); !data.MaxMetric.IsNull() {
+		if value.Exists() {
 			data.MaxMetric = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MaxMetric = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MaxMetric.IsNull() {
-			data.MaxMetric = types.BoolNull()
-		}
+	} else if data.MaxMetric.IsNull() {
+		data.MaxMetric = types.BoolNull()
 	}
-	if value := res.Get("max-metric.on-startup.advertise.advertise-number"); value.Exists() && !data.MaxMetricOnStartupAdvertise.IsNull() {
+	if value := gjson.GetBytes(res, "max-metric.on-startup.advertise.advertise-number"); value.Exists() && !data.MaxMetricOnStartupAdvertise.IsNull() {
 		data.MaxMetricOnStartupAdvertise = types.Int64Value(value.Int())
 	} else if data.MaxMetricOnStartupAdvertise.IsNull() {
 		data.MaxMetricOnStartupAdvertise = types.Int64Null()
 	}
-	if value := res.Get("max-metric.on-startup.wait-for-bgp"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MaxMetricOnStartupWaitForBgp.IsNull() {
+	if value := gjson.GetBytes(res, "max-metric.on-startup.wait-for-bgp"); !data.MaxMetricOnStartupWaitForBgp.IsNull() {
+		if value.Exists() {
 			data.MaxMetricOnStartupWaitForBgp = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MaxMetricOnStartupWaitForBgp = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MaxMetricOnStartupWaitForBgp.IsNull() {
-			data.MaxMetricOnStartupWaitForBgp = types.BoolNull()
-		}
+	} else if data.MaxMetricOnStartupWaitForBgp.IsNull() {
+		data.MaxMetricOnStartupWaitForBgp = types.BoolNull()
 	}
-	if value := res.Get("max-metric.external"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MaxMetricExternal.IsNull() {
+	if value := gjson.GetBytes(res, "max-metric.external"); !data.MaxMetricExternal.IsNull() {
+		if value.Exists() {
 			data.MaxMetricExternal = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MaxMetricExternal = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MaxMetricExternal.IsNull() {
-			data.MaxMetricExternal = types.BoolNull()
-		}
+	} else if data.MaxMetricExternal.IsNull() {
+		data.MaxMetricExternal = types.BoolNull()
 	}
-	if value := res.Get("max-metric.interlevel"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MaxMetricInterlevel.IsNull() {
+	if value := gjson.GetBytes(res, "max-metric.interlevel"); !data.MaxMetricInterlevel.IsNull() {
+		if value.Exists() {
 			data.MaxMetricInterlevel = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MaxMetricInterlevel = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MaxMetricInterlevel.IsNull() {
-			data.MaxMetricInterlevel = types.BoolNull()
-		}
+	} else if data.MaxMetricInterlevel.IsNull() {
+		data.MaxMetricInterlevel = types.BoolNull()
 	}
-	if value := res.Get("max-metric.default-route"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MaxMetricDefaultRoute.IsNull() {
+	if value := gjson.GetBytes(res, "max-metric.default-route"); !data.MaxMetricDefaultRoute.IsNull() {
+		if value.Exists() {
 			data.MaxMetricDefaultRoute = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MaxMetricDefaultRoute = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MaxMetricDefaultRoute.IsNull() {
-			data.MaxMetricDefaultRoute = types.BoolNull()
-		}
+	} else if data.MaxMetricDefaultRoute.IsNull() {
+		data.MaxMetricDefaultRoute = types.BoolNull()
 	}
-	if value := res.Get("max-metric.srv6-locator"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MaxMetricSrv6Locator.IsNull() {
+	if value := gjson.GetBytes(res, "max-metric.srv6-locator"); !data.MaxMetricSrv6Locator.IsNull() {
+		if value.Exists() {
 			data.MaxMetricSrv6Locator = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MaxMetricSrv6Locator = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MaxMetricSrv6Locator.IsNull() {
-			data.MaxMetricSrv6Locator = types.BoolNull()
-		}
+	} else if data.MaxMetricSrv6Locator.IsNull() {
+		data.MaxMetricSrv6Locator = types.BoolNull()
 	}
-	if value := res.Get("max-metric.te"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MaxMetricTe.IsNull() {
+	if value := gjson.GetBytes(res, "max-metric.te"); !data.MaxMetricTe.IsNull() {
+		if value.Exists() {
 			data.MaxMetricTe = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MaxMetricTe = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MaxMetricTe.IsNull() {
-			data.MaxMetricTe = types.BoolNull()
-		}
+	} else if data.MaxMetricTe.IsNull() {
+		data.MaxMetricTe = types.BoolNull()
 	}
-	if value := res.Get("max-metric.delay"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MaxMetricDelay.IsNull() {
+	if value := gjson.GetBytes(res, "max-metric.delay"); !data.MaxMetricDelay.IsNull() {
+		if value.Exists() {
 			data.MaxMetricDelay = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MaxMetricDelay = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MaxMetricDelay.IsNull() {
-			data.MaxMetricDelay = types.BoolNull()
-		}
+	} else if data.MaxMetricDelay.IsNull() {
+		data.MaxMetricDelay = types.BoolNull()
 	}
 	for i := range data.MaxMetricLevels {
 		keys := [...]string{"level-number"}
 		keyValues := [...]string{strconv.FormatInt(data.MaxMetricLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("max-metric-levels.max-metric-level").ForEach(
+		gjson.GetBytes(res, "max-metric-levels.max-metric-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2360,60 +2373,57 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 			}
 		}
 	}
-	if value := res.Get("distribute.link-state"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.DistributeLinkState.IsNull() {
+	if value := gjson.GetBytes(res, "distribute.link-state"); !data.DistributeLinkState.IsNull() {
+		if value.Exists() {
 			data.DistributeLinkState = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.DistributeLinkState = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.DistributeLinkState.IsNull() {
-			data.DistributeLinkState = types.BoolNull()
-		}
+	} else if data.DistributeLinkState.IsNull() {
+		data.DistributeLinkState = types.BoolNull()
 	}
-	if value := res.Get("distribute.link-state.level"); value.Exists() && !data.DistributeLinkStateLevel.IsNull() {
+	if value := gjson.GetBytes(res, "distribute.link-state.level"); value.Exists() && !data.DistributeLinkStateLevel.IsNull() {
 		data.DistributeLinkStateLevel = types.Int64Value(value.Int())
 	} else if data.DistributeLinkStateLevel.IsNull() {
 		data.DistributeLinkStateLevel = types.Int64Null()
 	}
-	if value := res.Get("distribute.link-state.instance-id"); value.Exists() && !data.DistributeLinkStateInstanceId.IsNull() {
+	if value := gjson.GetBytes(res, "distribute.link-state.instance-id"); value.Exists() && !data.DistributeLinkStateInstanceId.IsNull() {
 		data.DistributeLinkStateInstanceId = types.Int64Value(value.Int())
 	} else if data.DistributeLinkStateInstanceId.IsNull() {
 		data.DistributeLinkStateInstanceId = types.Int64Null()
 	}
-	if value := res.Get("distribute.link-state.throttle"); value.Exists() && !data.DistributeLinkStateThrottle.IsNull() {
+	if value := gjson.GetBytes(res, "distribute.link-state.throttle"); value.Exists() && !data.DistributeLinkStateThrottle.IsNull() {
 		data.DistributeLinkStateThrottle = types.Int64Value(value.Int())
 	} else if data.DistributeLinkStateThrottle.IsNull() {
 		data.DistributeLinkStateThrottle = types.Int64Null()
 	}
-	if value := res.Get("distribute.link-state.exclude-interarea"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.DistributeLinkStateExcludeInterarea.IsNull() {
+	if value := gjson.GetBytes(res, "distribute.link-state.exclude-interarea"); !data.DistributeLinkStateExcludeInterarea.IsNull() {
+		if value.Exists() {
 			data.DistributeLinkStateExcludeInterarea = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.DistributeLinkStateExcludeInterarea = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.DistributeLinkStateExcludeInterarea.IsNull() {
-			data.DistributeLinkStateExcludeInterarea = types.BoolNull()
-		}
+	} else if data.DistributeLinkStateExcludeInterarea.IsNull() {
+		data.DistributeLinkStateExcludeInterarea = types.BoolNull()
 	}
-	if value := res.Get("distribute.link-state.exclude-external"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.DistributeLinkStateExcludeExternal.IsNull() {
+	if value := gjson.GetBytes(res, "distribute.link-state.exclude-external"); !data.DistributeLinkStateExcludeExternal.IsNull() {
+		if value.Exists() {
 			data.DistributeLinkStateExcludeExternal = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.DistributeLinkStateExcludeExternal = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.DistributeLinkStateExcludeExternal.IsNull() {
-			data.DistributeLinkStateExcludeExternal = types.BoolNull()
-		}
+	} else if data.DistributeLinkStateExcludeExternal.IsNull() {
+		data.DistributeLinkStateExcludeExternal = types.BoolNull()
 	}
-	if value := res.Get("distribute.link-state.route-policy"); value.Exists() && !data.DistributeLinkStateRoutePolicy.IsNull() {
+	if value := gjson.GetBytes(res, "distribute.link-state.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.DistributeLinkStateRoutePolicy.IsNull() {
 		data.DistributeLinkStateRoutePolicy = types.StringValue(value.String())
 	} else if data.DistributeLinkStateRoutePolicy.IsNull() {
 		data.DistributeLinkStateRoutePolicy = types.StringNull()
 	}
-	if value := res.Get("max-lsp-lifetime"); value.Exists() && !data.MaxLspLifetime.IsNull() {
+	if value := gjson.GetBytes(res, "max-lsp-lifetime"); value.Exists() && !data.MaxLspLifetime.IsNull() {
 		data.MaxLspLifetime = types.Int64Value(value.Int())
 	} else if data.MaxLspLifetime.IsNull() {
 		data.MaxLspLifetime = types.Int64Null()
@@ -2423,7 +2433,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.MaxLspLifetimeLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("max-lsp-lifetime-levels.max-lsp-lifetime-level").ForEach(
+		gjson.GetBytes(res, "max-lsp-lifetime-levels.max-lsp-lifetime-level").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2452,38 +2462,37 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 			data.MaxLspLifetimeLevels[i].MaxLspLifetime = types.Int64Null()
 		}
 	}
-	if value := res.Get("instance-id"); value.Exists() && !data.InstanceId.IsNull() {
+	if value := gjson.GetBytes(res, "instance-id"); value.Exists() && !data.InstanceId.IsNull() {
 		data.InstanceId = types.Int64Value(value.Int())
 	} else if data.InstanceId.IsNull() {
 		data.InstanceId = types.Int64Null()
 	}
-	if value := res.Get("hello-padding"); value.Exists() && !data.HelloPadding.IsNull() {
+	if value := gjson.GetBytes(res, "hello-padding"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.HelloPadding.IsNull() {
 		data.HelloPadding = types.StringValue(value.String())
 	} else if data.HelloPadding.IsNull() {
 		data.HelloPadding = types.StringNull()
 	}
-	if value := res.Get("lsp-fast-flooding"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LspFastFlooding.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-fast-flooding"); !data.LspFastFlooding.IsNull() {
+		if value.Exists() {
 			data.LspFastFlooding = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LspFastFlooding = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LspFastFlooding.IsNull() {
-			data.LspFastFlooding = types.BoolNull()
-		}
+	} else if data.LspFastFlooding.IsNull() {
+		data.LspFastFlooding = types.BoolNull()
 	}
-	if value := res.Get("lsp-fast-flooding.max-lsp-tx"); value.Exists() && !data.LspFastFloodingMaxLspTx.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-fast-flooding.max-lsp-tx"); value.Exists() && !data.LspFastFloodingMaxLspTx.IsNull() {
 		data.LspFastFloodingMaxLspTx = types.Int64Value(value.Int())
 	} else if data.LspFastFloodingMaxLspTx.IsNull() {
 		data.LspFastFloodingMaxLspTx = types.Int64Null()
 	}
-	if value := res.Get("lsp-fast-flooding.remote-psnp-delay"); value.Exists() && !data.LspFastFloodingRemotePsnpDelay.IsNull() {
+	if value := gjson.GetBytes(res, "lsp-fast-flooding.remote-psnp-delay"); value.Exists() && !data.LspFastFloodingRemotePsnpDelay.IsNull() {
 		data.LspFastFloodingRemotePsnpDelay = types.Int64Value(value.Int())
 	} else if data.LspFastFloodingRemotePsnpDelay.IsNull() {
 		data.LspFastFloodingRemotePsnpDelay = types.Int64Null()
 	}
-	if value := res.Get("psnp-interval"); value.Exists() && !data.PsnpInterval.IsNull() {
+	if value := gjson.GetBytes(res, "psnp-interval"); value.Exists() && !data.PsnpInterval.IsNull() {
 		data.PsnpInterval = types.Int64Value(value.Int())
 	} else if data.PsnpInterval.IsNull() {
 		data.PsnpInterval = types.Int64Null()
@@ -2493,7 +2502,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{data.Nets[i].NetId.ValueString()}
 
 		var r gjson.Result
-		res.Get("nets.net").ForEach(
+		gjson.GetBytes(res, "nets.net").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2511,7 +2520,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 				return true
 			},
 		)
-		if value := r.Get("net-id"); value.Exists() && !data.Nets[i].NetId.IsNull() {
+		if value := r.Get("net-id"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Nets[i].NetId.IsNull() {
 			data.Nets[i].NetId = types.StringValue(value.String())
 		} else {
 			data.Nets[i].NetId = types.StringNull()
@@ -2522,7 +2531,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{data.AffinityMaps[i].AffinityName.ValueString()}
 
 		var r gjson.Result
-		res.Get("affinity-maps.affinity-map").ForEach(
+		gjson.GetBytes(res, "affinity-maps.affinity-map").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2540,7 +2549,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 				return true
 			},
 		)
-		if value := r.Get("affinity-attribute-name"); value.Exists() && !data.AffinityMaps[i].AffinityName.IsNull() {
+		if value := r.Get("affinity-attribute-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AffinityMaps[i].AffinityName.IsNull() {
 			data.AffinityMaps[i].AffinityName = types.StringValue(value.String())
 		} else {
 			data.AffinityMaps[i].AffinityName = types.StringNull()
@@ -2551,34 +2560,32 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 			data.AffinityMaps[i].BitPosition = types.Int64Null()
 		}
 	}
-	if value := res.Get("ignore-lsp-errors.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.IgnoreLspErrorsDisable.IsNull() {
+	if value := gjson.GetBytes(res, "ignore-lsp-errors.disable"); !data.IgnoreLspErrorsDisable.IsNull() {
+		if value.Exists() {
 			data.IgnoreLspErrorsDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.IgnoreLspErrorsDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.IgnoreLspErrorsDisable.IsNull() {
-			data.IgnoreLspErrorsDisable = types.BoolNull()
-		}
+	} else if data.IgnoreLspErrorsDisable.IsNull() {
+		data.IgnoreLspErrorsDisable = types.BoolNull()
 	}
-	if value := res.Get("purge-transmit.strict"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.PurgeTransmitStrict.IsNull() {
+	if value := gjson.GetBytes(res, "purge-transmit.strict"); !data.PurgeTransmitStrict.IsNull() {
+		if value.Exists() {
 			data.PurgeTransmitStrict = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.PurgeTransmitStrict = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.PurgeTransmitStrict.IsNull() {
-			data.PurgeTransmitStrict = types.BoolNull()
-		}
+	} else if data.PurgeTransmitStrict.IsNull() {
+		data.PurgeTransmitStrict = types.BoolNull()
 	}
-	if value := res.Get("purge-transmit.strict.strict-value"); value.Exists() && !data.PurgeTransmitStrictValue.IsNull() {
+	if value := gjson.GetBytes(res, "purge-transmit.strict.strict-value"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.PurgeTransmitStrictValue.IsNull() {
 		data.PurgeTransmitStrictValue = types.StringValue(value.String())
 	} else if data.PurgeTransmitStrictValue.IsNull() {
 		data.PurgeTransmitStrictValue = types.StringNull()
 	}
-	if value := res.Get("srlg.admin-weight"); value.Exists() && !data.SrlgAdminWeight.IsNull() {
+	if value := gjson.GetBytes(res, "srlg.admin-weight"); value.Exists() && !data.SrlgAdminWeight.IsNull() {
 		data.SrlgAdminWeight = types.Int64Value(value.Int())
 	} else if data.SrlgAdminWeight.IsNull() {
 		data.SrlgAdminWeight = types.Int64Null()
@@ -2588,7 +2595,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{data.SrlgNames[i].SrlgName.ValueString()}
 
 		var r gjson.Result
-		res.Get("srlg.names.name").ForEach(
+		gjson.GetBytes(res, "srlg.names.name").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2606,7 +2613,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 				return true
 			},
 		)
-		if value := r.Get("srlg-name"); value.Exists() && !data.SrlgNames[i].SrlgName.IsNull() {
+		if value := r.Get("srlg-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SrlgNames[i].SrlgName.IsNull() {
 			data.SrlgNames[i].SrlgName = types.StringValue(value.String())
 		} else {
 			data.SrlgNames[i].SrlgName = types.StringNull()
@@ -2639,12 +2646,12 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 					return true
 				},
 			)
-			if value := cr.Get("local-end-point"); value.Exists() && !data.SrlgNames[i].StaticIpv4Addresses[ci].LocalEndPoint.IsNull() {
+			if value := cr.Get("local-end-point"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SrlgNames[i].StaticIpv4Addresses[ci].LocalEndPoint.IsNull() {
 				data.SrlgNames[i].StaticIpv4Addresses[ci].LocalEndPoint = types.StringValue(value.String())
 			} else {
 				data.SrlgNames[i].StaticIpv4Addresses[ci].LocalEndPoint = types.StringNull()
 			}
-			if value := cr.Get("remote-end-point"); value.Exists() && !data.SrlgNames[i].StaticIpv4Addresses[ci].RemoteEndPoint.IsNull() {
+			if value := cr.Get("remote-end-point"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.SrlgNames[i].StaticIpv4Addresses[ci].RemoteEndPoint.IsNull() {
 				data.SrlgNames[i].StaticIpv4Addresses[ci].RemoteEndPoint = types.StringValue(value.String())
 			} else {
 				data.SrlgNames[i].StaticIpv4Addresses[ci].RemoteEndPoint = types.StringNull()
@@ -2656,7 +2663,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 		keyValues := [...]string{strconv.FormatInt(data.FlexAlgos[i].Number.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("flex-algoes.flex-algo").ForEach(
+		gjson.GetBytes(res, "flex-algoes.flex-algo").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -2694,7 +2701,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 		} else {
 			data.FlexAlgos[i].Priority = types.Int64Null()
 		}
-		if value := r.Get("metric-type"); value.Exists() && !data.FlexAlgos[i].MetricType.IsNull() {
+		if value := r.Get("metric-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.FlexAlgos[i].MetricType.IsNull() {
 			data.FlexAlgos[i].MetricType = types.StringValue(value.String())
 		} else {
 			data.FlexAlgos[i].MetricType = types.StringNull()
@@ -2863,12 +2870,12 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 					return true
 				},
 			)
-			if value := cr.Get("af-name"); value.Exists() && !data.FlexAlgos[i].AddressFamily[ci].AfName.IsNull() {
+			if value := cr.Get("af-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.FlexAlgos[i].AddressFamily[ci].AfName.IsNull() {
 				data.FlexAlgos[i].AddressFamily[ci].AfName = types.StringValue(value.String())
 			} else {
 				data.FlexAlgos[i].AddressFamily[ci].AfName = types.StringNull()
 			}
-			if value := cr.Get("saf-name"); value.Exists() && !data.FlexAlgos[i].AddressFamily[ci].SafName.IsNull() {
+			if value := cr.Get("saf-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.FlexAlgos[i].AddressFamily[ci].SafName.IsNull() {
 				data.FlexAlgos[i].AddressFamily[ci].SafName = types.StringValue(value.String())
 			} else {
 				data.FlexAlgos[i].AddressFamily[ci].SafName = types.StringNull()
@@ -2878,7 +2885,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 			} else {
 				data.FlexAlgos[i].AddressFamily[ci].MaximumPaths = types.Int64Null()
 			}
-			if value := cr.Get("maximum-paths.route-policy"); value.Exists() && !data.FlexAlgos[i].AddressFamily[ci].MaximumPathsRoutePolicy.IsNull() {
+			if value := cr.Get("maximum-paths.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.FlexAlgos[i].AddressFamily[ci].MaximumPathsRoutePolicy.IsNull() {
 				data.FlexAlgos[i].AddressFamily[ci].MaximumPathsRoutePolicy = types.StringValue(value.String())
 			} else {
 				data.FlexAlgos[i].AddressFamily[ci].MaximumPathsRoutePolicy = types.StringNull()
@@ -2891,31 +2898,23 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res gjson.Result) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "segment-routing.global-block.lower-bound-of-srgb"); value.Exists() {
+func (data *RouterISIS) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "segment-routing.global-block.lower-bound-of-srgb"); value.Exists() {
 		data.SegmentRoutingGlobalBlockLowerBound = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "segment-routing.global-block.upper-bound-of-srgb"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.global-block.upper-bound-of-srgb"); value.Exists() {
 		data.SegmentRoutingGlobalBlockUpperBound = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "receive.application.flex-algo.delay.app-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "receive.application.flex-algo.delay.app-only"); value.Exists() {
 		data.ReceiveApplicationFlexAlgoDelayAppOnly = types.BoolValue(true)
 	} else if !data.ReceiveApplicationFlexAlgoDelayAppOnly.IsNull() {
 		// Only set to false if it was previously set in state
 		data.ReceiveApplicationFlexAlgoDelayAppOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-refresh-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-refresh-interval"); value.Exists() {
 		data.LspRefreshInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "lsp-refresh-interval-levels.lsp-refresh-interval-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-refresh-interval-levels.lsp-refresh-interval-level"); value.Exists() {
 		data.LspRefreshIntervalLevels = make([]RouterISISLspRefreshIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISLspRefreshIntervalLevels{}
@@ -2929,40 +2928,40 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "oor-set-overload-bit.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "oor-set-overload-bit.disable"); value.Exists() {
 		data.OorSetOverloadBitDisable = types.BoolValue(true)
 	} else if !data.OorSetOverloadBitDisable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.OorSetOverloadBitDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "set-overload-bit"); value.Exists() {
+	if value := gjson.GetBytes(res, "set-overload-bit"); value.Exists() {
 		data.SetOverloadBit = types.BoolValue(true)
 	} else if !data.SetOverloadBit.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SetOverloadBit = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "set-overload-bit.on-startup.time-to-advertise.time-to-advertise-number"); value.Exists() {
+	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.time-to-advertise.time-to-advertise-number"); value.Exists() {
 		data.SetOverloadBitOnStartupTimeToAdvertise = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "set-overload-bit.on-startup.wait-for-bgp"); value.Exists() {
+	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.wait-for-bgp"); value.Exists() {
 		data.SetOverloadBitOnStartupWaitForBgp = types.BoolValue(true)
 	} else if !data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SetOverloadBitOnStartupWaitForBgp = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "set-overload-bit.advertise.external"); value.Exists() {
+	if value := gjson.GetBytes(res, "set-overload-bit.advertise.external"); value.Exists() {
 		data.SetOverloadBitAdvertiseExternal = types.BoolValue(true)
 	} else if !data.SetOverloadBitAdvertiseExternal.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SetOverloadBitAdvertiseExternal = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "set-overload-bit.advertise.interlevel"); value.Exists() {
+	if value := gjson.GetBytes(res, "set-overload-bit.advertise.interlevel"); value.Exists() {
 		data.SetOverloadBitAdvertiseInterlevel = types.BoolValue(true)
 	} else if !data.SetOverloadBitAdvertiseInterlevel.IsNull() {
 		// Only set to false if it was previously set in state
 		data.SetOverloadBitAdvertiseInterlevel = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "set-overload-bit-levels.set-overload-bit-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "set-overload-bit-levels.set-overload-bit-level"); value.Exists() {
 		data.SetOverloadBitLevels = make([]RouterISISSetOverloadBitLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISSetOverloadBitLevels{}
@@ -2994,10 +2993,10 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "lsp-mtu"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-mtu"); value.Exists() {
 		data.LspMtu = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "lsp-mtu-levels.lsp-mtu-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-mtu-levels.lsp-mtu-level"); value.Exists() {
 		data.LspMtuLevels = make([]RouterISISLspMtuLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISLspMtuLevels{}
@@ -3011,43 +3010,43 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "extended-admin-group"); value.Exists() {
+	if value := gjson.GetBytes(res, "extended-admin-group"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.ExtendedAdminGroup = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "nsr"); value.Exists() {
+	if value := gjson.GetBytes(res, "nsr"); value.Exists() {
 		data.Nsr = types.BoolValue(true)
 	} else if !data.Nsr.IsNull() {
 		// Only set to false if it was previously set in state
 		data.Nsr = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "nsr-restart-time"); value.Exists() {
+	if value := gjson.GetBytes(res, "nsr-restart-time"); value.Exists() {
 		data.NsrRestartTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "nsf.cisco"); value.Exists() {
+	if value := gjson.GetBytes(res, "nsf.cisco"); value.Exists() {
 		data.NsfCisco = types.BoolValue(true)
 	} else if !data.NsfCisco.IsNull() {
 		// Only set to false if it was previously set in state
 		data.NsfCisco = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "nsf.ietf"); value.Exists() {
+	if value := gjson.GetBytes(res, "nsf.ietf"); value.Exists() {
 		data.NsfIetf = types.BoolValue(true)
 	} else if !data.NsfIetf.IsNull() {
 		// Only set to false if it was previously set in state
 		data.NsfIetf = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "nsf.lifetime"); value.Exists() {
+	if value := gjson.GetBytes(res, "nsf.lifetime"); value.Exists() {
 		data.NsfLifetime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "nsf.interface-timer"); value.Exists() {
+	if value := gjson.GetBytes(res, "nsf.interface-timer"); value.Exists() {
 		data.NsfInterfaceTimer = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "nsf.interface-expires"); value.Exists() {
+	if value := gjson.GetBytes(res, "nsf.interface-expires"); value.Exists() {
 		data.NsfInterfaceExpires = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "lsp-check-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-check-interval"); value.Exists() {
 		data.LspCheckInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "lsp-check-interval-levels.lsp-check-interval-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-check-interval-levels.lsp-check-interval-level"); value.Exists() {
 		data.LspCheckIntervalLevels = make([]RouterISISLspCheckIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISLspCheckIntervalLevels{}
@@ -3061,16 +3060,16 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "lsp-gen-interval.maximum-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-gen-interval.maximum-wait"); value.Exists() {
 		data.LspGenIntervalMaximumWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "lsp-gen-interval.initial-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-gen-interval.initial-wait"); value.Exists() {
 		data.LspGenIntervalInitialWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "lsp-gen-interval.secondary-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-gen-interval.secondary-wait"); value.Exists() {
 		data.LspGenIntervalSecondaryWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "lsp-gen-interval-levels.lsp-gen-interval-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-gen-interval-levels.lsp-gen-interval-level"); value.Exists() {
 		data.LspGenIntervalLevels = make([]RouterISISLspGenIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISLspGenIntervalLevels{}
@@ -3090,52 +3089,52 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "adjacency.stagger"); value.Exists() {
+	if value := gjson.GetBytes(res, "adjacency.stagger"); value.Exists() {
 		data.AdjacencyStagger = types.BoolValue(true)
 	} else if !data.AdjacencyStagger.IsNull() {
 		// Only set to false if it was previously set in state
 		data.AdjacencyStagger = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "adjacency.stagger.initial-neighbors"); value.Exists() {
+	if value := gjson.GetBytes(res, "adjacency.stagger.initial-neighbors"); value.Exists() {
 		data.AdjacencyStaggerInitialNeighbors = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "adjacency.stagger.max-neighbors"); value.Exists() {
+	if value := gjson.GetBytes(res, "adjacency.stagger.max-neighbors"); value.Exists() {
 		data.AdjacencyStaggerMaxNeighbors = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "hostname.dynamic.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "hostname.dynamic.disable"); value.Exists() {
 		data.HostnameDynamicDisable = types.BoolValue(true)
 	} else if !data.HostnameDynamicDisable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.HostnameDynamicDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "is-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "is-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.IsType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "multi-part-tlv.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "multi-part-tlv.disable"); value.Exists() {
 		data.MultiPartTlvDisable = types.BoolValue(true)
 	} else if !data.MultiPartTlvDisable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MultiPartTlvDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "multi-part-tlv.disable.neighbor"); value.Exists() {
+	if value := gjson.GetBytes(res, "multi-part-tlv.disable.neighbor"); value.Exists() {
 		data.MultiPartTlvDisableNeighbor = types.BoolValue(true)
 	} else if !data.MultiPartTlvDisableNeighbor.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MultiPartTlvDisableNeighbor = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "multi-part-tlv.disable.prefix-tlvs"); value.Exists() {
+	if value := gjson.GetBytes(res, "multi-part-tlv.disable.prefix-tlvs"); value.Exists() {
 		data.MultiPartTlvDisablePrefixTlvs = types.BoolValue(true)
 	} else if !data.MultiPartTlvDisablePrefixTlvs.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MultiPartTlvDisablePrefixTlvs = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "multi-part-tlv.disable.router-capability"); value.Exists() {
+	if value := gjson.GetBytes(res, "multi-part-tlv.disable.router-capability"); value.Exists() {
 		data.MultiPartTlvDisableRouterCapability = types.BoolValue(true)
 	} else if !data.MultiPartTlvDisableRouterCapability.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MultiPartTlvDisableRouterCapability = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "multi-part-tlv.disable-levels.disable-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "multi-part-tlv.disable-levels.disable-level"); value.Exists() {
 		data.MultiPartTlvDisableLevels = make([]RouterISISMultiPartTlvDisableLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISMultiPartTlvDisableLevels{}
@@ -3164,29 +3163,29 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "log.adjacency.changes"); value.Exists() {
+	if value := gjson.GetBytes(res, "log.adjacency.changes"); value.Exists() {
 		data.LogAdjacencyChanges = types.BoolValue(true)
 	} else if !data.LogAdjacencyChanges.IsNull() {
 		// Only set to false if it was previously set in state
 		data.LogAdjacencyChanges = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "log.pdu.drops"); value.Exists() {
+	if value := gjson.GetBytes(res, "log.pdu.drops"); value.Exists() {
 		data.LogPduDrops = types.BoolValue(true)
 	} else if !data.LogPduDrops.IsNull() {
 		// Only set to false if it was previously set in state
 		data.LogPduDrops = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "log.format.brief"); value.Exists() {
+	if value := gjson.GetBytes(res, "log.format.brief"); value.Exists() {
 		data.LogFormatBrief = types.BoolValue(true)
 	} else if !data.LogFormatBrief.IsNull() {
 		// Only set to false if it was previously set in state
 		data.LogFormatBrief = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "log.sizes.size"); value.Exists() {
+	if value := gjson.GetBytes(res, "log.sizes.size"); value.Exists() {
 		data.LogSizes = make([]RouterISISLogSizes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISLogSizes{}
-			if cValue := v.Get("log-type"); cValue.Exists() {
+			if cValue := v.Get("log-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.LogType = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("size-number"); cValue.Exists() {
@@ -3196,7 +3195,7 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "lsp-password.accept-levels.accept-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.accept-levels.accept-level"); value.Exists() {
 		data.LspPasswordAcceptLevels = make([]RouterISISLspPasswordAcceptLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISLspPasswordAcceptLevels{}
@@ -3207,64 +3206,64 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.text.password-options.send-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.text.password-options.send-only"); value.Exists() {
 		data.LspPasswordTextSendOnly = types.BoolValue(true)
 	} else if !data.LspPasswordTextSendOnly.IsNull() {
 		// Only set to false if it was previously set in state
 		data.LspPasswordTextSendOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.text.password-options.snp.send-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.text.password-options.snp.send-only"); value.Exists() {
 		data.LspPasswordTextSnpSendOnly = types.BoolValue(true)
 	} else if !data.LspPasswordTextSnpSendOnly.IsNull() {
 		// Only set to false if it was previously set in state
 		data.LspPasswordTextSnpSendOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.text.password-options.enable-poi"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.text.password-options.enable-poi"); value.Exists() {
 		data.LspPasswordTextEnablePoi = types.BoolValue(true)
 	} else if !data.LspPasswordTextEnablePoi.IsNull() {
 		// Only set to false if it was previously set in state
 		data.LspPasswordTextEnablePoi = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.hmac-md5.password-options.send-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.hmac-md5.password-options.send-only"); value.Exists() {
 		data.LspPasswordHmacMd5SendOnly = types.BoolValue(true)
 	} else if !data.LspPasswordHmacMd5SendOnly.IsNull() {
 		// Only set to false if it was previously set in state
 		data.LspPasswordHmacMd5SendOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.hmac-md5.password-options.snp.send-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.hmac-md5.password-options.snp.send-only"); value.Exists() {
 		data.LspPasswordHmacMd5SnpSendOnly = types.BoolValue(true)
 	} else if !data.LspPasswordHmacMd5SnpSendOnly.IsNull() {
 		// Only set to false if it was previously set in state
 		data.LspPasswordHmacMd5SnpSendOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.hmac-md5.password-options.enable-poi"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.hmac-md5.password-options.enable-poi"); value.Exists() {
 		data.LspPasswordHmacMd5EnablePoi = types.BoolValue(true)
 	} else if !data.LspPasswordHmacMd5EnablePoi.IsNull() {
 		// Only set to false if it was previously set in state
 		data.LspPasswordHmacMd5EnablePoi = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.keychain.keychain-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.keychain-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.LspPasswordKeychain = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.keychain.send-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.send-only"); value.Exists() {
 		data.LspPasswordKeychainSendOnly = types.BoolValue(true)
 	} else if !data.LspPasswordKeychainSendOnly.IsNull() {
 		// Only set to false if it was previously set in state
 		data.LspPasswordKeychainSendOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.keychain.snp.send-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.snp.send-only"); value.Exists() {
 		data.LspPasswordKeychainSnpSendOnly = types.BoolValue(true)
 	} else if !data.LspPasswordKeychainSnpSendOnly.IsNull() {
 		// Only set to false if it was previously set in state
 		data.LspPasswordKeychainSnpSendOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.keychain.enable-poi"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.enable-poi"); value.Exists() {
 		data.LspPasswordKeychainEnablePoi = types.BoolValue(true)
 	} else if !data.LspPasswordKeychainEnablePoi.IsNull() {
 		// Only set to false if it was previously set in state
 		data.LspPasswordKeychainEnablePoi = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-password-levels.lsp-password-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password-levels.lsp-password-level"); value.Exists() {
 		data.LspPasswordLevels = make([]RouterISISLspPasswordLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISLspPasswordLevels{}
@@ -3307,7 +3306,7 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 				// Only set to false if it was previously set
 				item.HmacMd5EnablePoi = types.BoolValue(false)
 			}
-			if cValue := v.Get("keychain.keychain-name"); cValue.Exists() {
+			if cValue := v.Get("keychain.keychain-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.KeychainName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("keychain.send-only"); cValue.Exists() {
@@ -3332,43 +3331,43 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "authentication-check.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "authentication-check.disable"); value.Exists() {
 		data.AuthenticationCheckDisable = types.BoolValue(true)
 	} else if !data.AuthenticationCheckDisable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.AuthenticationCheckDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "iid.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "iid.disable"); value.Exists() {
 		data.IidDisable = types.BoolValue(true)
 	} else if !data.IidDisable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.IidDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.ldp.sync"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
 		data.MplsLdpSync = types.BoolValue(true)
 	} else if !data.MplsLdpSync.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MplsLdpSync = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.ldp.sync.level"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.ldp.sync.level"); value.Exists() {
 		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "protocol.shutdown"); value.Exists() {
+	if value := gjson.GetBytes(res, "protocol.shutdown"); value.Exists() {
 		data.ProtocolShutdown = types.BoolValue(true)
 	} else if !data.ProtocolShutdown.IsNull() {
 		// Only set to false if it was previously set in state
 		data.ProtocolShutdown = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "min-lsp-arrivaltime.initial-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "min-lsp-arrivaltime.initial-wait"); value.Exists() {
 		data.MinLspArrivalInitialWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "min-lsp-arrivaltime.secondary-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "min-lsp-arrivaltime.secondary-wait"); value.Exists() {
 		data.MinLspArrivalSecondaryWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "min-lsp-arrivaltime.maximum-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "min-lsp-arrivaltime.maximum-wait"); value.Exists() {
 		data.MinLspArrivalMaximumWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "min-lsp-arrivaltime-levels.min-lsp-arrivaltime-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "min-lsp-arrivaltime-levels.min-lsp-arrivaltime-level"); value.Exists() {
 		data.MinLspArrivalLevels = make([]RouterISISMinLspArrivalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISMinLspArrivalLevels{}
@@ -3388,58 +3387,58 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "max-metric"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric"); value.Exists() {
 		data.MaxMetric = types.BoolValue(true)
 	} else if !data.MaxMetric.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MaxMetric = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "max-metric.on-startup.advertise.advertise-number"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric.on-startup.advertise.advertise-number"); value.Exists() {
 		data.MaxMetricOnStartupAdvertise = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "max-metric.on-startup.wait-for-bgp"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric.on-startup.wait-for-bgp"); value.Exists() {
 		data.MaxMetricOnStartupWaitForBgp = types.BoolValue(true)
 	} else if !data.MaxMetricOnStartupWaitForBgp.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MaxMetricOnStartupWaitForBgp = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "max-metric.external"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric.external"); value.Exists() {
 		data.MaxMetricExternal = types.BoolValue(true)
 	} else if !data.MaxMetricExternal.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MaxMetricExternal = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "max-metric.interlevel"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric.interlevel"); value.Exists() {
 		data.MaxMetricInterlevel = types.BoolValue(true)
 	} else if !data.MaxMetricInterlevel.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MaxMetricInterlevel = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "max-metric.default-route"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric.default-route"); value.Exists() {
 		data.MaxMetricDefaultRoute = types.BoolValue(true)
 	} else if !data.MaxMetricDefaultRoute.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MaxMetricDefaultRoute = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "max-metric.srv6-locator"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric.srv6-locator"); value.Exists() {
 		data.MaxMetricSrv6Locator = types.BoolValue(true)
 	} else if !data.MaxMetricSrv6Locator.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MaxMetricSrv6Locator = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "max-metric.te"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric.te"); value.Exists() {
 		data.MaxMetricTe = types.BoolValue(true)
 	} else if !data.MaxMetricTe.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MaxMetricTe = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "max-metric.delay"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric.delay"); value.Exists() {
 		data.MaxMetricDelay = types.BoolValue(true)
 	} else if !data.MaxMetricDelay.IsNull() {
 		// Only set to false if it was previously set in state
 		data.MaxMetricDelay = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "max-metric-levels.max-metric-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric-levels.max-metric-level"); value.Exists() {
 		data.MaxMetricLevels = make([]RouterISISMaxMetricLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISMaxMetricLevels{}
@@ -3495,40 +3494,40 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "distribute.link-state"); value.Exists() {
+	if value := gjson.GetBytes(res, "distribute.link-state"); value.Exists() {
 		data.DistributeLinkState = types.BoolValue(true)
 	} else if !data.DistributeLinkState.IsNull() {
 		// Only set to false if it was previously set in state
 		data.DistributeLinkState = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "distribute.link-state.level"); value.Exists() {
+	if value := gjson.GetBytes(res, "distribute.link-state.level"); value.Exists() {
 		data.DistributeLinkStateLevel = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "distribute.link-state.instance-id"); value.Exists() {
+	if value := gjson.GetBytes(res, "distribute.link-state.instance-id"); value.Exists() {
 		data.DistributeLinkStateInstanceId = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "distribute.link-state.throttle"); value.Exists() {
+	if value := gjson.GetBytes(res, "distribute.link-state.throttle"); value.Exists() {
 		data.DistributeLinkStateThrottle = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "distribute.link-state.exclude-interarea"); value.Exists() {
+	if value := gjson.GetBytes(res, "distribute.link-state.exclude-interarea"); value.Exists() {
 		data.DistributeLinkStateExcludeInterarea = types.BoolValue(true)
 	} else if !data.DistributeLinkStateExcludeInterarea.IsNull() {
 		// Only set to false if it was previously set in state
 		data.DistributeLinkStateExcludeInterarea = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "distribute.link-state.exclude-external"); value.Exists() {
+	if value := gjson.GetBytes(res, "distribute.link-state.exclude-external"); value.Exists() {
 		data.DistributeLinkStateExcludeExternal = types.BoolValue(true)
 	} else if !data.DistributeLinkStateExcludeExternal.IsNull() {
 		// Only set to false if it was previously set in state
 		data.DistributeLinkStateExcludeExternal = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "distribute.link-state.route-policy"); value.Exists() {
+	if value := gjson.GetBytes(res, "distribute.link-state.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.DistributeLinkStateRoutePolicy = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "max-lsp-lifetime"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-lsp-lifetime"); value.Exists() {
 		data.MaxLspLifetime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "max-lsp-lifetime-levels.max-lsp-lifetime-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-lsp-lifetime-levels.max-lsp-lifetime-level"); value.Exists() {
 		data.MaxLspLifetimeLevels = make([]RouterISISMaxLspLifetimeLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISMaxLspLifetimeLevels{}
@@ -3542,43 +3541,43 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "instance-id"); value.Exists() {
+	if value := gjson.GetBytes(res, "instance-id"); value.Exists() {
 		data.InstanceId = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "hello-padding"); value.Exists() {
+	if value := gjson.GetBytes(res, "hello-padding"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.HelloPadding = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "lsp-fast-flooding"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-fast-flooding"); value.Exists() {
 		data.LspFastFlooding = types.BoolValue(true)
 	} else if !data.LspFastFlooding.IsNull() {
 		// Only set to false if it was previously set in state
 		data.LspFastFlooding = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-fast-flooding.max-lsp-tx"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-fast-flooding.max-lsp-tx"); value.Exists() {
 		data.LspFastFloodingMaxLspTx = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "lsp-fast-flooding.remote-psnp-delay"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-fast-flooding.remote-psnp-delay"); value.Exists() {
 		data.LspFastFloodingRemotePsnpDelay = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "psnp-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "psnp-interval"); value.Exists() {
 		data.PsnpInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "nets.net"); value.Exists() {
+	if value := gjson.GetBytes(res, "nets.net"); value.Exists() {
 		data.Nets = make([]RouterISISNets, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISNets{}
-			if cValue := v.Get("net-id"); cValue.Exists() {
+			if cValue := v.Get("net-id"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.NetId = types.StringValue(cValue.String())
 			}
 			data.Nets = append(data.Nets, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "affinity-maps.affinity-map"); value.Exists() {
+	if value := gjson.GetBytes(res, "affinity-maps.affinity-map"); value.Exists() {
 		data.AffinityMaps = make([]RouterISISAffinityMaps, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAffinityMaps{}
-			if cValue := v.Get("affinity-attribute-name"); cValue.Exists() {
+			if cValue := v.Get("affinity-attribute-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.AffinityName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("bit-position"); cValue.Exists() {
@@ -3588,29 +3587,29 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "ignore-lsp-errors.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "ignore-lsp-errors.disable"); value.Exists() {
 		data.IgnoreLspErrorsDisable = types.BoolValue(true)
 	} else if !data.IgnoreLspErrorsDisable.IsNull() {
 		// Only set to false if it was previously set in state
 		data.IgnoreLspErrorsDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "purge-transmit.strict"); value.Exists() {
+	if value := gjson.GetBytes(res, "purge-transmit.strict"); value.Exists() {
 		data.PurgeTransmitStrict = types.BoolValue(true)
 	} else if !data.PurgeTransmitStrict.IsNull() {
 		// Only set to false if it was previously set in state
 		data.PurgeTransmitStrict = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "purge-transmit.strict.strict-value"); value.Exists() {
+	if value := gjson.GetBytes(res, "purge-transmit.strict.strict-value"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.PurgeTransmitStrictValue = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "srlg.admin-weight"); value.Exists() {
+	if value := gjson.GetBytes(res, "srlg.admin-weight"); value.Exists() {
 		data.SrlgAdminWeight = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "srlg.names.name"); value.Exists() {
+	if value := gjson.GetBytes(res, "srlg.names.name"); value.Exists() {
 		data.SrlgNames = make([]RouterISISSrlgNames, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISSrlgNames{}
-			if cValue := v.Get("srlg-name"); cValue.Exists() {
+			if cValue := v.Get("srlg-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.SrlgName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("admin-weight"); cValue.Exists() {
@@ -3620,10 +3619,10 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 				item.StaticIpv4Addresses = make([]RouterISISSrlgNamesStaticIpv4Addresses, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := RouterISISSrlgNamesStaticIpv4Addresses{}
-					if ccValue := cv.Get("local-end-point"); ccValue.Exists() {
+					if ccValue := cv.Get("local-end-point"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
 						cItem.LocalEndPoint = types.StringValue(ccValue.String())
 					}
-					if ccValue := cv.Get("remote-end-point"); ccValue.Exists() {
+					if ccValue := cv.Get("remote-end-point"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
 						cItem.RemoteEndPoint = types.StringValue(ccValue.String())
 					}
 					item.StaticIpv4Addresses = append(item.StaticIpv4Addresses, cItem)
@@ -3634,7 +3633,7 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "flex-algoes.flex-algo"); value.Exists() {
+	if value := gjson.GetBytes(res, "flex-algoes.flex-algo"); value.Exists() {
 		data.FlexAlgos = make([]RouterISISFlexAlgos, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISFlexAlgos{}
@@ -3650,7 +3649,7 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("priority"); cValue.Exists() {
 				item.Priority = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("metric-type"); cValue.Exists() {
+			if cValue := v.Get("metric-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.MetricType = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("advertise-definition"); cValue.Exists() {
@@ -3746,16 +3745,16 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 				item.AddressFamily = make([]RouterISISFlexAlgosAddressFamily, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := RouterISISFlexAlgosAddressFamily{}
-					if ccValue := cv.Get("af-name"); ccValue.Exists() {
+					if ccValue := cv.Get("af-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
 						cItem.AfName = types.StringValue(ccValue.String())
 					}
-					if ccValue := cv.Get("saf-name"); ccValue.Exists() {
+					if ccValue := cv.Get("saf-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
 						cItem.SafName = types.StringValue(ccValue.String())
 					}
 					if ccValue := cv.Get("maximum-paths.number-of-paths"); ccValue.Exists() {
 						cItem.MaximumPaths = types.Int64Value(ccValue.Int())
 					}
-					if ccValue := cv.Get("maximum-paths.route-policy"); ccValue.Exists() {
+					if ccValue := cv.Get("maximum-paths.route-policy"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
 						cItem.MaximumPathsRoutePolicy = types.StringValue(ccValue.String())
 					}
 					item.AddressFamily = append(item.AddressFamily, cItem)
@@ -3772,31 +3771,22 @@ func (data *RouterISIS) fromBody(ctx context.Context, res gjson.Result) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "segment-routing.global-block.lower-bound-of-srgb"); value.Exists() {
+func (data *RouterISISData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "segment-routing.global-block.lower-bound-of-srgb"); value.Exists() {
 		data.SegmentRoutingGlobalBlockLowerBound = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "segment-routing.global-block.upper-bound-of-srgb"); value.Exists() {
+	if value := gjson.GetBytes(res, "segment-routing.global-block.upper-bound-of-srgb"); value.Exists() {
 		data.SegmentRoutingGlobalBlockUpperBound = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "receive.application.flex-algo.delay.app-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "receive.application.flex-algo.delay.app-only"); value.Exists() {
 		data.ReceiveApplicationFlexAlgoDelayAppOnly = types.BoolValue(true)
 	} else {
 		data.ReceiveApplicationFlexAlgoDelayAppOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-refresh-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-refresh-interval"); value.Exists() {
 		data.LspRefreshInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "lsp-refresh-interval-levels.lsp-refresh-interval-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-refresh-interval-levels.lsp-refresh-interval-level"); value.Exists() {
 		data.LspRefreshIntervalLevels = make([]RouterISISLspRefreshIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISLspRefreshIntervalLevels{}
@@ -3810,35 +3800,35 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "oor-set-overload-bit.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "oor-set-overload-bit.disable"); value.Exists() {
 		data.OorSetOverloadBitDisable = types.BoolValue(true)
 	} else {
 		data.OorSetOverloadBitDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "set-overload-bit"); value.Exists() {
+	if value := gjson.GetBytes(res, "set-overload-bit"); value.Exists() {
 		data.SetOverloadBit = types.BoolValue(true)
 	} else {
 		data.SetOverloadBit = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "set-overload-bit.on-startup.time-to-advertise.time-to-advertise-number"); value.Exists() {
+	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.time-to-advertise.time-to-advertise-number"); value.Exists() {
 		data.SetOverloadBitOnStartupTimeToAdvertise = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "set-overload-bit.on-startup.wait-for-bgp"); value.Exists() {
+	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.wait-for-bgp"); value.Exists() {
 		data.SetOverloadBitOnStartupWaitForBgp = types.BoolValue(true)
 	} else {
 		data.SetOverloadBitOnStartupWaitForBgp = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "set-overload-bit.advertise.external"); value.Exists() {
+	if value := gjson.GetBytes(res, "set-overload-bit.advertise.external"); value.Exists() {
 		data.SetOverloadBitAdvertiseExternal = types.BoolValue(true)
 	} else {
 		data.SetOverloadBitAdvertiseExternal = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "set-overload-bit.advertise.interlevel"); value.Exists() {
+	if value := gjson.GetBytes(res, "set-overload-bit.advertise.interlevel"); value.Exists() {
 		data.SetOverloadBitAdvertiseInterlevel = types.BoolValue(true)
 	} else {
 		data.SetOverloadBitAdvertiseInterlevel = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "set-overload-bit-levels.set-overload-bit-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "set-overload-bit-levels.set-overload-bit-level"); value.Exists() {
 		data.SetOverloadBitLevels = make([]RouterISISSetOverloadBitLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISSetOverloadBitLevels{}
@@ -3867,10 +3857,10 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "lsp-mtu"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-mtu"); value.Exists() {
 		data.LspMtu = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "lsp-mtu-levels.lsp-mtu-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-mtu-levels.lsp-mtu-level"); value.Exists() {
 		data.LspMtuLevels = make([]RouterISISLspMtuLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISLspMtuLevels{}
@@ -3884,40 +3874,40 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "extended-admin-group"); value.Exists() {
+	if value := gjson.GetBytes(res, "extended-admin-group"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.ExtendedAdminGroup = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "nsr"); value.Exists() {
+	if value := gjson.GetBytes(res, "nsr"); value.Exists() {
 		data.Nsr = types.BoolValue(true)
 	} else {
 		data.Nsr = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "nsr-restart-time"); value.Exists() {
+	if value := gjson.GetBytes(res, "nsr-restart-time"); value.Exists() {
 		data.NsrRestartTime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "nsf.cisco"); value.Exists() {
+	if value := gjson.GetBytes(res, "nsf.cisco"); value.Exists() {
 		data.NsfCisco = types.BoolValue(true)
 	} else {
 		data.NsfCisco = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "nsf.ietf"); value.Exists() {
+	if value := gjson.GetBytes(res, "nsf.ietf"); value.Exists() {
 		data.NsfIetf = types.BoolValue(true)
 	} else {
 		data.NsfIetf = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "nsf.lifetime"); value.Exists() {
+	if value := gjson.GetBytes(res, "nsf.lifetime"); value.Exists() {
 		data.NsfLifetime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "nsf.interface-timer"); value.Exists() {
+	if value := gjson.GetBytes(res, "nsf.interface-timer"); value.Exists() {
 		data.NsfInterfaceTimer = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "nsf.interface-expires"); value.Exists() {
+	if value := gjson.GetBytes(res, "nsf.interface-expires"); value.Exists() {
 		data.NsfInterfaceExpires = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "lsp-check-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-check-interval"); value.Exists() {
 		data.LspCheckInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "lsp-check-interval-levels.lsp-check-interval-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-check-interval-levels.lsp-check-interval-level"); value.Exists() {
 		data.LspCheckIntervalLevels = make([]RouterISISLspCheckIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISLspCheckIntervalLevels{}
@@ -3931,16 +3921,16 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "lsp-gen-interval.maximum-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-gen-interval.maximum-wait"); value.Exists() {
 		data.LspGenIntervalMaximumWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "lsp-gen-interval.initial-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-gen-interval.initial-wait"); value.Exists() {
 		data.LspGenIntervalInitialWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "lsp-gen-interval.secondary-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-gen-interval.secondary-wait"); value.Exists() {
 		data.LspGenIntervalSecondaryWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "lsp-gen-interval-levels.lsp-gen-interval-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-gen-interval-levels.lsp-gen-interval-level"); value.Exists() {
 		data.LspGenIntervalLevels = make([]RouterISISLspGenIntervalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISLspGenIntervalLevels{}
@@ -3960,46 +3950,46 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "adjacency.stagger"); value.Exists() {
+	if value := gjson.GetBytes(res, "adjacency.stagger"); value.Exists() {
 		data.AdjacencyStagger = types.BoolValue(true)
 	} else {
 		data.AdjacencyStagger = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "adjacency.stagger.initial-neighbors"); value.Exists() {
+	if value := gjson.GetBytes(res, "adjacency.stagger.initial-neighbors"); value.Exists() {
 		data.AdjacencyStaggerInitialNeighbors = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "adjacency.stagger.max-neighbors"); value.Exists() {
+	if value := gjson.GetBytes(res, "adjacency.stagger.max-neighbors"); value.Exists() {
 		data.AdjacencyStaggerMaxNeighbors = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "hostname.dynamic.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "hostname.dynamic.disable"); value.Exists() {
 		data.HostnameDynamicDisable = types.BoolValue(true)
 	} else {
 		data.HostnameDynamicDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "is-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "is-type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.IsType = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "multi-part-tlv.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "multi-part-tlv.disable"); value.Exists() {
 		data.MultiPartTlvDisable = types.BoolValue(true)
 	} else {
 		data.MultiPartTlvDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "multi-part-tlv.disable.neighbor"); value.Exists() {
+	if value := gjson.GetBytes(res, "multi-part-tlv.disable.neighbor"); value.Exists() {
 		data.MultiPartTlvDisableNeighbor = types.BoolValue(true)
 	} else {
 		data.MultiPartTlvDisableNeighbor = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "multi-part-tlv.disable.prefix-tlvs"); value.Exists() {
+	if value := gjson.GetBytes(res, "multi-part-tlv.disable.prefix-tlvs"); value.Exists() {
 		data.MultiPartTlvDisablePrefixTlvs = types.BoolValue(true)
 	} else {
 		data.MultiPartTlvDisablePrefixTlvs = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "multi-part-tlv.disable.router-capability"); value.Exists() {
+	if value := gjson.GetBytes(res, "multi-part-tlv.disable.router-capability"); value.Exists() {
 		data.MultiPartTlvDisableRouterCapability = types.BoolValue(true)
 	} else {
 		data.MultiPartTlvDisableRouterCapability = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "multi-part-tlv.disable-levels.disable-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "multi-part-tlv.disable-levels.disable-level"); value.Exists() {
 		data.MultiPartTlvDisableLevels = make([]RouterISISMultiPartTlvDisableLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISMultiPartTlvDisableLevels{}
@@ -4025,26 +4015,26 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "log.adjacency.changes"); value.Exists() {
+	if value := gjson.GetBytes(res, "log.adjacency.changes"); value.Exists() {
 		data.LogAdjacencyChanges = types.BoolValue(true)
 	} else {
 		data.LogAdjacencyChanges = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "log.pdu.drops"); value.Exists() {
+	if value := gjson.GetBytes(res, "log.pdu.drops"); value.Exists() {
 		data.LogPduDrops = types.BoolValue(true)
 	} else {
 		data.LogPduDrops = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "log.format.brief"); value.Exists() {
+	if value := gjson.GetBytes(res, "log.format.brief"); value.Exists() {
 		data.LogFormatBrief = types.BoolValue(true)
 	} else {
 		data.LogFormatBrief = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "log.sizes.size"); value.Exists() {
+	if value := gjson.GetBytes(res, "log.sizes.size"); value.Exists() {
 		data.LogSizes = make([]RouterISISLogSizes, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISLogSizes{}
-			if cValue := v.Get("log-type"); cValue.Exists() {
+			if cValue := v.Get("log-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.LogType = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("size-number"); cValue.Exists() {
@@ -4054,86 +4044,71 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "lsp-password.accept.encrypted"); value.Exists() {
-		data.LspPasswordAcceptEncrypted = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "lsp-password.accept-levels.accept-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.accept-levels.accept-level"); value.Exists() {
 		data.LspPasswordAcceptLevels = make([]RouterISISLspPasswordAcceptLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISLspPasswordAcceptLevels{}
 			if cValue := v.Get("level-number"); cValue.Exists() {
 				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("encrypted"); cValue.Exists() {
-				item.Encrypted = types.StringValue(cValue.String())
-			}
 			data.LspPasswordAcceptLevels = append(data.LspPasswordAcceptLevels, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.text.password-options.encrypted"); value.Exists() {
-		data.LspPasswordTextEncrypted = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.text.password-options.send-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.text.password-options.send-only"); value.Exists() {
 		data.LspPasswordTextSendOnly = types.BoolValue(true)
 	} else {
 		data.LspPasswordTextSendOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.text.password-options.snp.send-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.text.password-options.snp.send-only"); value.Exists() {
 		data.LspPasswordTextSnpSendOnly = types.BoolValue(true)
 	} else {
 		data.LspPasswordTextSnpSendOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.text.password-options.enable-poi"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.text.password-options.enable-poi"); value.Exists() {
 		data.LspPasswordTextEnablePoi = types.BoolValue(true)
 	} else {
 		data.LspPasswordTextEnablePoi = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.hmac-md5.password-options.encrypted"); value.Exists() {
-		data.LspPasswordHmacMd5Encrypted = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.hmac-md5.password-options.send-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.hmac-md5.password-options.send-only"); value.Exists() {
 		data.LspPasswordHmacMd5SendOnly = types.BoolValue(true)
 	} else {
 		data.LspPasswordHmacMd5SendOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.hmac-md5.password-options.snp.send-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.hmac-md5.password-options.snp.send-only"); value.Exists() {
 		data.LspPasswordHmacMd5SnpSendOnly = types.BoolValue(true)
 	} else {
 		data.LspPasswordHmacMd5SnpSendOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.hmac-md5.password-options.enable-poi"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.hmac-md5.password-options.enable-poi"); value.Exists() {
 		data.LspPasswordHmacMd5EnablePoi = types.BoolValue(true)
 	} else {
 		data.LspPasswordHmacMd5EnablePoi = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.keychain.keychain-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.keychain-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.LspPasswordKeychain = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.keychain.send-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.send-only"); value.Exists() {
 		data.LspPasswordKeychainSendOnly = types.BoolValue(true)
 	} else {
 		data.LspPasswordKeychainSendOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.keychain.snp.send-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.snp.send-only"); value.Exists() {
 		data.LspPasswordKeychainSnpSendOnly = types.BoolValue(true)
 	} else {
 		data.LspPasswordKeychainSnpSendOnly = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-password.lsp-password-option.keychain.enable-poi"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.enable-poi"); value.Exists() {
 		data.LspPasswordKeychainEnablePoi = types.BoolValue(true)
 	} else {
 		data.LspPasswordKeychainEnablePoi = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-password-levels.lsp-password-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-password-levels.lsp-password-level"); value.Exists() {
 		data.LspPasswordLevels = make([]RouterISISLspPasswordLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISLspPasswordLevels{}
 			if cValue := v.Get("level-number"); cValue.Exists() {
 				item.LevelNumber = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("text.password-options.encrypted"); cValue.Exists() {
-				item.TextEncrypted = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("text.password-options.send-only"); cValue.Exists() {
 				item.TextSendOnly = types.BoolValue(true)
@@ -4150,9 +4125,6 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 			} else {
 				item.TextEnablePoi = types.BoolValue(false)
 			}
-			if cValue := v.Get("hmac-md5.password-options.encrypted"); cValue.Exists() {
-				item.HmacMd5Encrypted = types.StringValue(cValue.String())
-			}
 			if cValue := v.Get("hmac-md5.password-options.send-only"); cValue.Exists() {
 				item.HmacMd5SendOnly = types.BoolValue(true)
 			} else {
@@ -4168,7 +4140,7 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 			} else {
 				item.HmacMd5EnablePoi = types.BoolValue(false)
 			}
-			if cValue := v.Get("keychain.keychain-name"); cValue.Exists() {
+			if cValue := v.Get("keychain.keychain-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.KeychainName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("keychain.send-only"); cValue.Exists() {
@@ -4190,39 +4162,39 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "authentication-check.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "authentication-check.disable"); value.Exists() {
 		data.AuthenticationCheckDisable = types.BoolValue(true)
 	} else {
 		data.AuthenticationCheckDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "iid.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "iid.disable"); value.Exists() {
 		data.IidDisable = types.BoolValue(true)
 	} else {
 		data.IidDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.ldp.sync"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
 		data.MplsLdpSync = types.BoolValue(true)
 	} else {
 		data.MplsLdpSync = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "mpls.ldp.sync.level"); value.Exists() {
+	if value := gjson.GetBytes(res, "mpls.ldp.sync.level"); value.Exists() {
 		data.MplsLdpSyncLevel = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "protocol.shutdown"); value.Exists() {
+	if value := gjson.GetBytes(res, "protocol.shutdown"); value.Exists() {
 		data.ProtocolShutdown = types.BoolValue(true)
 	} else {
 		data.ProtocolShutdown = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "min-lsp-arrivaltime.initial-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "min-lsp-arrivaltime.initial-wait"); value.Exists() {
 		data.MinLspArrivalInitialWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "min-lsp-arrivaltime.secondary-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "min-lsp-arrivaltime.secondary-wait"); value.Exists() {
 		data.MinLspArrivalSecondaryWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "min-lsp-arrivaltime.maximum-wait"); value.Exists() {
+	if value := gjson.GetBytes(res, "min-lsp-arrivaltime.maximum-wait"); value.Exists() {
 		data.MinLspArrivalMaximumWait = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "min-lsp-arrivaltime-levels.min-lsp-arrivaltime-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "min-lsp-arrivaltime-levels.min-lsp-arrivaltime-level"); value.Exists() {
 		data.MinLspArrivalLevels = make([]RouterISISMinLspArrivalLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISMinLspArrivalLevels{}
@@ -4242,50 +4214,50 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "max-metric"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric"); value.Exists() {
 		data.MaxMetric = types.BoolValue(true)
 	} else {
 		data.MaxMetric = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "max-metric.on-startup.advertise.advertise-number"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric.on-startup.advertise.advertise-number"); value.Exists() {
 		data.MaxMetricOnStartupAdvertise = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "max-metric.on-startup.wait-for-bgp"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric.on-startup.wait-for-bgp"); value.Exists() {
 		data.MaxMetricOnStartupWaitForBgp = types.BoolValue(true)
 	} else {
 		data.MaxMetricOnStartupWaitForBgp = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "max-metric.external"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric.external"); value.Exists() {
 		data.MaxMetricExternal = types.BoolValue(true)
 	} else {
 		data.MaxMetricExternal = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "max-metric.interlevel"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric.interlevel"); value.Exists() {
 		data.MaxMetricInterlevel = types.BoolValue(true)
 	} else {
 		data.MaxMetricInterlevel = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "max-metric.default-route"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric.default-route"); value.Exists() {
 		data.MaxMetricDefaultRoute = types.BoolValue(true)
 	} else {
 		data.MaxMetricDefaultRoute = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "max-metric.srv6-locator"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric.srv6-locator"); value.Exists() {
 		data.MaxMetricSrv6Locator = types.BoolValue(true)
 	} else {
 		data.MaxMetricSrv6Locator = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "max-metric.te"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric.te"); value.Exists() {
 		data.MaxMetricTe = types.BoolValue(true)
 	} else {
 		data.MaxMetricTe = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "max-metric.delay"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric.delay"); value.Exists() {
 		data.MaxMetricDelay = types.BoolValue(true)
 	} else {
 		data.MaxMetricDelay = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "max-metric-levels.max-metric-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-metric-levels.max-metric-level"); value.Exists() {
 		data.MaxMetricLevels = make([]RouterISISMaxMetricLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISMaxMetricLevels{}
@@ -4334,37 +4306,37 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "distribute.link-state"); value.Exists() {
+	if value := gjson.GetBytes(res, "distribute.link-state"); value.Exists() {
 		data.DistributeLinkState = types.BoolValue(true)
 	} else {
 		data.DistributeLinkState = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "distribute.link-state.level"); value.Exists() {
+	if value := gjson.GetBytes(res, "distribute.link-state.level"); value.Exists() {
 		data.DistributeLinkStateLevel = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "distribute.link-state.instance-id"); value.Exists() {
+	if value := gjson.GetBytes(res, "distribute.link-state.instance-id"); value.Exists() {
 		data.DistributeLinkStateInstanceId = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "distribute.link-state.throttle"); value.Exists() {
+	if value := gjson.GetBytes(res, "distribute.link-state.throttle"); value.Exists() {
 		data.DistributeLinkStateThrottle = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "distribute.link-state.exclude-interarea"); value.Exists() {
+	if value := gjson.GetBytes(res, "distribute.link-state.exclude-interarea"); value.Exists() {
 		data.DistributeLinkStateExcludeInterarea = types.BoolValue(true)
 	} else {
 		data.DistributeLinkStateExcludeInterarea = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "distribute.link-state.exclude-external"); value.Exists() {
+	if value := gjson.GetBytes(res, "distribute.link-state.exclude-external"); value.Exists() {
 		data.DistributeLinkStateExcludeExternal = types.BoolValue(true)
 	} else {
 		data.DistributeLinkStateExcludeExternal = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "distribute.link-state.route-policy"); value.Exists() {
+	if value := gjson.GetBytes(res, "distribute.link-state.route-policy"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.DistributeLinkStateRoutePolicy = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "max-lsp-lifetime"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-lsp-lifetime"); value.Exists() {
 		data.MaxLspLifetime = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "max-lsp-lifetime-levels.max-lsp-lifetime-level"); value.Exists() {
+	if value := gjson.GetBytes(res, "max-lsp-lifetime-levels.max-lsp-lifetime-level"); value.Exists() {
 		data.MaxLspLifetimeLevels = make([]RouterISISMaxLspLifetimeLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISMaxLspLifetimeLevels{}
@@ -4378,42 +4350,42 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "instance-id"); value.Exists() {
+	if value := gjson.GetBytes(res, "instance-id"); value.Exists() {
 		data.InstanceId = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "hello-padding"); value.Exists() {
+	if value := gjson.GetBytes(res, "hello-padding"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.HelloPadding = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "lsp-fast-flooding"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-fast-flooding"); value.Exists() {
 		data.LspFastFlooding = types.BoolValue(true)
 	} else {
 		data.LspFastFlooding = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "lsp-fast-flooding.max-lsp-tx"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-fast-flooding.max-lsp-tx"); value.Exists() {
 		data.LspFastFloodingMaxLspTx = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "lsp-fast-flooding.remote-psnp-delay"); value.Exists() {
+	if value := gjson.GetBytes(res, "lsp-fast-flooding.remote-psnp-delay"); value.Exists() {
 		data.LspFastFloodingRemotePsnpDelay = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "psnp-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "psnp-interval"); value.Exists() {
 		data.PsnpInterval = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "nets.net"); value.Exists() {
+	if value := gjson.GetBytes(res, "nets.net"); value.Exists() {
 		data.Nets = make([]RouterISISNets, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISNets{}
-			if cValue := v.Get("net-id"); cValue.Exists() {
+			if cValue := v.Get("net-id"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.NetId = types.StringValue(cValue.String())
 			}
 			data.Nets = append(data.Nets, item)
 			return true
 		})
 	}
-	if value := res.Get(prefix + "affinity-maps.affinity-map"); value.Exists() {
+	if value := gjson.GetBytes(res, "affinity-maps.affinity-map"); value.Exists() {
 		data.AffinityMaps = make([]RouterISISAffinityMaps, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAffinityMaps{}
-			if cValue := v.Get("affinity-attribute-name"); cValue.Exists() {
+			if cValue := v.Get("affinity-attribute-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.AffinityName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("bit-position"); cValue.Exists() {
@@ -4423,27 +4395,27 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "ignore-lsp-errors.disable"); value.Exists() {
+	if value := gjson.GetBytes(res, "ignore-lsp-errors.disable"); value.Exists() {
 		data.IgnoreLspErrorsDisable = types.BoolValue(true)
 	} else {
 		data.IgnoreLspErrorsDisable = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "purge-transmit.strict"); value.Exists() {
+	if value := gjson.GetBytes(res, "purge-transmit.strict"); value.Exists() {
 		data.PurgeTransmitStrict = types.BoolValue(true)
 	} else {
 		data.PurgeTransmitStrict = types.BoolValue(false)
 	}
-	if value := res.Get(prefix + "purge-transmit.strict.strict-value"); value.Exists() {
+	if value := gjson.GetBytes(res, "purge-transmit.strict.strict-value"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
 		data.PurgeTransmitStrictValue = types.StringValue(value.String())
 	}
-	if value := res.Get(prefix + "srlg.admin-weight"); value.Exists() {
+	if value := gjson.GetBytes(res, "srlg.admin-weight"); value.Exists() {
 		data.SrlgAdminWeight = types.Int64Value(value.Int())
 	}
-	if value := res.Get(prefix + "srlg.names.name"); value.Exists() {
+	if value := gjson.GetBytes(res, "srlg.names.name"); value.Exists() {
 		data.SrlgNames = make([]RouterISISSrlgNames, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISSrlgNames{}
-			if cValue := v.Get("srlg-name"); cValue.Exists() {
+			if cValue := v.Get("srlg-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.SrlgName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("admin-weight"); cValue.Exists() {
@@ -4453,10 +4425,10 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 				item.StaticIpv4Addresses = make([]RouterISISSrlgNamesStaticIpv4Addresses, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := RouterISISSrlgNamesStaticIpv4Addresses{}
-					if ccValue := cv.Get("local-end-point"); ccValue.Exists() {
+					if ccValue := cv.Get("local-end-point"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
 						cItem.LocalEndPoint = types.StringValue(ccValue.String())
 					}
-					if ccValue := cv.Get("remote-end-point"); ccValue.Exists() {
+					if ccValue := cv.Get("remote-end-point"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
 						cItem.RemoteEndPoint = types.StringValue(ccValue.String())
 					}
 					item.StaticIpv4Addresses = append(item.StaticIpv4Addresses, cItem)
@@ -4467,7 +4439,7 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 			return true
 		})
 	}
-	if value := res.Get(prefix + "flex-algoes.flex-algo"); value.Exists() {
+	if value := gjson.GetBytes(res, "flex-algoes.flex-algo"); value.Exists() {
 		data.FlexAlgos = make([]RouterISISFlexAlgos, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISFlexAlgos{}
@@ -4483,7 +4455,7 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 			if cValue := v.Get("priority"); cValue.Exists() {
 				item.Priority = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("metric-type"); cValue.Exists() {
+			if cValue := v.Get("metric-type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
 				item.MetricType = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("advertise-definition"); cValue.Exists() {
@@ -4571,16 +4543,16 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 				item.AddressFamily = make([]RouterISISFlexAlgosAddressFamily, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
 					cItem := RouterISISFlexAlgosAddressFamily{}
-					if ccValue := cv.Get("af-name"); ccValue.Exists() {
+					if ccValue := cv.Get("af-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
 						cItem.AfName = types.StringValue(ccValue.String())
 					}
-					if ccValue := cv.Get("saf-name"); ccValue.Exists() {
+					if ccValue := cv.Get("saf-name"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
 						cItem.SafName = types.StringValue(ccValue.String())
 					}
 					if ccValue := cv.Get("maximum-paths.number-of-paths"); ccValue.Exists() {
 						cItem.MaximumPaths = types.Int64Value(ccValue.Int())
 					}
-					if ccValue := cv.Get("maximum-paths.route-policy"); ccValue.Exists() {
+					if ccValue := cv.Get("maximum-paths.route-policy"); ccValue.Exists() && (ccValue.Type == gjson.String || ccValue.Type == gjson.Number) {
 						cItem.MaximumPathsRoutePolicy = types.StringValue(ccValue.String())
 					}
 					item.AddressFamily = append(item.AddressFamily, cItem)
@@ -4597,7 +4569,7 @@ func (data *RouterISISData) fromBody(ctx context.Context, res gjson.Result) {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) []string {
+func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS, version string) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.FlexAlgos {
 		keys := [...]string{"flex-algo-number"}
@@ -4652,86 +4624,86 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 						}
 						if found {
 							if !state.FlexAlgos[i].AddressFamily[ci].MaximumPathsRoutePolicy.IsNull() && data.FlexAlgos[j].AddressFamily[cj].MaximumPathsRoutePolicy.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/address-families/address-family%v/maximum-paths", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString, "address-families/address-family", ckeyString), "maximum-paths"))
 							}
 							if !state.FlexAlgos[i].AddressFamily[ci].MaximumPaths.IsNull() && data.FlexAlgos[j].AddressFamily[cj].MaximumPaths.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/address-families/address-family%v/maximum-paths", state.getPath(), keyString, ckeyString))
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString, "address-families/address-family", ckeyString), "maximum-paths"))
 							}
 							break
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/address-families/address-family%v", state.getPath(), keyString, ckeyString))
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString, "address-families/address-family", ckeyString))
 					}
 				}
 				if !state.FlexAlgos[i].UcmpDisable.IsNull() && data.FlexAlgos[j].UcmpDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/ucmp/disable", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "ucmp/disable"))
 				}
 				if !state.FlexAlgos[i].DataPlaneIp.IsNull() && data.FlexAlgos[j].DataPlaneIp.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/data-plane/ip", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "data-plane/ip"))
 				}
 				if !state.FlexAlgos[i].DataPlaneSegmentRouting.IsNull() && data.FlexAlgos[j].DataPlaneSegmentRouting.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/data-plane/segment-routing", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "data-plane/segment-routing"))
 				}
 				if !state.FlexAlgos[i].MicroloopAvoidanceDisable.IsNull() && data.FlexAlgos[j].MicroloopAvoidanceDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/microloop/avoidance/disable", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "microloop/avoidance/disable"))
 				}
 				if !state.FlexAlgos[i].FastRerouteDisable.IsNull() && data.FlexAlgos[j].FastRerouteDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/fast-reroute/disable", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "fast-reroute/disable"))
 				}
 				if !state.FlexAlgos[i].SrlgExcludeAny.IsNull() && data.FlexAlgos[j].SrlgExcludeAny.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/srlg/exclude-any/exclude-any-argument", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "srlg/exclude-any/exclude-any-argument"))
 				}
 				if !state.FlexAlgos[i].AffinityReverseIncludeAll.IsNull() && data.FlexAlgos[j].AffinityReverseIncludeAll.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/affinity/reverse/include-all/include-all-argument", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "affinity/reverse/include-all/include-all-argument"))
 				}
 				if !state.FlexAlgos[i].AffinityReverseIncludeAny.IsNull() && data.FlexAlgos[j].AffinityReverseIncludeAny.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/affinity/reverse/include-any/include-any-argument", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "affinity/reverse/include-any/include-any-argument"))
 				}
 				if !state.FlexAlgos[i].AffinityReverseExcludeAny.IsNull() && data.FlexAlgos[j].AffinityReverseExcludeAny.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/affinity/reverse/exclude-any/exclude-any-argument", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "affinity/reverse/exclude-any/exclude-any-argument"))
 				}
 				if !state.FlexAlgos[i].AffinityIncludeAll.IsNull() && data.FlexAlgos[j].AffinityIncludeAll.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/affinity/include-all/include-all-argument", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "affinity/include-all/include-all-argument"))
 				}
 				if !state.FlexAlgos[i].AffinityIncludeAny.IsNull() && data.FlexAlgos[j].AffinityIncludeAny.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/affinity/include-any/include-any-argument", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "affinity/include-any/include-any-argument"))
 				}
 				if !state.FlexAlgos[i].AffinityExcludeAny.IsNull() && data.FlexAlgos[j].AffinityExcludeAny.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/affinity/exclude-any/exclude-any-argument", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "affinity/exclude-any/exclude-any-argument"))
 				}
 				if !state.FlexAlgos[i].AutoCostReferenceGroupMode.IsNull() && data.FlexAlgos[j].AutoCostReferenceGroupMode.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/auto-cost/reference/group-mode", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "auto-cost/reference/group-mode"))
 				}
 				if !state.FlexAlgos[i].AutoCostReferenceBandwidthGranularity.IsNull() && data.FlexAlgos[j].AutoCostReferenceBandwidthGranularity.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/auto-cost/reference/reference-bandwidth/granularity", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "auto-cost/reference/reference-bandwidth/granularity"))
 				}
 				if !state.FlexAlgos[i].AutoCostReferenceBandwidth.IsNull() && data.FlexAlgos[j].AutoCostReferenceBandwidth.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/auto-cost/reference/reference-bandwidth", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "auto-cost/reference/reference-bandwidth"))
 				}
 				if !state.FlexAlgos[i].PrefixMetric.IsNull() && data.FlexAlgos[j].PrefixMetric.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/prefix-metric", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "prefix-metric"))
 				}
 				if !state.FlexAlgos[i].AdvertiseDefinition.IsNull() && data.FlexAlgos[j].AdvertiseDefinition.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/advertise-definition", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "advertise-definition"))
 				}
 				if !state.FlexAlgos[i].MetricType.IsNull() && data.FlexAlgos[j].MetricType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/metric-type", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "metric-type"))
 				}
 				if !state.FlexAlgos[i].Priority.IsNull() && data.FlexAlgos[j].Priority.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/priority", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "priority"))
 				}
 				if !state.FlexAlgos[i].MaximumDelay.IsNull() && data.FlexAlgos[j].MaximumDelay.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/maximum-delay", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "maximum-delay"))
 				}
 				if !state.FlexAlgos[i].MinimumBandwidth.IsNull() && data.FlexAlgos[j].MinimumBandwidth.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/minimum-bandwidth", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString), "minimum-bandwidth"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "flex-algoes/flex-algo", keyString))
 		}
 	}
 	for i := range state.SrlgNames {
@@ -4790,30 +4762,30 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 						}
 					}
 					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/srlg/names/name%v/static/ipv4/addresses/addresss%v", state.getPath(), keyString, ckeyString))
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "srlg/names/name", keyString, "static/ipv4/addresses/addresss", ckeyString))
 					}
 				}
 				if !state.SrlgNames[i].AdminWeight.IsNull() && data.SrlgNames[j].AdminWeight.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/srlg/names/name%v/admin-weight", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "srlg/names/name", keyString), "admin-weight"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/srlg/names/name%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "srlg/names/name", keyString))
 		}
 	}
 	if !state.SrlgAdminWeight.IsNull() && data.SrlgAdminWeight.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/srlg/admin-weight", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "srlg/admin-weight"))
 	}
 	if !state.PurgeTransmitStrictValue.IsNull() && data.PurgeTransmitStrictValue.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/purge-transmit/strict/strict-value", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "purge-transmit/strict/strict-value"))
 	}
 	if !state.PurgeTransmitStrict.IsNull() && data.PurgeTransmitStrict.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/purge-transmit/strict", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "purge-transmit/strict"))
 	}
 	if !state.IgnoreLspErrorsDisable.IsNull() && data.IgnoreLspErrorsDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ignore-lsp-errors/disable", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ignore-lsp-errors/disable"))
 	}
 	for i := range state.AffinityMaps {
 		keys := [...]string{"affinity-attribute-name"}
@@ -4839,13 +4811,13 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 			}
 			if found {
 				if !state.AffinityMaps[i].BitPosition.IsNull() && data.AffinityMaps[j].BitPosition.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/affinity-maps/affinity-map%v/bit-position", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "affinity-maps/affinity-map", keyString), "bit-position"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/affinity-maps/affinity-map%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "affinity-maps/affinity-map", keyString))
 		}
 	}
 	for i := range state.Nets {
@@ -4875,26 +4847,26 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/nets/net%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "nets/net", keyString))
 		}
 	}
 	if !state.PsnpInterval.IsNull() && data.PsnpInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/psnp-interval", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "psnp-interval"))
 	}
 	if !state.LspFastFloodingRemotePsnpDelay.IsNull() && data.LspFastFloodingRemotePsnpDelay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-fast-flooding/remote-psnp-delay", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-fast-flooding/remote-psnp-delay"))
 	}
 	if !state.LspFastFloodingMaxLspTx.IsNull() && data.LspFastFloodingMaxLspTx.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-fast-flooding/max-lsp-tx", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-fast-flooding/max-lsp-tx"))
 	}
 	if !state.LspFastFlooding.IsNull() && data.LspFastFlooding.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-fast-flooding", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-fast-flooding"))
 	}
 	if !state.HelloPadding.IsNull() && data.HelloPadding.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-padding", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "hello-padding"))
 	}
 	if !state.InstanceId.IsNull() && data.InstanceId.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/instance-id", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "instance-id"))
 	}
 	for i := range state.MaxLspLifetimeLevels {
 		keys := [...]string{"level-number"}
@@ -4920,38 +4892,38 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 			}
 			if found {
 				if !state.MaxLspLifetimeLevels[i].MaxLspLifetime.IsNull() && data.MaxLspLifetimeLevels[j].MaxLspLifetime.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/max-lsp-lifetime-levels/max-lsp-lifetime-level%v/max-lsp-lifetime", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "max-lsp-lifetime-levels/max-lsp-lifetime-level", keyString), "max-lsp-lifetime"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/max-lsp-lifetime-levels/max-lsp-lifetime-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "max-lsp-lifetime-levels/max-lsp-lifetime-level", keyString))
 		}
 	}
 	if !state.MaxLspLifetime.IsNull() && data.MaxLspLifetime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/max-lsp-lifetime", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "max-lsp-lifetime"))
 	}
 	if !state.DistributeLinkStateRoutePolicy.IsNull() && data.DistributeLinkStateRoutePolicy.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state/route-policy", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "distribute/link-state/route-policy"))
 	}
 	if !state.DistributeLinkStateExcludeExternal.IsNull() && data.DistributeLinkStateExcludeExternal.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state/exclude-external", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "distribute/link-state/exclude-external"))
 	}
 	if !state.DistributeLinkStateExcludeInterarea.IsNull() && data.DistributeLinkStateExcludeInterarea.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state/exclude-interarea", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "distribute/link-state/exclude-interarea"))
 	}
 	if !state.DistributeLinkStateThrottle.IsNull() && data.DistributeLinkStateThrottle.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state/throttle", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "distribute/link-state/throttle"))
 	}
 	if !state.DistributeLinkStateInstanceId.IsNull() && data.DistributeLinkStateInstanceId.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state/instance-id", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "distribute/link-state/instance-id"))
 	}
 	if !state.DistributeLinkStateLevel.IsNull() && data.DistributeLinkStateLevel.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state/level", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "distribute/link-state/level"))
 	}
 	if !state.DistributeLinkState.IsNull() && data.DistributeLinkState.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "distribute/link-state"))
 	}
 	for i := range state.MaxMetricLevels {
 		keys := [...]string{"level-number"}
@@ -4977,62 +4949,62 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 			}
 			if found {
 				if !state.MaxMetricLevels[i].Delay.IsNull() && data.MaxMetricLevels[j].Delay.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/max-metric-levels/max-metric-level%v/delay", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "max-metric-levels/max-metric-level", keyString), "delay"))
 				}
 				if !state.MaxMetricLevels[i].Te.IsNull() && data.MaxMetricLevels[j].Te.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/max-metric-levels/max-metric-level%v/te", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "max-metric-levels/max-metric-level", keyString), "te"))
 				}
 				if !state.MaxMetricLevels[i].Srv6Locator.IsNull() && data.MaxMetricLevels[j].Srv6Locator.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/max-metric-levels/max-metric-level%v/srv6-locator", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "max-metric-levels/max-metric-level", keyString), "srv6-locator"))
 				}
 				if !state.MaxMetricLevels[i].DefaultRoute.IsNull() && data.MaxMetricLevels[j].DefaultRoute.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/max-metric-levels/max-metric-level%v/default-route", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "max-metric-levels/max-metric-level", keyString), "default-route"))
 				}
 				if !state.MaxMetricLevels[i].Interlevel.IsNull() && data.MaxMetricLevels[j].Interlevel.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/max-metric-levels/max-metric-level%v/interlevel", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "max-metric-levels/max-metric-level", keyString), "interlevel"))
 				}
 				if !state.MaxMetricLevels[i].External.IsNull() && data.MaxMetricLevels[j].External.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/max-metric-levels/max-metric-level%v/external", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "max-metric-levels/max-metric-level", keyString), "external"))
 				}
 				if !state.MaxMetricLevels[i].OnStartupWaitForBgp.IsNull() && data.MaxMetricLevels[j].OnStartupWaitForBgp.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/max-metric-levels/max-metric-level%v/on-startup", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "max-metric-levels/max-metric-level", keyString), "on-startup"))
 				}
 				if !state.MaxMetricLevels[i].OnStartupAdvertise.IsNull() && data.MaxMetricLevels[j].OnStartupAdvertise.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/max-metric-levels/max-metric-level%v/on-startup/advertise", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "max-metric-levels/max-metric-level", keyString), "on-startup/advertise"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/max-metric-levels/max-metric-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "max-metric-levels/max-metric-level", keyString))
 		}
 	}
 	if !state.MaxMetricDelay.IsNull() && data.MaxMetricDelay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/max-metric/delay", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "max-metric/delay"))
 	}
 	if !state.MaxMetricTe.IsNull() && data.MaxMetricTe.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/max-metric/te", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "max-metric/te"))
 	}
 	if !state.MaxMetricSrv6Locator.IsNull() && data.MaxMetricSrv6Locator.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/max-metric/srv6-locator", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "max-metric/srv6-locator"))
 	}
 	if !state.MaxMetricDefaultRoute.IsNull() && data.MaxMetricDefaultRoute.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/max-metric/default-route", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "max-metric/default-route"))
 	}
 	if !state.MaxMetricInterlevel.IsNull() && data.MaxMetricInterlevel.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/max-metric/interlevel", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "max-metric/interlevel"))
 	}
 	if !state.MaxMetricExternal.IsNull() && data.MaxMetricExternal.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/max-metric/external", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "max-metric/external"))
 	}
 	if !state.MaxMetricOnStartupWaitForBgp.IsNull() && data.MaxMetricOnStartupWaitForBgp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/max-metric/on-startup", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "max-metric/on-startup"))
 	}
 	if !state.MaxMetricOnStartupAdvertise.IsNull() && data.MaxMetricOnStartupAdvertise.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/max-metric/on-startup/advertise", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "max-metric/on-startup/advertise"))
 	}
 	if !state.MaxMetric.IsNull() && data.MaxMetric.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/max-metric", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "max-metric"))
 	}
 	for i := range state.MinLspArrivalLevels {
 		keys := [...]string{"level-number"}
@@ -5058,44 +5030,44 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 			}
 			if found {
 				if !state.MinLspArrivalLevels[i].MaximumWait.IsNull() && data.MinLspArrivalLevels[j].MaximumWait.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/min-lsp-arrivaltime-levels/min-lsp-arrivaltime-level%v/maximum-wait", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "min-lsp-arrivaltime-levels/min-lsp-arrivaltime-level", keyString), "maximum-wait"))
 				}
 				if !state.MinLspArrivalLevels[i].SecondaryWait.IsNull() && data.MinLspArrivalLevels[j].SecondaryWait.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/min-lsp-arrivaltime-levels/min-lsp-arrivaltime-level%v/secondary-wait", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "min-lsp-arrivaltime-levels/min-lsp-arrivaltime-level", keyString), "secondary-wait"))
 				}
 				if !state.MinLspArrivalLevels[i].InitialWait.IsNull() && data.MinLspArrivalLevels[j].InitialWait.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/min-lsp-arrivaltime-levels/min-lsp-arrivaltime-level%v/initial-wait", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "min-lsp-arrivaltime-levels/min-lsp-arrivaltime-level", keyString), "initial-wait"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/min-lsp-arrivaltime-levels/min-lsp-arrivaltime-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "min-lsp-arrivaltime-levels/min-lsp-arrivaltime-level", keyString))
 		}
 	}
 	if !state.MinLspArrivalMaximumWait.IsNull() && data.MinLspArrivalMaximumWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/min-lsp-arrivaltime/maximum-wait", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "min-lsp-arrivaltime/maximum-wait"))
 	}
 	if !state.MinLspArrivalSecondaryWait.IsNull() && data.MinLspArrivalSecondaryWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/min-lsp-arrivaltime/secondary-wait", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "min-lsp-arrivaltime/secondary-wait"))
 	}
 	if !state.MinLspArrivalInitialWait.IsNull() && data.MinLspArrivalInitialWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/min-lsp-arrivaltime/initial-wait", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "min-lsp-arrivaltime/initial-wait"))
 	}
 	if !state.ProtocolShutdown.IsNull() && data.ProtocolShutdown.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/protocol/shutdown", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "protocol/shutdown"))
 	}
 	if !state.MplsLdpSyncLevel.IsNull() && data.MplsLdpSyncLevel.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/ldp/sync/level", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "mpls/ldp/sync/level"))
 	}
 	if !state.MplsLdpSync.IsNull() && data.MplsLdpSync.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/ldp/sync", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "mpls/ldp/sync"))
 	}
 	if !state.IidDisable.IsNull() && data.IidDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/iid/disable", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "iid/disable"))
 	}
 	if !state.AuthenticationCheckDisable.IsNull() && data.AuthenticationCheckDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/authentication-check/disable", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "authentication-check/disable"))
 	}
 	for i := range state.LspPasswordLevels {
 		keys := [...]string{"level-number"}
@@ -5121,83 +5093,83 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 			}
 			if found {
 				if !state.LspPasswordLevels[i].KeychainEnablePoi.IsNull() && data.LspPasswordLevels[j].KeychainEnablePoi.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/keychain/enable-poi", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-password-levels/lsp-password-level", keyString), "keychain/enable-poi"))
 				}
 				if !state.LspPasswordLevels[i].KeychainSnpSendOnly.IsNull() && data.LspPasswordLevels[j].KeychainSnpSendOnly.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/keychain/snp/send-only", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-password-levels/lsp-password-level", keyString), "keychain/snp/send-only"))
 				}
 				if !state.LspPasswordLevels[i].KeychainSendOnly.IsNull() && data.LspPasswordLevels[j].KeychainSendOnly.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/keychain/send-only", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-password-levels/lsp-password-level", keyString), "keychain/send-only"))
 				}
 				if !state.LspPasswordLevels[i].KeychainName.IsNull() && data.LspPasswordLevels[j].KeychainName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/keychain", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-password-levels/lsp-password-level", keyString), "keychain"))
 				}
 				if !state.LspPasswordLevels[i].HmacMd5EnablePoi.IsNull() && data.LspPasswordLevels[j].HmacMd5EnablePoi.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/hmac-md5/password-options", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-password-levels/lsp-password-level", keyString), "hmac-md5/password-options"))
 				}
 				if !state.LspPasswordLevels[i].HmacMd5SnpSendOnly.IsNull() && data.LspPasswordLevels[j].HmacMd5SnpSendOnly.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/hmac-md5/password-options", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-password-levels/lsp-password-level", keyString), "hmac-md5/password-options"))
 				}
 				if !state.LspPasswordLevels[i].HmacMd5SendOnly.IsNull() && data.LspPasswordLevels[j].HmacMd5SendOnly.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/hmac-md5/password-options", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-password-levels/lsp-password-level", keyString), "hmac-md5/password-options"))
 				}
 				if !state.LspPasswordLevels[i].HmacMd5Encrypted.IsNull() && data.LspPasswordLevels[j].HmacMd5Encrypted.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/hmac-md5/password-options", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-password-levels/lsp-password-level", keyString), "hmac-md5/password-options"))
 				}
 				if !state.LspPasswordLevels[i].TextEnablePoi.IsNull() && data.LspPasswordLevels[j].TextEnablePoi.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/text/password-options", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-password-levels/lsp-password-level", keyString), "text/password-options"))
 				}
 				if !state.LspPasswordLevels[i].TextSnpSendOnly.IsNull() && data.LspPasswordLevels[j].TextSnpSendOnly.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/text/password-options", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-password-levels/lsp-password-level", keyString), "text/password-options"))
 				}
 				if !state.LspPasswordLevels[i].TextSendOnly.IsNull() && data.LspPasswordLevels[j].TextSendOnly.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/text/password-options", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-password-levels/lsp-password-level", keyString), "text/password-options"))
 				}
 				if !state.LspPasswordLevels[i].TextEncrypted.IsNull() && data.LspPasswordLevels[j].TextEncrypted.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/text/password-options", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-password-levels/lsp-password-level", keyString), "text/password-options"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-password-levels/lsp-password-level", keyString))
 		}
 	}
 	if !state.LspPasswordKeychainEnablePoi.IsNull() && data.LspPasswordKeychainEnablePoi.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/enable-poi", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-password/lsp-password-option/keychain/enable-poi"))
 	}
 	if !state.LspPasswordKeychainSnpSendOnly.IsNull() && data.LspPasswordKeychainSnpSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/snp/send-only", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-password/lsp-password-option/keychain/snp/send-only"))
 	}
 	if !state.LspPasswordKeychainSendOnly.IsNull() && data.LspPasswordKeychainSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/send-only", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-password/lsp-password-option/keychain/send-only"))
 	}
 	if !state.LspPasswordKeychain.IsNull() && data.LspPasswordKeychain.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-password/lsp-password-option/keychain"))
 	}
 	if !state.LspPasswordHmacMd5EnablePoi.IsNull() && data.LspPasswordHmacMd5EnablePoi.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-password/lsp-password-option/hmac-md5/password-options"))
 	}
 	if !state.LspPasswordHmacMd5SnpSendOnly.IsNull() && data.LspPasswordHmacMd5SnpSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-password/lsp-password-option/hmac-md5/password-options"))
 	}
 	if !state.LspPasswordHmacMd5SendOnly.IsNull() && data.LspPasswordHmacMd5SendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-password/lsp-password-option/hmac-md5/password-options"))
 	}
 	if !state.LspPasswordHmacMd5Encrypted.IsNull() && data.LspPasswordHmacMd5Encrypted.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-password/lsp-password-option/hmac-md5/password-options"))
 	}
 	if !state.LspPasswordTextEnablePoi.IsNull() && data.LspPasswordTextEnablePoi.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-password/lsp-password-option/text/password-options"))
 	}
 	if !state.LspPasswordTextSnpSendOnly.IsNull() && data.LspPasswordTextSnpSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-password/lsp-password-option/text/password-options"))
 	}
 	if !state.LspPasswordTextSendOnly.IsNull() && data.LspPasswordTextSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-password/lsp-password-option/text/password-options"))
 	}
 	if !state.LspPasswordTextEncrypted.IsNull() && data.LspPasswordTextEncrypted.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-password/lsp-password-option/text/password-options"))
 	}
 	for i := range state.LspPasswordAcceptLevels {
 		keys := [...]string{"level-number"}
@@ -5223,17 +5195,17 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 			}
 			if found {
 				if !state.LspPasswordAcceptLevels[i].Encrypted.IsNull() && data.LspPasswordAcceptLevels[j].Encrypted.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/accept-levels/accept-level%v/encrypted", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-password/accept-levels/accept-level", keyString), "encrypted"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/accept-levels/accept-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-password/accept-levels/accept-level", keyString))
 		}
 	}
 	if !state.LspPasswordAcceptEncrypted.IsNull() && data.LspPasswordAcceptEncrypted.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/accept/encrypted", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-password/accept/encrypted"))
 	}
 	for i := range state.LogSizes {
 		keys := [...]string{"log-type"}
@@ -5259,23 +5231,23 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 			}
 			if found {
 				if !state.LogSizes[i].SizeNumber.IsNull() && data.LogSizes[j].SizeNumber.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/log/sizes/size%v/size-number", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "log/sizes/size", keyString), "size-number"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/log/sizes/size%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "log/sizes/size", keyString))
 		}
 	}
 	if !state.LogFormatBrief.IsNull() && data.LogFormatBrief.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/format/brief", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "log/format/brief"))
 	}
 	if !state.LogPduDrops.IsNull() && data.LogPduDrops.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/pdu/drops", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "log/pdu/drops"))
 	}
 	if !state.LogAdjacencyChanges.IsNull() && data.LogAdjacencyChanges.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/adjacency/changes", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "log/adjacency/changes"))
 	}
 	for i := range state.MultiPartTlvDisableLevels {
 		keys := [...]string{"level-number"}
@@ -5301,47 +5273,47 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 			}
 			if found {
 				if !state.MultiPartTlvDisableLevels[i].RouterCapability.IsNull() && data.MultiPartTlvDisableLevels[j].RouterCapability.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/multi-part-tlv/disable-levels/disable-level%v/router-capability", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "multi-part-tlv/disable-levels/disable-level", keyString), "router-capability"))
 				}
 				if !state.MultiPartTlvDisableLevels[i].PrefixTlvs.IsNull() && data.MultiPartTlvDisableLevels[j].PrefixTlvs.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/multi-part-tlv/disable-levels/disable-level%v/prefix-tlvs", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "multi-part-tlv/disable-levels/disable-level", keyString), "prefix-tlvs"))
 				}
 				if !state.MultiPartTlvDisableLevels[i].Neighbor.IsNull() && data.MultiPartTlvDisableLevels[j].Neighbor.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/multi-part-tlv/disable-levels/disable-level%v/neighbor", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "multi-part-tlv/disable-levels/disable-level", keyString), "neighbor"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/multi-part-tlv/disable-levels/disable-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "multi-part-tlv/disable-levels/disable-level", keyString))
 		}
 	}
 	if !state.MultiPartTlvDisableRouterCapability.IsNull() && data.MultiPartTlvDisableRouterCapability.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/multi-part-tlv/disable/router-capability", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "multi-part-tlv/disable/router-capability"))
 	}
 	if !state.MultiPartTlvDisablePrefixTlvs.IsNull() && data.MultiPartTlvDisablePrefixTlvs.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/multi-part-tlv/disable/prefix-tlvs", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "multi-part-tlv/disable/prefix-tlvs"))
 	}
 	if !state.MultiPartTlvDisableNeighbor.IsNull() && data.MultiPartTlvDisableNeighbor.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/multi-part-tlv/disable/neighbor", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "multi-part-tlv/disable/neighbor"))
 	}
 	if !state.MultiPartTlvDisable.IsNull() && data.MultiPartTlvDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/multi-part-tlv/disable", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "multi-part-tlv/disable"))
 	}
 	if !state.IsType.IsNull() && data.IsType.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/is-type", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "is-type"))
 	}
 	if !state.HostnameDynamicDisable.IsNull() && data.HostnameDynamicDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hostname/dynamic/disable", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "hostname/dynamic/disable"))
 	}
 	if !state.AdjacencyStaggerMaxNeighbors.IsNull() && data.AdjacencyStaggerMaxNeighbors.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/adjacency/stagger/max-neighbors", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "adjacency/stagger/max-neighbors"))
 	}
 	if !state.AdjacencyStaggerInitialNeighbors.IsNull() && data.AdjacencyStaggerInitialNeighbors.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/adjacency/stagger/initial-neighbors", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "adjacency/stagger/initial-neighbors"))
 	}
 	if !state.AdjacencyStagger.IsNull() && data.AdjacencyStagger.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/adjacency/stagger", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "adjacency/stagger"))
 	}
 	for i := range state.LspGenIntervalLevels {
 		keys := [...]string{"level-number"}
@@ -5367,29 +5339,29 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 			}
 			if found {
 				if !state.LspGenIntervalLevels[i].MaximumWait.IsNull() && data.LspGenIntervalLevels[j].MaximumWait.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-gen-interval-levels/lsp-gen-interval-level%v/maximum-wait", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-gen-interval-levels/lsp-gen-interval-level", keyString), "maximum-wait"))
 				}
 				if !state.LspGenIntervalLevels[i].SecondaryWait.IsNull() && data.LspGenIntervalLevels[j].SecondaryWait.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-gen-interval-levels/lsp-gen-interval-level%v/secondary-wait", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-gen-interval-levels/lsp-gen-interval-level", keyString), "secondary-wait"))
 				}
 				if !state.LspGenIntervalLevels[i].InitialWait.IsNull() && data.LspGenIntervalLevels[j].InitialWait.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-gen-interval-levels/lsp-gen-interval-level%v/initial-wait", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-gen-interval-levels/lsp-gen-interval-level", keyString), "initial-wait"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-gen-interval-levels/lsp-gen-interval-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-gen-interval-levels/lsp-gen-interval-level", keyString))
 		}
 	}
 	if !state.LspGenIntervalSecondaryWait.IsNull() && data.LspGenIntervalSecondaryWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-gen-interval/secondary-wait", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-gen-interval/secondary-wait"))
 	}
 	if !state.LspGenIntervalInitialWait.IsNull() && data.LspGenIntervalInitialWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-gen-interval/initial-wait", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-gen-interval/initial-wait"))
 	}
 	if !state.LspGenIntervalMaximumWait.IsNull() && data.LspGenIntervalMaximumWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-gen-interval/maximum-wait", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-gen-interval/maximum-wait"))
 	}
 	for i := range state.LspCheckIntervalLevels {
 		keys := [...]string{"level-number"}
@@ -5415,41 +5387,41 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 			}
 			if found {
 				if !state.LspCheckIntervalLevels[i].LspCheckInterval.IsNull() && data.LspCheckIntervalLevels[j].LspCheckInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-check-interval-levels/lsp-check-interval-level%v/lsp-check-interval", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-check-interval-levels/lsp-check-interval-level", keyString), "lsp-check-interval"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-check-interval-levels/lsp-check-interval-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-check-interval-levels/lsp-check-interval-level", keyString))
 		}
 	}
 	if !state.LspCheckInterval.IsNull() && data.LspCheckInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-check-interval", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-check-interval"))
 	}
 	if !state.NsfInterfaceExpires.IsNull() && data.NsfInterfaceExpires.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/interface-expires", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "nsf/interface-expires"))
 	}
 	if !state.NsfInterfaceTimer.IsNull() && data.NsfInterfaceTimer.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/interface-timer", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "nsf/interface-timer"))
 	}
 	if !state.NsfLifetime.IsNull() && data.NsfLifetime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/lifetime", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "nsf/lifetime"))
 	}
 	if !state.NsfIetf.IsNull() && data.NsfIetf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "nsf"))
 	}
 	if !state.NsfCisco.IsNull() && data.NsfCisco.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "nsf"))
 	}
 	if !state.NsrRestartTime.IsNull() && data.NsrRestartTime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsr-restart-time", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "nsr-restart-time"))
 	}
 	if !state.Nsr.IsNull() && data.Nsr.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsr", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "nsr"))
 	}
 	if !state.ExtendedAdminGroup.IsNull() && data.ExtendedAdminGroup.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/extended-admin-group", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "extended-admin-group"))
 	}
 	for i := range state.LspMtuLevels {
 		keys := [...]string{"level-number"}
@@ -5475,17 +5447,17 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 			}
 			if found {
 				if !state.LspMtuLevels[i].LspMtu.IsNull() && data.LspMtuLevels[j].LspMtu.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-mtu-levels/lsp-mtu-level%v/lsp-mtu", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-mtu-levels/lsp-mtu-level", keyString), "lsp-mtu"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-mtu-levels/lsp-mtu-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-mtu-levels/lsp-mtu-level", keyString))
 		}
 	}
 	if !state.LspMtu.IsNull() && data.LspMtu.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-mtu", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-mtu"))
 	}
 	for i := range state.SetOverloadBitLevels {
 		keys := [...]string{"level-number"}
@@ -5511,41 +5483,41 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 			}
 			if found {
 				if !state.SetOverloadBitLevels[i].AdvertiseInterlevel.IsNull() && data.SetOverloadBitLevels[j].AdvertiseInterlevel.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/advertise/interlevel", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "set-overload-bit-levels/set-overload-bit-level", keyString), "advertise/interlevel"))
 				}
 				if !state.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() && data.SetOverloadBitLevels[j].AdvertiseExternal.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/advertise/external", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "set-overload-bit-levels/set-overload-bit-level", keyString), "advertise/external"))
 				}
 				if !state.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() && data.SetOverloadBitLevels[j].OnStartupWaitForBgp.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "set-overload-bit-levels/set-overload-bit-level", keyString), "on-startup"))
 				}
 				if !state.SetOverloadBitLevels[i].OnStartupTimeToAdvertise.IsNull() && data.SetOverloadBitLevels[j].OnStartupTimeToAdvertise.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup/time-to-advertise", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "set-overload-bit-levels/set-overload-bit-level", keyString), "on-startup/time-to-advertise"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "set-overload-bit-levels/set-overload-bit-level", keyString))
 		}
 	}
 	if !state.SetOverloadBitAdvertiseInterlevel.IsNull() && data.SetOverloadBitAdvertiseInterlevel.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/advertise/interlevel", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "set-overload-bit/advertise/interlevel"))
 	}
 	if !state.SetOverloadBitAdvertiseExternal.IsNull() && data.SetOverloadBitAdvertiseExternal.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/advertise/external", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "set-overload-bit/advertise/external"))
 	}
 	if !state.SetOverloadBitOnStartupWaitForBgp.IsNull() && data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/on-startup", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "set-overload-bit/on-startup"))
 	}
 	if !state.SetOverloadBitOnStartupTimeToAdvertise.IsNull() && data.SetOverloadBitOnStartupTimeToAdvertise.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/on-startup/time-to-advertise", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "set-overload-bit/on-startup/time-to-advertise"))
 	}
 	if !state.SetOverloadBit.IsNull() && data.SetOverloadBit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "set-overload-bit"))
 	}
 	if !state.OorSetOverloadBitDisable.IsNull() && data.OorSetOverloadBitDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/oor-set-overload-bit/disable", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "oor-set-overload-bit/disable"))
 	}
 	for i := range state.LspRefreshIntervalLevels {
 		keys := [...]string{"level-number"}
@@ -5571,26 +5543,26 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 			}
 			if found {
 				if !state.LspRefreshIntervalLevels[i].LspRefreshInterval.IsNull() && data.LspRefreshIntervalLevels[j].LspRefreshInterval.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-refresh-interval-levels/lsp-refresh-interval-level%v/lsp-refresh-interval", state.getPath(), keyString))
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-refresh-interval-levels/lsp-refresh-interval-level", keyString), "lsp-refresh-interval"))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-refresh-interval-levels/lsp-refresh-interval-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "lsp-refresh-interval-levels/lsp-refresh-interval-level", keyString))
 		}
 	}
 	if !state.LspRefreshInterval.IsNull() && data.LspRefreshInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-refresh-interval", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "lsp-refresh-interval"))
 	}
 	if !state.ReceiveApplicationFlexAlgoDelayAppOnly.IsNull() && data.ReceiveApplicationFlexAlgoDelayAppOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/receive/application/flex-algo/delay/app-only", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "receive/application/flex-algo/delay/app-only"))
 	}
 	if !state.SegmentRoutingGlobalBlockUpperBound.IsNull() && data.SegmentRoutingGlobalBlockUpperBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/global-block/upper-bound-of-srgb", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/global-block/upper-bound-of-srgb"))
 	}
 	if !state.SegmentRoutingGlobalBlockLowerBound.IsNull() && data.SegmentRoutingGlobalBlockLowerBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/global-block/lower-bound-of-srgb", state.getPath()))
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "segment-routing/global-block/lower-bound-of-srgb"))
 	}
 	return deletedItems
 }
@@ -5599,7 +5571,7 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context, state *RouterISIS) []string {
+func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context, state *RouterISIS, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.FlexAlgos {
 		keys := [...]string{"flex-algo-number"}
@@ -5616,60 +5588,44 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context, state *RouterIS
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.FlexAlgos[i].UcmpDisable.IsNull() && !data.FlexAlgos[i].UcmpDisable.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.FlexAlgos) && !state.FlexAlgos[i].UcmpDisable.IsNull() && state.FlexAlgos[i].UcmpDisable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/flex-algoes/flex-algo%v/ucmp/disable", data.getXPath(), keyString))
+			if state == nil || i >= len(state.FlexAlgos) || state.FlexAlgos[i].UcmpDisable.IsNull() || state.FlexAlgos[i].UcmpDisable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "flex-algoes/flex-algo", keyString), "ucmp/disable"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.FlexAlgos[i].DataPlaneIp.IsNull() && !data.FlexAlgos[i].DataPlaneIp.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.FlexAlgos) && !state.FlexAlgos[i].DataPlaneIp.IsNull() && state.FlexAlgos[i].DataPlaneIp.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/flex-algoes/flex-algo%v/data-plane/ip", data.getXPath(), keyString))
+			if state == nil || i >= len(state.FlexAlgos) || state.FlexAlgos[i].DataPlaneIp.IsNull() || state.FlexAlgos[i].DataPlaneIp.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "flex-algoes/flex-algo", keyString), "data-plane/ip"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.FlexAlgos[i].DataPlaneSegmentRouting.IsNull() && !data.FlexAlgos[i].DataPlaneSegmentRouting.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.FlexAlgos) && !state.FlexAlgos[i].DataPlaneSegmentRouting.IsNull() && state.FlexAlgos[i].DataPlaneSegmentRouting.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/flex-algoes/flex-algo%v/data-plane/segment-routing", data.getXPath(), keyString))
+			if state == nil || i >= len(state.FlexAlgos) || state.FlexAlgos[i].DataPlaneSegmentRouting.IsNull() || state.FlexAlgos[i].DataPlaneSegmentRouting.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "flex-algoes/flex-algo", keyString), "data-plane/segment-routing"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.FlexAlgos[i].MicroloopAvoidanceDisable.IsNull() && !data.FlexAlgos[i].MicroloopAvoidanceDisable.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.FlexAlgos) && !state.FlexAlgos[i].MicroloopAvoidanceDisable.IsNull() && state.FlexAlgos[i].MicroloopAvoidanceDisable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/flex-algoes/flex-algo%v/microloop/avoidance/disable", data.getXPath(), keyString))
+			if state == nil || i >= len(state.FlexAlgos) || state.FlexAlgos[i].MicroloopAvoidanceDisable.IsNull() || state.FlexAlgos[i].MicroloopAvoidanceDisable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "flex-algoes/flex-algo", keyString), "microloop/avoidance/disable"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.FlexAlgos[i].FastRerouteDisable.IsNull() && !data.FlexAlgos[i].FastRerouteDisable.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.FlexAlgos) && !state.FlexAlgos[i].FastRerouteDisable.IsNull() && state.FlexAlgos[i].FastRerouteDisable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/flex-algoes/flex-algo%v/fast-reroute/disable", data.getXPath(), keyString))
+			if state == nil || i >= len(state.FlexAlgos) || state.FlexAlgos[i].FastRerouteDisable.IsNull() || state.FlexAlgos[i].FastRerouteDisable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "flex-algoes/flex-algo", keyString), "fast-reroute/disable"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.FlexAlgos[i].AutoCostReferenceGroupMode.IsNull() && !data.FlexAlgos[i].AutoCostReferenceGroupMode.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.FlexAlgos) && !state.FlexAlgos[i].AutoCostReferenceGroupMode.IsNull() && state.FlexAlgos[i].AutoCostReferenceGroupMode.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/flex-algoes/flex-algo%v/auto-cost/reference/group-mode", data.getXPath(), keyString))
+			if state == nil || i >= len(state.FlexAlgos) || state.FlexAlgos[i].AutoCostReferenceGroupMode.IsNull() || state.FlexAlgos[i].AutoCostReferenceGroupMode.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "flex-algoes/flex-algo", keyString), "auto-cost/reference/group-mode"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.FlexAlgos[i].PrefixMetric.IsNull() && !data.FlexAlgos[i].PrefixMetric.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.FlexAlgos) && !state.FlexAlgos[i].PrefixMetric.IsNull() && state.FlexAlgos[i].PrefixMetric.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/flex-algoes/flex-algo%v/prefix-metric", data.getXPath(), keyString))
+			if state == nil || i >= len(state.FlexAlgos) || state.FlexAlgos[i].PrefixMetric.IsNull() || state.FlexAlgos[i].PrefixMetric.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "flex-algoes/flex-algo", keyString), "prefix-metric"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.FlexAlgos[i].AdvertiseDefinition.IsNull() && !data.FlexAlgos[i].AdvertiseDefinition.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.FlexAlgos) && !state.FlexAlgos[i].AdvertiseDefinition.IsNull() && state.FlexAlgos[i].AdvertiseDefinition.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/flex-algoes/flex-algo%v/advertise-definition", data.getXPath(), keyString))
+			if state == nil || i >= len(state.FlexAlgos) || state.FlexAlgos[i].AdvertiseDefinition.IsNull() || state.FlexAlgos[i].AdvertiseDefinition.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "flex-algoes/flex-algo", keyString), "advertise-definition"))
 			}
 		}
 	}
@@ -5689,16 +5645,14 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context, state *RouterIS
 			}
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.PurgeTransmitStrict.IsNull() && !data.PurgeTransmitStrict.ValueBool() {
-		if state != nil && !state.PurgeTransmitStrict.IsNull() && state.PurgeTransmitStrict.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/purge-transmit/strict", data.getXPath()))
+		if state == nil || state.PurgeTransmitStrict.IsNull() || state.PurgeTransmitStrict.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "purge-transmit/strict"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.IgnoreLspErrorsDisable.IsNull() && !data.IgnoreLspErrorsDisable.ValueBool() {
-		if state != nil && !state.IgnoreLspErrorsDisable.IsNull() && state.IgnoreLspErrorsDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ignore-lsp-errors/disable", data.getXPath()))
+		if state == nil || state.IgnoreLspErrorsDisable.IsNull() || state.IgnoreLspErrorsDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "ignore-lsp-errors/disable"))
 		}
 	}
 	for i := range data.AffinityMaps {
@@ -5717,10 +5671,9 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context, state *RouterIS
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.LspFastFlooding.IsNull() && !data.LspFastFlooding.ValueBool() {
-		if state != nil && !state.LspFastFlooding.IsNull() && state.LspFastFlooding.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-fast-flooding", data.getXPath()))
+		if state == nil || state.LspFastFlooding.IsNull() || state.LspFastFlooding.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "lsp-fast-flooding"))
 		}
 	}
 	for i := range data.MaxLspLifetimeLevels {
@@ -5731,22 +5684,19 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context, state *RouterIS
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.DistributeLinkStateExcludeExternal.IsNull() && !data.DistributeLinkStateExcludeExternal.ValueBool() {
-		if state != nil && !state.DistributeLinkStateExcludeExternal.IsNull() && state.DistributeLinkStateExcludeExternal.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/distribute/link-state/exclude-external", data.getXPath()))
+		if state == nil || state.DistributeLinkStateExcludeExternal.IsNull() || state.DistributeLinkStateExcludeExternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "distribute/link-state/exclude-external"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.DistributeLinkStateExcludeInterarea.IsNull() && !data.DistributeLinkStateExcludeInterarea.ValueBool() {
-		if state != nil && !state.DistributeLinkStateExcludeInterarea.IsNull() && state.DistributeLinkStateExcludeInterarea.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/distribute/link-state/exclude-interarea", data.getXPath()))
+		if state == nil || state.DistributeLinkStateExcludeInterarea.IsNull() || state.DistributeLinkStateExcludeInterarea.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "distribute/link-state/exclude-interarea"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.DistributeLinkState.IsNull() && !data.DistributeLinkState.ValueBool() {
-		if state != nil && !state.DistributeLinkState.IsNull() && state.DistributeLinkState.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/distribute/link-state", data.getXPath()))
+		if state == nil || state.DistributeLinkState.IsNull() || state.DistributeLinkState.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "distribute/link-state"))
 		}
 	}
 	for i := range data.MaxMetricLevels {
@@ -5756,102 +5706,80 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context, state *RouterIS
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		// Only delete if state has true and plan has false
 		if !data.MaxMetricLevels[i].Delay.IsNull() && !data.MaxMetricLevels[i].Delay.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MaxMetricLevels) && !state.MaxMetricLevels[i].Delay.IsNull() && state.MaxMetricLevels[i].Delay.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/max-metric-levels/max-metric-level%v/delay", data.getXPath(), keyString))
+			if state == nil || i >= len(state.MaxMetricLevels) || state.MaxMetricLevels[i].Delay.IsNull() || state.MaxMetricLevels[i].Delay.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "max-metric-levels/max-metric-level", keyString), "delay"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.MaxMetricLevels[i].Te.IsNull() && !data.MaxMetricLevels[i].Te.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MaxMetricLevels) && !state.MaxMetricLevels[i].Te.IsNull() && state.MaxMetricLevels[i].Te.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/max-metric-levels/max-metric-level%v/te", data.getXPath(), keyString))
+			if state == nil || i >= len(state.MaxMetricLevels) || state.MaxMetricLevels[i].Te.IsNull() || state.MaxMetricLevels[i].Te.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "max-metric-levels/max-metric-level", keyString), "te"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.MaxMetricLevels[i].Srv6Locator.IsNull() && !data.MaxMetricLevels[i].Srv6Locator.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MaxMetricLevels) && !state.MaxMetricLevels[i].Srv6Locator.IsNull() && state.MaxMetricLevels[i].Srv6Locator.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/max-metric-levels/max-metric-level%v/srv6-locator", data.getXPath(), keyString))
+			if state == nil || i >= len(state.MaxMetricLevels) || state.MaxMetricLevels[i].Srv6Locator.IsNull() || state.MaxMetricLevels[i].Srv6Locator.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "max-metric-levels/max-metric-level", keyString), "srv6-locator"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.MaxMetricLevels[i].DefaultRoute.IsNull() && !data.MaxMetricLevels[i].DefaultRoute.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MaxMetricLevels) && !state.MaxMetricLevels[i].DefaultRoute.IsNull() && state.MaxMetricLevels[i].DefaultRoute.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/max-metric-levels/max-metric-level%v/default-route", data.getXPath(), keyString))
+			if state == nil || i >= len(state.MaxMetricLevels) || state.MaxMetricLevels[i].DefaultRoute.IsNull() || state.MaxMetricLevels[i].DefaultRoute.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "max-metric-levels/max-metric-level", keyString), "default-route"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.MaxMetricLevels[i].Interlevel.IsNull() && !data.MaxMetricLevels[i].Interlevel.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MaxMetricLevels) && !state.MaxMetricLevels[i].Interlevel.IsNull() && state.MaxMetricLevels[i].Interlevel.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/max-metric-levels/max-metric-level%v/interlevel", data.getXPath(), keyString))
+			if state == nil || i >= len(state.MaxMetricLevels) || state.MaxMetricLevels[i].Interlevel.IsNull() || state.MaxMetricLevels[i].Interlevel.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "max-metric-levels/max-metric-level", keyString), "interlevel"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.MaxMetricLevels[i].External.IsNull() && !data.MaxMetricLevels[i].External.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MaxMetricLevels) && !state.MaxMetricLevels[i].External.IsNull() && state.MaxMetricLevels[i].External.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/max-metric-levels/max-metric-level%v/external", data.getXPath(), keyString))
+			if state == nil || i >= len(state.MaxMetricLevels) || state.MaxMetricLevels[i].External.IsNull() || state.MaxMetricLevels[i].External.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "max-metric-levels/max-metric-level", keyString), "external"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.MaxMetricLevels[i].OnStartupWaitForBgp.IsNull() && !data.MaxMetricLevels[i].OnStartupWaitForBgp.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MaxMetricLevels) && !state.MaxMetricLevels[i].OnStartupWaitForBgp.IsNull() && state.MaxMetricLevels[i].OnStartupWaitForBgp.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/max-metric-levels/max-metric-level%v/on-startup", data.getXPath(), keyString))
+			if state == nil || i >= len(state.MaxMetricLevels) || state.MaxMetricLevels[i].OnStartupWaitForBgp.IsNull() || state.MaxMetricLevels[i].OnStartupWaitForBgp.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "max-metric-levels/max-metric-level", keyString), "on-startup"))
 			}
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MaxMetricDelay.IsNull() && !data.MaxMetricDelay.ValueBool() {
-		if state != nil && !state.MaxMetricDelay.IsNull() && state.MaxMetricDelay.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/max-metric/delay", data.getXPath()))
+		if state == nil || state.MaxMetricDelay.IsNull() || state.MaxMetricDelay.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "max-metric/delay"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MaxMetricTe.IsNull() && !data.MaxMetricTe.ValueBool() {
-		if state != nil && !state.MaxMetricTe.IsNull() && state.MaxMetricTe.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/max-metric/te", data.getXPath()))
+		if state == nil || state.MaxMetricTe.IsNull() || state.MaxMetricTe.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "max-metric/te"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MaxMetricSrv6Locator.IsNull() && !data.MaxMetricSrv6Locator.ValueBool() {
-		if state != nil && !state.MaxMetricSrv6Locator.IsNull() && state.MaxMetricSrv6Locator.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/max-metric/srv6-locator", data.getXPath()))
+		if state == nil || state.MaxMetricSrv6Locator.IsNull() || state.MaxMetricSrv6Locator.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "max-metric/srv6-locator"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MaxMetricDefaultRoute.IsNull() && !data.MaxMetricDefaultRoute.ValueBool() {
-		if state != nil && !state.MaxMetricDefaultRoute.IsNull() && state.MaxMetricDefaultRoute.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/max-metric/default-route", data.getXPath()))
+		if state == nil || state.MaxMetricDefaultRoute.IsNull() || state.MaxMetricDefaultRoute.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "max-metric/default-route"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MaxMetricInterlevel.IsNull() && !data.MaxMetricInterlevel.ValueBool() {
-		if state != nil && !state.MaxMetricInterlevel.IsNull() && state.MaxMetricInterlevel.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/max-metric/interlevel", data.getXPath()))
+		if state == nil || state.MaxMetricInterlevel.IsNull() || state.MaxMetricInterlevel.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "max-metric/interlevel"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MaxMetricExternal.IsNull() && !data.MaxMetricExternal.ValueBool() {
-		if state != nil && !state.MaxMetricExternal.IsNull() && state.MaxMetricExternal.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/max-metric/external", data.getXPath()))
+		if state == nil || state.MaxMetricExternal.IsNull() || state.MaxMetricExternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "max-metric/external"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MaxMetricOnStartupWaitForBgp.IsNull() && !data.MaxMetricOnStartupWaitForBgp.ValueBool() {
-		if state != nil && !state.MaxMetricOnStartupWaitForBgp.IsNull() && state.MaxMetricOnStartupWaitForBgp.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/max-metric/on-startup", data.getXPath()))
+		if state == nil || state.MaxMetricOnStartupWaitForBgp.IsNull() || state.MaxMetricOnStartupWaitForBgp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "max-metric/on-startup"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MaxMetric.IsNull() && !data.MaxMetric.ValueBool() {
-		if state != nil && !state.MaxMetric.IsNull() && state.MaxMetric.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/max-metric", data.getXPath()))
+		if state == nil || state.MaxMetric.IsNull() || state.MaxMetric.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "max-metric"))
 		}
 	}
 	for i := range data.MinLspArrivalLevels {
@@ -5862,28 +5790,24 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context, state *RouterIS
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.ProtocolShutdown.IsNull() && !data.ProtocolShutdown.ValueBool() {
-		if state != nil && !state.ProtocolShutdown.IsNull() && state.ProtocolShutdown.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/protocol/shutdown", data.getXPath()))
+		if state == nil || state.ProtocolShutdown.IsNull() || state.ProtocolShutdown.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "protocol/shutdown"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MplsLdpSync.IsNull() && !data.MplsLdpSync.ValueBool() {
-		if state != nil && !state.MplsLdpSync.IsNull() && state.MplsLdpSync.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/ldp/sync", data.getXPath()))
+		if state == nil || state.MplsLdpSync.IsNull() || state.MplsLdpSync.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "mpls/ldp/sync"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.IidDisable.IsNull() && !data.IidDisable.ValueBool() {
-		if state != nil && !state.IidDisable.IsNull() && state.IidDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/iid/disable", data.getXPath()))
+		if state == nil || state.IidDisable.IsNull() || state.IidDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "iid/disable"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.AuthenticationCheckDisable.IsNull() && !data.AuthenticationCheckDisable.ValueBool() {
-		if state != nil && !state.AuthenticationCheckDisable.IsNull() && state.AuthenticationCheckDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/authentication-check/disable", data.getXPath()))
+		if state == nil || state.AuthenticationCheckDisable.IsNull() || state.AuthenticationCheckDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "authentication-check/disable"))
 		}
 	}
 	for i := range data.LspPasswordLevels {
@@ -5893,122 +5817,95 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context, state *RouterIS
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		// Only delete if state has true and plan has false
 		if !data.LspPasswordLevels[i].KeychainEnablePoi.IsNull() && !data.LspPasswordLevels[i].KeychainEnablePoi.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.LspPasswordLevels) && !state.LspPasswordLevels[i].KeychainEnablePoi.IsNull() && state.LspPasswordLevels[i].KeychainEnablePoi.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/keychain/enable-poi", data.getXPath(), keyString))
+			if state == nil || i >= len(state.LspPasswordLevels) || state.LspPasswordLevels[i].KeychainEnablePoi.IsNull() || state.LspPasswordLevels[i].KeychainEnablePoi.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "lsp-password-levels/lsp-password-level", keyString), "keychain/enable-poi"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.LspPasswordLevels[i].KeychainSnpSendOnly.IsNull() && !data.LspPasswordLevels[i].KeychainSnpSendOnly.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.LspPasswordLevels) && !state.LspPasswordLevels[i].KeychainSnpSendOnly.IsNull() && state.LspPasswordLevels[i].KeychainSnpSendOnly.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/keychain/snp/send-only", data.getXPath(), keyString))
+			if state == nil || i >= len(state.LspPasswordLevels) || state.LspPasswordLevels[i].KeychainSnpSendOnly.IsNull() || state.LspPasswordLevels[i].KeychainSnpSendOnly.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "lsp-password-levels/lsp-password-level", keyString), "keychain/snp/send-only"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.LspPasswordLevels[i].KeychainSendOnly.IsNull() && !data.LspPasswordLevels[i].KeychainSendOnly.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.LspPasswordLevels) && !state.LspPasswordLevels[i].KeychainSendOnly.IsNull() && state.LspPasswordLevels[i].KeychainSendOnly.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/keychain/send-only", data.getXPath(), keyString))
+			if state == nil || i >= len(state.LspPasswordLevels) || state.LspPasswordLevels[i].KeychainSendOnly.IsNull() || state.LspPasswordLevels[i].KeychainSendOnly.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "lsp-password-levels/lsp-password-level", keyString), "keychain/send-only"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.LspPasswordLevels[i].HmacMd5EnablePoi.IsNull() && !data.LspPasswordLevels[i].HmacMd5EnablePoi.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.LspPasswordLevels) && !state.LspPasswordLevels[i].HmacMd5EnablePoi.IsNull() && state.LspPasswordLevels[i].HmacMd5EnablePoi.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/hmac-md5/password-options", data.getXPath(), keyString))
+			if state == nil || i >= len(state.LspPasswordLevels) || state.LspPasswordLevels[i].HmacMd5EnablePoi.IsNull() || state.LspPasswordLevels[i].HmacMd5EnablePoi.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "lsp-password-levels/lsp-password-level", keyString), "hmac-md5/password-options"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.LspPasswordLevels[i].HmacMd5SnpSendOnly.IsNull() && !data.LspPasswordLevels[i].HmacMd5SnpSendOnly.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.LspPasswordLevels) && !state.LspPasswordLevels[i].HmacMd5SnpSendOnly.IsNull() && state.LspPasswordLevels[i].HmacMd5SnpSendOnly.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/hmac-md5/password-options", data.getXPath(), keyString))
+			if state == nil || i >= len(state.LspPasswordLevels) || state.LspPasswordLevels[i].HmacMd5SnpSendOnly.IsNull() || state.LspPasswordLevels[i].HmacMd5SnpSendOnly.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "lsp-password-levels/lsp-password-level", keyString), "hmac-md5/password-options"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.LspPasswordLevels[i].HmacMd5SendOnly.IsNull() && !data.LspPasswordLevels[i].HmacMd5SendOnly.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.LspPasswordLevels) && !state.LspPasswordLevels[i].HmacMd5SendOnly.IsNull() && state.LspPasswordLevels[i].HmacMd5SendOnly.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/hmac-md5/password-options", data.getXPath(), keyString))
+			if state == nil || i >= len(state.LspPasswordLevels) || state.LspPasswordLevels[i].HmacMd5SendOnly.IsNull() || state.LspPasswordLevels[i].HmacMd5SendOnly.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "lsp-password-levels/lsp-password-level", keyString), "hmac-md5/password-options"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.LspPasswordLevels[i].TextEnablePoi.IsNull() && !data.LspPasswordLevels[i].TextEnablePoi.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.LspPasswordLevels) && !state.LspPasswordLevels[i].TextEnablePoi.IsNull() && state.LspPasswordLevels[i].TextEnablePoi.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/text/password-options", data.getXPath(), keyString))
+			if state == nil || i >= len(state.LspPasswordLevels) || state.LspPasswordLevels[i].TextEnablePoi.IsNull() || state.LspPasswordLevels[i].TextEnablePoi.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "lsp-password-levels/lsp-password-level", keyString), "text/password-options"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.LspPasswordLevels[i].TextSnpSendOnly.IsNull() && !data.LspPasswordLevels[i].TextSnpSendOnly.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.LspPasswordLevels) && !state.LspPasswordLevels[i].TextSnpSendOnly.IsNull() && state.LspPasswordLevels[i].TextSnpSendOnly.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/text/password-options", data.getXPath(), keyString))
+			if state == nil || i >= len(state.LspPasswordLevels) || state.LspPasswordLevels[i].TextSnpSendOnly.IsNull() || state.LspPasswordLevels[i].TextSnpSendOnly.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "lsp-password-levels/lsp-password-level", keyString), "text/password-options"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.LspPasswordLevels[i].TextSendOnly.IsNull() && !data.LspPasswordLevels[i].TextSendOnly.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.LspPasswordLevels) && !state.LspPasswordLevels[i].TextSendOnly.IsNull() && state.LspPasswordLevels[i].TextSendOnly.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v/text/password-options", data.getXPath(), keyString))
+			if state == nil || i >= len(state.LspPasswordLevels) || state.LspPasswordLevels[i].TextSendOnly.IsNull() || state.LspPasswordLevels[i].TextSendOnly.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "lsp-password-levels/lsp-password-level", keyString), "text/password-options"))
 			}
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.LspPasswordKeychainEnablePoi.IsNull() && !data.LspPasswordKeychainEnablePoi.ValueBool() {
-		if state != nil && !state.LspPasswordKeychainEnablePoi.IsNull() && state.LspPasswordKeychainEnablePoi.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/enable-poi", data.getXPath()))
+		if state == nil || state.LspPasswordKeychainEnablePoi.IsNull() || state.LspPasswordKeychainEnablePoi.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "lsp-password/lsp-password-option/keychain/enable-poi"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.LspPasswordKeychainSnpSendOnly.IsNull() && !data.LspPasswordKeychainSnpSendOnly.ValueBool() {
-		if state != nil && !state.LspPasswordKeychainSnpSendOnly.IsNull() && state.LspPasswordKeychainSnpSendOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/snp/send-only", data.getXPath()))
+		if state == nil || state.LspPasswordKeychainSnpSendOnly.IsNull() || state.LspPasswordKeychainSnpSendOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "lsp-password/lsp-password-option/keychain/snp/send-only"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.LspPasswordKeychainSendOnly.IsNull() && !data.LspPasswordKeychainSendOnly.ValueBool() {
-		if state != nil && !state.LspPasswordKeychainSendOnly.IsNull() && state.LspPasswordKeychainSendOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/send-only", data.getXPath()))
+		if state == nil || state.LspPasswordKeychainSendOnly.IsNull() || state.LspPasswordKeychainSendOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "lsp-password/lsp-password-option/keychain/send-only"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.LspPasswordHmacMd5EnablePoi.IsNull() && !data.LspPasswordHmacMd5EnablePoi.ValueBool() {
-		if state != nil && !state.LspPasswordHmacMd5EnablePoi.IsNull() && state.LspPasswordHmacMd5EnablePoi.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getXPath()))
+		if state == nil || state.LspPasswordHmacMd5EnablePoi.IsNull() || state.LspPasswordHmacMd5EnablePoi.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "lsp-password/lsp-password-option/hmac-md5/password-options"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.LspPasswordHmacMd5SnpSendOnly.IsNull() && !data.LspPasswordHmacMd5SnpSendOnly.ValueBool() {
-		if state != nil && !state.LspPasswordHmacMd5SnpSendOnly.IsNull() && state.LspPasswordHmacMd5SnpSendOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getXPath()))
+		if state == nil || state.LspPasswordHmacMd5SnpSendOnly.IsNull() || state.LspPasswordHmacMd5SnpSendOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "lsp-password/lsp-password-option/hmac-md5/password-options"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.LspPasswordHmacMd5SendOnly.IsNull() && !data.LspPasswordHmacMd5SendOnly.ValueBool() {
-		if state != nil && !state.LspPasswordHmacMd5SendOnly.IsNull() && state.LspPasswordHmacMd5SendOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getXPath()))
+		if state == nil || state.LspPasswordHmacMd5SendOnly.IsNull() || state.LspPasswordHmacMd5SendOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "lsp-password/lsp-password-option/hmac-md5/password-options"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.LspPasswordTextEnablePoi.IsNull() && !data.LspPasswordTextEnablePoi.ValueBool() {
-		if state != nil && !state.LspPasswordTextEnablePoi.IsNull() && state.LspPasswordTextEnablePoi.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getXPath()))
+		if state == nil || state.LspPasswordTextEnablePoi.IsNull() || state.LspPasswordTextEnablePoi.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "lsp-password/lsp-password-option/text/password-options"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.LspPasswordTextSnpSendOnly.IsNull() && !data.LspPasswordTextSnpSendOnly.ValueBool() {
-		if state != nil && !state.LspPasswordTextSnpSendOnly.IsNull() && state.LspPasswordTextSnpSendOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getXPath()))
+		if state == nil || state.LspPasswordTextSnpSendOnly.IsNull() || state.LspPasswordTextSnpSendOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "lsp-password/lsp-password-option/text/password-options"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.LspPasswordTextSendOnly.IsNull() && !data.LspPasswordTextSendOnly.ValueBool() {
-		if state != nil && !state.LspPasswordTextSendOnly.IsNull() && state.LspPasswordTextSendOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getXPath()))
+		if state == nil || state.LspPasswordTextSendOnly.IsNull() || state.LspPasswordTextSendOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "lsp-password/lsp-password-option/text/password-options"))
 		}
 	}
 	for i := range data.LspPasswordAcceptLevels {
@@ -6027,22 +5924,19 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context, state *RouterIS
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.LogFormatBrief.IsNull() && !data.LogFormatBrief.ValueBool() {
-		if state != nil && !state.LogFormatBrief.IsNull() && state.LogFormatBrief.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/format/brief", data.getXPath()))
+		if state == nil || state.LogFormatBrief.IsNull() || state.LogFormatBrief.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "log/format/brief"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.LogPduDrops.IsNull() && !data.LogPduDrops.ValueBool() {
-		if state != nil && !state.LogPduDrops.IsNull() && state.LogPduDrops.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/pdu/drops", data.getXPath()))
+		if state == nil || state.LogPduDrops.IsNull() || state.LogPduDrops.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "log/pdu/drops"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.LogAdjacencyChanges.IsNull() && !data.LogAdjacencyChanges.ValueBool() {
-		if state != nil && !state.LogAdjacencyChanges.IsNull() && state.LogAdjacencyChanges.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/adjacency/changes", data.getXPath()))
+		if state == nil || state.LogAdjacencyChanges.IsNull() || state.LogAdjacencyChanges.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "log/adjacency/changes"))
 		}
 	}
 	for i := range data.MultiPartTlvDisableLevels {
@@ -6052,62 +5946,50 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context, state *RouterIS
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		// Only delete if state has true and plan has false
 		if !data.MultiPartTlvDisableLevels[i].RouterCapability.IsNull() && !data.MultiPartTlvDisableLevels[i].RouterCapability.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MultiPartTlvDisableLevels) && !state.MultiPartTlvDisableLevels[i].RouterCapability.IsNull() && state.MultiPartTlvDisableLevels[i].RouterCapability.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/multi-part-tlv/disable-levels/disable-level%v/router-capability", data.getXPath(), keyString))
+			if state == nil || i >= len(state.MultiPartTlvDisableLevels) || state.MultiPartTlvDisableLevels[i].RouterCapability.IsNull() || state.MultiPartTlvDisableLevels[i].RouterCapability.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "multi-part-tlv/disable-levels/disable-level", keyString), "router-capability"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.MultiPartTlvDisableLevels[i].PrefixTlvs.IsNull() && !data.MultiPartTlvDisableLevels[i].PrefixTlvs.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MultiPartTlvDisableLevels) && !state.MultiPartTlvDisableLevels[i].PrefixTlvs.IsNull() && state.MultiPartTlvDisableLevels[i].PrefixTlvs.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/multi-part-tlv/disable-levels/disable-level%v/prefix-tlvs", data.getXPath(), keyString))
+			if state == nil || i >= len(state.MultiPartTlvDisableLevels) || state.MultiPartTlvDisableLevels[i].PrefixTlvs.IsNull() || state.MultiPartTlvDisableLevels[i].PrefixTlvs.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "multi-part-tlv/disable-levels/disable-level", keyString), "prefix-tlvs"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.MultiPartTlvDisableLevels[i].Neighbor.IsNull() && !data.MultiPartTlvDisableLevels[i].Neighbor.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.MultiPartTlvDisableLevels) && !state.MultiPartTlvDisableLevels[i].Neighbor.IsNull() && state.MultiPartTlvDisableLevels[i].Neighbor.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/multi-part-tlv/disable-levels/disable-level%v/neighbor", data.getXPath(), keyString))
+			if state == nil || i >= len(state.MultiPartTlvDisableLevels) || state.MultiPartTlvDisableLevels[i].Neighbor.IsNull() || state.MultiPartTlvDisableLevels[i].Neighbor.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "multi-part-tlv/disable-levels/disable-level", keyString), "neighbor"))
 			}
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MultiPartTlvDisableRouterCapability.IsNull() && !data.MultiPartTlvDisableRouterCapability.ValueBool() {
-		if state != nil && !state.MultiPartTlvDisableRouterCapability.IsNull() && state.MultiPartTlvDisableRouterCapability.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/multi-part-tlv/disable/router-capability", data.getXPath()))
+		if state == nil || state.MultiPartTlvDisableRouterCapability.IsNull() || state.MultiPartTlvDisableRouterCapability.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multi-part-tlv/disable/router-capability"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MultiPartTlvDisablePrefixTlvs.IsNull() && !data.MultiPartTlvDisablePrefixTlvs.ValueBool() {
-		if state != nil && !state.MultiPartTlvDisablePrefixTlvs.IsNull() && state.MultiPartTlvDisablePrefixTlvs.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/multi-part-tlv/disable/prefix-tlvs", data.getXPath()))
+		if state == nil || state.MultiPartTlvDisablePrefixTlvs.IsNull() || state.MultiPartTlvDisablePrefixTlvs.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multi-part-tlv/disable/prefix-tlvs"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MultiPartTlvDisableNeighbor.IsNull() && !data.MultiPartTlvDisableNeighbor.ValueBool() {
-		if state != nil && !state.MultiPartTlvDisableNeighbor.IsNull() && state.MultiPartTlvDisableNeighbor.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/multi-part-tlv/disable/neighbor", data.getXPath()))
+		if state == nil || state.MultiPartTlvDisableNeighbor.IsNull() || state.MultiPartTlvDisableNeighbor.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multi-part-tlv/disable/neighbor"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.MultiPartTlvDisable.IsNull() && !data.MultiPartTlvDisable.ValueBool() {
-		if state != nil && !state.MultiPartTlvDisable.IsNull() && state.MultiPartTlvDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/multi-part-tlv/disable", data.getXPath()))
+		if state == nil || state.MultiPartTlvDisable.IsNull() || state.MultiPartTlvDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multi-part-tlv/disable"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.HostnameDynamicDisable.IsNull() && !data.HostnameDynamicDisable.ValueBool() {
-		if state != nil && !state.HostnameDynamicDisable.IsNull() && state.HostnameDynamicDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hostname/dynamic/disable", data.getXPath()))
+		if state == nil || state.HostnameDynamicDisable.IsNull() || state.HostnameDynamicDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "hostname/dynamic/disable"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.AdjacencyStagger.IsNull() && !data.AdjacencyStagger.ValueBool() {
-		if state != nil && !state.AdjacencyStagger.IsNull() && state.AdjacencyStagger.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/adjacency/stagger", data.getXPath()))
+		if state == nil || state.AdjacencyStagger.IsNull() || state.AdjacencyStagger.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "adjacency/stagger"))
 		}
 	}
 	for i := range data.LspGenIntervalLevels {
@@ -6126,22 +6008,19 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context, state *RouterIS
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.NsfIetf.IsNull() && !data.NsfIetf.ValueBool() {
-		if state != nil && !state.NsfIetf.IsNull() && state.NsfIetf.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsf", data.getXPath()))
+		if state == nil || state.NsfIetf.IsNull() || state.NsfIetf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "nsf"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.NsfCisco.IsNull() && !data.NsfCisco.ValueBool() {
-		if state != nil && !state.NsfCisco.IsNull() && state.NsfCisco.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsf", data.getXPath()))
+		if state == nil || state.NsfCisco.IsNull() || state.NsfCisco.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "nsf"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.Nsr.IsNull() && !data.Nsr.ValueBool() {
-		if state != nil && !state.Nsr.IsNull() && state.Nsr.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsr", data.getXPath()))
+		if state == nil || state.Nsr.IsNull() || state.Nsr.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "nsr"))
 		}
 	}
 	for i := range data.LspMtuLevels {
@@ -6159,56 +6038,45 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context, state *RouterIS
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		// Only delete if state has true and plan has false
 		if !data.SetOverloadBitLevels[i].AdvertiseInterlevel.IsNull() && !data.SetOverloadBitLevels[i].AdvertiseInterlevel.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SetOverloadBitLevels) && !state.SetOverloadBitLevels[i].AdvertiseInterlevel.IsNull() && state.SetOverloadBitLevels[i].AdvertiseInterlevel.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/advertise/interlevel", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SetOverloadBitLevels) || state.SetOverloadBitLevels[i].AdvertiseInterlevel.IsNull() || state.SetOverloadBitLevels[i].AdvertiseInterlevel.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "set-overload-bit-levels/set-overload-bit-level", keyString), "advertise/interlevel"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() && !data.SetOverloadBitLevels[i].AdvertiseExternal.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SetOverloadBitLevels) && !state.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() && state.SetOverloadBitLevels[i].AdvertiseExternal.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/advertise/external", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SetOverloadBitLevels) || state.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() || state.SetOverloadBitLevels[i].AdvertiseExternal.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "set-overload-bit-levels/set-overload-bit-level", keyString), "advertise/external"))
 			}
 		}
-		// Only delete if state has true and plan has false
 		if !data.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() && !data.SetOverloadBitLevels[i].OnStartupWaitForBgp.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.SetOverloadBitLevels) && !state.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() && state.SetOverloadBitLevels[i].OnStartupWaitForBgp.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup", data.getXPath(), keyString))
+			if state == nil || i >= len(state.SetOverloadBitLevels) || state.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() || state.SetOverloadBitLevels[i].OnStartupWaitForBgp.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "set-overload-bit-levels/set-overload-bit-level", keyString), "on-startup"))
 			}
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SetOverloadBitAdvertiseInterlevel.IsNull() && !data.SetOverloadBitAdvertiseInterlevel.ValueBool() {
-		if state != nil && !state.SetOverloadBitAdvertiseInterlevel.IsNull() && state.SetOverloadBitAdvertiseInterlevel.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/advertise/interlevel", data.getXPath()))
+		if state == nil || state.SetOverloadBitAdvertiseInterlevel.IsNull() || state.SetOverloadBitAdvertiseInterlevel.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "set-overload-bit/advertise/interlevel"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SetOverloadBitAdvertiseExternal.IsNull() && !data.SetOverloadBitAdvertiseExternal.ValueBool() {
-		if state != nil && !state.SetOverloadBitAdvertiseExternal.IsNull() && state.SetOverloadBitAdvertiseExternal.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/advertise/external", data.getXPath()))
+		if state == nil || state.SetOverloadBitAdvertiseExternal.IsNull() || state.SetOverloadBitAdvertiseExternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "set-overload-bit/advertise/external"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SetOverloadBitOnStartupWaitForBgp.IsNull() && !data.SetOverloadBitOnStartupWaitForBgp.ValueBool() {
-		if state != nil && !state.SetOverloadBitOnStartupWaitForBgp.IsNull() && state.SetOverloadBitOnStartupWaitForBgp.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/on-startup", data.getXPath()))
+		if state == nil || state.SetOverloadBitOnStartupWaitForBgp.IsNull() || state.SetOverloadBitOnStartupWaitForBgp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "set-overload-bit/on-startup"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.SetOverloadBit.IsNull() && !data.SetOverloadBit.ValueBool() {
-		if state != nil && !state.SetOverloadBit.IsNull() && state.SetOverloadBit.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit", data.getXPath()))
+		if state == nil || state.SetOverloadBit.IsNull() || state.SetOverloadBit.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "set-overload-bit"))
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.OorSetOverloadBitDisable.IsNull() && !data.OorSetOverloadBitDisable.ValueBool() {
-		if state != nil && !state.OorSetOverloadBitDisable.IsNull() && state.OorSetOverloadBitDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oor-set-overload-bit/disable", data.getXPath()))
+		if state == nil || state.OorSetOverloadBitDisable.IsNull() || state.OorSetOverloadBitDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "oor-set-overload-bit/disable"))
 		}
 	}
 	for i := range data.LspRefreshIntervalLevels {
@@ -6219,10 +6087,9 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context, state *RouterIS
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	// Only delete if state has true and plan has false
 	if !data.ReceiveApplicationFlexAlgoDelayAppOnly.IsNull() && !data.ReceiveApplicationFlexAlgoDelayAppOnly.ValueBool() {
-		if state != nil && !state.ReceiveApplicationFlexAlgoDelayAppOnly.IsNull() && state.ReceiveApplicationFlexAlgoDelayAppOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/receive/application/flex-algo/delay/app-only", data.getXPath()))
+		if state == nil || state.ReceiveApplicationFlexAlgoDelayAppOnly.IsNull() || state.ReceiveApplicationFlexAlgoDelayAppOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "receive/application/flex-algo/delay/app-only"))
 		}
 	}
 	return emptyLeafsDelete
@@ -6231,353 +6098,544 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context, state *RouterIS
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *RouterISIS) getDeletePaths(ctx context.Context) []string {
+func (data *RouterISIS) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
 	for i := range data.FlexAlgos {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[flex-algo-number=" + strconv.FormatInt(data.FlexAlgos[i].Number.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/flex-algoes/flex-algo%v", data.getPath(), keyPath))
+		keys := [...]string{"flex-algo-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FlexAlgos[i].Number.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.FlexAlgos[i].Number.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "flex-algoes/flex-algo", keyString))
 	}
 	for i := range data.SrlgNames {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[srlg-name=" + data.SrlgNames[i].SrlgName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/srlg/names/name%v", data.getPath(), keyPath))
+		keys := [...]string{"srlg-name"}
+		keyValues := [...]string{data.SrlgNames[i].SrlgName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.SrlgNames[i].SrlgName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "srlg/names/name", keyString))
 	}
 	if !data.SrlgAdminWeight.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/srlg/admin-weight", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "srlg/admin-weight"))
 	}
 	if !data.PurgeTransmitStrictValue.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/purge-transmit/strict/strict-value", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "purge-transmit/strict/strict-value"))
 	}
 	if !data.PurgeTransmitStrict.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/purge-transmit/strict", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "purge-transmit/strict"))
 	}
 	if !data.IgnoreLspErrorsDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ignore-lsp-errors/disable", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ignore-lsp-errors/disable"))
 	}
 	for i := range data.AffinityMaps {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[affinity-attribute-name=" + data.AffinityMaps[i].AffinityName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/affinity-maps/affinity-map%v", data.getPath(), keyPath))
+		keys := [...]string{"affinity-attribute-name"}
+		keyValues := [...]string{data.AffinityMaps[i].AffinityName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.AffinityMaps[i].AffinityName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "affinity-maps/affinity-map", keyString))
 	}
 	for i := range data.Nets {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[net-id=" + data.Nets[i].NetId.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nets/net%v", data.getPath(), keyPath))
+		keys := [...]string{"net-id"}
+		keyValues := [...]string{data.Nets[i].NetId.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.Nets[i].NetId.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "nets/net", keyString))
 	}
 	if !data.PsnpInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/psnp-interval", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "psnp-interval"))
 	}
 	if !data.LspFastFloodingRemotePsnpDelay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-fast-flooding/remote-psnp-delay", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-fast-flooding/remote-psnp-delay"))
 	}
 	if !data.LspFastFloodingMaxLspTx.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-fast-flooding/max-lsp-tx", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-fast-flooding/max-lsp-tx"))
 	}
 	if !data.LspFastFlooding.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-fast-flooding", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-fast-flooding"))
 	}
 	if !data.HelloPadding.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-padding", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "hello-padding"))
 	}
 	if !data.InstanceId.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/instance-id", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "instance-id"))
 	}
 	for i := range data.MaxLspLifetimeLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.MaxLspLifetimeLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-lsp-lifetime-levels/max-lsp-lifetime-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.MaxLspLifetimeLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.MaxLspLifetimeLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "max-lsp-lifetime-levels/max-lsp-lifetime-level", keyString))
 	}
 	if !data.MaxLspLifetime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-lsp-lifetime", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "max-lsp-lifetime"))
 	}
 	if !data.DistributeLinkStateRoutePolicy.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state/route-policy", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "distribute/link-state/route-policy"))
 	}
 	if !data.DistributeLinkStateExcludeExternal.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state/exclude-external", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "distribute/link-state/exclude-external"))
 	}
 	if !data.DistributeLinkStateExcludeInterarea.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state/exclude-interarea", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "distribute/link-state/exclude-interarea"))
 	}
 	if !data.DistributeLinkStateThrottle.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state/throttle", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "distribute/link-state/throttle"))
 	}
 	if !data.DistributeLinkStateInstanceId.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state/instance-id", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "distribute/link-state/instance-id"))
 	}
 	if !data.DistributeLinkStateLevel.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state/level", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "distribute/link-state/level"))
 	}
 	if !data.DistributeLinkState.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "distribute/link-state"))
 	}
 	for i := range data.MaxMetricLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.MaxMetricLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-metric-levels/max-metric-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.MaxMetricLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.MaxMetricLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "max-metric-levels/max-metric-level", keyString))
 	}
 	if !data.MaxMetricDelay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-metric/delay", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "max-metric/delay"))
 	}
 	if !data.MaxMetricTe.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-metric/te", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "max-metric/te"))
 	}
 	if !data.MaxMetricSrv6Locator.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-metric/srv6-locator", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "max-metric/srv6-locator"))
 	}
 	if !data.MaxMetricDefaultRoute.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-metric/default-route", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "max-metric/default-route"))
 	}
 	if !data.MaxMetricInterlevel.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-metric/interlevel", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "max-metric/interlevel"))
 	}
 	if !data.MaxMetricExternal.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-metric/external", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "max-metric/external"))
 	}
 	if !data.MaxMetricOnStartupWaitForBgp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-metric/on-startup", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "max-metric/on-startup"))
 	}
 	if !data.MaxMetricOnStartupAdvertise.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-metric/on-startup/advertise", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "max-metric/on-startup/advertise"))
 	}
 	if !data.MaxMetric.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-metric", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "max-metric"))
 	}
 	for i := range data.MinLspArrivalLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.MinLspArrivalLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/min-lsp-arrivaltime-levels/min-lsp-arrivaltime-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.MinLspArrivalLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.MinLspArrivalLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "min-lsp-arrivaltime-levels/min-lsp-arrivaltime-level", keyString))
 	}
 	if !data.MinLspArrivalMaximumWait.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/min-lsp-arrivaltime/maximum-wait", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "min-lsp-arrivaltime/maximum-wait"))
 	}
 	if !data.MinLspArrivalSecondaryWait.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/min-lsp-arrivaltime/secondary-wait", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "min-lsp-arrivaltime/secondary-wait"))
 	}
 	if !data.MinLspArrivalInitialWait.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/min-lsp-arrivaltime/initial-wait", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "min-lsp-arrivaltime/initial-wait"))
 	}
 	if !data.ProtocolShutdown.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/protocol/shutdown", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "protocol/shutdown"))
 	}
 	if !data.MplsLdpSyncLevel.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/ldp/sync/level", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "mpls/ldp/sync/level"))
 	}
 	if !data.MplsLdpSync.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/ldp/sync", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "mpls/ldp/sync"))
 	}
 	if !data.IidDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/iid/disable", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "iid/disable"))
 	}
 	if !data.AuthenticationCheckDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/authentication-check/disable", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "authentication-check/disable"))
 	}
 	for i := range data.LspPasswordLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.LspPasswordLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password-levels/lsp-password-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.LspPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.LspPasswordLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "lsp-password-levels/lsp-password-level", keyString))
 	}
 	if !data.LspPasswordKeychainEnablePoi.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/enable-poi", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-password/lsp-password-option/keychain/enable-poi"))
 	}
 	if !data.LspPasswordKeychainSnpSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/snp/send-only", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-password/lsp-password-option/keychain/snp/send-only"))
 	}
 	if !data.LspPasswordKeychainSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/send-only", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-password/lsp-password-option/keychain/send-only"))
 	}
 	if !data.LspPasswordKeychain.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-password/lsp-password-option/keychain"))
 	}
 	if !data.LspPasswordHmacMd5EnablePoi.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-password/lsp-password-option/hmac-md5/password-options"))
 	}
 	if !data.LspPasswordHmacMd5SnpSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-password/lsp-password-option/hmac-md5/password-options"))
 	}
 	if !data.LspPasswordHmacMd5SendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-password/lsp-password-option/hmac-md5/password-options"))
 	}
 	if !data.LspPasswordHmacMd5Encrypted.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-password/lsp-password-option/hmac-md5/password-options"))
 	}
 	if !data.LspPasswordTextEnablePoi.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-password/lsp-password-option/text/password-options"))
 	}
 	if !data.LspPasswordTextSnpSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-password/lsp-password-option/text/password-options"))
 	}
 	if !data.LspPasswordTextSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-password/lsp-password-option/text/password-options"))
 	}
 	if !data.LspPasswordTextEncrypted.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-password/lsp-password-option/text/password-options"))
 	}
 	for i := range data.LspPasswordAcceptLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.LspPasswordAcceptLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/accept-levels/accept-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.LspPasswordAcceptLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.LspPasswordAcceptLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "lsp-password/accept-levels/accept-level", keyString))
 	}
 	if !data.LspPasswordAcceptEncrypted.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/accept/encrypted", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-password/accept/encrypted"))
 	}
 	for i := range data.LogSizes {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[log-type=" + data.LogSizes[i].LogType.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/sizes/size%v", data.getPath(), keyPath))
+		keys := [...]string{"log-type"}
+		keyValues := [...]string{data.LogSizes[i].LogType.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.LogSizes[i].LogType.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "log/sizes/size", keyString))
 	}
 	if !data.LogFormatBrief.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/format/brief", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "log/format/brief"))
 	}
 	if !data.LogPduDrops.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/pdu/drops", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "log/pdu/drops"))
 	}
 	if !data.LogAdjacencyChanges.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/adjacency/changes", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "log/adjacency/changes"))
 	}
 	for i := range data.MultiPartTlvDisableLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.MultiPartTlvDisableLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/multi-part-tlv/disable-levels/disable-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.MultiPartTlvDisableLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.MultiPartTlvDisableLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "multi-part-tlv/disable-levels/disable-level", keyString))
 	}
 	if !data.MultiPartTlvDisableRouterCapability.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/multi-part-tlv/disable/router-capability", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "multi-part-tlv/disable/router-capability"))
 	}
 	if !data.MultiPartTlvDisablePrefixTlvs.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/multi-part-tlv/disable/prefix-tlvs", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "multi-part-tlv/disable/prefix-tlvs"))
 	}
 	if !data.MultiPartTlvDisableNeighbor.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/multi-part-tlv/disable/neighbor", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "multi-part-tlv/disable/neighbor"))
 	}
 	if !data.MultiPartTlvDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/multi-part-tlv/disable", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "multi-part-tlv/disable"))
 	}
 	if !data.IsType.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/is-type", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "is-type"))
 	}
 	if !data.HostnameDynamicDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hostname/dynamic/disable", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "hostname/dynamic/disable"))
 	}
 	if !data.AdjacencyStaggerMaxNeighbors.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/adjacency/stagger/max-neighbors", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "adjacency/stagger/max-neighbors"))
 	}
 	if !data.AdjacencyStaggerInitialNeighbors.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/adjacency/stagger/initial-neighbors", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "adjacency/stagger/initial-neighbors"))
 	}
 	if !data.AdjacencyStagger.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/adjacency/stagger", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "adjacency/stagger"))
 	}
 	for i := range data.LspGenIntervalLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.LspGenIntervalLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-gen-interval-levels/lsp-gen-interval-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.LspGenIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.LspGenIntervalLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "lsp-gen-interval-levels/lsp-gen-interval-level", keyString))
 	}
 	if !data.LspGenIntervalSecondaryWait.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-gen-interval/secondary-wait", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-gen-interval/secondary-wait"))
 	}
 	if !data.LspGenIntervalInitialWait.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-gen-interval/initial-wait", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-gen-interval/initial-wait"))
 	}
 	if !data.LspGenIntervalMaximumWait.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-gen-interval/maximum-wait", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-gen-interval/maximum-wait"))
 	}
 	for i := range data.LspCheckIntervalLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.LspCheckIntervalLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-check-interval-levels/lsp-check-interval-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.LspCheckIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.LspCheckIntervalLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "lsp-check-interval-levels/lsp-check-interval-level", keyString))
 	}
 	if !data.LspCheckInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-check-interval", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-check-interval"))
 	}
 	if !data.NsfInterfaceExpires.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/interface-expires", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "nsf/interface-expires"))
 	}
 	if !data.NsfInterfaceTimer.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/interface-timer", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "nsf/interface-timer"))
 	}
 	if !data.NsfLifetime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/lifetime", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "nsf/lifetime"))
 	}
 	if !data.NsfIetf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "nsf"))
 	}
 	if !data.NsfCisco.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "nsf"))
 	}
 	if !data.NsrRestartTime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsr-restart-time", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "nsr-restart-time"))
 	}
 	if !data.Nsr.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsr", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "nsr"))
 	}
 	if !data.ExtendedAdminGroup.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/extended-admin-group", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "extended-admin-group"))
 	}
 	for i := range data.LspMtuLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.LspMtuLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-mtu-levels/lsp-mtu-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.LspMtuLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.LspMtuLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "lsp-mtu-levels/lsp-mtu-level", keyString))
 	}
 	if !data.LspMtu.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-mtu", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-mtu"))
 	}
 	for i := range data.SetOverloadBitLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.SetOverloadBitLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.SetOverloadBitLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.SetOverloadBitLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "set-overload-bit-levels/set-overload-bit-level", keyString))
 	}
 	if !data.SetOverloadBitAdvertiseInterlevel.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/advertise/interlevel", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "set-overload-bit/advertise/interlevel"))
 	}
 	if !data.SetOverloadBitAdvertiseExternal.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/advertise/external", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "set-overload-bit/advertise/external"))
 	}
 	if !data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/on-startup", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "set-overload-bit/on-startup"))
 	}
 	if !data.SetOverloadBitOnStartupTimeToAdvertise.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/on-startup/time-to-advertise", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "set-overload-bit/on-startup/time-to-advertise"))
 	}
 	if !data.SetOverloadBit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "set-overload-bit"))
 	}
 	if !data.OorSetOverloadBitDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/oor-set-overload-bit/disable", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "oor-set-overload-bit/disable"))
 	}
 	for i := range data.LspRefreshIntervalLevels {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[level-number=" + strconv.FormatInt(data.LspRefreshIntervalLevels[i].LevelNumber.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-refresh-interval-levels/lsp-refresh-interval-level%v", data.getPath(), keyPath))
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.LspRefreshIntervalLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.LspRefreshIntervalLevels[i].LevelNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "lsp-refresh-interval-levels/lsp-refresh-interval-level", keyString))
 	}
 	if !data.LspRefreshInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-refresh-interval", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "lsp-refresh-interval"))
 	}
 	if !data.ReceiveApplicationFlexAlgoDelayAppOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/receive/application/flex-algo/delay/app-only", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "receive/application/flex-algo/delay/app-only"))
 	}
 	if !data.SegmentRoutingGlobalBlockUpperBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/global-block/upper-bound-of-srgb", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/global-block/upper-bound-of-srgb"))
 	}
 	if !data.SegmentRoutingGlobalBlockLowerBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/global-block/lower-bound-of-srgb", data.getPath()))
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "segment-routing/global-block/lower-bound-of-srgb"))
 	}
 
 	return deletePaths
@@ -7384,7 +7442,7 @@ func (data RouterISIS) toBodyXML(ctx context.Context, stateArg ...*RouterISIS) s
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))

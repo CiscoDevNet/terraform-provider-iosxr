@@ -14,55 +14,53 @@ This resource can manage the Radius Server configuration.
 
 ```terraform
 resource "iosxr_radius_server" "example" {
-  hosts = [
+  attribute_acct_multi_session_id_include_parent_session_id = true
+  attribute_acct_session_id_prepend_nas_port_id             = true
+  attribute_filter_id_11_default_direction                  = "inbound"
+  attribute_lists = [
     {
-      address          = "10.1.1.1"
-      auth_port        = 1812
-      acct_port        = 1813
-      timeout          = 120
-      retransmit       = 5
-      key_type_7       = "060506324F41584B"
-      test_username    = "cisco"
-      idle_time        = 30
-      ignore_auth_port = true
-      ignore_acct_port = true
+      attribute_vendor_cisco_vendor_types = [
+        {
+          all_avpairs    = true
+          vendor_type_id = 1
+        }
+      ]
+      name              = "ATTR-LIST-1"
+      radius_attributes = "1,2,3,4,5"
     }
   ]
+  attribute_message_authenticator = true
+  dead_criteria_time              = 10
+  dead_criteria_tries             = 5
+  deadtime                        = 10
+  disallow_null_username          = true
+  hosts = [
+    {
+      acct_port                               = 1813
+      address                                 = "10.1.1.1"
+      attribute_message_authenticator_mandate = true
+      auth_port                               = 1812
+      idle_time                               = 30
+      ignore_acct_port                        = true
+      ignore_auth_port                        = true
+      key_type_7                              = "060506324F41584B"
+      retransmit                              = 5
+      test_username                           = "cisco"
+      timeout                                 = 120
+    }
+  ]
+  ipv4_dscp                                                     = "cs6"
+  ipv6_dscp                                                     = "cs6"
   key_type_7                                                    = "060506324F41584B"
-  timeout                                                       = 120
-  retransmit_retries                                            = 5
   load_balance_method_least_outstanding_batch_size              = 25
   load_balance_method_least_outstanding_ignore_preferred_server = true
+  retransmit_retries                                            = 5
+  source_port_extended                                          = true
   throttle_access                                               = 100
   throttle_access_timeout                                       = 5
   throttle_accounting                                           = 50
-  deadtime                                                      = 10
-  dead_criteria_time                                            = 10
-  dead_criteria_tries                                           = 5
-  source_port_extended                                          = true
-  ipv4_dscp                                                     = "cs6"
-  ipv6_dscp                                                     = "cs6"
+  timeout                                                       = 120
   vsa_attribute_ignore_unknown                                  = true
-  disallow_null_username                                        = true
-  attribute_lists = [
-    {
-      name              = "ATTR-LIST-1"
-      radius_attributes = "1,2,3,4,5"
-      attribute_vendor_ids = [
-        {
-          id = 9
-          vendor_types = [
-            {
-              vendor_type_id = 1
-            }
-          ]
-        }
-      ]
-    }
-  ]
-  attribute_acct_session_id_prepend_nas_port_id             = true
-  attribute_acct_multi_session_id_include_parent_session_id = true
-  attribute_filter_id_11_default_direction                  = "inbound"
 }
 ```
 
@@ -76,6 +74,8 @@ resource "iosxr_radius_server" "example" {
 - `attribute_filter_id_11_default_direction` (String) Set the attribute default direction
   - Choices: `inbound`, `outbound`
 - `attribute_lists` (Attributes List) List of Attribute Types (see [below for nested schema](#nestedatt--attribute_lists))
+- `attribute_message_authenticator` (Boolean) Enable Message-authenticator attribute(80) validation in all radius packets
+  - Supported from version: `25.4`
 - `dead_criteria_time` (Number) Minimum time that must elapse since a response was received from this RADIUS server
   - Range: `1`-`120`
 - `dead_criteria_tries` (Number) The minimum number of transmissions (original attempts plus retransmits) to this RADIUS server
@@ -121,8 +121,35 @@ Required:
 
 Optional:
 
+- `attribute_vendor_cisco_vendor_types` (Attributes List) Vendor 9 vendor-type entry
+  - Supported from version: `26.2` (see [below for nested schema](#nestedatt--attribute_lists--attribute_vendor_cisco_vendor_types))
 - `attribute_vendor_ids` (Attributes List) vendor-id (see [below for nested schema](#nestedatt--attribute_lists--attribute_vendor_ids))
 - `radius_attributes` (String) Comma-delimited list of RADIUS attributes
+
+<a id="nestedatt--attribute_lists--attribute_vendor_cisco_vendor_types"></a>
+### Nested Schema for `attribute_lists.attribute_vendor_cisco_vendor_types`
+
+Optional:
+
+- `all_attributes` (Boolean) Apply to all attributes for this vendor 9 vendor-type.
+  - Supported from version: `26.2`
+- `all_avpairs` (Boolean) Apply to all avpairs with vendor 9 type 1 special semantics.
+  - Supported from version: `26.2`
+- `avpairs` (Attributes List) Named Av-Pair entry for vendor 9 type 1.
+  - Supported from version: `26.2` (see [below for nested schema](#nestedatt--attribute_lists--attribute_vendor_cisco_vendor_types--avpairs))
+- `vendor_type_id` (Number) Vendor 9 vendor-type id.
+  - Range: `1`-`254`
+  - Supported from version: `26.2`
+
+<a id="nestedatt--attribute_lists--attribute_vendor_cisco_vendor_types--avpairs"></a>
+### Nested Schema for `attribute_lists.attribute_vendor_cisco_vendor_types.avpairs`
+
+Optional:
+
+- `avpair_name` (String) Av-Pair name for vendor 9 type 1.
+  - Supported from version: `26.2`
+
+
 
 <a id="nestedatt--attribute_lists--attribute_vendor_ids"></a>
 ### Nested Schema for `attribute_lists.attribute_vendor_ids`
@@ -162,6 +189,10 @@ Required:
 
 Optional:
 
+- `attribute_message_authenticator_mandate` (Boolean) Enforce message-authenticator attribute validation mandatorily in all radius packets received
+  - Supported from version: `25.4`
+- `attribute_message_authenticator_optional` (Boolean) Enforce message-authenticator attribute validation optional in all radius packets received (Default)
+  - Supported from version: `25.4`
 - `dtls_server_trustpoint` (String) Trustpoint to be used for RADIUS over DTLS
 - `idle_time` (Number) Idle time after which automated test should start
   - Range: `1`-`60`

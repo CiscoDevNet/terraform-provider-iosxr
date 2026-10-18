@@ -1,0 +1,9 @@
+---
+name: EVPN Segment Routing SRv6 EVI
+path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/segment-routing/srv6/evi[vpn-id=%v]
+doc_category: EVPN
+attributes:
+  # ===========================================================
+  # CONSTRAINT CHANGES — range/length widened in 26.2
+  # ===========================================================
+  - yang_name: vpn-id

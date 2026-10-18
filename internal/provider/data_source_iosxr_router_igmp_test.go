@@ -54,6 +54,25 @@ func TestAccDataSourceIosxrRouterIGMP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "missed_packets_grp_spec_query", "5000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "missed_packets_ssm_query", "5000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "missed_packets_member_report", "5000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.version", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.router_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.dvmrp_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.query_interval", "125"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.query_timeout", "255"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.query_max_response_time", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.explicit_tracking_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.explicit_tracking_acl", "IGMP_ACL"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.access_group", "IGMP_ACL"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.maximum_groups_per_interface", "25000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.maximum_groups_per_interface_threshold", "20000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.maximum_groups_per_interface_acl", "IGMP_ACL"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.static_groups.0.group_address", "239.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.static_groups.0.group_address_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.static_groups.0.suppress_reports", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.join_groups.0.group_address", "239.1.1.100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.join_groups.0.source_addresses.0.source_ip", "10.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_igmp.test", "interfaces.0.join_groups.0.source_addresses.0.include", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -107,6 +126,33 @@ func testAccDataSourceIosxrRouterIGMPConfig() string {
 	config += `	missed_packets_grp_spec_query = 5000` + "\n"
 	config += `	missed_packets_ssm_query = 5000` + "\n"
 	config += `	missed_packets_member_report = 5000` + "\n"
+	config += `	interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `		version = 3` + "\n"
+	config += `		router_enable = true` + "\n"
+	config += `		dvmrp_enable = true` + "\n"
+	config += `		query_interval = 125` + "\n"
+	config += `		query_timeout = 255` + "\n"
+	config += `		query_max_response_time = 10` + "\n"
+	config += `		explicit_tracking_enable = true` + "\n"
+	config += `		explicit_tracking_acl = "IGMP_ACL"` + "\n"
+	config += `		access_group = "IGMP_ACL"` + "\n"
+	config += `		maximum_groups_per_interface = 25000` + "\n"
+	config += `		maximum_groups_per_interface_threshold = 20000` + "\n"
+	config += `		maximum_groups_per_interface_acl = "IGMP_ACL"` + "\n"
+	config += `		static_groups = [{` + "\n"
+	config += `			group_address = "239.1.1.1"` + "\n"
+	config += `			group_address_only = true` + "\n"
+	config += `			suppress_reports = true` + "\n"
+	config += `		}]` + "\n"
+	config += `		join_groups = [{` + "\n"
+	config += `			group_address = "239.1.1.100"` + "\n"
+	config += `			source_addresses = [{` + "\n"
+	config += `				source_ip = "10.1.1.1"` + "\n"
+	config += `				include = true` + "\n"
+	config += `			}]` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
 	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 

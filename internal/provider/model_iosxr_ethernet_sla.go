@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -128,6 +129,8 @@ type EthernetSLAStatisticsMeasure struct {
 	ThresholdsStatelessLogOnMeanValue     types.Int64  `tfsdk:"thresholds_stateless_log_on_mean_value"`
 	ThresholdsStatelessLogOnSampleCount   types.Int64  `tfsdk:"thresholds_stateless_log_on_sample_count"`
 	ThresholdsStatelessLogOnInAndAboveBin types.Int64  `tfsdk:"thresholds_stateless_log_on_in_and_above_bin"`
+	AggregateMinimumDelay                 types.Int64  `tfsdk:"aggregate_minimum_delay"`
+	AggregateUsecMinimumDelay             types.Bool   `tfsdk:"aggregate_usec_minimum_delay"`
 }
 
 // End of section. //template:end types
@@ -159,7 +162,7 @@ func (data EthernetSLAData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data EthernetSLA) toBody(ctx context.Context) string {
+func (data EthernetSLA) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.ProfileName.IsNull() && !data.ProfileName.IsUnknown() {
 		body, _ = sjson.Set(body, "profile-name", data.ProfileName.ValueString())
@@ -337,12 +340,1239 @@ func (data EthernetSLA) toBody(ctx context.Context) string {
 			if !item.ThresholdsStatelessLogOnInAndAboveBin.IsNull() && !item.ThresholdsStatelessLogOnInAndAboveBin.IsUnknown() {
 				body, _ = sjson.Set(body, "statistics.measures.measure"+"."+strconv.Itoa(index)+"."+"thresholds.type.stateless.log.on.in-and-above.bin", strconv.FormatInt(item.ThresholdsStatelessLogOnInAndAboveBin.ValueInt64(), 10))
 			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.AggregateMinimumDelay.IsNull() && !item.AggregateMinimumDelay.IsUnknown() {
+					body, _ = sjson.Set(body, "statistics.measures.measure"+"."+strconv.Itoa(index)+"."+"aggregate.minimum-delay", strconv.FormatInt(item.AggregateMinimumDelay.ValueInt64(), 10))
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.AggregateUsecMinimumDelay.IsNull() && !item.AggregateUsecMinimumDelay.IsUnknown() {
+					if item.AggregateUsecMinimumDelay.ValueBool() {
+						body, _ = sjson.Set(body, "statistics.measures.measure"+"."+strconv.Itoa(index)+"."+"aggregate.usec-minimum-delay", map[string]string{})
+					}
+				}
+			}
 		}
 	}
 	return body
 }
 
 // End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
+
+// GetVersionConstraints returns the version constraints for all fields
+func (data EthernetSLA) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "statistics_measure.aggregate_minimum_delay",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "statistics_measure.aggregate_usec_minimum_delay",
+			AddedInVersion: "25.4",
+		},
+	}...)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data EthernetSLA) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data EthernetSLA) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data EthernetSLA) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data EthernetSLA) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *EthernetSLA) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Type.IsNull() {
+		data.Type = types.StringValue(value.String())
+	} else if data.Type.IsNull() {
+		data.Type = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "probe.send.packet.once"); !data.ProbeSendPacketOnce.IsNull() {
+		if value.Exists() {
+			data.ProbeSendPacketOnce = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProbeSendPacketOnce = types.BoolValue(false)
+		}
+	} else if data.ProbeSendPacketOnce.IsNull() {
+		data.ProbeSendPacketOnce = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "probe.send.packet.every.interval"); value.Exists() && !data.ProbeSendPacketEveryInterval.IsNull() {
+		data.ProbeSendPacketEveryInterval = types.Int64Value(value.Int())
+	} else if data.ProbeSendPacketEveryInterval.IsNull() {
+		data.ProbeSendPacketEveryInterval = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "probe.send.packet.every.milliseconds"); !data.ProbeSendPacketEveryMilliseconds.IsNull() {
+		if value.Exists() {
+			data.ProbeSendPacketEveryMilliseconds = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProbeSendPacketEveryMilliseconds = types.BoolValue(false)
+		}
+	} else if data.ProbeSendPacketEveryMilliseconds.IsNull() {
+		data.ProbeSendPacketEveryMilliseconds = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "probe.send.packet.every.seconds"); !data.ProbeSendPacketEverySeconds.IsNull() {
+		if value.Exists() {
+			data.ProbeSendPacketEverySeconds = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProbeSendPacketEverySeconds = types.BoolValue(false)
+		}
+	} else if data.ProbeSendPacketEverySeconds.IsNull() {
+		data.ProbeSendPacketEverySeconds = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "probe.send.packet.every.minutes"); !data.ProbeSendPacketEveryMinutes.IsNull() {
+		if value.Exists() {
+			data.ProbeSendPacketEveryMinutes = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProbeSendPacketEveryMinutes = types.BoolValue(false)
+		}
+	} else if data.ProbeSendPacketEveryMinutes.IsNull() {
+		data.ProbeSendPacketEveryMinutes = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "probe.send.packet.every.hours"); !data.ProbeSendPacketEveryHours.IsNull() {
+		if value.Exists() {
+			data.ProbeSendPacketEveryHours = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProbeSendPacketEveryHours = types.BoolValue(false)
+		}
+	} else if data.ProbeSendPacketEveryHours.IsNull() {
+		data.ProbeSendPacketEveryHours = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.once"); !data.ProbeSendBurstOnce.IsNull() {
+		if value.Exists() {
+			data.ProbeSendBurstOnce = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProbeSendBurstOnce = types.BoolValue(false)
+		}
+	} else if data.ProbeSendBurstOnce.IsNull() {
+		data.ProbeSendBurstOnce = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.every.interval"); value.Exists() && !data.ProbeSendBurstEveryInterval.IsNull() {
+		data.ProbeSendBurstEveryInterval = types.Int64Value(value.Int())
+	} else if data.ProbeSendBurstEveryInterval.IsNull() {
+		data.ProbeSendBurstEveryInterval = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.every.seconds"); !data.ProbeSendBurstEverySeconds.IsNull() {
+		if value.Exists() {
+			data.ProbeSendBurstEverySeconds = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProbeSendBurstEverySeconds = types.BoolValue(false)
+		}
+	} else if data.ProbeSendBurstEverySeconds.IsNull() {
+		data.ProbeSendBurstEverySeconds = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.every.minutes"); !data.ProbeSendBurstEveryMinutes.IsNull() {
+		if value.Exists() {
+			data.ProbeSendBurstEveryMinutes = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProbeSendBurstEveryMinutes = types.BoolValue(false)
+		}
+	} else if data.ProbeSendBurstEveryMinutes.IsNull() {
+		data.ProbeSendBurstEveryMinutes = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.every.hours"); !data.ProbeSendBurstEveryHours.IsNull() {
+		if value.Exists() {
+			data.ProbeSendBurstEveryHours = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProbeSendBurstEveryHours = types.BoolValue(false)
+		}
+	} else if data.ProbeSendBurstEveryHours.IsNull() {
+		data.ProbeSendBurstEveryHours = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.packet.count"); value.Exists() && !data.ProbeSendBurstPacketCount.IsNull() {
+		data.ProbeSendBurstPacketCount = types.Int64Value(value.Int())
+	} else if data.ProbeSendBurstPacketCount.IsNull() {
+		data.ProbeSendBurstPacketCount = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.packet.interval-in-seconds"); value.Exists() && !data.ProbeSendBurstPacketIntervalSeconds.IsNull() {
+		data.ProbeSendBurstPacketIntervalSeconds = types.Int64Value(value.Int())
+	} else if data.ProbeSendBurstPacketIntervalSeconds.IsNull() {
+		data.ProbeSendBurstPacketIntervalSeconds = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.packet.interval-in-milliseconds"); value.Exists() && !data.ProbeSendBurstPacketIntervalMilliseconds.IsNull() {
+		data.ProbeSendBurstPacketIntervalMilliseconds = types.Int64Value(value.Int())
+	} else if data.ProbeSendBurstPacketIntervalMilliseconds.IsNull() {
+		data.ProbeSendBurstPacketIntervalMilliseconds = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "probe.packet.size"); value.Exists() && !data.ProbePacketSize.IsNull() {
+		data.ProbePacketSize = types.Int64Value(value.Int())
+	} else if data.ProbePacketSize.IsNull() {
+		data.ProbePacketSize = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "probe.packet.test.pattern.hex"); value.Exists() && !data.ProbePacketTestPatternHex.IsNull() {
+		data.ProbePacketTestPatternHex = types.Int64Value(value.Int())
+	} else if data.ProbePacketTestPatternHex.IsNull() {
+		data.ProbePacketTestPatternHex = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "probe.priority"); value.Exists() && !data.ProbePriority.IsNull() {
+		data.ProbePriority = types.Int64Value(value.Int())
+	} else if data.ProbePriority.IsNull() {
+		data.ProbePriority = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "probe.synthetic.loss.calculation.packets"); value.Exists() && !data.ProbeSyntheticLossCalculationPackets.IsNull() {
+		data.ProbeSyntheticLossCalculationPackets = types.Int64Value(value.Int())
+	} else if data.ProbeSyntheticLossCalculationPackets.IsNull() {
+		data.ProbeSyntheticLossCalculationPackets = types.Int64Null()
+	}
+	for i := range data.StatisticsMeasure {
+		keys := [...]string{"type"}
+		keyValues := [...]string{data.StatisticsMeasure[i].Type.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "statistics.measures.measure").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.StatisticsMeasure[i].Type.IsNull() {
+			data.StatisticsMeasure[i].Type = types.StringValue(value.String())
+		} else {
+			data.StatisticsMeasure[i].Type = types.StringNull()
+		}
+		if value := r.Get("aggregate.none"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.StatisticsMeasure[i].AggregateNone.IsNull() {
+				data.StatisticsMeasure[i].AggregateNone = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.StatisticsMeasure[i].AggregateNone.IsNull() {
+				data.StatisticsMeasure[i].AggregateNone = types.BoolNull()
+			}
+		}
+		if value := r.Get("aggregate.bins"); value.Exists() && !data.StatisticsMeasure[i].AggregateBins.IsNull() {
+			data.StatisticsMeasure[i].AggregateBins = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].AggregateBins = types.Int64Null()
+		}
+		if value := r.Get("aggregate.width"); value.Exists() && !data.StatisticsMeasure[i].AggregateWidth.IsNull() {
+			data.StatisticsMeasure[i].AggregateWidth = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].AggregateWidth = types.Int64Null()
+		}
+		if value := r.Get("aggregate.width-tenths"); value.Exists() && !data.StatisticsMeasure[i].AggregateWidthPercentage.IsNull() {
+			data.StatisticsMeasure[i].AggregateWidthPercentage = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].AggregateWidthPercentage = types.Int64Null()
+		}
+		if value := r.Get("aggregate.usec"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.StatisticsMeasure[i].AggregateUsec.IsNull() {
+				data.StatisticsMeasure[i].AggregateUsec = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.StatisticsMeasure[i].AggregateUsec.IsNull() {
+				data.StatisticsMeasure[i].AggregateUsec = types.BoolNull()
+			}
+		}
+		if value := r.Get("buckets.size"); value.Exists() && !data.StatisticsMeasure[i].BucketsSize.IsNull() {
+			data.StatisticsMeasure[i].BucketsSize = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].BucketsSize = types.Int64Null()
+		}
+		if value := r.Get("buckets.probes"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.StatisticsMeasure[i].BucketsProbes.IsNull() {
+				data.StatisticsMeasure[i].BucketsProbes = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.StatisticsMeasure[i].BucketsProbes.IsNull() {
+				data.StatisticsMeasure[i].BucketsProbes = types.BoolNull()
+			}
+		}
+		if value := r.Get("buckets.archive"); value.Exists() && !data.StatisticsMeasure[i].BucketsArchive.IsNull() {
+			data.StatisticsMeasure[i].BucketsArchive = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].BucketsArchive = types.Int64Null()
+		}
+		if value := r.Get("thresholds.type.stateful.log.on.max-value"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatefulLogOnMaxValue.IsNull() {
+			data.StatisticsMeasure[i].ThresholdsStatefulLogOnMaxValue = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].ThresholdsStatefulLogOnMaxValue = types.Int64Null()
+		}
+		if value := r.Get("thresholds.type.stateful.log.on.mean-value"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatefulLogOnMeanValue.IsNull() {
+			data.StatisticsMeasure[i].ThresholdsStatefulLogOnMeanValue = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].ThresholdsStatefulLogOnMeanValue = types.Int64Null()
+		}
+		if value := r.Get("thresholds.type.stateful.log.on.sample-count"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatefulLogOnSampleCount.IsNull() {
+			data.StatisticsMeasure[i].ThresholdsStatefulLogOnSampleCount = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].ThresholdsStatefulLogOnSampleCount = types.Int64Null()
+		}
+		if value := r.Get("thresholds.type.stateful.log.on.in-and-above.bin"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatefulLogOnInAndAboveBin.IsNull() {
+			data.StatisticsMeasure[i].ThresholdsStatefulLogOnInAndAboveBin = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].ThresholdsStatefulLogOnInAndAboveBin = types.Int64Null()
+		}
+		if value := r.Get("thresholds.type.stateful.efd.on.max-value"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatefulEfdOnMaxValue.IsNull() {
+			data.StatisticsMeasure[i].ThresholdsStatefulEfdOnMaxValue = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].ThresholdsStatefulEfdOnMaxValue = types.Int64Null()
+		}
+		if value := r.Get("thresholds.type.stateful.efd.on.mean-value"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatefulEfdOnMeanValue.IsNull() {
+			data.StatisticsMeasure[i].ThresholdsStatefulEfdOnMeanValue = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].ThresholdsStatefulEfdOnMeanValue = types.Int64Null()
+		}
+		if value := r.Get("thresholds.type.stateful.efd.on.sample-count"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatefulEfdOnSampleCount.IsNull() {
+			data.StatisticsMeasure[i].ThresholdsStatefulEfdOnSampleCount = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].ThresholdsStatefulEfdOnSampleCount = types.Int64Null()
+		}
+		if value := r.Get("thresholds.type.stateful.efd.on.in-and-above.bin"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatefulEfdOnInAndAboveBin.IsNull() {
+			data.StatisticsMeasure[i].ThresholdsStatefulEfdOnInAndAboveBin = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].ThresholdsStatefulEfdOnInAndAboveBin = types.Int64Null()
+		}
+		if value := r.Get("thresholds.type.stateless.log.on.max-value"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatelessLogOnMaxValue.IsNull() {
+			data.StatisticsMeasure[i].ThresholdsStatelessLogOnMaxValue = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].ThresholdsStatelessLogOnMaxValue = types.Int64Null()
+		}
+		if value := r.Get("thresholds.type.stateless.log.on.mean-value"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatelessLogOnMeanValue.IsNull() {
+			data.StatisticsMeasure[i].ThresholdsStatelessLogOnMeanValue = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].ThresholdsStatelessLogOnMeanValue = types.Int64Null()
+		}
+		if value := r.Get("thresholds.type.stateless.log.on.sample-count"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatelessLogOnSampleCount.IsNull() {
+			data.StatisticsMeasure[i].ThresholdsStatelessLogOnSampleCount = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].ThresholdsStatelessLogOnSampleCount = types.Int64Null()
+		}
+		if value := r.Get("thresholds.type.stateless.log.on.in-and-above.bin"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatelessLogOnInAndAboveBin.IsNull() {
+			data.StatisticsMeasure[i].ThresholdsStatelessLogOnInAndAboveBin = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].ThresholdsStatelessLogOnInAndAboveBin = types.Int64Null()
+		}
+		if value := r.Get("aggregate.minimum-delay"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.StatisticsMeasure[i].AggregateMinimumDelay.IsNull() {
+			data.StatisticsMeasure[i].AggregateMinimumDelay = types.Int64Value(value.Int())
+		} else {
+			data.StatisticsMeasure[i].AggregateMinimumDelay = types.Int64Null()
+		}
+		if value := r.Get("aggregate.usec-minimum-delay"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() {
+				data.StatisticsMeasure[i].AggregateUsecMinimumDelay = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() {
+				data.StatisticsMeasure[i].AggregateUsecMinimumDelay = types.BoolNull()
+			}
+		}
+	}
+	if value := gjson.GetBytes(res, "schedule.every.week.on"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ScheduleEveryWeekOn.IsNull() {
+		data.ScheduleEveryWeekOn = types.StringValue(value.String())
+	} else if data.ScheduleEveryWeekOn.IsNull() {
+		data.ScheduleEveryWeekOn = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "schedule.every.day"); !data.ScheduleEveryDay.IsNull() {
+		if value.Exists() {
+			data.ScheduleEveryDay = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ScheduleEveryDay = types.BoolValue(false)
+		}
+	} else if data.ScheduleEveryDay.IsNull() {
+		data.ScheduleEveryDay = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "schedule.every.interval-in-minutes"); value.Exists() && !data.ScheduleEveryMinutes.IsNull() {
+		data.ScheduleEveryMinutes = types.Int64Value(value.Int())
+	} else if data.ScheduleEveryMinutes.IsNull() {
+		data.ScheduleEveryMinutes = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "schedule.every.interval-in-hours"); value.Exists() && !data.ScheduleEveryHours.IsNull() {
+		data.ScheduleEveryHours = types.Int64Value(value.Int())
+	} else if data.ScheduleEveryHours.IsNull() {
+		data.ScheduleEveryHours = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "schedule.every.at.hours"); value.Exists() && !data.ScheduleEveryAtHours.IsNull() {
+		data.ScheduleEveryAtHours = types.Int64Value(value.Int())
+	} else if data.ScheduleEveryAtHours.IsNull() {
+		data.ScheduleEveryAtHours = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "schedule.every.at.minutes"); value.Exists() && !data.ScheduleEveryAtMinutes.IsNull() {
+		data.ScheduleEveryAtMinutes = types.Int64Value(value.Int())
+	} else if data.ScheduleEveryAtMinutes.IsNull() {
+		data.ScheduleEveryAtMinutes = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "schedule.every.for.time"); value.Exists() && !data.ScheduleEveryForTime.IsNull() {
+		data.ScheduleEveryForTime = types.Int64Value(value.Int())
+	} else if data.ScheduleEveryForTime.IsNull() {
+		data.ScheduleEveryForTime = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "schedule.every.for.unit"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ScheduleEveryForUnit.IsNull() {
+		data.ScheduleEveryForUnit = types.StringValue(value.String())
+	} else if data.ScheduleEveryForUnit.IsNull() {
+		data.ScheduleEveryForUnit = types.StringNull()
+	}
+}
+
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *EthernetSLA) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Type = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "probe.send.packet.once"); value.Exists() {
+		data.ProbeSendPacketOnce = types.BoolValue(true)
+	} else if !data.ProbeSendPacketOnce.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProbeSendPacketOnce = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "probe.send.packet.every.interval"); value.Exists() {
+		data.ProbeSendPacketEveryInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "probe.send.packet.every.milliseconds"); value.Exists() {
+		data.ProbeSendPacketEveryMilliseconds = types.BoolValue(true)
+	} else if !data.ProbeSendPacketEveryMilliseconds.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProbeSendPacketEveryMilliseconds = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "probe.send.packet.every.seconds"); value.Exists() {
+		data.ProbeSendPacketEverySeconds = types.BoolValue(true)
+	} else if !data.ProbeSendPacketEverySeconds.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProbeSendPacketEverySeconds = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "probe.send.packet.every.minutes"); value.Exists() {
+		data.ProbeSendPacketEveryMinutes = types.BoolValue(true)
+	} else if !data.ProbeSendPacketEveryMinutes.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProbeSendPacketEveryMinutes = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "probe.send.packet.every.hours"); value.Exists() {
+		data.ProbeSendPacketEveryHours = types.BoolValue(true)
+	} else if !data.ProbeSendPacketEveryHours.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProbeSendPacketEveryHours = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.once"); value.Exists() {
+		data.ProbeSendBurstOnce = types.BoolValue(true)
+	} else if !data.ProbeSendBurstOnce.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProbeSendBurstOnce = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.every.interval"); value.Exists() {
+		data.ProbeSendBurstEveryInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.every.seconds"); value.Exists() {
+		data.ProbeSendBurstEverySeconds = types.BoolValue(true)
+	} else if !data.ProbeSendBurstEverySeconds.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProbeSendBurstEverySeconds = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.every.minutes"); value.Exists() {
+		data.ProbeSendBurstEveryMinutes = types.BoolValue(true)
+	} else if !data.ProbeSendBurstEveryMinutes.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProbeSendBurstEveryMinutes = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.every.hours"); value.Exists() {
+		data.ProbeSendBurstEveryHours = types.BoolValue(true)
+	} else if !data.ProbeSendBurstEveryHours.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProbeSendBurstEveryHours = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.packet.count"); value.Exists() {
+		data.ProbeSendBurstPacketCount = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.packet.interval-in-seconds"); value.Exists() {
+		data.ProbeSendBurstPacketIntervalSeconds = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.packet.interval-in-milliseconds"); value.Exists() {
+		data.ProbeSendBurstPacketIntervalMilliseconds = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "probe.packet.size"); value.Exists() {
+		data.ProbePacketSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "probe.packet.test.pattern.hex"); value.Exists() {
+		data.ProbePacketTestPatternHex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "probe.priority"); value.Exists() {
+		data.ProbePriority = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "probe.synthetic.loss.calculation.packets"); value.Exists() {
+		data.ProbeSyntheticLossCalculationPackets = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "statistics.measures.measure"); value.Exists() {
+		data.StatisticsMeasure = make([]EthernetSLAStatisticsMeasure, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EthernetSLAStatisticsMeasure{}
+			if cValue := v.Get("type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Type = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("aggregate.none"); cValue.Exists() {
+				item.AggregateNone = types.BoolValue(true)
+			} else if !item.AggregateNone.IsNull() {
+				// Only set to false if it was previously set
+				item.AggregateNone = types.BoolValue(false)
+			}
+			if cValue := v.Get("aggregate.bins"); cValue.Exists() {
+				item.AggregateBins = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("aggregate.width"); cValue.Exists() {
+				item.AggregateWidth = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("aggregate.width-tenths"); cValue.Exists() {
+				item.AggregateWidthPercentage = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("aggregate.usec"); cValue.Exists() {
+				item.AggregateUsec = types.BoolValue(true)
+			} else if !item.AggregateUsec.IsNull() {
+				// Only set to false if it was previously set
+				item.AggregateUsec = types.BoolValue(false)
+			}
+			if cValue := v.Get("buckets.size"); cValue.Exists() {
+				item.BucketsSize = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("buckets.probes"); cValue.Exists() {
+				item.BucketsProbes = types.BoolValue(true)
+			} else if !item.BucketsProbes.IsNull() {
+				// Only set to false if it was previously set
+				item.BucketsProbes = types.BoolValue(false)
+			}
+			if cValue := v.Get("buckets.archive"); cValue.Exists() {
+				item.BucketsArchive = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateful.log.on.max-value"); cValue.Exists() {
+				item.ThresholdsStatefulLogOnMaxValue = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateful.log.on.mean-value"); cValue.Exists() {
+				item.ThresholdsStatefulLogOnMeanValue = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateful.log.on.sample-count"); cValue.Exists() {
+				item.ThresholdsStatefulLogOnSampleCount = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateful.log.on.in-and-above.bin"); cValue.Exists() {
+				item.ThresholdsStatefulLogOnInAndAboveBin = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateful.efd.on.max-value"); cValue.Exists() {
+				item.ThresholdsStatefulEfdOnMaxValue = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateful.efd.on.mean-value"); cValue.Exists() {
+				item.ThresholdsStatefulEfdOnMeanValue = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateful.efd.on.sample-count"); cValue.Exists() {
+				item.ThresholdsStatefulEfdOnSampleCount = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateful.efd.on.in-and-above.bin"); cValue.Exists() {
+				item.ThresholdsStatefulEfdOnInAndAboveBin = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateless.log.on.max-value"); cValue.Exists() {
+				item.ThresholdsStatelessLogOnMaxValue = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateless.log.on.mean-value"); cValue.Exists() {
+				item.ThresholdsStatelessLogOnMeanValue = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateless.log.on.sample-count"); cValue.Exists() {
+				item.ThresholdsStatelessLogOnSampleCount = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateless.log.on.in-and-above.bin"); cValue.Exists() {
+				item.ThresholdsStatelessLogOnInAndAboveBin = types.Int64Value(cValue.Int())
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("aggregate.minimum-delay"); cValue.Exists() {
+					item.AggregateMinimumDelay = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.AggregateMinimumDelay = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("aggregate.usec-minimum-delay"); cValue.Exists() {
+					item.AggregateUsecMinimumDelay = types.BoolValue(true)
+				} else if !item.AggregateUsecMinimumDelay.IsNull() {
+					// Only set to false if it was previously set
+					item.AggregateUsecMinimumDelay = types.BoolValue(false)
+				}
+			} else {
+				item.AggregateUsecMinimumDelay = types.BoolNull()
+			}
+			data.StatisticsMeasure = append(data.StatisticsMeasure, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "schedule.every.week.on"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ScheduleEveryWeekOn = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "schedule.every.day"); value.Exists() {
+		data.ScheduleEveryDay = types.BoolValue(true)
+	} else if !data.ScheduleEveryDay.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ScheduleEveryDay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "schedule.every.interval-in-minutes"); value.Exists() {
+		data.ScheduleEveryMinutes = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "schedule.every.interval-in-hours"); value.Exists() {
+		data.ScheduleEveryHours = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "schedule.every.at.hours"); value.Exists() {
+		data.ScheduleEveryAtHours = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "schedule.every.at.minutes"); value.Exists() {
+		data.ScheduleEveryAtMinutes = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "schedule.every.for.time"); value.Exists() {
+		data.ScheduleEveryForTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "schedule.every.for.unit"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ScheduleEveryForUnit = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *EthernetSLAData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "type"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Type = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "probe.send.packet.once"); value.Exists() {
+		data.ProbeSendPacketOnce = types.BoolValue(true)
+	} else {
+		data.ProbeSendPacketOnce = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "probe.send.packet.every.interval"); value.Exists() {
+		data.ProbeSendPacketEveryInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "probe.send.packet.every.milliseconds"); value.Exists() {
+		data.ProbeSendPacketEveryMilliseconds = types.BoolValue(true)
+	} else {
+		data.ProbeSendPacketEveryMilliseconds = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "probe.send.packet.every.seconds"); value.Exists() {
+		data.ProbeSendPacketEverySeconds = types.BoolValue(true)
+	} else {
+		data.ProbeSendPacketEverySeconds = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "probe.send.packet.every.minutes"); value.Exists() {
+		data.ProbeSendPacketEveryMinutes = types.BoolValue(true)
+	} else {
+		data.ProbeSendPacketEveryMinutes = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "probe.send.packet.every.hours"); value.Exists() {
+		data.ProbeSendPacketEveryHours = types.BoolValue(true)
+	} else {
+		data.ProbeSendPacketEveryHours = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.once"); value.Exists() {
+		data.ProbeSendBurstOnce = types.BoolValue(true)
+	} else {
+		data.ProbeSendBurstOnce = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.every.interval"); value.Exists() {
+		data.ProbeSendBurstEveryInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.every.seconds"); value.Exists() {
+		data.ProbeSendBurstEverySeconds = types.BoolValue(true)
+	} else {
+		data.ProbeSendBurstEverySeconds = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.every.minutes"); value.Exists() {
+		data.ProbeSendBurstEveryMinutes = types.BoolValue(true)
+	} else {
+		data.ProbeSendBurstEveryMinutes = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.every.hours"); value.Exists() {
+		data.ProbeSendBurstEveryHours = types.BoolValue(true)
+	} else {
+		data.ProbeSendBurstEveryHours = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.packet.count"); value.Exists() {
+		data.ProbeSendBurstPacketCount = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.packet.interval-in-seconds"); value.Exists() {
+		data.ProbeSendBurstPacketIntervalSeconds = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "probe.send.burst.packet.interval-in-milliseconds"); value.Exists() {
+		data.ProbeSendBurstPacketIntervalMilliseconds = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "probe.packet.size"); value.Exists() {
+		data.ProbePacketSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "probe.packet.test.pattern.hex"); value.Exists() {
+		data.ProbePacketTestPatternHex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "probe.priority"); value.Exists() {
+		data.ProbePriority = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "probe.synthetic.loss.calculation.packets"); value.Exists() {
+		data.ProbeSyntheticLossCalculationPackets = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "statistics.measures.measure"); value.Exists() {
+		data.StatisticsMeasure = make([]EthernetSLAStatisticsMeasure, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EthernetSLAStatisticsMeasure{}
+			if cValue := v.Get("type"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Type = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("aggregate.none"); cValue.Exists() {
+				item.AggregateNone = types.BoolValue(true)
+			} else {
+				item.AggregateNone = types.BoolValue(false)
+			}
+			if cValue := v.Get("aggregate.bins"); cValue.Exists() {
+				item.AggregateBins = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("aggregate.width"); cValue.Exists() {
+				item.AggregateWidth = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("aggregate.width-tenths"); cValue.Exists() {
+				item.AggregateWidthPercentage = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("aggregate.usec"); cValue.Exists() {
+				item.AggregateUsec = types.BoolValue(true)
+			} else {
+				item.AggregateUsec = types.BoolValue(false)
+			}
+			if cValue := v.Get("buckets.size"); cValue.Exists() {
+				item.BucketsSize = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("buckets.probes"); cValue.Exists() {
+				item.BucketsProbes = types.BoolValue(true)
+			} else {
+				item.BucketsProbes = types.BoolValue(false)
+			}
+			if cValue := v.Get("buckets.archive"); cValue.Exists() {
+				item.BucketsArchive = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateful.log.on.max-value"); cValue.Exists() {
+				item.ThresholdsStatefulLogOnMaxValue = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateful.log.on.mean-value"); cValue.Exists() {
+				item.ThresholdsStatefulLogOnMeanValue = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateful.log.on.sample-count"); cValue.Exists() {
+				item.ThresholdsStatefulLogOnSampleCount = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateful.log.on.in-and-above.bin"); cValue.Exists() {
+				item.ThresholdsStatefulLogOnInAndAboveBin = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateful.efd.on.max-value"); cValue.Exists() {
+				item.ThresholdsStatefulEfdOnMaxValue = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateful.efd.on.mean-value"); cValue.Exists() {
+				item.ThresholdsStatefulEfdOnMeanValue = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateful.efd.on.sample-count"); cValue.Exists() {
+				item.ThresholdsStatefulEfdOnSampleCount = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateful.efd.on.in-and-above.bin"); cValue.Exists() {
+				item.ThresholdsStatefulEfdOnInAndAboveBin = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateless.log.on.max-value"); cValue.Exists() {
+				item.ThresholdsStatelessLogOnMaxValue = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateless.log.on.mean-value"); cValue.Exists() {
+				item.ThresholdsStatelessLogOnMeanValue = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateless.log.on.sample-count"); cValue.Exists() {
+				item.ThresholdsStatelessLogOnSampleCount = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("thresholds.type.stateless.log.on.in-and-above.bin"); cValue.Exists() {
+				item.ThresholdsStatelessLogOnInAndAboveBin = types.Int64Value(cValue.Int())
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("aggregate.minimum-delay"); cValue.Exists() {
+					item.AggregateMinimumDelay = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.AggregateMinimumDelay = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("aggregate.usec-minimum-delay"); cValue.Exists() {
+					item.AggregateUsecMinimumDelay = types.BoolValue(true)
+				} else {
+					item.AggregateUsecMinimumDelay = types.BoolValue(false)
+				}
+			} else {
+				item.AggregateUsecMinimumDelay = types.BoolNull()
+			}
+			data.StatisticsMeasure = append(data.StatisticsMeasure, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "schedule.every.week.on"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ScheduleEveryWeekOn = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "schedule.every.day"); value.Exists() {
+		data.ScheduleEveryDay = types.BoolValue(true)
+	} else {
+		data.ScheduleEveryDay = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "schedule.every.interval-in-minutes"); value.Exists() {
+		data.ScheduleEveryMinutes = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "schedule.every.interval-in-hours"); value.Exists() {
+		data.ScheduleEveryHours = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "schedule.every.at.hours"); value.Exists() {
+		data.ScheduleEveryAtHours = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "schedule.every.at.minutes"); value.Exists() {
+		data.ScheduleEveryAtMinutes = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "schedule.every.for.time"); value.Exists() {
+		data.ScheduleEveryForTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "schedule.every.for.unit"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ScheduleEveryForUnit = types.StringValue(value.String())
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *EthernetSLA) getDeletedItems(ctx context.Context, state EthernetSLA, version string) []string {
+	deletedItems := make([]string, 0)
+	if !state.ScheduleEveryForUnit.IsNull() && data.ScheduleEveryForUnit.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "schedule/every/for/unit"))
+	}
+	if !state.ScheduleEveryForTime.IsNull() && data.ScheduleEveryForTime.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "schedule/every/for/time"))
+	}
+	if !state.ScheduleEveryAtMinutes.IsNull() && data.ScheduleEveryAtMinutes.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "schedule/every/at/minutes"))
+	}
+	if !state.ScheduleEveryAtHours.IsNull() && data.ScheduleEveryAtHours.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "schedule/every/at/hours"))
+	}
+	if !state.ScheduleEveryHours.IsNull() && data.ScheduleEveryHours.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "schedule/every/interval-in-hours"))
+	}
+	if !state.ScheduleEveryMinutes.IsNull() && data.ScheduleEveryMinutes.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "schedule/every/interval-in-minutes"))
+	}
+	if !state.ScheduleEveryDay.IsNull() && data.ScheduleEveryDay.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "schedule/every/day"))
+	}
+	if !state.ScheduleEveryWeekOn.IsNull() && data.ScheduleEveryWeekOn.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "schedule/every/week/on"))
+	}
+	for i := range state.StatisticsMeasure {
+		keys := [...]string{"type"}
+		stateKeyValues := [...]string{state.StatisticsMeasure[i].Type.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.StatisticsMeasure[i].Type.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.StatisticsMeasure {
+			found = true
+			if state.StatisticsMeasure[i].Type.ValueString() != data.StatisticsMeasure[j].Type.ValueString() {
+				found = false
+			}
+			if found {
+				if helpers.VersionAtLeast(version, "25.4") && !state.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() && data.StatisticsMeasure[j].AggregateUsecMinimumDelay.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "aggregate/usec-minimum-delay"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.StatisticsMeasure[i].AggregateMinimumDelay.IsNull() && data.StatisticsMeasure[j].AggregateMinimumDelay.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "aggregate/minimum-delay"))
+				}
+				if !state.StatisticsMeasure[i].ThresholdsStatelessLogOnInAndAboveBin.IsNull() && data.StatisticsMeasure[j].ThresholdsStatelessLogOnInAndAboveBin.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "thresholds/type/stateless/log/on/in-and-above/bin"))
+				}
+				if !state.StatisticsMeasure[i].ThresholdsStatelessLogOnSampleCount.IsNull() && data.StatisticsMeasure[j].ThresholdsStatelessLogOnSampleCount.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "thresholds/type/stateless/log/on/sample-count"))
+				}
+				if !state.StatisticsMeasure[i].ThresholdsStatelessLogOnMeanValue.IsNull() && data.StatisticsMeasure[j].ThresholdsStatelessLogOnMeanValue.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "thresholds/type/stateless/log/on/mean-value"))
+				}
+				if !state.StatisticsMeasure[i].ThresholdsStatelessLogOnMaxValue.IsNull() && data.StatisticsMeasure[j].ThresholdsStatelessLogOnMaxValue.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "thresholds/type/stateless/log/on/max-value"))
+				}
+				if !state.StatisticsMeasure[i].ThresholdsStatefulEfdOnInAndAboveBin.IsNull() && data.StatisticsMeasure[j].ThresholdsStatefulEfdOnInAndAboveBin.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "thresholds/type/stateful/efd/on/in-and-above/bin"))
+				}
+				if !state.StatisticsMeasure[i].ThresholdsStatefulEfdOnSampleCount.IsNull() && data.StatisticsMeasure[j].ThresholdsStatefulEfdOnSampleCount.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "thresholds/type/stateful/efd/on/sample-count"))
+				}
+				if !state.StatisticsMeasure[i].ThresholdsStatefulEfdOnMeanValue.IsNull() && data.StatisticsMeasure[j].ThresholdsStatefulEfdOnMeanValue.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "thresholds/type/stateful/efd/on/mean-value"))
+				}
+				if !state.StatisticsMeasure[i].ThresholdsStatefulEfdOnMaxValue.IsNull() && data.StatisticsMeasure[j].ThresholdsStatefulEfdOnMaxValue.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "thresholds/type/stateful/efd/on/max-value"))
+				}
+				if !state.StatisticsMeasure[i].ThresholdsStatefulLogOnInAndAboveBin.IsNull() && data.StatisticsMeasure[j].ThresholdsStatefulLogOnInAndAboveBin.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "thresholds/type/stateful/log/on/in-and-above/bin"))
+				}
+				if !state.StatisticsMeasure[i].ThresholdsStatefulLogOnSampleCount.IsNull() && data.StatisticsMeasure[j].ThresholdsStatefulLogOnSampleCount.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "thresholds/type/stateful/log/on/sample-count"))
+				}
+				if !state.StatisticsMeasure[i].ThresholdsStatefulLogOnMeanValue.IsNull() && data.StatisticsMeasure[j].ThresholdsStatefulLogOnMeanValue.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "thresholds/type/stateful/log/on/mean-value"))
+				}
+				if !state.StatisticsMeasure[i].ThresholdsStatefulLogOnMaxValue.IsNull() && data.StatisticsMeasure[j].ThresholdsStatefulLogOnMaxValue.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "thresholds/type/stateful/log/on/max-value"))
+				}
+				if !state.StatisticsMeasure[i].BucketsArchive.IsNull() && data.StatisticsMeasure[j].BucketsArchive.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "buckets/archive"))
+				}
+				if !state.StatisticsMeasure[i].BucketsProbes.IsNull() && data.StatisticsMeasure[j].BucketsProbes.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "buckets/probes"))
+				}
+				if !state.StatisticsMeasure[i].BucketsSize.IsNull() && data.StatisticsMeasure[j].BucketsSize.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "buckets/size"))
+				}
+				if !state.StatisticsMeasure[i].AggregateUsec.IsNull() && data.StatisticsMeasure[j].AggregateUsec.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "aggregate/usec"))
+				}
+				if !state.StatisticsMeasure[i].AggregateWidthPercentage.IsNull() && data.StatisticsMeasure[j].AggregateWidthPercentage.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "aggregate/width-tenths"))
+				}
+				if !state.StatisticsMeasure[i].AggregateWidth.IsNull() && data.StatisticsMeasure[j].AggregateWidth.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "aggregate/width"))
+				}
+				if !state.StatisticsMeasure[i].AggregateBins.IsNull() && data.StatisticsMeasure[j].AggregateBins.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "aggregate/bins"))
+				}
+				if !state.StatisticsMeasure[i].AggregateNone.IsNull() && data.StatisticsMeasure[j].AggregateNone.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString), "aggregate/none"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "statistics/measures/measure", keyString))
+		}
+	}
+	if !state.ProbeSyntheticLossCalculationPackets.IsNull() && data.ProbeSyntheticLossCalculationPackets.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "probe/synthetic/loss/calculation/packets"))
+	}
+	if !state.ProbePriority.IsNull() && data.ProbePriority.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "probe/priority"))
+	}
+	if !state.ProbePacketTestPatternHex.IsNull() && data.ProbePacketTestPatternHex.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "probe/packet/test/pattern/hex"))
+	}
+	if !state.ProbePacketSize.IsNull() && data.ProbePacketSize.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "probe/packet/size"))
+	}
+	if !state.ProbeSendBurstPacketIntervalMilliseconds.IsNull() && data.ProbeSendBurstPacketIntervalMilliseconds.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "probe/send/burst/packet/interval-in-milliseconds"))
+	}
+	if !state.ProbeSendBurstPacketIntervalSeconds.IsNull() && data.ProbeSendBurstPacketIntervalSeconds.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "probe/send/burst/packet/interval-in-seconds"))
+	}
+	if !state.ProbeSendBurstPacketCount.IsNull() && data.ProbeSendBurstPacketCount.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "probe/send/burst/packet/count"))
+	}
+	if !state.ProbeSendBurstEveryHours.IsNull() && data.ProbeSendBurstEveryHours.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "probe/send/burst/every/hours"))
+	}
+	if !state.ProbeSendBurstEveryMinutes.IsNull() && data.ProbeSendBurstEveryMinutes.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "probe/send/burst/every/minutes"))
+	}
+	if !state.ProbeSendBurstEverySeconds.IsNull() && data.ProbeSendBurstEverySeconds.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "probe/send/burst/every/seconds"))
+	}
+	if !state.ProbeSendBurstEveryInterval.IsNull() && data.ProbeSendBurstEveryInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "probe/send/burst/every/interval"))
+	}
+	if !state.ProbeSendBurstOnce.IsNull() && data.ProbeSendBurstOnce.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "probe/send/burst/once"))
+	}
+	if !state.ProbeSendPacketEveryHours.IsNull() && data.ProbeSendPacketEveryHours.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "probe/send/packet/every/hours"))
+	}
+	if !state.ProbeSendPacketEveryMinutes.IsNull() && data.ProbeSendPacketEveryMinutes.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "probe/send/packet/every/minutes"))
+	}
+	if !state.ProbeSendPacketEverySeconds.IsNull() && data.ProbeSendPacketEverySeconds.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "probe/send/packet/every/seconds"))
+	}
+	if !state.ProbeSendPacketEveryMilliseconds.IsNull() && data.ProbeSendPacketEveryMilliseconds.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "probe/send/packet/every/milliseconds"))
+	}
+	if !state.ProbeSendPacketEveryInterval.IsNull() && data.ProbeSendPacketEveryInterval.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "probe/send/packet/every/interval"))
+	}
+	if !state.ProbeSendPacketOnce.IsNull() && data.ProbeSendPacketOnce.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "probe/send/packet/once"))
+	}
+	if !state.Type.IsNull() && data.Type.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "type"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *EthernetSLA) getEmptyLeafsDelete(ctx context.Context, state *EthernetSLA, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if !data.ScheduleEveryDay.IsNull() && !data.ScheduleEveryDay.ValueBool() {
+		if state == nil || state.ScheduleEveryDay.IsNull() || state.ScheduleEveryDay.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "schedule/every/day"))
+		}
+	}
+	for i := range data.StatisticsMeasure {
+		keys := [...]string{"type"}
+		keyValues := [...]string{data.StatisticsMeasure[i].Type.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() && !data.StatisticsMeasure[i].AggregateUsecMinimumDelay.ValueBool() {
+			if state == nil || i >= len(state.StatisticsMeasure) || state.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() || state.StatisticsMeasure[i].AggregateUsecMinimumDelay.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "statistics/measures/measure", keyString), "aggregate/usec-minimum-delay"))
+			}
+		}
+		if !data.StatisticsMeasure[i].BucketsProbes.IsNull() && !data.StatisticsMeasure[i].BucketsProbes.ValueBool() {
+			if state == nil || i >= len(state.StatisticsMeasure) || state.StatisticsMeasure[i].BucketsProbes.IsNull() || state.StatisticsMeasure[i].BucketsProbes.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "statistics/measures/measure", keyString), "buckets/probes"))
+			}
+		}
+		if !data.StatisticsMeasure[i].AggregateUsec.IsNull() && !data.StatisticsMeasure[i].AggregateUsec.ValueBool() {
+			if state == nil || i >= len(state.StatisticsMeasure) || state.StatisticsMeasure[i].AggregateUsec.IsNull() || state.StatisticsMeasure[i].AggregateUsec.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "statistics/measures/measure", keyString), "aggregate/usec"))
+			}
+		}
+		if !data.StatisticsMeasure[i].AggregateNone.IsNull() && !data.StatisticsMeasure[i].AggregateNone.ValueBool() {
+			if state == nil || i >= len(state.StatisticsMeasure) || state.StatisticsMeasure[i].AggregateNone.IsNull() || state.StatisticsMeasure[i].AggregateNone.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "statistics/measures/measure", keyString), "aggregate/none"))
+			}
+		}
+	}
+	if !data.ProbeSendBurstEveryHours.IsNull() && !data.ProbeSendBurstEveryHours.ValueBool() {
+		if state == nil || state.ProbeSendBurstEveryHours.IsNull() || state.ProbeSendBurstEveryHours.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "probe/send/burst/every/hours"))
+		}
+	}
+	if !data.ProbeSendBurstEveryMinutes.IsNull() && !data.ProbeSendBurstEveryMinutes.ValueBool() {
+		if state == nil || state.ProbeSendBurstEveryMinutes.IsNull() || state.ProbeSendBurstEveryMinutes.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "probe/send/burst/every/minutes"))
+		}
+	}
+	if !data.ProbeSendBurstEverySeconds.IsNull() && !data.ProbeSendBurstEverySeconds.ValueBool() {
+		if state == nil || state.ProbeSendBurstEverySeconds.IsNull() || state.ProbeSendBurstEverySeconds.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "probe/send/burst/every/seconds"))
+		}
+	}
+	if !data.ProbeSendBurstOnce.IsNull() && !data.ProbeSendBurstOnce.ValueBool() {
+		if state == nil || state.ProbeSendBurstOnce.IsNull() || state.ProbeSendBurstOnce.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "probe/send/burst/once"))
+		}
+	}
+	if !data.ProbeSendPacketEveryHours.IsNull() && !data.ProbeSendPacketEveryHours.ValueBool() {
+		if state == nil || state.ProbeSendPacketEveryHours.IsNull() || state.ProbeSendPacketEveryHours.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "probe/send/packet/every/hours"))
+		}
+	}
+	if !data.ProbeSendPacketEveryMinutes.IsNull() && !data.ProbeSendPacketEveryMinutes.ValueBool() {
+		if state == nil || state.ProbeSendPacketEveryMinutes.IsNull() || state.ProbeSendPacketEveryMinutes.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "probe/send/packet/every/minutes"))
+		}
+	}
+	if !data.ProbeSendPacketEverySeconds.IsNull() && !data.ProbeSendPacketEverySeconds.ValueBool() {
+		if state == nil || state.ProbeSendPacketEverySeconds.IsNull() || state.ProbeSendPacketEverySeconds.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "probe/send/packet/every/seconds"))
+		}
+	}
+	if !data.ProbeSendPacketEveryMilliseconds.IsNull() && !data.ProbeSendPacketEveryMilliseconds.ValueBool() {
+		if state == nil || state.ProbeSendPacketEveryMilliseconds.IsNull() || state.ProbeSendPacketEveryMilliseconds.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "probe/send/packet/every/milliseconds"))
+		}
+	}
+	if !data.ProbeSendPacketOnce.IsNull() && !data.ProbeSendPacketOnce.ValueBool() {
+		if state == nil || state.ProbeSendPacketOnce.IsNull() || state.ProbeSendPacketOnce.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "probe/send/packet/once"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *EthernetSLA) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if !data.ScheduleEveryForUnit.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "schedule/every/for/unit"))
+	}
+	if !data.ScheduleEveryForTime.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "schedule/every/for/time"))
+	}
+	if !data.ScheduleEveryAtMinutes.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "schedule/every/at/minutes"))
+	}
+	if !data.ScheduleEveryAtHours.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "schedule/every/at/hours"))
+	}
+	if !data.ScheduleEveryHours.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "schedule/every/interval-in-hours"))
+	}
+	if !data.ScheduleEveryMinutes.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "schedule/every/interval-in-minutes"))
+	}
+	if !data.ScheduleEveryDay.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "schedule/every/day"))
+	}
+	if !data.ScheduleEveryWeekOn.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "schedule/every/week/on"))
+	}
+	for i := range data.StatisticsMeasure {
+		keys := [...]string{"type"}
+		keyValues := [...]string{data.StatisticsMeasure[i].Type.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.StatisticsMeasure[i].Type.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "statistics/measures/measure", keyString))
+	}
+	if !data.ProbeSyntheticLossCalculationPackets.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "probe/synthetic/loss/calculation/packets"))
+	}
+	if !data.ProbePriority.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "probe/priority"))
+	}
+	if !data.ProbePacketTestPatternHex.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "probe/packet/test/pattern/hex"))
+	}
+	if !data.ProbePacketSize.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "probe/packet/size"))
+	}
+	if !data.ProbeSendBurstPacketIntervalMilliseconds.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "probe/send/burst/packet/interval-in-milliseconds"))
+	}
+	if !data.ProbeSendBurstPacketIntervalSeconds.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "probe/send/burst/packet/interval-in-seconds"))
+	}
+	if !data.ProbeSendBurstPacketCount.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "probe/send/burst/packet/count"))
+	}
+	if !data.ProbeSendBurstEveryHours.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "probe/send/burst/every/hours"))
+	}
+	if !data.ProbeSendBurstEveryMinutes.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "probe/send/burst/every/minutes"))
+	}
+	if !data.ProbeSendBurstEverySeconds.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "probe/send/burst/every/seconds"))
+	}
+	if !data.ProbeSendBurstEveryInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "probe/send/burst/every/interval"))
+	}
+	if !data.ProbeSendBurstOnce.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "probe/send/burst/once"))
+	}
+	if !data.ProbeSendPacketEveryHours.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "probe/send/packet/every/hours"))
+	}
+	if !data.ProbeSendPacketEveryMinutes.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "probe/send/packet/every/minutes"))
+	}
+	if !data.ProbeSendPacketEverySeconds.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "probe/send/packet/every/seconds"))
+	}
+	if !data.ProbeSendPacketEveryMilliseconds.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "probe/send/packet/every/milliseconds"))
+	}
+	if !data.ProbeSendPacketEveryInterval.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "probe/send/packet/every/interval"))
+	}
+	if !data.ProbeSendPacketOnce.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "probe/send/packet/once"))
+	}
+	if !data.Type.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "type"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
@@ -499,6 +1729,14 @@ func (data EthernetSLA) toBodyXML(ctx context.Context, stateArg ...*EthernetSLA)
 			if !item.ThresholdsStatelessLogOnInAndAboveBin.IsNull() && !item.ThresholdsStatelessLogOnInAndAboveBin.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/thresholds/type/stateless/log/on/in-and-above/bin", strconv.FormatInt(item.ThresholdsStatelessLogOnInAndAboveBin.ValueInt64(), 10))
 			}
+			if !item.AggregateMinimumDelay.IsNull() && !item.AggregateMinimumDelay.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/aggregate/minimum-delay", strconv.FormatInt(item.AggregateMinimumDelay.ValueInt64(), 10))
+			}
+			if !item.AggregateUsecMinimumDelay.IsNull() && !item.AggregateUsecMinimumDelay.IsUnknown() {
+				if item.AggregateUsecMinimumDelay.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/aggregate/usec-minimum-delay", "")
+				}
+			}
 		}
 	}
 	if !data.ScheduleEveryWeekOn.IsNull() && !data.ScheduleEveryWeekOn.IsUnknown() {
@@ -549,7 +1787,7 @@ func (data EthernetSLA) toBodyXML(ctx context.Context, stateArg ...*EthernetSLA)
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -557,358 +1795,6 @@ func (data EthernetSLA) toBodyXML(ctx context.Context, stateArg ...*EthernetSLA)
 }
 
 // End of section. //template:end toBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
-
-func (data *EthernetSLA) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("type"); value.Exists() && !data.Type.IsNull() {
-		data.Type = types.StringValue(value.String())
-	} else if data.Type.IsNull() {
-		data.Type = types.StringNull()
-	}
-	if value := res.Get("probe.send.packet.once"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProbeSendPacketOnce.IsNull() {
-			data.ProbeSendPacketOnce = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProbeSendPacketOnce.IsNull() {
-			data.ProbeSendPacketOnce = types.BoolNull()
-		}
-	}
-	if value := res.Get("probe.send.packet.every.interval"); value.Exists() && !data.ProbeSendPacketEveryInterval.IsNull() {
-		data.ProbeSendPacketEveryInterval = types.Int64Value(value.Int())
-	} else if data.ProbeSendPacketEveryInterval.IsNull() {
-		data.ProbeSendPacketEveryInterval = types.Int64Null()
-	}
-	if value := res.Get("probe.send.packet.every.milliseconds"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProbeSendPacketEveryMilliseconds.IsNull() {
-			data.ProbeSendPacketEveryMilliseconds = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProbeSendPacketEveryMilliseconds.IsNull() {
-			data.ProbeSendPacketEveryMilliseconds = types.BoolNull()
-		}
-	}
-	if value := res.Get("probe.send.packet.every.seconds"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProbeSendPacketEverySeconds.IsNull() {
-			data.ProbeSendPacketEverySeconds = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProbeSendPacketEverySeconds.IsNull() {
-			data.ProbeSendPacketEverySeconds = types.BoolNull()
-		}
-	}
-	if value := res.Get("probe.send.packet.every.minutes"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProbeSendPacketEveryMinutes.IsNull() {
-			data.ProbeSendPacketEveryMinutes = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProbeSendPacketEveryMinutes.IsNull() {
-			data.ProbeSendPacketEveryMinutes = types.BoolNull()
-		}
-	}
-	if value := res.Get("probe.send.packet.every.hours"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProbeSendPacketEveryHours.IsNull() {
-			data.ProbeSendPacketEveryHours = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProbeSendPacketEveryHours.IsNull() {
-			data.ProbeSendPacketEveryHours = types.BoolNull()
-		}
-	}
-	if value := res.Get("probe.send.burst.once"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProbeSendBurstOnce.IsNull() {
-			data.ProbeSendBurstOnce = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProbeSendBurstOnce.IsNull() {
-			data.ProbeSendBurstOnce = types.BoolNull()
-		}
-	}
-	if value := res.Get("probe.send.burst.every.interval"); value.Exists() && !data.ProbeSendBurstEveryInterval.IsNull() {
-		data.ProbeSendBurstEveryInterval = types.Int64Value(value.Int())
-	} else if data.ProbeSendBurstEveryInterval.IsNull() {
-		data.ProbeSendBurstEveryInterval = types.Int64Null()
-	}
-	if value := res.Get("probe.send.burst.every.seconds"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProbeSendBurstEverySeconds.IsNull() {
-			data.ProbeSendBurstEverySeconds = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProbeSendBurstEverySeconds.IsNull() {
-			data.ProbeSendBurstEverySeconds = types.BoolNull()
-		}
-	}
-	if value := res.Get("probe.send.burst.every.minutes"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProbeSendBurstEveryMinutes.IsNull() {
-			data.ProbeSendBurstEveryMinutes = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProbeSendBurstEveryMinutes.IsNull() {
-			data.ProbeSendBurstEveryMinutes = types.BoolNull()
-		}
-	}
-	if value := res.Get("probe.send.burst.every.hours"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProbeSendBurstEveryHours.IsNull() {
-			data.ProbeSendBurstEveryHours = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProbeSendBurstEveryHours.IsNull() {
-			data.ProbeSendBurstEveryHours = types.BoolNull()
-		}
-	}
-	if value := res.Get("probe.send.burst.packet.count"); value.Exists() && !data.ProbeSendBurstPacketCount.IsNull() {
-		data.ProbeSendBurstPacketCount = types.Int64Value(value.Int())
-	} else if data.ProbeSendBurstPacketCount.IsNull() {
-		data.ProbeSendBurstPacketCount = types.Int64Null()
-	}
-	if value := res.Get("probe.send.burst.packet.interval-in-seconds"); value.Exists() && !data.ProbeSendBurstPacketIntervalSeconds.IsNull() {
-		data.ProbeSendBurstPacketIntervalSeconds = types.Int64Value(value.Int())
-	} else if data.ProbeSendBurstPacketIntervalSeconds.IsNull() {
-		data.ProbeSendBurstPacketIntervalSeconds = types.Int64Null()
-	}
-	if value := res.Get("probe.send.burst.packet.interval-in-milliseconds"); value.Exists() && !data.ProbeSendBurstPacketIntervalMilliseconds.IsNull() {
-		data.ProbeSendBurstPacketIntervalMilliseconds = types.Int64Value(value.Int())
-	} else if data.ProbeSendBurstPacketIntervalMilliseconds.IsNull() {
-		data.ProbeSendBurstPacketIntervalMilliseconds = types.Int64Null()
-	}
-	if value := res.Get("probe.packet.size"); value.Exists() && !data.ProbePacketSize.IsNull() {
-		data.ProbePacketSize = types.Int64Value(value.Int())
-	} else if data.ProbePacketSize.IsNull() {
-		data.ProbePacketSize = types.Int64Null()
-	}
-	if value := res.Get("probe.packet.test.pattern.hex"); value.Exists() && !data.ProbePacketTestPatternHex.IsNull() {
-		data.ProbePacketTestPatternHex = types.Int64Value(value.Int())
-	} else if data.ProbePacketTestPatternHex.IsNull() {
-		data.ProbePacketTestPatternHex = types.Int64Null()
-	}
-	if value := res.Get("probe.priority"); value.Exists() && !data.ProbePriority.IsNull() {
-		data.ProbePriority = types.Int64Value(value.Int())
-	} else if data.ProbePriority.IsNull() {
-		data.ProbePriority = types.Int64Null()
-	}
-	if value := res.Get("probe.synthetic.loss.calculation.packets"); value.Exists() && !data.ProbeSyntheticLossCalculationPackets.IsNull() {
-		data.ProbeSyntheticLossCalculationPackets = types.Int64Value(value.Int())
-	} else if data.ProbeSyntheticLossCalculationPackets.IsNull() {
-		data.ProbeSyntheticLossCalculationPackets = types.Int64Null()
-	}
-	for i := range data.StatisticsMeasure {
-		keys := [...]string{"type"}
-		keyValues := [...]string{data.StatisticsMeasure[i].Type.ValueString()}
-
-		var r gjson.Result
-		res.Get("statistics.measures.measure").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("type"); value.Exists() && !data.StatisticsMeasure[i].Type.IsNull() {
-			data.StatisticsMeasure[i].Type = types.StringValue(value.String())
-		} else {
-			data.StatisticsMeasure[i].Type = types.StringNull()
-		}
-		if value := r.Get("aggregate.none"); value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.StatisticsMeasure[i].AggregateNone.IsNull() {
-				data.StatisticsMeasure[i].AggregateNone = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.StatisticsMeasure[i].AggregateNone.IsNull() {
-				data.StatisticsMeasure[i].AggregateNone = types.BoolNull()
-			}
-		}
-		if value := r.Get("aggregate.bins"); value.Exists() && !data.StatisticsMeasure[i].AggregateBins.IsNull() {
-			data.StatisticsMeasure[i].AggregateBins = types.Int64Value(value.Int())
-		} else {
-			data.StatisticsMeasure[i].AggregateBins = types.Int64Null()
-		}
-		if value := r.Get("aggregate.width"); value.Exists() && !data.StatisticsMeasure[i].AggregateWidth.IsNull() {
-			data.StatisticsMeasure[i].AggregateWidth = types.Int64Value(value.Int())
-		} else {
-			data.StatisticsMeasure[i].AggregateWidth = types.Int64Null()
-		}
-		if value := r.Get("aggregate.width-tenths"); value.Exists() && !data.StatisticsMeasure[i].AggregateWidthPercentage.IsNull() {
-			data.StatisticsMeasure[i].AggregateWidthPercentage = types.Int64Value(value.Int())
-		} else {
-			data.StatisticsMeasure[i].AggregateWidthPercentage = types.Int64Null()
-		}
-		if value := r.Get("aggregate.usec"); value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.StatisticsMeasure[i].AggregateUsec.IsNull() {
-				data.StatisticsMeasure[i].AggregateUsec = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.StatisticsMeasure[i].AggregateUsec.IsNull() {
-				data.StatisticsMeasure[i].AggregateUsec = types.BoolNull()
-			}
-		}
-		if value := r.Get("buckets.size"); value.Exists() && !data.StatisticsMeasure[i].BucketsSize.IsNull() {
-			data.StatisticsMeasure[i].BucketsSize = types.Int64Value(value.Int())
-		} else {
-			data.StatisticsMeasure[i].BucketsSize = types.Int64Null()
-		}
-		if value := r.Get("buckets.probes"); value.Exists() {
-			// Only set to true if it was already in the plan (not null)
-			if !data.StatisticsMeasure[i].BucketsProbes.IsNull() {
-				data.StatisticsMeasure[i].BucketsProbes = types.BoolValue(true)
-			}
-		} else {
-			// If config has false and device doesn't have the field, keep false (don't set to null)
-			// Only set to null if it was already null
-			if data.StatisticsMeasure[i].BucketsProbes.IsNull() {
-				data.StatisticsMeasure[i].BucketsProbes = types.BoolNull()
-			}
-		}
-		if value := r.Get("buckets.archive"); value.Exists() && !data.StatisticsMeasure[i].BucketsArchive.IsNull() {
-			data.StatisticsMeasure[i].BucketsArchive = types.Int64Value(value.Int())
-		} else {
-			data.StatisticsMeasure[i].BucketsArchive = types.Int64Null()
-		}
-		if value := r.Get("thresholds.type.stateful.log.on.max-value"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatefulLogOnMaxValue.IsNull() {
-			data.StatisticsMeasure[i].ThresholdsStatefulLogOnMaxValue = types.Int64Value(value.Int())
-		} else {
-			data.StatisticsMeasure[i].ThresholdsStatefulLogOnMaxValue = types.Int64Null()
-		}
-		if value := r.Get("thresholds.type.stateful.log.on.mean-value"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatefulLogOnMeanValue.IsNull() {
-			data.StatisticsMeasure[i].ThresholdsStatefulLogOnMeanValue = types.Int64Value(value.Int())
-		} else {
-			data.StatisticsMeasure[i].ThresholdsStatefulLogOnMeanValue = types.Int64Null()
-		}
-		if value := r.Get("thresholds.type.stateful.log.on.sample-count"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatefulLogOnSampleCount.IsNull() {
-			data.StatisticsMeasure[i].ThresholdsStatefulLogOnSampleCount = types.Int64Value(value.Int())
-		} else {
-			data.StatisticsMeasure[i].ThresholdsStatefulLogOnSampleCount = types.Int64Null()
-		}
-		if value := r.Get("thresholds.type.stateful.log.on.in-and-above.bin"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatefulLogOnInAndAboveBin.IsNull() {
-			data.StatisticsMeasure[i].ThresholdsStatefulLogOnInAndAboveBin = types.Int64Value(value.Int())
-		} else {
-			data.StatisticsMeasure[i].ThresholdsStatefulLogOnInAndAboveBin = types.Int64Null()
-		}
-		if value := r.Get("thresholds.type.stateful.efd.on.max-value"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatefulEfdOnMaxValue.IsNull() {
-			data.StatisticsMeasure[i].ThresholdsStatefulEfdOnMaxValue = types.Int64Value(value.Int())
-		} else {
-			data.StatisticsMeasure[i].ThresholdsStatefulEfdOnMaxValue = types.Int64Null()
-		}
-		if value := r.Get("thresholds.type.stateful.efd.on.mean-value"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatefulEfdOnMeanValue.IsNull() {
-			data.StatisticsMeasure[i].ThresholdsStatefulEfdOnMeanValue = types.Int64Value(value.Int())
-		} else {
-			data.StatisticsMeasure[i].ThresholdsStatefulEfdOnMeanValue = types.Int64Null()
-		}
-		if value := r.Get("thresholds.type.stateful.efd.on.sample-count"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatefulEfdOnSampleCount.IsNull() {
-			data.StatisticsMeasure[i].ThresholdsStatefulEfdOnSampleCount = types.Int64Value(value.Int())
-		} else {
-			data.StatisticsMeasure[i].ThresholdsStatefulEfdOnSampleCount = types.Int64Null()
-		}
-		if value := r.Get("thresholds.type.stateful.efd.on.in-and-above.bin"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatefulEfdOnInAndAboveBin.IsNull() {
-			data.StatisticsMeasure[i].ThresholdsStatefulEfdOnInAndAboveBin = types.Int64Value(value.Int())
-		} else {
-			data.StatisticsMeasure[i].ThresholdsStatefulEfdOnInAndAboveBin = types.Int64Null()
-		}
-		if value := r.Get("thresholds.type.stateless.log.on.max-value"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatelessLogOnMaxValue.IsNull() {
-			data.StatisticsMeasure[i].ThresholdsStatelessLogOnMaxValue = types.Int64Value(value.Int())
-		} else {
-			data.StatisticsMeasure[i].ThresholdsStatelessLogOnMaxValue = types.Int64Null()
-		}
-		if value := r.Get("thresholds.type.stateless.log.on.mean-value"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatelessLogOnMeanValue.IsNull() {
-			data.StatisticsMeasure[i].ThresholdsStatelessLogOnMeanValue = types.Int64Value(value.Int())
-		} else {
-			data.StatisticsMeasure[i].ThresholdsStatelessLogOnMeanValue = types.Int64Null()
-		}
-		if value := r.Get("thresholds.type.stateless.log.on.sample-count"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatelessLogOnSampleCount.IsNull() {
-			data.StatisticsMeasure[i].ThresholdsStatelessLogOnSampleCount = types.Int64Value(value.Int())
-		} else {
-			data.StatisticsMeasure[i].ThresholdsStatelessLogOnSampleCount = types.Int64Null()
-		}
-		if value := r.Get("thresholds.type.stateless.log.on.in-and-above.bin"); value.Exists() && !data.StatisticsMeasure[i].ThresholdsStatelessLogOnInAndAboveBin.IsNull() {
-			data.StatisticsMeasure[i].ThresholdsStatelessLogOnInAndAboveBin = types.Int64Value(value.Int())
-		} else {
-			data.StatisticsMeasure[i].ThresholdsStatelessLogOnInAndAboveBin = types.Int64Null()
-		}
-	}
-	if value := res.Get("schedule.every.week.on"); value.Exists() && !data.ScheduleEveryWeekOn.IsNull() {
-		data.ScheduleEveryWeekOn = types.StringValue(value.String())
-	} else if data.ScheduleEveryWeekOn.IsNull() {
-		data.ScheduleEveryWeekOn = types.StringNull()
-	}
-	if value := res.Get("schedule.every.day"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ScheduleEveryDay.IsNull() {
-			data.ScheduleEveryDay = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ScheduleEveryDay.IsNull() {
-			data.ScheduleEveryDay = types.BoolNull()
-		}
-	}
-	if value := res.Get("schedule.every.interval-in-minutes"); value.Exists() && !data.ScheduleEveryMinutes.IsNull() {
-		data.ScheduleEveryMinutes = types.Int64Value(value.Int())
-	} else if data.ScheduleEveryMinutes.IsNull() {
-		data.ScheduleEveryMinutes = types.Int64Null()
-	}
-	if value := res.Get("schedule.every.interval-in-hours"); value.Exists() && !data.ScheduleEveryHours.IsNull() {
-		data.ScheduleEveryHours = types.Int64Value(value.Int())
-	} else if data.ScheduleEveryHours.IsNull() {
-		data.ScheduleEveryHours = types.Int64Null()
-	}
-	if value := res.Get("schedule.every.at.hours"); value.Exists() && !data.ScheduleEveryAtHours.IsNull() {
-		data.ScheduleEveryAtHours = types.Int64Value(value.Int())
-	} else if data.ScheduleEveryAtHours.IsNull() {
-		data.ScheduleEveryAtHours = types.Int64Null()
-	}
-	if value := res.Get("schedule.every.at.minutes"); value.Exists() && !data.ScheduleEveryAtMinutes.IsNull() {
-		data.ScheduleEveryAtMinutes = types.Int64Value(value.Int())
-	} else if data.ScheduleEveryAtMinutes.IsNull() {
-		data.ScheduleEveryAtMinutes = types.Int64Null()
-	}
-	if value := res.Get("schedule.every.for.time"); value.Exists() && !data.ScheduleEveryForTime.IsNull() {
-		data.ScheduleEveryForTime = types.Int64Value(value.Int())
-	} else if data.ScheduleEveryForTime.IsNull() {
-		data.ScheduleEveryForTime = types.Int64Null()
-	}
-	if value := res.Get("schedule.every.for.unit"); value.Exists() && !data.ScheduleEveryForUnit.IsNull() {
-		data.ScheduleEveryForUnit = types.StringValue(value.String())
-	} else if data.ScheduleEveryForUnit.IsNull() {
-		data.ScheduleEveryForUnit = types.StringNull()
-	}
-}
-
-// End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
@@ -1211,6 +2097,23 @@ func (data *EthernetSLA) updateFromBodyXML(ctx context.Context, res xmldot.Resul
 		} else if data.StatisticsMeasure[i].ThresholdsStatelessLogOnInAndAboveBin.IsNull() {
 			data.StatisticsMeasure[i].ThresholdsStatelessLogOnInAndAboveBin = types.Int64Null()
 		}
+		if value := helpers.GetFromXPath(r, "aggregate/minimum-delay"); value.Exists() && !data.StatisticsMeasure[i].AggregateMinimumDelay.IsNull() {
+			data.StatisticsMeasure[i].AggregateMinimumDelay = types.Int64Value(value.Int())
+		} else if data.StatisticsMeasure[i].AggregateMinimumDelay.IsNull() {
+			data.StatisticsMeasure[i].AggregateMinimumDelay = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "aggregate/usec-minimum-delay"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() {
+				data.StatisticsMeasure[i].AggregateUsecMinimumDelay = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() {
+				data.StatisticsMeasure[i].AggregateUsecMinimumDelay = types.BoolNull()
+			}
+		}
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/schedule/every/week/on"); value.Exists() && !data.ScheduleEveryWeekOn.IsNull() {
 		data.ScheduleEveryWeekOn = types.StringValue(value.String())
@@ -1261,406 +2164,6 @@ func (data *EthernetSLA) updateFromBodyXML(ctx context.Context, res xmldot.Resul
 }
 
 // End of section. //template:end updateFromBodyXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
-
-func (data *EthernetSLA) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "type"); value.Exists() {
-		data.Type = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "probe.send.packet.once"); value.Exists() {
-		data.ProbeSendPacketOnce = types.BoolValue(true)
-	} else if !data.ProbeSendPacketOnce.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProbeSendPacketOnce = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "probe.send.packet.every.interval"); value.Exists() {
-		data.ProbeSendPacketEveryInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "probe.send.packet.every.milliseconds"); value.Exists() {
-		data.ProbeSendPacketEveryMilliseconds = types.BoolValue(true)
-	} else if !data.ProbeSendPacketEveryMilliseconds.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProbeSendPacketEveryMilliseconds = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "probe.send.packet.every.seconds"); value.Exists() {
-		data.ProbeSendPacketEverySeconds = types.BoolValue(true)
-	} else if !data.ProbeSendPacketEverySeconds.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProbeSendPacketEverySeconds = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "probe.send.packet.every.minutes"); value.Exists() {
-		data.ProbeSendPacketEveryMinutes = types.BoolValue(true)
-	} else if !data.ProbeSendPacketEveryMinutes.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProbeSendPacketEveryMinutes = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "probe.send.packet.every.hours"); value.Exists() {
-		data.ProbeSendPacketEveryHours = types.BoolValue(true)
-	} else if !data.ProbeSendPacketEveryHours.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProbeSendPacketEveryHours = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "probe.send.burst.once"); value.Exists() {
-		data.ProbeSendBurstOnce = types.BoolValue(true)
-	} else if !data.ProbeSendBurstOnce.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProbeSendBurstOnce = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "probe.send.burst.every.interval"); value.Exists() {
-		data.ProbeSendBurstEveryInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "probe.send.burst.every.seconds"); value.Exists() {
-		data.ProbeSendBurstEverySeconds = types.BoolValue(true)
-	} else if !data.ProbeSendBurstEverySeconds.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProbeSendBurstEverySeconds = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "probe.send.burst.every.minutes"); value.Exists() {
-		data.ProbeSendBurstEveryMinutes = types.BoolValue(true)
-	} else if !data.ProbeSendBurstEveryMinutes.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProbeSendBurstEveryMinutes = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "probe.send.burst.every.hours"); value.Exists() {
-		data.ProbeSendBurstEveryHours = types.BoolValue(true)
-	} else if !data.ProbeSendBurstEveryHours.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProbeSendBurstEveryHours = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "probe.send.burst.packet.count"); value.Exists() {
-		data.ProbeSendBurstPacketCount = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "probe.send.burst.packet.interval-in-seconds"); value.Exists() {
-		data.ProbeSendBurstPacketIntervalSeconds = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "probe.send.burst.packet.interval-in-milliseconds"); value.Exists() {
-		data.ProbeSendBurstPacketIntervalMilliseconds = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "probe.packet.size"); value.Exists() {
-		data.ProbePacketSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "probe.packet.test.pattern.hex"); value.Exists() {
-		data.ProbePacketTestPatternHex = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "probe.priority"); value.Exists() {
-		data.ProbePriority = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "probe.synthetic.loss.calculation.packets"); value.Exists() {
-		data.ProbeSyntheticLossCalculationPackets = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "statistics.measures.measure"); value.Exists() {
-		data.StatisticsMeasure = make([]EthernetSLAStatisticsMeasure, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := EthernetSLAStatisticsMeasure{}
-			if cValue := v.Get("type"); cValue.Exists() {
-				item.Type = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("aggregate.none"); cValue.Exists() {
-				item.AggregateNone = types.BoolValue(true)
-			} else if !item.AggregateNone.IsNull() {
-				// Only set to false if it was previously set
-				item.AggregateNone = types.BoolValue(false)
-			}
-			if cValue := v.Get("aggregate.bins"); cValue.Exists() {
-				item.AggregateBins = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("aggregate.width"); cValue.Exists() {
-				item.AggregateWidth = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("aggregate.width-tenths"); cValue.Exists() {
-				item.AggregateWidthPercentage = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("aggregate.usec"); cValue.Exists() {
-				item.AggregateUsec = types.BoolValue(true)
-			} else if !item.AggregateUsec.IsNull() {
-				// Only set to false if it was previously set
-				item.AggregateUsec = types.BoolValue(false)
-			}
-			if cValue := v.Get("buckets.size"); cValue.Exists() {
-				item.BucketsSize = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("buckets.probes"); cValue.Exists() {
-				item.BucketsProbes = types.BoolValue(true)
-			} else if !item.BucketsProbes.IsNull() {
-				// Only set to false if it was previously set
-				item.BucketsProbes = types.BoolValue(false)
-			}
-			if cValue := v.Get("buckets.archive"); cValue.Exists() {
-				item.BucketsArchive = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateful.log.on.max-value"); cValue.Exists() {
-				item.ThresholdsStatefulLogOnMaxValue = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateful.log.on.mean-value"); cValue.Exists() {
-				item.ThresholdsStatefulLogOnMeanValue = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateful.log.on.sample-count"); cValue.Exists() {
-				item.ThresholdsStatefulLogOnSampleCount = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateful.log.on.in-and-above.bin"); cValue.Exists() {
-				item.ThresholdsStatefulLogOnInAndAboveBin = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateful.efd.on.max-value"); cValue.Exists() {
-				item.ThresholdsStatefulEfdOnMaxValue = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateful.efd.on.mean-value"); cValue.Exists() {
-				item.ThresholdsStatefulEfdOnMeanValue = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateful.efd.on.sample-count"); cValue.Exists() {
-				item.ThresholdsStatefulEfdOnSampleCount = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateful.efd.on.in-and-above.bin"); cValue.Exists() {
-				item.ThresholdsStatefulEfdOnInAndAboveBin = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateless.log.on.max-value"); cValue.Exists() {
-				item.ThresholdsStatelessLogOnMaxValue = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateless.log.on.mean-value"); cValue.Exists() {
-				item.ThresholdsStatelessLogOnMeanValue = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateless.log.on.sample-count"); cValue.Exists() {
-				item.ThresholdsStatelessLogOnSampleCount = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateless.log.on.in-and-above.bin"); cValue.Exists() {
-				item.ThresholdsStatelessLogOnInAndAboveBin = types.Int64Value(cValue.Int())
-			}
-			data.StatisticsMeasure = append(data.StatisticsMeasure, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "schedule.every.week.on"); value.Exists() {
-		data.ScheduleEveryWeekOn = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "schedule.every.day"); value.Exists() {
-		data.ScheduleEveryDay = types.BoolValue(true)
-	} else if !data.ScheduleEveryDay.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ScheduleEveryDay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "schedule.every.interval-in-minutes"); value.Exists() {
-		data.ScheduleEveryMinutes = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "schedule.every.interval-in-hours"); value.Exists() {
-		data.ScheduleEveryHours = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "schedule.every.at.hours"); value.Exists() {
-		data.ScheduleEveryAtHours = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "schedule.every.at.minutes"); value.Exists() {
-		data.ScheduleEveryAtMinutes = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "schedule.every.for.time"); value.Exists() {
-		data.ScheduleEveryForTime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "schedule.every.for.unit"); value.Exists() {
-		data.ScheduleEveryForUnit = types.StringValue(value.String())
-	}
-}
-
-// End of section. //template:end fromBody
-
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *EthernetSLAData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "type"); value.Exists() {
-		data.Type = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "probe.send.packet.once"); value.Exists() {
-		data.ProbeSendPacketOnce = types.BoolValue(true)
-	} else {
-		data.ProbeSendPacketOnce = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "probe.send.packet.every.interval"); value.Exists() {
-		data.ProbeSendPacketEveryInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "probe.send.packet.every.milliseconds"); value.Exists() {
-		data.ProbeSendPacketEveryMilliseconds = types.BoolValue(true)
-	} else {
-		data.ProbeSendPacketEveryMilliseconds = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "probe.send.packet.every.seconds"); value.Exists() {
-		data.ProbeSendPacketEverySeconds = types.BoolValue(true)
-	} else {
-		data.ProbeSendPacketEverySeconds = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "probe.send.packet.every.minutes"); value.Exists() {
-		data.ProbeSendPacketEveryMinutes = types.BoolValue(true)
-	} else {
-		data.ProbeSendPacketEveryMinutes = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "probe.send.packet.every.hours"); value.Exists() {
-		data.ProbeSendPacketEveryHours = types.BoolValue(true)
-	} else {
-		data.ProbeSendPacketEveryHours = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "probe.send.burst.once"); value.Exists() {
-		data.ProbeSendBurstOnce = types.BoolValue(true)
-	} else {
-		data.ProbeSendBurstOnce = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "probe.send.burst.every.interval"); value.Exists() {
-		data.ProbeSendBurstEveryInterval = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "probe.send.burst.every.seconds"); value.Exists() {
-		data.ProbeSendBurstEverySeconds = types.BoolValue(true)
-	} else {
-		data.ProbeSendBurstEverySeconds = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "probe.send.burst.every.minutes"); value.Exists() {
-		data.ProbeSendBurstEveryMinutes = types.BoolValue(true)
-	} else {
-		data.ProbeSendBurstEveryMinutes = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "probe.send.burst.every.hours"); value.Exists() {
-		data.ProbeSendBurstEveryHours = types.BoolValue(true)
-	} else {
-		data.ProbeSendBurstEveryHours = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "probe.send.burst.packet.count"); value.Exists() {
-		data.ProbeSendBurstPacketCount = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "probe.send.burst.packet.interval-in-seconds"); value.Exists() {
-		data.ProbeSendBurstPacketIntervalSeconds = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "probe.send.burst.packet.interval-in-milliseconds"); value.Exists() {
-		data.ProbeSendBurstPacketIntervalMilliseconds = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "probe.packet.size"); value.Exists() {
-		data.ProbePacketSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "probe.packet.test.pattern.hex"); value.Exists() {
-		data.ProbePacketTestPatternHex = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "probe.priority"); value.Exists() {
-		data.ProbePriority = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "probe.synthetic.loss.calculation.packets"); value.Exists() {
-		data.ProbeSyntheticLossCalculationPackets = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "statistics.measures.measure"); value.Exists() {
-		data.StatisticsMeasure = make([]EthernetSLAStatisticsMeasure, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := EthernetSLAStatisticsMeasure{}
-			if cValue := v.Get("type"); cValue.Exists() {
-				item.Type = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("aggregate.none"); cValue.Exists() {
-				item.AggregateNone = types.BoolValue(true)
-			} else {
-				item.AggregateNone = types.BoolValue(false)
-			}
-			if cValue := v.Get("aggregate.bins"); cValue.Exists() {
-				item.AggregateBins = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("aggregate.width"); cValue.Exists() {
-				item.AggregateWidth = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("aggregate.width-tenths"); cValue.Exists() {
-				item.AggregateWidthPercentage = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("aggregate.usec"); cValue.Exists() {
-				item.AggregateUsec = types.BoolValue(true)
-			} else {
-				item.AggregateUsec = types.BoolValue(false)
-			}
-			if cValue := v.Get("buckets.size"); cValue.Exists() {
-				item.BucketsSize = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("buckets.probes"); cValue.Exists() {
-				item.BucketsProbes = types.BoolValue(true)
-			} else {
-				item.BucketsProbes = types.BoolValue(false)
-			}
-			if cValue := v.Get("buckets.archive"); cValue.Exists() {
-				item.BucketsArchive = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateful.log.on.max-value"); cValue.Exists() {
-				item.ThresholdsStatefulLogOnMaxValue = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateful.log.on.mean-value"); cValue.Exists() {
-				item.ThresholdsStatefulLogOnMeanValue = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateful.log.on.sample-count"); cValue.Exists() {
-				item.ThresholdsStatefulLogOnSampleCount = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateful.log.on.in-and-above.bin"); cValue.Exists() {
-				item.ThresholdsStatefulLogOnInAndAboveBin = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateful.efd.on.max-value"); cValue.Exists() {
-				item.ThresholdsStatefulEfdOnMaxValue = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateful.efd.on.mean-value"); cValue.Exists() {
-				item.ThresholdsStatefulEfdOnMeanValue = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateful.efd.on.sample-count"); cValue.Exists() {
-				item.ThresholdsStatefulEfdOnSampleCount = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateful.efd.on.in-and-above.bin"); cValue.Exists() {
-				item.ThresholdsStatefulEfdOnInAndAboveBin = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateless.log.on.max-value"); cValue.Exists() {
-				item.ThresholdsStatelessLogOnMaxValue = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateless.log.on.mean-value"); cValue.Exists() {
-				item.ThresholdsStatelessLogOnMeanValue = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateless.log.on.sample-count"); cValue.Exists() {
-				item.ThresholdsStatelessLogOnSampleCount = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("thresholds.type.stateless.log.on.in-and-above.bin"); cValue.Exists() {
-				item.ThresholdsStatelessLogOnInAndAboveBin = types.Int64Value(cValue.Int())
-			}
-			data.StatisticsMeasure = append(data.StatisticsMeasure, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "schedule.every.week.on"); value.Exists() {
-		data.ScheduleEveryWeekOn = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "schedule.every.day"); value.Exists() {
-		data.ScheduleEveryDay = types.BoolValue(true)
-	} else {
-		data.ScheduleEveryDay = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "schedule.every.interval-in-minutes"); value.Exists() {
-		data.ScheduleEveryMinutes = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "schedule.every.interval-in-hours"); value.Exists() {
-		data.ScheduleEveryHours = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "schedule.every.at.hours"); value.Exists() {
-		data.ScheduleEveryAtHours = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "schedule.every.at.minutes"); value.Exists() {
-		data.ScheduleEveryAtMinutes = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "schedule.every.for.time"); value.Exists() {
-		data.ScheduleEveryForTime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "schedule.every.for.unit"); value.Exists() {
-		data.ScheduleEveryForUnit = types.StringValue(value.String())
-	}
-}
-
-// End of section. //template:end fromBodyData
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
@@ -1812,6 +2315,14 @@ func (data *EthernetSLA) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			}
 			if cValue := helpers.GetFromXPath(v, "thresholds/type/stateless/log/on/in-and-above/bin"); cValue.Exists() {
 				item.ThresholdsStatelessLogOnInAndAboveBin = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "aggregate/minimum-delay"); cValue.Exists() {
+				item.AggregateMinimumDelay = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "aggregate/usec-minimum-delay"); cValue.Exists() {
+				item.AggregateUsecMinimumDelay = types.BoolValue(true)
+			} else {
+				item.AggregateUsecMinimumDelay = types.BoolValue(false)
 			}
 			data.StatisticsMeasure = append(data.StatisticsMeasure, item)
 			return true
@@ -1998,6 +2509,14 @@ func (data *EthernetSLAData) fromBodyXML(ctx context.Context, res xmldot.Result)
 			if cValue := helpers.GetFromXPath(v, "thresholds/type/stateless/log/on/in-and-above/bin"); cValue.Exists() {
 				item.ThresholdsStatelessLogOnInAndAboveBin = types.Int64Value(cValue.Int())
 			}
+			if cValue := helpers.GetFromXPath(v, "aggregate/minimum-delay"); cValue.Exists() {
+				item.AggregateMinimumDelay = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "aggregate/usec-minimum-delay"); cValue.Exists() {
+				item.AggregateUsecMinimumDelay = types.BoolValue(true)
+			} else {
+				item.AggregateUsecMinimumDelay = types.BoolValue(false)
+			}
 			data.StatisticsMeasure = append(data.StatisticsMeasure, item)
 			return true
 		})
@@ -2031,381 +2550,6 @@ func (data *EthernetSLAData) fromBodyXML(ctx context.Context, res xmldot.Result)
 }
 
 // End of section. //template:end fromBodyDataXML
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
-
-func (data *EthernetSLA) getDeletedItems(ctx context.Context, state EthernetSLA) []string {
-	deletedItems := make([]string, 0)
-	if !state.ScheduleEveryForUnit.IsNull() && data.ScheduleEveryForUnit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/schedule/every/for/unit", state.getPath()))
-	}
-	if !state.ScheduleEveryForTime.IsNull() && data.ScheduleEveryForTime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/schedule/every/for/time", state.getPath()))
-	}
-	if !state.ScheduleEveryAtMinutes.IsNull() && data.ScheduleEveryAtMinutes.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/schedule/every/at/minutes", state.getPath()))
-	}
-	if !state.ScheduleEveryAtHours.IsNull() && data.ScheduleEveryAtHours.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/schedule/every/at/hours", state.getPath()))
-	}
-	if !state.ScheduleEveryHours.IsNull() && data.ScheduleEveryHours.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/schedule/every/interval-in-hours", state.getPath()))
-	}
-	if !state.ScheduleEveryMinutes.IsNull() && data.ScheduleEveryMinutes.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/schedule/every/interval-in-minutes", state.getPath()))
-	}
-	if !state.ScheduleEveryDay.IsNull() && data.ScheduleEveryDay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/schedule/every/day", state.getPath()))
-	}
-	if !state.ScheduleEveryWeekOn.IsNull() && data.ScheduleEveryWeekOn.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/schedule/every/week/on", state.getPath()))
-	}
-	for i := range state.StatisticsMeasure {
-		keys := [...]string{"type"}
-		stateKeyValues := [...]string{state.StatisticsMeasure[i].Type.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.StatisticsMeasure[i].Type.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.StatisticsMeasure {
-			found = true
-			if state.StatisticsMeasure[i].Type.ValueString() != data.StatisticsMeasure[j].Type.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.StatisticsMeasure[i].ThresholdsStatelessLogOnInAndAboveBin.IsNull() && data.StatisticsMeasure[j].ThresholdsStatelessLogOnInAndAboveBin.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/thresholds/type/stateless/log/on/in-and-above/bin", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].ThresholdsStatelessLogOnSampleCount.IsNull() && data.StatisticsMeasure[j].ThresholdsStatelessLogOnSampleCount.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/thresholds/type/stateless/log/on/sample-count", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].ThresholdsStatelessLogOnMeanValue.IsNull() && data.StatisticsMeasure[j].ThresholdsStatelessLogOnMeanValue.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/thresholds/type/stateless/log/on/mean-value", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].ThresholdsStatelessLogOnMaxValue.IsNull() && data.StatisticsMeasure[j].ThresholdsStatelessLogOnMaxValue.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/thresholds/type/stateless/log/on/max-value", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].ThresholdsStatefulEfdOnInAndAboveBin.IsNull() && data.StatisticsMeasure[j].ThresholdsStatefulEfdOnInAndAboveBin.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/thresholds/type/stateful/efd/on/in-and-above/bin", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].ThresholdsStatefulEfdOnSampleCount.IsNull() && data.StatisticsMeasure[j].ThresholdsStatefulEfdOnSampleCount.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/thresholds/type/stateful/efd/on/sample-count", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].ThresholdsStatefulEfdOnMeanValue.IsNull() && data.StatisticsMeasure[j].ThresholdsStatefulEfdOnMeanValue.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/thresholds/type/stateful/efd/on/mean-value", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].ThresholdsStatefulEfdOnMaxValue.IsNull() && data.StatisticsMeasure[j].ThresholdsStatefulEfdOnMaxValue.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/thresholds/type/stateful/efd/on/max-value", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].ThresholdsStatefulLogOnInAndAboveBin.IsNull() && data.StatisticsMeasure[j].ThresholdsStatefulLogOnInAndAboveBin.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/thresholds/type/stateful/log/on/in-and-above/bin", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].ThresholdsStatefulLogOnSampleCount.IsNull() && data.StatisticsMeasure[j].ThresholdsStatefulLogOnSampleCount.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/thresholds/type/stateful/log/on/sample-count", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].ThresholdsStatefulLogOnMeanValue.IsNull() && data.StatisticsMeasure[j].ThresholdsStatefulLogOnMeanValue.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/thresholds/type/stateful/log/on/mean-value", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].ThresholdsStatefulLogOnMaxValue.IsNull() && data.StatisticsMeasure[j].ThresholdsStatefulLogOnMaxValue.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/thresholds/type/stateful/log/on/max-value", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].BucketsArchive.IsNull() && data.StatisticsMeasure[j].BucketsArchive.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/buckets/archive", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].BucketsProbes.IsNull() && data.StatisticsMeasure[j].BucketsProbes.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/buckets/probes", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].BucketsSize.IsNull() && data.StatisticsMeasure[j].BucketsSize.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/buckets/size", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].AggregateUsec.IsNull() && data.StatisticsMeasure[j].AggregateUsec.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/aggregate/usec", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].AggregateWidthPercentage.IsNull() && data.StatisticsMeasure[j].AggregateWidthPercentage.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/aggregate/width-tenths", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].AggregateWidth.IsNull() && data.StatisticsMeasure[j].AggregateWidth.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/aggregate/width", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].AggregateBins.IsNull() && data.StatisticsMeasure[j].AggregateBins.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/aggregate/bins", state.getPath(), keyString))
-				}
-				if !state.StatisticsMeasure[i].AggregateNone.IsNull() && data.StatisticsMeasure[j].AggregateNone.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v/aggregate/none", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/statistics/measures/measure%v", state.getPath(), keyString))
-		}
-	}
-	if !state.ProbeSyntheticLossCalculationPackets.IsNull() && data.ProbeSyntheticLossCalculationPackets.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/probe/synthetic/loss/calculation/packets", state.getPath()))
-	}
-	if !state.ProbePriority.IsNull() && data.ProbePriority.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/probe/priority", state.getPath()))
-	}
-	if !state.ProbePacketTestPatternHex.IsNull() && data.ProbePacketTestPatternHex.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/probe/packet/test/pattern/hex", state.getPath()))
-	}
-	if !state.ProbePacketSize.IsNull() && data.ProbePacketSize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/probe/packet/size", state.getPath()))
-	}
-	if !state.ProbeSendBurstPacketIntervalMilliseconds.IsNull() && data.ProbeSendBurstPacketIntervalMilliseconds.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/probe/send/burst/packet/interval-in-milliseconds", state.getPath()))
-	}
-	if !state.ProbeSendBurstPacketIntervalSeconds.IsNull() && data.ProbeSendBurstPacketIntervalSeconds.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/probe/send/burst/packet/interval-in-seconds", state.getPath()))
-	}
-	if !state.ProbeSendBurstPacketCount.IsNull() && data.ProbeSendBurstPacketCount.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/probe/send/burst/packet/count", state.getPath()))
-	}
-	if !state.ProbeSendBurstEveryHours.IsNull() && data.ProbeSendBurstEveryHours.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/probe/send/burst/every/hours", state.getPath()))
-	}
-	if !state.ProbeSendBurstEveryMinutes.IsNull() && data.ProbeSendBurstEveryMinutes.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/probe/send/burst/every/minutes", state.getPath()))
-	}
-	if !state.ProbeSendBurstEverySeconds.IsNull() && data.ProbeSendBurstEverySeconds.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/probe/send/burst/every/seconds", state.getPath()))
-	}
-	if !state.ProbeSendBurstEveryInterval.IsNull() && data.ProbeSendBurstEveryInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/probe/send/burst/every/interval", state.getPath()))
-	}
-	if !state.ProbeSendBurstOnce.IsNull() && data.ProbeSendBurstOnce.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/probe/send/burst/once", state.getPath()))
-	}
-	if !state.ProbeSendPacketEveryHours.IsNull() && data.ProbeSendPacketEveryHours.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/probe/send/packet/every/hours", state.getPath()))
-	}
-	if !state.ProbeSendPacketEveryMinutes.IsNull() && data.ProbeSendPacketEveryMinutes.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/probe/send/packet/every/minutes", state.getPath()))
-	}
-	if !state.ProbeSendPacketEverySeconds.IsNull() && data.ProbeSendPacketEverySeconds.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/probe/send/packet/every/seconds", state.getPath()))
-	}
-	if !state.ProbeSendPacketEveryMilliseconds.IsNull() && data.ProbeSendPacketEveryMilliseconds.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/probe/send/packet/every/milliseconds", state.getPath()))
-	}
-	if !state.ProbeSendPacketEveryInterval.IsNull() && data.ProbeSendPacketEveryInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/probe/send/packet/every/interval", state.getPath()))
-	}
-	if !state.ProbeSendPacketOnce.IsNull() && data.ProbeSendPacketOnce.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/probe/send/packet/once", state.getPath()))
-	}
-	if !state.Type.IsNull() && data.Type.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/type", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *EthernetSLA) getEmptyLeafsDelete(ctx context.Context, state *EthernetSLA) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.ScheduleEveryDay.IsNull() && !data.ScheduleEveryDay.ValueBool() {
-		if state != nil && !state.ScheduleEveryDay.IsNull() && state.ScheduleEveryDay.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/schedule/every/day", data.getXPath()))
-		}
-	}
-	for i := range data.StatisticsMeasure {
-		keys := [...]string{"type"}
-		keyValues := [...]string{data.StatisticsMeasure[i].Type.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.StatisticsMeasure[i].BucketsProbes.IsNull() && !data.StatisticsMeasure[i].BucketsProbes.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.StatisticsMeasure) && !state.StatisticsMeasure[i].BucketsProbes.IsNull() && state.StatisticsMeasure[i].BucketsProbes.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/statistics/measures/measure%v/buckets/probes", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.StatisticsMeasure[i].AggregateUsec.IsNull() && !data.StatisticsMeasure[i].AggregateUsec.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.StatisticsMeasure) && !state.StatisticsMeasure[i].AggregateUsec.IsNull() && state.StatisticsMeasure[i].AggregateUsec.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/statistics/measures/measure%v/aggregate/usec", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.StatisticsMeasure[i].AggregateNone.IsNull() && !data.StatisticsMeasure[i].AggregateNone.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.StatisticsMeasure) && !state.StatisticsMeasure[i].AggregateNone.IsNull() && state.StatisticsMeasure[i].AggregateNone.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/statistics/measures/measure%v/aggregate/none", data.getXPath(), keyString))
-			}
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProbeSendBurstEveryHours.IsNull() && !data.ProbeSendBurstEveryHours.ValueBool() {
-		if state != nil && !state.ProbeSendBurstEveryHours.IsNull() && state.ProbeSendBurstEveryHours.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/probe/send/burst/every/hours", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProbeSendBurstEveryMinutes.IsNull() && !data.ProbeSendBurstEveryMinutes.ValueBool() {
-		if state != nil && !state.ProbeSendBurstEveryMinutes.IsNull() && state.ProbeSendBurstEveryMinutes.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/probe/send/burst/every/minutes", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProbeSendBurstEverySeconds.IsNull() && !data.ProbeSendBurstEverySeconds.ValueBool() {
-		if state != nil && !state.ProbeSendBurstEverySeconds.IsNull() && state.ProbeSendBurstEverySeconds.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/probe/send/burst/every/seconds", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProbeSendBurstOnce.IsNull() && !data.ProbeSendBurstOnce.ValueBool() {
-		if state != nil && !state.ProbeSendBurstOnce.IsNull() && state.ProbeSendBurstOnce.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/probe/send/burst/once", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProbeSendPacketEveryHours.IsNull() && !data.ProbeSendPacketEveryHours.ValueBool() {
-		if state != nil && !state.ProbeSendPacketEveryHours.IsNull() && state.ProbeSendPacketEveryHours.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/probe/send/packet/every/hours", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProbeSendPacketEveryMinutes.IsNull() && !data.ProbeSendPacketEveryMinutes.ValueBool() {
-		if state != nil && !state.ProbeSendPacketEveryMinutes.IsNull() && state.ProbeSendPacketEveryMinutes.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/probe/send/packet/every/minutes", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProbeSendPacketEverySeconds.IsNull() && !data.ProbeSendPacketEverySeconds.ValueBool() {
-		if state != nil && !state.ProbeSendPacketEverySeconds.IsNull() && state.ProbeSendPacketEverySeconds.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/probe/send/packet/every/seconds", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProbeSendPacketEveryMilliseconds.IsNull() && !data.ProbeSendPacketEveryMilliseconds.ValueBool() {
-		if state != nil && !state.ProbeSendPacketEveryMilliseconds.IsNull() && state.ProbeSendPacketEveryMilliseconds.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/probe/send/packet/every/milliseconds", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProbeSendPacketOnce.IsNull() && !data.ProbeSendPacketOnce.ValueBool() {
-		if state != nil && !state.ProbeSendPacketOnce.IsNull() && state.ProbeSendPacketOnce.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/probe/send/packet/once", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *EthernetSLA) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.ScheduleEveryForUnit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/schedule/every/for/unit", data.getPath()))
-	}
-	if !data.ScheduleEveryForTime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/schedule/every/for/time", data.getPath()))
-	}
-	if !data.ScheduleEveryAtMinutes.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/schedule/every/at/minutes", data.getPath()))
-	}
-	if !data.ScheduleEveryAtHours.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/schedule/every/at/hours", data.getPath()))
-	}
-	if !data.ScheduleEveryHours.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/schedule/every/interval-in-hours", data.getPath()))
-	}
-	if !data.ScheduleEveryMinutes.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/schedule/every/interval-in-minutes", data.getPath()))
-	}
-	if !data.ScheduleEveryDay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/schedule/every/day", data.getPath()))
-	}
-	if !data.ScheduleEveryWeekOn.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/schedule/every/week/on", data.getPath()))
-	}
-	for i := range data.StatisticsMeasure {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[type=" + data.StatisticsMeasure[i].Type.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/statistics/measures/measure%v", data.getPath(), keyPath))
-	}
-	if !data.ProbeSyntheticLossCalculationPackets.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/probe/synthetic/loss/calculation/packets", data.getPath()))
-	}
-	if !data.ProbePriority.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/probe/priority", data.getPath()))
-	}
-	if !data.ProbePacketTestPatternHex.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/probe/packet/test/pattern/hex", data.getPath()))
-	}
-	if !data.ProbePacketSize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/probe/packet/size", data.getPath()))
-	}
-	if !data.ProbeSendBurstPacketIntervalMilliseconds.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/probe/send/burst/packet/interval-in-milliseconds", data.getPath()))
-	}
-	if !data.ProbeSendBurstPacketIntervalSeconds.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/probe/send/burst/packet/interval-in-seconds", data.getPath()))
-	}
-	if !data.ProbeSendBurstPacketCount.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/probe/send/burst/packet/count", data.getPath()))
-	}
-	if !data.ProbeSendBurstEveryHours.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/probe/send/burst/every/hours", data.getPath()))
-	}
-	if !data.ProbeSendBurstEveryMinutes.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/probe/send/burst/every/minutes", data.getPath()))
-	}
-	if !data.ProbeSendBurstEverySeconds.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/probe/send/burst/every/seconds", data.getPath()))
-	}
-	if !data.ProbeSendBurstEveryInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/probe/send/burst/every/interval", data.getPath()))
-	}
-	if !data.ProbeSendBurstOnce.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/probe/send/burst/once", data.getPath()))
-	}
-	if !data.ProbeSendPacketEveryHours.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/probe/send/packet/every/hours", data.getPath()))
-	}
-	if !data.ProbeSendPacketEveryMinutes.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/probe/send/packet/every/minutes", data.getPath()))
-	}
-	if !data.ProbeSendPacketEverySeconds.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/probe/send/packet/every/seconds", data.getPath()))
-	}
-	if !data.ProbeSendPacketEveryMilliseconds.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/probe/send/packet/every/milliseconds", data.getPath()))
-	}
-	if !data.ProbeSendPacketEveryInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/probe/send/packet/every/interval", data.getPath()))
-	}
-	if !data.ProbeSendPacketOnce.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/probe/send/packet/once", data.getPath()))
-	}
-	if !data.Type.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/type", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
@@ -2558,6 +2702,13 @@ func (data *EthernetSLA) addDeletedItemsXML(ctx context.Context, state EthernetS
 				found = false
 			}
 			if found {
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.StatisticsMeasure[i].AggregateUsecMinimumDelay.IsNull() && state.StatisticsMeasure[i].AggregateUsecMinimumDelay.ValueBool() && data.StatisticsMeasure[j].AggregateUsecMinimumDelay.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/statistics/measures/measure%v/aggregate/usec-minimum-delay", predicates))
+				}
+				if !state.StatisticsMeasure[i].AggregateMinimumDelay.IsNull() && data.StatisticsMeasure[j].AggregateMinimumDelay.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/statistics/measures/measure%v/aggregate/minimum-delay", predicates))
+				}
 				if !state.StatisticsMeasure[i].ThresholdsStatelessLogOnInAndAboveBin.IsNull() && data.StatisticsMeasure[j].ThresholdsStatelessLogOnInAndAboveBin.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/statistics/measures/measure%v/thresholds/type/stateless/log/on/in-and-above/bin", predicates))
 				}

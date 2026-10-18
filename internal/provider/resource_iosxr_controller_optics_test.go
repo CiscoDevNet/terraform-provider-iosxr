@@ -43,10 +43,18 @@ func TestAccIosxrControllerOptics(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_controller_optics.test", "active", "act"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_controller_optics.test", "shutdown", "true"))
 	if os.Getenv("C8000") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_controller_optics.test", "speed", "10g"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_controller_optics.test",
+			"speed", selectVersionExample(map[string]string{
+				"24.4": "10g", "25.4": "400g",
+			}, "400g")))
 	}
 	if os.Getenv("C8000") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_controller_optics.test", "breakout", "4x25"))
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("C8000") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("iosxr_controller_optics.test", "speed_host_lanes", "4"))
+		}
 	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
@@ -115,10 +123,17 @@ func testAccIosxrControllerOpticsConfig_all() string {
 	config += `	active = "act"` + "\n"
 	config += `	shutdown = true` + "\n"
 	if os.Getenv("C8000") != "" {
-		config += `	speed = "10g"` + "\n"
+		config += `	speed = ` + fmt.Sprintf("%q", selectVersionExample(map[string]string{
+			"24.4": "10g", "25.4": "400g",
+		}, "400g")) + "\n"
 	}
 	if os.Getenv("C8000") != "" {
 		config += `	breakout = "4x25"` + "\n"
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("C8000") != "" {
+			config += `	speed_host_lanes = 4` + "\n"
+		}
 	}
 	config += `}` + "\n"
 	return config

@@ -1,8 +1,9 @@
 resource "iosxr_controller_optics" "example" {
-  type     = "Optics"
-  name     = "0/0/0/1"
-  active   = "act"
-  shutdown = true
-  speed    = "10g"
-  breakout = "4x25"
+  active           = "act"
+  breakout         = "4x25"
+  name             = "0/0/0/1"
+  shutdown         = true
+  speed            = "400g"
+  speed_host_lanes = 4
+  type             = "Optics"
 }

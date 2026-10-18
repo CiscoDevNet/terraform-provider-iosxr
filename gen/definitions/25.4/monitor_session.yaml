@@ -1,0 +1,70 @@
+---
+name: Monitor Session
+path: Cisco-IOS-XR-um-monitor-session-cfg:/monitor-sessions
+doc_category: System
+attributes:
+  - yang_name: monitor-session
+    tf_name: monitor_sessions
+    type: List
+    attributes:
+      # ===========================================================
+      # REMOVALS — rate-limit container removed; moved into the
+      # destination/rx/tx tuples with explicit units
+      # ===========================================================
+      - yang_name: rate-limit/rx
+        legacy: true
+      - yang_name: rate-limit/tx
+        legacy: true
+      # ===========================================================
+      # ADDITIONS — new in 25.4
+      # ===========================================================
+      - yang_name: destination/application
+        tf_name: destination_application
+        exclude_test: true
+        example: true
+      - yang_name: destination/rate-limit
+        tf_name: destination_rate_limit
+        exclude_test: true
+        example: 1000
+      - yang_name: destination/rate-limit-units
+        tf_name: destination_rate_limit_units
+        exclude_test: true
+        example: pps
+      - yang_name: rx/application
+        tf_name: rx_application
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: rx/rate-limit
+        tf_name: rx_rate_limit
+        test_tags: [NCS]
+        exclude_test: true
+        example: 1000
+      - yang_name: rx/rate-limit-units
+        tf_name: rx_rate_limit_units
+        test_tags: [NCS]
+        exclude_test: true
+        example: pps
+      - yang_name: tx/application
+        tf_name: tx_application
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: tx/rate-limit
+        tf_name: tx_rate_limit
+        test_tags: [NCS]
+        exclude_test: true
+        example: 1000
+      - yang_name: tx/rate-limit-units
+        tf_name: tx_rate_limit_units
+        test_tags: [NCS]
+        exclude_test: true
+        example: pps
+      - yang_name: drops/unique-punt
+        tf_name: drops_unique_punt
+        exclude_test: true
+        example: true
+      - yang_name: drops/unique-port
+        tf_name: drops_unique_port
+        exclude_test: true
+        example: true

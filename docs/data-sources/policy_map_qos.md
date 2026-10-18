@@ -51,6 +51,8 @@ Read-Only:
 - `police_conform_action_set_cos` (Number) Sets the specific IEEE 802.1Q Layer 2 CoS value of an outgoing packet. This command should be used by a router if a user wants to mark a packet that is being sent to a switch. Switches can leverage Layer 2 header information, including a CoS value marking. Packets entering an interface cannot be set with a CoS value.
 - `police_conform_action_set_discard_class` (Number) Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.
 - `police_conform_action_set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
+- `police_conform_action_set_ipencap_cos` (Number) Set the IP encapsulation class-of-service.
+  - Supported from version: `25.4`
 - `police_conform_action_set_mpls_experimental_imposition` (Number) Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy
 - `police_conform_action_set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
 - `police_conform_action_set_precedence` (String) Set IP Precedence
@@ -60,6 +62,8 @@ Read-Only:
 - `police_exceed_action_set_cos` (Number) Sets the specific IEEE 802.1Q Layer 2 CoS value of an outgoing packet. This command should be used by a router if a user wants to mark a packet that is being sent to a switch. Switches can leverage Layer 2 header information, including a CoS value marking. Packets entering an interface cannot be set with a CoS value.
 - `police_exceed_action_set_discard_class` (Number) Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.
 - `police_exceed_action_set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
+- `police_exceed_action_set_ipencap_cos` (Number) Set the IP encapsulation class-of-service.
+  - Supported from version: `25.4`
 - `police_exceed_action_set_mpls_experimental_imposition` (Number) Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy
 - `police_exceed_action_set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
 - `police_exceed_action_set_precedence` (String) Set IP Precedence
@@ -75,6 +79,8 @@ Read-Only:
 - `police_violate_action_set_cos` (Number) Sets the specific IEEE 802.1Q Layer 2 CoS value of an outgoing packet. This command should be used by a router if a user wants to mark a packet that is being sent to a switch. Switches can leverage Layer 2 header information, including a CoS value marking. Packets entering an interface cannot be set with a CoS value.
 - `police_violate_action_set_discard_class` (Number) Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.
 - `police_violate_action_set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
+- `police_violate_action_set_ipencap_cos` (Number) Set the IP encapsulation class-of-service.
+  - Supported from version: `25.4`
 - `police_violate_action_set_mpls_experimental_imposition` (Number) Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy
 - `police_violate_action_set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
 - `police_violate_action_set_precedence` (String) Set IP Precedence
@@ -89,6 +95,8 @@ Read-Only:
 - `set_cos` (Number) Sets the specific IEEE 802.1Q Layer 2 CoS value of an outgoing packet. This command should be used by a router if a user wants to mark a packet that is being sent to a switch. Switches can leverage Layer 2 header information, including a CoS value marking. Packets entering an interface cannot be set with a CoS value.
 - `set_discard_class` (Number) Sets the discard class on IPv4 or MPLS packets. The discard-class can be used only in service policies that are attached in the ingress policy.
 - `set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
+- `set_ipencap_cos` (Number) Set the IP encapsulation class-of-service.
+  - Supported from version: `25.4`
 - `set_mpls_experimental_imposition` (Number) Sets the experimental value of the MPLS packet imposition labels. Imposition can be used only in service policies that are attached in the ingress policy
 - `set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
 - `set_precedence` (String) Set IP Precedence

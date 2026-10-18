@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -162,6 +161,190 @@ func (d *RouterMLDVRFDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Maximum membership servicability entries",
 				Computed:            true,
 			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Select an interface to configure",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Select an interface to configure",
+							Computed:            true,
+						},
+						"version": schema.Int64Attribute{
+							MarkdownDescription: "MLD version",
+							Computed:            true,
+						},
+						"router_enable": schema.BoolAttribute{
+							MarkdownDescription: "Enable Router side functionality in MLD",
+							Computed:            true,
+						},
+						"router_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable Router side functionality in MLD",
+							Computed:            true,
+						},
+						"query_interval": schema.Int64Attribute{
+							MarkdownDescription: "MLD host query interval",
+							Computed:            true,
+						},
+						"query_timeout": schema.Int64Attribute{
+							MarkdownDescription: "MLD previous querier timeout",
+							Computed:            true,
+						},
+						"query_max_response_time": schema.Int64Attribute{
+							MarkdownDescription: "MLD max query response value",
+							Computed:            true,
+						},
+						"explicit_tracking_enable": schema.BoolAttribute{
+							MarkdownDescription: "Enable IGMPv3 explicit host tracking",
+							Computed:            true,
+						},
+						"explicit_tracking_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable IGMPv3 explicit host tracking",
+							Computed:            true,
+						},
+						"explicit_tracking_acl": schema.StringAttribute{
+							MarkdownDescription: "Access list specifying tracking group range",
+							Computed:            true,
+						},
+						"access_group": schema.StringAttribute{
+							MarkdownDescription: "MLD group access group",
+							Computed:            true,
+						},
+						"maximum_groups_per_interface": schema.Int64Attribute{
+							MarkdownDescription: "Maxinum number of groups accepted per interface by this router",
+							Computed:            true,
+						},
+						"maximum_groups_per_interface_threshold": schema.Int64Attribute{
+							MarkdownDescription: "Threshold warning",
+							Computed:            true,
+						},
+						"maximum_groups_per_interface_acl": schema.StringAttribute{
+							MarkdownDescription: "Name of ACL",
+							Computed:            true,
+						},
+						"static_groups": schema.ListNestedAttribute{
+							MarkdownDescription: "MLD static multicast group",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_address": schema.StringAttribute{
+										MarkdownDescription: "IP group address",
+										Computed:            true,
+									},
+									"group_address_only": schema.BoolAttribute{
+										MarkdownDescription: "Group-address without increment mask/source-address",
+										Computed:            true,
+									},
+									"suppress_reports": schema.BoolAttribute{
+										MarkdownDescription: "Suppress IGMP reports",
+										Computed:            true,
+									},
+									"group_masks": schema.ListNestedAttribute{
+										MarkdownDescription: "Increment mask for group address",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"group_inc_mask": schema.StringAttribute{
+													MarkdownDescription: "Increment mask for group address",
+													Computed:            true,
+												},
+												"group_count": schema.Int64Attribute{
+													MarkdownDescription: "No. of group addresses to join",
+													Computed:            true,
+												},
+												"suppress_reports": schema.BoolAttribute{
+													MarkdownDescription: "Suppress IGMP reports",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"source_addresses": schema.ListNestedAttribute{
+										MarkdownDescription: "IGMP static multicast group",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: "Source address to join",
+													Computed:            true,
+												},
+												"suppress_reports": schema.BoolAttribute{
+													MarkdownDescription: "Suppress IGMP reports",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"group_masks_source_addresses": schema.ListNestedAttribute{
+										MarkdownDescription: "Increment mask for group address",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"group_inc_mask": schema.StringAttribute{
+													MarkdownDescription: "Increment mask for group address",
+													Computed:            true,
+												},
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: "Source address to join",
+													Computed:            true,
+												},
+												"group_count": schema.Int64Attribute{
+													MarkdownDescription: "No. of group addresses to join",
+													Computed:            true,
+												},
+												"suppress_reports": schema.BoolAttribute{
+													MarkdownDescription: "Suppress IGMP reports",
+													Computed:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"join_groups": schema.ListNestedAttribute{
+							MarkdownDescription: "MLD join multicast group",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_address": schema.StringAttribute{
+										MarkdownDescription: "MLD join multicast group",
+										Computed:            true,
+									},
+									"group_address_only": schema.BoolAttribute{
+										MarkdownDescription: "Join multicast group without source address",
+										Computed:            true,
+									},
+									"source_addresses": schema.ListNestedAttribute{
+										MarkdownDescription: "Source address to include or exclude",
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"source_ip": schema.StringAttribute{
+													MarkdownDescription: "Source address to include",
+													Computed:            true,
+												},
+												"include": schema.BoolAttribute{
+													MarkdownDescription: "Include only the following source address",
+													Computed:            true,
+												},
+												"exclude": schema.BoolAttribute{
+													MarkdownDescription: "Exclude only the following source address",
+													Computed:            true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"dvmrp_enable": schema.BoolAttribute{
+							MarkdownDescription: "MLD Enable dvmrp on specific interface",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -209,7 +392,6 @@ func (d *RouterMLDVRFDataSource) Read(ctx context.Context, req datasource.ReadRe
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -229,7 +411,7 @@ func (d *RouterMLDVRFDataSource) Read(ctx context.Context, req datasource.ReadRe
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

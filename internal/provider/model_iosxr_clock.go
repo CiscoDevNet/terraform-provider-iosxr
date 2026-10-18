@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/go-netconf"
 	"github.com/netascode/xmldot"
-	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
 
@@ -78,7 +77,7 @@ func (data ClockData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data Clock) toBody(ctx context.Context) string {
+func (data Clock) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.Timezone.IsNull() && !data.Timezone.IsUnknown() {
 		body, _ = sjson.Set(body, "", data.Timezone.ValueString())
@@ -89,46 +88,28 @@ func (data Clock) toBody(ctx context.Context) string {
 // End of section. //template:end toBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
-
-func (data *Clock) updateFromBody(ctx context.Context, res gjson.Result) {
+func (data *Clock) updateFromBody(ctx context.Context, res []byte, version string) {
 }
 
 // End of section. //template:end updateFromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *Clock) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
+func (data *Clock) fromBody(ctx context.Context, res []byte, version string) {
 }
 
 // End of section. //template:end fromBody
 
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
-func (data *ClockData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
+func (data *ClockData) fromBody(ctx context.Context, res []byte, version string) {
 }
 
 // End of section. //template:end fromBodyData
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *Clock) getDeletedItems(ctx context.Context, state Clock) []string {
+func (data *Clock) getDeletedItems(ctx context.Context, state Clock, version string) []string {
 	deletedItems := make([]string, 0)
 	return deletedItems
 }
@@ -137,7 +118,7 @@ func (data *Clock) getDeletedItems(ctx context.Context, state Clock) []string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
-func (data *Clock) getEmptyLeafsDelete(ctx context.Context, state *Clock) []string {
+func (data *Clock) getEmptyLeafsDelete(ctx context.Context, state *Clock, version string) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
@@ -145,8 +126,7 @@ func (data *Clock) getEmptyLeafsDelete(ctx context.Context, state *Clock) []stri
 // End of section. //template:end getEmptyLeafsDelete
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *Clock) getDeletePaths(ctx context.Context) []string {
+func (data *Clock) getDeletePaths(ctx context.Context, version string) []string {
 	var deletePaths []string
 
 	return deletePaths
@@ -184,7 +164,7 @@ func (data Clock) toBodyXML(ctx context.Context, stateArg ...*Clock) string {
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))

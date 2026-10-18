@@ -1,0 +1,18 @@
+---
+name: CEF Accounting
+path: Cisco-IOS-XR-um-cef-accounting-cfg:/accounting
+doc_category: System
+attributes:
+  - yang_name: interfaces/mpls/ipv4/rsvp-te
+    delete_parent: true
+    minimum_test_value: true
+    example: true
+  - yang_name: interfaces/segment-routing/mpls/ipv4
+    example: true
+  - yang_name: interfaces/segment-routing/mpls/ipv6
+    example: true
+  - yang_name: prefixes/ipv6/mode/per-prefix/per-nexthop/srv6-locators
+    delete_grandparent: true
+    test_tags: [NCS, C8000, XRD]
+    include_example: true
+    example: true

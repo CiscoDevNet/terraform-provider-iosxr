@@ -1,0 +1,11 @@
+---
+name: Performance Measurement Delay Profile
+path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/delay-profile
+doc_category: Performance Monitoring
+attributes:
+  # ===========================================================
+  # endpoint/default/histogram/delay-bins/explicit removed in 26.2
+  # ===========================================================
+  - yang_name: endpoint/default/histogram/delay-bins/explicit
+    tf_name: endpoint_default_histogram_delay_bins_explicit
+    legacy: true

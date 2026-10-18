@@ -1,0 +1,14 @@
+---
+name: Logging
+path: Cisco-IOS-XR-um-logging-cfg:/logging
+doc_category: Management
+attributes:
+  # ===========================================================
+  # CONSTRAINT CHANGES — range/length widened in 26.2
+  # ===========================================================
+  - yang_name: tls-servers/tls-server
+    tf_name: tls_servers
+    type: List
+    attributes:
+      - yang_name: tls-hostname
+        tf_name: tls_hostname

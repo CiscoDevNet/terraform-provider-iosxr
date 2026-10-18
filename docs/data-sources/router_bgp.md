@@ -34,6 +34,8 @@ data "iosxr_router_bgp" "example" {
 - `as_league_peers` (Attributes List) AS League peers mode (see [below for nested schema](#nestedatt--as_league_peers))
 - `as_lists` (Attributes List) List of AS numbers (see [below for nested schema](#nestedatt--as_lists))
 - `attribute_filter_groups` (Attributes List) Attribute-filter group command mode (see [below for nested schema](#nestedatt--attribute_filter_groups))
+- `bandwidth_groups` (Attributes List) Enter Bandwidth Group command mode
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--bandwidth_groups))
 - `bfd_minimum_interval` (Number) Hello interval
 - `bfd_multiplier` (Number) Detect multiplier
 - `bgp_as_path_loopcheck` (Boolean) Enable AS-path loop checking for iBGP peers
@@ -76,6 +78,8 @@ data "iosxr_router_bgp" "example" {
 - `bgp_maximum_neighbor` (Number) Maximum number of neighbors that can be configured
 - `bgp_multipath_as_path_ignore_onwards` (Boolean) Ignore everything onwards as-path for multipath selection
 - `bgp_multipath_use_cluster_list_length` (Boolean) Use Cluster-List Length in BGP Multipath consideration
+- `bgp_neighbor_down_fast_hold_timer` (Number) Fast hold timer (in msec) when neighbors go down due to link down or BFD down
+  - Supported from version: `25.4`
 - `bgp_origin_as_validation_signal_ibgp` (Boolean) Signal origin-AS validity towards iBGP peers
 - `bgp_origin_as_validation_time` (Number) Prefix validation time (in seconds)
 - `bgp_origin_as_validation_time_off` (Boolean) No automatic prefix validation after an RPKI update
@@ -88,6 +92,12 @@ data "iosxr_router_bgp" "example" {
 - `bgp_update_delay_always` (Boolean) Keepalive trigger bestpath is disabled and delay is enforced
 - `default_information_originate` (Boolean) Distribute a default route
 - `default_metric` (Number) default redistributed metric
+- `distance_bgp_external` (Number) Distance for routes external to the AS
+  - Supported from version: `25.4`
+- `distance_bgp_internal` (Number) Distance for routes internal to the AS
+  - Supported from version: `25.4`
+- `distance_bgp_local` (Number) Distance for routes that are locally generated
+  - Supported from version: `25.4`
 - `graceful_maintenance_activate_all_neighbors` (Boolean) Also neighbors without graceful-maintenance config
 - `graceful_maintenance_activate_interfaces` (Attributes List) Enable graceful-maintenance on all directly connected ebgp neighbors whose session is going over this interface (see [below for nested schema](#nestedatt--graceful_maintenance_activate_interfaces))
 - `graceful_maintenance_activate_locations` (Attributes List) Enable graceful-maintenance on all directly connected ebgp neighbors whose session is going over this line card location (see [below for nested schema](#nestedatt--graceful_maintenance_activate_locations))
@@ -170,6 +180,32 @@ Read-Only:
 - `end` (Number) Attribute code range end
 - `start` (Number) Attribute code range start
 - `treat_as_withdraw` (Boolean) Treat the update message as a Withdraw
+
+
+
+<a id="nestedatt--bandwidth_groups"></a>
+### Nested Schema for `bandwidth_groups`
+
+Read-Only:
+
+- `bandwidth_group_name` (String) bandwidth-group name
+  - Supported from version: `25.4`
+- `bandwidth_ids` (Attributes List) Bandwidth-Group Identifier
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--bandwidth_groups--bandwidth_ids))
+
+<a id="nestedatt--bandwidth_groups--bandwidth_ids"></a>
+### Nested Schema for `bandwidth_groups.bandwidth_ids`
+
+Read-Only:
+
+- `asn` (Number) Bandwidth Group encoding asn
+  - Supported from version: `25.4`
+- `bandwidth_id_number` (Number) Identifier for the Bandwidth-Group
+  - Supported from version: `25.4`
+- `bandwidth_unit` (String) set bandwidth unit
+  - Supported from version: `25.4`
+- `value` (Number) set bandwidth id value
+  - Supported from version: `25.4`
 
 
 

@@ -10,6 +10,18 @@ description: |-
 
 This data source can read the Logging configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `archive_frequency_daily` | `25.4` |
+| `archive_frequency_weekly` | `25.4` |
+| `format_bsd` | `25.4` |
+| `format_rfc5424` | `25.4` |
+| `source_interfaces.vrfs` | `25.4` |
+
 ## Example Usage
 
 ```terraform
@@ -29,11 +41,15 @@ data "iosxr_logging" "example" {
 - `archive_disk0` (Boolean) Use disk0 as the archive device
 - `archive_disk1` (Boolean) Use disk1 as the archive device
 - `archive_filesize` (Number) The maximum file size for a single log file.
+- `archive_frequency` (String) The collection interval for logs
+  - Supported from version: `25.4`
 - `archive_frequency_daily` (Boolean) Collect log in files on a daily basis
+  - **Not supported from version `25.4` and above**
 - `archive_frequency_weekly` (Boolean) Collect log in files on a weekly basis
+  - **Not supported from version `25.4` and above**
 - `archive_harddisk` (Boolean) Use harddisk as the archive device
 - `archive_length` (Number) The maximum no of weeks of log to maintain
-- `archive_severity` (String) The minimum severity of log messages to archive
+- `archive_severity` (String) severity of remote host
 - `archive_size` (Number) The total size of the archive
 - `archive_threshold` (Number) The size threshold at which a syslog is generated
 - `buffered_discriminator_match1` (String) Set match discriminator 1
@@ -42,11 +58,23 @@ data "iosxr_logging" "example" {
 - `buffered_discriminator_nomatch1` (String) Set no-match discriminator 1
 - `buffered_discriminator_nomatch2` (String) Set no-match discriminator 2
 - `buffered_discriminator_nomatch3` (String) Set no-match discriminator 3
-- `buffered_entries_count` (Number) Number of syslog entries in buffer
-- `buffered_level` (String) configure this node
+- `buffered_entries_count` (Number) Syslog in buffer
+- `buffered_level` (String) buffered level
 - `buffered_size` (Number) Logging buffer size
-- `console` (String) Set console logging
-- `console_facility` (String) Console message logging facilities
+- `console` (String) console level
+- `console_discriminator_match1` (String) Set match discriminator 1
+  - Supported from version: `25.4`
+- `console_discriminator_match2` (String) Set match discriminator 2
+  - Supported from version: `25.4`
+- `console_discriminator_match3` (String) Set match discriminator 3
+  - Supported from version: `25.4`
+- `console_discriminator_nomatch1` (String) Set no-match discriminator 1
+  - Supported from version: `25.4`
+- `console_discriminator_nomatch2` (String) Set no-match discriminator 2
+  - Supported from version: `25.4`
+- `console_discriminator_nomatch3` (String) Set no-match discriminator 3
+  - Supported from version: `25.4`
+- `console_facility` (String) All supported facilities
 - `container_all` (Boolean) Enables log collection from all containers
 - `container_fetch_timestamp` (Boolean) Fetch logs with container timestamp for all containers
 - `events_buffer_size` (Number) Set size of the local event buffer
@@ -55,12 +83,16 @@ data "iosxr_logging" "example" {
 - `events_precfg_suppression` (String) Suppress events from a card/VM till its configuration is complete
 - `events_precfg_suppression_timeout` (Number) Timeout (in minutes) for pre-config events suppression (default 15)
 - `events_threshold` (Number) Configure threshold (%) for capacity alarm
-- `facility_level` (String) configure this node
+- `facility_level` (String) Modify message logging facilities
 - `file` (Attributes List) Set file logging (see [below for nested schema](#nestedatt--file))
 - `filter_matches` (Attributes List) Configure match string to filter (see [below for nested schema](#nestedatt--filter_matches))
-- `format_bsd` (Boolean) Enable to send the syslog message as BSD format
-- `format_rfc5424` (Boolean) Enable to send the syslog message rfc5424 format
-- `history` (String) Set history logging
+- `format` (String) Specify syslog message format send to the server
+  - Supported from version: `25.4`
+- `format_bsd` (Boolean) Enable to send the syslog message as BSD format 
+  - **Not supported from version `25.4` and above**
+- `format_rfc5424` (Boolean) Enable to send the syslog message rfc5424 format 
+  - **Not supported from version `25.4` and above**
+- `history` (String) history level
 - `history_size` (Number) Logging history size
 - `hostnameprefix` (String) Hostname prefix to add on msgs to servers
 - `id` (String) The path of the retrieved object.
@@ -79,6 +111,8 @@ data "iosxr_logging" "example" {
 - `source_interfaces` (Attributes List) Specify interface for source address in logging transactions (see [below for nested schema](#nestedatt--source_interfaces))
 - `suppress_duplicates` (Boolean) Suppress consecutive duplicate messages
 - `suppress_rules` (Attributes List) Configure a specified suppression rule (see [below for nested schema](#nestedatt--suppress_rules))
+- `tls_servers` (Attributes List) Secure server over tls
+  - Supported from version: `25.4` (see [below for nested schema](#nestedatt--tls_servers))
 - `trap` (String) Set trap logging
 - `yang` (String) Set yang logging parameters
 
@@ -94,10 +128,12 @@ Read-Only:
 - `discriminator_nomatch2` (String) Set no-match discriminator 2
 - `discriminator_nomatch3` (String) Set no-match discriminator 3
 - `file_name` (String) Set file logging
-- `local_accounting_send_to_remote_facility_level` (String) configure this node
+- `local_accounting` (Boolean) Store only the command accounting logs
+- `local_accounting_send_to_remote` (Boolean) Send the command accounting logs to syslog server
+- `local_accounting_send_to_remote_facility_level` (String) Modify message logging facilities
 - `maxfilesize` (Number) Set max file size
-- `path` (String) Set file path
-- `severity` (String) Set severity level
+- `path` (String) File path (e.g. /disk0: )
+- `severity` (String) severity
 
 
 <a id="nestedatt--filter_matches"></a>
@@ -114,7 +150,10 @@ Read-Only:
 Read-Only:
 
 - `name` (String) Specify interface for source address in logging transactions
-- `vrfs` (Attributes List) Set VRF option (see [below for nested schema](#nestedatt--source_interfaces--vrfs))
+- `vrf` (String) Set VRF option
+  - Supported from version: `25.4`
+- `vrfs` (Attributes List) Set VRF option
+  - **Not supported from version `25.4` and above** (see [below for nested schema](#nestedatt--source_interfaces--vrfs))
 
 <a id="nestedatt--source_interfaces--vrfs"></a>
 ### Nested Schema for `source_interfaces.vrfs`
@@ -152,3 +191,33 @@ Read-Only:
 Read-Only:
 
 - `location_name` (String) Location name
+
+
+
+<a id="nestedatt--tls_servers"></a>
+### Nested Schema for `tls_servers`
+
+Read-Only:
+
+- `address_ipv4` (String) IPv4 Address
+  - Supported from version: `25.4`
+- `address_ipv6` (String) IPv6 Address
+  - Supported from version: `25.4`
+- `name` (String) Name for the tls peer configuration
+  - Supported from version: `25.4`
+- `security_template` (String) Security template to be used for TLS essentials.
+  - Supported from version: `25.4`
+- `severity` (String) severity of remote host
+  - Supported from version: `25.4`
+- `source_interface` (String) Specify Source interface
+  - Supported from version: `25.4`
+- `tls_hostname` (String) Hostname or FQDN of Secure Log server
+  - Supported from version: `25.4`
+- `tls_max_version` (String) Max TLS version
+  - Supported from version: `25.4`
+- `tls_min_version` (String) Min TLS version
+  - Supported from version: `25.4`
+- `trustpoint` (String) Trustpoint
+  - Supported from version: `25.4`
+- `vrf` (String) Set VRF option
+  - Supported from version: `25.4`

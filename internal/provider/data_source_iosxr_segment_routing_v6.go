@@ -29,7 +29,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/tidwall/gjson"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 )
@@ -163,7 +162,15 @@ func (d *SegmentRoutingV6DataSource) Schema(ctx context.Context, req datasource.
 				Computed:            true,
 			},
 			"encapsulation_source_address": schema.StringAttribute{
-				MarkdownDescription: "Configure a source address",
+				MarkdownDescription: "Configure a source address" + "\n  - **Not supported from version `26.2` and above**",
+				Computed:            true,
+			},
+			"encapsulation_source_address_option": schema.StringAttribute{
+				MarkdownDescription: "Source address config option" + "\n  - Supported from version: `26.2`",
+				Computed:            true,
+			},
+			"encapsulation_source_address_address": schema.StringAttribute{
+				MarkdownDescription: "Explicit IPv6 address" + "\n  - Supported from version: `26.2`",
 				Computed:            true,
 			},
 		},
@@ -213,7 +220,6 @@ func (d *SegmentRoutingV6DataSource) Read(ctx context.Context, req datasource.Re
 				return
 			}
 
-			defer helpers.CloseGnmiConnection(ctx, device.GnmiClient, device.ReuseConnection)
 			getResp, err := device.GnmiClient.Get(ctx, []string{config.getPath()})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
@@ -233,7 +239,7 @@ func (d *SegmentRoutingV6DataSource) Read(ctx context.Context, req datasource.Re
 			}
 
 			respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
-			config.fromBody(ctx, gjson.ParseBytes(respBody))
+			config.fromBody(ctx, respBody, device.Version)
 		} else {
 			// Serialize NETCONF operations when reuse disabled (concurrent reads allowed when reuse enabled)
 			locked := helpers.AcquireNetconfLock(device.GetOpMutex(), device.ReuseConnection, false)

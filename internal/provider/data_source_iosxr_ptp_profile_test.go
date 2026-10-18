@@ -109,12 +109,22 @@ func TestAccDataSourceIosxrPTPProfile(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ptp_profile.test", "interop_ingress_conversion_clock_class_default", "6"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ptp_profile.test", "interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_from", "13"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ptp_profile.test", "interop_ingress_conversion_clock_class_mappings.0.clock_class_to_map_to", "6"))
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("C8000") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ptp_profile.test", "monitor_sender", "true"))
+		}
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("C8000") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ptp_profile.test", "monitor_receiver", "true"))
+		}
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrPTPProfilePrerequisitesConfig + testAccDataSourceIosxrPTPProfileConfig(),
+				Config: testAccDataSourceIosxrPTPProfilePrerequisitesConfig() + testAccDataSourceIosxrPTPProfileConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -124,12 +134,23 @@ func TestAccDataSourceIosxrPTPProfile(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrPTPProfilePrerequisitesConfig = `
+const testAccDataSourceIosxrPTPProfilePrerequisitesConfig_V24_4 = `
 resource "iosxr_yang" "PreReq0" {
 	path = "Cisco-IOS-XR-um-ptp-cfg:/ptp"
+	attributes = {
+	}
 }
 
 `
+
+// Versions without their own test_prerequisites inherit from the highest version at or below IOSXR_VERSION.
+func testAccDataSourceIosxrPTPProfilePrerequisitesConfig() string {
+	return selectVersionPrerequisitesConfig(
+		map[string]string{
+			"24.4": testAccDataSourceIosxrPTPProfilePrerequisitesConfig_V24_4,
+		},
+	)
+}
 
 // End of section. //template:end testPrerequisites
 
@@ -228,7 +249,19 @@ func testAccDataSourceIosxrPTPProfileConfig() string {
 	config += `		clock_class_to_map_from = 13` + "\n"
 	config += `		clock_class_to_map_to = 6` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_yang.PreReq0, ]` + "\n"
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("C8000") != "" {
+			config += `	monitor_sender = true` + "\n"
+		}
+	}
+	if iosxrVersionAtLeast(os.Getenv("IOSXR_VERSION"), "25.4") {
+		if os.Getenv("C8000") != "" {
+			config += `	monitor_receiver = true` + "\n"
+		}
+	}
+	config += selectVersionDependsOn(map[string]string{
+		"24.4": `[iosxr_yang.PreReq0, ]`,
+	}) + "\n"
 	config += `}` + "\n"
 
 	config += `

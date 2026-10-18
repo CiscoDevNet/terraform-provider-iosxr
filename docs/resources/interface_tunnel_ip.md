@@ -14,20 +14,10 @@ This resource can manage the Interface Tunnel IP configuration.
 
 ```terraform
 resource "iosxr_interface_tunnel_ip" "example" {
-  name                       = "100"
-  shutdown                   = false
-  mtu                        = 1400
-  logging_events_link_status = true
-  bandwidth                  = 100000
-  description                = "My Interface Description"
-  load_interval              = 30
-  vrf                        = "VRF1"
-  ipv4_address               = "192.168.1.1"
-  ipv4_netmask               = "255.255.255.0"
-  ipv6_link_local_address    = "fe80::1"
-  ipv6_link_local_zone       = "0"
-  ipv6_autoconfig            = false
-  ipv6_enable                = true
+  bandwidth    = 100000
+  description  = "My Interface Description"
+  ipv4_address = "192.168.1.1"
+  ipv4_netmask = "255.255.255.0"
   ipv6_addresses = [
     {
       address       = "2001:db8::1"
@@ -35,18 +25,28 @@ resource "iosxr_interface_tunnel_ip" "example" {
       zone          = "0"
     }
   ]
-  tunnel_source_ipv4          = "192.168.1.1"
-  tunnel_destination_ipv4     = "192.168.1.2"
+  ipv6_autoconfig             = false
+  ipv6_enable                 = true
+  ipv6_link_local_address     = "fe80::1"
+  ipv6_link_local_zone        = "0"
+  load_interval               = 30
+  logging_events_link_status  = true
+  mtu                         = 1400
+  name                        = "100"
+  shutdown                    = false
   tunnel_bfd_destination_ipv4 = "192.168.1.2"
-  tunnel_bfd_period           = 20
-  tunnel_bfd_retry            = 3
   tunnel_bfd_minimum_interval = 1000
   tunnel_bfd_multiplier       = 3
+  tunnel_bfd_period           = 20
+  tunnel_bfd_retry            = 3
+  tunnel_destination_ipv4     = "192.168.1.2"
+  tunnel_df_disable           = true
   tunnel_mode_gre_ipv4        = true
+  tunnel_source_ipv4          = "192.168.1.1"
   tunnel_tos                  = 5
   tunnel_ttl_value            = 10
-  tunnel_df_disable           = true
   tunnel_vrf                  = "VRF1"
+  vrf                         = "VRF1"
 }
 ```
 
@@ -87,6 +87,7 @@ resource "iosxr_interface_tunnel_ip" "example" {
 - `keepalive_period` (Number) Keepalive period in seconds (default 10 seconds)
   - Range: `1`-`32767`
 - `load_interval` (Number) Specify interval for load calculation for an interface
+  - Range: `0`-`600`
 - `logging_events_link_status` (Boolean) Enable interface and line-protocol state change alarms
 - `mtu` (Number) Set the MTU on an interface
   - Range: `64`-`65535`
@@ -104,6 +105,7 @@ resource "iosxr_interface_tunnel_ip" "example" {
 - `tunnel_destination_ipv4` (String) IPV4 address of the tunnel destination
 - `tunnel_destination_ipv6` (String) IPV6 address of the tunnel destination
 - `tunnel_destination_prefix_list` (String) Prefix-list to validate destination's resolving prefix
+  - Length: `1`-`64` (v24.4), `1`-`128` (v25.4)
 - `tunnel_df_disable` (Boolean) Disable DF bit (i.e. allow fragmentation)
 - `tunnel_key` (Number) Enter the Key value
   - Range: `0`-`4294967295`

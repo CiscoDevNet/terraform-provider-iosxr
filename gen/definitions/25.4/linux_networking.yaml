@@ -1,0 +1,14 @@
+---
+name: Linux Networking
+path: Cisco-IOS-XR-um-linux-networking-cfg:/linux/networking
+doc_category: Management
+attributes:
+  # ===========================================================
+  # exposed-interfaces: linux-managed enum gains disable-l3-only
+  # ===========================================================
+  - yang_name: exposed-interfaces/interfaces/interface
+    tf_name: exposed_interfaces
+    type: List
+    attributes:
+      - yang_name: linux-managed
+        tf_name: linux_managed

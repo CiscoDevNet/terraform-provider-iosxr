@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"strconv"
 
@@ -85,7 +86,7 @@ func (data TFTPClientData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data TFTPClient) toBody(ctx context.Context) string {
+func (data TFTPClient) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if len(data.ClientVrfs) > 0 {
 		body, _ = sjson.Set(body, "client.vrfs.vrf", []interface{}{})
@@ -112,15 +113,64 @@ func (data TFTPClient) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *TFTPClient) updateFromBody(ctx context.Context, res gjson.Result) {
+// GetVersionConstraints returns the version constraints for all fields
+func (data TFTPClient) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data TFTPClient) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data TFTPClient) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data TFTPClient) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data TFTPClient) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *TFTPClient) updateFromBody(ctx context.Context, res []byte, version string) {
 	for i := range data.ClientVrfs {
 		keys := [...]string{"vrf-name"}
 		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
 
 		var r gjson.Result
-		res.Get("client.vrfs.vrf").ForEach(
+		gjson.GetBytes(res, "client.vrfs.vrf").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -138,12 +188,12 @@ func (data *TFTPClient) updateFromBody(ctx context.Context, res gjson.Result) {
 				return true
 			},
 		)
-		if value := r.Get("vrf-name"); value.Exists() && !data.ClientVrfs[i].VrfName.IsNull() {
+		if value := r.Get("vrf-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ClientVrfs[i].VrfName.IsNull() {
 			data.ClientVrfs[i].VrfName = types.StringValue(value.String())
 		} else {
 			data.ClientVrfs[i].VrfName = types.StringNull()
 		}
-		if value := r.Get("source-interface"); value.Exists() && !data.ClientVrfs[i].SourceInterface.IsNull() {
+		if value := r.Get("source-interface"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ClientVrfs[i].SourceInterface.IsNull() {
 			data.ClientVrfs[i].SourceInterface = types.StringValue(value.String())
 		} else {
 			data.ClientVrfs[i].SourceInterface = types.StringNull()
@@ -158,7 +208,7 @@ func (data *TFTPClient) updateFromBody(ctx context.Context, res gjson.Result) {
 		} else {
 			data.ClientVrfs[i].Timeout = types.Int64Null()
 		}
-		if value := r.Get("dscp"); value.Exists() && !data.ClientVrfs[i].Dscp.IsNull() {
+		if value := r.Get("dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ClientVrfs[i].Dscp.IsNull() {
 			data.ClientVrfs[i].Dscp = types.StringValue(value.String())
 		} else {
 			data.ClientVrfs[i].Dscp = types.StringNull()
@@ -167,6 +217,162 @@ func (data *TFTPClient) updateFromBody(ctx context.Context, res gjson.Result) {
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *TFTPClient) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "client.vrfs.vrf"); value.Exists() {
+		data.ClientVrfs = make([]TFTPClientClientVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := TFTPClientClientVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("source-interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.SourceInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("retries"); cValue.Exists() {
+				item.Retries = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("timeout"); cValue.Exists() {
+				item.Timeout = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("dscp"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Dscp = types.StringValue(cValue.String())
+			}
+			data.ClientVrfs = append(data.ClientVrfs, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *TFTPClientData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "client.vrfs.vrf"); value.Exists() {
+		data.ClientVrfs = make([]TFTPClientClientVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := TFTPClientClientVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("source-interface"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.SourceInterface = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("retries"); cValue.Exists() {
+				item.Retries = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("timeout"); cValue.Exists() {
+				item.Timeout = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("dscp"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Dscp = types.StringValue(cValue.String())
+			}
+			data.ClientVrfs = append(data.ClientVrfs, item)
+			return true
+		})
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *TFTPClient) getDeletedItems(ctx context.Context, state TFTPClient, version string) []string {
+	deletedItems := make([]string, 0)
+	for i := range state.ClientVrfs {
+		keys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.ClientVrfs[i].VrfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ClientVrfs[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ClientVrfs {
+			found = true
+			if state.ClientVrfs[i].VrfName.ValueString() != data.ClientVrfs[j].VrfName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.ClientVrfs[i].Dscp.IsNull() && data.ClientVrfs[j].Dscp.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "client/vrfs/vrf", keyString), "dscp"))
+				}
+				if !state.ClientVrfs[i].Timeout.IsNull() && data.ClientVrfs[j].Timeout.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "client/vrfs/vrf", keyString), "timeout"))
+				}
+				if !state.ClientVrfs[i].Retries.IsNull() && data.ClientVrfs[j].Retries.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "client/vrfs/vrf", keyString), "retries"))
+				}
+				if !state.ClientVrfs[i].SourceInterface.IsNull() && data.ClientVrfs[j].SourceInterface.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "client/vrfs/vrf", keyString), "source-interface"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "client/vrfs/vrf", keyString))
+		}
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *TFTPClient) getEmptyLeafsDelete(ctx context.Context, state *TFTPClient, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	for i := range data.ClientVrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *TFTPClient) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	for i := range data.ClientVrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.ClientVrfs[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "client/vrfs/vrf", keyString))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data TFTPClient) toBodyXML(ctx context.Context, stateArg ...*TFTPClient) string {
@@ -217,7 +423,7 @@ func (data TFTPClient) toBodyXML(ctx context.Context, stateArg ...*TFTPClient) s
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -225,6 +431,7 @@ func (data TFTPClient) toBodyXML(ctx context.Context, stateArg ...*TFTPClient) s
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *TFTPClient) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -280,81 +487,7 @@ func (data *TFTPClient) updateFromBodyXML(ctx context.Context, res xmldot.Result
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *TFTPClient) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "client.vrfs.vrf"); value.Exists() {
-		data.ClientVrfs = make([]TFTPClientClientVrfs, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := TFTPClientClientVrfs{}
-			if cValue := v.Get("vrf-name"); cValue.Exists() {
-				item.VrfName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("source-interface"); cValue.Exists() {
-				item.SourceInterface = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("retries"); cValue.Exists() {
-				item.Retries = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("timeout"); cValue.Exists() {
-				item.Timeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("dscp"); cValue.Exists() {
-				item.Dscp = types.StringValue(cValue.String())
-			}
-			data.ClientVrfs = append(data.ClientVrfs, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *TFTPClientData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "client.vrfs.vrf"); value.Exists() {
-		data.ClientVrfs = make([]TFTPClientClientVrfs, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := TFTPClientClientVrfs{}
-			if cValue := v.Get("vrf-name"); cValue.Exists() {
-				item.VrfName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("source-interface"); cValue.Exists() {
-				item.SourceInterface = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("retries"); cValue.Exists() {
-				item.Retries = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("timeout"); cValue.Exists() {
-				item.Timeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("dscp"); cValue.Exists() {
-				item.Dscp = types.StringValue(cValue.String())
-			}
-			data.ClientVrfs = append(data.ClientVrfs, item)
-			return true
-		})
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *TFTPClient) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -384,6 +517,7 @@ func (data *TFTPClient) fromBodyXML(ctx context.Context, res xmldot.Result) {
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *TFTPClientData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -413,87 +547,7 @@ func (data *TFTPClientData) fromBodyXML(ctx context.Context, res xmldot.Result) 
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *TFTPClient) getDeletedItems(ctx context.Context, state TFTPClient) []string {
-	deletedItems := make([]string, 0)
-	for i := range state.ClientVrfs {
-		keys := [...]string{"vrf-name"}
-		stateKeyValues := [...]string{state.ClientVrfs[i].VrfName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.ClientVrfs[i].VrfName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.ClientVrfs {
-			found = true
-			if state.ClientVrfs[i].VrfName.ValueString() != data.ClientVrfs[j].VrfName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.ClientVrfs[i].Dscp.IsNull() && data.ClientVrfs[j].Dscp.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/dscp", state.getPath(), keyString))
-				}
-				if !state.ClientVrfs[i].Timeout.IsNull() && data.ClientVrfs[j].Timeout.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/timeout", state.getPath(), keyString))
-				}
-				if !state.ClientVrfs[i].Retries.IsNull() && data.ClientVrfs[j].Retries.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/retries", state.getPath(), keyString))
-				}
-				if !state.ClientVrfs[i].SourceInterface.IsNull() && data.ClientVrfs[j].SourceInterface.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v/source-interface", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/client/vrfs/vrf%v", state.getPath(), keyString))
-		}
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *TFTPClient) getEmptyLeafsDelete(ctx context.Context, state *TFTPClient) []string {
-	emptyLeafsDelete := make([]string, 0)
-	for i := range data.ClientVrfs {
-		keys := [...]string{"vrf-name"}
-		keyValues := [...]string{data.ClientVrfs[i].VrfName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *TFTPClient) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	for i := range data.ClientVrfs {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[vrf-name=" + data.ClientVrfs[i].VrfName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/client/vrfs/vrf%v", data.getPath(), keyPath))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *TFTPClient) addDeletedItemsXML(ctx context.Context, state TFTPClient, body string) string {
@@ -549,6 +603,7 @@ func (data *TFTPClient) addDeletedItemsXML(ctx context.Context, state TFTPClient
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *TFTPClient) addDeletePathsXML(ctx context.Context, body string) string {

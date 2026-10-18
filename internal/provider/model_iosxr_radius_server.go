@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"sort"
 	"strconv"
@@ -67,6 +68,7 @@ type RadiusServer struct {
 	AttributeAcctSessionIdPrependNasPortId                 types.Bool                   `tfsdk:"attribute_acct_session_id_prepend_nas_port_id"`
 	AttributeAcctMultiSessionIdIncludeParentSessionId      types.Bool                   `tfsdk:"attribute_acct_multi_session_id_include_parent_session_id"`
 	AttributeFilterId11DefaultDirection                    types.String                 `tfsdk:"attribute_filter_id_11_default_direction"`
+	AttributeMessageAuthenticator                          types.Bool                   `tfsdk:"attribute_message_authenticator"`
 }
 
 type RadiusServerData struct {
@@ -95,34 +97,47 @@ type RadiusServerData struct {
 	AttributeAcctSessionIdPrependNasPortId                 types.Bool                   `tfsdk:"attribute_acct_session_id_prepend_nas_port_id"`
 	AttributeAcctMultiSessionIdIncludeParentSessionId      types.Bool                   `tfsdk:"attribute_acct_multi_session_id_include_parent_session_id"`
 	AttributeFilterId11DefaultDirection                    types.String                 `tfsdk:"attribute_filter_id_11_default_direction"`
+	AttributeMessageAuthenticator                          types.Bool                   `tfsdk:"attribute_message_authenticator"`
 }
 type RadiusServerHosts struct {
-	Order                  types.Int64  `tfsdk:"order"`
-	Address                types.String `tfsdk:"address"`
-	AuthPort               types.Int64  `tfsdk:"auth_port"`
-	AcctPort               types.Int64  `tfsdk:"acct_port"`
-	Timeout                types.Int64  `tfsdk:"timeout"`
-	Retransmit             types.Int64  `tfsdk:"retransmit"`
-	KeyType7               types.String `tfsdk:"key_type_7"`
-	KeyType6               types.String `tfsdk:"key_type_6"`
-	TestUsername           types.String `tfsdk:"test_username"`
-	IdleTime               types.Int64  `tfsdk:"idle_time"`
-	IgnoreAuthPort         types.Bool   `tfsdk:"ignore_auth_port"`
-	IgnoreAcctPort         types.Bool   `tfsdk:"ignore_acct_port"`
-	DtlsServerTrustpoint   types.String `tfsdk:"dtls_server_trustpoint"`
-	RadsecServerTrustpoint types.String `tfsdk:"radsec_server_trustpoint"`
+	Order                                 types.Int64  `tfsdk:"order"`
+	Address                               types.String `tfsdk:"address"`
+	AuthPort                              types.Int64  `tfsdk:"auth_port"`
+	AcctPort                              types.Int64  `tfsdk:"acct_port"`
+	Timeout                               types.Int64  `tfsdk:"timeout"`
+	Retransmit                            types.Int64  `tfsdk:"retransmit"`
+	KeyType7                              types.String `tfsdk:"key_type_7"`
+	KeyType6                              types.String `tfsdk:"key_type_6"`
+	TestUsername                          types.String `tfsdk:"test_username"`
+	IdleTime                              types.Int64  `tfsdk:"idle_time"`
+	IgnoreAuthPort                        types.Bool   `tfsdk:"ignore_auth_port"`
+	IgnoreAcctPort                        types.Bool   `tfsdk:"ignore_acct_port"`
+	DtlsServerTrustpoint                  types.String `tfsdk:"dtls_server_trustpoint"`
+	RadsecServerTrustpoint                types.String `tfsdk:"radsec_server_trustpoint"`
+	AttributeMessageAuthenticatorMandate  types.Bool   `tfsdk:"attribute_message_authenticator_mandate"`
+	AttributeMessageAuthenticatorOptional types.Bool   `tfsdk:"attribute_message_authenticator_optional"`
 }
 type RadiusServerAttributeLists struct {
-	Name               types.String                                   `tfsdk:"name"`
-	RadiusAttributes   types.String                                   `tfsdk:"radius_attributes"`
-	AttributeVendorIds []RadiusServerAttributeListsAttributeVendorIds `tfsdk:"attribute_vendor_ids"`
+	Name                            types.String                                                `tfsdk:"name"`
+	RadiusAttributes                types.String                                                `tfsdk:"radius_attributes"`
+	AttributeVendorIds              []RadiusServerAttributeListsAttributeVendorIds              `tfsdk:"attribute_vendor_ids"`
+	AttributeVendorCiscoVendorTypes []RadiusServerAttributeListsAttributeVendorCiscoVendorTypes `tfsdk:"attribute_vendor_cisco_vendor_types"`
 }
 type RadiusServerAttributeListsAttributeVendorIds struct {
 	Id          types.Int64                                               `tfsdk:"id"`
 	VendorTypes []RadiusServerAttributeListsAttributeVendorIdsVendorTypes `tfsdk:"vendor_types"`
 }
+type RadiusServerAttributeListsAttributeVendorCiscoVendorTypes struct {
+	VendorTypeId  types.Int64                                                        `tfsdk:"vendor_type_id"`
+	AllAvpairs    types.Bool                                                         `tfsdk:"all_avpairs"`
+	AllAttributes types.Bool                                                         `tfsdk:"all_attributes"`
+	Avpairs       []RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs `tfsdk:"avpairs"`
+}
 type RadiusServerAttributeListsAttributeVendorIdsVendorTypes struct {
 	VendorTypeId types.Int64 `tfsdk:"vendor_type_id"`
+}
+type RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs struct {
+	AvpairName types.String `tfsdk:"avpair_name"`
 }
 
 // End of section. //template:end types
@@ -152,7 +167,7 @@ func (data RadiusServerData) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data RadiusServer) toBody(ctx context.Context) string {
+func (data RadiusServer) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.KeyType7.IsNull() && !data.KeyType7.IsUnknown() {
 		body, _ = sjson.Set(body, "key.seven", data.KeyType7.ValueString())
@@ -231,6 +246,13 @@ func (data RadiusServer) toBody(ctx context.Context) string {
 	if !data.AttributeFilterId11DefaultDirection.IsNull() && !data.AttributeFilterId11DefaultDirection.IsUnknown() {
 		body, _ = sjson.Set(body, "attribute.filter-id-11.default.direction", data.AttributeFilterId11DefaultDirection.ValueString())
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.AttributeMessageAuthenticator.IsNull() && !data.AttributeMessageAuthenticator.IsUnknown() {
+			if data.AttributeMessageAuthenticator.ValueBool() {
+				body, _ = sjson.Set(body, "attribute.message-authenticator", map[string]string{})
+			}
+		}
+	}
 	if len(data.Hosts) > 0 {
 		body, _ = sjson.Set(body, "hosts.host", []interface{}{})
 		for index, item := range data.Hosts {
@@ -280,6 +302,20 @@ func (data RadiusServer) toBody(ctx context.Context) string {
 			if !item.RadsecServerTrustpoint.IsNull() && !item.RadsecServerTrustpoint.IsUnknown() {
 				body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"radsec-server.trustpoint", item.RadsecServerTrustpoint.ValueString())
 			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.AttributeMessageAuthenticatorMandate.IsNull() && !item.AttributeMessageAuthenticatorMandate.IsUnknown() {
+					if item.AttributeMessageAuthenticatorMandate.ValueBool() {
+						body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"attribute.message-authenticator.mandate", map[string]string{})
+					}
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.AttributeMessageAuthenticatorOptional.IsNull() && !item.AttributeMessageAuthenticatorOptional.IsUnknown() {
+					if item.AttributeMessageAuthenticatorOptional.ValueBool() {
+						body, _ = sjson.Set(body, "hosts.host"+"."+strconv.Itoa(index)+"."+"attribute.message-authenticator.optional", map[string]string{})
+					}
+				}
+			}
 		}
 	}
 	if len(data.AttributeLists) > 0 {
@@ -292,14 +328,50 @@ func (data RadiusServer) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.radius-attributes", item.RadiusAttributes.ValueString())
 			}
 			if len(item.AttributeVendorIds) > 0 {
+				body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-ids.vendor-id", []interface{}{})
 				for cindex, citem := range item.AttributeVendorIds {
 					if !citem.Id.IsNull() && !citem.Id.IsUnknown() {
 						body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-ids.vendor-id"+"."+strconv.Itoa(cindex)+"."+"id", strconv.FormatInt(citem.Id.ValueInt64(), 10))
 					}
 					if len(citem.VendorTypes) > 0 {
+						body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-ids.vendor-id"+"."+strconv.Itoa(cindex)+"."+"vendor-types.vendor-type", []interface{}{})
 						for ccindex, ccitem := range citem.VendorTypes {
 							if !ccitem.VendorTypeId.IsNull() && !ccitem.VendorTypeId.IsUnknown() {
 								body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-ids.vendor-id"+"."+strconv.Itoa(cindex)+"."+"vendor-types.vendor-type"+"."+strconv.Itoa(ccindex)+"."+"vendor-type-id", strconv.FormatInt(ccitem.VendorTypeId.ValueInt64(), 10))
+							}
+						}
+					}
+				}
+			}
+			if (helpers.VersionAtLeast(providerVersion, "26.2")) && len(item.AttributeVendorCiscoVendorTypes) > 0 {
+				body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-cisco.vendor-type", []interface{}{})
+				for cindex, citem := range item.AttributeVendorCiscoVendorTypes {
+					if helpers.VersionAtLeast(providerVersion, "26.2") {
+						if !citem.VendorTypeId.IsNull() && !citem.VendorTypeId.IsUnknown() {
+							body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-cisco.vendor-type"+"."+strconv.Itoa(cindex)+"."+"vendor-type-id", strconv.FormatInt(citem.VendorTypeId.ValueInt64(), 10))
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "26.2") {
+						if !citem.AllAvpairs.IsNull() && !citem.AllAvpairs.IsUnknown() {
+							if citem.AllAvpairs.ValueBool() {
+								body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-cisco.vendor-type"+"."+strconv.Itoa(cindex)+"."+"all-avpairs", map[string]string{})
+							}
+						}
+					}
+					if helpers.VersionAtLeast(providerVersion, "26.2") {
+						if !citem.AllAttributes.IsNull() && !citem.AllAttributes.IsUnknown() {
+							if citem.AllAttributes.ValueBool() {
+								body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-cisco.vendor-type"+"."+strconv.Itoa(cindex)+"."+"all-attributes", map[string]string{})
+							}
+						}
+					}
+					if (helpers.VersionAtLeast(providerVersion, "26.2")) && len(citem.Avpairs) > 0 {
+						body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-cisco.vendor-type"+"."+strconv.Itoa(cindex)+"."+"avpairs", []interface{}{})
+						for ccindex, ccitem := range citem.Avpairs {
+							if helpers.VersionAtLeast(providerVersion, "26.2") {
+								if !ccitem.AvpairName.IsNull() && !ccitem.AvpairName.IsUnknown() {
+									body, _ = sjson.Set(body, "attribute.list"+"."+strconv.Itoa(index)+"."+"attribute.vendor-cisco.vendor-type"+"."+strconv.Itoa(cindex)+"."+"avpairs"+"."+strconv.Itoa(ccindex)+"."+"avpair-name", ccitem.AvpairName.ValueString())
+								}
 							}
 						}
 					}
@@ -312,15 +384,102 @@ func (data RadiusServer) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *RadiusServer) updateFromBody(ctx context.Context, res gjson.Result) {
+// GetVersionConstraints returns the version constraints for all fields
+func (data RadiusServer) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath:      "hosts.attribute_message_authenticator_mandate",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "hosts.attribute_message_authenticator_optional",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "attribute_lists.attribute_vendor_cisco_vendor_types",
+			AddedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "attribute_lists.attribute_vendor_cisco_vendor_types.vendor_type_id",
+			AddedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "attribute_lists.attribute_vendor_cisco_vendor_types.all_avpairs",
+			AddedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "attribute_lists.attribute_vendor_cisco_vendor_types.all_attributes",
+			AddedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "attribute_lists.attribute_vendor_cisco_vendor_types.avpairs",
+			AddedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "attribute_lists.attribute_vendor_cisco_vendor_types.avpairs.avpair_name",
+			AddedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "attribute_message_authenticator",
+			AddedInVersion: "25.4",
+		},
+	}...)
+	if len(constraints) == 0 {
+		return nil
+	}
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data RadiusServer) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return nil
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data RadiusServer) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data RadiusServer) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data RadiusServer) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *RadiusServer) updateFromBody(ctx context.Context, res []byte, version string) {
 	for i := range data.Hosts {
 		keys := [...]string{"ordering-index", "address", "auth-port", "acct-port"}
 		keyValues := [...]string{strconv.FormatInt(data.Hosts[i].Order.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].AuthPort.ValueInt64(), 10), strconv.FormatInt(data.Hosts[i].AcctPort.ValueInt64(), 10)}
 
 		var r gjson.Result
-		res.Get("hosts.host").ForEach(
+		gjson.GetBytes(res, "hosts.host").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -343,7 +502,7 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res gjson.Result) 
 		} else {
 			data.Hosts[i].Order = types.Int64Null()
 		}
-		if value := r.Get("address"); value.Exists() && !data.Hosts[i].Address.IsNull() {
+		if value := r.Get("address"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Hosts[i].Address.IsNull() {
 			data.Hosts[i].Address = types.StringValue(value.String())
 		} else {
 			data.Hosts[i].Address = types.StringNull()
@@ -368,7 +527,7 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res gjson.Result) 
 		} else {
 			data.Hosts[i].Retransmit = types.Int64Null()
 		}
-		if value := r.Get("test.username"); value.Exists() && !data.Hosts[i].TestUsername.IsNull() {
+		if value := r.Get("test.username"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Hosts[i].TestUsername.IsNull() {
 			data.Hosts[i].TestUsername = types.StringValue(value.String())
 		} else {
 			data.Hosts[i].TestUsername = types.StringNull()
@@ -402,133 +561,152 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res gjson.Result) 
 				data.Hosts[i].IgnoreAcctPort = types.BoolNull()
 			}
 		}
-		if value := r.Get("dtls-server.trustpoint"); value.Exists() && !data.Hosts[i].DtlsServerTrustpoint.IsNull() {
+		if value := r.Get("dtls-server.trustpoint"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Hosts[i].DtlsServerTrustpoint.IsNull() {
 			data.Hosts[i].DtlsServerTrustpoint = types.StringValue(value.String())
 		} else {
 			data.Hosts[i].DtlsServerTrustpoint = types.StringNull()
 		}
-		if value := r.Get("radsec-server.trustpoint"); value.Exists() && !data.Hosts[i].RadsecServerTrustpoint.IsNull() {
+		if value := r.Get("radsec-server.trustpoint"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Hosts[i].RadsecServerTrustpoint.IsNull() {
 			data.Hosts[i].RadsecServerTrustpoint = types.StringValue(value.String())
 		} else {
 			data.Hosts[i].RadsecServerTrustpoint = types.StringNull()
 		}
+		if value := r.Get("attribute.message-authenticator.mandate"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() {
+				data.Hosts[i].AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() {
+				data.Hosts[i].AttributeMessageAuthenticatorMandate = types.BoolNull()
+			}
+		}
+		if value := r.Get("attribute.message-authenticator.optional"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() {
+				data.Hosts[i].AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() {
+				data.Hosts[i].AttributeMessageAuthenticatorOptional = types.BoolNull()
+			}
+		}
 	}
-	if value := res.Get("timeout"); value.Exists() && !data.Timeout.IsNull() {
+	if value := gjson.GetBytes(res, "timeout"); value.Exists() && !data.Timeout.IsNull() {
 		data.Timeout = types.Int64Value(value.Int())
 	} else if data.Timeout.IsNull() {
 		data.Timeout = types.Int64Null()
 	}
-	if value := res.Get("retransmit.retries"); value.Exists() && !data.RetransmitRetries.IsNull() {
+	if value := gjson.GetBytes(res, "retransmit.retries"); value.Exists() && !data.RetransmitRetries.IsNull() {
 		data.RetransmitRetries = types.Int64Value(value.Int())
 	} else if data.RetransmitRetries.IsNull() {
 		data.RetransmitRetries = types.Int64Null()
 	}
-	if value := res.Get("retransmit.disable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.RetransmitDisable.IsNull() {
+	if value := gjson.GetBytes(res, "retransmit.disable"); !data.RetransmitDisable.IsNull() {
+		if value.Exists() {
 			data.RetransmitDisable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.RetransmitDisable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.RetransmitDisable.IsNull() {
-			data.RetransmitDisable = types.BoolNull()
-		}
+	} else if data.RetransmitDisable.IsNull() {
+		data.RetransmitDisable = types.BoolNull()
 	}
-	if value := res.Get("load-balance.method.least-outstanding.batch-size"); value.Exists() && !data.LoadBalanceMethodLeastOutstandingBatchSize.IsNull() {
+	if value := gjson.GetBytes(res, "load-balance.method.least-outstanding.batch-size"); value.Exists() && !data.LoadBalanceMethodLeastOutstandingBatchSize.IsNull() {
 		data.LoadBalanceMethodLeastOutstandingBatchSize = types.Int64Value(value.Int())
 	} else if data.LoadBalanceMethodLeastOutstandingBatchSize.IsNull() {
 		data.LoadBalanceMethodLeastOutstandingBatchSize = types.Int64Null()
 	}
-	if value := res.Get("load-balance.method.least-outstanding.ignore-preferred-server"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() {
+	if value := gjson.GetBytes(res, "load-balance.method.least-outstanding.ignore-preferred-server"); !data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() {
+		if value.Exists() {
 			data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() {
-			data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolNull()
-		}
+	} else if data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() {
+		data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolNull()
 	}
-	if value := res.Get("throttle.access"); value.Exists() && !data.ThrottleAccess.IsNull() {
+	if value := gjson.GetBytes(res, "throttle.access"); value.Exists() && !data.ThrottleAccess.IsNull() {
 		data.ThrottleAccess = types.Int64Value(value.Int())
 	} else if data.ThrottleAccess.IsNull() {
 		data.ThrottleAccess = types.Int64Null()
 	}
-	if value := res.Get("throttle.access-timeout"); value.Exists() && !data.ThrottleAccessTimeout.IsNull() {
+	if value := gjson.GetBytes(res, "throttle.access-timeout"); value.Exists() && !data.ThrottleAccessTimeout.IsNull() {
 		data.ThrottleAccessTimeout = types.Int64Value(value.Int())
 	} else if data.ThrottleAccessTimeout.IsNull() {
 		data.ThrottleAccessTimeout = types.Int64Null()
 	}
-	if value := res.Get("throttle.accounting"); value.Exists() && !data.ThrottleAccounting.IsNull() {
+	if value := gjson.GetBytes(res, "throttle.accounting"); value.Exists() && !data.ThrottleAccounting.IsNull() {
 		data.ThrottleAccounting = types.Int64Value(value.Int())
 	} else if data.ThrottleAccounting.IsNull() {
 		data.ThrottleAccounting = types.Int64Null()
 	}
-	if value := res.Get("deadtime"); value.Exists() && !data.Deadtime.IsNull() {
+	if value := gjson.GetBytes(res, "deadtime"); value.Exists() && !data.Deadtime.IsNull() {
 		data.Deadtime = types.Int64Value(value.Int())
 	} else if data.Deadtime.IsNull() {
 		data.Deadtime = types.Int64Null()
 	}
-	if value := res.Get("dead-criteria.time"); value.Exists() && !data.DeadCriteriaTime.IsNull() {
+	if value := gjson.GetBytes(res, "dead-criteria.time"); value.Exists() && !data.DeadCriteriaTime.IsNull() {
 		data.DeadCriteriaTime = types.Int64Value(value.Int())
 	} else if data.DeadCriteriaTime.IsNull() {
 		data.DeadCriteriaTime = types.Int64Null()
 	}
-	if value := res.Get("dead-criteria.tries"); value.Exists() && !data.DeadCriteriaTries.IsNull() {
+	if value := gjson.GetBytes(res, "dead-criteria.tries"); value.Exists() && !data.DeadCriteriaTries.IsNull() {
 		data.DeadCriteriaTries = types.Int64Value(value.Int())
 	} else if data.DeadCriteriaTries.IsNull() {
 		data.DeadCriteriaTries = types.Int64Null()
 	}
-	if value := res.Get("source-port.extended"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.SourcePortExtended.IsNull() {
+	if value := gjson.GetBytes(res, "source-port.extended"); !data.SourcePortExtended.IsNull() {
+		if value.Exists() {
 			data.SourcePortExtended = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.SourcePortExtended = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.SourcePortExtended.IsNull() {
-			data.SourcePortExtended = types.BoolNull()
-		}
+	} else if data.SourcePortExtended.IsNull() {
+		data.SourcePortExtended = types.BoolNull()
 	}
-	if value := res.Get("ipv4.dscp"); value.Exists() && !data.Ipv4Dscp.IsNull() {
+	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringValue(value.String())
 	} else if data.Ipv4Dscp.IsNull() {
 		data.Ipv4Dscp = types.StringNull()
 	}
-	if value := res.Get("ipv6.dscp"); value.Exists() && !data.Ipv6Dscp.IsNull() {
+	if value := gjson.GetBytes(res, "ipv6.dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringValue(value.String())
 	} else if data.Ipv6Dscp.IsNull() {
 		data.Ipv6Dscp = types.StringNull()
 	}
-	if value := res.Get("vsa.attribute.ignore.unknown"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.VsaAttributeIgnoreUnknown.IsNull() {
+	if value := gjson.GetBytes(res, "vsa.attribute.ignore.unknown"); !data.VsaAttributeIgnoreUnknown.IsNull() {
+		if value.Exists() {
 			data.VsaAttributeIgnoreUnknown = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.VsaAttributeIgnoreUnknown = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.VsaAttributeIgnoreUnknown.IsNull() {
-			data.VsaAttributeIgnoreUnknown = types.BoolNull()
-		}
+	} else if data.VsaAttributeIgnoreUnknown.IsNull() {
+		data.VsaAttributeIgnoreUnknown = types.BoolNull()
 	}
-	if value := res.Get("disallow.null-username"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.DisallowNullUsername.IsNull() {
+	if value := gjson.GetBytes(res, "disallow.null-username"); !data.DisallowNullUsername.IsNull() {
+		if value.Exists() {
 			data.DisallowNullUsername = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.DisallowNullUsername = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.DisallowNullUsername.IsNull() {
-			data.DisallowNullUsername = types.BoolNull()
-		}
+	} else if data.DisallowNullUsername.IsNull() {
+		data.DisallowNullUsername = types.BoolNull()
 	}
 	for i := range data.AttributeLists {
 		keys := [...]string{"list-name"}
 		keyValues := [...]string{data.AttributeLists[i].Name.ValueString()}
 
 		var r gjson.Result
-		res.Get("attribute.list").ForEach(
+		gjson.GetBytes(res, "attribute.list").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -546,12 +724,12 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res gjson.Result) 
 				return true
 			},
 		)
-		if value := r.Get("list-name"); value.Exists() && !data.AttributeLists[i].Name.IsNull() {
+		if value := r.Get("list-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AttributeLists[i].Name.IsNull() {
 			data.AttributeLists[i].Name = types.StringValue(value.String())
 		} else {
 			data.AttributeLists[i].Name = types.StringNull()
 		}
-		if value := r.Get("attribute.radius-attributes"); value.Exists() && !data.AttributeLists[i].RadiusAttributes.IsNull() {
+		if value := r.Get("attribute.radius-attributes"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AttributeLists[i].RadiusAttributes.IsNull() {
 			data.AttributeLists[i].RadiusAttributes = types.StringValue(value.String())
 		} else {
 			data.AttributeLists[i].RadiusAttributes = types.StringNull()
@@ -614,37 +792,1207 @@ func (data *RadiusServer) updateFromBody(ctx context.Context, res gjson.Result) 
 				}
 			}
 		}
+		for ci := range data.AttributeLists[i].AttributeVendorCiscoVendorTypes {
+			var keys []string
+			var keyValues []string
+			if helpers.VersionAtLeast(version, "26.2") {
+				keys = append(keys, "vendor-type-id")
+				keyValues = append(keyValues, strconv.FormatInt(data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.ValueInt64(), 10))
+			}
+
+			var cr gjson.Result
+			r.Get("attribute.vendor-cisco.vendor-type").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("vendor-type-id"); helpers.VersionAtLeast(version, "26.2") && value.Exists() && !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.IsNull() {
+				data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId = types.Int64Value(value.Int())
+			} else {
+				data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId = types.Int64Null()
+			}
+			if value := cr.Get("all-avpairs"); helpers.VersionAtLeast(version, "26.2") && value.Exists() {
+				if !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs = types.BoolNull()
+				}
+			}
+			if value := cr.Get("all-attributes"); helpers.VersionAtLeast(version, "26.2") && value.Exists() {
+				if !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to null if the attribute is null in state
+				if data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes = types.BoolNull()
+				}
+			}
+			for cci := range data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs {
+				var keys []string
+				var keyValues []string
+				if helpers.VersionAtLeast(version, "26.2") {
+					keys = append(keys, "avpair-name")
+					keyValues = append(keyValues, data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs[cci].AvpairName.ValueString())
+				}
+
+				var ccr gjson.Result
+				cr.Get("avpairs").ForEach(
+					func(_, v gjson.Result) bool {
+						found := false
+						for ik := range keys {
+							if v.Get(keys[ik]).String() == keyValues[ik] {
+								found = true
+								continue
+							}
+							found = false
+							break
+						}
+						if found {
+							ccr = v
+							return false
+						}
+						return true
+					},
+				)
+				if value := ccr.Get("avpair-name"); helpers.VersionAtLeast(version, "26.2") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs[cci].AvpairName.IsNull() {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs[cci].AvpairName = types.StringValue(value.String())
+				} else {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs[cci].AvpairName = types.StringNull()
+				}
+			}
+		}
 	}
-	if value := res.Get("attribute.acct-session-id.prepend-nas-port-id"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.AttributeAcctSessionIdPrependNasPortId.IsNull() {
+	if value := gjson.GetBytes(res, "attribute.acct-session-id.prepend-nas-port-id"); !data.AttributeAcctSessionIdPrependNasPortId.IsNull() {
+		if value.Exists() {
 			data.AttributeAcctSessionIdPrependNasPortId = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.AttributeAcctSessionIdPrependNasPortId = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.AttributeAcctSessionIdPrependNasPortId.IsNull() {
-			data.AttributeAcctSessionIdPrependNasPortId = types.BoolNull()
-		}
+	} else if data.AttributeAcctSessionIdPrependNasPortId.IsNull() {
+		data.AttributeAcctSessionIdPrependNasPortId = types.BoolNull()
 	}
-	if value := res.Get("attribute.acct-multi-session-id.include-parent-session-id"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() {
+	if value := gjson.GetBytes(res, "attribute.acct-multi-session-id.include-parent-session-id"); !data.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() {
+		if value.Exists() {
 			data.AttributeAcctMultiSessionIdIncludeParentSessionId = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.AttributeAcctMultiSessionIdIncludeParentSessionId = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() {
-			data.AttributeAcctMultiSessionIdIncludeParentSessionId = types.BoolNull()
-		}
+	} else if data.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() {
+		data.AttributeAcctMultiSessionIdIncludeParentSessionId = types.BoolNull()
 	}
-	if value := res.Get("attribute.filter-id-11.default.direction"); value.Exists() && !data.AttributeFilterId11DefaultDirection.IsNull() {
+	if value := gjson.GetBytes(res, "attribute.filter-id-11.default.direction"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.AttributeFilterId11DefaultDirection.IsNull() {
 		data.AttributeFilterId11DefaultDirection = types.StringValue(value.String())
 	} else if data.AttributeFilterId11DefaultDirection.IsNull() {
 		data.AttributeFilterId11DefaultDirection = types.StringNull()
 	}
+	if value := gjson.GetBytes(res, "attribute.message-authenticator"); helpers.VersionAtLeast(version, "25.4") && !data.AttributeMessageAuthenticator.IsNull() {
+		if value.Exists() {
+			data.AttributeMessageAuthenticator = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.AttributeMessageAuthenticator = types.BoolValue(false)
+		}
+	} else if data.AttributeMessageAuthenticator.IsNull() {
+		data.AttributeMessageAuthenticator = types.BoolNull()
+	}
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *RadiusServer) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "hosts.host"); value.Exists() {
+		data.Hosts = make([]RadiusServerHosts, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RadiusServerHosts{}
+			if cValue := v.Get("ordering-index"); cValue.Exists() {
+				item.Order = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("auth-port"); cValue.Exists() {
+				item.AuthPort = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("acct-port"); cValue.Exists() {
+				item.AcctPort = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("timeout"); cValue.Exists() {
+				item.Timeout = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("retransmit"); cValue.Exists() {
+				item.Retransmit = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("test.username"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.TestUsername = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("idle-time"); cValue.Exists() {
+				item.IdleTime = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ignore-auth-port"); cValue.Exists() {
+				item.IgnoreAuthPort = types.BoolValue(true)
+			} else if !item.IgnoreAuthPort.IsNull() {
+				// Only set to false if it was previously set
+				item.IgnoreAuthPort = types.BoolValue(false)
+			}
+			if cValue := v.Get("ignore-acct-port"); cValue.Exists() {
+				item.IgnoreAcctPort = types.BoolValue(true)
+			} else if !item.IgnoreAcctPort.IsNull() {
+				// Only set to false if it was previously set
+				item.IgnoreAcctPort = types.BoolValue(false)
+			}
+			if cValue := v.Get("dtls-server.trustpoint"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.DtlsServerTrustpoint = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("radsec-server.trustpoint"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RadsecServerTrustpoint = types.StringValue(cValue.String())
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("attribute.message-authenticator.mandate"); cValue.Exists() {
+					item.AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+				} else if !item.AttributeMessageAuthenticatorMandate.IsNull() {
+					// Only set to false if it was previously set
+					item.AttributeMessageAuthenticatorMandate = types.BoolValue(false)
+				}
+			} else {
+				item.AttributeMessageAuthenticatorMandate = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("attribute.message-authenticator.optional"); cValue.Exists() {
+					item.AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+				} else if !item.AttributeMessageAuthenticatorOptional.IsNull() {
+					// Only set to false if it was previously set
+					item.AttributeMessageAuthenticatorOptional = types.BoolValue(false)
+				}
+			} else {
+				item.AttributeMessageAuthenticatorOptional = types.BoolNull()
+			}
+			data.Hosts = append(data.Hosts, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "timeout"); value.Exists() {
+		data.Timeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "retransmit.retries"); value.Exists() {
+		data.RetransmitRetries = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "retransmit.disable"); value.Exists() {
+		data.RetransmitDisable = types.BoolValue(true)
+	} else if !data.RetransmitDisable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.RetransmitDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "load-balance.method.least-outstanding.batch-size"); value.Exists() {
+		data.LoadBalanceMethodLeastOutstandingBatchSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "load-balance.method.least-outstanding.ignore-preferred-server"); value.Exists() {
+		data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(true)
+	} else if !data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() {
+		// Only set to false if it was previously set in state
+		data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "throttle.access"); value.Exists() {
+		data.ThrottleAccess = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "throttle.access-timeout"); value.Exists() {
+		data.ThrottleAccessTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "throttle.accounting"); value.Exists() {
+		data.ThrottleAccounting = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "deadtime"); value.Exists() {
+		data.Deadtime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "dead-criteria.time"); value.Exists() {
+		data.DeadCriteriaTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "dead-criteria.tries"); value.Exists() {
+		data.DeadCriteriaTries = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "source-port.extended"); value.Exists() {
+		data.SourcePortExtended = types.BoolValue(true)
+	} else if !data.SourcePortExtended.IsNull() {
+		// Only set to false if it was previously set in state
+		data.SourcePortExtended = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Ipv4Dscp = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ipv6.dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Ipv6Dscp = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "vsa.attribute.ignore.unknown"); value.Exists() {
+		data.VsaAttributeIgnoreUnknown = types.BoolValue(true)
+	} else if !data.VsaAttributeIgnoreUnknown.IsNull() {
+		// Only set to false if it was previously set in state
+		data.VsaAttributeIgnoreUnknown = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "disallow.null-username"); value.Exists() {
+		data.DisallowNullUsername = types.BoolValue(true)
+	} else if !data.DisallowNullUsername.IsNull() {
+		// Only set to false if it was previously set in state
+		data.DisallowNullUsername = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "attribute.list"); value.Exists() {
+		data.AttributeLists = make([]RadiusServerAttributeLists, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RadiusServerAttributeLists{}
+			if cValue := v.Get("list-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("attribute.radius-attributes"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RadiusAttributes = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("attribute.vendor-ids.vendor-id"); cValue.Exists() {
+				item.AttributeVendorIds = make([]RadiusServerAttributeListsAttributeVendorIds, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RadiusServerAttributeListsAttributeVendorIds{}
+					if ccValue := cv.Get("id"); ccValue.Exists() {
+						cItem.Id = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("vendor-types.vendor-type"); ccValue.Exists() {
+						cItem.VendorTypes = make([]RadiusServerAttributeListsAttributeVendorIdsVendorTypes, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := RadiusServerAttributeListsAttributeVendorIdsVendorTypes{}
+							if cccValue := ccv.Get("vendor-type-id"); cccValue.Exists() {
+								ccItem.VendorTypeId = types.Int64Value(cccValue.Int())
+							}
+							cItem.VendorTypes = append(cItem.VendorTypes, ccItem)
+							return true
+						})
+					}
+					item.AttributeVendorIds = append(item.AttributeVendorIds, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("attribute.vendor-cisco.vendor-type"); cValue.Exists() {
+				item.AttributeVendorCiscoVendorTypes = make([]RadiusServerAttributeListsAttributeVendorCiscoVendorTypes, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RadiusServerAttributeListsAttributeVendorCiscoVendorTypes{}
+					if helpers.VersionAtLeast(version, "26.2") {
+						if ccValue := cv.Get("vendor-type-id"); ccValue.Exists() {
+							cItem.VendorTypeId = types.Int64Value(ccValue.Int())
+						}
+					} else {
+						cItem.VendorTypeId = types.Int64Null()
+					}
+					if helpers.VersionAtLeast(version, "26.2") {
+						if ccValue := cv.Get("all-avpairs"); ccValue.Exists() {
+							cItem.AllAvpairs = types.BoolValue(true)
+						} else {
+							cItem.AllAvpairs = types.BoolValue(false)
+						}
+					} else {
+						cItem.AllAvpairs = types.BoolNull()
+					}
+					if helpers.VersionAtLeast(version, "26.2") {
+						if ccValue := cv.Get("all-attributes"); ccValue.Exists() {
+							cItem.AllAttributes = types.BoolValue(true)
+						} else {
+							cItem.AllAttributes = types.BoolValue(false)
+						}
+					} else {
+						cItem.AllAttributes = types.BoolNull()
+					}
+					if ccValue := cv.Get("avpairs"); ccValue.Exists() {
+						cItem.Avpairs = make([]RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs{}
+							if helpers.VersionAtLeast(version, "26.2") {
+								if cccValue := ccv.Get("avpair-name"); cccValue.Exists() && (cccValue.Type == gjson.String || cccValue.Type == gjson.Number) {
+									ccItem.AvpairName = types.StringValue(cccValue.String())
+								}
+							} else {
+								ccItem.AvpairName = types.StringNull()
+							}
+							cItem.Avpairs = append(cItem.Avpairs, ccItem)
+							return true
+						})
+					}
+					item.AttributeVendorCiscoVendorTypes = append(item.AttributeVendorCiscoVendorTypes, cItem)
+					return true
+				})
+			}
+			data.AttributeLists = append(data.AttributeLists, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "attribute.acct-session-id.prepend-nas-port-id"); value.Exists() {
+		data.AttributeAcctSessionIdPrependNasPortId = types.BoolValue(true)
+	} else if !data.AttributeAcctSessionIdPrependNasPortId.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AttributeAcctSessionIdPrependNasPortId = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "attribute.acct-multi-session-id.include-parent-session-id"); value.Exists() {
+		data.AttributeAcctMultiSessionIdIncludeParentSessionId = types.BoolValue(true)
+	} else if !data.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() {
+		// Only set to false if it was previously set in state
+		data.AttributeAcctMultiSessionIdIncludeParentSessionId = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "attribute.filter-id-11.default.direction"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AttributeFilterId11DefaultDirection = types.StringValue(value.String())
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "attribute.message-authenticator"); value.Exists() {
+			data.AttributeMessageAuthenticator = types.BoolValue(true)
+		} else if !data.AttributeMessageAuthenticator.IsNull() {
+			// Only set to false if it was previously set in state
+			data.AttributeMessageAuthenticator = types.BoolValue(false)
+		}
+	} else {
+		data.AttributeMessageAuthenticator = types.BoolNull()
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *RadiusServerData) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "hosts.host"); value.Exists() {
+		data.Hosts = make([]RadiusServerHosts, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RadiusServerHosts{}
+			if cValue := v.Get("ordering-index"); cValue.Exists() {
+				item.Order = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("address"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("auth-port"); cValue.Exists() {
+				item.AuthPort = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("acct-port"); cValue.Exists() {
+				item.AcctPort = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("timeout"); cValue.Exists() {
+				item.Timeout = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("retransmit"); cValue.Exists() {
+				item.Retransmit = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("test.username"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.TestUsername = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("idle-time"); cValue.Exists() {
+				item.IdleTime = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ignore-auth-port"); cValue.Exists() {
+				item.IgnoreAuthPort = types.BoolValue(true)
+			} else {
+				item.IgnoreAuthPort = types.BoolValue(false)
+			}
+			if cValue := v.Get("ignore-acct-port"); cValue.Exists() {
+				item.IgnoreAcctPort = types.BoolValue(true)
+			} else {
+				item.IgnoreAcctPort = types.BoolValue(false)
+			}
+			if cValue := v.Get("dtls-server.trustpoint"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.DtlsServerTrustpoint = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("radsec-server.trustpoint"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RadsecServerTrustpoint = types.StringValue(cValue.String())
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("attribute.message-authenticator.mandate"); cValue.Exists() {
+					item.AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+				} else {
+					item.AttributeMessageAuthenticatorMandate = types.BoolValue(false)
+				}
+			} else {
+				item.AttributeMessageAuthenticatorMandate = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("attribute.message-authenticator.optional"); cValue.Exists() {
+					item.AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+				} else {
+					item.AttributeMessageAuthenticatorOptional = types.BoolValue(false)
+				}
+			} else {
+				item.AttributeMessageAuthenticatorOptional = types.BoolNull()
+			}
+			data.Hosts = append(data.Hosts, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "timeout"); value.Exists() {
+		data.Timeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "retransmit.retries"); value.Exists() {
+		data.RetransmitRetries = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "retransmit.disable"); value.Exists() {
+		data.RetransmitDisable = types.BoolValue(true)
+	} else {
+		data.RetransmitDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "load-balance.method.least-outstanding.batch-size"); value.Exists() {
+		data.LoadBalanceMethodLeastOutstandingBatchSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "load-balance.method.least-outstanding.ignore-preferred-server"); value.Exists() {
+		data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(true)
+	} else {
+		data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "throttle.access"); value.Exists() {
+		data.ThrottleAccess = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "throttle.access-timeout"); value.Exists() {
+		data.ThrottleAccessTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "throttle.accounting"); value.Exists() {
+		data.ThrottleAccounting = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "deadtime"); value.Exists() {
+		data.Deadtime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "dead-criteria.time"); value.Exists() {
+		data.DeadCriteriaTime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "dead-criteria.tries"); value.Exists() {
+		data.DeadCriteriaTries = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "source-port.extended"); value.Exists() {
+		data.SourcePortExtended = types.BoolValue(true)
+	} else {
+		data.SourcePortExtended = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Ipv4Dscp = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ipv6.dscp"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.Ipv6Dscp = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "vsa.attribute.ignore.unknown"); value.Exists() {
+		data.VsaAttributeIgnoreUnknown = types.BoolValue(true)
+	} else {
+		data.VsaAttributeIgnoreUnknown = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "disallow.null-username"); value.Exists() {
+		data.DisallowNullUsername = types.BoolValue(true)
+	} else {
+		data.DisallowNullUsername = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "attribute.list"); value.Exists() {
+		data.AttributeLists = make([]RadiusServerAttributeLists, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RadiusServerAttributeLists{}
+			if cValue := v.Get("list-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("attribute.radius-attributes"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.RadiusAttributes = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("attribute.vendor-ids.vendor-id"); cValue.Exists() {
+				item.AttributeVendorIds = make([]RadiusServerAttributeListsAttributeVendorIds, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RadiusServerAttributeListsAttributeVendorIds{}
+					if ccValue := cv.Get("id"); ccValue.Exists() {
+						cItem.Id = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("vendor-types.vendor-type"); ccValue.Exists() {
+						cItem.VendorTypes = make([]RadiusServerAttributeListsAttributeVendorIdsVendorTypes, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := RadiusServerAttributeListsAttributeVendorIdsVendorTypes{}
+							if cccValue := ccv.Get("vendor-type-id"); cccValue.Exists() {
+								ccItem.VendorTypeId = types.Int64Value(cccValue.Int())
+							}
+							cItem.VendorTypes = append(cItem.VendorTypes, ccItem)
+							return true
+						})
+					}
+					item.AttributeVendorIds = append(item.AttributeVendorIds, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("attribute.vendor-cisco.vendor-type"); cValue.Exists() {
+				item.AttributeVendorCiscoVendorTypes = make([]RadiusServerAttributeListsAttributeVendorCiscoVendorTypes, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RadiusServerAttributeListsAttributeVendorCiscoVendorTypes{}
+					if helpers.VersionAtLeast(version, "26.2") {
+						if ccValue := cv.Get("vendor-type-id"); ccValue.Exists() {
+							cItem.VendorTypeId = types.Int64Value(ccValue.Int())
+						}
+					} else {
+						cItem.VendorTypeId = types.Int64Null()
+					}
+					if helpers.VersionAtLeast(version, "26.2") {
+						if ccValue := cv.Get("all-avpairs"); ccValue.Exists() {
+							cItem.AllAvpairs = types.BoolValue(true)
+						} else {
+							cItem.AllAvpairs = types.BoolValue(false)
+						}
+					} else {
+						cItem.AllAvpairs = types.BoolNull()
+					}
+					if helpers.VersionAtLeast(version, "26.2") {
+						if ccValue := cv.Get("all-attributes"); ccValue.Exists() {
+							cItem.AllAttributes = types.BoolValue(true)
+						} else {
+							cItem.AllAttributes = types.BoolValue(false)
+						}
+					} else {
+						cItem.AllAttributes = types.BoolNull()
+					}
+					if ccValue := cv.Get("avpairs"); ccValue.Exists() {
+						cItem.Avpairs = make([]RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs, 0)
+						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
+							ccItem := RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs{}
+							if helpers.VersionAtLeast(version, "26.2") {
+								if cccValue := ccv.Get("avpair-name"); cccValue.Exists() && (cccValue.Type == gjson.String || cccValue.Type == gjson.Number) {
+									ccItem.AvpairName = types.StringValue(cccValue.String())
+								}
+							} else {
+								ccItem.AvpairName = types.StringNull()
+							}
+							cItem.Avpairs = append(cItem.Avpairs, ccItem)
+							return true
+						})
+					}
+					item.AttributeVendorCiscoVendorTypes = append(item.AttributeVendorCiscoVendorTypes, cItem)
+					return true
+				})
+			}
+			data.AttributeLists = append(data.AttributeLists, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "attribute.acct-session-id.prepend-nas-port-id"); value.Exists() {
+		data.AttributeAcctSessionIdPrependNasPortId = types.BoolValue(true)
+	} else {
+		data.AttributeAcctSessionIdPrependNasPortId = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "attribute.acct-multi-session-id.include-parent-session-id"); value.Exists() {
+		data.AttributeAcctMultiSessionIdIncludeParentSessionId = types.BoolValue(true)
+	} else {
+		data.AttributeAcctMultiSessionIdIncludeParentSessionId = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "attribute.filter-id-11.default.direction"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.AttributeFilterId11DefaultDirection = types.StringValue(value.String())
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "attribute.message-authenticator"); value.Exists() {
+			data.AttributeMessageAuthenticator = types.BoolValue(true)
+		} else {
+			data.AttributeMessageAuthenticator = types.BoolValue(false)
+		}
+	} else {
+		data.AttributeMessageAuthenticator = types.BoolNull()
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *RadiusServer) getDeletedItems(ctx context.Context, state RadiusServer, version string) []string {
+	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !state.AttributeMessageAuthenticator.IsNull() && data.AttributeMessageAuthenticator.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "attribute/message-authenticator"))
+	}
+	if !state.AttributeFilterId11DefaultDirection.IsNull() && data.AttributeFilterId11DefaultDirection.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "attribute/filter-id-11/default/direction"))
+	}
+	if !state.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() && data.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "attribute/acct-multi-session-id/include-parent-session-id"))
+	}
+	if !state.AttributeAcctSessionIdPrependNasPortId.IsNull() && data.AttributeAcctSessionIdPrependNasPortId.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "attribute/acct-session-id/prepend-nas-port-id"))
+	}
+	for i := range state.AttributeLists {
+		keys := [...]string{"list-name"}
+		stateKeyValues := [...]string{state.AttributeLists[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.AttributeLists[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.AttributeLists {
+			found = true
+			if state.AttributeLists[i].Name.ValueString() != data.AttributeLists[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				if helpers.VersionAtLeast(version, "26.2") {
+					for ci := range state.AttributeLists[i].AttributeVendorCiscoVendorTypes {
+						var ckeys []string
+						var cstateKeyValues []string
+						if helpers.VersionAtLeast(version, "26.2") {
+							ckeys = append(ckeys, "vendor-type-id")
+							cstateKeyValues = append(cstateKeyValues, strconv.FormatInt(state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.ValueInt64(), 10))
+						}
+						ckeyString := ""
+						for cki := range ckeys {
+							ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+						}
+
+						cemptyKeys := true
+						if !reflect.ValueOf(state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.ValueInt64()).IsZero() {
+							cemptyKeys = false
+						}
+						if cemptyKeys {
+							continue
+						}
+
+						found := false
+						for cj := range data.AttributeLists[j].AttributeVendorCiscoVendorTypes {
+							found = true
+							if state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.ValueInt64() != data.AttributeLists[j].AttributeVendorCiscoVendorTypes[cj].VendorTypeId.ValueInt64() {
+								found = false
+							}
+							if found {
+								if helpers.VersionAtLeast(version, "26.2") {
+									for cci := range state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs {
+										var cckeys []string
+										var ccstateKeyValues []string
+										if helpers.VersionAtLeast(version, "26.2") {
+											cckeys = append(cckeys, "avpair-name")
+											ccstateKeyValues = append(ccstateKeyValues, state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs[cci].AvpairName.ValueString())
+										}
+										cckeyString := ""
+										for ccki := range cckeys {
+											cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+										}
+
+										ccemptyKeys := true
+										if !reflect.ValueOf(state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs[cci].AvpairName.ValueString()).IsZero() {
+											ccemptyKeys = false
+										}
+										if ccemptyKeys {
+											continue
+										}
+
+										found := false
+										for ccj := range data.AttributeLists[j].AttributeVendorCiscoVendorTypes[cj].Avpairs {
+											found = true
+											if state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs[cci].AvpairName.ValueString() != data.AttributeLists[j].AttributeVendorCiscoVendorTypes[cj].Avpairs[ccj].AvpairName.ValueString() {
+												found = false
+											}
+											if found {
+												break
+											}
+										}
+										if !found {
+											deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v/%v%v", state.getPath(), "attribute/list", keyString, "attribute/vendor-cisco/vendor-type", ckeyString, "avpairs", cckeyString))
+										}
+									}
+								}
+								if helpers.VersionAtLeast(version, "26.2") && !state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() && data.AttributeLists[j].AttributeVendorCiscoVendorTypes[cj].AllAttributes.IsNull() {
+									deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "attribute/list", keyString, "attribute/vendor-cisco/vendor-type", ckeyString), "all-attributes"))
+								}
+								if helpers.VersionAtLeast(version, "26.2") && !state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() && data.AttributeLists[j].AttributeVendorCiscoVendorTypes[cj].AllAvpairs.IsNull() {
+									deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "attribute/list", keyString, "attribute/vendor-cisco/vendor-type", ckeyString), "all-avpairs"))
+								}
+								break
+							}
+						}
+						if !found {
+							deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "attribute/list", keyString, "attribute/vendor-cisco/vendor-type", ckeyString))
+						}
+					}
+				}
+				for ci := range state.AttributeLists[i].AttributeVendorIds {
+					ckeys := [...]string{"id"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.AttributeLists[i].AttributeVendorIds[ci].Id.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.AttributeLists[i].AttributeVendorIds[ci].Id.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.AttributeLists[j].AttributeVendorIds {
+						found = true
+						if state.AttributeLists[i].AttributeVendorIds[ci].Id.ValueInt64() != data.AttributeLists[j].AttributeVendorIds[cj].Id.ValueInt64() {
+							found = false
+						}
+						if found {
+							for cci := range state.AttributeLists[i].AttributeVendorIds[ci].VendorTypes {
+								cckeys := [...]string{"vendor-type-id"}
+								ccstateKeyValues := [...]string{strconv.FormatInt(state.AttributeLists[i].AttributeVendorIds[ci].VendorTypes[cci].VendorTypeId.ValueInt64(), 10)}
+								cckeyString := ""
+								for ccki := range cckeys {
+									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
+								}
+
+								ccemptyKeys := true
+								if !reflect.ValueOf(state.AttributeLists[i].AttributeVendorIds[ci].VendorTypes[cci].VendorTypeId.ValueInt64()).IsZero() {
+									ccemptyKeys = false
+								}
+								if ccemptyKeys {
+									continue
+								}
+
+								found := false
+								for ccj := range data.AttributeLists[j].AttributeVendorIds[cj].VendorTypes {
+									found = true
+									if state.AttributeLists[i].AttributeVendorIds[ci].VendorTypes[cci].VendorTypeId.ValueInt64() != data.AttributeLists[j].AttributeVendorIds[cj].VendorTypes[ccj].VendorTypeId.ValueInt64() {
+										found = false
+									}
+									if found {
+										break
+									}
+								}
+								if !found {
+									deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v/%v%v", state.getPath(), "attribute/list", keyString, "attribute/vendor-ids/vendor-id", ckeyString, "vendor-types/vendor-type", cckeyString))
+								}
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "attribute/list", keyString, "attribute/vendor-ids/vendor-id", ckeyString))
+					}
+				}
+				if !state.AttributeLists[i].RadiusAttributes.IsNull() && data.AttributeLists[j].RadiusAttributes.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "attribute/list", keyString), "attribute/radius-attributes"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "attribute/list", keyString))
+		}
+	}
+	if !state.DisallowNullUsername.IsNull() && data.DisallowNullUsername.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "disallow/null-username"))
+	}
+	if !state.VsaAttributeIgnoreUnknown.IsNull() && data.VsaAttributeIgnoreUnknown.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "vsa/attribute/ignore/unknown"))
+	}
+	if !state.Ipv6Dscp.IsNull() && data.Ipv6Dscp.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv6/dscp"))
+	}
+	if !state.Ipv4Dscp.IsNull() && data.Ipv4Dscp.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "ipv4/dscp"))
+	}
+	if !state.SourcePortExtended.IsNull() && data.SourcePortExtended.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "source-port/extended"))
+	}
+	if !state.DeadCriteriaTries.IsNull() && data.DeadCriteriaTries.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "dead-criteria/tries"))
+	}
+	if !state.DeadCriteriaTime.IsNull() && data.DeadCriteriaTime.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "dead-criteria/time"))
+	}
+	if !state.Deadtime.IsNull() && data.Deadtime.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "deadtime"))
+	}
+	if !state.ThrottleAccounting.IsNull() && data.ThrottleAccounting.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "throttle/accounting"))
+	}
+	if !state.ThrottleAccessTimeout.IsNull() && data.ThrottleAccessTimeout.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "throttle/access-timeout"))
+	}
+	if !state.ThrottleAccess.IsNull() && data.ThrottleAccess.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "throttle/access"))
+	}
+	if !state.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() && data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "load-balance/method/least-outstanding/ignore-preferred-server"))
+	}
+	if !state.LoadBalanceMethodLeastOutstandingBatchSize.IsNull() && data.LoadBalanceMethodLeastOutstandingBatchSize.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "load-balance/method/least-outstanding/batch-size"))
+	}
+	if !state.RetransmitDisable.IsNull() && data.RetransmitDisable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "retransmit"))
+	}
+	if !state.RetransmitRetries.IsNull() && data.RetransmitRetries.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "retransmit"))
+	}
+	if !state.Timeout.IsNull() && data.Timeout.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "timeout"))
+	}
+	if !state.KeyType6.IsNull() && data.KeyType6.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "key/six"))
+	}
+	if !state.KeyType7.IsNull() && data.KeyType7.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "key/seven"))
+	}
+	for i := range state.Hosts {
+		keys := [...]string{"ordering-index", "address", "auth-port", "acct-port"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.Hosts[i].Order.ValueInt64(), 10), state.Hosts[i].Address.ValueString(), strconv.FormatInt(state.Hosts[i].AuthPort.ValueInt64(), 10), strconv.FormatInt(state.Hosts[i].AcctPort.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Hosts[i].Order.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Hosts[i].AuthPort.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Hosts[i].AcctPort.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Hosts {
+			found = true
+			if state.Hosts[i].Order.ValueInt64() != data.Hosts[j].Order.ValueInt64() {
+				found = false
+			}
+			if state.Hosts[i].Address.ValueString() != data.Hosts[j].Address.ValueString() {
+				found = false
+			}
+			if state.Hosts[i].AuthPort.ValueInt64() != data.Hosts[j].AuthPort.ValueInt64() {
+				found = false
+			}
+			if state.Hosts[i].AcctPort.ValueInt64() != data.Hosts[j].AcctPort.ValueInt64() {
+				found = false
+			}
+			if found {
+				if helpers.VersionAtLeast(version, "25.4") && !state.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() && data.Hosts[j].AttributeMessageAuthenticatorOptional.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "attribute/message-authenticator/optional"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() && data.Hosts[j].AttributeMessageAuthenticatorMandate.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "attribute/message-authenticator/mandate"))
+				}
+				if !state.Hosts[i].RadsecServerTrustpoint.IsNull() && data.Hosts[j].RadsecServerTrustpoint.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "radsec-server/trustpoint"))
+				}
+				if !state.Hosts[i].DtlsServerTrustpoint.IsNull() && data.Hosts[j].DtlsServerTrustpoint.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "dtls-server/trustpoint"))
+				}
+				if !state.Hosts[i].IgnoreAcctPort.IsNull() && data.Hosts[j].IgnoreAcctPort.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "ignore-acct-port"))
+				}
+				if !state.Hosts[i].IgnoreAuthPort.IsNull() && data.Hosts[j].IgnoreAuthPort.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "ignore-auth-port"))
+				}
+				if !state.Hosts[i].IdleTime.IsNull() && data.Hosts[j].IdleTime.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "idle-time"))
+				}
+				if !state.Hosts[i].TestUsername.IsNull() && data.Hosts[j].TestUsername.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "test/username"))
+				}
+				if !state.Hosts[i].KeyType6.IsNull() && data.Hosts[j].KeyType6.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "key/six"))
+				}
+				if !state.Hosts[i].KeyType7.IsNull() && data.Hosts[j].KeyType7.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "key/seven"))
+				}
+				if !state.Hosts[i].Retransmit.IsNull() && data.Hosts[j].Retransmit.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "retransmit"))
+				}
+				if !state.Hosts[i].Timeout.IsNull() && data.Hosts[j].Timeout.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString), "timeout"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "hosts/host", keyString))
+		}
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *RadiusServer) getEmptyLeafsDelete(ctx context.Context, state *RadiusServer, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "25.4") && !data.AttributeMessageAuthenticator.IsNull() && !data.AttributeMessageAuthenticator.ValueBool() {
+		if state == nil || state.AttributeMessageAuthenticator.IsNull() || state.AttributeMessageAuthenticator.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "attribute/message-authenticator"))
+		}
+	}
+	if !data.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() && !data.AttributeAcctMultiSessionIdIncludeParentSessionId.ValueBool() {
+		if state == nil || state.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() || state.AttributeAcctMultiSessionIdIncludeParentSessionId.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "attribute/acct-multi-session-id/include-parent-session-id"))
+		}
+	}
+	if !data.AttributeAcctSessionIdPrependNasPortId.IsNull() && !data.AttributeAcctSessionIdPrependNasPortId.ValueBool() {
+		if state == nil || state.AttributeAcctSessionIdPrependNasPortId.IsNull() || state.AttributeAcctSessionIdPrependNasPortId.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "attribute/acct-session-id/prepend-nas-port-id"))
+		}
+	}
+	for i := range data.AttributeLists {
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.AttributeLists[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if helpers.VersionAtLeast(version, "26.2") {
+			for ci := range data.AttributeLists[i].AttributeVendorCiscoVendorTypes {
+				var ckeys []string
+				var ckeyValues []string
+				if helpers.VersionAtLeast(version, "26.2") {
+					ckeys = append(ckeys, "vendor-type-id")
+					ckeyValues = append(ckeyValues, strconv.FormatInt(data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.ValueInt64(), 10))
+				}
+				ckeyString := ""
+				for cki := range ckeys {
+					ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+				}
+				if helpers.VersionAtLeast(version, "26.2") {
+					for cci := range data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs {
+						var cckeys []string
+						var cckeyValues []string
+						if helpers.VersionAtLeast(version, "26.2") {
+							cckeys = append(cckeys, "avpair-name")
+							cckeyValues = append(cckeyValues, data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].Avpairs[cci].AvpairName.ValueString())
+						}
+						cckeyString := ""
+						for ccki := range cckeys {
+							cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+						}
+					}
+				}
+				if helpers.VersionAtLeast(version, "26.2") && !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() && !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.ValueBool() {
+					if state == nil || i >= len(state.AttributeLists) || ci >= len(state.AttributeLists[i].AttributeVendorCiscoVendorTypes) || state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() || state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.ValueBool() {
+						emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "attribute/list", keyString, "attribute/vendor-cisco/vendor-type", ckeyString), "all-attributes"))
+					}
+				}
+				if helpers.VersionAtLeast(version, "26.2") && !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() && !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.ValueBool() {
+					if state == nil || i >= len(state.AttributeLists) || ci >= len(state.AttributeLists[i].AttributeVendorCiscoVendorTypes) || state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() || state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.ValueBool() {
+						emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "attribute/list", keyString, "attribute/vendor-cisco/vendor-type", ckeyString), "all-avpairs"))
+					}
+				}
+			}
+		}
+		for ci := range data.AttributeLists[i].AttributeVendorIds {
+			ckeys := [...]string{"id"}
+			ckeyValues := [...]string{strconv.FormatInt(data.AttributeLists[i].AttributeVendorIds[ci].Id.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			for cci := range data.AttributeLists[i].AttributeVendorIds[ci].VendorTypes {
+				cckeys := [...]string{"vendor-type-id"}
+				cckeyValues := [...]string{strconv.FormatInt(data.AttributeLists[i].AttributeVendorIds[ci].VendorTypes[cci].VendorTypeId.ValueInt64(), 10)}
+				cckeyString := ""
+				for ccki := range cckeys {
+					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
+				}
+			}
+		}
+	}
+	if !data.DisallowNullUsername.IsNull() && !data.DisallowNullUsername.ValueBool() {
+		if state == nil || state.DisallowNullUsername.IsNull() || state.DisallowNullUsername.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "disallow/null-username"))
+		}
+	}
+	if !data.VsaAttributeIgnoreUnknown.IsNull() && !data.VsaAttributeIgnoreUnknown.ValueBool() {
+		if state == nil || state.VsaAttributeIgnoreUnknown.IsNull() || state.VsaAttributeIgnoreUnknown.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "vsa/attribute/ignore/unknown"))
+		}
+	}
+	if !data.SourcePortExtended.IsNull() && !data.SourcePortExtended.ValueBool() {
+		if state == nil || state.SourcePortExtended.IsNull() || state.SourcePortExtended.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "source-port/extended"))
+		}
+	}
+	if !data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() && !data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.ValueBool() {
+		if state == nil || state.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() || state.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "load-balance/method/least-outstanding/ignore-preferred-server"))
+		}
+	}
+	if !data.RetransmitDisable.IsNull() && !data.RetransmitDisable.ValueBool() {
+		if state == nil || state.RetransmitDisable.IsNull() || state.RetransmitDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "retransmit"))
+		}
+	}
+	for i := range data.Hosts {
+		keys := [...]string{"ordering-index", "address", "auth-port", "acct-port"}
+		keyValues := [...]string{strconv.FormatInt(data.Hosts[i].Order.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].AuthPort.ValueInt64(), 10), strconv.FormatInt(data.Hosts[i].AcctPort.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() && !data.Hosts[i].AttributeMessageAuthenticatorOptional.ValueBool() {
+			if state == nil || i >= len(state.Hosts) || state.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() || state.Hosts[i].AttributeMessageAuthenticatorOptional.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "hosts/host", keyString), "attribute/message-authenticator/optional"))
+			}
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() && !data.Hosts[i].AttributeMessageAuthenticatorMandate.ValueBool() {
+			if state == nil || i >= len(state.Hosts) || state.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() || state.Hosts[i].AttributeMessageAuthenticatorMandate.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "hosts/host", keyString), "attribute/message-authenticator/mandate"))
+			}
+		}
+		if !data.Hosts[i].IgnoreAcctPort.IsNull() && !data.Hosts[i].IgnoreAcctPort.ValueBool() {
+			if state == nil || i >= len(state.Hosts) || state.Hosts[i].IgnoreAcctPort.IsNull() || state.Hosts[i].IgnoreAcctPort.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "hosts/host", keyString), "ignore-acct-port"))
+			}
+		}
+		if !data.Hosts[i].IgnoreAuthPort.IsNull() && !data.Hosts[i].IgnoreAuthPort.ValueBool() {
+			if state == nil || i >= len(state.Hosts) || state.Hosts[i].IgnoreAuthPort.IsNull() || state.Hosts[i].IgnoreAuthPort.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "hosts/host", keyString), "ignore-auth-port"))
+			}
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *RadiusServer) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if helpers.VersionAtLeast(version, "25.4") && !data.AttributeMessageAuthenticator.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "attribute/message-authenticator"))
+	}
+	if !data.AttributeFilterId11DefaultDirection.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "attribute/filter-id-11/default/direction"))
+	}
+	if !data.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "attribute/acct-multi-session-id/include-parent-session-id"))
+	}
+	if !data.AttributeAcctSessionIdPrependNasPortId.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "attribute/acct-session-id/prepend-nas-port-id"))
+	}
+	for i := range data.AttributeLists {
+		keys := [...]string{"list-name"}
+		keyValues := [...]string{data.AttributeLists[i].Name.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.AttributeLists[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "attribute/list", keyString))
+	}
+	if !data.DisallowNullUsername.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "disallow/null-username"))
+	}
+	if !data.VsaAttributeIgnoreUnknown.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "vsa/attribute/ignore/unknown"))
+	}
+	if !data.Ipv6Dscp.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv6/dscp"))
+	}
+	if !data.Ipv4Dscp.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "ipv4/dscp"))
+	}
+	if !data.SourcePortExtended.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "source-port/extended"))
+	}
+	if !data.DeadCriteriaTries.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "dead-criteria/tries"))
+	}
+	if !data.DeadCriteriaTime.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "dead-criteria/time"))
+	}
+	if !data.Deadtime.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "deadtime"))
+	}
+	if !data.ThrottleAccounting.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "throttle/accounting"))
+	}
+	if !data.ThrottleAccessTimeout.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "throttle/access-timeout"))
+	}
+	if !data.ThrottleAccess.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "throttle/access"))
+	}
+	if !data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "load-balance/method/least-outstanding/ignore-preferred-server"))
+	}
+	if !data.LoadBalanceMethodLeastOutstandingBatchSize.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "load-balance/method/least-outstanding/batch-size"))
+	}
+	if !data.RetransmitDisable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "retransmit"))
+	}
+	if !data.RetransmitRetries.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "retransmit"))
+	}
+	if !data.Timeout.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "timeout"))
+	}
+	if !data.KeyType6.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "key/six"))
+	}
+	if !data.KeyType7.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "key/seven"))
+	}
+	for i := range data.Hosts {
+		keys := [...]string{"ordering-index", "address", "auth-port", "acct-port"}
+		keyValues := [...]string{strconv.FormatInt(data.Hosts[i].Order.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].AuthPort.ValueInt64(), 10), strconv.FormatInt(data.Hosts[i].AcctPort.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.Hosts[i].Order.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(data.Hosts[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(data.Hosts[i].AuthPort.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(data.Hosts[i].AcctPort.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "hosts/host", keyString))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data RadiusServer) toBodyXML(ctx context.Context, stateArg ...*RadiusServer) string {
@@ -701,6 +2049,16 @@ func (data RadiusServer) toBodyXML(ctx context.Context, stateArg ...*RadiusServe
 			}
 			if !item.RadsecServerTrustpoint.IsNull() && !item.RadsecServerTrustpoint.IsUnknown() {
 				body = helpers.SetFromXPath(body, basePath+"/radsec-server/trustpoint", item.RadsecServerTrustpoint.ValueString())
+			}
+			if !item.AttributeMessageAuthenticatorMandate.IsNull() && !item.AttributeMessageAuthenticatorMandate.IsUnknown() {
+				if item.AttributeMessageAuthenticatorMandate.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/attribute/message-authenticator/mandate", "")
+				}
+			}
+			if !item.AttributeMessageAuthenticatorOptional.IsNull() && !item.AttributeMessageAuthenticatorOptional.IsUnknown() {
+				if item.AttributeMessageAuthenticatorOptional.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/attribute/message-authenticator/optional", "")
+				}
 			}
 		}
 	}
@@ -793,6 +2151,32 @@ func (data RadiusServer) toBodyXML(ctx context.Context, stateArg ...*RadiusServe
 					}
 				}
 			}
+			if len(item.AttributeVendorCiscoVendorTypes) > 0 {
+				for _, citem := range item.AttributeVendorCiscoVendorTypes {
+					cbasePath := basePath + "/attribute/vendor-cisco/vendor-type[vendor-type-id='" + strconv.FormatInt(citem.VendorTypeId.ValueInt64(), 10) + "']"
+					if !citem.VendorTypeId.IsNull() && !citem.VendorTypeId.IsUnknown() {
+						body = helpers.SetFromXPath(body, cbasePath+"/vendor-type-id", strconv.FormatInt(citem.VendorTypeId.ValueInt64(), 10))
+					}
+					if !citem.AllAvpairs.IsNull() && !citem.AllAvpairs.IsUnknown() {
+						if citem.AllAvpairs.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/all-avpairs", "")
+						}
+					}
+					if !citem.AllAttributes.IsNull() && !citem.AllAttributes.IsUnknown() {
+						if citem.AllAttributes.ValueBool() {
+							body = helpers.SetFromXPath(body, cbasePath+"/all-attributes", "")
+						}
+					}
+					if len(citem.Avpairs) > 0 {
+						for _, ccitem := range citem.Avpairs {
+							ccbasePath := cbasePath + "/avpairs[avpair-name='" + ccitem.AvpairName.ValueString() + "']"
+							if !ccitem.AvpairName.IsNull() && !ccitem.AvpairName.IsUnknown() {
+								body = helpers.SetFromXPath(body, ccbasePath+"/avpair-name", ccitem.AvpairName.ValueString())
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 	if !data.AttributeAcctSessionIdPrependNasPortId.IsNull() && !data.AttributeAcctSessionIdPrependNasPortId.IsUnknown() {
@@ -807,6 +2191,11 @@ func (data RadiusServer) toBodyXML(ctx context.Context, stateArg ...*RadiusServe
 	}
 	if !data.AttributeFilterId11DefaultDirection.IsNull() && !data.AttributeFilterId11DefaultDirection.IsUnknown() {
 		body = helpers.SetFromXPath(body, data.getXPath()+"/attribute/filter-id-11/default/direction", data.AttributeFilterId11DefaultDirection.ValueString())
+	}
+	if !data.AttributeMessageAuthenticator.IsNull() && !data.AttributeMessageAuthenticator.IsUnknown() {
+		if data.AttributeMessageAuthenticator.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/attribute/message-authenticator", "")
+		}
 	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
@@ -830,7 +2219,7 @@ func (data RadiusServer) toBodyXML(ctx context.Context, stateArg ...*RadiusServe
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -838,6 +2227,7 @@ func (data RadiusServer) toBodyXML(ctx context.Context, stateArg ...*RadiusServe
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *RadiusServer) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -937,6 +2327,30 @@ func (data *RadiusServer) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 			data.Hosts[i].RadsecServerTrustpoint = types.StringValue(value.String())
 		} else if data.Hosts[i].RadsecServerTrustpoint.IsNull() {
 			data.Hosts[i].RadsecServerTrustpoint = types.StringNull()
+		}
+		if value := helpers.GetFromXPath(r, "attribute/message-authenticator/mandate"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() {
+				data.Hosts[i].AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() {
+				data.Hosts[i].AttributeMessageAuthenticatorMandate = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "attribute/message-authenticator/optional"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() {
+				data.Hosts[i].AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() {
+				data.Hosts[i].AttributeMessageAuthenticatorOptional = types.BoolNull()
+			}
 		}
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/timeout"); value.Exists() && !data.Timeout.IsNull() {
@@ -1111,6 +2525,55 @@ func (data *RadiusServer) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 				data.AttributeLists[i].AttributeVendorIds[ci].Id = types.Int64Null()
 			}
 		}
+		for ci := range data.AttributeLists[i].AttributeVendorCiscoVendorTypes {
+			keys := [...]string{"vendor-type-id"}
+			keyValues := [...]string{strconv.FormatInt(data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.ValueInt64(), 10)}
+
+			var cr xmldot.Result
+			helpers.GetFromXPath(r, "attribute/vendor-cisco/vendor-type").ForEach(
+				func(_ int, v xmldot.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := helpers.GetFromXPath(cr, "vendor-type-id"); value.Exists() && !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.IsNull() {
+				data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId = types.Int64Value(value.Int())
+			} else if data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.IsNull() {
+				data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId = types.Int64Null()
+			}
+			if value := helpers.GetFromXPath(cr, "all-avpairs"); value.Exists() {
+				if !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs = types.BoolNull()
+				}
+			}
+			if value := helpers.GetFromXPath(cr, "all-attributes"); value.Exists() {
+				if !data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes = types.BoolValue(true)
+				}
+			} else {
+				// For presence-based booleans, only set to false if the attribute is null in state
+				if data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() {
+					data.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes = types.BoolNull()
+				}
+			}
+		}
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/attribute/acct-session-id/prepend-nas-port-id"); value.Exists() {
 		// Only set to true if it was already in the plan (not null)
@@ -1139,369 +2602,21 @@ func (data *RadiusServer) updateFromBodyXML(ctx context.Context, res xmldot.Resu
 	} else if data.AttributeFilterId11DefaultDirection.IsNull() {
 		data.AttributeFilterId11DefaultDirection = types.StringNull()
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/attribute/message-authenticator"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.AttributeMessageAuthenticator.IsNull() {
+			data.AttributeMessageAuthenticator = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.AttributeMessageAuthenticator.IsNull() {
+			data.AttributeMessageAuthenticator = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *RadiusServer) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "hosts.host"); value.Exists() {
-		data.Hosts = make([]RadiusServerHosts, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RadiusServerHosts{}
-			if cValue := v.Get("ordering-index"); cValue.Exists() {
-				item.Order = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("auth-port"); cValue.Exists() {
-				item.AuthPort = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("acct-port"); cValue.Exists() {
-				item.AcctPort = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("timeout"); cValue.Exists() {
-				item.Timeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("retransmit"); cValue.Exists() {
-				item.Retransmit = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("test.username"); cValue.Exists() {
-				item.TestUsername = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("idle-time"); cValue.Exists() {
-				item.IdleTime = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("ignore-auth-port"); cValue.Exists() {
-				item.IgnoreAuthPort = types.BoolValue(true)
-			} else if !item.IgnoreAuthPort.IsNull() {
-				// Only set to false if it was previously set
-				item.IgnoreAuthPort = types.BoolValue(false)
-			}
-			if cValue := v.Get("ignore-acct-port"); cValue.Exists() {
-				item.IgnoreAcctPort = types.BoolValue(true)
-			} else if !item.IgnoreAcctPort.IsNull() {
-				// Only set to false if it was previously set
-				item.IgnoreAcctPort = types.BoolValue(false)
-			}
-			if cValue := v.Get("dtls-server.trustpoint"); cValue.Exists() {
-				item.DtlsServerTrustpoint = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("radsec-server.trustpoint"); cValue.Exists() {
-				item.RadsecServerTrustpoint = types.StringValue(cValue.String())
-			}
-			data.Hosts = append(data.Hosts, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "timeout"); value.Exists() {
-		data.Timeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "retransmit.retries"); value.Exists() {
-		data.RetransmitRetries = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "retransmit.disable"); value.Exists() {
-		data.RetransmitDisable = types.BoolValue(true)
-	} else if !data.RetransmitDisable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.RetransmitDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "load-balance.method.least-outstanding.batch-size"); value.Exists() {
-		data.LoadBalanceMethodLeastOutstandingBatchSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "load-balance.method.least-outstanding.ignore-preferred-server"); value.Exists() {
-		data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(true)
-	} else if !data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() {
-		// Only set to false if it was previously set in state
-		data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "throttle.access"); value.Exists() {
-		data.ThrottleAccess = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "throttle.access-timeout"); value.Exists() {
-		data.ThrottleAccessTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "throttle.accounting"); value.Exists() {
-		data.ThrottleAccounting = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "deadtime"); value.Exists() {
-		data.Deadtime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "dead-criteria.time"); value.Exists() {
-		data.DeadCriteriaTime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "dead-criteria.tries"); value.Exists() {
-		data.DeadCriteriaTries = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "source-port.extended"); value.Exists() {
-		data.SourcePortExtended = types.BoolValue(true)
-	} else if !data.SourcePortExtended.IsNull() {
-		// Only set to false if it was previously set in state
-		data.SourcePortExtended = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ipv4.dscp"); value.Exists() {
-		data.Ipv4Dscp = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ipv6.dscp"); value.Exists() {
-		data.Ipv6Dscp = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "vsa.attribute.ignore.unknown"); value.Exists() {
-		data.VsaAttributeIgnoreUnknown = types.BoolValue(true)
-	} else if !data.VsaAttributeIgnoreUnknown.IsNull() {
-		// Only set to false if it was previously set in state
-		data.VsaAttributeIgnoreUnknown = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "disallow.null-username"); value.Exists() {
-		data.DisallowNullUsername = types.BoolValue(true)
-	} else if !data.DisallowNullUsername.IsNull() {
-		// Only set to false if it was previously set in state
-		data.DisallowNullUsername = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "attribute.list"); value.Exists() {
-		data.AttributeLists = make([]RadiusServerAttributeLists, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RadiusServerAttributeLists{}
-			if cValue := v.Get("list-name"); cValue.Exists() {
-				item.Name = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("attribute.radius-attributes"); cValue.Exists() {
-				item.RadiusAttributes = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("attribute.vendor-ids.vendor-id"); cValue.Exists() {
-				item.AttributeVendorIds = make([]RadiusServerAttributeListsAttributeVendorIds, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := RadiusServerAttributeListsAttributeVendorIds{}
-					if ccValue := cv.Get("id"); ccValue.Exists() {
-						cItem.Id = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("vendor-types.vendor-type"); ccValue.Exists() {
-						cItem.VendorTypes = make([]RadiusServerAttributeListsAttributeVendorIdsVendorTypes, 0)
-						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
-							ccItem := RadiusServerAttributeListsAttributeVendorIdsVendorTypes{}
-							if cccValue := ccv.Get("vendor-type-id"); cccValue.Exists() {
-								ccItem.VendorTypeId = types.Int64Value(cccValue.Int())
-							}
-							cItem.VendorTypes = append(cItem.VendorTypes, ccItem)
-							return true
-						})
-					}
-					item.AttributeVendorIds = append(item.AttributeVendorIds, cItem)
-					return true
-				})
-			}
-			data.AttributeLists = append(data.AttributeLists, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "attribute.acct-session-id.prepend-nas-port-id"); value.Exists() {
-		data.AttributeAcctSessionIdPrependNasPortId = types.BoolValue(true)
-	} else if !data.AttributeAcctSessionIdPrependNasPortId.IsNull() {
-		// Only set to false if it was previously set in state
-		data.AttributeAcctSessionIdPrependNasPortId = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "attribute.acct-multi-session-id.include-parent-session-id"); value.Exists() {
-		data.AttributeAcctMultiSessionIdIncludeParentSessionId = types.BoolValue(true)
-	} else if !data.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() {
-		// Only set to false if it was previously set in state
-		data.AttributeAcctMultiSessionIdIncludeParentSessionId = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "attribute.filter-id-11.default.direction"); value.Exists() {
-		data.AttributeFilterId11DefaultDirection = types.StringValue(value.String())
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *RadiusServerData) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "hosts.host"); value.Exists() {
-		data.Hosts = make([]RadiusServerHosts, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RadiusServerHosts{}
-			if cValue := v.Get("ordering-index"); cValue.Exists() {
-				item.Order = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("address"); cValue.Exists() {
-				item.Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("auth-port"); cValue.Exists() {
-				item.AuthPort = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("acct-port"); cValue.Exists() {
-				item.AcctPort = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("timeout"); cValue.Exists() {
-				item.Timeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("retransmit"); cValue.Exists() {
-				item.Retransmit = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("key.seven"); cValue.Exists() {
-				item.KeyType7 = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("key.six"); cValue.Exists() {
-				item.KeyType6 = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("test.username"); cValue.Exists() {
-				item.TestUsername = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("idle-time"); cValue.Exists() {
-				item.IdleTime = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("ignore-auth-port"); cValue.Exists() {
-				item.IgnoreAuthPort = types.BoolValue(true)
-			} else {
-				item.IgnoreAuthPort = types.BoolValue(false)
-			}
-			if cValue := v.Get("ignore-acct-port"); cValue.Exists() {
-				item.IgnoreAcctPort = types.BoolValue(true)
-			} else {
-				item.IgnoreAcctPort = types.BoolValue(false)
-			}
-			if cValue := v.Get("dtls-server.trustpoint"); cValue.Exists() {
-				item.DtlsServerTrustpoint = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("radsec-server.trustpoint"); cValue.Exists() {
-				item.RadsecServerTrustpoint = types.StringValue(cValue.String())
-			}
-			data.Hosts = append(data.Hosts, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "key.seven"); value.Exists() {
-		data.KeyType7 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "key.six"); value.Exists() {
-		data.KeyType6 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "timeout"); value.Exists() {
-		data.Timeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "retransmit.retries"); value.Exists() {
-		data.RetransmitRetries = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "retransmit.disable"); value.Exists() {
-		data.RetransmitDisable = types.BoolValue(true)
-	} else {
-		data.RetransmitDisable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "load-balance.method.least-outstanding.batch-size"); value.Exists() {
-		data.LoadBalanceMethodLeastOutstandingBatchSize = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "load-balance.method.least-outstanding.ignore-preferred-server"); value.Exists() {
-		data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(true)
-	} else {
-		data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "throttle.access"); value.Exists() {
-		data.ThrottleAccess = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "throttle.access-timeout"); value.Exists() {
-		data.ThrottleAccessTimeout = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "throttle.accounting"); value.Exists() {
-		data.ThrottleAccounting = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "deadtime"); value.Exists() {
-		data.Deadtime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "dead-criteria.time"); value.Exists() {
-		data.DeadCriteriaTime = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "dead-criteria.tries"); value.Exists() {
-		data.DeadCriteriaTries = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "source-port.extended"); value.Exists() {
-		data.SourcePortExtended = types.BoolValue(true)
-	} else {
-		data.SourcePortExtended = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "ipv4.dscp"); value.Exists() {
-		data.Ipv4Dscp = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "ipv6.dscp"); value.Exists() {
-		data.Ipv6Dscp = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "vsa.attribute.ignore.unknown"); value.Exists() {
-		data.VsaAttributeIgnoreUnknown = types.BoolValue(true)
-	} else {
-		data.VsaAttributeIgnoreUnknown = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "disallow.null-username"); value.Exists() {
-		data.DisallowNullUsername = types.BoolValue(true)
-	} else {
-		data.DisallowNullUsername = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "attribute.list"); value.Exists() {
-		data.AttributeLists = make([]RadiusServerAttributeLists, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RadiusServerAttributeLists{}
-			if cValue := v.Get("list-name"); cValue.Exists() {
-				item.Name = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("attribute.radius-attributes"); cValue.Exists() {
-				item.RadiusAttributes = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("attribute.vendor-ids.vendor-id"); cValue.Exists() {
-				item.AttributeVendorIds = make([]RadiusServerAttributeListsAttributeVendorIds, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := RadiusServerAttributeListsAttributeVendorIds{}
-					if ccValue := cv.Get("id"); ccValue.Exists() {
-						cItem.Id = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("vendor-types.vendor-type"); ccValue.Exists() {
-						cItem.VendorTypes = make([]RadiusServerAttributeListsAttributeVendorIdsVendorTypes, 0)
-						ccValue.ForEach(func(cck, ccv gjson.Result) bool {
-							ccItem := RadiusServerAttributeListsAttributeVendorIdsVendorTypes{}
-							if cccValue := ccv.Get("vendor-type-id"); cccValue.Exists() {
-								ccItem.VendorTypeId = types.Int64Value(cccValue.Int())
-							}
-							cItem.VendorTypes = append(cItem.VendorTypes, ccItem)
-							return true
-						})
-					}
-					item.AttributeVendorIds = append(item.AttributeVendorIds, cItem)
-					return true
-				})
-			}
-			data.AttributeLists = append(data.AttributeLists, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "attribute.acct-session-id.prepend-nas-port-id"); value.Exists() {
-		data.AttributeAcctSessionIdPrependNasPortId = types.BoolValue(true)
-	} else {
-		data.AttributeAcctSessionIdPrependNasPortId = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "attribute.acct-multi-session-id.include-parent-session-id"); value.Exists() {
-		data.AttributeAcctMultiSessionIdIncludeParentSessionId = types.BoolValue(true)
-	} else {
-		data.AttributeAcctMultiSessionIdIncludeParentSessionId = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "attribute.filter-id-11.default.direction"); value.Exists() {
-		data.AttributeFilterId11DefaultDirection = types.StringValue(value.String())
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *RadiusServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1555,6 +2670,16 @@ func (data *RadiusServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
 			if cValue := helpers.GetFromXPath(v, "radsec-server/trustpoint"); cValue.Exists() {
 				item.RadsecServerTrustpoint = types.StringValue(cValue.String())
 			}
+			if cValue := helpers.GetFromXPath(v, "attribute/message-authenticator/mandate"); cValue.Exists() {
+				item.AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+			} else {
+				item.AttributeMessageAuthenticatorMandate = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "attribute/message-authenticator/optional"); cValue.Exists() {
+				item.AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+			} else {
+				item.AttributeMessageAuthenticatorOptional = types.BoolValue(false)
+			}
 			data.Hosts = append(data.Hosts, item)
 			return true
 		})
@@ -1655,6 +2780,38 @@ func (data *RadiusServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
 					return true
 				})
 			}
+			if cValue := helpers.GetFromXPath(v, "attribute/vendor-cisco/vendor-type"); cValue.Exists() {
+				item.AttributeVendorCiscoVendorTypes = make([]RadiusServerAttributeListsAttributeVendorCiscoVendorTypes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := RadiusServerAttributeListsAttributeVendorCiscoVendorTypes{}
+					if ccValue := helpers.GetFromXPath(cv, "vendor-type-id"); ccValue.Exists() {
+						cItem.VendorTypeId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "all-avpairs"); ccValue.Exists() {
+						cItem.AllAvpairs = types.BoolValue(true)
+					} else {
+						cItem.AllAvpairs = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "all-attributes"); ccValue.Exists() {
+						cItem.AllAttributes = types.BoolValue(true)
+					} else {
+						cItem.AllAttributes = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "avpairs"); ccValue.Exists() {
+						cItem.Avpairs = make([]RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs, 0)
+						ccValue.ForEach(func(_ int, ccv xmldot.Result) bool {
+							ccItem := RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs{}
+							if cccValue := helpers.GetFromXPath(ccv, "avpair-name"); cccValue.Exists() {
+								ccItem.AvpairName = types.StringValue(cccValue.String())
+							}
+							cItem.Avpairs = append(cItem.Avpairs, ccItem)
+							return true
+						})
+					}
+					item.AttributeVendorCiscoVendorTypes = append(item.AttributeVendorCiscoVendorTypes, cItem)
+					return true
+				})
+			}
 			data.AttributeLists = append(data.AttributeLists, item)
 			return true
 		})
@@ -1672,9 +2829,15 @@ func (data *RadiusServer) fromBodyXML(ctx context.Context, res xmldot.Result) {
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/attribute/filter-id-11/default/direction"); value.Exists() {
 		data.AttributeFilterId11DefaultDirection = types.StringValue(value.String())
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/attribute/message-authenticator"); value.Exists() {
+		data.AttributeMessageAuthenticator = types.BoolValue(true)
+	} else {
+		data.AttributeMessageAuthenticator = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *RadiusServerData) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -1728,6 +2891,16 @@ func (data *RadiusServerData) fromBodyXML(ctx context.Context, res xmldot.Result
 			if cValue := helpers.GetFromXPath(v, "radsec-server/trustpoint"); cValue.Exists() {
 				item.RadsecServerTrustpoint = types.StringValue(cValue.String())
 			}
+			if cValue := helpers.GetFromXPath(v, "attribute/message-authenticator/mandate"); cValue.Exists() {
+				item.AttributeMessageAuthenticatorMandate = types.BoolValue(true)
+			} else {
+				item.AttributeMessageAuthenticatorMandate = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "attribute/message-authenticator/optional"); cValue.Exists() {
+				item.AttributeMessageAuthenticatorOptional = types.BoolValue(true)
+			} else {
+				item.AttributeMessageAuthenticatorOptional = types.BoolValue(false)
+			}
 			data.Hosts = append(data.Hosts, item)
 			return true
 		})
@@ -1828,6 +3001,38 @@ func (data *RadiusServerData) fromBodyXML(ctx context.Context, res xmldot.Result
 					return true
 				})
 			}
+			if cValue := helpers.GetFromXPath(v, "attribute/vendor-cisco/vendor-type"); cValue.Exists() {
+				item.AttributeVendorCiscoVendorTypes = make([]RadiusServerAttributeListsAttributeVendorCiscoVendorTypes, 0)
+				cValue.ForEach(func(_ int, cv xmldot.Result) bool {
+					cItem := RadiusServerAttributeListsAttributeVendorCiscoVendorTypes{}
+					if ccValue := helpers.GetFromXPath(cv, "vendor-type-id"); ccValue.Exists() {
+						cItem.VendorTypeId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := helpers.GetFromXPath(cv, "all-avpairs"); ccValue.Exists() {
+						cItem.AllAvpairs = types.BoolValue(true)
+					} else {
+						cItem.AllAvpairs = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "all-attributes"); ccValue.Exists() {
+						cItem.AllAttributes = types.BoolValue(true)
+					} else {
+						cItem.AllAttributes = types.BoolValue(false)
+					}
+					if ccValue := helpers.GetFromXPath(cv, "avpairs"); ccValue.Exists() {
+						cItem.Avpairs = make([]RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs, 0)
+						ccValue.ForEach(func(_ int, ccv xmldot.Result) bool {
+							ccItem := RadiusServerAttributeListsAttributeVendorCiscoVendorTypesAvpairs{}
+							if cccValue := helpers.GetFromXPath(ccv, "avpair-name"); cccValue.Exists() {
+								ccItem.AvpairName = types.StringValue(cccValue.String())
+							}
+							cItem.Avpairs = append(cItem.Avpairs, ccItem)
+							return true
+						})
+					}
+					item.AttributeVendorCiscoVendorTypes = append(item.AttributeVendorCiscoVendorTypes, cItem)
+					return true
+				})
+			}
 			data.AttributeLists = append(data.AttributeLists, item)
 			return true
 		})
@@ -1845,434 +3050,15 @@ func (data *RadiusServerData) fromBodyXML(ctx context.Context, res xmldot.Result
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/attribute/filter-id-11/default/direction"); value.Exists() {
 		data.AttributeFilterId11DefaultDirection = types.StringValue(value.String())
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/attribute/message-authenticator"); value.Exists() {
+		data.AttributeMessageAuthenticator = types.BoolValue(true)
+	} else {
+		data.AttributeMessageAuthenticator = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *RadiusServer) getDeletedItems(ctx context.Context, state RadiusServer) []string {
-	deletedItems := make([]string, 0)
-	if !state.AttributeFilterId11DefaultDirection.IsNull() && data.AttributeFilterId11DefaultDirection.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/attribute/filter-id-11/default/direction", state.getPath()))
-	}
-	if !state.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() && data.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/attribute/acct-multi-session-id/include-parent-session-id", state.getPath()))
-	}
-	if !state.AttributeAcctSessionIdPrependNasPortId.IsNull() && data.AttributeAcctSessionIdPrependNasPortId.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/attribute/acct-session-id/prepend-nas-port-id", state.getPath()))
-	}
-	for i := range state.AttributeLists {
-		keys := [...]string{"list-name"}
-		stateKeyValues := [...]string{state.AttributeLists[i].Name.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.AttributeLists[i].Name.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.AttributeLists {
-			found = true
-			if state.AttributeLists[i].Name.ValueString() != data.AttributeLists[j].Name.ValueString() {
-				found = false
-			}
-			if found {
-				for ci := range state.AttributeLists[i].AttributeVendorIds {
-					ckeys := [...]string{"id"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.AttributeLists[i].AttributeVendorIds[ci].Id.ValueInt64(), 10)}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.AttributeLists[i].AttributeVendorIds[ci].Id.ValueInt64()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.AttributeLists[j].AttributeVendorIds {
-						found = true
-						if state.AttributeLists[i].AttributeVendorIds[ci].Id.ValueInt64() != data.AttributeLists[j].AttributeVendorIds[cj].Id.ValueInt64() {
-							found = false
-						}
-						if found {
-							for cci := range state.AttributeLists[i].AttributeVendorIds[ci].VendorTypes {
-								cckeys := [...]string{"vendor-type-id"}
-								ccstateKeyValues := [...]string{strconv.FormatInt(state.AttributeLists[i].AttributeVendorIds[ci].VendorTypes[cci].VendorTypeId.ValueInt64(), 10)}
-								cckeyString := ""
-								for ccki := range cckeys {
-									cckeyString += "[" + cckeys[ccki] + "=" + ccstateKeyValues[ccki] + "]"
-								}
-
-								ccemptyKeys := true
-								if !reflect.ValueOf(state.AttributeLists[i].AttributeVendorIds[ci].VendorTypes[cci].VendorTypeId.ValueInt64()).IsZero() {
-									ccemptyKeys = false
-								}
-								if ccemptyKeys {
-									continue
-								}
-
-								found := false
-								for ccj := range data.AttributeLists[j].AttributeVendorIds[cj].VendorTypes {
-									found = true
-									if state.AttributeLists[i].AttributeVendorIds[ci].VendorTypes[cci].VendorTypeId.ValueInt64() != data.AttributeLists[j].AttributeVendorIds[cj].VendorTypes[ccj].VendorTypeId.ValueInt64() {
-										found = false
-									}
-									if found {
-										break
-									}
-								}
-								if !found {
-									deletedItems = append(deletedItems, fmt.Sprintf("%v/attribute/list%v/attribute/vendor-ids/vendor-id%v/vendor-types/vendor-type%v", state.getPath(), keyString, ckeyString, cckeyString))
-								}
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/attribute/list%v/attribute/vendor-ids/vendor-id%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				if !state.AttributeLists[i].RadiusAttributes.IsNull() && data.AttributeLists[j].RadiusAttributes.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/attribute/list%v/attribute/radius-attributes", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/attribute/list%v", state.getPath(), keyString))
-		}
-	}
-	if !state.DisallowNullUsername.IsNull() && data.DisallowNullUsername.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/disallow/null-username", state.getPath()))
-	}
-	if !state.VsaAttributeIgnoreUnknown.IsNull() && data.VsaAttributeIgnoreUnknown.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/vsa/attribute/ignore/unknown", state.getPath()))
-	}
-	if !state.Ipv6Dscp.IsNull() && data.Ipv6Dscp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/dscp", state.getPath()))
-	}
-	if !state.Ipv4Dscp.IsNull() && data.Ipv4Dscp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/dscp", state.getPath()))
-	}
-	if !state.SourcePortExtended.IsNull() && data.SourcePortExtended.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/source-port/extended", state.getPath()))
-	}
-	if !state.DeadCriteriaTries.IsNull() && data.DeadCriteriaTries.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/dead-criteria/tries", state.getPath()))
-	}
-	if !state.DeadCriteriaTime.IsNull() && data.DeadCriteriaTime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/dead-criteria/time", state.getPath()))
-	}
-	if !state.Deadtime.IsNull() && data.Deadtime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/deadtime", state.getPath()))
-	}
-	if !state.ThrottleAccounting.IsNull() && data.ThrottleAccounting.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/throttle/accounting", state.getPath()))
-	}
-	if !state.ThrottleAccessTimeout.IsNull() && data.ThrottleAccessTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/throttle/access-timeout", state.getPath()))
-	}
-	if !state.ThrottleAccess.IsNull() && data.ThrottleAccess.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/throttle/access", state.getPath()))
-	}
-	if !state.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() && data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/load-balance/method/least-outstanding/ignore-preferred-server", state.getPath()))
-	}
-	if !state.LoadBalanceMethodLeastOutstandingBatchSize.IsNull() && data.LoadBalanceMethodLeastOutstandingBatchSize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/load-balance/method/least-outstanding/batch-size", state.getPath()))
-	}
-	if !state.RetransmitDisable.IsNull() && data.RetransmitDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/retransmit", state.getPath()))
-	}
-	if !state.RetransmitRetries.IsNull() && data.RetransmitRetries.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/retransmit", state.getPath()))
-	}
-	if !state.Timeout.IsNull() && data.Timeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timeout", state.getPath()))
-	}
-	if !state.KeyType6.IsNull() && data.KeyType6.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/key/six", state.getPath()))
-	}
-	if !state.KeyType7.IsNull() && data.KeyType7.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/key/seven", state.getPath()))
-	}
-	for i := range state.Hosts {
-		keys := [...]string{"ordering-index", "address", "auth-port", "acct-port"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.Hosts[i].Order.ValueInt64(), 10), state.Hosts[i].Address.ValueString(), strconv.FormatInt(state.Hosts[i].AuthPort.ValueInt64(), 10), strconv.FormatInt(state.Hosts[i].AcctPort.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Hosts[i].Order.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if !reflect.ValueOf(state.Hosts[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if !reflect.ValueOf(state.Hosts[i].AuthPort.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if !reflect.ValueOf(state.Hosts[i].AcctPort.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Hosts {
-			found = true
-			if state.Hosts[i].Order.ValueInt64() != data.Hosts[j].Order.ValueInt64() {
-				found = false
-			}
-			if state.Hosts[i].Address.ValueString() != data.Hosts[j].Address.ValueString() {
-				found = false
-			}
-			if state.Hosts[i].AuthPort.ValueInt64() != data.Hosts[j].AuthPort.ValueInt64() {
-				found = false
-			}
-			if state.Hosts[i].AcctPort.ValueInt64() != data.Hosts[j].AcctPort.ValueInt64() {
-				found = false
-			}
-			if found {
-				if !state.Hosts[i].RadsecServerTrustpoint.IsNull() && data.Hosts[j].RadsecServerTrustpoint.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/radsec-server/trustpoint", state.getPath(), keyString))
-				}
-				if !state.Hosts[i].DtlsServerTrustpoint.IsNull() && data.Hosts[j].DtlsServerTrustpoint.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/dtls-server/trustpoint", state.getPath(), keyString))
-				}
-				if !state.Hosts[i].IgnoreAcctPort.IsNull() && data.Hosts[j].IgnoreAcctPort.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/ignore-acct-port", state.getPath(), keyString))
-				}
-				if !state.Hosts[i].IgnoreAuthPort.IsNull() && data.Hosts[j].IgnoreAuthPort.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/ignore-auth-port", state.getPath(), keyString))
-				}
-				if !state.Hosts[i].IdleTime.IsNull() && data.Hosts[j].IdleTime.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/idle-time", state.getPath(), keyString))
-				}
-				if !state.Hosts[i].TestUsername.IsNull() && data.Hosts[j].TestUsername.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/test/username", state.getPath(), keyString))
-				}
-				if !state.Hosts[i].KeyType6.IsNull() && data.Hosts[j].KeyType6.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/key/six", state.getPath(), keyString))
-				}
-				if !state.Hosts[i].KeyType7.IsNull() && data.Hosts[j].KeyType7.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/key/seven", state.getPath(), keyString))
-				}
-				if !state.Hosts[i].Retransmit.IsNull() && data.Hosts[j].Retransmit.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/retransmit", state.getPath(), keyString))
-				}
-				if !state.Hosts[i].Timeout.IsNull() && data.Hosts[j].Timeout.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v/timeout", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/hosts/host%v", state.getPath(), keyString))
-		}
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *RadiusServer) getEmptyLeafsDelete(ctx context.Context, state *RadiusServer) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() && !data.AttributeAcctMultiSessionIdIncludeParentSessionId.ValueBool() {
-		if state != nil && !state.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() && state.AttributeAcctMultiSessionIdIncludeParentSessionId.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/attribute/acct-multi-session-id/include-parent-session-id", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.AttributeAcctSessionIdPrependNasPortId.IsNull() && !data.AttributeAcctSessionIdPrependNasPortId.ValueBool() {
-		if state != nil && !state.AttributeAcctSessionIdPrependNasPortId.IsNull() && state.AttributeAcctSessionIdPrependNasPortId.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/attribute/acct-session-id/prepend-nas-port-id", data.getXPath()))
-		}
-	}
-	for i := range data.AttributeLists {
-		keys := [...]string{"list-name"}
-		keyValues := [...]string{data.AttributeLists[i].Name.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		for ci := range data.AttributeLists[i].AttributeVendorIds {
-			ckeys := [...]string{"id"}
-			ckeyValues := [...]string{strconv.FormatInt(data.AttributeLists[i].AttributeVendorIds[ci].Id.ValueInt64(), 10)}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-			for cci := range data.AttributeLists[i].AttributeVendorIds[ci].VendorTypes {
-				cckeys := [...]string{"vendor-type-id"}
-				cckeyValues := [...]string{strconv.FormatInt(data.AttributeLists[i].AttributeVendorIds[ci].VendorTypes[cci].VendorTypeId.ValueInt64(), 10)}
-				cckeyString := ""
-				for ccki := range cckeys {
-					cckeyString += "[" + cckeys[ccki] + "=" + cckeyValues[ccki] + "]"
-				}
-			}
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.DisallowNullUsername.IsNull() && !data.DisallowNullUsername.ValueBool() {
-		if state != nil && !state.DisallowNullUsername.IsNull() && state.DisallowNullUsername.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/disallow/null-username", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.VsaAttributeIgnoreUnknown.IsNull() && !data.VsaAttributeIgnoreUnknown.ValueBool() {
-		if state != nil && !state.VsaAttributeIgnoreUnknown.IsNull() && state.VsaAttributeIgnoreUnknown.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vsa/attribute/ignore/unknown", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.SourcePortExtended.IsNull() && !data.SourcePortExtended.ValueBool() {
-		if state != nil && !state.SourcePortExtended.IsNull() && state.SourcePortExtended.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/source-port/extended", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() && !data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.ValueBool() {
-		if state != nil && !state.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() && state.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balance/method/least-outstanding/ignore-preferred-server", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.RetransmitDisable.IsNull() && !data.RetransmitDisable.ValueBool() {
-		if state != nil && !state.RetransmitDisable.IsNull() && state.RetransmitDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/retransmit", data.getXPath()))
-		}
-	}
-	for i := range data.Hosts {
-		keys := [...]string{"ordering-index", "address", "auth-port", "acct-port"}
-		keyValues := [...]string{strconv.FormatInt(data.Hosts[i].Order.ValueInt64(), 10), data.Hosts[i].Address.ValueString(), strconv.FormatInt(data.Hosts[i].AuthPort.ValueInt64(), 10), strconv.FormatInt(data.Hosts[i].AcctPort.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.Hosts[i].IgnoreAcctPort.IsNull() && !data.Hosts[i].IgnoreAcctPort.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Hosts) && !state.Hosts[i].IgnoreAcctPort.IsNull() && state.Hosts[i].IgnoreAcctPort.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hosts/host%v/ignore-acct-port", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.Hosts[i].IgnoreAuthPort.IsNull() && !data.Hosts[i].IgnoreAuthPort.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.Hosts) && !state.Hosts[i].IgnoreAuthPort.IsNull() && state.Hosts[i].IgnoreAuthPort.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hosts/host%v/ignore-auth-port", data.getXPath(), keyString))
-			}
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *RadiusServer) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.AttributeFilterId11DefaultDirection.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/attribute/filter-id-11/default/direction", data.getPath()))
-	}
-	if !data.AttributeAcctMultiSessionIdIncludeParentSessionId.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/attribute/acct-multi-session-id/include-parent-session-id", data.getPath()))
-	}
-	if !data.AttributeAcctSessionIdPrependNasPortId.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/attribute/acct-session-id/prepend-nas-port-id", data.getPath()))
-	}
-	for i := range data.AttributeLists {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[list-name=" + data.AttributeLists[i].Name.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/attribute/list%v", data.getPath(), keyPath))
-	}
-	if !data.DisallowNullUsername.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/disallow/null-username", data.getPath()))
-	}
-	if !data.VsaAttributeIgnoreUnknown.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/vsa/attribute/ignore/unknown", data.getPath()))
-	}
-	if !data.Ipv6Dscp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/dscp", data.getPath()))
-	}
-	if !data.Ipv4Dscp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/dscp", data.getPath()))
-	}
-	if !data.SourcePortExtended.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-port/extended", data.getPath()))
-	}
-	if !data.DeadCriteriaTries.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/dead-criteria/tries", data.getPath()))
-	}
-	if !data.DeadCriteriaTime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/dead-criteria/time", data.getPath()))
-	}
-	if !data.Deadtime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/deadtime", data.getPath()))
-	}
-	if !data.ThrottleAccounting.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/throttle/accounting", data.getPath()))
-	}
-	if !data.ThrottleAccessTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/throttle/access-timeout", data.getPath()))
-	}
-	if !data.ThrottleAccess.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/throttle/access", data.getPath()))
-	}
-	if !data.LoadBalanceMethodLeastOutstandingIgnorePreferredServer.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/load-balance/method/least-outstanding/ignore-preferred-server", data.getPath()))
-	}
-	if !data.LoadBalanceMethodLeastOutstandingBatchSize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/load-balance/method/least-outstanding/batch-size", data.getPath()))
-	}
-	if !data.RetransmitDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/retransmit", data.getPath()))
-	}
-	if !data.RetransmitRetries.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/retransmit", data.getPath()))
-	}
-	if !data.Timeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timeout", data.getPath()))
-	}
-	if !data.KeyType6.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/key/six", data.getPath()))
-	}
-	if !data.KeyType7.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/key/seven", data.getPath()))
-	}
-	for i := range data.Hosts {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[ordering-index=" + strconv.FormatInt(data.Hosts[i].Order.ValueInt64(), 10) + "]"
-		keyPath += "[address=" + data.Hosts[i].Address.ValueString() + "]"
-		keyPath += "[auth-port=" + strconv.FormatInt(data.Hosts[i].AuthPort.ValueInt64(), 10) + "]"
-		keyPath += "[acct-port=" + strconv.FormatInt(data.Hosts[i].AcctPort.ValueInt64(), 10) + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hosts/host%v", data.getPath(), keyPath))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *RadiusServer) addDeletedItemsXML(ctx context.Context, state RadiusServer, body string) string {
@@ -2280,6 +3066,22 @@ func (data *RadiusServer) addDeletedItemsXML(ctx context.Context, state RadiusSe
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.AttributeMessageAuthenticator.IsNull() && state.AttributeMessageAuthenticator.ValueBool() && data.AttributeMessageAuthenticator.IsNull() {
+		deletePath := state.getXPath() + "/attribute/message-authenticator"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	if !state.AttributeFilterId11DefaultDirection.IsNull() && data.AttributeFilterId11DefaultDirection.IsNull() {
 		deletePath := state.getXPath() + "/attribute/filter-id-11/default/direction"
 		// Check if a parent path is already marked for deletion
@@ -2350,6 +3152,44 @@ func (data *RadiusServer) addDeletedItemsXML(ctx context.Context, state RadiusSe
 				found = false
 			}
 			if found {
+				for ci := range state.AttributeLists[i].AttributeVendorCiscoVendorTypes {
+					cstateKeys := [...]string{"vendor-type-id"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.ValueInt64(), 10)}
+					cpredicates := ""
+					for i := range cstateKeys {
+						cpredicates += fmt.Sprintf("[%s='%s']", cstateKeys[i], cstateKeyValues[i])
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.AttributeLists[j].AttributeVendorCiscoVendorTypes {
+						found = true
+						if state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].VendorTypeId.ValueInt64() != data.AttributeLists[j].AttributeVendorCiscoVendorTypes[cj].VendorTypeId.ValueInt64() {
+							found = false
+						}
+						if found {
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.IsNull() && state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAttributes.ValueBool() && data.AttributeLists[j].AttributeVendorCiscoVendorTypes[cj].AllAttributes.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/attribute/list%v/attribute/vendor-cisco/vendor-type%v/all-attributes", predicates, cpredicates))
+							}
+							// For boolean fields, only delete if state was true (presence container was set)
+							if !state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.IsNull() && state.AttributeLists[i].AttributeVendorCiscoVendorTypes[ci].AllAvpairs.ValueBool() && data.AttributeLists[j].AttributeVendorCiscoVendorTypes[cj].AllAvpairs.IsNull() {
+								b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/attribute/list%v/attribute/vendor-cisco/vendor-type%v/all-avpairs", predicates, cpredicates))
+							}
+							break
+						}
+					}
+					if !found {
+						b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/attribute/list%v/attribute/vendor-cisco/vendor-type%v", predicates, cpredicates))
+					}
+				}
 				for ci := range state.AttributeLists[i].AttributeVendorIds {
 					cstateKeys := [...]string{"id"}
 					cstateKeyValues := [...]string{strconv.FormatInt(state.AttributeLists[i].AttributeVendorIds[ci].Id.ValueInt64(), 10)}
@@ -2720,6 +3560,14 @@ func (data *RadiusServer) addDeletedItemsXML(ctx context.Context, state RadiusSe
 				found = false
 			}
 			if found {
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Hosts[i].AttributeMessageAuthenticatorOptional.IsNull() && state.Hosts[i].AttributeMessageAuthenticatorOptional.ValueBool() && data.Hosts[j].AttributeMessageAuthenticatorOptional.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/attribute/message-authenticator/optional", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.Hosts[i].AttributeMessageAuthenticatorMandate.IsNull() && state.Hosts[i].AttributeMessageAuthenticatorMandate.ValueBool() && data.Hosts[j].AttributeMessageAuthenticatorMandate.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/attribute/message-authenticator/mandate", predicates))
+				}
 				if !state.Hosts[i].RadsecServerTrustpoint.IsNull() && data.Hosts[j].RadsecServerTrustpoint.IsNull() {
 					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/hosts/host%v/radsec-server/trustpoint", predicates))
 				}
@@ -2765,10 +3613,14 @@ func (data *RadiusServer) addDeletedItemsXML(ctx context.Context, state RadiusSe
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *RadiusServer) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.AttributeMessageAuthenticator.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/attribute/message-authenticator")
+	}
 	if !data.AttributeFilterId11DefaultDirection.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/attribute/filter-id-11/default/direction")
 	}

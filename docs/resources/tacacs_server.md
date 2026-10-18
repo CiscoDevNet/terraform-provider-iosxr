@@ -14,22 +14,23 @@ This resource can manage the TACACS Server configuration.
 
 ```terraform
 resource "iosxr_tacacs_server" "example" {
+  holddown_time = 600
   hosts = [
     {
       address                        = "9.0.1.68"
-      port                           = 49
-      timeout                        = 10
       holddown_time                  = 300
       key_type_7                     = "0235347225301B204F4F0A0A"
+      port                           = 49
       single_connection              = true
       single_connection_idle_timeout = 1000
+      timeout                        = 10
+      tls_server_name_indicator      = "tacacs.example.com"
     }
   ]
-  key_type_7    = "0235347225301B204F4F0A0A"
-  timeout       = 5
-  holddown_time = 600
-  ipv4_dscp     = "cs6"
-  ipv6_dscp     = "cs6"
+  ipv4_dscp  = "cs6"
+  ipv6_dscp  = "cs6"
+  key_type_7 = "0235347225301B204F4F0A0A"
+  timeout    = 5
 }
 ```
 
@@ -77,6 +78,10 @@ Optional:
   - Range: `500`-`7200`
 - `timeout` (Number) Time to wait for this TACACS server to reply (overrides default)
   - Range: `1`-`1000`
+- `tls_server_name_indicator` (String) SNI extension to include in client hello
+  - Supported from version: `25.4`
+- `tls_trustpoint` (String) Trustpoint to be used for TACACS over TLS
+  - Supported from version: `25.4`
 
 ## Import
 

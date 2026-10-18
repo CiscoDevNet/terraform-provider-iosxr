@@ -14,41 +14,43 @@ This resource can manage the Ethernet SLA configuration.
 
 ```terraform
 resource "iosxr_ethernet_sla" "example" {
-  profile_name                             = "SLA-PROFILE-1"
-  type                                     = "cfm-delay-measurement"
+  probe_packet_size                        = 1500
+  probe_packet_test_pattern_hex            = 4369
+  probe_priority                           = 7
   probe_send_burst_every_interval          = 30
   probe_send_burst_every_seconds           = true
   probe_send_burst_packet_count            = 5
   probe_send_burst_packet_interval_seconds = 1
-  probe_packet_size                        = 1500
-  probe_packet_test_pattern_hex            = 4369
-  probe_priority                           = 7
+  profile_name                             = "SLA-PROFILE-1"
+  schedule_every_for_time                  = 1
+  schedule_every_for_unit                  = "minutes"
+  schedule_every_minutes                   = 1
   statistics_measure = [
     {
-      type                                         = "round-trip-delay"
       aggregate_bins                               = 5
-      aggregate_width                              = 1000
+      aggregate_minimum_delay                      = 100
       aggregate_usec                               = true
-      buckets_size                                 = 5
-      buckets_probes                               = true
+      aggregate_usec_minimum_delay                 = true
+      aggregate_width                              = 1000
       buckets_archive                              = 10
-      thresholds_stateful_log_on_max_value         = 1000
-      thresholds_stateful_log_on_mean_value        = 1000
-      thresholds_stateful_log_on_sample_count      = 10
-      thresholds_stateful_log_on_in_and_above_bin  = 5
+      buckets_probes                               = true
+      buckets_size                                 = 5
+      thresholds_stateful_efd_on_in_and_above_bin  = 5
       thresholds_stateful_efd_on_max_value         = 2000
       thresholds_stateful_efd_on_mean_value        = 2000
       thresholds_stateful_efd_on_sample_count      = 10
-      thresholds_stateful_efd_on_in_and_above_bin  = 5
+      thresholds_stateful_log_on_in_and_above_bin  = 5
+      thresholds_stateful_log_on_max_value         = 1000
+      thresholds_stateful_log_on_mean_value        = 1000
+      thresholds_stateful_log_on_sample_count      = 10
+      thresholds_stateless_log_on_in_and_above_bin = 5
       thresholds_stateless_log_on_max_value        = 2000
       thresholds_stateless_log_on_mean_value       = 2000
       thresholds_stateless_log_on_sample_count     = 10
-      thresholds_stateless_log_on_in_and_above_bin = 5
+      type                                         = "round-trip-delay"
     }
   ]
-  schedule_every_minutes  = 1
-  schedule_every_for_time = 1
-  schedule_every_for_unit = "minutes"
+  type = "cfm-delay-measurement"
 }
 ```
 
@@ -123,8 +125,13 @@ Optional:
 
 - `aggregate_bins` (Number) Aggregate results into a number of bins
   - Range: `2`-`100`
+- `aggregate_minimum_delay` (Number) Specify the width of the first bin in milliseconds (or optionally microseconds), independent of the width of the other bins
+  - Range: `1`-`10000000`
+  - Supported from version: `25.4`
 - `aggregate_none` (Boolean) Perform no aggregation
 - `aggregate_usec` (Boolean) Interpret the width in microseconds
+- `aggregate_usec_minimum_delay` (Boolean) Interpret the minimum-delay in microseconds
+  - Supported from version: `25.4`
 - `aggregate_width` (Number) Width in percentage points, to an accuracy of one percentage point
   - Range: `1`-`10000000`
 - `aggregate_width_percentage` (Number) Tenths of a percentage point

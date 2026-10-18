@@ -1,0 +1,296 @@
+---
+name: Logging
+path: Cisco-IOS-XR-um-logging-cfg:/logging
+doc_category: Management
+attributes:
+  # ===========================================================
+  # monitor: leaf → container restructure
+  # 24.4: monitor (leaf), monitor-discriminator/* (sibling container)
+  # 25.4: monitor/monitor-level (leaf), monitor/discriminator/* (nested)
+  # ===========================================================
+  - yang_name: monitor/monitor-level
+    tf_name: monitor
+    replaces_yang_name: monitor
+  - yang_name: monitor/discriminator/match1
+    tf_name: monitor_discriminator_match1
+    replaces_yang_name: monitor-discriminator/match1
+  - yang_name: monitor/discriminator/match2
+    tf_name: monitor_discriminator_match2
+    replaces_yang_name: monitor-discriminator/match2
+  - yang_name: monitor/discriminator/match3
+    tf_name: monitor_discriminator_match3
+    replaces_yang_name: monitor-discriminator/match3
+  - yang_name: monitor/discriminator/nomatch1
+    tf_name: monitor_discriminator_nomatch1
+    replaces_yang_name: monitor-discriminator/nomatch1
+  - yang_name: monitor/discriminator/nomatch2
+    tf_name: monitor_discriminator_nomatch2
+    replaces_yang_name: monitor-discriminator/nomatch2
+  - yang_name: monitor/discriminator/nomatch3
+    tf_name: monitor_discriminator_nomatch3
+    replaces_yang_name: monitor-discriminator/nomatch3
+  # ===========================================================
+  # console: leaf → container restructure
+  # 24.4: console (leaf), console-logging/console-log-facility/console-facility-level
+  # 25.4: console/console-level (leaf), console/facility/all (leaf),
+  #        console/discriminator/* (new)
+  # ===========================================================
+  - yang_name: console/console-level
+    tf_name: console
+    replaces_yang_name: console
+  - yang_name: console/facility/all
+    tf_name: console_facility
+    replaces_yang_name: console-logging/console-log-facility/console-facility-level
+    example: all
+  # New console discriminator (not present in 24.4)
+  - yang_name: console/discriminator/match1
+    tf_name: console_discriminator_match1
+    example: "CONSOLE1"
+  - yang_name: console/discriminator/match2
+    tf_name: console_discriminator_match2
+    example: "CONSOLE2"
+  - yang_name: console/discriminator/match3
+    tf_name: console_discriminator_match3
+    example: "CONSOLE3"
+  - yang_name: console/discriminator/nomatch1
+    tf_name: console_discriminator_nomatch1
+    example: "CONSOLE_NOMATCH1"
+  - yang_name: console/discriminator/nomatch2
+    tf_name: console_discriminator_nomatch2
+    example: "CONSOLE_NOMATCH2"
+  - yang_name: console/discriminator/nomatch3
+    tf_name: console_discriminator_nomatch3
+    example: "CONSOLE_NOMATCH3"
+  # ===========================================================
+  # Attribute Move / Rename: buffered sibling renames
+  # 24.4: buffered/buffered-entries/count, buffered/level, buffered/logging-buffer-size
+  # 25.4: buffered/entries-count, buffered/buffered-level, buffered/log-buffer-size
+  # ===========================================================
+  - yang_name: buffered/entries-count
+    tf_name: buffered_entries_count
+    replaces_yang_name: buffered/buffered-entries/count
+  - yang_name: buffered/buffered-level
+    tf_name: buffered_level
+    replaces_yang_name: buffered/level
+  - yang_name: buffered/log-buffer-size
+    tf_name: buffered_size
+    replaces_yang_name: buffered/logging-buffer-size
+  # ===========================================================
+  # history: leaf → container restructure
+  # 24.4: history (leaf), history-size (sibling leaf)
+  # 25.4: history/level (leaf), history/size (leaf)
+  # ===========================================================
+  - yang_name: history/level
+    tf_name: history
+    replaces_yang_name: history
+  - yang_name: history/size
+    tf_name: history_size
+    replaces_yang_name: history-size
+  # ===========================================================
+  # files/file/path: leaf → container restructure
+  # 24.4: files/file/{path, maxfilesize, severity, local-accounting*} as siblings
+  # 25.4: files/file/path/{path-name, maxfilesize, severity, local-accounting*} under path container
+  # ===========================================================
+  - yang_name: files/file
+    tf_name: file
+    type: List
+    attributes:
+      # path leaf renamed to path/path-name (now inside presence container)
+      - yang_name: path/path-name
+        tf_name: path
+        replaces_yang_name: path
+        delete_parent: true
+      - yang_name: path/maxfilesize
+        tf_name: maxfilesize
+        replaces_yang_name: maxfilesize
+        delete_parent: true
+      - yang_name: path/severity
+        tf_name: severity
+        replaces_yang_name: severity
+        delete_parent: true
+        example: informational
+      - yang_name: path/local-accounting
+        tf_name: local_accounting
+        replaces_yang_name: local-accounting
+      - yang_name: path/local-accounting/send-to-remote
+        tf_name: local_accounting_send_to_remote
+        replaces_yang_name: local-accounting/send-to-remote
+      # 25.4: facility/level container collapsed to a single "facility" enum leaf
+      - yang_name: path/local-accounting/send-to-remote/facility
+        tf_name: local_accounting_send_to_remote_facility_level
+        replaces_yang_name: local-accounting/send-to-remote/facility/level
+  # ===========================================================
+  # source-interfaces/source-interface: key change (BREAKING)
+  # 24.4: single key source-interface-name
+  # 25.4: composite key interface-name + vrf-name; nested vrfs/vrf list removed
+  # ===========================================================
+  - yang_name: source-interfaces/source-interface
+    tf_name: source_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        tf_name: name
+        replaces_yang_name: source-interface-name
+        id: true
+      # Second composite key — replaces the nested vrfs/vrf sub-list
+      - yang_name: vrf-name
+        tf_name: vrf
+        id: true
+        example: "default"
+      # Old nested vrfs/vrf list removed; VRF is now a flat composite key
+      - yang_name: vrfs/vrf
+        legacy: true
+      - yang_name: vrfs/vrf/vrf-name
+        legacy: true
+  # ===========================================================
+  # format: container → enum leaf (same path)
+  # 24.4: format/rfc5424 (Bool presence), format/bsd (Bool presence)
+  # 25.4: format (enum leaf: rfc5424|bsd)
+  # ===========================================================
+  - yang_name: format/rfc5424
+    legacy: true
+  - yang_name: format/bsd
+    legacy: true
+  - yang_name: format
+    example: rfc5424
+  # ===========================================================
+  # archive/frequency: container → enum leaf (same path)
+  # 24.4: archive/frequency/daily (Bool presence), archive/frequency/weekly (Bool presence)
+  # 25.4: archive/frequency (enum leaf: daily|weekly)
+  # ===========================================================
+  - yang_name: archive/frequency/daily
+    legacy: true
+  - yang_name: archive/frequency/weekly
+    legacy: true
+  - yang_name: archive/frequency
+    tf_name: archive_frequency
+    example: daily
+  # ===========================================================
+  # Attribute Move / Rename: choice/case insertion ipv4/ipv6 dscp and precedence
+  # 24.4: ipv4/dscp, ipv4/precedence, same for ipv6
+  # 25.4: wrapped in choice/case; dscp/precedence are now presence containers with
+  #       a value leaf child (dscp-value, precedence-value); yang_name goes to the leaf
+  # ===========================================================
+  - yang_name: ipv4/IPV4/DSCP/dscp/dscp-value
+    tf_name: ipv4_dscp
+    xpath: ipv4/dscp/dscp-value
+    replaces_yang_name: ipv4/dscp
+  - yang_name: ipv4/IPV4/PRECEDENCE/precedence/precedence-value
+    tf_name: ipv4_precedence
+    xpath: ipv4/precedence/precedence-value
+    replaces_yang_name: ipv4/precedence
+  - yang_name: ipv6/IPV6/DSCP/dscp/dscp-value
+    tf_name: ipv6_dscp
+    xpath: ipv6/dscp/dscp-value
+    replaces_yang_name: ipv6/dscp
+  - yang_name: ipv6/IPV6/PRECEDENCE/precedence/precedence-value
+    tf_name: ipv6_precedence
+    xpath: ipv6/precedence/precedence-value
+    replaces_yang_name: ipv6/precedence
+  # ===========================================================
+  # Attribute Move / Rename: choice/case insertion archive/device
+  # 24.4: archive/device/disk0, disk1, harddisk (Bool presence)
+  # 25.4: wrapped in DEVICE choice/case
+  # ===========================================================
+  - yang_name: archive/device/DEVICE/DISK0/disk0
+    tf_name: archive_disk0
+    xpath: archive/device/disk0
+    replaces_yang_name: archive/device/disk0
+  - yang_name: archive/device/DEVICE/DISK1/disk1
+    tf_name: archive_disk1
+    xpath: archive/device/disk1
+    replaces_yang_name: archive/device/disk1
+  - yang_name: archive/device/DEVICE/HARDDISK/harddisk
+    tf_name: archive_harddisk
+    xpath: archive/device/harddisk
+    replaces_yang_name: archive/device/harddisk
+  # ===========================================================
+  # Container absorbed: facility/level → facility
+  # 24.4: facility is a container; facility/level is the leaf inside it
+  # 25.4: facility is a leaf directly (container wrapper removed)
+  # ===========================================================
+  - yang_name: facility
+    tf_name: facility_level
+    replaces_yang_name: facility/level
+  # ===========================================================
+  # length/range constraint change on an existing attribute
+  # 24.4: hostnameprefix 1..800 -> 25.4: 1..1024
+  # ===========================================================
+  - yang_name: hostnameprefix
+  # ===========================================================
+  # length/range constraint change on an existing attribute
+  # 24.4: localfilesize 0..4294967295 -> 25.4: 1..125000000 (narrowing)
+  # ===========================================================
+  - yang_name: localfilesize
+  # ===========================================================
+  # enum value change on an existing attribute
+  # 24.4: archive/severity "warnings" -> 25.4: "warning" (renamed)
+  # ===========================================================
+  - yang_name: archive/severity
+  # ===========================================================
+  # enum value change on an existing attribute
+  # 24.4: yang enum set -> 25.4: gains "disable"
+  # ===========================================================
+  - yang_name: yang
+  # ===========================================================
+  # Bool wire encoding change (presence → empty)
+  # 24.4: presence container → 25.4: leaf empty
+  # ===========================================================
+  - yang_name: suppress/duplicates
+  # ===========================================================
+  # Bool wire encoding change (presence → empty)
+  # 24.4: presence container → 25.4: leaf empty
+  # ===========================================================
+  - yang_name: container/fetch-timestamp
+  # ===========================================================
+  # Bool wire encoding change (presence → empty)
+  # 24.4: presence container → 25.4: leaf empty
+  # Excluded from acceptance tests: mutually exclusive with tls_servers
+  # ===========================================================
+  - yang_name: container/all
+    exclude_test: true
+
+  # ===========================================================
+  # ADDITIONS — new in 25.4
+  # ===========================================================
+  # TLS syslog server support
+  - yang_name: tls-servers/tls-server
+    tf_name: tls_servers
+    type: List
+    attributes:
+      - yang_name: tls-server-name
+        tf_name: name
+        id: true
+        example: "TLS-SERVER1"
+      - yang_name: vrf
+        example: "VRF1"
+      - yang_name: address/ipv4
+        tf_name: address_ipv4
+        example: "1.1.1.1"
+      - yang_name: address/ipv6
+        tf_name: address_ipv6
+        example: "2001:db8::1"
+        exclude_test: true
+      - yang_name: tls-hostname
+        tf_name: tls_hostname
+        example: "tls-server-1.example.com"
+        exclude_test: true
+      - yang_name: trustpoint
+        example: "TRUSTPOINT1"
+      - yang_name: severity
+        example: informational
+      - yang_name: source-interface
+        tf_name: source_interface
+        example: Loopback0
+      - yang_name: version/min-version
+        tf_name: tls_min_version
+        example: tls1.2
+        exclude_test: true
+      - yang_name: version/max-version
+        tf_name: tls_max_version
+        example: tls1.3
+        exclude_test: true
+      - yang_name: security-template
+        tf_name: security_template
+        example: "TEMPLATE1"
+        exclude_test: true

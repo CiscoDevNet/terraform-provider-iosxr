@@ -14,44 +14,46 @@ This resource can manage the Router BGP VRF Neighbor Address Family configuratio
 
 ```terraform
 resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
-  as_number                                               = "65001"
-  vrf_name                                                = "VRF2"
+  additional_paths_receive                                = true
+  additional_paths_send                                   = true
   address                                                 = "10.1.1.2"
   af_name                                                 = "ipv4-unicast"
-  weight                                                  = 100
-  multipath                                               = true
+  aigp                                                    = true
+  aigp_send_cost_community_id                             = 5
+  aigp_send_cost_community_id_poi_pre_bestpath_transitive = true
+  aigp_send_med                                           = true
+  allowas_in                                              = 3
+  allowconfedas_in                                        = 5
+  as_number                                               = "65001"
+  as_override                                             = true
+  bestpath_origin_as_allow_invalid                        = true
   capability_orf_prefix                                   = "both"
-  additional_paths_send                                   = true
-  additional_paths_receive                                = true
   default_originate                                       = true
   default_originate_route_policy                          = "ROUTE_POLICY_1"
+  default_policy_action_in                                = "accept"
+  default_policy_action_out                               = "accept"
   maximum_prefix_limit                                    = 1248576
   maximum_prefix_threshold                                = 80
   maximum_prefix_warning_only                             = true
+  multipath                                               = true
   next_hop_self                                           = true
-  route_policy_in                                         = "ROUTE_POLICY_1"
-  route_policy_out                                        = "ROUTE_POLICY_1"
   orf_route_policy                                        = "ROUTE_POLICY_1"
-  replace_private_as                                      = true
+  origin_as_validation_disable                            = true
+  remove_private_as_entire_aspath                         = true
   remove_private_as_inbound                               = true
   remove_private_as_inbound_entire_aspath                 = true
-  remove_private_as_entire_aspath                         = true
+  replace_private_as                                      = true
+  route_policy_in                                         = "ROUTE_POLICY_1"
+  route_policy_out                                        = "ROUTE_POLICY_1"
   send_community_ebgp                                     = true
   send_community_gshut_ebgp                               = true
+  site_of_origin_four_byte_as_index                       = 100
+  site_of_origin_four_byte_as_number                      = "65536"
+  slow_peer_static                                        = true
   soft_reconfiguration_inbound_always                     = true
   update_out_originator_loopcheck_disable                 = true
-  allowas_in                                              = 3
-  allowconfedas_in                                        = 5
-  site_of_origin_four_byte_as_number                      = "65536"
-  site_of_origin_four_byte_as_index                       = 100
-  as_override                                             = true
-  aigp                                                    = true
-  aigp_send_med                                           = true
-  aigp_send_cost_community_id                             = 5
-  aigp_send_cost_community_id_poi_pre_bestpath_transitive = true
-  slow_peer_static                                        = true
-  origin_as_validation_disable                            = true
-  bestpath_origin_as_allow_invalid                        = true
+  vrf_name                                                = "VRF2"
+  weight                                                  = 100
 }
 ```
 
@@ -99,6 +101,14 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
   - Range: `1`-`10`
 - `as_override` (Boolean) Override matching AS-number while sending update
 - `as_override_inheritance_disable` (Boolean) Prevent as-override from being inherited from the parent
+- `bandwidth_grp_inbound_inheritance_disable` (Boolean) Prevent item being inherited from a parent group
+  - Supported from version: `25.4`
+- `bandwidth_grp_inbound_name` (String) Bandwidth group name
+  - Supported from version: `25.4`
+- `bandwidth_grp_outbound_inheritance_disable` (Boolean) Prevent item being inherited from a parent group
+  - Supported from version: `25.4`
+- `bandwidth_grp_outbound_name` (String) Bandwidth group name
+  - Supported from version: `25.4`
 - `bestpath_origin_as_allow_invalid` (Boolean) BGP bestpath selection will allow 'invalid' origin-AS
 - `capability_orf_prefix` (String) Capability to RECEIVE the ORF from this neighbor
   - Choices: `both`, `none`, `receive`, `send`
@@ -107,11 +117,21 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 - `default_originate` (Boolean) Originate default route to this neighbor
 - `default_originate_inheritance_disable` (Boolean) Prevent default-originate being inherited from a parent group
 - `default_originate_route_policy` (String) Route policy to specify criteria to originate default
+- `default_policy_action_in` (String) Default action if route does not satisfy inbound route-policy
+  - Choices: `accept`, `reject`
+  - Supported from version: `25.4`
+- `default_policy_action_out` (String) Default action if route does not satisfy outbound route-policy
+  - Choices: `accept`, `reject`
+  - Supported from version: `25.4`
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `encapsulation_type` (String) Specify encapsulation type
   - Choices: `srv6`, `vxlan`
+- `fast_reroute_per_link_multipath_backup_address` (String) Backup IP address
+  - Supported from version: `25.4`
+- `fast_reroute_per_link_multipath_backup_address_inheritance_disable` (Boolean) Prevent fast-reroute-per-link from being inherited from the parent
+  - Supported from version: `25.4`
 - `import_re_originate` (Boolean) Reoriginate imported routes by attaching stitching RTs
 - `import_stitching_rt` (Boolean) Import routes using stitching RTs
 - `import_stitching_rt_re_originate` (Boolean) Re-originate imported routes

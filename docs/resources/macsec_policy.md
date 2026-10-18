@@ -14,31 +14,33 @@ This resource can manage the MACSec Policy configuration.
 
 ```terraform
 resource "iosxr_macsec_policy" "example" {
-  policy_name                        = "POLICY1"
-  key_server_priority                = 100
+  allow_lacp_in_clear                = true
+  allow_lldp_in_clear                = true
+  allow_pause_frame_in_clear         = true
+  allow_ptp_in_clear                 = true
   cipher_suite                       = "GCM-AES-256"
-  window_size                        = 512
   conf_offset                        = "CONF-OFFSET-50"
-  security_policy                    = "must-secure"
-  vlan_tags_in_clear                 = 1
-  policy_exception                   = "lacp-in-clear"
-  sak_rekey_interval_seconds         = 1800
-  include_icv_indicator              = true
   delay_protection                   = true
-  use_eapol_pae_in_icv               = true
-  suspend_on_request_disable         = true
-  suspend_for_disable                = true
+  enable_fault_detection             = true
   enable_legacy_fallback             = true
   enable_legacy_sak_write            = true
   impose_overhead_on_bundle          = true
-  max_an                             = "1"
-  allow_lacp_in_clear                = true
-  allow_pause_frame_in_clear         = true
-  allow_lldp_in_clear                = true
-  ppk                                = true
-  ppk_sks_profile                    = "SKS-PROFILE1"
+  include_icv_indicator              = true
+  key_server_priority                = 100
   logging_sak_rekey_disable          = true
   logging_sak_rekey_summary_interval = 60
+  max_an                             = "1"
+  policy_exception                   = "lacp-in-clear"
+  policy_name                        = "POLICY1"
+  ppk                                = true
+  ppk_sks_profile                    = "SKS-PROFILE1"
+  sak_rekey_interval_seconds         = 1800
+  security_policy                    = "must-secure"
+  suspend_for_disable                = true
+  suspend_on_request_disable         = true
+  use_eapol_pae_in_icv               = true
+  vlan_tags_in_clear                 = 1
+  window_size                        = 512
 }
 ```
 
@@ -54,6 +56,8 @@ resource "iosxr_macsec_policy" "example" {
 - `allow_lacp_in_clear` (Boolean) Allow LACP((Link aggregation control plane protocol) Packets in clear Text
 - `allow_lldp_in_clear` (Boolean) Allow lldp packets in clear text
 - `allow_pause_frame_in_clear` (Boolean) Allow pause-frame packets in clear text
+- `allow_ptp_in_clear` (Boolean) Allow Precision Time Protocol packets in clear text (unencrypted)
+  - Supported from version: `26.2`
 - `cipher_suite` (String) Cipher-Suite used for encryption
   - Choices: `GCM-AES-128`, `GCM-AES-256`, `GCM-AES-XPN-128`, `GCM-AES-XPN-256`
 - `conf_offset` (String) conf-offset used for encryption
@@ -62,6 +66,8 @@ resource "iosxr_macsec_policy" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `enable_fault_detection` (Boolean) enable fault detection
+  - Supported from version: `26.2`
 - `enable_legacy_fallback` (Boolean) enable keepalive fallback ca
 - `enable_legacy_sak_write` (Boolean) To interop with legacy ncs5500 coherent systems
 - `impose_overhead_on_bundle` (Boolean) Impose macsec overhead on bundle interface
@@ -77,6 +83,8 @@ resource "iosxr_macsec_policy" "example" {
   - Choices: `lacp-in-clear`
 - `ppk` (Boolean) To use PPK supported MACsec session
 - `ppk_sks_profile` (String) use sks profile for PPK generation
+- `sak_rekey_interval_minutes` (Number) Interval after which key-server generates new SAK for a Secured Session
+  - Range: `1`-`43200`
 - `sak_rekey_interval_seconds` (Number) Interval(in seconds)<60-2592000>, Default: OFF
   - Range: `60`-`2592000`
 - `security_policy` (String) Must Secure/Should Secure for Data encryption

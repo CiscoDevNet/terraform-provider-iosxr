@@ -7,10 +7,10 @@ resource "iosxr_vty_pool" "example" {
   eem_line_template     = "EEM_TEMPLATE"
   pools = [
     {
-      pool_name     = "USER_POOL"
       first_vty     = "20"
       last_vty      = "30"
       line_template = "USER_TEMPLATE"
+      pool_name     = "USER_POOL"
     }
   ]
 }

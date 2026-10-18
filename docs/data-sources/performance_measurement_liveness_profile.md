@@ -29,6 +29,8 @@ data "iosxr_performance_measurement_liveness_profile" "example" {
 - `endpoint_default` (Boolean) Default profile
 - `endpoint_default_liveness_detection_logging_state_change` (Boolean) Emit syslog when the liveness state change detected
 - `endpoint_default_liveness_detection_multiplier` (Number) Configure detect multiplier
+- `endpoint_default_liveness_detection_npu_offload` (Boolean) Enable offloading sessions to NPU
+  - Supported from version: `25.4`
 - `endpoint_default_probe_flow_label_explicit` (Boolean) explicit list of flow labels
 - `endpoint_default_probe_flow_label_explicit_list` (List of Number) explicit list of flow labels
 - `endpoint_default_probe_flow_label_from` (Number) Lower bound

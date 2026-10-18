@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"path"
 	"reflect"
 	"sort"
 	"strconv"
@@ -135,6 +136,15 @@ type HWModuleProfile8000 struct {
 	ProfileRouteScaleIpv6UnicastConnectedPrefixHigh  types.Bool                                               `tfsdk:"profile_route_scale_ipv6_unicast_connected_prefix_high"`
 	ProfileFlowspecIpv6PacketLenEnable               types.Bool                                               `tfsdk:"profile_flowspec_ipv6_packet_len_enable"`
 	ProfileIrbThroughputOptimized                    types.Bool                                               `tfsdk:"profile_irb_throughput_optimized"`
+	ProfileTcamFormatOgComprIdExtension              types.Bool                                               `tfsdk:"profile_tcam_format_og_compr_id_extension"`
+	ProfileQosMode                                   types.String                                             `tfsdk:"profile_qos_mode"`
+	ProfileCefIptunnelScale                          types.Bool                                               `tfsdk:"profile_cef_iptunnel_scale"`
+	ProfileCefHashIpFieldDuplication                 types.Bool                                               `tfsdk:"profile_cef_hash_ip_field_duplication"`
+	ProfileL2fibEvpnAging                            types.Bool                                               `tfsdk:"profile_l2fib_evpn_aging"`
+	ProfileRouteScaleHostRoute                       types.Bool                                               `tfsdk:"profile_route_scale_host_route"`
+	ProfileRouteScaleLpmFullScale                    types.Bool                                               `tfsdk:"profile_route_scale_lpm_full_scale"`
+	ProfileTcamFormatOgComprIdExtensionIngress       types.Bool                                               `tfsdk:"profile_tcam_format_og_compr_id_extension_ingress"`
+	ProfileTcamFormatOgComprIdExtensionEgress        types.Bool                                               `tfsdk:"profile_tcam_format_og_compr_id_extension_egress"`
 }
 
 type HWModuleProfile8000Data struct {
@@ -231,6 +241,15 @@ type HWModuleProfile8000Data struct {
 	ProfileRouteScaleIpv6UnicastConnectedPrefixHigh  types.Bool                                               `tfsdk:"profile_route_scale_ipv6_unicast_connected_prefix_high"`
 	ProfileFlowspecIpv6PacketLenEnable               types.Bool                                               `tfsdk:"profile_flowspec_ipv6_packet_len_enable"`
 	ProfileIrbThroughputOptimized                    types.Bool                                               `tfsdk:"profile_irb_throughput_optimized"`
+	ProfileTcamFormatOgComprIdExtension              types.Bool                                               `tfsdk:"profile_tcam_format_og_compr_id_extension"`
+	ProfileQosMode                                   types.String                                             `tfsdk:"profile_qos_mode"`
+	ProfileCefIptunnelScale                          types.Bool                                               `tfsdk:"profile_cef_iptunnel_scale"`
+	ProfileCefHashIpFieldDuplication                 types.Bool                                               `tfsdk:"profile_cef_hash_ip_field_duplication"`
+	ProfileL2fibEvpnAging                            types.Bool                                               `tfsdk:"profile_l2fib_evpn_aging"`
+	ProfileRouteScaleHostRoute                       types.Bool                                               `tfsdk:"profile_route_scale_host_route"`
+	ProfileRouteScaleLpmFullScale                    types.Bool                                               `tfsdk:"profile_route_scale_lpm_full_scale"`
+	ProfileTcamFormatOgComprIdExtensionIngress       types.Bool                                               `tfsdk:"profile_tcam_format_og_compr_id_extension_ingress"`
+	ProfileTcamFormatOgComprIdExtensionEgress        types.Bool                                               `tfsdk:"profile_tcam_format_og_compr_id_extension_egress"`
 }
 type HWModuleProfile8000ProfileEncapExactInterfaces struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
@@ -239,9 +258,12 @@ type HWModuleProfile8000ProfileEncapExactLocations struct {
 	LocationName types.String `tfsdk:"location_name"`
 }
 type HWModuleProfile8000ProfilePriorityFlowControlLocations struct {
-	LocationName               types.String                                                                       `tfsdk:"location_name"`
-	BufferExtendedTrafficClass []HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferExtendedTrafficClass `tfsdk:"buffer_extended_traffic_class"`
-	BufferInternalTrafficClass []HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferInternalTrafficClass `tfsdk:"buffer_internal_traffic_class"`
+	LocationName                               types.String                                                                       `tfsdk:"location_name"`
+	BufferExtendedTrafficClass                 []HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferExtendedTrafficClass `tfsdk:"buffer_extended_traffic_class"`
+	BufferInternalTrafficClass                 []HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferInternalTrafficClass `tfsdk:"buffer_internal_traffic_class"`
+	NonPfcTcs                                  types.Bool                                                                         `tfsdk:"non_pfc_tcs"`
+	NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs    types.Int64                                                                        `tfsdk:"non_pfc_tcs_max_non_pfc_voqs_number_of_evict_voqs"`
+	NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage types.Int64                                                                        `tfsdk:"non_pfc_tcs_max_non_pfc_voqs_hbm_buffers_percentage"`
 }
 type HWModuleProfile8000ProfileNpuBufferExtendedLocations struct {
 	LocationName                       types.String `tfsdk:"location_name"`
@@ -297,18 +319,22 @@ func (data HWModuleProfile8000Data) getXPath() string {
 
 // Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
-func (data HWModuleProfile8000) toBody(ctx context.Context) string {
+func (data HWModuleProfile8000) toBody(ctx context.Context, providerVersion string) string {
 	body := "{}"
 	if !data.MulticastRouteScale.IsNull() && !data.MulticastRouteScale.IsUnknown() {
 		if data.MulticastRouteScale.ValueBool() {
 			body, _ = sjson.Set(body, "multicast.route-scale", map[string]string{})
 		}
 	}
-	if !data.ProfileTcamFibIpv4UnicastPercent.IsNull() && !data.ProfileTcamFibIpv4UnicastPercent.IsUnknown() {
-		body, _ = sjson.Set(body, "profile.tcam.fib.ipv4.unicast.percent", strconv.FormatInt(data.ProfileTcamFibIpv4UnicastPercent.ValueInt64(), 10))
+	if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileTcamFibIpv4UnicastPercent.IsNull() && !data.ProfileTcamFibIpv4UnicastPercent.IsUnknown() {
+			body, _ = sjson.Set(body, "profile.tcam.fib.ipv4.unicast.percent", strconv.FormatInt(data.ProfileTcamFibIpv4UnicastPercent.ValueInt64(), 10))
+		}
 	}
-	if !data.ProfileTcamFibIpv6UnicastPercent.IsNull() && !data.ProfileTcamFibIpv6UnicastPercent.IsUnknown() {
-		body, _ = sjson.Set(body, "profile.tcam.fib.ipv6.unicast.percent", strconv.FormatInt(data.ProfileTcamFibIpv6UnicastPercent.ValueInt64(), 10))
+	if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileTcamFibIpv6UnicastPercent.IsNull() && !data.ProfileTcamFibIpv6UnicastPercent.IsUnknown() {
+			body, _ = sjson.Set(body, "profile.tcam.fib.ipv6.unicast.percent", strconv.FormatInt(data.ProfileTcamFibIpv6UnicastPercent.ValueInt64(), 10))
+		}
 	}
 	if !data.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() && !data.ProfileTcamFormatAccessListIpv4SrcAddr.IsUnknown() {
 		if data.ProfileTcamFormatAccessListIpv4SrcAddr.ValueBool() {
@@ -548,9 +574,11 @@ func (data HWModuleProfile8000) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "profile.cef.vxlan.ipv6-tnl-scale", map[string]string{})
 		}
 	}
-	if !data.ProfileCefMplsoudpScale.IsNull() && !data.ProfileCefMplsoudpScale.IsUnknown() {
-		if data.ProfileCefMplsoudpScale.ValueBool() {
-			body, _ = sjson.Set(body, "profile.cef.mplsoudp.scale", map[string]string{})
+	if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileCefMplsoudpScale.IsNull() && !data.ProfileCefMplsoudpScale.IsUnknown() {
+			if data.ProfileCefMplsoudpScale.ValueBool() {
+				body, _ = sjson.Set(body, "profile.cef.mplsoudp.scale", map[string]string{})
+			}
 		}
 	}
 	if !data.ProfileCefStatsLabelAppDefault.IsNull() && !data.ProfileCefStatsLabelAppDefault.IsUnknown() {
@@ -613,14 +641,20 @@ func (data HWModuleProfile8000) toBody(ctx context.Context) string {
 	if !data.ProfileBwThreshold.IsNull() && !data.ProfileBwThreshold.IsUnknown() {
 		body, _ = sjson.Set(body, "profile.bw-threshold", data.ProfileBwThreshold.ValueString())
 	}
-	if !data.ProfileGueUdpDestPortIpv4.IsNull() && !data.ProfileGueUdpDestPortIpv4.IsUnknown() {
-		body, _ = sjson.Set(body, "profile.gue.udp-dest-port.ipv4", strconv.FormatInt(data.ProfileGueUdpDestPortIpv4.ValueInt64(), 10))
+	if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileGueUdpDestPortIpv4.IsNull() && !data.ProfileGueUdpDestPortIpv4.IsUnknown() {
+			body, _ = sjson.Set(body, "profile.gue.udp-dest-port.ipv4", strconv.FormatInt(data.ProfileGueUdpDestPortIpv4.ValueInt64(), 10))
+		}
 	}
-	if !data.ProfileGueUdpDestPortIpv6.IsNull() && !data.ProfileGueUdpDestPortIpv6.IsUnknown() {
-		body, _ = sjson.Set(body, "profile.gue.udp-dest-port.ipv6", strconv.FormatInt(data.ProfileGueUdpDestPortIpv6.ValueInt64(), 10))
+	if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileGueUdpDestPortIpv6.IsNull() && !data.ProfileGueUdpDestPortIpv6.IsUnknown() {
+			body, _ = sjson.Set(body, "profile.gue.udp-dest-port.ipv6", strconv.FormatInt(data.ProfileGueUdpDestPortIpv6.ValueInt64(), 10))
+		}
 	}
-	if !data.ProfileGueUdpDestPortMpls.IsNull() && !data.ProfileGueUdpDestPortMpls.IsUnknown() {
-		body, _ = sjson.Set(body, "profile.gue.udp-dest-port.mpls", strconv.FormatInt(data.ProfileGueUdpDestPortMpls.ValueInt64(), 10))
+	if providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileGueUdpDestPortMpls.IsNull() && !data.ProfileGueUdpDestPortMpls.IsUnknown() {
+			body, _ = sjson.Set(body, "profile.gue.udp-dest-port.mpls", strconv.FormatInt(data.ProfileGueUdpDestPortMpls.ValueInt64(), 10))
+		}
 	}
 	if !data.ProfileL2fibPwStats.IsNull() && !data.ProfileL2fibPwStats.IsUnknown() {
 		if data.ProfileL2fibPwStats.ValueBool() {
@@ -660,6 +694,67 @@ func (data HWModuleProfile8000) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "profile.irb.throughput-optimized", map[string]string{})
 		}
 	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") && (providerVersion == "" || !helpers.VersionAtLeast(providerVersion, "26.2")) {
+		if !data.ProfileTcamFormatOgComprIdExtension.IsNull() && !data.ProfileTcamFormatOgComprIdExtension.IsUnknown() {
+			if data.ProfileTcamFormatOgComprIdExtension.ValueBool() {
+				body, _ = sjson.Set(body, "profile.tcam.format.og-compr-id-extension", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileQosMode.IsNull() && !data.ProfileQosMode.IsUnknown() {
+			body, _ = sjson.Set(body, "profile.qos.mode", data.ProfileQosMode.ValueString())
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileCefIptunnelScale.IsNull() && !data.ProfileCefIptunnelScale.IsUnknown() {
+			if data.ProfileCefIptunnelScale.ValueBool() {
+				body, _ = sjson.Set(body, "profile.cef.iptunnel.scale", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileCefHashIpFieldDuplication.IsNull() && !data.ProfileCefHashIpFieldDuplication.IsUnknown() {
+			if data.ProfileCefHashIpFieldDuplication.ValueBool() {
+				body, _ = sjson.Set(body, "profile.cef.hash.ip-field-duplication", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileL2fibEvpnAging.IsNull() && !data.ProfileL2fibEvpnAging.IsUnknown() {
+			if data.ProfileL2fibEvpnAging.ValueBool() {
+				body, _ = sjson.Set(body, "profile.l2fib.evpn-aging", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileRouteScaleHostRoute.IsNull() && !data.ProfileRouteScaleHostRoute.IsUnknown() {
+			if data.ProfileRouteScaleHostRoute.ValueBool() {
+				body, _ = sjson.Set(body, "profile.route.scale.host-route", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "25.4") {
+		if !data.ProfileRouteScaleLpmFullScale.IsNull() && !data.ProfileRouteScaleLpmFullScale.IsUnknown() {
+			if data.ProfileRouteScaleLpmFullScale.ValueBool() {
+				body, _ = sjson.Set(body, "profile.route.scale.lpm.full-scale", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "26.2") {
+		if !data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() && !data.ProfileTcamFormatOgComprIdExtensionIngress.IsUnknown() {
+			if data.ProfileTcamFormatOgComprIdExtensionIngress.ValueBool() {
+				body, _ = sjson.Set(body, "profile.tcam.format.og-compr-id-extension.ingress", map[string]string{})
+			}
+		}
+	}
+	if helpers.VersionAtLeast(providerVersion, "26.2") {
+		if !data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() && !data.ProfileTcamFormatOgComprIdExtensionEgress.IsUnknown() {
+			if data.ProfileTcamFormatOgComprIdExtensionEgress.ValueBool() {
+				body, _ = sjson.Set(body, "profile.tcam.format.og-compr-id-extension.egress", map[string]string{})
+			}
+		}
+	}
 	if len(data.ProfileEncapExactInterfaces) > 0 {
 		body, _ = sjson.Set(body, "profile.encap-exact.interfaces.interface", []interface{}{})
 		for index, item := range data.ProfileEncapExactInterfaces {
@@ -682,7 +777,25 @@ func (data HWModuleProfile8000) toBody(ctx context.Context) string {
 			if !item.LocationName.IsNull() && !item.LocationName.IsUnknown() {
 				body, _ = sjson.Set(body, "profile.priority-flow-control.locations.location"+"."+strconv.Itoa(index)+"."+"location-name", item.LocationName.ValueString())
 			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.NonPfcTcs.IsNull() && !item.NonPfcTcs.IsUnknown() {
+					if item.NonPfcTcs.ValueBool() {
+						body, _ = sjson.Set(body, "profile.priority-flow-control.locations.location"+"."+strconv.Itoa(index)+"."+"buffer-extended.non-pfc-tcs", map[string]string{})
+					}
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs.IsNull() && !item.NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs.IsUnknown() {
+					body, _ = sjson.Set(body, "profile.priority-flow-control.locations.location"+"."+strconv.Itoa(index)+"."+"buffer-extended.non-pfc-tcs.max-non-pfc-voqs.number-of-evict-voqs", strconv.FormatInt(item.NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs.ValueInt64(), 10))
+				}
+			}
+			if helpers.VersionAtLeast(providerVersion, "25.4") {
+				if !item.NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage.IsNull() && !item.NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage.IsUnknown() {
+					body, _ = sjson.Set(body, "profile.priority-flow-control.locations.location"+"."+strconv.Itoa(index)+"."+"buffer-extended.non-pfc-tcs.max-non-pfc-voqs.hbm-buffers-percentage", strconv.FormatInt(item.NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage.ValueInt64(), 10))
+				}
+			}
 			if len(item.BufferExtendedTrafficClass) > 0 {
+				body, _ = sjson.Set(body, "profile.priority-flow-control.locations.location"+"."+strconv.Itoa(index)+"."+"buffer-extended.traffic-class", []interface{}{})
 				for cindex, citem := range item.BufferExtendedTrafficClass {
 					if !citem.TrafficClassId.IsNull() && !citem.TrafficClassId.IsUnknown() {
 						body, _ = sjson.Set(body, "profile.priority-flow-control.locations.location"+"."+strconv.Itoa(index)+"."+"buffer-extended.traffic-class"+"."+strconv.Itoa(cindex)+"."+"traffic-class-id", strconv.FormatInt(citem.TrafficClassId.ValueInt64(), 10))
@@ -728,6 +841,7 @@ func (data HWModuleProfile8000) toBody(ctx context.Context) string {
 				}
 			}
 			if len(item.BufferInternalTrafficClass) > 0 {
+				body, _ = sjson.Set(body, "profile.priority-flow-control.locations.location"+"."+strconv.Itoa(index)+"."+"buffer-internal.traffic-class", []interface{}{})
 				for cindex, citem := range item.BufferInternalTrafficClass {
 					if !citem.TrafficClassId.IsNull() && !citem.TrafficClassId.IsUnknown() {
 						body, _ = sjson.Set(body, "profile.priority-flow-control.locations.location"+"."+strconv.Itoa(index)+"."+"buffer-internal.traffic-class"+"."+strconv.Itoa(cindex)+"."+"traffic-class-id", strconv.FormatInt(citem.TrafficClassId.ValueInt64(), 10))
@@ -774,593 +888,715 @@ func (data HWModuleProfile8000) toBody(ctx context.Context) string {
 
 // End of section. //template:end toBody
 
-// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+// Section below is generated&owned by "gen/generator.go". //template:begin getVersionConstraints
 
-func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res gjson.Result) {
-	if value := res.Get("multicast.route-scale"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.MulticastRouteScale.IsNull() {
-			data.MulticastRouteScale = types.BoolValue(true)
-		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.MulticastRouteScale.IsNull() {
-			data.MulticastRouteScale = types.BoolNull()
-		}
+// GetVersionConstraints returns the version constraints for all fields
+func (data HWModuleProfile8000) GetVersionConstraints() []helpers.FieldVersionConstraint {
+	constraints := make([]helpers.FieldVersionConstraint, 0)
+
+	constraints = append(constraints, []helpers.FieldVersionConstraint{
+		{
+			FieldPath: "profile_tcam_fib_ipv4_unicast_percent",
+
+			RemovedInVersion: "25.4",
+		},
+		{
+			FieldPath: "profile_tcam_fib_ipv6_unicast_percent",
+
+			RemovedInVersion: "25.4",
+		},
+		{
+			FieldPath: "profile_cef_mplsoudp_scale",
+
+			RemovedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_priority_flow_control_locations.non_pfc_tcs",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_priority_flow_control_locations.non_pfc_tcs_max_non_pfc_voqs_number_of_evict_voqs",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_priority_flow_control_locations.non_pfc_tcs_max_non_pfc_voqs_hbm_buffers_percentage",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath: "profile_gue_udp_dest_port_ipv4",
+
+			RemovedInVersion: "25.4",
+		},
+		{
+			FieldPath: "profile_gue_udp_dest_port_ipv6",
+
+			RemovedInVersion: "25.4",
+		},
+		{
+			FieldPath: "profile_gue_udp_dest_port_mpls",
+
+			RemovedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_tcam_format_og_compr_id_extension",
+			AddedInVersion: "25.4",
+
+			RemovedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "profile_qos_mode",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_cef_iptunnel_scale",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_cef_hash_ip_field_duplication",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_l2fib_evpn_aging",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_route_scale_host_route",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_route_scale_lpm_full_scale",
+			AddedInVersion: "25.4",
+		},
+		{
+			FieldPath:      "profile_tcam_format_og_compr_id_extension_ingress",
+			AddedInVersion: "26.2",
+		},
+		{
+			FieldPath:      "profile_tcam_format_og_compr_id_extension_egress",
+			AddedInVersion: "26.2",
+		},
+	}...)
+	if len(constraints) == 0 {
+		return nil
 	}
-	if value := res.Get("profile.tcam.fib.ipv4.unicast.percent"); value.Exists() && !data.ProfileTcamFibIpv4UnicastPercent.IsNull() {
+	return constraints
+}
+
+// End of section. //template:end getVersionConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getRangeConstraints
+
+// GetRangeConstraints returns the version-specific range constraints for integer fields
+func (data HWModuleProfile8000) GetRangeConstraints() []helpers.FieldRangeConstraint {
+	return []helpers.FieldRangeConstraint{
+		{
+			FieldPath: "profile_priority_flow_control_locations.buffer_internal_traffic_class.pause_threshold",
+			VersionRanges: map[string]helpers.VersionRange{
+				"24.4": {Min: 307200, Max: 1574400},
+				"25.4": {Min: 307200, Max: 5760000},
+			},
+		},
+		{
+			FieldPath: "profile_priority_flow_control_locations.buffer_internal_traffic_class.headroom",
+			VersionRanges: map[string]helpers.VersionRange{
+				"24.4": {Min: 345600, Max: 1651200},
+				"25.4": {Min: 201600, Max: 1651200},
+			},
+		},
+		{
+			FieldPath: "profile_priority_flow_control_locations.buffer_internal_traffic_class.ecn",
+			VersionRanges: map[string]helpers.VersionRange{
+				"24.4": {Min: 153600, Max: 897408},
+				"25.4": {Min: 153600, Max: 5749376},
+			},
+		},
+		{
+			FieldPath: "profile_priority_flow_control_locations.buffer_internal_traffic_class.max_threshold",
+			VersionRanges: map[string]helpers.VersionRange{
+				"24.4": {Min: 153600, Max: 1495680},
+				"25.4": {Min: 153600, Max: 5759616},
+			},
+		},
+	}
+}
+
+// End of section. //template:end getRangeConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEnumConstraints
+
+// GetEnumConstraints returns the version-specific enum constraints for string fields
+func (data HWModuleProfile8000) GetEnumConstraints() []helpers.FieldEnumConstraint {
+	return nil
+}
+
+// End of section. //template:end getEnumConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getStringLengthConstraints
+
+// GetStringLengthConstraints returns the version-specific string length constraints
+func (data HWModuleProfile8000) GetStringLengthConstraints() []helpers.FieldStringLengthConstraint {
+	return nil
+}
+
+// End of section. //template:end getStringLengthConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPatternConstraints
+
+// GetPatternConstraints returns the version-specific string pattern constraints
+func (data HWModuleProfile8000) GetPatternConstraints() []helpers.FieldPatternConstraint {
+	return nil
+}
+
+// End of section. //template:end getPatternConstraints
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "multicast.route-scale"); !data.MulticastRouteScale.IsNull() {
+		if value.Exists() {
+			data.MulticastRouteScale = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.MulticastRouteScale = types.BoolValue(false)
+		}
+	} else if data.MulticastRouteScale.IsNull() {
+		data.MulticastRouteScale = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.fib.ipv4.unicast.percent"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && !data.ProfileTcamFibIpv4UnicastPercent.IsNull() {
 		data.ProfileTcamFibIpv4UnicastPercent = types.Int64Value(value.Int())
 	} else if data.ProfileTcamFibIpv4UnicastPercent.IsNull() {
 		data.ProfileTcamFibIpv4UnicastPercent = types.Int64Null()
 	}
-	if value := res.Get("profile.tcam.fib.ipv6.unicast.percent"); value.Exists() && !data.ProfileTcamFibIpv6UnicastPercent.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.fib.ipv6.unicast.percent"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && !data.ProfileTcamFibIpv6UnicastPercent.IsNull() {
 		data.ProfileTcamFibIpv6UnicastPercent = types.Int64Value(value.Int())
 	} else if data.ProfileTcamFibIpv6UnicastPercent.IsNull() {
 		data.ProfileTcamFibIpv6UnicastPercent = types.Int64Null()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.src-addr"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.src-addr"); !data.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv4SrcAddr = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv4SrcAddr = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() {
-			data.ProfileTcamFormatAccessListIpv4SrcAddr = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() {
+		data.ProfileTcamFormatAccessListIpv4SrcAddr = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.dst-addr"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.dst-addr"); !data.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv4DstAddr = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv4DstAddr = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() {
-			data.ProfileTcamFormatAccessListIpv4DstAddr = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() {
+		data.ProfileTcamFormatAccessListIpv4DstAddr = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.src-port"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.src-port"); !data.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv4SrcPort = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv4SrcPort = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() {
-			data.ProfileTcamFormatAccessListIpv4SrcPort = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() {
+		data.ProfileTcamFormatAccessListIpv4SrcPort = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.dst-port"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv4DstPort.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.dst-port"); !data.ProfileTcamFormatAccessListIpv4DstPort.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv4DstPort = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv4DstPort = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv4DstPort.IsNull() {
-			data.ProfileTcamFormatAccessListIpv4DstPort = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv4DstPort.IsNull() {
+		data.ProfileTcamFormatAccessListIpv4DstPort = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.proto"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv4Proto.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.proto"); !data.ProfileTcamFormatAccessListIpv4Proto.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv4Proto = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv4Proto = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv4Proto.IsNull() {
-			data.ProfileTcamFormatAccessListIpv4Proto = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv4Proto.IsNull() {
+		data.ProfileTcamFormatAccessListIpv4Proto = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.precedence"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv4Precedence.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.precedence"); !data.ProfileTcamFormatAccessListIpv4Precedence.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv4Precedence = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv4Precedence = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv4Precedence.IsNull() {
-			data.ProfileTcamFormatAccessListIpv4Precedence = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv4Precedence.IsNull() {
+		data.ProfileTcamFormatAccessListIpv4Precedence = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.ttl-match"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.ttl-match"); !data.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv4TtlMatch = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv4TtlMatch = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() {
-			data.ProfileTcamFormatAccessListIpv4TtlMatch = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() {
+		data.ProfileTcamFormatAccessListIpv4TtlMatch = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.tcp-flags"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.tcp-flags"); !data.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv4TcpFlags = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv4TcpFlags = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() {
-			data.ProfileTcamFormatAccessListIpv4TcpFlags = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() {
+		data.ProfileTcamFormatAccessListIpv4TcpFlags = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.frag-bit"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv4FragBit.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.frag-bit"); !data.ProfileTcamFormatAccessListIpv4FragBit.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv4FragBit = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv4FragBit = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv4FragBit.IsNull() {
-			data.ProfileTcamFormatAccessListIpv4FragBit = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv4FragBit.IsNull() {
+		data.ProfileTcamFormatAccessListIpv4FragBit = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.src-object-group"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.src-object-group"); !data.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv4SrcObjectGroup = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv4SrcObjectGroup = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() {
-			data.ProfileTcamFormatAccessListIpv4SrcObjectGroup = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() {
+		data.ProfileTcamFormatAccessListIpv4SrcObjectGroup = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.dst-object-group"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.dst-object-group"); !data.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv4DstObjectGroup = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv4DstObjectGroup = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() {
-			data.ProfileTcamFormatAccessListIpv4DstObjectGroup = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() {
+		data.ProfileTcamFormatAccessListIpv4DstObjectGroup = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.packet-len"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.packet-len"); !data.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv4PacketLen = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv4PacketLen = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() {
-			data.ProfileTcamFormatAccessListIpv4PacketLen = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() {
+		data.ProfileTcamFormatAccessListIpv4PacketLen = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.fragment-offset"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.fragment-offset"); !data.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv4FragmentOffset = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv4FragmentOffset = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() {
-			data.ProfileTcamFormatAccessListIpv4FragmentOffset = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() {
+		data.ProfileTcamFormatAccessListIpv4FragmentOffset = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.udf1"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf1.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf1"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileTcamFormatAccessListIpv4Udf1.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf1 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv4Udf1.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf1 = types.StringNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.udf2"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf2.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf2"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileTcamFormatAccessListIpv4Udf2.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf2 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv4Udf2.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf2 = types.StringNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.udf3"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf3.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf3"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileTcamFormatAccessListIpv4Udf3.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf3 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv4Udf3.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf3 = types.StringNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.udf4"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf4.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileTcamFormatAccessListIpv4Udf4.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf4 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv4Udf4.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf4 = types.StringNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.udf5"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf5.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf5"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileTcamFormatAccessListIpv4Udf5.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf5 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv4Udf5.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf5 = types.StringNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.udf6"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf6.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf6"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileTcamFormatAccessListIpv4Udf6.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf6 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv4Udf6.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf6 = types.StringNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.udf7"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf7.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf7"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileTcamFormatAccessListIpv4Udf7.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf7 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv4Udf7.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf7 = types.StringNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv4.udf8"); value.Exists() && !data.ProfileTcamFormatAccessListIpv4Udf8.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf8"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileTcamFormatAccessListIpv4Udf8.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf8 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv4Udf8.IsNull() {
 		data.ProfileTcamFormatAccessListIpv4Udf8 = types.StringNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv6.src-addr"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.src-addr"); !data.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv6SrcAddr = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv6SrcAddr = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() {
-			data.ProfileTcamFormatAccessListIpv6SrcAddr = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() {
+		data.ProfileTcamFormatAccessListIpv6SrcAddr = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv6.dst-addr"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.dst-addr"); !data.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv6DstAddr = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv6DstAddr = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() {
-			data.ProfileTcamFormatAccessListIpv6DstAddr = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() {
+		data.ProfileTcamFormatAccessListIpv6DstAddr = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv6.dst-port"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv6DstPort.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.dst-port"); !data.ProfileTcamFormatAccessListIpv6DstPort.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv6DstPort = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv6DstPort = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv6DstPort.IsNull() {
-			data.ProfileTcamFormatAccessListIpv6DstPort = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv6DstPort.IsNull() {
+		data.ProfileTcamFormatAccessListIpv6DstPort = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv6.next-hdr"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.next-hdr"); !data.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv6NextHdr = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv6NextHdr = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() {
-			data.ProfileTcamFormatAccessListIpv6NextHdr = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() {
+		data.ProfileTcamFormatAccessListIpv6NextHdr = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv6.traffic-class"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.traffic-class"); !data.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv6TrafficClass = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv6TrafficClass = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() {
-			data.ProfileTcamFormatAccessListIpv6TrafficClass = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() {
+		data.ProfileTcamFormatAccessListIpv6TrafficClass = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv6.frag-bit"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv6FragBit.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.frag-bit"); !data.ProfileTcamFormatAccessListIpv6FragBit.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv6FragBit = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv6FragBit = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv6FragBit.IsNull() {
-			data.ProfileTcamFormatAccessListIpv6FragBit = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv6FragBit.IsNull() {
+		data.ProfileTcamFormatAccessListIpv6FragBit = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv6.tcp-flags"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.tcp-flags"); !data.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv6TcpFlags = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv6TcpFlags = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() {
-			data.ProfileTcamFormatAccessListIpv6TcpFlags = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() {
+		data.ProfileTcamFormatAccessListIpv6TcpFlags = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv6.src-object-group"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.src-object-group"); !data.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv6SrcObjectGroup = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv6SrcObjectGroup = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() {
-			data.ProfileTcamFormatAccessListIpv6SrcObjectGroup = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() {
+		data.ProfileTcamFormatAccessListIpv6SrcObjectGroup = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv6.dst-object-group"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.dst-object-group"); !data.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv6DstObjectGroup = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv6DstObjectGroup = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() {
-			data.ProfileTcamFormatAccessListIpv6DstObjectGroup = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() {
+		data.ProfileTcamFormatAccessListIpv6DstObjectGroup = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv6.packet-len"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.packet-len"); !data.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() {
+		if value.Exists() {
 			data.ProfileTcamFormatAccessListIpv6PacketLen = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatAccessListIpv6PacketLen = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() {
-			data.ProfileTcamFormatAccessListIpv6PacketLen = types.BoolNull()
-		}
+	} else if data.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() {
+		data.ProfileTcamFormatAccessListIpv6PacketLen = types.BoolNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv6.udf1"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf1.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf1"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileTcamFormatAccessListIpv6Udf1.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf1 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv6Udf1.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf1 = types.StringNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv6.udf2"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf2.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf2"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileTcamFormatAccessListIpv6Udf2.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf2 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv6Udf2.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf2 = types.StringNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv6.udf3"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf3.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf3"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileTcamFormatAccessListIpv6Udf3.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf3 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv6Udf3.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf3 = types.StringNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv6.udf4"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf4.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileTcamFormatAccessListIpv6Udf4.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf4 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv6Udf4.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf4 = types.StringNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv6.udf5"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf5.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf5"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileTcamFormatAccessListIpv6Udf5.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf5 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv6Udf5.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf5 = types.StringNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv6.udf6"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf6.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf6"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileTcamFormatAccessListIpv6Udf6.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf6 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv6Udf6.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf6 = types.StringNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv6.udf7"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf7.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf7"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileTcamFormatAccessListIpv6Udf7.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf7 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv6Udf7.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf7 = types.StringNull()
 	}
-	if value := res.Get("profile.tcam.format.access-list.ipv6.udf8"); value.Exists() && !data.ProfileTcamFormatAccessListIpv6Udf8.IsNull() {
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf8"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileTcamFormatAccessListIpv6Udf8.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf8 = types.StringValue(value.String())
 	} else if data.ProfileTcamFormatAccessListIpv6Udf8.IsNull() {
 		data.ProfileTcamFormatAccessListIpv6Udf8 = types.StringNull()
 	}
-	if value := res.Get("profile.qos.voq-mode.four"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileQosVoqModeFour.IsNull() {
+	if value := gjson.GetBytes(res, "profile.qos.voq-mode.four"); !data.ProfileQosVoqModeFour.IsNull() {
+		if value.Exists() {
 			data.ProfileQosVoqModeFour = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileQosVoqModeFour = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileQosVoqModeFour.IsNull() {
-			data.ProfileQosVoqModeFour = types.BoolNull()
-		}
+	} else if data.ProfileQosVoqModeFour.IsNull() {
+		data.ProfileQosVoqModeFour = types.BoolNull()
 	}
-	if value := res.Get("profile.qos.voq-mode.eight"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileQosVoqModeEight.IsNull() {
+	if value := gjson.GetBytes(res, "profile.qos.voq-mode.eight"); !data.ProfileQosVoqModeEight.IsNull() {
+		if value.Exists() {
 			data.ProfileQosVoqModeEight = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileQosVoqModeEight = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileQosVoqModeEight.IsNull() {
-			data.ProfileQosVoqModeEight = types.BoolNull()
-		}
+	} else if data.ProfileQosVoqModeEight.IsNull() {
+		data.ProfileQosVoqModeEight = types.BoolNull()
 	}
-	if value := res.Get("profile.qos.voq-mode.fair-four"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileQosVoqModeFairFour.IsNull() {
+	if value := gjson.GetBytes(res, "profile.qos.voq-mode.fair-four"); !data.ProfileQosVoqModeFairFour.IsNull() {
+		if value.Exists() {
 			data.ProfileQosVoqModeFairFour = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileQosVoqModeFairFour = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileQosVoqModeFairFour.IsNull() {
-			data.ProfileQosVoqModeFairFour = types.BoolNull()
-		}
+	} else if data.ProfileQosVoqModeFairFour.IsNull() {
+		data.ProfileQosVoqModeFairFour = types.BoolNull()
 	}
-	if value := res.Get("profile.qos.voq-mode.fair-eight"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileQosVoqModeFairEight.IsNull() {
+	if value := gjson.GetBytes(res, "profile.qos.voq-mode.fair-eight"); !data.ProfileQosVoqModeFairEight.IsNull() {
+		if value.Exists() {
 			data.ProfileQosVoqModeFairEight = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileQosVoqModeFairEight = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileQosVoqModeFairEight.IsNull() {
-			data.ProfileQosVoqModeFairEight = types.BoolNull()
-		}
+	} else if data.ProfileQosVoqModeFairEight.IsNull() {
+		data.ProfileQosVoqModeFairEight = types.BoolNull()
 	}
-	if value := res.Get("profile.qos.l2-mode"); value.Exists() && !data.ProfileQosL2Mode.IsNull() {
+	if value := gjson.GetBytes(res, "profile.qos.l2-mode"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileQosL2Mode.IsNull() {
 		data.ProfileQosL2Mode = types.StringValue(value.String())
 	} else if data.ProfileQosL2Mode.IsNull() {
 		data.ProfileQosL2Mode = types.StringNull()
 	}
-	if value := res.Get("profile.qos.low-latency-mode"); value.Exists() && !data.ProfileQosLowLatencyMode.IsNull() {
+	if value := gjson.GetBytes(res, "profile.qos.low-latency-mode"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileQosLowLatencyMode.IsNull() {
 		data.ProfileQosLowLatencyMode = types.StringValue(value.String())
 	} else if data.ProfileQosLowLatencyMode.IsNull() {
 		data.ProfileQosLowLatencyMode = types.StringNull()
 	}
-	if value := res.Get("profile.qos.intra-npu-over-fabric"); value.Exists() && !data.ProfileQosIntraNpuOverFabric.IsNull() {
+	if value := gjson.GetBytes(res, "profile.qos.intra-npu-over-fabric"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileQosIntraNpuOverFabric.IsNull() {
 		data.ProfileQosIntraNpuOverFabric = types.StringValue(value.String())
 	} else if data.ProfileQosIntraNpuOverFabric.IsNull() {
 		data.ProfileQosIntraNpuOverFabric = types.StringNull()
 	}
-	if value := res.Get("profile.qos.qos-stats-push-collection"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileQosQosStatsPushCollection.IsNull() {
+	if value := gjson.GetBytes(res, "profile.qos.qos-stats-push-collection"); !data.ProfileQosQosStatsPushCollection.IsNull() {
+		if value.Exists() {
 			data.ProfileQosQosStatsPushCollection = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileQosQosStatsPushCollection = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileQosQosStatsPushCollection.IsNull() {
-			data.ProfileQosQosStatsPushCollection = types.BoolNull()
-		}
+	} else if data.ProfileQosQosStatsPushCollection.IsNull() {
+		data.ProfileQosQosStatsPushCollection = types.BoolNull()
 	}
-	if value := res.Get("profile.qos.high-water-marks"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileQosHighWaterMarks.IsNull() {
+	if value := gjson.GetBytes(res, "profile.qos.high-water-marks"); !data.ProfileQosHighWaterMarks.IsNull() {
+		if value.Exists() {
 			data.ProfileQosHighWaterMarks = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileQosHighWaterMarks = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileQosHighWaterMarks.IsNull() {
-			data.ProfileQosHighWaterMarks = types.BoolNull()
-		}
+	} else if data.ProfileQosHighWaterMarks.IsNull() {
+		data.ProfileQosHighWaterMarks = types.BoolNull()
 	}
-	if value := res.Get("profile.cef.dark-bw"); value.Exists() && !data.ProfileCefDarkBw.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.dark-bw"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileCefDarkBw.IsNull() {
 		data.ProfileCefDarkBw = types.StringValue(value.String())
 	} else if data.ProfileCefDarkBw.IsNull() {
 		data.ProfileCefDarkBw = types.StringNull()
 	}
-	if value := res.Get("profile.cef.sropt"); value.Exists() && !data.ProfileCefSropt.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.sropt"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileCefSropt.IsNull() {
 		data.ProfileCefSropt = types.StringValue(value.String())
 	} else if data.ProfileCefSropt.IsNull() {
 		data.ProfileCefSropt = types.StringNull()
 	}
-	if value := res.Get("profile.cef.bgplu"); value.Exists() && !data.ProfileCefBgplu.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.bgplu"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileCefBgplu.IsNull() {
 		data.ProfileCefBgplu = types.StringValue(value.String())
 	} else if data.ProfileCefBgplu.IsNull() {
 		data.ProfileCefBgplu = types.StringNull()
 	}
-	if value := res.Get("profile.cef.bgplu-over-rsvpte"); value.Exists() && !data.ProfileCefBgpluOverRsvpte.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.bgplu-over-rsvpte"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileCefBgpluOverRsvpte.IsNull() {
 		data.ProfileCefBgpluOverRsvpte = types.StringValue(value.String())
 	} else if data.ProfileCefBgpluOverRsvpte.IsNull() {
 		data.ProfileCefBgpluOverRsvpte = types.StringNull()
 	}
-	if value := res.Get("profile.cef.cbf"); value.Exists() && !data.ProfileCefCbf.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.cbf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileCefCbf.IsNull() {
 		data.ProfileCefCbf = types.StringValue(value.String())
 	} else if data.ProfileCefCbf.IsNull() {
 		data.ProfileCefCbf = types.StringNull()
 	}
-	if value := res.Get("profile.cef.forward-class-lists.forward-class-list"); value.Exists() && !data.ProfileCefCbfForwardClassList.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.forward-class-lists.forward-class-list"); value.Exists() && !data.ProfileCefCbfForwardClassList.IsNull() {
 		data.ProfileCefCbfForwardClassList = helpers.GetInt64List(value.Array())
 	} else if data.ProfileCefCbfForwardClassList.IsNull() {
 		data.ProfileCefCbfForwardClassList = types.ListNull(types.Int64Type)
 	}
-	if value := res.Get("profile.cef.ipv6.hop-limit"); value.Exists() && !data.ProfileCefIpv6HopLimit.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.ipv6.hop-limit"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileCefIpv6HopLimit.IsNull() {
 		data.ProfileCefIpv6HopLimit = types.StringValue(value.String())
 	} else if data.ProfileCefIpv6HopLimit.IsNull() {
 		data.ProfileCefIpv6HopLimit = types.StringNull()
 	}
-	if value := res.Get("profile.cef.lpts.acl"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileCefLptsAcl.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.lpts.acl"); !data.ProfileCefLptsAcl.IsNull() {
+		if value.Exists() {
 			data.ProfileCefLptsAcl = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileCefLptsAcl = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileCefLptsAcl.IsNull() {
-			data.ProfileCefLptsAcl = types.BoolNull()
-		}
+	} else if data.ProfileCefLptsAcl.IsNull() {
+		data.ProfileCefLptsAcl = types.BoolNull()
 	}
-	if value := res.Get("profile.cef.lpts.pifib-entry-counters"); value.Exists() && !data.ProfileCefLptsPifibEntryCounters.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.lpts.pifib-entry-counters"); value.Exists() && !data.ProfileCefLptsPifibEntryCounters.IsNull() {
 		data.ProfileCefLptsPifibEntryCounters = types.Int64Value(value.Int())
 	} else if data.ProfileCefLptsPifibEntryCounters.IsNull() {
 		data.ProfileCefLptsPifibEntryCounters = types.Int64Null()
 	}
-	if value := res.Get("profile.cef.vxlan.ipv6-tnl-scale"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileCefVxlanIpv6TnlScale.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.vxlan.ipv6-tnl-scale"); !data.ProfileCefVxlanIpv6TnlScale.IsNull() {
+		if value.Exists() {
 			data.ProfileCefVxlanIpv6TnlScale = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileCefVxlanIpv6TnlScale = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileCefVxlanIpv6TnlScale.IsNull() {
-			data.ProfileCefVxlanIpv6TnlScale = types.BoolNull()
-		}
+	} else if data.ProfileCefVxlanIpv6TnlScale.IsNull() {
+		data.ProfileCefVxlanIpv6TnlScale = types.BoolNull()
 	}
-	if value := res.Get("profile.cef.mplsoudp.scale"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileCefMplsoudpScale.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.mplsoudp.scale"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ProfileCefMplsoudpScale.IsNull() {
+		if value.Exists() {
 			data.ProfileCefMplsoudpScale = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileCefMplsoudpScale = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileCefMplsoudpScale.IsNull() {
-			data.ProfileCefMplsoudpScale = types.BoolNull()
-		}
+	} else if data.ProfileCefMplsoudpScale.IsNull() {
+		data.ProfileCefMplsoudpScale = types.BoolNull()
 	}
-	if value := res.Get("profile.cef.stats.label.app-default"); value.Exists() && !data.ProfileCefStatsLabelAppDefault.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.stats.label.app-default"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileCefStatsLabelAppDefault.IsNull() {
 		data.ProfileCefStatsLabelAppDefault = types.StringValue(value.String())
 	} else if data.ProfileCefStatsLabelAppDefault.IsNull() {
 		data.ProfileCefStatsLabelAppDefault = types.StringNull()
 	}
-	if value := res.Get("profile.cef.ttl.tunnel-ip.decrement"); value.Exists() && !data.ProfileCefTtlTunnelIpDecrement.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.ttl.tunnel-ip.decrement"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileCefTtlTunnelIpDecrement.IsNull() {
 		data.ProfileCefTtlTunnelIpDecrement = types.StringValue(value.String())
 	} else if data.ProfileCefTtlTunnelIpDecrement.IsNull() {
 		data.ProfileCefTtlTunnelIpDecrement = types.StringNull()
 	}
-	if value := res.Get("profile.cef.te-tunnel.highscale-no-ldp-over-te"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.te-tunnel.highscale-no-ldp-over-te"); !data.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() {
+		if value.Exists() {
 			data.ProfileCefTeTunnelHighscaleNoLdpOverTe = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileCefTeTunnelHighscaleNoLdpOverTe = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() {
-			data.ProfileCefTeTunnelHighscaleNoLdpOverTe = types.BoolNull()
-		}
+	} else if data.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() {
+		data.ProfileCefTeTunnelHighscaleNoLdpOverTe = types.BoolNull()
 	}
-	if value := res.Get("profile.cef.te-tunnel.highscale-ldp-over-te-no-sr-over-srte"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.te-tunnel.highscale-ldp-over-te-no-sr-over-srte"); !data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() {
+		if value.Exists() {
 			data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() {
-			data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte = types.BoolNull()
-		}
+	} else if data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() {
+		data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte = types.BoolNull()
 	}
-	if value := res.Get("profile.cef.te-tunnel.label-over-te-counters"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileCefTeTunnelLabelOverTeCounters.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.te-tunnel.label-over-te-counters"); !data.ProfileCefTeTunnelLabelOverTeCounters.IsNull() {
+		if value.Exists() {
 			data.ProfileCefTeTunnelLabelOverTeCounters = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileCefTeTunnelLabelOverTeCounters = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileCefTeTunnelLabelOverTeCounters.IsNull() {
-			data.ProfileCefTeTunnelLabelOverTeCounters = types.BoolNull()
-		}
+	} else if data.ProfileCefTeTunnelLabelOverTeCounters.IsNull() {
+		data.ProfileCefTeTunnelLabelOverTeCounters = types.BoolNull()
 	}
-	if value := res.Get("profile.cef.ip-redirect"); value.Exists() && !data.ProfileCefIpRedirect.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.ip-redirect"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileCefIpRedirect.IsNull() {
 		data.ProfileCefIpRedirect = types.StringValue(value.String())
 	} else if data.ProfileCefIpRedirect.IsNull() {
 		data.ProfileCefIpRedirect = types.StringNull()
 	}
-	if value := res.Get("profile.cef.unipath-surpf.enable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileCefUnipathSurpfEnable.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.unipath-surpf.enable"); !data.ProfileCefUnipathSurpfEnable.IsNull() {
+		if value.Exists() {
 			data.ProfileCefUnipathSurpfEnable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileCefUnipathSurpfEnable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileCefUnipathSurpfEnable.IsNull() {
-			data.ProfileCefUnipathSurpfEnable = types.BoolNull()
-		}
+	} else if data.ProfileCefUnipathSurpfEnable.IsNull() {
+		data.ProfileCefUnipathSurpfEnable = types.BoolNull()
 	}
-	if value := res.Get("profile.cef.source-rtbh.enable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileCefSourceRtbhEnable.IsNull() {
+	if value := gjson.GetBytes(res, "profile.cef.source-rtbh.enable"); !data.ProfileCefSourceRtbhEnable.IsNull() {
+		if value.Exists() {
 			data.ProfileCefSourceRtbhEnable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileCefSourceRtbhEnable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileCefSourceRtbhEnable.IsNull() {
-			data.ProfileCefSourceRtbhEnable = types.BoolNull()
-		}
+	} else if data.ProfileCefSourceRtbhEnable.IsNull() {
+		data.ProfileCefSourceRtbhEnable = types.BoolNull()
 	}
 	for i := range data.ProfileEncapExactInterfaces {
 		keys := [...]string{"interface-name"}
 		keyValues := [...]string{data.ProfileEncapExactInterfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
-		res.Get("profile.encap-exact.interfaces.interface").ForEach(
+		gjson.GetBytes(res, "profile.encap-exact.interfaces.interface").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1378,7 +1614,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res gjson.R
 				return true
 			},
 		)
-		if value := r.Get("interface-name"); value.Exists() && !data.ProfileEncapExactInterfaces[i].InterfaceName.IsNull() {
+		if value := r.Get("interface-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileEncapExactInterfaces[i].InterfaceName.IsNull() {
 			data.ProfileEncapExactInterfaces[i].InterfaceName = types.StringValue(value.String())
 		} else {
 			data.ProfileEncapExactInterfaces[i].InterfaceName = types.StringNull()
@@ -1389,7 +1625,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res gjson.R
 		keyValues := [...]string{data.ProfileEncapExactLocations[i].LocationName.ValueString()}
 
 		var r gjson.Result
-		res.Get("profile.encap-exact.locations.location").ForEach(
+		gjson.GetBytes(res, "profile.encap-exact.locations.location").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1407,62 +1643,58 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res gjson.R
 				return true
 			},
 		)
-		if value := r.Get("location-name"); value.Exists() && !data.ProfileEncapExactLocations[i].LocationName.IsNull() {
+		if value := r.Get("location-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileEncapExactLocations[i].LocationName.IsNull() {
 			data.ProfileEncapExactLocations[i].LocationName = types.StringValue(value.String())
 		} else {
 			data.ProfileEncapExactLocations[i].LocationName = types.StringNull()
 		}
 	}
-	if value := res.Get("profile.encap-exact.locations.all"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileEncapExactLocationsAll.IsNull() {
+	if value := gjson.GetBytes(res, "profile.encap-exact.locations.all"); !data.ProfileEncapExactLocationsAll.IsNull() {
+		if value.Exists() {
 			data.ProfileEncapExactLocationsAll = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileEncapExactLocationsAll = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileEncapExactLocationsAll.IsNull() {
-			data.ProfileEncapExactLocationsAll = types.BoolNull()
-		}
+	} else if data.ProfileEncapExactLocationsAll.IsNull() {
+		data.ProfileEncapExactLocationsAll = types.BoolNull()
 	}
-	if value := res.Get("profile.encap-exact.locations.all-virtual"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileEncapExactLocationsAllVirtual.IsNull() {
+	if value := gjson.GetBytes(res, "profile.encap-exact.locations.all-virtual"); !data.ProfileEncapExactLocationsAllVirtual.IsNull() {
+		if value.Exists() {
 			data.ProfileEncapExactLocationsAllVirtual = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileEncapExactLocationsAllVirtual = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileEncapExactLocationsAllVirtual.IsNull() {
-			data.ProfileEncapExactLocationsAllVirtual = types.BoolNull()
-		}
+	} else if data.ProfileEncapExactLocationsAllVirtual.IsNull() {
+		data.ProfileEncapExactLocationsAllVirtual = types.BoolNull()
 	}
-	if value := res.Get("profile.stats.voqs-sharing-counters"); value.Exists() && !data.ProfileStatsVoqsSharingCounters.IsNull() {
+	if value := gjson.GetBytes(res, "profile.stats.voqs-sharing-counters"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileStatsVoqsSharingCounters.IsNull() {
 		data.ProfileStatsVoqsSharingCounters = types.StringValue(value.String())
 	} else if data.ProfileStatsVoqsSharingCounters.IsNull() {
 		data.ProfileStatsVoqsSharingCounters = types.StringNull()
 	}
-	if value := res.Get("profile.stats.no-bvi-ingress"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileStatsNoBviIngress.IsNull() {
+	if value := gjson.GetBytes(res, "profile.stats.no-bvi-ingress"); !data.ProfileStatsNoBviIngress.IsNull() {
+		if value.Exists() {
 			data.ProfileStatsNoBviIngress = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileStatsNoBviIngress = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileStatsNoBviIngress.IsNull() {
-			data.ProfileStatsNoBviIngress = types.BoolNull()
-		}
+	} else if data.ProfileStatsNoBviIngress.IsNull() {
+		data.ProfileStatsNoBviIngress = types.BoolNull()
 	}
-	if value := res.Get("profile.stats.acl-permit"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileStatsAclPermit.IsNull() {
+	if value := gjson.GetBytes(res, "profile.stats.acl-permit"); !data.ProfileStatsAclPermit.IsNull() {
+		if value.Exists() {
 			data.ProfileStatsAclPermit = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileStatsAclPermit = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileStatsAclPermit.IsNull() {
-			data.ProfileStatsAclPermit = types.BoolNull()
-		}
+	} else if data.ProfileStatsAclPermit.IsNull() {
+		data.ProfileStatsAclPermit = types.BoolNull()
 	}
-	if value := res.Get("profile.bw-threshold"); value.Exists() && !data.ProfileBwThreshold.IsNull() {
+	if value := gjson.GetBytes(res, "profile.bw-threshold"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileBwThreshold.IsNull() {
 		data.ProfileBwThreshold = types.StringValue(value.String())
 	} else if data.ProfileBwThreshold.IsNull() {
 		data.ProfileBwThreshold = types.StringNull()
@@ -1472,7 +1704,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res gjson.R
 		keyValues := [...]string{data.ProfilePriorityFlowControlLocations[i].LocationName.ValueString()}
 
 		var r gjson.Result
-		res.Get("profile.priority-flow-control.locations.location").ForEach(
+		gjson.GetBytes(res, "profile.priority-flow-control.locations.location").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1490,7 +1722,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res gjson.R
 				return true
 			},
 		)
-		if value := r.Get("location-name"); value.Exists() && !data.ProfilePriorityFlowControlLocations[i].LocationName.IsNull() {
+		if value := r.Get("location-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfilePriorityFlowControlLocations[i].LocationName.IsNull() {
 			data.ProfilePriorityFlowControlLocations[i].LocationName = types.StringValue(value.String())
 		} else {
 			data.ProfilePriorityFlowControlLocations[i].LocationName = types.StringNull()
@@ -1648,18 +1880,40 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res gjson.R
 				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].ProbabilityPercentage = types.Int64Null()
 			}
 		}
+		if value := r.Get("buffer-extended.non-pfc-tcs"); helpers.VersionAtLeast(version, "25.4") && value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.ProfilePriorityFlowControlLocations[i].NonPfcTcs.IsNull() {
+				data.ProfilePriorityFlowControlLocations[i].NonPfcTcs = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.ProfilePriorityFlowControlLocations[i].NonPfcTcs.IsNull() {
+				data.ProfilePriorityFlowControlLocations[i].NonPfcTcs = types.BoolNull()
+			}
+		}
+		if value := r.Get("buffer-extended.non-pfc-tcs.max-non-pfc-voqs.number-of-evict-voqs"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs.IsNull() {
+			data.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs = types.Int64Value(value.Int())
+		} else {
+			data.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs = types.Int64Null()
+		}
+		if value := r.Get("buffer-extended.non-pfc-tcs.max-non-pfc-voqs.hbm-buffers-percentage"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && !data.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage.IsNull() {
+			data.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage = types.Int64Value(value.Int())
+		} else {
+			data.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage = types.Int64Null()
+		}
 	}
-	if value := res.Get("profile.gue.udp-dest-port.ipv4"); value.Exists() && !data.ProfileGueUdpDestPortIpv4.IsNull() {
+	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv4"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && !data.ProfileGueUdpDestPortIpv4.IsNull() {
 		data.ProfileGueUdpDestPortIpv4 = types.Int64Value(value.Int())
 	} else if data.ProfileGueUdpDestPortIpv4.IsNull() {
 		data.ProfileGueUdpDestPortIpv4 = types.Int64Null()
 	}
-	if value := res.Get("profile.gue.udp-dest-port.ipv6"); value.Exists() && !data.ProfileGueUdpDestPortIpv6.IsNull() {
+	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv6"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && !data.ProfileGueUdpDestPortIpv6.IsNull() {
 		data.ProfileGueUdpDestPortIpv6 = types.Int64Value(value.Int())
 	} else if data.ProfileGueUdpDestPortIpv6.IsNull() {
 		data.ProfileGueUdpDestPortIpv6 = types.Int64Null()
 	}
-	if value := res.Get("profile.gue.udp-dest-port.mpls"); value.Exists() && !data.ProfileGueUdpDestPortMpls.IsNull() {
+	if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.mpls"); (version == "" || !helpers.VersionAtLeast(version, "25.4")) && value.Exists() && !data.ProfileGueUdpDestPortMpls.IsNull() {
 		data.ProfileGueUdpDestPortMpls = types.Int64Value(value.Int())
 	} else if data.ProfileGueUdpDestPortMpls.IsNull() {
 		data.ProfileGueUdpDestPortMpls = types.Int64Null()
@@ -1669,7 +1923,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res gjson.R
 		keyValues := [...]string{data.ProfileNpuBufferExtendedLocations[i].LocationName.ValueString()}
 
 		var r gjson.Result
-		res.Get("profile.npu.buffer-extended.locations.location").ForEach(
+		gjson.GetBytes(res, "profile.npu.buffer-extended.locations.location").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -1687,7 +1941,7 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res gjson.R
 				return true
 			},
 		)
-		if value := r.Get("location-name"); value.Exists() && !data.ProfileNpuBufferExtendedLocations[i].LocationName.IsNull() {
+		if value := r.Get("location-name"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileNpuBufferExtendedLocations[i].LocationName.IsNull() {
 			data.ProfileNpuBufferExtendedLocations[i].LocationName = types.StringValue(value.String())
 		} else {
 			data.ProfileNpuBufferExtendedLocations[i].LocationName = types.StringNull()
@@ -1717,91 +1971,2759 @@ func (data *HWModuleProfile8000) updateFromBody(ctx context.Context, res gjson.R
 			}
 		}
 	}
-	if value := res.Get("profile.l2fib.pw-stats"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileL2fibPwStats.IsNull() {
+	if value := gjson.GetBytes(res, "profile.l2fib.pw-stats"); !data.ProfileL2fibPwStats.IsNull() {
+		if value.Exists() {
 			data.ProfileL2fibPwStats = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileL2fibPwStats = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileL2fibPwStats.IsNull() {
-			data.ProfileL2fibPwStats = types.BoolNull()
-		}
+	} else if data.ProfileL2fibPwStats.IsNull() {
+		data.ProfileL2fibPwStats = types.BoolNull()
 	}
-	if value := res.Get("profile.l2fib.bridge-flush-convergence"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileL2fibBridgeFlushConvergence.IsNull() {
+	if value := gjson.GetBytes(res, "profile.l2fib.bridge-flush-convergence"); !data.ProfileL2fibBridgeFlushConvergence.IsNull() {
+		if value.Exists() {
 			data.ProfileL2fibBridgeFlushConvergence = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileL2fibBridgeFlushConvergence = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileL2fibBridgeFlushConvergence.IsNull() {
-			data.ProfileL2fibBridgeFlushConvergence = types.BoolNull()
-		}
+	} else if data.ProfileL2fibBridgeFlushConvergence.IsNull() {
+		data.ProfileL2fibBridgeFlushConvergence = types.BoolNull()
 	}
-	if value := res.Get("profile.l2fib.L2-high-scale"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileL2fibHigherScale.IsNull() {
+	if value := gjson.GetBytes(res, "profile.l2fib.L2-high-scale"); !data.ProfileL2fibHigherScale.IsNull() {
+		if value.Exists() {
 			data.ProfileL2fibHigherScale = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileL2fibHigherScale = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileL2fibHigherScale.IsNull() {
-			data.ProfileL2fibHigherScale = types.BoolNull()
-		}
+	} else if data.ProfileL2fibHigherScale.IsNull() {
+		data.ProfileL2fibHigherScale = types.BoolNull()
 	}
-	if value := res.Get("profile.l2fib.vxlan-dc-leaf"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileL2fibVxlanDcLeaf.IsNull() {
+	if value := gjson.GetBytes(res, "profile.l2fib.vxlan-dc-leaf"); !data.ProfileL2fibVxlanDcLeaf.IsNull() {
+		if value.Exists() {
 			data.ProfileL2fibVxlanDcLeaf = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileL2fibVxlanDcLeaf = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileL2fibVxlanDcLeaf.IsNull() {
-			data.ProfileL2fibVxlanDcLeaf = types.BoolNull()
-		}
+	} else if data.ProfileL2fibVxlanDcLeaf.IsNull() {
+		data.ProfileL2fibVxlanDcLeaf = types.BoolNull()
 	}
-	if value := res.Get("profile.npu-compatibility"); value.Exists() && !data.ProfileNpuCompatibility.IsNull() {
+	if value := gjson.GetBytes(res, "profile.npu-compatibility"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileNpuCompatibility.IsNull() {
 		data.ProfileNpuCompatibility = types.StringValue(value.String())
 	} else if data.ProfileNpuCompatibility.IsNull() {
 		data.ProfileNpuCompatibility = types.StringNull()
 	}
-	if value := res.Get("profile.route.scale.ipv6-unicast.connected-prefix.high"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() {
+	if value := gjson.GetBytes(res, "profile.route.scale.ipv6-unicast.connected-prefix.high"); !data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() {
+		if value.Exists() {
 			data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() {
-			data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh = types.BoolNull()
-		}
+	} else if data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() {
+		data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh = types.BoolNull()
 	}
-	if value := res.Get("profile.flowspec.ipv6-packet-len-enable"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileFlowspecIpv6PacketLenEnable.IsNull() {
+	if value := gjson.GetBytes(res, "profile.flowspec.ipv6-packet-len-enable"); !data.ProfileFlowspecIpv6PacketLenEnable.IsNull() {
+		if value.Exists() {
 			data.ProfileFlowspecIpv6PacketLenEnable = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileFlowspecIpv6PacketLenEnable = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileFlowspecIpv6PacketLenEnable.IsNull() {
-			data.ProfileFlowspecIpv6PacketLenEnable = types.BoolNull()
-		}
+	} else if data.ProfileFlowspecIpv6PacketLenEnable.IsNull() {
+		data.ProfileFlowspecIpv6PacketLenEnable = types.BoolNull()
 	}
-	if value := res.Get("profile.irb.throughput-optimized"); value.Exists() {
-		// Only set to true if it was already in the plan (not null)
-		if !data.ProfileIrbThroughputOptimized.IsNull() {
+	if value := gjson.GetBytes(res, "profile.irb.throughput-optimized"); !data.ProfileIrbThroughputOptimized.IsNull() {
+		if value.Exists() {
 			data.ProfileIrbThroughputOptimized = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileIrbThroughputOptimized = types.BoolValue(false)
 		}
-	} else {
-		// For presence-based booleans, only set to null if it's already null
-		if data.ProfileIrbThroughputOptimized.IsNull() {
-			data.ProfileIrbThroughputOptimized = types.BoolNull()
+	} else if data.ProfileIrbThroughputOptimized.IsNull() {
+		data.ProfileIrbThroughputOptimized = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension"); helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) && !data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+		if value.Exists() {
+			data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(false)
 		}
+	} else if data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+		data.ProfileTcamFormatOgComprIdExtension = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile.qos.mode"); helpers.VersionAtLeast(version, "25.4") && value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) && !data.ProfileQosMode.IsNull() {
+		data.ProfileQosMode = types.StringValue(value.String())
+	} else if data.ProfileQosMode.IsNull() {
+		data.ProfileQosMode = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "profile.cef.iptunnel.scale"); helpers.VersionAtLeast(version, "25.4") && !data.ProfileCefIptunnelScale.IsNull() {
+		if value.Exists() {
+			data.ProfileCefIptunnelScale = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileCefIptunnelScale = types.BoolValue(false)
+		}
+	} else if data.ProfileCefIptunnelScale.IsNull() {
+		data.ProfileCefIptunnelScale = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile.cef.hash.ip-field-duplication"); helpers.VersionAtLeast(version, "25.4") && !data.ProfileCefHashIpFieldDuplication.IsNull() {
+		if value.Exists() {
+			data.ProfileCefHashIpFieldDuplication = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileCefHashIpFieldDuplication = types.BoolValue(false)
+		}
+	} else if data.ProfileCefHashIpFieldDuplication.IsNull() {
+		data.ProfileCefHashIpFieldDuplication = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile.l2fib.evpn-aging"); helpers.VersionAtLeast(version, "25.4") && !data.ProfileL2fibEvpnAging.IsNull() {
+		if value.Exists() {
+			data.ProfileL2fibEvpnAging = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileL2fibEvpnAging = types.BoolValue(false)
+		}
+	} else if data.ProfileL2fibEvpnAging.IsNull() {
+		data.ProfileL2fibEvpnAging = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile.route.scale.host-route"); helpers.VersionAtLeast(version, "25.4") && !data.ProfileRouteScaleHostRoute.IsNull() {
+		if value.Exists() {
+			data.ProfileRouteScaleHostRoute = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileRouteScaleHostRoute = types.BoolValue(false)
+		}
+	} else if data.ProfileRouteScaleHostRoute.IsNull() {
+		data.ProfileRouteScaleHostRoute = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile.route.scale.lpm.full-scale"); helpers.VersionAtLeast(version, "25.4") && !data.ProfileRouteScaleLpmFullScale.IsNull() {
+		if value.Exists() {
+			data.ProfileRouteScaleLpmFullScale = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileRouteScaleLpmFullScale = types.BoolValue(false)
+		}
+	} else if data.ProfileRouteScaleLpmFullScale.IsNull() {
+		data.ProfileRouteScaleLpmFullScale = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension.ingress"); helpers.VersionAtLeast(version, "26.2") && !data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() {
+		if value.Exists() {
+			data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(false)
+		}
+	} else if data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() {
+		data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension.egress"); helpers.VersionAtLeast(version, "26.2") && !data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() {
+		if value.Exists() {
+			data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(true)
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(false)
+		}
+	} else if data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() {
+		data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolNull()
 	}
 }
 
 // End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
+func (data *HWModuleProfile8000) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "multicast.route-scale"); value.Exists() {
+		data.MulticastRouteScale = types.BoolValue(true)
+	} else if !data.MulticastRouteScale.IsNull() {
+		// Only set to false if it was previously set in state
+		data.MulticastRouteScale = types.BoolValue(false)
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.tcam.fib.ipv4.unicast.percent"); value.Exists() {
+			data.ProfileTcamFibIpv4UnicastPercent = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileTcamFibIpv4UnicastPercent = types.Int64Null()
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.tcam.fib.ipv6.unicast.percent"); value.Exists() {
+			data.ProfileTcamFibIpv6UnicastPercent = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileTcamFibIpv6UnicastPercent = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.src-addr"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4SrcAddr = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv4SrcAddr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.dst-addr"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4DstAddr = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv4DstAddr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.src-port"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4SrcPort = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv4SrcPort = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.dst-port"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4DstPort = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv4DstPort.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv4DstPort = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.proto"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4Proto = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv4Proto.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv4Proto = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.precedence"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4Precedence = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv4Precedence.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv4Precedence = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.ttl-match"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4TtlMatch = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv4TtlMatch = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.tcp-flags"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4TcpFlags = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv4TcpFlags = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.frag-bit"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4FragBit = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv4FragBit.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv4FragBit = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.src-object-group"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4SrcObjectGroup = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv4SrcObjectGroup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.dst-object-group"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4DstObjectGroup = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv4DstObjectGroup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.packet-len"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4PacketLen = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv4PacketLen = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.fragment-offset"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4FragmentOffset = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv4FragmentOffset = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf1"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv4Udf1 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf2"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv4Udf2 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf3"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv4Udf3 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv4Udf4 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf5"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv4Udf5 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf6"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv4Udf6 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf7"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv4Udf7 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf8"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv4Udf8 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.src-addr"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6SrcAddr = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv6SrcAddr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.dst-addr"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6DstAddr = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv6DstAddr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.dst-port"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6DstPort = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv6DstPort.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv6DstPort = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.next-hdr"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6NextHdr = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv6NextHdr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.traffic-class"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6TrafficClass = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv6TrafficClass = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.frag-bit"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6FragBit = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv6FragBit.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv6FragBit = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.tcp-flags"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6TcpFlags = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv6TcpFlags = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.src-object-group"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6SrcObjectGroup = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv6SrcObjectGroup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.dst-object-group"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6DstObjectGroup = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv6DstObjectGroup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.packet-len"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6PacketLen = types.BoolValue(true)
+	} else if !data.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileTcamFormatAccessListIpv6PacketLen = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf1"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv6Udf1 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf2"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv6Udf2 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf3"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv6Udf3 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv6Udf4 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf5"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv6Udf5 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf6"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv6Udf6 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf7"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv6Udf7 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf8"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv6Udf8 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.qos.voq-mode.four"); value.Exists() {
+		data.ProfileQosVoqModeFour = types.BoolValue(true)
+	} else if !data.ProfileQosVoqModeFour.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileQosVoqModeFour = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.qos.voq-mode.eight"); value.Exists() {
+		data.ProfileQosVoqModeEight = types.BoolValue(true)
+	} else if !data.ProfileQosVoqModeEight.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileQosVoqModeEight = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.qos.voq-mode.fair-four"); value.Exists() {
+		data.ProfileQosVoqModeFairFour = types.BoolValue(true)
+	} else if !data.ProfileQosVoqModeFairFour.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileQosVoqModeFairFour = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.qos.voq-mode.fair-eight"); value.Exists() {
+		data.ProfileQosVoqModeFairEight = types.BoolValue(true)
+	} else if !data.ProfileQosVoqModeFairEight.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileQosVoqModeFairEight = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.qos.l2-mode"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileQosL2Mode = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.qos.low-latency-mode"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileQosLowLatencyMode = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.qos.intra-npu-over-fabric"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileQosIntraNpuOverFabric = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.qos.qos-stats-push-collection"); value.Exists() {
+		data.ProfileQosQosStatsPushCollection = types.BoolValue(true)
+	} else if !data.ProfileQosQosStatsPushCollection.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileQosQosStatsPushCollection = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.qos.high-water-marks"); value.Exists() {
+		data.ProfileQosHighWaterMarks = types.BoolValue(true)
+	} else if !data.ProfileQosHighWaterMarks.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileQosHighWaterMarks = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.cef.dark-bw"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileCefDarkBw = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.sropt"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileCefSropt = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.bgplu"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileCefBgplu = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.bgplu-over-rsvpte"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileCefBgpluOverRsvpte = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.cbf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileCefCbf = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.forward-class-lists.forward-class-list"); value.Exists() {
+		data.ProfileCefCbfForwardClassList = helpers.GetInt64List(value.Array())
+	} else {
+		data.ProfileCefCbfForwardClassList = types.ListNull(types.Int64Type)
+	}
+	if value := gjson.GetBytes(res, "profile.cef.ipv6.hop-limit"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileCefIpv6HopLimit = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.lpts.acl"); value.Exists() {
+		data.ProfileCefLptsAcl = types.BoolValue(true)
+	} else if !data.ProfileCefLptsAcl.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileCefLptsAcl = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.cef.lpts.pifib-entry-counters"); value.Exists() {
+		data.ProfileCefLptsPifibEntryCounters = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.vxlan.ipv6-tnl-scale"); value.Exists() {
+		data.ProfileCefVxlanIpv6TnlScale = types.BoolValue(true)
+	} else if !data.ProfileCefVxlanIpv6TnlScale.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileCefVxlanIpv6TnlScale = types.BoolValue(false)
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.cef.mplsoudp.scale"); value.Exists() {
+			data.ProfileCefMplsoudpScale = types.BoolValue(true)
+		} else if !data.ProfileCefMplsoudpScale.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileCefMplsoudpScale = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileCefMplsoudpScale = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile.cef.stats.label.app-default"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileCefStatsLabelAppDefault = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.ttl.tunnel-ip.decrement"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileCefTtlTunnelIpDecrement = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.te-tunnel.highscale-no-ldp-over-te"); value.Exists() {
+		data.ProfileCefTeTunnelHighscaleNoLdpOverTe = types.BoolValue(true)
+	} else if !data.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileCefTeTunnelHighscaleNoLdpOverTe = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.cef.te-tunnel.highscale-ldp-over-te-no-sr-over-srte"); value.Exists() {
+		data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte = types.BoolValue(true)
+	} else if !data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.cef.te-tunnel.label-over-te-counters"); value.Exists() {
+		data.ProfileCefTeTunnelLabelOverTeCounters = types.BoolValue(true)
+	} else if !data.ProfileCefTeTunnelLabelOverTeCounters.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileCefTeTunnelLabelOverTeCounters = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.cef.ip-redirect"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileCefIpRedirect = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.unipath-surpf.enable"); value.Exists() {
+		data.ProfileCefUnipathSurpfEnable = types.BoolValue(true)
+	} else if !data.ProfileCefUnipathSurpfEnable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileCefUnipathSurpfEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.cef.source-rtbh.enable"); value.Exists() {
+		data.ProfileCefSourceRtbhEnable = types.BoolValue(true)
+	} else if !data.ProfileCefSourceRtbhEnable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileCefSourceRtbhEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.encap-exact.interfaces.interface"); value.Exists() {
+		data.ProfileEncapExactInterfaces = make([]HWModuleProfile8000ProfileEncapExactInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := HWModuleProfile8000ProfileEncapExactInterfaces{}
+			if cValue := v.Get("interface-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			data.ProfileEncapExactInterfaces = append(data.ProfileEncapExactInterfaces, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "profile.encap-exact.locations.location"); value.Exists() {
+		data.ProfileEncapExactLocations = make([]HWModuleProfile8000ProfileEncapExactLocations, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := HWModuleProfile8000ProfileEncapExactLocations{}
+			if cValue := v.Get("location-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			data.ProfileEncapExactLocations = append(data.ProfileEncapExactLocations, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "profile.encap-exact.locations.all"); value.Exists() {
+		data.ProfileEncapExactLocationsAll = types.BoolValue(true)
+	} else if !data.ProfileEncapExactLocationsAll.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileEncapExactLocationsAll = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.encap-exact.locations.all-virtual"); value.Exists() {
+		data.ProfileEncapExactLocationsAllVirtual = types.BoolValue(true)
+	} else if !data.ProfileEncapExactLocationsAllVirtual.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileEncapExactLocationsAllVirtual = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.stats.voqs-sharing-counters"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileStatsVoqsSharingCounters = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.stats.no-bvi-ingress"); value.Exists() {
+		data.ProfileStatsNoBviIngress = types.BoolValue(true)
+	} else if !data.ProfileStatsNoBviIngress.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileStatsNoBviIngress = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.stats.acl-permit"); value.Exists() {
+		data.ProfileStatsAclPermit = types.BoolValue(true)
+	} else if !data.ProfileStatsAclPermit.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileStatsAclPermit = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.bw-threshold"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileBwThreshold = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.priority-flow-control.locations.location"); value.Exists() {
+		data.ProfilePriorityFlowControlLocations = make([]HWModuleProfile8000ProfilePriorityFlowControlLocations, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := HWModuleProfile8000ProfilePriorityFlowControlLocations{}
+			if cValue := v.Get("location-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("buffer-extended.traffic-class"); cValue.Exists() {
+				item.BufferExtendedTrafficClass = make([]HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferExtendedTrafficClass, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferExtendedTrafficClass{}
+					if ccValue := cv.Get("traffic-class-id"); ccValue.Exists() {
+						cItem.TrafficClassId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("pause-threshold"); ccValue.Exists() {
+						cItem.PauseThreshold = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("pause-threshold-bytes"); ccValue.Exists() {
+						cItem.PauseThresholdBytes = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("ms"); ccValue.Exists() {
+						cItem.Ms = types.BoolValue(true)
+					} else {
+						cItem.Ms = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("ms.headroom"); ccValue.Exists() {
+						cItem.MsHeadroom = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("us"); ccValue.Exists() {
+						cItem.Us = types.BoolValue(true)
+					} else {
+						cItem.Us = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("us.headroom"); ccValue.Exists() {
+						cItem.UsHeadroom = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("kbytes"); ccValue.Exists() {
+						cItem.Kbytes = types.BoolValue(true)
+					} else {
+						cItem.Kbytes = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("kbytes.headroom"); ccValue.Exists() {
+						cItem.KbytesHeadroom = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("mbytes"); ccValue.Exists() {
+						cItem.Mbytes = types.BoolValue(true)
+					} else {
+						cItem.Mbytes = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("mbytes.headroom"); ccValue.Exists() {
+						cItem.MbytesHeadroom = types.Int64Value(ccValue.Int())
+					}
+					item.BufferExtendedTrafficClass = append(item.BufferExtendedTrafficClass, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("buffer-internal.traffic-class"); cValue.Exists() {
+				item.BufferInternalTrafficClass = make([]HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferInternalTrafficClass, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferInternalTrafficClass{}
+					if ccValue := cv.Get("traffic-class-id"); ccValue.Exists() {
+						cItem.TrafficClassId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("pause-threshold"); ccValue.Exists() {
+						cItem.PauseThreshold = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("headroom"); ccValue.Exists() {
+						cItem.Headroom = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("ecn"); ccValue.Exists() {
+						cItem.Ecn = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("max-threshold"); ccValue.Exists() {
+						cItem.MaxThreshold = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("probability-percentage"); ccValue.Exists() {
+						cItem.ProbabilityPercentage = types.Int64Value(ccValue.Int())
+					}
+					item.BufferInternalTrafficClass = append(item.BufferInternalTrafficClass, cItem)
+					return true
+				})
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("buffer-extended.non-pfc-tcs"); cValue.Exists() {
+					item.NonPfcTcs = types.BoolValue(true)
+				} else if !item.NonPfcTcs.IsNull() {
+					// Only set to false if it was previously set
+					item.NonPfcTcs = types.BoolValue(false)
+				}
+			} else {
+				item.NonPfcTcs = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("buffer-extended.non-pfc-tcs.max-non-pfc-voqs.number-of-evict-voqs"); cValue.Exists() {
+					item.NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("buffer-extended.non-pfc-tcs.max-non-pfc-voqs.hbm-buffers-percentage"); cValue.Exists() {
+					item.NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage = types.Int64Null()
+			}
+			data.ProfilePriorityFlowControlLocations = append(data.ProfilePriorityFlowControlLocations, item)
+			return true
+		})
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv4"); value.Exists() {
+			data.ProfileGueUdpDestPortIpv4 = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileGueUdpDestPortIpv4 = types.Int64Null()
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv6"); value.Exists() {
+			data.ProfileGueUdpDestPortIpv6 = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileGueUdpDestPortIpv6 = types.Int64Null()
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.mpls"); value.Exists() {
+			data.ProfileGueUdpDestPortMpls = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileGueUdpDestPortMpls = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "profile.npu.buffer-extended.locations.location"); value.Exists() {
+		data.ProfileNpuBufferExtendedLocations = make([]HWModuleProfile8000ProfileNpuBufferExtendedLocations, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := HWModuleProfile8000ProfileNpuBufferExtendedLocations{}
+			if cValue := v.Get("location-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("bandwidth-congestion-detection.enable"); cValue.Exists() {
+				item.BandwidthCongestionDetectionEnable = types.BoolValue(true)
+			} else if !item.BandwidthCongestionDetectionEnable.IsNull() {
+				// Only set to false if it was previously set
+				item.BandwidthCongestionDetectionEnable = types.BoolValue(false)
+			}
+			if cValue := v.Get("bandwidth-congestion-protect.enable"); cValue.Exists() {
+				item.BandwidthCongestionProtectEnable = types.BoolValue(true)
+			} else if !item.BandwidthCongestionProtectEnable.IsNull() {
+				// Only set to false if it was previously set
+				item.BandwidthCongestionProtectEnable = types.BoolValue(false)
+			}
+			data.ProfileNpuBufferExtendedLocations = append(data.ProfileNpuBufferExtendedLocations, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "profile.l2fib.pw-stats"); value.Exists() {
+		data.ProfileL2fibPwStats = types.BoolValue(true)
+	} else if !data.ProfileL2fibPwStats.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileL2fibPwStats = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.l2fib.bridge-flush-convergence"); value.Exists() {
+		data.ProfileL2fibBridgeFlushConvergence = types.BoolValue(true)
+	} else if !data.ProfileL2fibBridgeFlushConvergence.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileL2fibBridgeFlushConvergence = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.l2fib.L2-high-scale"); value.Exists() {
+		data.ProfileL2fibHigherScale = types.BoolValue(true)
+	} else if !data.ProfileL2fibHigherScale.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileL2fibHigherScale = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.l2fib.vxlan-dc-leaf"); value.Exists() {
+		data.ProfileL2fibVxlanDcLeaf = types.BoolValue(true)
+	} else if !data.ProfileL2fibVxlanDcLeaf.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileL2fibVxlanDcLeaf = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.npu-compatibility"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileNpuCompatibility = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.route.scale.ipv6-unicast.connected-prefix.high"); value.Exists() {
+		data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh = types.BoolValue(true)
+	} else if !data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.flowspec.ipv6-packet-len-enable"); value.Exists() {
+		data.ProfileFlowspecIpv6PacketLenEnable = types.BoolValue(true)
+	} else if !data.ProfileFlowspecIpv6PacketLenEnable.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileFlowspecIpv6PacketLenEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.irb.throughput-optimized"); value.Exists() {
+		data.ProfileIrbThroughputOptimized = types.BoolValue(true)
+	} else if !data.ProfileIrbThroughputOptimized.IsNull() {
+		// Only set to false if it was previously set in state
+		data.ProfileIrbThroughputOptimized = types.BoolValue(false)
+	}
+	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) {
+		if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension"); value.Exists() {
+			data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(true)
+		} else if !data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileTcamFormatOgComprIdExtension = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.qos.mode"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.ProfileQosMode = types.StringValue(value.String())
+		}
+	} else {
+		data.ProfileQosMode = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.cef.iptunnel.scale"); value.Exists() {
+			data.ProfileCefIptunnelScale = types.BoolValue(true)
+		} else if !data.ProfileCefIptunnelScale.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileCefIptunnelScale = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileCefIptunnelScale = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.cef.hash.ip-field-duplication"); value.Exists() {
+			data.ProfileCefHashIpFieldDuplication = types.BoolValue(true)
+		} else if !data.ProfileCefHashIpFieldDuplication.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileCefHashIpFieldDuplication = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileCefHashIpFieldDuplication = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.l2fib.evpn-aging"); value.Exists() {
+			data.ProfileL2fibEvpnAging = types.BoolValue(true)
+		} else if !data.ProfileL2fibEvpnAging.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileL2fibEvpnAging = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileL2fibEvpnAging = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.route.scale.host-route"); value.Exists() {
+			data.ProfileRouteScaleHostRoute = types.BoolValue(true)
+		} else if !data.ProfileRouteScaleHostRoute.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileRouteScaleHostRoute = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileRouteScaleHostRoute = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.route.scale.lpm.full-scale"); value.Exists() {
+			data.ProfileRouteScaleLpmFullScale = types.BoolValue(true)
+		} else if !data.ProfileRouteScaleLpmFullScale.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileRouteScaleLpmFullScale = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileRouteScaleLpmFullScale = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension.ingress"); value.Exists() {
+			data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(true)
+		} else if !data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension.egress"); value.Exists() {
+			data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(true)
+		} else if !data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() {
+			// Only set to false if it was previously set in state
+			data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolNull()
+	}
+}
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
+func (data *HWModuleProfile8000Data) fromBody(ctx context.Context, res []byte, version string) {
+	if value := gjson.GetBytes(res, "multicast.route-scale"); value.Exists() {
+		data.MulticastRouteScale = types.BoolValue(true)
+	} else {
+		data.MulticastRouteScale = types.BoolValue(false)
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.tcam.fib.ipv4.unicast.percent"); value.Exists() {
+			data.ProfileTcamFibIpv4UnicastPercent = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileTcamFibIpv4UnicastPercent = types.Int64Null()
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.tcam.fib.ipv6.unicast.percent"); value.Exists() {
+			data.ProfileTcamFibIpv6UnicastPercent = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileTcamFibIpv6UnicastPercent = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.src-addr"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4SrcAddr = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv4SrcAddr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.dst-addr"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4DstAddr = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv4DstAddr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.src-port"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4SrcPort = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv4SrcPort = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.dst-port"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4DstPort = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv4DstPort = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.proto"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4Proto = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv4Proto = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.precedence"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4Precedence = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv4Precedence = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.ttl-match"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4TtlMatch = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv4TtlMatch = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.tcp-flags"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4TcpFlags = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv4TcpFlags = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.frag-bit"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4FragBit = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv4FragBit = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.src-object-group"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4SrcObjectGroup = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv4SrcObjectGroup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.dst-object-group"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4DstObjectGroup = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv4DstObjectGroup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.packet-len"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4PacketLen = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv4PacketLen = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.fragment-offset"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv4FragmentOffset = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv4FragmentOffset = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf1"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv4Udf1 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf2"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv4Udf2 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf3"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv4Udf3 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv4Udf4 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf5"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv4Udf5 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf6"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv4Udf6 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf7"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv4Udf7 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv4.udf8"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv4Udf8 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.src-addr"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6SrcAddr = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv6SrcAddr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.dst-addr"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6DstAddr = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv6DstAddr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.dst-port"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6DstPort = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv6DstPort = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.next-hdr"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6NextHdr = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv6NextHdr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.traffic-class"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6TrafficClass = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv6TrafficClass = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.frag-bit"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6FragBit = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv6FragBit = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.tcp-flags"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6TcpFlags = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv6TcpFlags = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.src-object-group"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6SrcObjectGroup = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv6SrcObjectGroup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.dst-object-group"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6DstObjectGroup = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv6DstObjectGroup = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.packet-len"); value.Exists() {
+		data.ProfileTcamFormatAccessListIpv6PacketLen = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatAccessListIpv6PacketLen = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf1"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv6Udf1 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf2"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv6Udf2 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf3"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv6Udf3 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf4"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv6Udf4 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf5"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv6Udf5 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf6"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv6Udf6 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf7"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv6Udf7 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.tcam.format.access-list.ipv6.udf8"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileTcamFormatAccessListIpv6Udf8 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.qos.voq-mode.four"); value.Exists() {
+		data.ProfileQosVoqModeFour = types.BoolValue(true)
+	} else {
+		data.ProfileQosVoqModeFour = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.qos.voq-mode.eight"); value.Exists() {
+		data.ProfileQosVoqModeEight = types.BoolValue(true)
+	} else {
+		data.ProfileQosVoqModeEight = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.qos.voq-mode.fair-four"); value.Exists() {
+		data.ProfileQosVoqModeFairFour = types.BoolValue(true)
+	} else {
+		data.ProfileQosVoqModeFairFour = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.qos.voq-mode.fair-eight"); value.Exists() {
+		data.ProfileQosVoqModeFairEight = types.BoolValue(true)
+	} else {
+		data.ProfileQosVoqModeFairEight = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.qos.l2-mode"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileQosL2Mode = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.qos.low-latency-mode"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileQosLowLatencyMode = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.qos.intra-npu-over-fabric"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileQosIntraNpuOverFabric = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.qos.qos-stats-push-collection"); value.Exists() {
+		data.ProfileQosQosStatsPushCollection = types.BoolValue(true)
+	} else {
+		data.ProfileQosQosStatsPushCollection = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.qos.high-water-marks"); value.Exists() {
+		data.ProfileQosHighWaterMarks = types.BoolValue(true)
+	} else {
+		data.ProfileQosHighWaterMarks = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.cef.dark-bw"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileCefDarkBw = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.sropt"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileCefSropt = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.bgplu"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileCefBgplu = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.bgplu-over-rsvpte"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileCefBgpluOverRsvpte = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.cbf"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileCefCbf = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.forward-class-lists.forward-class-list"); value.Exists() {
+		data.ProfileCefCbfForwardClassList = helpers.GetInt64List(value.Array())
+	} else {
+		data.ProfileCefCbfForwardClassList = types.ListNull(types.Int64Type)
+	}
+	if value := gjson.GetBytes(res, "profile.cef.ipv6.hop-limit"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileCefIpv6HopLimit = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.lpts.acl"); value.Exists() {
+		data.ProfileCefLptsAcl = types.BoolValue(true)
+	} else {
+		data.ProfileCefLptsAcl = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.cef.lpts.pifib-entry-counters"); value.Exists() {
+		data.ProfileCefLptsPifibEntryCounters = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.vxlan.ipv6-tnl-scale"); value.Exists() {
+		data.ProfileCefVxlanIpv6TnlScale = types.BoolValue(true)
+	} else {
+		data.ProfileCefVxlanIpv6TnlScale = types.BoolValue(false)
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.cef.mplsoudp.scale"); value.Exists() {
+			data.ProfileCefMplsoudpScale = types.BoolValue(true)
+		} else {
+			data.ProfileCefMplsoudpScale = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileCefMplsoudpScale = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "profile.cef.stats.label.app-default"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileCefStatsLabelAppDefault = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.ttl.tunnel-ip.decrement"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileCefTtlTunnelIpDecrement = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.te-tunnel.highscale-no-ldp-over-te"); value.Exists() {
+		data.ProfileCefTeTunnelHighscaleNoLdpOverTe = types.BoolValue(true)
+	} else {
+		data.ProfileCefTeTunnelHighscaleNoLdpOverTe = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.cef.te-tunnel.highscale-ldp-over-te-no-sr-over-srte"); value.Exists() {
+		data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte = types.BoolValue(true)
+	} else {
+		data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.cef.te-tunnel.label-over-te-counters"); value.Exists() {
+		data.ProfileCefTeTunnelLabelOverTeCounters = types.BoolValue(true)
+	} else {
+		data.ProfileCefTeTunnelLabelOverTeCounters = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.cef.ip-redirect"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileCefIpRedirect = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.cef.unipath-surpf.enable"); value.Exists() {
+		data.ProfileCefUnipathSurpfEnable = types.BoolValue(true)
+	} else {
+		data.ProfileCefUnipathSurpfEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.cef.source-rtbh.enable"); value.Exists() {
+		data.ProfileCefSourceRtbhEnable = types.BoolValue(true)
+	} else {
+		data.ProfileCefSourceRtbhEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.encap-exact.interfaces.interface"); value.Exists() {
+		data.ProfileEncapExactInterfaces = make([]HWModuleProfile8000ProfileEncapExactInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := HWModuleProfile8000ProfileEncapExactInterfaces{}
+			if cValue := v.Get("interface-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			data.ProfileEncapExactInterfaces = append(data.ProfileEncapExactInterfaces, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "profile.encap-exact.locations.location"); value.Exists() {
+		data.ProfileEncapExactLocations = make([]HWModuleProfile8000ProfileEncapExactLocations, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := HWModuleProfile8000ProfileEncapExactLocations{}
+			if cValue := v.Get("location-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			data.ProfileEncapExactLocations = append(data.ProfileEncapExactLocations, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "profile.encap-exact.locations.all"); value.Exists() {
+		data.ProfileEncapExactLocationsAll = types.BoolValue(true)
+	} else {
+		data.ProfileEncapExactLocationsAll = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.encap-exact.locations.all-virtual"); value.Exists() {
+		data.ProfileEncapExactLocationsAllVirtual = types.BoolValue(true)
+	} else {
+		data.ProfileEncapExactLocationsAllVirtual = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.stats.voqs-sharing-counters"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileStatsVoqsSharingCounters = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.stats.no-bvi-ingress"); value.Exists() {
+		data.ProfileStatsNoBviIngress = types.BoolValue(true)
+	} else {
+		data.ProfileStatsNoBviIngress = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.stats.acl-permit"); value.Exists() {
+		data.ProfileStatsAclPermit = types.BoolValue(true)
+	} else {
+		data.ProfileStatsAclPermit = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.bw-threshold"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileBwThreshold = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.priority-flow-control.locations.location"); value.Exists() {
+		data.ProfilePriorityFlowControlLocations = make([]HWModuleProfile8000ProfilePriorityFlowControlLocations, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := HWModuleProfile8000ProfilePriorityFlowControlLocations{}
+			if cValue := v.Get("location-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("buffer-extended.traffic-class"); cValue.Exists() {
+				item.BufferExtendedTrafficClass = make([]HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferExtendedTrafficClass, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferExtendedTrafficClass{}
+					if ccValue := cv.Get("traffic-class-id"); ccValue.Exists() {
+						cItem.TrafficClassId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("pause-threshold"); ccValue.Exists() {
+						cItem.PauseThreshold = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("pause-threshold-bytes"); ccValue.Exists() {
+						cItem.PauseThresholdBytes = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("ms"); ccValue.Exists() {
+						cItem.Ms = types.BoolValue(true)
+					} else {
+						cItem.Ms = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("ms.headroom"); ccValue.Exists() {
+						cItem.MsHeadroom = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("us"); ccValue.Exists() {
+						cItem.Us = types.BoolValue(true)
+					} else {
+						cItem.Us = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("us.headroom"); ccValue.Exists() {
+						cItem.UsHeadroom = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("kbytes"); ccValue.Exists() {
+						cItem.Kbytes = types.BoolValue(true)
+					} else {
+						cItem.Kbytes = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("kbytes.headroom"); ccValue.Exists() {
+						cItem.KbytesHeadroom = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("mbytes"); ccValue.Exists() {
+						cItem.Mbytes = types.BoolValue(true)
+					} else {
+						cItem.Mbytes = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("mbytes.headroom"); ccValue.Exists() {
+						cItem.MbytesHeadroom = types.Int64Value(ccValue.Int())
+					}
+					item.BufferExtendedTrafficClass = append(item.BufferExtendedTrafficClass, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("buffer-internal.traffic-class"); cValue.Exists() {
+				item.BufferInternalTrafficClass = make([]HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferInternalTrafficClass, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferInternalTrafficClass{}
+					if ccValue := cv.Get("traffic-class-id"); ccValue.Exists() {
+						cItem.TrafficClassId = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("pause-threshold"); ccValue.Exists() {
+						cItem.PauseThreshold = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("headroom"); ccValue.Exists() {
+						cItem.Headroom = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("ecn"); ccValue.Exists() {
+						cItem.Ecn = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("max-threshold"); ccValue.Exists() {
+						cItem.MaxThreshold = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("probability-percentage"); ccValue.Exists() {
+						cItem.ProbabilityPercentage = types.Int64Value(ccValue.Int())
+					}
+					item.BufferInternalTrafficClass = append(item.BufferInternalTrafficClass, cItem)
+					return true
+				})
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("buffer-extended.non-pfc-tcs"); cValue.Exists() {
+					item.NonPfcTcs = types.BoolValue(true)
+				} else {
+					item.NonPfcTcs = types.BoolValue(false)
+				}
+			} else {
+				item.NonPfcTcs = types.BoolNull()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("buffer-extended.non-pfc-tcs.max-non-pfc-voqs.number-of-evict-voqs"); cValue.Exists() {
+					item.NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs = types.Int64Null()
+			}
+			if helpers.VersionAtLeast(version, "25.4") {
+				if cValue := v.Get("buffer-extended.non-pfc-tcs.max-non-pfc-voqs.hbm-buffers-percentage"); cValue.Exists() {
+					item.NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage = types.Int64Value(cValue.Int())
+				}
+			} else {
+				item.NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage = types.Int64Null()
+			}
+			data.ProfilePriorityFlowControlLocations = append(data.ProfilePriorityFlowControlLocations, item)
+			return true
+		})
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv4"); value.Exists() {
+			data.ProfileGueUdpDestPortIpv4 = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileGueUdpDestPortIpv4 = types.Int64Null()
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.ipv6"); value.Exists() {
+			data.ProfileGueUdpDestPortIpv6 = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileGueUdpDestPortIpv6 = types.Int64Null()
+	}
+	if version == "" || !helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.gue.udp-dest-port.mpls"); value.Exists() {
+			data.ProfileGueUdpDestPortMpls = types.Int64Value(value.Int())
+		}
+	} else {
+		data.ProfileGueUdpDestPortMpls = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "profile.npu.buffer-extended.locations.location"); value.Exists() {
+		data.ProfileNpuBufferExtendedLocations = make([]HWModuleProfile8000ProfileNpuBufferExtendedLocations, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := HWModuleProfile8000ProfileNpuBufferExtendedLocations{}
+			if cValue := v.Get("location-name"); cValue.Exists() && (cValue.Type == gjson.String || cValue.Type == gjson.Number) {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("bandwidth-congestion-detection.enable"); cValue.Exists() {
+				item.BandwidthCongestionDetectionEnable = types.BoolValue(true)
+			} else {
+				item.BandwidthCongestionDetectionEnable = types.BoolValue(false)
+			}
+			if cValue := v.Get("bandwidth-congestion-protect.enable"); cValue.Exists() {
+				item.BandwidthCongestionProtectEnable = types.BoolValue(true)
+			} else {
+				item.BandwidthCongestionProtectEnable = types.BoolValue(false)
+			}
+			data.ProfileNpuBufferExtendedLocations = append(data.ProfileNpuBufferExtendedLocations, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "profile.l2fib.pw-stats"); value.Exists() {
+		data.ProfileL2fibPwStats = types.BoolValue(true)
+	} else {
+		data.ProfileL2fibPwStats = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.l2fib.bridge-flush-convergence"); value.Exists() {
+		data.ProfileL2fibBridgeFlushConvergence = types.BoolValue(true)
+	} else {
+		data.ProfileL2fibBridgeFlushConvergence = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.l2fib.L2-high-scale"); value.Exists() {
+		data.ProfileL2fibHigherScale = types.BoolValue(true)
+	} else {
+		data.ProfileL2fibHigherScale = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.l2fib.vxlan-dc-leaf"); value.Exists() {
+		data.ProfileL2fibVxlanDcLeaf = types.BoolValue(true)
+	} else {
+		data.ProfileL2fibVxlanDcLeaf = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.npu-compatibility"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+		data.ProfileNpuCompatibility = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "profile.route.scale.ipv6-unicast.connected-prefix.high"); value.Exists() {
+		data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh = types.BoolValue(true)
+	} else {
+		data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.flowspec.ipv6-packet-len-enable"); value.Exists() {
+		data.ProfileFlowspecIpv6PacketLenEnable = types.BoolValue(true)
+	} else {
+		data.ProfileFlowspecIpv6PacketLenEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "profile.irb.throughput-optimized"); value.Exists() {
+		data.ProfileIrbThroughputOptimized = types.BoolValue(true)
+	} else {
+		data.ProfileIrbThroughputOptimized = types.BoolValue(false)
+	}
+	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) {
+		if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension"); value.Exists() {
+			data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(true)
+		} else {
+			data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileTcamFormatOgComprIdExtension = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.qos.mode"); value.Exists() && (value.Type == gjson.String || value.Type == gjson.Number) {
+			data.ProfileQosMode = types.StringValue(value.String())
+		}
+	} else {
+		data.ProfileQosMode = types.StringNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.cef.iptunnel.scale"); value.Exists() {
+			data.ProfileCefIptunnelScale = types.BoolValue(true)
+		} else {
+			data.ProfileCefIptunnelScale = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileCefIptunnelScale = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.cef.hash.ip-field-duplication"); value.Exists() {
+			data.ProfileCefHashIpFieldDuplication = types.BoolValue(true)
+		} else {
+			data.ProfileCefHashIpFieldDuplication = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileCefHashIpFieldDuplication = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.l2fib.evpn-aging"); value.Exists() {
+			data.ProfileL2fibEvpnAging = types.BoolValue(true)
+		} else {
+			data.ProfileL2fibEvpnAging = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileL2fibEvpnAging = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.route.scale.host-route"); value.Exists() {
+			data.ProfileRouteScaleHostRoute = types.BoolValue(true)
+		} else {
+			data.ProfileRouteScaleHostRoute = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileRouteScaleHostRoute = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "25.4") {
+		if value := gjson.GetBytes(res, "profile.route.scale.lpm.full-scale"); value.Exists() {
+			data.ProfileRouteScaleLpmFullScale = types.BoolValue(true)
+		} else {
+			data.ProfileRouteScaleLpmFullScale = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileRouteScaleLpmFullScale = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension.ingress"); value.Exists() {
+			data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(true)
+		} else {
+			data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolNull()
+	}
+	if helpers.VersionAtLeast(version, "26.2") {
+		if value := gjson.GetBytes(res, "profile.tcam.format.og-compr-id-extension.egress"); value.Exists() {
+			data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(true)
+		} else {
+			data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(false)
+		}
+	} else {
+		data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolNull()
+	}
+}
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
+func (data *HWModuleProfile8000) getDeletedItems(ctx context.Context, state HWModuleProfile8000, version string) []string {
+	deletedItems := make([]string, 0)
+	if helpers.VersionAtLeast(version, "26.2") && !state.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() && data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/og-compr-id-extension/egress"))
+	}
+	if helpers.VersionAtLeast(version, "26.2") && !state.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() && data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/og-compr-id-extension/ingress"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileRouteScaleLpmFullScale.IsNull() && data.ProfileRouteScaleLpmFullScale.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/route/scale/lpm/full-scale"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileRouteScaleHostRoute.IsNull() && data.ProfileRouteScaleHostRoute.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/route/scale/host-route"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileL2fibEvpnAging.IsNull() && data.ProfileL2fibEvpnAging.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/l2fib/evpn-aging"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileCefHashIpFieldDuplication.IsNull() && data.ProfileCefHashIpFieldDuplication.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/hash/ip-field-duplication"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileCefIptunnelScale.IsNull() && data.ProfileCefIptunnelScale.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/iptunnel/scale"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !state.ProfileQosMode.IsNull() && data.ProfileQosMode.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/qos/mode"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) && !state.ProfileTcamFormatOgComprIdExtension.IsNull() && data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/og-compr-id-extension"))
+	}
+	if !state.ProfileIrbThroughputOptimized.IsNull() && data.ProfileIrbThroughputOptimized.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/irb/throughput-optimized"))
+	}
+	if !state.ProfileFlowspecIpv6PacketLenEnable.IsNull() && data.ProfileFlowspecIpv6PacketLenEnable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/flowspec/ipv6-packet-len-enable"))
+	}
+	if !state.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() && data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/route/scale/ipv6-unicast/connected-prefix/high"))
+	}
+	if !state.ProfileNpuCompatibility.IsNull() && data.ProfileNpuCompatibility.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/npu-compatibility"))
+	}
+	if !state.ProfileL2fibVxlanDcLeaf.IsNull() && data.ProfileL2fibVxlanDcLeaf.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/l2fib/vxlan-dc-leaf"))
+	}
+	if !state.ProfileL2fibHigherScale.IsNull() && data.ProfileL2fibHigherScale.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/l2fib/L2-high-scale"))
+	}
+	if !state.ProfileL2fibBridgeFlushConvergence.IsNull() && data.ProfileL2fibBridgeFlushConvergence.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/l2fib/bridge-flush-convergence"))
+	}
+	if !state.ProfileL2fibPwStats.IsNull() && data.ProfileL2fibPwStats.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/l2fib/pw-stats"))
+	}
+	for i := range state.ProfileNpuBufferExtendedLocations {
+		keys := [...]string{"location-name"}
+		stateKeyValues := [...]string{state.ProfileNpuBufferExtendedLocations[i].LocationName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ProfileNpuBufferExtendedLocations[i].LocationName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ProfileNpuBufferExtendedLocations {
+			found = true
+			if state.ProfileNpuBufferExtendedLocations[i].LocationName.ValueString() != data.ProfileNpuBufferExtendedLocations[j].LocationName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.IsNull() && data.ProfileNpuBufferExtendedLocations[j].BandwidthCongestionProtectEnable.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "profile/npu/buffer-extended/locations/location", keyString), "bandwidth-congestion-protect/enable"))
+				}
+				if !state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.IsNull() && data.ProfileNpuBufferExtendedLocations[j].BandwidthCongestionDetectionEnable.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "profile/npu/buffer-extended/locations/location", keyString), "bandwidth-congestion-detection/enable"))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "profile/npu/buffer-extended/locations/location", keyString))
+		}
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.ProfileGueUdpDestPortMpls.IsNull() && data.ProfileGueUdpDestPortMpls.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/gue/udp-dest-port"))
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.ProfileGueUdpDestPortIpv6.IsNull() && data.ProfileGueUdpDestPortIpv6.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/gue/udp-dest-port"))
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.ProfileGueUdpDestPortIpv4.IsNull() && data.ProfileGueUdpDestPortIpv4.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/gue/udp-dest-port"))
+	}
+	for i := range state.ProfilePriorityFlowControlLocations {
+		keys := [...]string{"location-name"}
+		stateKeyValues := [...]string{state.ProfilePriorityFlowControlLocations[i].LocationName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ProfilePriorityFlowControlLocations[i].LocationName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ProfilePriorityFlowControlLocations {
+			found = true
+			if state.ProfilePriorityFlowControlLocations[i].LocationName.ValueString() != data.ProfilePriorityFlowControlLocations[j].LocationName.ValueString() {
+				found = false
+			}
+			if found {
+				if helpers.VersionAtLeast(version, "25.4") && !state.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage.IsNull() && data.ProfilePriorityFlowControlLocations[j].NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString), "buffer-extended/non-pfc-tcs/max-non-pfc-voqs/hbm-buffers-percentage"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs.IsNull() && data.ProfilePriorityFlowControlLocations[j].NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString), "buffer-extended/non-pfc-tcs/max-non-pfc-voqs/number-of-evict-voqs"))
+				}
+				if helpers.VersionAtLeast(version, "25.4") && !state.ProfilePriorityFlowControlLocations[i].NonPfcTcs.IsNull() && data.ProfilePriorityFlowControlLocations[j].NonPfcTcs.IsNull() {
+					deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString), "buffer-extended/non-pfc-tcs"))
+				}
+				for ci := range state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass {
+					ckeys := [...]string{"traffic-class-id"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].TrafficClassId.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].TrafficClassId.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.ProfilePriorityFlowControlLocations[j].BufferInternalTrafficClass {
+						found = true
+						if state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].TrafficClassId.ValueInt64() != data.ProfilePriorityFlowControlLocations[j].BufferInternalTrafficClass[cj].TrafficClassId.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].ProbabilityPercentage.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferInternalTrafficClass[cj].ProbabilityPercentage.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-internal/traffic-class", ckeyString), "probability-percentage"))
+							}
+							if !state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].MaxThreshold.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferInternalTrafficClass[cj].MaxThreshold.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-internal/traffic-class", ckeyString), "max-threshold"))
+							}
+							if !state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].Ecn.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferInternalTrafficClass[cj].Ecn.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-internal/traffic-class", ckeyString), "ecn"))
+							}
+							if !state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].Headroom.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferInternalTrafficClass[cj].Headroom.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-internal/traffic-class", ckeyString), "headroom"))
+							}
+							if !state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].PauseThreshold.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferInternalTrafficClass[cj].PauseThreshold.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-internal/traffic-class", ckeyString), "pause-threshold"))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-internal/traffic-class", ckeyString))
+					}
+				}
+				for ci := range state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass {
+					ckeys := [...]string{"traffic-class-id"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].TrafficClassId.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].TrafficClassId.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass {
+						found = true
+						if state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].TrafficClassId.ValueInt64() != data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].TrafficClassId.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].MbytesHeadroom.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].MbytesHeadroom.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString), "mbytes/headroom"))
+							}
+							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].Mbytes.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString), "mbytes"))
+							}
+							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].KbytesHeadroom.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].KbytesHeadroom.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString), "kbytes/headroom"))
+							}
+							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].Kbytes.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString), "kbytes"))
+							}
+							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].UsHeadroom.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].UsHeadroom.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString), "us/headroom"))
+							}
+							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].Us.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString), "us"))
+							}
+							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].MsHeadroom.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].MsHeadroom.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString), "ms/headroom"))
+							}
+							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].Ms.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString), "ms"))
+							}
+							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].PauseThresholdBytes.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].PauseThresholdBytes.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString), "pause-threshold-bytes"))
+							}
+							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].PauseThreshold.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].PauseThreshold.IsNull() {
+								deletedItems = append(deletedItems, path.Join(fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString), "pause-threshold"))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString))
+					}
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "profile/priority-flow-control/locations/location", keyString))
+		}
+	}
+	if !state.ProfileBwThreshold.IsNull() && data.ProfileBwThreshold.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/bw-threshold"))
+	}
+	if !state.ProfileStatsAclPermit.IsNull() && data.ProfileStatsAclPermit.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/stats/acl-permit"))
+	}
+	if !state.ProfileStatsNoBviIngress.IsNull() && data.ProfileStatsNoBviIngress.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/stats/no-bvi-ingress"))
+	}
+	if !state.ProfileStatsVoqsSharingCounters.IsNull() && data.ProfileStatsVoqsSharingCounters.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/stats/voqs-sharing-counters"))
+	}
+	if !state.ProfileEncapExactLocationsAllVirtual.IsNull() && data.ProfileEncapExactLocationsAllVirtual.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/encap-exact/locations"))
+	}
+	if !state.ProfileEncapExactLocationsAll.IsNull() && data.ProfileEncapExactLocationsAll.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/encap-exact/locations"))
+	}
+	for i := range state.ProfileEncapExactLocations {
+		keys := [...]string{"location-name"}
+		stateKeyValues := [...]string{state.ProfileEncapExactLocations[i].LocationName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ProfileEncapExactLocations[i].LocationName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ProfileEncapExactLocations {
+			found = true
+			if state.ProfileEncapExactLocations[i].LocationName.ValueString() != data.ProfileEncapExactLocations[j].LocationName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "profile/encap-exact/locations/location", keyString))
+		}
+	}
+	for i := range state.ProfileEncapExactInterfaces {
+		keys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.ProfileEncapExactInterfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.ProfileEncapExactInterfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.ProfileEncapExactInterfaces {
+			found = true
+			if state.ProfileEncapExactInterfaces[i].InterfaceName.ValueString() != data.ProfileEncapExactInterfaces[j].InterfaceName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/%v%v", state.getPath(), "profile/encap-exact/interfaces/interface", keyString))
+		}
+	}
+	if !state.ProfileCefSourceRtbhEnable.IsNull() && data.ProfileCefSourceRtbhEnable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/source-rtbh/enable"))
+	}
+	if !state.ProfileCefUnipathSurpfEnable.IsNull() && data.ProfileCefUnipathSurpfEnable.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/unipath-surpf/enable"))
+	}
+	if !state.ProfileCefIpRedirect.IsNull() && data.ProfileCefIpRedirect.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/ip-redirect"))
+	}
+	if !state.ProfileCefTeTunnelLabelOverTeCounters.IsNull() && data.ProfileCefTeTunnelLabelOverTeCounters.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/te-tunnel/label-over-te-counters"))
+	}
+	if !state.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() && data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/te-tunnel/highscale-ldp-over-te-no-sr-over-srte"))
+	}
+	if !state.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() && data.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/te-tunnel/highscale-no-ldp-over-te"))
+	}
+	if !state.ProfileCefTtlTunnelIpDecrement.IsNull() && data.ProfileCefTtlTunnelIpDecrement.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/ttl/tunnel-ip/decrement"))
+	}
+	if !state.ProfileCefStatsLabelAppDefault.IsNull() && data.ProfileCefStatsLabelAppDefault.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/stats/label/app-default"))
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.ProfileCefMplsoudpScale.IsNull() && data.ProfileCefMplsoudpScale.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/mplsoudp/scale"))
+	}
+	if !state.ProfileCefVxlanIpv6TnlScale.IsNull() && data.ProfileCefVxlanIpv6TnlScale.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/vxlan/ipv6-tnl-scale"))
+	}
+	if !state.ProfileCefLptsPifibEntryCounters.IsNull() && data.ProfileCefLptsPifibEntryCounters.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/lpts/pifib-entry-counters"))
+	}
+	if !state.ProfileCefLptsAcl.IsNull() && data.ProfileCefLptsAcl.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/lpts/acl"))
+	}
+	if !state.ProfileCefIpv6HopLimit.IsNull() && data.ProfileCefIpv6HopLimit.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/ipv6/hop-limit"))
+	}
+	if !state.ProfileCefCbfForwardClassList.IsNull() && data.ProfileCefCbfForwardClassList.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/forward-class-lists/forward-class-list"))
+	}
+	if !state.ProfileCefCbf.IsNull() && data.ProfileCefCbf.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/cbf"))
+	}
+	if !state.ProfileCefBgpluOverRsvpte.IsNull() && data.ProfileCefBgpluOverRsvpte.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/bgplu-over-rsvpte"))
+	}
+	if !state.ProfileCefBgplu.IsNull() && data.ProfileCefBgplu.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/bgplu"))
+	}
+	if !state.ProfileCefSropt.IsNull() && data.ProfileCefSropt.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/sropt"))
+	}
+	if !state.ProfileCefDarkBw.IsNull() && data.ProfileCefDarkBw.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/cef/dark-bw"))
+	}
+	if !state.ProfileQosHighWaterMarks.IsNull() && data.ProfileQosHighWaterMarks.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/qos/high-water-marks"))
+	}
+	if !state.ProfileQosQosStatsPushCollection.IsNull() && data.ProfileQosQosStatsPushCollection.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/qos/qos-stats-push-collection"))
+	}
+	if !state.ProfileQosIntraNpuOverFabric.IsNull() && data.ProfileQosIntraNpuOverFabric.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/qos/intra-npu-over-fabric"))
+	}
+	if !state.ProfileQosLowLatencyMode.IsNull() && data.ProfileQosLowLatencyMode.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/qos/low-latency-mode"))
+	}
+	if !state.ProfileQosL2Mode.IsNull() && data.ProfileQosL2Mode.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/qos/l2-mode"))
+	}
+	if !state.ProfileQosVoqModeFairEight.IsNull() && data.ProfileQosVoqModeFairEight.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/qos/voq-mode/fair-eight"))
+	}
+	if !state.ProfileQosVoqModeFairFour.IsNull() && data.ProfileQosVoqModeFairFour.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/qos/voq-mode/fair-four"))
+	}
+	if !state.ProfileQosVoqModeEight.IsNull() && data.ProfileQosVoqModeEight.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/qos/voq-mode/eight"))
+	}
+	if !state.ProfileQosVoqModeFour.IsNull() && data.ProfileQosVoqModeFour.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/qos/voq-mode/four"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv6Udf8.IsNull() && data.ProfileTcamFormatAccessListIpv6Udf8.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv6/udf8"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv6Udf7.IsNull() && data.ProfileTcamFormatAccessListIpv6Udf7.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv6/udf7"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv6Udf6.IsNull() && data.ProfileTcamFormatAccessListIpv6Udf6.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv6/udf6"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv6Udf5.IsNull() && data.ProfileTcamFormatAccessListIpv6Udf5.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv6/udf5"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv6Udf4.IsNull() && data.ProfileTcamFormatAccessListIpv6Udf4.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv6/udf4"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv6Udf3.IsNull() && data.ProfileTcamFormatAccessListIpv6Udf3.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv6/udf3"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv6Udf2.IsNull() && data.ProfileTcamFormatAccessListIpv6Udf2.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv6/udf2"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv6Udf1.IsNull() && data.ProfileTcamFormatAccessListIpv6Udf1.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv6/udf1"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() && data.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() && data.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() && data.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() && data.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv6FragBit.IsNull() && data.ProfileTcamFormatAccessListIpv6FragBit.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() && data.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() && data.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv6DstPort.IsNull() && data.ProfileTcamFormatAccessListIpv6DstPort.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() && data.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() && data.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4Udf8.IsNull() && data.ProfileTcamFormatAccessListIpv4Udf8.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4/udf8"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4Udf7.IsNull() && data.ProfileTcamFormatAccessListIpv4Udf7.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4/udf7"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4Udf6.IsNull() && data.ProfileTcamFormatAccessListIpv4Udf6.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4/udf6"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4Udf5.IsNull() && data.ProfileTcamFormatAccessListIpv4Udf5.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4/udf5"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4Udf4.IsNull() && data.ProfileTcamFormatAccessListIpv4Udf4.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4/udf4"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4Udf3.IsNull() && data.ProfileTcamFormatAccessListIpv4Udf3.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4/udf3"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4Udf2.IsNull() && data.ProfileTcamFormatAccessListIpv4Udf2.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4/udf2"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4Udf1.IsNull() && data.ProfileTcamFormatAccessListIpv4Udf1.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4/udf1"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() && data.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() && data.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() && data.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() && data.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4FragBit.IsNull() && data.ProfileTcamFormatAccessListIpv4FragBit.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() && data.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() && data.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4Precedence.IsNull() && data.ProfileTcamFormatAccessListIpv4Precedence.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4Proto.IsNull() && data.ProfileTcamFormatAccessListIpv4Proto.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4DstPort.IsNull() && data.ProfileTcamFormatAccessListIpv4DstPort.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() && data.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() && data.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !state.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() && data.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.ProfileTcamFibIpv6UnicastPercent.IsNull() && data.ProfileTcamFibIpv6UnicastPercent.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/fib/ipv6/unicast/percent"))
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !state.ProfileTcamFibIpv4UnicastPercent.IsNull() && data.ProfileTcamFibIpv4UnicastPercent.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "profile/tcam/fib/ipv4/unicast/percent"))
+	}
+	if !state.MulticastRouteScale.IsNull() && data.MulticastRouteScale.IsNull() {
+		deletedItems = append(deletedItems, path.Join(state.getPath(), "multicast/route-scale"))
+	}
+	return deletedItems
+}
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
+func (data *HWModuleProfile8000) getEmptyLeafsDelete(ctx context.Context, state *HWModuleProfile8000, version string) []string {
+	emptyLeafsDelete := make([]string, 0)
+	if helpers.VersionAtLeast(version, "26.2") && !data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() && !data.ProfileTcamFormatOgComprIdExtensionEgress.ValueBool() {
+		if state == nil || state.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() || state.ProfileTcamFormatOgComprIdExtensionEgress.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/og-compr-id-extension/egress"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "26.2") && !data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() && !data.ProfileTcamFormatOgComprIdExtensionIngress.ValueBool() {
+		if state == nil || state.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() || state.ProfileTcamFormatOgComprIdExtensionIngress.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/og-compr-id-extension/ingress"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileRouteScaleLpmFullScale.IsNull() && !data.ProfileRouteScaleLpmFullScale.ValueBool() {
+		if state == nil || state.ProfileRouteScaleLpmFullScale.IsNull() || state.ProfileRouteScaleLpmFullScale.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/route/scale/lpm/full-scale"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileRouteScaleHostRoute.IsNull() && !data.ProfileRouteScaleHostRoute.ValueBool() {
+		if state == nil || state.ProfileRouteScaleHostRoute.IsNull() || state.ProfileRouteScaleHostRoute.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/route/scale/host-route"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileL2fibEvpnAging.IsNull() && !data.ProfileL2fibEvpnAging.ValueBool() {
+		if state == nil || state.ProfileL2fibEvpnAging.IsNull() || state.ProfileL2fibEvpnAging.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/l2fib/evpn-aging"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileCefHashIpFieldDuplication.IsNull() && !data.ProfileCefHashIpFieldDuplication.ValueBool() {
+		if state == nil || state.ProfileCefHashIpFieldDuplication.IsNull() || state.ProfileCefHashIpFieldDuplication.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/hash/ip-field-duplication"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileCefIptunnelScale.IsNull() && !data.ProfileCefIptunnelScale.ValueBool() {
+		if state == nil || state.ProfileCefIptunnelScale.IsNull() || state.ProfileCefIptunnelScale.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/iptunnel/scale"))
+		}
+	}
+	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) && !data.ProfileTcamFormatOgComprIdExtension.IsNull() && !data.ProfileTcamFormatOgComprIdExtension.ValueBool() {
+		if state == nil || state.ProfileTcamFormatOgComprIdExtension.IsNull() || state.ProfileTcamFormatOgComprIdExtension.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/og-compr-id-extension"))
+		}
+	}
+	if !data.ProfileIrbThroughputOptimized.IsNull() && !data.ProfileIrbThroughputOptimized.ValueBool() {
+		if state == nil || state.ProfileIrbThroughputOptimized.IsNull() || state.ProfileIrbThroughputOptimized.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/irb/throughput-optimized"))
+		}
+	}
+	if !data.ProfileFlowspecIpv6PacketLenEnable.IsNull() && !data.ProfileFlowspecIpv6PacketLenEnable.ValueBool() {
+		if state == nil || state.ProfileFlowspecIpv6PacketLenEnable.IsNull() || state.ProfileFlowspecIpv6PacketLenEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/flowspec/ipv6-packet-len-enable"))
+		}
+	}
+	if !data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() && !data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.ValueBool() {
+		if state == nil || state.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() || state.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/route/scale/ipv6-unicast/connected-prefix/high"))
+		}
+	}
+	if !data.ProfileL2fibVxlanDcLeaf.IsNull() && !data.ProfileL2fibVxlanDcLeaf.ValueBool() {
+		if state == nil || state.ProfileL2fibVxlanDcLeaf.IsNull() || state.ProfileL2fibVxlanDcLeaf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/l2fib/vxlan-dc-leaf"))
+		}
+	}
+	if !data.ProfileL2fibHigherScale.IsNull() && !data.ProfileL2fibHigherScale.ValueBool() {
+		if state == nil || state.ProfileL2fibHigherScale.IsNull() || state.ProfileL2fibHigherScale.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/l2fib/L2-high-scale"))
+		}
+	}
+	if !data.ProfileL2fibBridgeFlushConvergence.IsNull() && !data.ProfileL2fibBridgeFlushConvergence.ValueBool() {
+		if state == nil || state.ProfileL2fibBridgeFlushConvergence.IsNull() || state.ProfileL2fibBridgeFlushConvergence.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/l2fib/bridge-flush-convergence"))
+		}
+	}
+	if !data.ProfileL2fibPwStats.IsNull() && !data.ProfileL2fibPwStats.ValueBool() {
+		if state == nil || state.ProfileL2fibPwStats.IsNull() || state.ProfileL2fibPwStats.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/l2fib/pw-stats"))
+		}
+	}
+	for i := range data.ProfileNpuBufferExtendedLocations {
+		keys := [...]string{"location-name"}
+		keyValues := [...]string{data.ProfileNpuBufferExtendedLocations[i].LocationName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.IsNull() && !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.ValueBool() {
+			if state == nil || i >= len(state.ProfileNpuBufferExtendedLocations) || state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.IsNull() || state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profile/npu/buffer-extended/locations/location", keyString), "bandwidth-congestion-protect/enable"))
+			}
+		}
+		if !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.IsNull() && !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.ValueBool() {
+			if state == nil || i >= len(state.ProfileNpuBufferExtendedLocations) || state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.IsNull() || state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profile/npu/buffer-extended/locations/location", keyString), "bandwidth-congestion-detection/enable"))
+			}
+		}
+	}
+	for i := range data.ProfilePriorityFlowControlLocations {
+		keys := [...]string{"location-name"}
+		keyValues := [...]string{data.ProfilePriorityFlowControlLocations[i].LocationName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if helpers.VersionAtLeast(version, "25.4") && !data.ProfilePriorityFlowControlLocations[i].NonPfcTcs.IsNull() && !data.ProfilePriorityFlowControlLocations[i].NonPfcTcs.ValueBool() {
+			if state == nil || i >= len(state.ProfilePriorityFlowControlLocations) || state.ProfilePriorityFlowControlLocations[i].NonPfcTcs.IsNull() || state.ProfilePriorityFlowControlLocations[i].NonPfcTcs.ValueBool() {
+				emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v", data.getPath(), "profile/priority-flow-control/locations/location", keyString), "buffer-extended/non-pfc-tcs"))
+			}
+		}
+		for ci := range data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass {
+			ckeys := [...]string{"traffic-class-id"}
+			ckeyValues := [...]string{strconv.FormatInt(data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].TrafficClassId.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+		}
+		for ci := range data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass {
+			ckeys := [...]string{"traffic-class-id"}
+			ckeyValues := [...]string{strconv.FormatInt(data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].TrafficClassId.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
+			if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.ValueBool() {
+				if state == nil || i >= len(state.ProfilePriorityFlowControlLocations) || ci >= len(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass) || state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.IsNull() || state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString), "mbytes"))
+				}
+			}
+			if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.ValueBool() {
+				if state == nil || i >= len(state.ProfilePriorityFlowControlLocations) || ci >= len(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass) || state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.IsNull() || state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString), "kbytes"))
+				}
+			}
+			if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.ValueBool() {
+				if state == nil || i >= len(state.ProfilePriorityFlowControlLocations) || ci >= len(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass) || state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.IsNull() || state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString), "us"))
+				}
+			}
+			if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.ValueBool() {
+				if state == nil || i >= len(state.ProfilePriorityFlowControlLocations) || ci >= len(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass) || state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.IsNull() || state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.ValueBool() {
+					emptyLeafsDelete = append(emptyLeafsDelete, path.Join(fmt.Sprintf("%v/%v%v/%v%v", data.getPath(), "profile/priority-flow-control/locations/location", keyString, "buffer-extended/traffic-class", ckeyString), "ms"))
+				}
+			}
+		}
+	}
+	if !data.ProfileStatsAclPermit.IsNull() && !data.ProfileStatsAclPermit.ValueBool() {
+		if state == nil || state.ProfileStatsAclPermit.IsNull() || state.ProfileStatsAclPermit.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/stats/acl-permit"))
+		}
+	}
+	if !data.ProfileStatsNoBviIngress.IsNull() && !data.ProfileStatsNoBviIngress.ValueBool() {
+		if state == nil || state.ProfileStatsNoBviIngress.IsNull() || state.ProfileStatsNoBviIngress.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/stats/no-bvi-ingress"))
+		}
+	}
+	if !data.ProfileEncapExactLocationsAllVirtual.IsNull() && !data.ProfileEncapExactLocationsAllVirtual.ValueBool() {
+		if state == nil || state.ProfileEncapExactLocationsAllVirtual.IsNull() || state.ProfileEncapExactLocationsAllVirtual.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/encap-exact/locations"))
+		}
+	}
+	if !data.ProfileEncapExactLocationsAll.IsNull() && !data.ProfileEncapExactLocationsAll.ValueBool() {
+		if state == nil || state.ProfileEncapExactLocationsAll.IsNull() || state.ProfileEncapExactLocationsAll.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/encap-exact/locations"))
+		}
+	}
+	for i := range data.ProfileEncapExactLocations {
+		keys := [...]string{"location-name"}
+		keyValues := [...]string{data.ProfileEncapExactLocations[i].LocationName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.ProfileEncapExactInterfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.ProfileEncapExactInterfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	if !data.ProfileCefSourceRtbhEnable.IsNull() && !data.ProfileCefSourceRtbhEnable.ValueBool() {
+		if state == nil || state.ProfileCefSourceRtbhEnable.IsNull() || state.ProfileCefSourceRtbhEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/source-rtbh/enable"))
+		}
+	}
+	if !data.ProfileCefUnipathSurpfEnable.IsNull() && !data.ProfileCefUnipathSurpfEnable.ValueBool() {
+		if state == nil || state.ProfileCefUnipathSurpfEnable.IsNull() || state.ProfileCefUnipathSurpfEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/unipath-surpf/enable"))
+		}
+	}
+	if !data.ProfileCefTeTunnelLabelOverTeCounters.IsNull() && !data.ProfileCefTeTunnelLabelOverTeCounters.ValueBool() {
+		if state == nil || state.ProfileCefTeTunnelLabelOverTeCounters.IsNull() || state.ProfileCefTeTunnelLabelOverTeCounters.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/te-tunnel/label-over-te-counters"))
+		}
+	}
+	if !data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() && !data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.ValueBool() {
+		if state == nil || state.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() || state.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/te-tunnel/highscale-ldp-over-te-no-sr-over-srte"))
+		}
+	}
+	if !data.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() && !data.ProfileCefTeTunnelHighscaleNoLdpOverTe.ValueBool() {
+		if state == nil || state.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() || state.ProfileCefTeTunnelHighscaleNoLdpOverTe.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/te-tunnel/highscale-no-ldp-over-te"))
+		}
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ProfileCefMplsoudpScale.IsNull() && !data.ProfileCefMplsoudpScale.ValueBool() {
+		if state == nil || state.ProfileCefMplsoudpScale.IsNull() || state.ProfileCefMplsoudpScale.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/mplsoudp/scale"))
+		}
+	}
+	if !data.ProfileCefVxlanIpv6TnlScale.IsNull() && !data.ProfileCefVxlanIpv6TnlScale.ValueBool() {
+		if state == nil || state.ProfileCefVxlanIpv6TnlScale.IsNull() || state.ProfileCefVxlanIpv6TnlScale.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/vxlan/ipv6-tnl-scale"))
+		}
+	}
+	if !data.ProfileCefLptsAcl.IsNull() && !data.ProfileCefLptsAcl.ValueBool() {
+		if state == nil || state.ProfileCefLptsAcl.IsNull() || state.ProfileCefLptsAcl.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/cef/lpts/acl"))
+		}
+	}
+	if !data.ProfileQosHighWaterMarks.IsNull() && !data.ProfileQosHighWaterMarks.ValueBool() {
+		if state == nil || state.ProfileQosHighWaterMarks.IsNull() || state.ProfileQosHighWaterMarks.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/qos/high-water-marks"))
+		}
+	}
+	if !data.ProfileQosQosStatsPushCollection.IsNull() && !data.ProfileQosQosStatsPushCollection.ValueBool() {
+		if state == nil || state.ProfileQosQosStatsPushCollection.IsNull() || state.ProfileQosQosStatsPushCollection.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/qos/qos-stats-push-collection"))
+		}
+	}
+	if !data.ProfileQosVoqModeFairEight.IsNull() && !data.ProfileQosVoqModeFairEight.ValueBool() {
+		if state == nil || state.ProfileQosVoqModeFairEight.IsNull() || state.ProfileQosVoqModeFairEight.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/qos/voq-mode/fair-eight"))
+		}
+	}
+	if !data.ProfileQosVoqModeFairFour.IsNull() && !data.ProfileQosVoqModeFairFour.ValueBool() {
+		if state == nil || state.ProfileQosVoqModeFairFour.IsNull() || state.ProfileQosVoqModeFairFour.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/qos/voq-mode/fair-four"))
+		}
+	}
+	if !data.ProfileQosVoqModeEight.IsNull() && !data.ProfileQosVoqModeEight.ValueBool() {
+		if state == nil || state.ProfileQosVoqModeEight.IsNull() || state.ProfileQosVoqModeEight.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/qos/voq-mode/eight"))
+		}
+	}
+	if !data.ProfileQosVoqModeFour.IsNull() && !data.ProfileQosVoqModeFour.ValueBool() {
+		if state == nil || state.ProfileQosVoqModeFour.IsNull() || state.ProfileQosVoqModeFour.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/qos/voq-mode/four"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() && !data.ProfileTcamFormatAccessListIpv6PacketLen.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() || state.ProfileTcamFormatAccessListIpv6PacketLen.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() && !data.ProfileTcamFormatAccessListIpv6DstObjectGroup.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() || state.ProfileTcamFormatAccessListIpv6DstObjectGroup.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() && !data.ProfileTcamFormatAccessListIpv6SrcObjectGroup.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() || state.ProfileTcamFormatAccessListIpv6SrcObjectGroup.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() && !data.ProfileTcamFormatAccessListIpv6TcpFlags.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() || state.ProfileTcamFormatAccessListIpv6TcpFlags.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv6FragBit.IsNull() && !data.ProfileTcamFormatAccessListIpv6FragBit.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6FragBit.IsNull() || state.ProfileTcamFormatAccessListIpv6FragBit.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() && !data.ProfileTcamFormatAccessListIpv6TrafficClass.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() || state.ProfileTcamFormatAccessListIpv6TrafficClass.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() && !data.ProfileTcamFormatAccessListIpv6NextHdr.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() || state.ProfileTcamFormatAccessListIpv6NextHdr.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv6DstPort.IsNull() && !data.ProfileTcamFormatAccessListIpv6DstPort.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6DstPort.IsNull() || state.ProfileTcamFormatAccessListIpv6DstPort.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() && !data.ProfileTcamFormatAccessListIpv6DstAddr.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() || state.ProfileTcamFormatAccessListIpv6DstAddr.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() && !data.ProfileTcamFormatAccessListIpv6SrcAddr.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() || state.ProfileTcamFormatAccessListIpv6SrcAddr.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() && !data.ProfileTcamFormatAccessListIpv4FragmentOffset.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() || state.ProfileTcamFormatAccessListIpv4FragmentOffset.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() && !data.ProfileTcamFormatAccessListIpv4PacketLen.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() || state.ProfileTcamFormatAccessListIpv4PacketLen.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() && !data.ProfileTcamFormatAccessListIpv4DstObjectGroup.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() || state.ProfileTcamFormatAccessListIpv4DstObjectGroup.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() && !data.ProfileTcamFormatAccessListIpv4SrcObjectGroup.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() || state.ProfileTcamFormatAccessListIpv4SrcObjectGroup.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv4FragBit.IsNull() && !data.ProfileTcamFormatAccessListIpv4FragBit.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4FragBit.IsNull() || state.ProfileTcamFormatAccessListIpv4FragBit.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() && !data.ProfileTcamFormatAccessListIpv4TcpFlags.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() || state.ProfileTcamFormatAccessListIpv4TcpFlags.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() && !data.ProfileTcamFormatAccessListIpv4TtlMatch.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() || state.ProfileTcamFormatAccessListIpv4TtlMatch.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv4Precedence.IsNull() && !data.ProfileTcamFormatAccessListIpv4Precedence.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4Precedence.IsNull() || state.ProfileTcamFormatAccessListIpv4Precedence.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv4Proto.IsNull() && !data.ProfileTcamFormatAccessListIpv4Proto.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4Proto.IsNull() || state.ProfileTcamFormatAccessListIpv4Proto.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv4DstPort.IsNull() && !data.ProfileTcamFormatAccessListIpv4DstPort.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4DstPort.IsNull() || state.ProfileTcamFormatAccessListIpv4DstPort.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() && !data.ProfileTcamFormatAccessListIpv4SrcPort.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() || state.ProfileTcamFormatAccessListIpv4SrcPort.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() && !data.ProfileTcamFormatAccessListIpv4DstAddr.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() || state.ProfileTcamFormatAccessListIpv4DstAddr.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+		}
+	}
+	if !data.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() && !data.ProfileTcamFormatAccessListIpv4SrcAddr.ValueBool() {
+		if state == nil || state.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() || state.ProfileTcamFormatAccessListIpv4SrcAddr.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+		}
+	}
+	if !data.MulticastRouteScale.IsNull() && !data.MulticastRouteScale.ValueBool() {
+		if state == nil || state.MulticastRouteScale.IsNull() || state.MulticastRouteScale.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, path.Join(data.getPath(), "multicast/route-scale"))
+		}
+	}
+	return emptyLeafsDelete
+}
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+func (data *HWModuleProfile8000) getDeletePaths(ctx context.Context, version string) []string {
+	var deletePaths []string
+	if helpers.VersionAtLeast(version, "26.2") && !data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/og-compr-id-extension/egress"))
+	}
+	if helpers.VersionAtLeast(version, "26.2") && !data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/og-compr-id-extension/ingress"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileRouteScaleLpmFullScale.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/route/scale/lpm/full-scale"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileRouteScaleHostRoute.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/route/scale/host-route"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileL2fibEvpnAging.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/l2fib/evpn-aging"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileCefHashIpFieldDuplication.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/hash/ip-field-duplication"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileCefIptunnelScale.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/iptunnel/scale"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && !data.ProfileQosMode.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/qos/mode"))
+	}
+	if helpers.VersionAtLeast(version, "25.4") && (version == "" || !helpers.VersionAtLeast(version, "26.2")) && !data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/og-compr-id-extension"))
+	}
+	if !data.ProfileIrbThroughputOptimized.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/irb/throughput-optimized"))
+	}
+	if !data.ProfileFlowspecIpv6PacketLenEnable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/flowspec/ipv6-packet-len-enable"))
+	}
+	if !data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/route/scale/ipv6-unicast/connected-prefix/high"))
+	}
+	if !data.ProfileNpuCompatibility.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/npu-compatibility"))
+	}
+	if !data.ProfileL2fibVxlanDcLeaf.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/l2fib/vxlan-dc-leaf"))
+	}
+	if !data.ProfileL2fibHigherScale.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/l2fib/L2-high-scale"))
+	}
+	if !data.ProfileL2fibBridgeFlushConvergence.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/l2fib/bridge-flush-convergence"))
+	}
+	if !data.ProfileL2fibPwStats.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/l2fib/pw-stats"))
+	}
+	for i := range data.ProfileNpuBufferExtendedLocations {
+		keys := [...]string{"location-name"}
+		keyValues := [...]string{data.ProfileNpuBufferExtendedLocations[i].LocationName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.ProfileNpuBufferExtendedLocations[i].LocationName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "profile/npu/buffer-extended/locations/location", keyString))
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ProfileGueUdpDestPortMpls.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/gue/udp-dest-port"))
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ProfileGueUdpDestPortIpv6.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/gue/udp-dest-port"))
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ProfileGueUdpDestPortIpv4.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/gue/udp-dest-port"))
+	}
+	for i := range data.ProfilePriorityFlowControlLocations {
+		keys := [...]string{"location-name"}
+		keyValues := [...]string{data.ProfilePriorityFlowControlLocations[i].LocationName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.ProfilePriorityFlowControlLocations[i].LocationName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "profile/priority-flow-control/locations/location", keyString))
+	}
+	if !data.ProfileBwThreshold.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/bw-threshold"))
+	}
+	if !data.ProfileStatsAclPermit.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/stats/acl-permit"))
+	}
+	if !data.ProfileStatsNoBviIngress.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/stats/no-bvi-ingress"))
+	}
+	if !data.ProfileStatsVoqsSharingCounters.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/stats/voqs-sharing-counters"))
+	}
+	if !data.ProfileEncapExactLocationsAllVirtual.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/encap-exact/locations"))
+	}
+	if !data.ProfileEncapExactLocationsAll.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/encap-exact/locations"))
+	}
+	for i := range data.ProfileEncapExactLocations {
+		keys := [...]string{"location-name"}
+		keyValues := [...]string{data.ProfileEncapExactLocations[i].LocationName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.ProfileEncapExactLocations[i].LocationName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "profile/encap-exact/locations/location", keyString))
+	}
+	for i := range data.ProfileEncapExactInterfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.ProfileEncapExactInterfaces[i].InterfaceName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(data.ProfileEncapExactInterfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/%v%v", data.getPath(), "profile/encap-exact/interfaces/interface", keyString))
+	}
+	if !data.ProfileCefSourceRtbhEnable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/source-rtbh/enable"))
+	}
+	if !data.ProfileCefUnipathSurpfEnable.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/unipath-surpf/enable"))
+	}
+	if !data.ProfileCefIpRedirect.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/ip-redirect"))
+	}
+	if !data.ProfileCefTeTunnelLabelOverTeCounters.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/te-tunnel/label-over-te-counters"))
+	}
+	if !data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/te-tunnel/highscale-ldp-over-te-no-sr-over-srte"))
+	}
+	if !data.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/te-tunnel/highscale-no-ldp-over-te"))
+	}
+	if !data.ProfileCefTtlTunnelIpDecrement.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/ttl/tunnel-ip/decrement"))
+	}
+	if !data.ProfileCefStatsLabelAppDefault.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/stats/label/app-default"))
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ProfileCefMplsoudpScale.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/mplsoudp/scale"))
+	}
+	if !data.ProfileCefVxlanIpv6TnlScale.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/vxlan/ipv6-tnl-scale"))
+	}
+	if !data.ProfileCefLptsPifibEntryCounters.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/lpts/pifib-entry-counters"))
+	}
+	if !data.ProfileCefLptsAcl.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/lpts/acl"))
+	}
+	if !data.ProfileCefIpv6HopLimit.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/ipv6/hop-limit"))
+	}
+	if !data.ProfileCefCbfForwardClassList.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/forward-class-lists/forward-class-list"))
+	}
+	if !data.ProfileCefCbf.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/cbf"))
+	}
+	if !data.ProfileCefBgpluOverRsvpte.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/bgplu-over-rsvpte"))
+	}
+	if !data.ProfileCefBgplu.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/bgplu"))
+	}
+	if !data.ProfileCefSropt.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/sropt"))
+	}
+	if !data.ProfileCefDarkBw.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/cef/dark-bw"))
+	}
+	if !data.ProfileQosHighWaterMarks.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/qos/high-water-marks"))
+	}
+	if !data.ProfileQosQosStatsPushCollection.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/qos/qos-stats-push-collection"))
+	}
+	if !data.ProfileQosIntraNpuOverFabric.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/qos/intra-npu-over-fabric"))
+	}
+	if !data.ProfileQosLowLatencyMode.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/qos/low-latency-mode"))
+	}
+	if !data.ProfileQosL2Mode.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/qos/l2-mode"))
+	}
+	if !data.ProfileQosVoqModeFairEight.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/qos/voq-mode/fair-eight"))
+	}
+	if !data.ProfileQosVoqModeFairFour.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/qos/voq-mode/fair-four"))
+	}
+	if !data.ProfileQosVoqModeEight.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/qos/voq-mode/eight"))
+	}
+	if !data.ProfileQosVoqModeFour.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/qos/voq-mode/four"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv6Udf8.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6/udf8"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv6Udf7.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6/udf7"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv6Udf6.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6/udf6"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv6Udf5.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6/udf5"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv6Udf4.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6/udf4"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv6Udf3.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6/udf3"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv6Udf2.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6/udf2"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv6Udf1.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6/udf1"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv6FragBit.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv6DstPort.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv6"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4Udf8.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4/udf8"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4Udf7.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4/udf7"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4Udf6.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4/udf6"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4Udf5.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4/udf5"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4Udf4.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4/udf4"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4Udf3.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4/udf3"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4Udf2.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4/udf2"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4Udf1.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4/udf1"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4FragBit.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4Precedence.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4Proto.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4DstPort.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if !data.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/format/access-list/ipv4"))
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ProfileTcamFibIpv6UnicastPercent.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/fib/ipv6/unicast/percent"))
+	}
+	if (version == "" || !helpers.VersionAtLeast(version, "25.4")) && !data.ProfileTcamFibIpv4UnicastPercent.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "profile/tcam/fib/ipv4/unicast/percent"))
+	}
+	if !data.MulticastRouteScale.IsNull() {
+		deletePaths = append(deletePaths, path.Join(data.getPath(), "multicast/route-scale"))
+	}
+
+	return deletePaths
+}
+
+// End of section. //template:end getDeletePaths
+
 // Section below is generated&owned by "gen/generator.go". //template:begin toBodyXML
 
 func (data HWModuleProfile8000) toBodyXML(ctx context.Context, stateArg ...*HWModuleProfile8000) string {
@@ -2217,6 +5139,17 @@ func (data HWModuleProfile8000) toBodyXML(ctx context.Context, stateArg ...*HWMo
 					}
 				}
 			}
+			if !item.NonPfcTcs.IsNull() && !item.NonPfcTcs.IsUnknown() {
+				if item.NonPfcTcs.ValueBool() {
+					body = helpers.SetFromXPath(body, basePath+"/buffer-extended/non-pfc-tcs", "")
+				}
+			}
+			if !item.NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs.IsNull() && !item.NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/buffer-extended/non-pfc-tcs/max-non-pfc-voqs/number-of-evict-voqs", strconv.FormatInt(item.NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs.ValueInt64(), 10))
+			}
+			if !item.NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage.IsNull() && !item.NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage.IsUnknown() {
+				body = helpers.SetFromXPath(body, basePath+"/buffer-extended/non-pfc-tcs/max-non-pfc-voqs/hbm-buffers-percentage", strconv.FormatInt(item.NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage.ValueInt64(), 10))
+			}
 		}
 	}
 	if !data.ProfileGueUdpDestPortIpv4.IsNull() && !data.ProfileGueUdpDestPortIpv4.IsUnknown() {
@@ -2284,6 +5217,49 @@ func (data HWModuleProfile8000) toBodyXML(ctx context.Context, stateArg ...*HWMo
 			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/irb/throughput-optimized", "")
 		}
 	}
+	if !data.ProfileTcamFormatOgComprIdExtension.IsNull() && !data.ProfileTcamFormatOgComprIdExtension.IsUnknown() {
+		if data.ProfileTcamFormatOgComprIdExtension.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/tcam/format/og-compr-id-extension", "")
+		}
+	}
+	if !data.ProfileQosMode.IsNull() && !data.ProfileQosMode.IsUnknown() {
+		body = helpers.SetFromXPath(body, data.getXPath()+"/profile/qos/mode", data.ProfileQosMode.ValueString())
+	}
+	if !data.ProfileCefIptunnelScale.IsNull() && !data.ProfileCefIptunnelScale.IsUnknown() {
+		if data.ProfileCefIptunnelScale.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/cef/iptunnel/scale", "")
+		}
+	}
+	if !data.ProfileCefHashIpFieldDuplication.IsNull() && !data.ProfileCefHashIpFieldDuplication.IsUnknown() {
+		if data.ProfileCefHashIpFieldDuplication.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/cef/hash/ip-field-duplication", "")
+		}
+	}
+	if !data.ProfileL2fibEvpnAging.IsNull() && !data.ProfileL2fibEvpnAging.IsUnknown() {
+		if data.ProfileL2fibEvpnAging.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/l2fib/evpn-aging", "")
+		}
+	}
+	if !data.ProfileRouteScaleHostRoute.IsNull() && !data.ProfileRouteScaleHostRoute.IsUnknown() {
+		if data.ProfileRouteScaleHostRoute.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/route/scale/host-route", "")
+		}
+	}
+	if !data.ProfileRouteScaleLpmFullScale.IsNull() && !data.ProfileRouteScaleLpmFullScale.IsUnknown() {
+		if data.ProfileRouteScaleLpmFullScale.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/route/scale/lpm/full-scale", "")
+		}
+	}
+	if !data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() && !data.ProfileTcamFormatOgComprIdExtensionIngress.IsUnknown() {
+		if data.ProfileTcamFormatOgComprIdExtensionIngress.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/tcam/format/og-compr-id-extension/ingress", "")
+		}
+	}
+	if !data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() && !data.ProfileTcamFormatOgComprIdExtensionEgress.IsUnknown() {
+		if data.ProfileTcamFormatOgComprIdExtensionEgress.ValueBool() {
+			body = helpers.SetFromXPath(body, data.getXPath()+"/profile/tcam/format/og-compr-id-extension/egress", "")
+		}
+	}
 	bodyString, err := helpers.BodyToNestedXML(body)
 	if err != nil {
 		tflog.Error(ctx, fmt.Sprintf("Error converting body to nested XML: %s", err))
@@ -2306,7 +5282,7 @@ func (data HWModuleProfile8000) toBodyXML(ctx context.Context, stateArg ...*HWMo
 		}
 	}
 	// Append delete XML for empty bool leafs (false values that need explicit removal)
-	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state) {
+	for _, deletePath := range data.getEmptyLeafsDelete(ctx, state, "") {
 		bodyString += helpers.RemoveFromXPath(netconf.Body{}, deletePath).Res()
 	}
 	tflog.Debug(ctx, fmt.Sprintf("toBodyXML: generated body length: %d", len(bodyString)))
@@ -2314,6 +5290,7 @@ func (data HWModuleProfile8000) toBodyXML(ctx context.Context, stateArg ...*HWMo
 }
 
 // End of section. //template:end toBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBodyXML
 
 func (data *HWModuleProfile8000) updateFromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -3188,6 +6165,28 @@ func (data *HWModuleProfile8000) updateFromBodyXML(ctx context.Context, res xmld
 				data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].ProbabilityPercentage = types.Int64Null()
 			}
 		}
+		if value := helpers.GetFromXPath(r, "buffer-extended/non-pfc-tcs"); value.Exists() {
+			// Only set to true if it was already in the plan (not null)
+			if !data.ProfilePriorityFlowControlLocations[i].NonPfcTcs.IsNull() {
+				data.ProfilePriorityFlowControlLocations[i].NonPfcTcs = types.BoolValue(true)
+			}
+		} else {
+			// If config has false and device doesn't have the field, keep false (don't set to null)
+			// Only set to null if it was already null
+			if data.ProfilePriorityFlowControlLocations[i].NonPfcTcs.IsNull() {
+				data.ProfilePriorityFlowControlLocations[i].NonPfcTcs = types.BoolNull()
+			}
+		}
+		if value := helpers.GetFromXPath(r, "buffer-extended/non-pfc-tcs/max-non-pfc-voqs/number-of-evict-voqs"); value.Exists() && !data.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs.IsNull() {
+			data.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs = types.Int64Value(value.Int())
+		} else if data.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs.IsNull() {
+			data.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs = types.Int64Null()
+		}
+		if value := helpers.GetFromXPath(r, "buffer-extended/non-pfc-tcs/max-non-pfc-voqs/hbm-buffers-percentage"); value.Exists() && !data.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage.IsNull() {
+			data.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage = types.Int64Value(value.Int())
+		} else if data.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage.IsNull() {
+			data.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage = types.Int64Null()
+		}
 	}
 	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/gue/udp-dest-port/ipv4"); value.Exists() && !data.ProfileGueUdpDestPortIpv4.IsNull() {
 		data.ProfileGueUdpDestPortIpv4 = types.Int64Value(value.Int())
@@ -3339,1073 +6338,103 @@ func (data *HWModuleProfile8000) updateFromBodyXML(ctx context.Context, res xmld
 			data.ProfileIrbThroughputOptimized = types.BoolNull()
 		}
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/tcam/format/og-compr-id-extension"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+			data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+			data.ProfileTcamFormatOgComprIdExtension = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/qos/mode"); value.Exists() && !data.ProfileQosMode.IsNull() {
+		data.ProfileQosMode = types.StringValue(value.String())
+	} else if data.ProfileQosMode.IsNull() {
+		data.ProfileQosMode = types.StringNull()
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/cef/iptunnel/scale"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileCefIptunnelScale.IsNull() {
+			data.ProfileCefIptunnelScale = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileCefIptunnelScale.IsNull() {
+			data.ProfileCefIptunnelScale = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/cef/hash/ip-field-duplication"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileCefHashIpFieldDuplication.IsNull() {
+			data.ProfileCefHashIpFieldDuplication = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileCefHashIpFieldDuplication.IsNull() {
+			data.ProfileCefHashIpFieldDuplication = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/l2fib/evpn-aging"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileL2fibEvpnAging.IsNull() {
+			data.ProfileL2fibEvpnAging = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileL2fibEvpnAging.IsNull() {
+			data.ProfileL2fibEvpnAging = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/route/scale/host-route"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileRouteScaleHostRoute.IsNull() {
+			data.ProfileRouteScaleHostRoute = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileRouteScaleHostRoute.IsNull() {
+			data.ProfileRouteScaleHostRoute = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/route/scale/lpm/full-scale"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileRouteScaleLpmFullScale.IsNull() {
+			data.ProfileRouteScaleLpmFullScale = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileRouteScaleLpmFullScale.IsNull() {
+			data.ProfileRouteScaleLpmFullScale = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/tcam/format/og-compr-id-extension/ingress"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() {
+			data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() {
+			data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolNull()
+		}
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/tcam/format/og-compr-id-extension/egress"); value.Exists() {
+		// Only set to true if it was already in the plan (not null)
+		if !data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() {
+			data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(true)
+		}
+	} else {
+		// For presence-based booleans, only set to null if it's already null
+		if data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() {
+			data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBodyXML
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
-func (data *HWModuleProfile8000) fromBody(ctx context.Context, res gjson.Result) {
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "multicast.route-scale"); value.Exists() {
-		data.MulticastRouteScale = types.BoolValue(true)
-	} else if !data.MulticastRouteScale.IsNull() {
-		// Only set to false if it was previously set in state
-		data.MulticastRouteScale = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.fib.ipv4.unicast.percent"); value.Exists() {
-		data.ProfileTcamFibIpv4UnicastPercent = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "profile.tcam.fib.ipv6.unicast.percent"); value.Exists() {
-		data.ProfileTcamFibIpv6UnicastPercent = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.src-addr"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4SrcAddr = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv4SrcAddr = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.dst-addr"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4DstAddr = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv4DstAddr = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.src-port"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4SrcPort = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv4SrcPort = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.dst-port"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4DstPort = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv4DstPort.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv4DstPort = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.proto"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Proto = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv4Proto.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv4Proto = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.precedence"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Precedence = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv4Precedence.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv4Precedence = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.ttl-match"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4TtlMatch = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv4TtlMatch = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.tcp-flags"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4TcpFlags = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv4TcpFlags = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.frag-bit"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4FragBit = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv4FragBit.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv4FragBit = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.src-object-group"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4SrcObjectGroup = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv4SrcObjectGroup = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.dst-object-group"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4DstObjectGroup = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv4DstObjectGroup = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.packet-len"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4PacketLen = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv4PacketLen = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.fragment-offset"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4FragmentOffset = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv4FragmentOffset = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.udf1"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Udf1 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.udf2"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Udf2 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.udf3"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Udf3 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.udf4"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Udf4 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.udf5"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Udf5 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.udf6"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Udf6 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.udf7"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Udf7 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.udf8"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Udf8 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.src-addr"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6SrcAddr = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv6SrcAddr = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.dst-addr"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6DstAddr = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv6DstAddr = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.dst-port"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6DstPort = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv6DstPort.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv6DstPort = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.next-hdr"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6NextHdr = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv6NextHdr = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.traffic-class"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6TrafficClass = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv6TrafficClass = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.frag-bit"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6FragBit = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv6FragBit.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv6FragBit = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.tcp-flags"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6TcpFlags = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv6TcpFlags = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.src-object-group"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6SrcObjectGroup = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv6SrcObjectGroup = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.dst-object-group"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6DstObjectGroup = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv6DstObjectGroup = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.packet-len"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6PacketLen = types.BoolValue(true)
-	} else if !data.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileTcamFormatAccessListIpv6PacketLen = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.udf1"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6Udf1 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.udf2"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6Udf2 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.udf3"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6Udf3 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.udf4"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6Udf4 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.udf5"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6Udf5 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.udf6"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6Udf6 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.udf7"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6Udf7 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.udf8"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6Udf8 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.qos.voq-mode.four"); value.Exists() {
-		data.ProfileQosVoqModeFour = types.BoolValue(true)
-	} else if !data.ProfileQosVoqModeFour.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileQosVoqModeFour = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.qos.voq-mode.eight"); value.Exists() {
-		data.ProfileQosVoqModeEight = types.BoolValue(true)
-	} else if !data.ProfileQosVoqModeEight.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileQosVoqModeEight = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.qos.voq-mode.fair-four"); value.Exists() {
-		data.ProfileQosVoqModeFairFour = types.BoolValue(true)
-	} else if !data.ProfileQosVoqModeFairFour.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileQosVoqModeFairFour = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.qos.voq-mode.fair-eight"); value.Exists() {
-		data.ProfileQosVoqModeFairEight = types.BoolValue(true)
-	} else if !data.ProfileQosVoqModeFairEight.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileQosVoqModeFairEight = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.qos.l2-mode"); value.Exists() {
-		data.ProfileQosL2Mode = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.qos.low-latency-mode"); value.Exists() {
-		data.ProfileQosLowLatencyMode = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.qos.intra-npu-over-fabric"); value.Exists() {
-		data.ProfileQosIntraNpuOverFabric = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.qos.qos-stats-push-collection"); value.Exists() {
-		data.ProfileQosQosStatsPushCollection = types.BoolValue(true)
-	} else if !data.ProfileQosQosStatsPushCollection.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileQosQosStatsPushCollection = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.qos.high-water-marks"); value.Exists() {
-		data.ProfileQosHighWaterMarks = types.BoolValue(true)
-	} else if !data.ProfileQosHighWaterMarks.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileQosHighWaterMarks = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.cef.dark-bw"); value.Exists() {
-		data.ProfileCefDarkBw = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.cef.sropt"); value.Exists() {
-		data.ProfileCefSropt = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.cef.bgplu"); value.Exists() {
-		data.ProfileCefBgplu = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.cef.bgplu-over-rsvpte"); value.Exists() {
-		data.ProfileCefBgpluOverRsvpte = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.cef.cbf"); value.Exists() {
-		data.ProfileCefCbf = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.cef.forward-class-lists.forward-class-list"); value.Exists() {
-		data.ProfileCefCbfForwardClassList = helpers.GetInt64List(value.Array())
-	} else {
-		data.ProfileCefCbfForwardClassList = types.ListNull(types.Int64Type)
-	}
-	if value := res.Get(prefix + "profile.cef.ipv6.hop-limit"); value.Exists() {
-		data.ProfileCefIpv6HopLimit = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.cef.lpts.acl"); value.Exists() {
-		data.ProfileCefLptsAcl = types.BoolValue(true)
-	} else if !data.ProfileCefLptsAcl.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileCefLptsAcl = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.cef.lpts.pifib-entry-counters"); value.Exists() {
-		data.ProfileCefLptsPifibEntryCounters = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "profile.cef.vxlan.ipv6-tnl-scale"); value.Exists() {
-		data.ProfileCefVxlanIpv6TnlScale = types.BoolValue(true)
-	} else if !data.ProfileCefVxlanIpv6TnlScale.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileCefVxlanIpv6TnlScale = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.cef.mplsoudp.scale"); value.Exists() {
-		data.ProfileCefMplsoudpScale = types.BoolValue(true)
-	} else if !data.ProfileCefMplsoudpScale.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileCefMplsoudpScale = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.cef.stats.label.app-default"); value.Exists() {
-		data.ProfileCefStatsLabelAppDefault = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.cef.ttl.tunnel-ip.decrement"); value.Exists() {
-		data.ProfileCefTtlTunnelIpDecrement = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.cef.te-tunnel.highscale-no-ldp-over-te"); value.Exists() {
-		data.ProfileCefTeTunnelHighscaleNoLdpOverTe = types.BoolValue(true)
-	} else if !data.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileCefTeTunnelHighscaleNoLdpOverTe = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.cef.te-tunnel.highscale-ldp-over-te-no-sr-over-srte"); value.Exists() {
-		data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte = types.BoolValue(true)
-	} else if !data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.cef.te-tunnel.label-over-te-counters"); value.Exists() {
-		data.ProfileCefTeTunnelLabelOverTeCounters = types.BoolValue(true)
-	} else if !data.ProfileCefTeTunnelLabelOverTeCounters.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileCefTeTunnelLabelOverTeCounters = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.cef.ip-redirect"); value.Exists() {
-		data.ProfileCefIpRedirect = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.cef.unipath-surpf.enable"); value.Exists() {
-		data.ProfileCefUnipathSurpfEnable = types.BoolValue(true)
-	} else if !data.ProfileCefUnipathSurpfEnable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileCefUnipathSurpfEnable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.cef.source-rtbh.enable"); value.Exists() {
-		data.ProfileCefSourceRtbhEnable = types.BoolValue(true)
-	} else if !data.ProfileCefSourceRtbhEnable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileCefSourceRtbhEnable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.encap-exact.interfaces.interface"); value.Exists() {
-		data.ProfileEncapExactInterfaces = make([]HWModuleProfile8000ProfileEncapExactInterfaces, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := HWModuleProfile8000ProfileEncapExactInterfaces{}
-			if cValue := v.Get("interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			data.ProfileEncapExactInterfaces = append(data.ProfileEncapExactInterfaces, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "profile.encap-exact.locations.location"); value.Exists() {
-		data.ProfileEncapExactLocations = make([]HWModuleProfile8000ProfileEncapExactLocations, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := HWModuleProfile8000ProfileEncapExactLocations{}
-			if cValue := v.Get("location-name"); cValue.Exists() {
-				item.LocationName = types.StringValue(cValue.String())
-			}
-			data.ProfileEncapExactLocations = append(data.ProfileEncapExactLocations, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "profile.encap-exact.locations.all"); value.Exists() {
-		data.ProfileEncapExactLocationsAll = types.BoolValue(true)
-	} else if !data.ProfileEncapExactLocationsAll.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileEncapExactLocationsAll = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.encap-exact.locations.all-virtual"); value.Exists() {
-		data.ProfileEncapExactLocationsAllVirtual = types.BoolValue(true)
-	} else if !data.ProfileEncapExactLocationsAllVirtual.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileEncapExactLocationsAllVirtual = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.stats.voqs-sharing-counters"); value.Exists() {
-		data.ProfileStatsVoqsSharingCounters = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.stats.no-bvi-ingress"); value.Exists() {
-		data.ProfileStatsNoBviIngress = types.BoolValue(true)
-	} else if !data.ProfileStatsNoBviIngress.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileStatsNoBviIngress = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.stats.acl-permit"); value.Exists() {
-		data.ProfileStatsAclPermit = types.BoolValue(true)
-	} else if !data.ProfileStatsAclPermit.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileStatsAclPermit = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.bw-threshold"); value.Exists() {
-		data.ProfileBwThreshold = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.priority-flow-control.locations.location"); value.Exists() {
-		data.ProfilePriorityFlowControlLocations = make([]HWModuleProfile8000ProfilePriorityFlowControlLocations, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := HWModuleProfile8000ProfilePriorityFlowControlLocations{}
-			if cValue := v.Get("location-name"); cValue.Exists() {
-				item.LocationName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("buffer-extended.traffic-class"); cValue.Exists() {
-				item.BufferExtendedTrafficClass = make([]HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferExtendedTrafficClass, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferExtendedTrafficClass{}
-					if ccValue := cv.Get("traffic-class-id"); ccValue.Exists() {
-						cItem.TrafficClassId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("pause-threshold"); ccValue.Exists() {
-						cItem.PauseThreshold = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("pause-threshold-bytes"); ccValue.Exists() {
-						cItem.PauseThresholdBytes = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("ms"); ccValue.Exists() {
-						cItem.Ms = types.BoolValue(true)
-					} else if !cItem.Ms.IsNull() {
-						// Only set to false if it was previously set
-						cItem.Ms = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("ms.headroom"); ccValue.Exists() {
-						cItem.MsHeadroom = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("us"); ccValue.Exists() {
-						cItem.Us = types.BoolValue(true)
-					} else if !cItem.Us.IsNull() {
-						// Only set to false if it was previously set
-						cItem.Us = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("us.headroom"); ccValue.Exists() {
-						cItem.UsHeadroom = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("kbytes"); ccValue.Exists() {
-						cItem.Kbytes = types.BoolValue(true)
-					} else if !cItem.Kbytes.IsNull() {
-						// Only set to false if it was previously set
-						cItem.Kbytes = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("kbytes.headroom"); ccValue.Exists() {
-						cItem.KbytesHeadroom = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("mbytes"); ccValue.Exists() {
-						cItem.Mbytes = types.BoolValue(true)
-					} else if !cItem.Mbytes.IsNull() {
-						// Only set to false if it was previously set
-						cItem.Mbytes = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("mbytes.headroom"); ccValue.Exists() {
-						cItem.MbytesHeadroom = types.Int64Value(ccValue.Int())
-					}
-					item.BufferExtendedTrafficClass = append(item.BufferExtendedTrafficClass, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("buffer-internal.traffic-class"); cValue.Exists() {
-				item.BufferInternalTrafficClass = make([]HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferInternalTrafficClass, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferInternalTrafficClass{}
-					if ccValue := cv.Get("traffic-class-id"); ccValue.Exists() {
-						cItem.TrafficClassId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("pause-threshold"); ccValue.Exists() {
-						cItem.PauseThreshold = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("headroom"); ccValue.Exists() {
-						cItem.Headroom = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("ecn"); ccValue.Exists() {
-						cItem.Ecn = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("max-threshold"); ccValue.Exists() {
-						cItem.MaxThreshold = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("probability-percentage"); ccValue.Exists() {
-						cItem.ProbabilityPercentage = types.Int64Value(ccValue.Int())
-					}
-					item.BufferInternalTrafficClass = append(item.BufferInternalTrafficClass, cItem)
-					return true
-				})
-			}
-			data.ProfilePriorityFlowControlLocations = append(data.ProfilePriorityFlowControlLocations, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "profile.gue.udp-dest-port.ipv4"); value.Exists() {
-		data.ProfileGueUdpDestPortIpv4 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "profile.gue.udp-dest-port.ipv6"); value.Exists() {
-		data.ProfileGueUdpDestPortIpv6 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "profile.gue.udp-dest-port.mpls"); value.Exists() {
-		data.ProfileGueUdpDestPortMpls = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "profile.npu.buffer-extended.locations.location"); value.Exists() {
-		data.ProfileNpuBufferExtendedLocations = make([]HWModuleProfile8000ProfileNpuBufferExtendedLocations, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := HWModuleProfile8000ProfileNpuBufferExtendedLocations{}
-			if cValue := v.Get("location-name"); cValue.Exists() {
-				item.LocationName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("bandwidth-congestion-detection.enable"); cValue.Exists() {
-				item.BandwidthCongestionDetectionEnable = types.BoolValue(true)
-			} else if !item.BandwidthCongestionDetectionEnable.IsNull() {
-				// Only set to false if it was previously set
-				item.BandwidthCongestionDetectionEnable = types.BoolValue(false)
-			}
-			if cValue := v.Get("bandwidth-congestion-protect.enable"); cValue.Exists() {
-				item.BandwidthCongestionProtectEnable = types.BoolValue(true)
-			} else if !item.BandwidthCongestionProtectEnable.IsNull() {
-				// Only set to false if it was previously set
-				item.BandwidthCongestionProtectEnable = types.BoolValue(false)
-			}
-			data.ProfileNpuBufferExtendedLocations = append(data.ProfileNpuBufferExtendedLocations, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "profile.l2fib.pw-stats"); value.Exists() {
-		data.ProfileL2fibPwStats = types.BoolValue(true)
-	} else if !data.ProfileL2fibPwStats.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileL2fibPwStats = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.l2fib.bridge-flush-convergence"); value.Exists() {
-		data.ProfileL2fibBridgeFlushConvergence = types.BoolValue(true)
-	} else if !data.ProfileL2fibBridgeFlushConvergence.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileL2fibBridgeFlushConvergence = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.l2fib.L2-high-scale"); value.Exists() {
-		data.ProfileL2fibHigherScale = types.BoolValue(true)
-	} else if !data.ProfileL2fibHigherScale.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileL2fibHigherScale = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.l2fib.vxlan-dc-leaf"); value.Exists() {
-		data.ProfileL2fibVxlanDcLeaf = types.BoolValue(true)
-	} else if !data.ProfileL2fibVxlanDcLeaf.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileL2fibVxlanDcLeaf = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.npu-compatibility"); value.Exists() {
-		data.ProfileNpuCompatibility = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.route.scale.ipv6-unicast.connected-prefix.high"); value.Exists() {
-		data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh = types.BoolValue(true)
-	} else if !data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.flowspec.ipv6-packet-len-enable"); value.Exists() {
-		data.ProfileFlowspecIpv6PacketLenEnable = types.BoolValue(true)
-	} else if !data.ProfileFlowspecIpv6PacketLenEnable.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileFlowspecIpv6PacketLenEnable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.irb.throughput-optimized"); value.Exists() {
-		data.ProfileIrbThroughputOptimized = types.BoolValue(true)
-	} else if !data.ProfileIrbThroughputOptimized.IsNull() {
-		// Only set to false if it was previously set in state
-		data.ProfileIrbThroughputOptimized = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBody
-// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
-
-func (data *HWModuleProfile8000Data) fromBody(ctx context.Context, res gjson.Result) {
-
-	prefix := helpers.LastElement(data.getPath()) + "."
-	if res.Get(helpers.LastElement(data.getPath())).IsArray() {
-		prefix += "0."
-	}
-	// Check if data is at root level (gNMI response case)
-	if !res.Get(helpers.LastElement(data.getPath())).Exists() {
-		prefix = ""
-	}
-	if value := res.Get(prefix + "multicast.route-scale"); value.Exists() {
-		data.MulticastRouteScale = types.BoolValue(true)
-	} else {
-		data.MulticastRouteScale = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.fib.ipv4.unicast.percent"); value.Exists() {
-		data.ProfileTcamFibIpv4UnicastPercent = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "profile.tcam.fib.ipv6.unicast.percent"); value.Exists() {
-		data.ProfileTcamFibIpv6UnicastPercent = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.src-addr"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4SrcAddr = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv4SrcAddr = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.dst-addr"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4DstAddr = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv4DstAddr = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.src-port"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4SrcPort = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv4SrcPort = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.dst-port"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4DstPort = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv4DstPort = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.proto"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Proto = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv4Proto = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.precedence"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Precedence = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv4Precedence = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.ttl-match"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4TtlMatch = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv4TtlMatch = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.tcp-flags"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4TcpFlags = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv4TcpFlags = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.frag-bit"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4FragBit = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv4FragBit = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.src-object-group"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4SrcObjectGroup = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv4SrcObjectGroup = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.dst-object-group"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4DstObjectGroup = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv4DstObjectGroup = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.packet-len"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4PacketLen = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv4PacketLen = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.fragment-offset"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4FragmentOffset = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv4FragmentOffset = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.udf1"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Udf1 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.udf2"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Udf2 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.udf3"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Udf3 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.udf4"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Udf4 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.udf5"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Udf5 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.udf6"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Udf6 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.udf7"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Udf7 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv4.udf8"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv4Udf8 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.src-addr"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6SrcAddr = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv6SrcAddr = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.dst-addr"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6DstAddr = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv6DstAddr = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.dst-port"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6DstPort = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv6DstPort = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.next-hdr"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6NextHdr = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv6NextHdr = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.traffic-class"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6TrafficClass = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv6TrafficClass = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.frag-bit"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6FragBit = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv6FragBit = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.tcp-flags"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6TcpFlags = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv6TcpFlags = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.src-object-group"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6SrcObjectGroup = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv6SrcObjectGroup = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.dst-object-group"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6DstObjectGroup = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv6DstObjectGroup = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.packet-len"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6PacketLen = types.BoolValue(true)
-	} else {
-		data.ProfileTcamFormatAccessListIpv6PacketLen = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.udf1"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6Udf1 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.udf2"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6Udf2 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.udf3"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6Udf3 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.udf4"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6Udf4 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.udf5"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6Udf5 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.udf6"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6Udf6 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.udf7"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6Udf7 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.tcam.format.access-list.ipv6.udf8"); value.Exists() {
-		data.ProfileTcamFormatAccessListIpv6Udf8 = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.qos.voq-mode.four"); value.Exists() {
-		data.ProfileQosVoqModeFour = types.BoolValue(true)
-	} else {
-		data.ProfileQosVoqModeFour = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.qos.voq-mode.eight"); value.Exists() {
-		data.ProfileQosVoqModeEight = types.BoolValue(true)
-	} else {
-		data.ProfileQosVoqModeEight = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.qos.voq-mode.fair-four"); value.Exists() {
-		data.ProfileQosVoqModeFairFour = types.BoolValue(true)
-	} else {
-		data.ProfileQosVoqModeFairFour = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.qos.voq-mode.fair-eight"); value.Exists() {
-		data.ProfileQosVoqModeFairEight = types.BoolValue(true)
-	} else {
-		data.ProfileQosVoqModeFairEight = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.qos.l2-mode"); value.Exists() {
-		data.ProfileQosL2Mode = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.qos.low-latency-mode"); value.Exists() {
-		data.ProfileQosLowLatencyMode = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.qos.intra-npu-over-fabric"); value.Exists() {
-		data.ProfileQosIntraNpuOverFabric = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.qos.qos-stats-push-collection"); value.Exists() {
-		data.ProfileQosQosStatsPushCollection = types.BoolValue(true)
-	} else {
-		data.ProfileQosQosStatsPushCollection = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.qos.high-water-marks"); value.Exists() {
-		data.ProfileQosHighWaterMarks = types.BoolValue(true)
-	} else {
-		data.ProfileQosHighWaterMarks = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.cef.dark-bw"); value.Exists() {
-		data.ProfileCefDarkBw = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.cef.sropt"); value.Exists() {
-		data.ProfileCefSropt = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.cef.bgplu"); value.Exists() {
-		data.ProfileCefBgplu = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.cef.bgplu-over-rsvpte"); value.Exists() {
-		data.ProfileCefBgpluOverRsvpte = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.cef.cbf"); value.Exists() {
-		data.ProfileCefCbf = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.cef.forward-class-lists.forward-class-list"); value.Exists() {
-		data.ProfileCefCbfForwardClassList = helpers.GetInt64List(value.Array())
-	} else {
-		data.ProfileCefCbfForwardClassList = types.ListNull(types.Int64Type)
-	}
-	if value := res.Get(prefix + "profile.cef.ipv6.hop-limit"); value.Exists() {
-		data.ProfileCefIpv6HopLimit = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.cef.lpts.acl"); value.Exists() {
-		data.ProfileCefLptsAcl = types.BoolValue(true)
-	} else {
-		data.ProfileCefLptsAcl = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.cef.lpts.pifib-entry-counters"); value.Exists() {
-		data.ProfileCefLptsPifibEntryCounters = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "profile.cef.vxlan.ipv6-tnl-scale"); value.Exists() {
-		data.ProfileCefVxlanIpv6TnlScale = types.BoolValue(true)
-	} else {
-		data.ProfileCefVxlanIpv6TnlScale = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.cef.mplsoudp.scale"); value.Exists() {
-		data.ProfileCefMplsoudpScale = types.BoolValue(true)
-	} else {
-		data.ProfileCefMplsoudpScale = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.cef.stats.label.app-default"); value.Exists() {
-		data.ProfileCefStatsLabelAppDefault = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.cef.ttl.tunnel-ip.decrement"); value.Exists() {
-		data.ProfileCefTtlTunnelIpDecrement = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.cef.te-tunnel.highscale-no-ldp-over-te"); value.Exists() {
-		data.ProfileCefTeTunnelHighscaleNoLdpOverTe = types.BoolValue(true)
-	} else {
-		data.ProfileCefTeTunnelHighscaleNoLdpOverTe = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.cef.te-tunnel.highscale-ldp-over-te-no-sr-over-srte"); value.Exists() {
-		data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte = types.BoolValue(true)
-	} else {
-		data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.cef.te-tunnel.label-over-te-counters"); value.Exists() {
-		data.ProfileCefTeTunnelLabelOverTeCounters = types.BoolValue(true)
-	} else {
-		data.ProfileCefTeTunnelLabelOverTeCounters = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.cef.ip-redirect"); value.Exists() {
-		data.ProfileCefIpRedirect = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.cef.unipath-surpf.enable"); value.Exists() {
-		data.ProfileCefUnipathSurpfEnable = types.BoolValue(true)
-	} else {
-		data.ProfileCefUnipathSurpfEnable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.cef.source-rtbh.enable"); value.Exists() {
-		data.ProfileCefSourceRtbhEnable = types.BoolValue(true)
-	} else {
-		data.ProfileCefSourceRtbhEnable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.encap-exact.interfaces.interface"); value.Exists() {
-		data.ProfileEncapExactInterfaces = make([]HWModuleProfile8000ProfileEncapExactInterfaces, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := HWModuleProfile8000ProfileEncapExactInterfaces{}
-			if cValue := v.Get("interface-name"); cValue.Exists() {
-				item.InterfaceName = types.StringValue(cValue.String())
-			}
-			data.ProfileEncapExactInterfaces = append(data.ProfileEncapExactInterfaces, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "profile.encap-exact.locations.location"); value.Exists() {
-		data.ProfileEncapExactLocations = make([]HWModuleProfile8000ProfileEncapExactLocations, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := HWModuleProfile8000ProfileEncapExactLocations{}
-			if cValue := v.Get("location-name"); cValue.Exists() {
-				item.LocationName = types.StringValue(cValue.String())
-			}
-			data.ProfileEncapExactLocations = append(data.ProfileEncapExactLocations, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "profile.encap-exact.locations.all"); value.Exists() {
-		data.ProfileEncapExactLocationsAll = types.BoolValue(true)
-	} else {
-		data.ProfileEncapExactLocationsAll = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.encap-exact.locations.all-virtual"); value.Exists() {
-		data.ProfileEncapExactLocationsAllVirtual = types.BoolValue(true)
-	} else {
-		data.ProfileEncapExactLocationsAllVirtual = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.stats.voqs-sharing-counters"); value.Exists() {
-		data.ProfileStatsVoqsSharingCounters = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.stats.no-bvi-ingress"); value.Exists() {
-		data.ProfileStatsNoBviIngress = types.BoolValue(true)
-	} else {
-		data.ProfileStatsNoBviIngress = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.stats.acl-permit"); value.Exists() {
-		data.ProfileStatsAclPermit = types.BoolValue(true)
-	} else {
-		data.ProfileStatsAclPermit = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.bw-threshold"); value.Exists() {
-		data.ProfileBwThreshold = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.priority-flow-control.locations.location"); value.Exists() {
-		data.ProfilePriorityFlowControlLocations = make([]HWModuleProfile8000ProfilePriorityFlowControlLocations, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := HWModuleProfile8000ProfilePriorityFlowControlLocations{}
-			if cValue := v.Get("location-name"); cValue.Exists() {
-				item.LocationName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("buffer-extended.traffic-class"); cValue.Exists() {
-				item.BufferExtendedTrafficClass = make([]HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferExtendedTrafficClass, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferExtendedTrafficClass{}
-					if ccValue := cv.Get("traffic-class-id"); ccValue.Exists() {
-						cItem.TrafficClassId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("pause-threshold"); ccValue.Exists() {
-						cItem.PauseThreshold = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("pause-threshold-bytes"); ccValue.Exists() {
-						cItem.PauseThresholdBytes = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("ms"); ccValue.Exists() {
-						cItem.Ms = types.BoolValue(true)
-					} else {
-						cItem.Ms = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("ms.headroom"); ccValue.Exists() {
-						cItem.MsHeadroom = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("us"); ccValue.Exists() {
-						cItem.Us = types.BoolValue(true)
-					} else {
-						cItem.Us = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("us.headroom"); ccValue.Exists() {
-						cItem.UsHeadroom = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("kbytes"); ccValue.Exists() {
-						cItem.Kbytes = types.BoolValue(true)
-					} else {
-						cItem.Kbytes = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("kbytes.headroom"); ccValue.Exists() {
-						cItem.KbytesHeadroom = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("mbytes"); ccValue.Exists() {
-						cItem.Mbytes = types.BoolValue(true)
-					} else {
-						cItem.Mbytes = types.BoolValue(false)
-					}
-					if ccValue := cv.Get("mbytes.headroom"); ccValue.Exists() {
-						cItem.MbytesHeadroom = types.Int64Value(ccValue.Int())
-					}
-					item.BufferExtendedTrafficClass = append(item.BufferExtendedTrafficClass, cItem)
-					return true
-				})
-			}
-			if cValue := v.Get("buffer-internal.traffic-class"); cValue.Exists() {
-				item.BufferInternalTrafficClass = make([]HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferInternalTrafficClass, 0)
-				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := HWModuleProfile8000ProfilePriorityFlowControlLocationsBufferInternalTrafficClass{}
-					if ccValue := cv.Get("traffic-class-id"); ccValue.Exists() {
-						cItem.TrafficClassId = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("pause-threshold"); ccValue.Exists() {
-						cItem.PauseThreshold = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("headroom"); ccValue.Exists() {
-						cItem.Headroom = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("ecn"); ccValue.Exists() {
-						cItem.Ecn = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("max-threshold"); ccValue.Exists() {
-						cItem.MaxThreshold = types.Int64Value(ccValue.Int())
-					}
-					if ccValue := cv.Get("probability-percentage"); ccValue.Exists() {
-						cItem.ProbabilityPercentage = types.Int64Value(ccValue.Int())
-					}
-					item.BufferInternalTrafficClass = append(item.BufferInternalTrafficClass, cItem)
-					return true
-				})
-			}
-			data.ProfilePriorityFlowControlLocations = append(data.ProfilePriorityFlowControlLocations, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "profile.gue.udp-dest-port.ipv4"); value.Exists() {
-		data.ProfileGueUdpDestPortIpv4 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "profile.gue.udp-dest-port.ipv6"); value.Exists() {
-		data.ProfileGueUdpDestPortIpv6 = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "profile.gue.udp-dest-port.mpls"); value.Exists() {
-		data.ProfileGueUdpDestPortMpls = types.Int64Value(value.Int())
-	}
-	if value := res.Get(prefix + "profile.npu.buffer-extended.locations.location"); value.Exists() {
-		data.ProfileNpuBufferExtendedLocations = make([]HWModuleProfile8000ProfileNpuBufferExtendedLocations, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := HWModuleProfile8000ProfileNpuBufferExtendedLocations{}
-			if cValue := v.Get("location-name"); cValue.Exists() {
-				item.LocationName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("bandwidth-congestion-detection.enable"); cValue.Exists() {
-				item.BandwidthCongestionDetectionEnable = types.BoolValue(true)
-			} else {
-				item.BandwidthCongestionDetectionEnable = types.BoolValue(false)
-			}
-			if cValue := v.Get("bandwidth-congestion-protect.enable"); cValue.Exists() {
-				item.BandwidthCongestionProtectEnable = types.BoolValue(true)
-			} else {
-				item.BandwidthCongestionProtectEnable = types.BoolValue(false)
-			}
-			data.ProfileNpuBufferExtendedLocations = append(data.ProfileNpuBufferExtendedLocations, item)
-			return true
-		})
-	}
-	if value := res.Get(prefix + "profile.l2fib.pw-stats"); value.Exists() {
-		data.ProfileL2fibPwStats = types.BoolValue(true)
-	} else {
-		data.ProfileL2fibPwStats = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.l2fib.bridge-flush-convergence"); value.Exists() {
-		data.ProfileL2fibBridgeFlushConvergence = types.BoolValue(true)
-	} else {
-		data.ProfileL2fibBridgeFlushConvergence = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.l2fib.L2-high-scale"); value.Exists() {
-		data.ProfileL2fibHigherScale = types.BoolValue(true)
-	} else {
-		data.ProfileL2fibHigherScale = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.l2fib.vxlan-dc-leaf"); value.Exists() {
-		data.ProfileL2fibVxlanDcLeaf = types.BoolValue(true)
-	} else {
-		data.ProfileL2fibVxlanDcLeaf = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.npu-compatibility"); value.Exists() {
-		data.ProfileNpuCompatibility = types.StringValue(value.String())
-	}
-	if value := res.Get(prefix + "profile.route.scale.ipv6-unicast.connected-prefix.high"); value.Exists() {
-		data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh = types.BoolValue(true)
-	} else {
-		data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.flowspec.ipv6-packet-len-enable"); value.Exists() {
-		data.ProfileFlowspecIpv6PacketLenEnable = types.BoolValue(true)
-	} else {
-		data.ProfileFlowspecIpv6PacketLenEnable = types.BoolValue(false)
-	}
-	if value := res.Get(prefix + "profile.irb.throughput-optimized"); value.Exists() {
-		data.ProfileIrbThroughputOptimized = types.BoolValue(true)
-	} else {
-		data.ProfileIrbThroughputOptimized = types.BoolValue(false)
-	}
-}
-
-// End of section. //template:end fromBodyData
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyXML
 
 func (data *HWModuleProfile8000) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -4827,6 +6856,17 @@ func (data *HWModuleProfile8000) fromBodyXML(ctx context.Context, res xmldot.Res
 					return true
 				})
 			}
+			if cValue := helpers.GetFromXPath(v, "buffer-extended/non-pfc-tcs"); cValue.Exists() {
+				item.NonPfcTcs = types.BoolValue(true)
+			} else {
+				item.NonPfcTcs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "buffer-extended/non-pfc-tcs/max-non-pfc-voqs/number-of-evict-voqs"); cValue.Exists() {
+				item.NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "buffer-extended/non-pfc-tcs/max-non-pfc-voqs/hbm-buffers-percentage"); cValue.Exists() {
+				item.NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage = types.Int64Value(cValue.Int())
+			}
 			data.ProfilePriorityFlowControlLocations = append(data.ProfilePriorityFlowControlLocations, item)
 			return true
 		})
@@ -4899,9 +6939,53 @@ func (data *HWModuleProfile8000) fromBodyXML(ctx context.Context, res xmldot.Res
 	} else {
 		data.ProfileIrbThroughputOptimized = types.BoolValue(false)
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/tcam/format/og-compr-id-extension"); value.Exists() {
+		data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/qos/mode"); value.Exists() {
+		data.ProfileQosMode = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/cef/iptunnel/scale"); value.Exists() {
+		data.ProfileCefIptunnelScale = types.BoolValue(true)
+	} else {
+		data.ProfileCefIptunnelScale = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/cef/hash/ip-field-duplication"); value.Exists() {
+		data.ProfileCefHashIpFieldDuplication = types.BoolValue(true)
+	} else {
+		data.ProfileCefHashIpFieldDuplication = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/l2fib/evpn-aging"); value.Exists() {
+		data.ProfileL2fibEvpnAging = types.BoolValue(true)
+	} else {
+		data.ProfileL2fibEvpnAging = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/route/scale/host-route"); value.Exists() {
+		data.ProfileRouteScaleHostRoute = types.BoolValue(true)
+	} else {
+		data.ProfileRouteScaleHostRoute = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/route/scale/lpm/full-scale"); value.Exists() {
+		data.ProfileRouteScaleLpmFullScale = types.BoolValue(true)
+	} else {
+		data.ProfileRouteScaleLpmFullScale = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/tcam/format/og-compr-id-extension/ingress"); value.Exists() {
+		data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/tcam/format/og-compr-id-extension/egress"); value.Exists() {
+		data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyDataXML
 
 func (data *HWModuleProfile8000Data) fromBodyXML(ctx context.Context, res xmldot.Result) {
@@ -5323,6 +7407,17 @@ func (data *HWModuleProfile8000Data) fromBodyXML(ctx context.Context, res xmldot
 					return true
 				})
 			}
+			if cValue := helpers.GetFromXPath(v, "buffer-extended/non-pfc-tcs"); cValue.Exists() {
+				item.NonPfcTcs = types.BoolValue(true)
+			} else {
+				item.NonPfcTcs = types.BoolValue(false)
+			}
+			if cValue := helpers.GetFromXPath(v, "buffer-extended/non-pfc-tcs/max-non-pfc-voqs/number-of-evict-voqs"); cValue.Exists() {
+				item.NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs = types.Int64Value(cValue.Int())
+			}
+			if cValue := helpers.GetFromXPath(v, "buffer-extended/non-pfc-tcs/max-non-pfc-voqs/hbm-buffers-percentage"); cValue.Exists() {
+				item.NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage = types.Int64Value(cValue.Int())
+			}
 			data.ProfilePriorityFlowControlLocations = append(data.ProfilePriorityFlowControlLocations, item)
 			return true
 		})
@@ -5395,1195 +7490,53 @@ func (data *HWModuleProfile8000Data) fromBodyXML(ctx context.Context, res xmldot
 	} else {
 		data.ProfileIrbThroughputOptimized = types.BoolValue(false)
 	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/tcam/format/og-compr-id-extension"); value.Exists() {
+		data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatOgComprIdExtension = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/qos/mode"); value.Exists() {
+		data.ProfileQosMode = types.StringValue(value.String())
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/cef/iptunnel/scale"); value.Exists() {
+		data.ProfileCefIptunnelScale = types.BoolValue(true)
+	} else {
+		data.ProfileCefIptunnelScale = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/cef/hash/ip-field-duplication"); value.Exists() {
+		data.ProfileCefHashIpFieldDuplication = types.BoolValue(true)
+	} else {
+		data.ProfileCefHashIpFieldDuplication = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/l2fib/evpn-aging"); value.Exists() {
+		data.ProfileL2fibEvpnAging = types.BoolValue(true)
+	} else {
+		data.ProfileL2fibEvpnAging = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/route/scale/host-route"); value.Exists() {
+		data.ProfileRouteScaleHostRoute = types.BoolValue(true)
+	} else {
+		data.ProfileRouteScaleHostRoute = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/route/scale/lpm/full-scale"); value.Exists() {
+		data.ProfileRouteScaleLpmFullScale = types.BoolValue(true)
+	} else {
+		data.ProfileRouteScaleLpmFullScale = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/tcam/format/og-compr-id-extension/ingress"); value.Exists() {
+		data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatOgComprIdExtensionIngress = types.BoolValue(false)
+	}
+	if value := helpers.GetFromXPath(res, "data/"+data.getXPath()+"/profile/tcam/format/og-compr-id-extension/egress"); value.Exists() {
+		data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(true)
+	} else {
+		data.ProfileTcamFormatOgComprIdExtensionEgress = types.BoolValue(false)
+	}
 }
 
 // End of section. //template:end fromBodyDataXML
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
-func (data *HWModuleProfile8000) getDeletedItems(ctx context.Context, state HWModuleProfile8000) []string {
-	deletedItems := make([]string, 0)
-	if !state.ProfileIrbThroughputOptimized.IsNull() && data.ProfileIrbThroughputOptimized.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/irb/throughput-optimized", state.getPath()))
-	}
-	if !state.ProfileFlowspecIpv6PacketLenEnable.IsNull() && data.ProfileFlowspecIpv6PacketLenEnable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/flowspec/ipv6-packet-len-enable", state.getPath()))
-	}
-	if !state.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() && data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/route/scale/ipv6-unicast/connected-prefix/high", state.getPath()))
-	}
-	if !state.ProfileNpuCompatibility.IsNull() && data.ProfileNpuCompatibility.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/npu-compatibility", state.getPath()))
-	}
-	if !state.ProfileL2fibVxlanDcLeaf.IsNull() && data.ProfileL2fibVxlanDcLeaf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/l2fib/vxlan-dc-leaf", state.getPath()))
-	}
-	if !state.ProfileL2fibHigherScale.IsNull() && data.ProfileL2fibHigherScale.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/l2fib/L2-high-scale", state.getPath()))
-	}
-	if !state.ProfileL2fibBridgeFlushConvergence.IsNull() && data.ProfileL2fibBridgeFlushConvergence.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/l2fib/bridge-flush-convergence", state.getPath()))
-	}
-	if !state.ProfileL2fibPwStats.IsNull() && data.ProfileL2fibPwStats.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/l2fib/pw-stats", state.getPath()))
-	}
-	for i := range state.ProfileNpuBufferExtendedLocations {
-		keys := [...]string{"location-name"}
-		stateKeyValues := [...]string{state.ProfileNpuBufferExtendedLocations[i].LocationName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.ProfileNpuBufferExtendedLocations[i].LocationName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.ProfileNpuBufferExtendedLocations {
-			found = true
-			if state.ProfileNpuBufferExtendedLocations[i].LocationName.ValueString() != data.ProfileNpuBufferExtendedLocations[j].LocationName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.IsNull() && data.ProfileNpuBufferExtendedLocations[j].BandwidthCongestionProtectEnable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/npu/buffer-extended/locations/location%v/bandwidth-congestion-protect/enable", state.getPath(), keyString))
-				}
-				if !state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.IsNull() && data.ProfileNpuBufferExtendedLocations[j].BandwidthCongestionDetectionEnable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/npu/buffer-extended/locations/location%v/bandwidth-congestion-detection/enable", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/npu/buffer-extended/locations/location%v", state.getPath(), keyString))
-		}
-	}
-	if !state.ProfileGueUdpDestPortMpls.IsNull() && data.ProfileGueUdpDestPortMpls.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/gue/udp-dest-port", state.getPath()))
-	}
-	if !state.ProfileGueUdpDestPortIpv6.IsNull() && data.ProfileGueUdpDestPortIpv6.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/gue/udp-dest-port", state.getPath()))
-	}
-	if !state.ProfileGueUdpDestPortIpv4.IsNull() && data.ProfileGueUdpDestPortIpv4.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/gue/udp-dest-port", state.getPath()))
-	}
-	for i := range state.ProfilePriorityFlowControlLocations {
-		keys := [...]string{"location-name"}
-		stateKeyValues := [...]string{state.ProfilePriorityFlowControlLocations[i].LocationName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.ProfilePriorityFlowControlLocations[i].LocationName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.ProfilePriorityFlowControlLocations {
-			found = true
-			if state.ProfilePriorityFlowControlLocations[i].LocationName.ValueString() != data.ProfilePriorityFlowControlLocations[j].LocationName.ValueString() {
-				found = false
-			}
-			if found {
-				for ci := range state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass {
-					ckeys := [...]string{"traffic-class-id"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].TrafficClassId.ValueInt64(), 10)}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].TrafficClassId.ValueInt64()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.ProfilePriorityFlowControlLocations[j].BufferInternalTrafficClass {
-						found = true
-						if state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].TrafficClassId.ValueInt64() != data.ProfilePriorityFlowControlLocations[j].BufferInternalTrafficClass[cj].TrafficClassId.ValueInt64() {
-							found = false
-						}
-						if found {
-							if !state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].ProbabilityPercentage.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferInternalTrafficClass[cj].ProbabilityPercentage.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-internal/traffic-class%v/probability-percentage", state.getPath(), keyString, ckeyString))
-							}
-							if !state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].MaxThreshold.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferInternalTrafficClass[cj].MaxThreshold.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-internal/traffic-class%v/max-threshold", state.getPath(), keyString, ckeyString))
-							}
-							if !state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].Ecn.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferInternalTrafficClass[cj].Ecn.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-internal/traffic-class%v/ecn", state.getPath(), keyString, ckeyString))
-							}
-							if !state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].Headroom.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferInternalTrafficClass[cj].Headroom.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-internal/traffic-class%v/headroom", state.getPath(), keyString, ckeyString))
-							}
-							if !state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].PauseThreshold.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferInternalTrafficClass[cj].PauseThreshold.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-internal/traffic-class%v/pause-threshold", state.getPath(), keyString, ckeyString))
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-internal/traffic-class%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				for ci := range state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass {
-					ckeys := [...]string{"traffic-class-id"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].TrafficClassId.ValueInt64(), 10)}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].TrafficClassId.ValueInt64()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass {
-						found = true
-						if state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].TrafficClassId.ValueInt64() != data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].TrafficClassId.ValueInt64() {
-							found = false
-						}
-						if found {
-							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].MbytesHeadroom.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].MbytesHeadroom.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-extended/traffic-class%v/mbytes/headroom", state.getPath(), keyString, ckeyString))
-							}
-							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].Mbytes.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-extended/traffic-class%v/mbytes", state.getPath(), keyString, ckeyString))
-							}
-							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].KbytesHeadroom.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].KbytesHeadroom.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-extended/traffic-class%v/kbytes/headroom", state.getPath(), keyString, ckeyString))
-							}
-							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].Kbytes.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-extended/traffic-class%v/kbytes", state.getPath(), keyString, ckeyString))
-							}
-							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].UsHeadroom.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].UsHeadroom.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-extended/traffic-class%v/us/headroom", state.getPath(), keyString, ckeyString))
-							}
-							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].Us.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-extended/traffic-class%v/us", state.getPath(), keyString, ckeyString))
-							}
-							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].MsHeadroom.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].MsHeadroom.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-extended/traffic-class%v/ms/headroom", state.getPath(), keyString, ckeyString))
-							}
-							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].Ms.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-extended/traffic-class%v/ms", state.getPath(), keyString, ckeyString))
-							}
-							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].PauseThresholdBytes.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].PauseThresholdBytes.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-extended/traffic-class%v/pause-threshold-bytes", state.getPath(), keyString, ckeyString))
-							}
-							if !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].PauseThreshold.IsNull() && data.ProfilePriorityFlowControlLocations[j].BufferExtendedTrafficClass[cj].PauseThreshold.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-extended/traffic-class%v/pause-threshold", state.getPath(), keyString, ckeyString))
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-extended/traffic-class%v", state.getPath(), keyString, ckeyString))
-					}
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v", state.getPath(), keyString))
-		}
-	}
-	if !state.ProfileBwThreshold.IsNull() && data.ProfileBwThreshold.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/bw-threshold", state.getPath()))
-	}
-	if !state.ProfileStatsAclPermit.IsNull() && data.ProfileStatsAclPermit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/stats/acl-permit", state.getPath()))
-	}
-	if !state.ProfileStatsNoBviIngress.IsNull() && data.ProfileStatsNoBviIngress.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/stats/no-bvi-ingress", state.getPath()))
-	}
-	if !state.ProfileStatsVoqsSharingCounters.IsNull() && data.ProfileStatsVoqsSharingCounters.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/stats/voqs-sharing-counters", state.getPath()))
-	}
-	if !state.ProfileEncapExactLocationsAllVirtual.IsNull() && data.ProfileEncapExactLocationsAllVirtual.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/encap-exact/locations", state.getPath()))
-	}
-	if !state.ProfileEncapExactLocationsAll.IsNull() && data.ProfileEncapExactLocationsAll.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/encap-exact/locations", state.getPath()))
-	}
-	for i := range state.ProfileEncapExactLocations {
-		keys := [...]string{"location-name"}
-		stateKeyValues := [...]string{state.ProfileEncapExactLocations[i].LocationName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.ProfileEncapExactLocations[i].LocationName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.ProfileEncapExactLocations {
-			found = true
-			if state.ProfileEncapExactLocations[i].LocationName.ValueString() != data.ProfileEncapExactLocations[j].LocationName.ValueString() {
-				found = false
-			}
-			if found {
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/encap-exact/locations/location%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.ProfileEncapExactInterfaces {
-		keys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.ProfileEncapExactInterfaces[i].InterfaceName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.ProfileEncapExactInterfaces[i].InterfaceName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.ProfileEncapExactInterfaces {
-			found = true
-			if state.ProfileEncapExactInterfaces[i].InterfaceName.ValueString() != data.ProfileEncapExactInterfaces[j].InterfaceName.ValueString() {
-				found = false
-			}
-			if found {
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/encap-exact/interfaces/interface%v", state.getPath(), keyString))
-		}
-	}
-	if !state.ProfileCefSourceRtbhEnable.IsNull() && data.ProfileCefSourceRtbhEnable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/source-rtbh/enable", state.getPath()))
-	}
-	if !state.ProfileCefUnipathSurpfEnable.IsNull() && data.ProfileCefUnipathSurpfEnable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/unipath-surpf/enable", state.getPath()))
-	}
-	if !state.ProfileCefIpRedirect.IsNull() && data.ProfileCefIpRedirect.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/ip-redirect", state.getPath()))
-	}
-	if !state.ProfileCefTeTunnelLabelOverTeCounters.IsNull() && data.ProfileCefTeTunnelLabelOverTeCounters.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/te-tunnel/label-over-te-counters", state.getPath()))
-	}
-	if !state.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() && data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/te-tunnel/highscale-ldp-over-te-no-sr-over-srte", state.getPath()))
-	}
-	if !state.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() && data.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/te-tunnel/highscale-no-ldp-over-te", state.getPath()))
-	}
-	if !state.ProfileCefTtlTunnelIpDecrement.IsNull() && data.ProfileCefTtlTunnelIpDecrement.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/ttl/tunnel-ip/decrement", state.getPath()))
-	}
-	if !state.ProfileCefStatsLabelAppDefault.IsNull() && data.ProfileCefStatsLabelAppDefault.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/stats/label/app-default", state.getPath()))
-	}
-	if !state.ProfileCefMplsoudpScale.IsNull() && data.ProfileCefMplsoudpScale.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/mplsoudp/scale", state.getPath()))
-	}
-	if !state.ProfileCefVxlanIpv6TnlScale.IsNull() && data.ProfileCefVxlanIpv6TnlScale.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/vxlan/ipv6-tnl-scale", state.getPath()))
-	}
-	if !state.ProfileCefLptsPifibEntryCounters.IsNull() && data.ProfileCefLptsPifibEntryCounters.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/lpts/pifib-entry-counters", state.getPath()))
-	}
-	if !state.ProfileCefLptsAcl.IsNull() && data.ProfileCefLptsAcl.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/lpts/acl", state.getPath()))
-	}
-	if !state.ProfileCefIpv6HopLimit.IsNull() && data.ProfileCefIpv6HopLimit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/ipv6/hop-limit", state.getPath()))
-	}
-	if !state.ProfileCefCbfForwardClassList.IsNull() && data.ProfileCefCbfForwardClassList.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/forward-class-lists/forward-class-list", state.getPath()))
-	}
-	if !state.ProfileCefCbf.IsNull() && data.ProfileCefCbf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/cbf", state.getPath()))
-	}
-	if !state.ProfileCefBgpluOverRsvpte.IsNull() && data.ProfileCefBgpluOverRsvpte.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/bgplu-over-rsvpte", state.getPath()))
-	}
-	if !state.ProfileCefBgplu.IsNull() && data.ProfileCefBgplu.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/bgplu", state.getPath()))
-	}
-	if !state.ProfileCefSropt.IsNull() && data.ProfileCefSropt.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/sropt", state.getPath()))
-	}
-	if !state.ProfileCefDarkBw.IsNull() && data.ProfileCefDarkBw.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/cef/dark-bw", state.getPath()))
-	}
-	if !state.ProfileQosHighWaterMarks.IsNull() && data.ProfileQosHighWaterMarks.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/qos/high-water-marks", state.getPath()))
-	}
-	if !state.ProfileQosQosStatsPushCollection.IsNull() && data.ProfileQosQosStatsPushCollection.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/qos/qos-stats-push-collection", state.getPath()))
-	}
-	if !state.ProfileQosIntraNpuOverFabric.IsNull() && data.ProfileQosIntraNpuOverFabric.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/qos/intra-npu-over-fabric", state.getPath()))
-	}
-	if !state.ProfileQosLowLatencyMode.IsNull() && data.ProfileQosLowLatencyMode.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/qos/low-latency-mode", state.getPath()))
-	}
-	if !state.ProfileQosL2Mode.IsNull() && data.ProfileQosL2Mode.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/qos/l2-mode", state.getPath()))
-	}
-	if !state.ProfileQosVoqModeFairEight.IsNull() && data.ProfileQosVoqModeFairEight.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/qos/voq-mode/fair-eight", state.getPath()))
-	}
-	if !state.ProfileQosVoqModeFairFour.IsNull() && data.ProfileQosVoqModeFairFour.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/qos/voq-mode/fair-four", state.getPath()))
-	}
-	if !state.ProfileQosVoqModeEight.IsNull() && data.ProfileQosVoqModeEight.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/qos/voq-mode/eight", state.getPath()))
-	}
-	if !state.ProfileQosVoqModeFour.IsNull() && data.ProfileQosVoqModeFour.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/qos/voq-mode/four", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv6Udf8.IsNull() && data.ProfileTcamFormatAccessListIpv6Udf8.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6/udf8", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv6Udf7.IsNull() && data.ProfileTcamFormatAccessListIpv6Udf7.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6/udf7", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv6Udf6.IsNull() && data.ProfileTcamFormatAccessListIpv6Udf6.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6/udf6", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv6Udf5.IsNull() && data.ProfileTcamFormatAccessListIpv6Udf5.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6/udf5", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv6Udf4.IsNull() && data.ProfileTcamFormatAccessListIpv6Udf4.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6/udf4", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv6Udf3.IsNull() && data.ProfileTcamFormatAccessListIpv6Udf3.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6/udf3", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv6Udf2.IsNull() && data.ProfileTcamFormatAccessListIpv6Udf2.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6/udf2", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv6Udf1.IsNull() && data.ProfileTcamFormatAccessListIpv6Udf1.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6/udf1", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() && data.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() && data.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() && data.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() && data.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv6FragBit.IsNull() && data.ProfileTcamFormatAccessListIpv6FragBit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() && data.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() && data.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv6DstPort.IsNull() && data.ProfileTcamFormatAccessListIpv6DstPort.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() && data.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() && data.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4Udf8.IsNull() && data.ProfileTcamFormatAccessListIpv4Udf8.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4/udf8", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4Udf7.IsNull() && data.ProfileTcamFormatAccessListIpv4Udf7.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4/udf7", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4Udf6.IsNull() && data.ProfileTcamFormatAccessListIpv4Udf6.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4/udf6", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4Udf5.IsNull() && data.ProfileTcamFormatAccessListIpv4Udf5.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4/udf5", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4Udf4.IsNull() && data.ProfileTcamFormatAccessListIpv4Udf4.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4/udf4", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4Udf3.IsNull() && data.ProfileTcamFormatAccessListIpv4Udf3.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4/udf3", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4Udf2.IsNull() && data.ProfileTcamFormatAccessListIpv4Udf2.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4/udf2", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4Udf1.IsNull() && data.ProfileTcamFormatAccessListIpv4Udf1.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4/udf1", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() && data.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() && data.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() && data.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() && data.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4FragBit.IsNull() && data.ProfileTcamFormatAccessListIpv4FragBit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() && data.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() && data.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4Precedence.IsNull() && data.ProfileTcamFormatAccessListIpv4Precedence.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4Proto.IsNull() && data.ProfileTcamFormatAccessListIpv4Proto.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4DstPort.IsNull() && data.ProfileTcamFormatAccessListIpv4DstPort.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() && data.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() && data.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", state.getPath()))
-	}
-	if !state.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() && data.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", state.getPath()))
-	}
-	if !state.ProfileTcamFibIpv6UnicastPercent.IsNull() && data.ProfileTcamFibIpv6UnicastPercent.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/fib/ipv6/unicast/percent", state.getPath()))
-	}
-	if !state.ProfileTcamFibIpv4UnicastPercent.IsNull() && data.ProfileTcamFibIpv4UnicastPercent.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/profile/tcam/fib/ipv4/unicast/percent", state.getPath()))
-	}
-	if !state.MulticastRouteScale.IsNull() && data.MulticastRouteScale.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/multicast/route-scale", state.getPath()))
-	}
-	return deletedItems
-}
-
-// End of section. //template:end getDeletedItems
-// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
-
-func (data *HWModuleProfile8000) getEmptyLeafsDelete(ctx context.Context, state *HWModuleProfile8000) []string {
-	emptyLeafsDelete := make([]string, 0)
-	// Only delete if state has true and plan has false
-	if !data.ProfileIrbThroughputOptimized.IsNull() && !data.ProfileIrbThroughputOptimized.ValueBool() {
-		if state != nil && !state.ProfileIrbThroughputOptimized.IsNull() && state.ProfileIrbThroughputOptimized.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/irb/throughput-optimized", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileFlowspecIpv6PacketLenEnable.IsNull() && !data.ProfileFlowspecIpv6PacketLenEnable.ValueBool() {
-		if state != nil && !state.ProfileFlowspecIpv6PacketLenEnable.IsNull() && state.ProfileFlowspecIpv6PacketLenEnable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/flowspec/ipv6-packet-len-enable", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() && !data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.ValueBool() {
-		if state != nil && !state.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() && state.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/route/scale/ipv6-unicast/connected-prefix/high", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileL2fibVxlanDcLeaf.IsNull() && !data.ProfileL2fibVxlanDcLeaf.ValueBool() {
-		if state != nil && !state.ProfileL2fibVxlanDcLeaf.IsNull() && state.ProfileL2fibVxlanDcLeaf.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/l2fib/vxlan-dc-leaf", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileL2fibHigherScale.IsNull() && !data.ProfileL2fibHigherScale.ValueBool() {
-		if state != nil && !state.ProfileL2fibHigherScale.IsNull() && state.ProfileL2fibHigherScale.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/l2fib/L2-high-scale", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileL2fibBridgeFlushConvergence.IsNull() && !data.ProfileL2fibBridgeFlushConvergence.ValueBool() {
-		if state != nil && !state.ProfileL2fibBridgeFlushConvergence.IsNull() && state.ProfileL2fibBridgeFlushConvergence.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/l2fib/bridge-flush-convergence", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileL2fibPwStats.IsNull() && !data.ProfileL2fibPwStats.ValueBool() {
-		if state != nil && !state.ProfileL2fibPwStats.IsNull() && state.ProfileL2fibPwStats.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/l2fib/pw-stats", data.getXPath()))
-		}
-	}
-	for i := range data.ProfileNpuBufferExtendedLocations {
-		keys := [...]string{"location-name"}
-		keyValues := [...]string{data.ProfileNpuBufferExtendedLocations[i].LocationName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		// Only delete if state has true and plan has false
-		if !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.IsNull() && !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.ProfileNpuBufferExtendedLocations) && !state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.IsNull() && state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionProtectEnable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/npu/buffer-extended/locations/location%v/bandwidth-congestion-protect/enable", data.getXPath(), keyString))
-			}
-		}
-		// Only delete if state has true and plan has false
-		if !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.IsNull() && !data.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.ValueBool() {
-			// Check if corresponding state item exists and has true value
-			if state != nil && i < len(state.ProfileNpuBufferExtendedLocations) && !state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.IsNull() && state.ProfileNpuBufferExtendedLocations[i].BandwidthCongestionDetectionEnable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/npu/buffer-extended/locations/location%v/bandwidth-congestion-detection/enable", data.getXPath(), keyString))
-			}
-		}
-	}
-	for i := range data.ProfilePriorityFlowControlLocations {
-		keys := [...]string{"location-name"}
-		keyValues := [...]string{data.ProfilePriorityFlowControlLocations[i].LocationName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		for ci := range data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass {
-			ckeys := [...]string{"traffic-class-id"}
-			ckeyValues := [...]string{strconv.FormatInt(data.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].TrafficClassId.ValueInt64(), 10)}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-		}
-		for ci := range data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass {
-			ckeys := [...]string{"traffic-class-id"}
-			ckeyValues := [...]string{strconv.FormatInt(data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].TrafficClassId.ValueInt64(), 10)}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
-			// Only delete if state has true and plan has false
-			if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.ProfilePriorityFlowControlLocations) && ci < len(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass) && !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.IsNull() && state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Mbytes.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-extended/traffic-class%v/mbytes", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.ProfilePriorityFlowControlLocations) && ci < len(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass) && !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.IsNull() && state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Kbytes.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-extended/traffic-class%v/kbytes", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.ProfilePriorityFlowControlLocations) && ci < len(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass) && !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.IsNull() && state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Us.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-extended/traffic-class%v/us", data.getXPath(), keyString, ckeyString))
-				}
-			}
-			// Only delete if state has true and plan has false
-			if !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.IsNull() && !data.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.ValueBool() {
-				// Check if corresponding state item exists and has true value
-				if state != nil && i < len(state.ProfilePriorityFlowControlLocations) && ci < len(state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass) && !state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.IsNull() && state.ProfilePriorityFlowControlLocations[i].BufferExtendedTrafficClass[ci].Ms.ValueBool() {
-					emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v/buffer-extended/traffic-class%v/ms", data.getXPath(), keyString, ckeyString))
-				}
-			}
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileStatsAclPermit.IsNull() && !data.ProfileStatsAclPermit.ValueBool() {
-		if state != nil && !state.ProfileStatsAclPermit.IsNull() && state.ProfileStatsAclPermit.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/stats/acl-permit", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileStatsNoBviIngress.IsNull() && !data.ProfileStatsNoBviIngress.ValueBool() {
-		if state != nil && !state.ProfileStatsNoBviIngress.IsNull() && state.ProfileStatsNoBviIngress.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/stats/no-bvi-ingress", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileEncapExactLocationsAllVirtual.IsNull() && !data.ProfileEncapExactLocationsAllVirtual.ValueBool() {
-		if state != nil && !state.ProfileEncapExactLocationsAllVirtual.IsNull() && state.ProfileEncapExactLocationsAllVirtual.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/encap-exact/locations", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileEncapExactLocationsAll.IsNull() && !data.ProfileEncapExactLocationsAll.ValueBool() {
-		if state != nil && !state.ProfileEncapExactLocationsAll.IsNull() && state.ProfileEncapExactLocationsAll.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/encap-exact/locations", data.getXPath()))
-		}
-	}
-	for i := range data.ProfileEncapExactLocations {
-		keys := [...]string{"location-name"}
-		keyValues := [...]string{data.ProfileEncapExactLocations[i].LocationName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	for i := range data.ProfileEncapExactInterfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.ProfileEncapExactInterfaces[i].InterfaceName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileCefSourceRtbhEnable.IsNull() && !data.ProfileCefSourceRtbhEnable.ValueBool() {
-		if state != nil && !state.ProfileCefSourceRtbhEnable.IsNull() && state.ProfileCefSourceRtbhEnable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/cef/source-rtbh/enable", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileCefUnipathSurpfEnable.IsNull() && !data.ProfileCefUnipathSurpfEnable.ValueBool() {
-		if state != nil && !state.ProfileCefUnipathSurpfEnable.IsNull() && state.ProfileCefUnipathSurpfEnable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/cef/unipath-surpf/enable", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileCefTeTunnelLabelOverTeCounters.IsNull() && !data.ProfileCefTeTunnelLabelOverTeCounters.ValueBool() {
-		if state != nil && !state.ProfileCefTeTunnelLabelOverTeCounters.IsNull() && state.ProfileCefTeTunnelLabelOverTeCounters.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/cef/te-tunnel/label-over-te-counters", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() && !data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.ValueBool() {
-		if state != nil && !state.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() && state.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/cef/te-tunnel/highscale-ldp-over-te-no-sr-over-srte", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() && !data.ProfileCefTeTunnelHighscaleNoLdpOverTe.ValueBool() {
-		if state != nil && !state.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() && state.ProfileCefTeTunnelHighscaleNoLdpOverTe.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/cef/te-tunnel/highscale-no-ldp-over-te", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileCefMplsoudpScale.IsNull() && !data.ProfileCefMplsoudpScale.ValueBool() {
-		if state != nil && !state.ProfileCefMplsoudpScale.IsNull() && state.ProfileCefMplsoudpScale.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/cef/mplsoudp/scale", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileCefVxlanIpv6TnlScale.IsNull() && !data.ProfileCefVxlanIpv6TnlScale.ValueBool() {
-		if state != nil && !state.ProfileCefVxlanIpv6TnlScale.IsNull() && state.ProfileCefVxlanIpv6TnlScale.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/cef/vxlan/ipv6-tnl-scale", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileCefLptsAcl.IsNull() && !data.ProfileCefLptsAcl.ValueBool() {
-		if state != nil && !state.ProfileCefLptsAcl.IsNull() && state.ProfileCefLptsAcl.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/cef/lpts/acl", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileQosHighWaterMarks.IsNull() && !data.ProfileQosHighWaterMarks.ValueBool() {
-		if state != nil && !state.ProfileQosHighWaterMarks.IsNull() && state.ProfileQosHighWaterMarks.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/qos/high-water-marks", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileQosQosStatsPushCollection.IsNull() && !data.ProfileQosQosStatsPushCollection.ValueBool() {
-		if state != nil && !state.ProfileQosQosStatsPushCollection.IsNull() && state.ProfileQosQosStatsPushCollection.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/qos/qos-stats-push-collection", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileQosVoqModeFairEight.IsNull() && !data.ProfileQosVoqModeFairEight.ValueBool() {
-		if state != nil && !state.ProfileQosVoqModeFairEight.IsNull() && state.ProfileQosVoqModeFairEight.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/qos/voq-mode/fair-eight", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileQosVoqModeFairFour.IsNull() && !data.ProfileQosVoqModeFairFour.ValueBool() {
-		if state != nil && !state.ProfileQosVoqModeFairFour.IsNull() && state.ProfileQosVoqModeFairFour.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/qos/voq-mode/fair-four", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileQosVoqModeEight.IsNull() && !data.ProfileQosVoqModeEight.ValueBool() {
-		if state != nil && !state.ProfileQosVoqModeEight.IsNull() && state.ProfileQosVoqModeEight.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/qos/voq-mode/eight", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileQosVoqModeFour.IsNull() && !data.ProfileQosVoqModeFour.ValueBool() {
-		if state != nil && !state.ProfileQosVoqModeFour.IsNull() && state.ProfileQosVoqModeFour.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/qos/voq-mode/four", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() && !data.ProfileTcamFormatAccessListIpv6PacketLen.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() && state.ProfileTcamFormatAccessListIpv6PacketLen.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() && !data.ProfileTcamFormatAccessListIpv6DstObjectGroup.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() && state.ProfileTcamFormatAccessListIpv6DstObjectGroup.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() && !data.ProfileTcamFormatAccessListIpv6SrcObjectGroup.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() && state.ProfileTcamFormatAccessListIpv6SrcObjectGroup.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() && !data.ProfileTcamFormatAccessListIpv6TcpFlags.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() && state.ProfileTcamFormatAccessListIpv6TcpFlags.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv6FragBit.IsNull() && !data.ProfileTcamFormatAccessListIpv6FragBit.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6FragBit.IsNull() && state.ProfileTcamFormatAccessListIpv6FragBit.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() && !data.ProfileTcamFormatAccessListIpv6TrafficClass.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() && state.ProfileTcamFormatAccessListIpv6TrafficClass.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() && !data.ProfileTcamFormatAccessListIpv6NextHdr.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() && state.ProfileTcamFormatAccessListIpv6NextHdr.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv6DstPort.IsNull() && !data.ProfileTcamFormatAccessListIpv6DstPort.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6DstPort.IsNull() && state.ProfileTcamFormatAccessListIpv6DstPort.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() && !data.ProfileTcamFormatAccessListIpv6DstAddr.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() && state.ProfileTcamFormatAccessListIpv6DstAddr.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() && !data.ProfileTcamFormatAccessListIpv6SrcAddr.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() && state.ProfileTcamFormatAccessListIpv6SrcAddr.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() && !data.ProfileTcamFormatAccessListIpv4FragmentOffset.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() && state.ProfileTcamFormatAccessListIpv4FragmentOffset.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() && !data.ProfileTcamFormatAccessListIpv4PacketLen.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() && state.ProfileTcamFormatAccessListIpv4PacketLen.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() && !data.ProfileTcamFormatAccessListIpv4DstObjectGroup.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() && state.ProfileTcamFormatAccessListIpv4DstObjectGroup.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() && !data.ProfileTcamFormatAccessListIpv4SrcObjectGroup.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() && state.ProfileTcamFormatAccessListIpv4SrcObjectGroup.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv4FragBit.IsNull() && !data.ProfileTcamFormatAccessListIpv4FragBit.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4FragBit.IsNull() && state.ProfileTcamFormatAccessListIpv4FragBit.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() && !data.ProfileTcamFormatAccessListIpv4TcpFlags.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() && state.ProfileTcamFormatAccessListIpv4TcpFlags.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() && !data.ProfileTcamFormatAccessListIpv4TtlMatch.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() && state.ProfileTcamFormatAccessListIpv4TtlMatch.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv4Precedence.IsNull() && !data.ProfileTcamFormatAccessListIpv4Precedence.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4Precedence.IsNull() && state.ProfileTcamFormatAccessListIpv4Precedence.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv4Proto.IsNull() && !data.ProfileTcamFormatAccessListIpv4Proto.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4Proto.IsNull() && state.ProfileTcamFormatAccessListIpv4Proto.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv4DstPort.IsNull() && !data.ProfileTcamFormatAccessListIpv4DstPort.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4DstPort.IsNull() && state.ProfileTcamFormatAccessListIpv4DstPort.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() && !data.ProfileTcamFormatAccessListIpv4SrcPort.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() && state.ProfileTcamFormatAccessListIpv4SrcPort.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() && !data.ProfileTcamFormatAccessListIpv4DstAddr.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() && state.ProfileTcamFormatAccessListIpv4DstAddr.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() && !data.ProfileTcamFormatAccessListIpv4SrcAddr.ValueBool() {
-		if state != nil && !state.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() && state.ProfileTcamFormatAccessListIpv4SrcAddr.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getXPath()))
-		}
-	}
-	// Only delete if state has true and plan has false
-	if !data.MulticastRouteScale.IsNull() && !data.MulticastRouteScale.ValueBool() {
-		if state != nil && !state.MulticastRouteScale.IsNull() && state.MulticastRouteScale.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/multicast/route-scale", data.getXPath()))
-		}
-	}
-	return emptyLeafsDelete
-}
-
-// End of section. //template:end getEmptyLeafsDelete
-// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
-
-func (data *HWModuleProfile8000) getDeletePaths(ctx context.Context) []string {
-	var deletePaths []string
-	if !data.ProfileIrbThroughputOptimized.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/irb/throughput-optimized", data.getPath()))
-	}
-	if !data.ProfileFlowspecIpv6PacketLenEnable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/flowspec/ipv6-packet-len-enable", data.getPath()))
-	}
-	if !data.ProfileRouteScaleIpv6UnicastConnectedPrefixHigh.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/route/scale/ipv6-unicast/connected-prefix/high", data.getPath()))
-	}
-	if !data.ProfileNpuCompatibility.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/npu-compatibility", data.getPath()))
-	}
-	if !data.ProfileL2fibVxlanDcLeaf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/l2fib/vxlan-dc-leaf", data.getPath()))
-	}
-	if !data.ProfileL2fibHigherScale.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/l2fib/L2-high-scale", data.getPath()))
-	}
-	if !data.ProfileL2fibBridgeFlushConvergence.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/l2fib/bridge-flush-convergence", data.getPath()))
-	}
-	if !data.ProfileL2fibPwStats.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/l2fib/pw-stats", data.getPath()))
-	}
-	for i := range data.ProfileNpuBufferExtendedLocations {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[location-name=" + data.ProfileNpuBufferExtendedLocations[i].LocationName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/npu/buffer-extended/locations/location%v", data.getPath(), keyPath))
-	}
-	if !data.ProfileGueUdpDestPortMpls.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/gue/udp-dest-port", data.getPath()))
-	}
-	if !data.ProfileGueUdpDestPortIpv6.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/gue/udp-dest-port", data.getPath()))
-	}
-	if !data.ProfileGueUdpDestPortIpv4.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/gue/udp-dest-port", data.getPath()))
-	}
-	for i := range data.ProfilePriorityFlowControlLocations {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[location-name=" + data.ProfilePriorityFlowControlLocations[i].LocationName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/priority-flow-control/locations/location%v", data.getPath(), keyPath))
-	}
-	if !data.ProfileBwThreshold.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/bw-threshold", data.getPath()))
-	}
-	if !data.ProfileStatsAclPermit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/stats/acl-permit", data.getPath()))
-	}
-	if !data.ProfileStatsNoBviIngress.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/stats/no-bvi-ingress", data.getPath()))
-	}
-	if !data.ProfileStatsVoqsSharingCounters.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/stats/voqs-sharing-counters", data.getPath()))
-	}
-	if !data.ProfileEncapExactLocationsAllVirtual.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/encap-exact/locations", data.getPath()))
-	}
-	if !data.ProfileEncapExactLocationsAll.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/encap-exact/locations", data.getPath()))
-	}
-	for i := range data.ProfileEncapExactLocations {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[location-name=" + data.ProfileEncapExactLocations[i].LocationName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/encap-exact/locations/location%v", data.getPath(), keyPath))
-	}
-	for i := range data.ProfileEncapExactInterfaces {
-		// Build path with bracket notation for keys
-		keyPath := ""
-		keyPath += "[interface-name=" + data.ProfileEncapExactInterfaces[i].InterfaceName.ValueString() + "]"
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/encap-exact/interfaces/interface%v", data.getPath(), keyPath))
-	}
-	if !data.ProfileCefSourceRtbhEnable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/source-rtbh/enable", data.getPath()))
-	}
-	if !data.ProfileCefUnipathSurpfEnable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/unipath-surpf/enable", data.getPath()))
-	}
-	if !data.ProfileCefIpRedirect.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/ip-redirect", data.getPath()))
-	}
-	if !data.ProfileCefTeTunnelLabelOverTeCounters.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/te-tunnel/label-over-te-counters", data.getPath()))
-	}
-	if !data.ProfileCefTeTunnelHighscaleLdpOverTeNoSrOverSrte.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/te-tunnel/highscale-ldp-over-te-no-sr-over-srte", data.getPath()))
-	}
-	if !data.ProfileCefTeTunnelHighscaleNoLdpOverTe.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/te-tunnel/highscale-no-ldp-over-te", data.getPath()))
-	}
-	if !data.ProfileCefTtlTunnelIpDecrement.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/ttl/tunnel-ip/decrement", data.getPath()))
-	}
-	if !data.ProfileCefStatsLabelAppDefault.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/stats/label/app-default", data.getPath()))
-	}
-	if !data.ProfileCefMplsoudpScale.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/mplsoudp/scale", data.getPath()))
-	}
-	if !data.ProfileCefVxlanIpv6TnlScale.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/vxlan/ipv6-tnl-scale", data.getPath()))
-	}
-	if !data.ProfileCefLptsPifibEntryCounters.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/lpts/pifib-entry-counters", data.getPath()))
-	}
-	if !data.ProfileCefLptsAcl.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/lpts/acl", data.getPath()))
-	}
-	if !data.ProfileCefIpv6HopLimit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/ipv6/hop-limit", data.getPath()))
-	}
-	if !data.ProfileCefCbfForwardClassList.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/forward-class-lists/forward-class-list", data.getPath()))
-	}
-	if !data.ProfileCefCbf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/cbf", data.getPath()))
-	}
-	if !data.ProfileCefBgpluOverRsvpte.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/bgplu-over-rsvpte", data.getPath()))
-	}
-	if !data.ProfileCefBgplu.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/bgplu", data.getPath()))
-	}
-	if !data.ProfileCefSropt.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/sropt", data.getPath()))
-	}
-	if !data.ProfileCefDarkBw.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/cef/dark-bw", data.getPath()))
-	}
-	if !data.ProfileQosHighWaterMarks.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/qos/high-water-marks", data.getPath()))
-	}
-	if !data.ProfileQosQosStatsPushCollection.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/qos/qos-stats-push-collection", data.getPath()))
-	}
-	if !data.ProfileQosIntraNpuOverFabric.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/qos/intra-npu-over-fabric", data.getPath()))
-	}
-	if !data.ProfileQosLowLatencyMode.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/qos/low-latency-mode", data.getPath()))
-	}
-	if !data.ProfileQosL2Mode.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/qos/l2-mode", data.getPath()))
-	}
-	if !data.ProfileQosVoqModeFairEight.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/qos/voq-mode/fair-eight", data.getPath()))
-	}
-	if !data.ProfileQosVoqModeFairFour.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/qos/voq-mode/fair-four", data.getPath()))
-	}
-	if !data.ProfileQosVoqModeEight.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/qos/voq-mode/eight", data.getPath()))
-	}
-	if !data.ProfileQosVoqModeFour.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/qos/voq-mode/four", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv6Udf8.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6/udf8", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv6Udf7.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6/udf7", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv6Udf6.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6/udf6", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv6Udf5.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6/udf5", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv6Udf4.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6/udf4", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv6Udf3.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6/udf3", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv6Udf2.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6/udf2", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv6Udf1.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6/udf1", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv6PacketLen.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv6DstObjectGroup.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv6SrcObjectGroup.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv6TcpFlags.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv6FragBit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv6TrafficClass.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv6NextHdr.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv6DstPort.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv6DstAddr.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv6SrcAddr.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv6", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4Udf8.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4/udf8", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4Udf7.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4/udf7", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4Udf6.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4/udf6", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4Udf5.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4/udf5", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4Udf4.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4/udf4", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4Udf3.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4/udf3", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4Udf2.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4/udf2", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4Udf1.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4/udf1", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4FragmentOffset.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4PacketLen.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4DstObjectGroup.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4SrcObjectGroup.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4FragBit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4TcpFlags.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4TtlMatch.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4Precedence.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4Proto.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4DstPort.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4SrcPort.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4DstAddr.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getPath()))
-	}
-	if !data.ProfileTcamFormatAccessListIpv4SrcAddr.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/format/access-list/ipv4", data.getPath()))
-	}
-	if !data.ProfileTcamFibIpv6UnicastPercent.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/fib/ipv6/unicast/percent", data.getPath()))
-	}
-	if !data.ProfileTcamFibIpv4UnicastPercent.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/profile/tcam/fib/ipv4/unicast/percent", data.getPath()))
-	}
-	if !data.MulticastRouteScale.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/multicast/route-scale", data.getPath()))
-	}
-
-	return deletePaths
-}
-
-// End of section. //template:end getDeletePaths
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletedItemsXML
 
 func (data *HWModuleProfile8000) addDeletedItemsXML(ctx context.Context, state HWModuleProfile8000, body string) string {
@@ -6591,6 +7544,149 @@ func (data *HWModuleProfile8000) addDeletedItemsXML(ctx context.Context, state H
 	b := netconf.Body{}
 	deletedPaths := make(map[string]bool)
 	_ = deletedPaths // Avoid unused variable error when no delete_parent attributes exist
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() && state.ProfileTcamFormatOgComprIdExtensionEgress.ValueBool() && data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() {
+		deletePath := state.getXPath() + "/profile/tcam/format/og-compr-id-extension/egress"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() && state.ProfileTcamFormatOgComprIdExtensionIngress.ValueBool() && data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() {
+		deletePath := state.getXPath() + "/profile/tcam/format/og-compr-id-extension/ingress"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileRouteScaleLpmFullScale.IsNull() && state.ProfileRouteScaleLpmFullScale.ValueBool() && data.ProfileRouteScaleLpmFullScale.IsNull() {
+		deletePath := state.getXPath() + "/profile/route/scale/lpm/full-scale"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileRouteScaleHostRoute.IsNull() && state.ProfileRouteScaleHostRoute.ValueBool() && data.ProfileRouteScaleHostRoute.IsNull() {
+		deletePath := state.getXPath() + "/profile/route/scale/host-route"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileL2fibEvpnAging.IsNull() && state.ProfileL2fibEvpnAging.ValueBool() && data.ProfileL2fibEvpnAging.IsNull() {
+		deletePath := state.getXPath() + "/profile/l2fib/evpn-aging"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileCefHashIpFieldDuplication.IsNull() && state.ProfileCefHashIpFieldDuplication.ValueBool() && data.ProfileCefHashIpFieldDuplication.IsNull() {
+		deletePath := state.getXPath() + "/profile/cef/hash/ip-field-duplication"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileCefIptunnelScale.IsNull() && state.ProfileCefIptunnelScale.ValueBool() && data.ProfileCefIptunnelScale.IsNull() {
+		deletePath := state.getXPath() + "/profile/cef/iptunnel/scale"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	if !state.ProfileQosMode.IsNull() && data.ProfileQosMode.IsNull() {
+		deletePath := state.getXPath() + "/profile/qos/mode"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
+	// For boolean fields, only delete if state was true (presence container was set)
+	if !state.ProfileTcamFormatOgComprIdExtension.IsNull() && state.ProfileTcamFormatOgComprIdExtension.ValueBool() && data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+		deletePath := state.getXPath() + "/profile/tcam/format/og-compr-id-extension"
+		// Check if a parent path is already marked for deletion
+		parentAlreadyDeleted := false
+		for dp := range deletedPaths {
+			if strings.HasPrefix(deletePath, dp+"/") {
+				parentAlreadyDeleted = true
+				break
+			}
+		}
+		if !parentAlreadyDeleted && !deletedPaths[deletePath] {
+			b = helpers.RemoveFromXPath(b, deletePath)
+			deletedPaths[deletePath] = true
+		}
+	}
 	// For boolean fields, only delete if state was true (presence container was set)
 	if !state.ProfileIrbThroughputOptimized.IsNull() && state.ProfileIrbThroughputOptimized.ValueBool() && data.ProfileIrbThroughputOptimized.IsNull() {
 		deletePath := state.getXPath() + "/profile/irb/throughput-optimized"
@@ -6854,6 +7950,16 @@ func (data *HWModuleProfile8000) addDeletedItemsXML(ctx context.Context, state H
 				found = false
 			}
 			if found {
+				if !state.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage.IsNull() && data.ProfilePriorityFlowControlLocations[j].NonPfcTcsMaxNonPfcVoqsHbmBuffersPercentage.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profile/priority-flow-control/locations/location%v/buffer-extended/non-pfc-tcs/max-non-pfc-voqs/hbm-buffers-percentage", predicates))
+				}
+				if !state.ProfilePriorityFlowControlLocations[i].NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs.IsNull() && data.ProfilePriorityFlowControlLocations[j].NonPfcTcsMaxNonPfcVoqsNumberOfEvictVoqs.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profile/priority-flow-control/locations/location%v/buffer-extended/non-pfc-tcs/max-non-pfc-voqs/number-of-evict-voqs", predicates))
+				}
+				// For boolean fields, only delete if state was true (presence container was set)
+				if !state.ProfilePriorityFlowControlLocations[i].NonPfcTcs.IsNull() && state.ProfilePriorityFlowControlLocations[i].NonPfcTcs.ValueBool() && data.ProfilePriorityFlowControlLocations[j].NonPfcTcs.IsNull() {
+					b = helpers.RemoveFromXPath(b, fmt.Sprintf(state.getXPath()+"/profile/priority-flow-control/locations/location%v/buffer-extended/non-pfc-tcs", predicates))
+				}
 				for ci := range state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass {
 					cstateKeys := [...]string{"traffic-class-id"}
 					cstateKeyValues := [...]string{strconv.FormatInt(state.ProfilePriorityFlowControlLocations[i].BufferInternalTrafficClass[ci].TrafficClassId.ValueInt64(), 10)}
@@ -9072,10 +10178,38 @@ func (data *HWModuleProfile8000) addDeletedItemsXML(ctx context.Context, state H
 }
 
 // End of section. //template:end addDeletedItemsXML
+
 // Section below is generated&owned by "gen/generator.go". //template:begin addDeletePathsXML
 
 func (data *HWModuleProfile8000) addDeletePathsXML(ctx context.Context, body string) string {
 	b := netconf.NewBody(body)
+	if !data.ProfileTcamFormatOgComprIdExtensionEgress.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/tcam/format/og-compr-id-extension/egress")
+	}
+	if !data.ProfileTcamFormatOgComprIdExtensionIngress.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/tcam/format/og-compr-id-extension/ingress")
+	}
+	if !data.ProfileRouteScaleLpmFullScale.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/route/scale/lpm/full-scale")
+	}
+	if !data.ProfileRouteScaleHostRoute.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/route/scale/host-route")
+	}
+	if !data.ProfileL2fibEvpnAging.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/l2fib/evpn-aging")
+	}
+	if !data.ProfileCefHashIpFieldDuplication.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/cef/hash/ip-field-duplication")
+	}
+	if !data.ProfileCefIptunnelScale.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/cef/iptunnel/scale")
+	}
+	if !data.ProfileQosMode.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/qos/mode")
+	}
+	if !data.ProfileTcamFormatOgComprIdExtension.IsNull() {
+		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/tcam/format/og-compr-id-extension")
+	}
 	if !data.ProfileIrbThroughputOptimized.IsNull() {
 		b = helpers.RemoveFromXPath(b, data.getXPath()+"/profile/irb/throughput-optimized")
 	}

@@ -10,6 +10,14 @@ description: |-
 
 This data source can read the L2VPN configuration.
 
+## Version Compatibility
+
+### Removed from version
+
+| Attribute | Version |
+|-----------|:-------:|
+| `pw_oam_refresh_transmit` | `25.4` |
+
 ## Example Usage
 
 ```terraform
@@ -46,6 +54,7 @@ data "iosxr_l2vpn" "example" {
 - `neighbors_all_ldp_flap` (Boolean) Forcing targetted-sesion flapping
 - `pw_grouping` (Boolean) Enable PW-Grouping
 - `pw_oam_refresh_transmit` (Number) Transmit
+  - **Not supported from version `25.4` and above**
 - `pw_routing_bgp_rd_four_byte_as_assigned_number` (Number) AS:nn (hex or decimal format)
 - `pw_routing_bgp_rd_four_byte_as_number` (Number) Four Byte AS number
 - `pw_routing_bgp_rd_ipv4_address` (String) IP address

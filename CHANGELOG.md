@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Add `iosxr_hw_module_shutdown_8000` resource and data source
 - Add `iosxr_multicast_routing` resource and data source
 - Add `iosxr_multicast_routing_vrf` resource and data source
 - Fix: Make `maximum_route_interfaces` of the `interfaces` list optional in `iosxr_router_pim_ipv4`, `iosxr_router_pim_ipv6`, `iosxr_router_pim_vrf_ipv4` and `iosxr_router_pim_vrf_ipv6` resources and data sources

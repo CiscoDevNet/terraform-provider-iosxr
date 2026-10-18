@@ -1,0 +1,19 @@
+---
+name: HW Module Shutdown 8000
+path: Cisco-IOS-XR-hw-module-cfg:/hw-module/nodes/node[location=%s]
+doc_category: Cisco 8000 Series
+ds_description: "This data source can read the HW Module Shutdown configuration on Cisco 8000 series routers."
+res_description: "This resource can manage the HW Module Shutdown configuration on Cisco 8000 series routers."
+no_delete_attributes: true
+test_tags: [C8000, HW]
+attributes:
+  - yang_name: location
+    id: true
+    example: 0/0/CPU0
+    minimum_test_value: '"0/0/CPU0"'
+    exclude_test: true
+  - yang_name: config/admin-state
+    tf_name: admin_state
+    minimum_test_value: '"unshut"'
+    example: unshut
+    exclude_test: true

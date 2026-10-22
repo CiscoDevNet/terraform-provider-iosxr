@@ -185,13 +185,805 @@ func (r *InterfaceEthernetSubinterfaceResource) Schema(ctx context.Context, req 
 					int64validator.Between(1, 4094),
 				},
 			},
+			"l2transport_encapsulation_dot1q": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IEEE 802.1Q VLAN-tagged packets").String,
+				Optional:            true,
+			},
 			"l2transport_encapsulation_dot1q_vlan_id": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").String,
 				Optional:            true,
 			},
+			"l2transport_encapsulation_dot1q_end_vlan_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1q_vlan_id_2": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1q_end_vlan_id_2": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_vlan_id_3": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1q_end_vlan_id_3": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_vlan_id_4": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1q_end_vlan_id_4": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_vlan_id_5": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1q_end_vlan_id_5": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_vlan_id_6": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1q_end_vlan_id_6": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_vlan_id_7": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1q_end_vlan_id_7": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_vlan_id_8": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1q_end_vlan_id_8": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_vlan_id_9": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1q_end_vlan_id_9": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
 			"l2transport_encapsulation_dot1q_second_dot1q": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").String,
 				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1q_second_dot1q_end_vlan_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1q_exact": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not allow further inner tags").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1q_ingress_source_mac": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Perform source MAC-based matching").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+				},
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IEEE 802.1ad priority-tagged packets").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IEEE 802.1Q VLAN-tagged packets").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_2": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_2": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_3": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_3": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_4": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_4": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_5": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_5": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_6": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_6": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_7": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_7": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_8": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_8": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_9": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_9": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_exact": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not allow further inner tags").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_ingress_source_mac": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Perform source MAC-based matching").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+				},
+			},
+			"l2transport_encapsulation_dot1ad": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IEEE 802.1ad VLAN-tagged packets").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1ad_vlan_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1ad_end_vlan_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1ad_vlan_id_2": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_end_vlan_id_2": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_vlan_id_3": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_end_vlan_id_3": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_vlan_id_4": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_end_vlan_id_4": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_vlan_id_5": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_end_vlan_id_5": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_vlan_id_6": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_end_vlan_id_6": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_vlan_id_7": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_end_vlan_id_7": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_vlan_id_8": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_end_vlan_id_8": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_vlan_id_9": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_end_vlan_id_9": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_dot1q": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1ad_dot1q_end_vlan_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1ad_exact": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not allow further inner tags").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1ad_ingress_source_mac": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Perform source MAC-based matching").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IEEE 802.1ad priority-tagged packets").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IEEE 802.1Q VLAN-tagged packets").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_2": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_2": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_3": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_3": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_4": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_4": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_5": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_5": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_6": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_6": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_7": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_7": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_8": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_8": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_9": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_9": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_exact": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not allow further inner tags").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_ingress_source_mac": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Perform source MAC-based matching").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+				},
+			},
+			"l2transport_encapsulation_untagged": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Packets with no explicit VLAN tag").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IEEE 802.1Q VLAN-tagged packets").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_vlan_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_end_vlan_id": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_untagged_dot1q_vlan_id_2": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_untagged_dot1q_end_vlan_id_2": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_untagged_dot1q_vlan_id_3": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_untagged_dot1q_end_vlan_id_3": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_untagged_dot1q_vlan_id_4": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_untagged_dot1q_end_vlan_id_4": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_untagged_dot1q_vlan_id_5": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_untagged_dot1q_end_vlan_id_5": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_untagged_dot1q_vlan_id_6": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_untagged_dot1q_end_vlan_id_6": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_untagged_dot1q_vlan_id_7": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_untagged_dot1q_end_vlan_id_7": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_untagged_dot1q_vlan_id_8": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_untagged_dot1q_end_vlan_id_8": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_untagged_dot1q_vlan_id_9": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_untagged_dot1q_end_vlan_id_9": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_untagged_ingress_source_mac": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Perform source MAC-based matching").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+				},
+			},
+			"l2transport_encapsulation_default": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Packets unmatched by other service instances").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1q": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IEEE 802.1Q VLAN-tagged packets").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1q_vlan_ranges": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of VLAN Ranges in the form a-b,c,d,e-f,g").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 800),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"l2transport_encapsulation_list_extended_dot1q_outer_cos": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify outer PCP bits").AddIntegerRangeDescription(0, 7).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
+				},
+			},
+			"l2transport_encapsulation_list_extended_dot1q_second_dot1q": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IEEE 802.1Q VLAN-tagged packets").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 800),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"l2transport_encapsulation_list_extended_dot1q_inner_cos": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify inner PCP bits").AddIntegerRangeDescription(0, 7).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
+				},
+			},
+			"l2transport_encapsulation_list_extended_dot1q_exact": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do exact match of the given tags and do not allow further inner tags").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1q_payload_ethertype_pppoe": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ethertype: PPP over Ethernet").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1q_ingress_source_mac": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Perform source MAC-based matching").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+				},
+			},
+			"l2transport_encapsulation_list_extended_dot1q_ingress_destination_mac": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Perform destination MAC-based matching").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+				},
+			},
+			"l2transport_encapsulation_list_extended_dot1ad": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IEEE 802.1ad VLAN-tagged packets").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1ad_vlan_ranges": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of VLAN Ranges in the form a-b,c,d,e-f,g").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 800),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"l2transport_encapsulation_list_extended_dot1ad_outer_cos": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify outer PCP bits").AddIntegerRangeDescription(0, 7).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
+				},
+			},
+			"l2transport_encapsulation_list_extended_dot1ad_dot1q": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IEEE 802.1Q VLAN-tagged packets").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 800),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+				},
+			},
+			"l2transport_encapsulation_list_extended_dot1ad_inner_cos": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify inner PCP bits").AddIntegerRangeDescription(0, 7).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 7),
+				},
+			},
+			"l2transport_encapsulation_list_extended_dot1ad_exact": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do exact match of the given tags and do not allow further inner tags").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1ad_payload_ethertype_pppoe": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ethertype: PPP over Ethernet").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1ad_ingress_source_mac": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Perform source MAC-based matching").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+				},
+			},
+			"l2transport_encapsulation_list_extended_dot1ad_ingress_destination_mac": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Perform destination MAC-based matching").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}`), ""),
+				},
 			},
 			"rewrite_ingress_tag_pop_one": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Remove outer tag only").String,

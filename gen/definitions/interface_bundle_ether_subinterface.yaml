@@ -88,12 +88,654 @@ attributes:
     min_int: 1
     max_int: 4094
     example: 200
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
   - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id
+    optional: true
     example: 300
     exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/end-vlan-id
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id-2
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/end-vlan-id-2
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id-3
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/end-vlan-id-3
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id-4
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/end-vlan-id-4
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id-5
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/end-vlan-id-5
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id-6
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/end-vlan-id-6
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id-7
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/end-vlan-id-7
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id-8
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/end-vlan-id-8
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id-9
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/end-vlan-id-9
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
   - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/second-dot1q
+    optional: true
     example: 400
     exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/second-dot1q-end-vlan-id
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/exact
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/ingress/source-mac
+    optional: true
+    example: 00:11:22:33:44:55
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q/vlan-id
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q/end-vlan-id
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q/vlan-id-2
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q/end-vlan-id-2
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q/vlan-id-3
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q/end-vlan-id-3
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q/vlan-id-4
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q/end-vlan-id-4
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q/vlan-id-5
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q/end-vlan-id-5
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q/vlan-id-6
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q/end-vlan-id-6
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q/vlan-id-7
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q/end-vlan-id-7
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q/vlan-id-8
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q/end-vlan-id-8
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q/vlan-id-9
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/dot1q/end-vlan-id-9
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/exact
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/priority-tagged/ingress/source-mac
+    optional: true
+    example: 00:11:22:33:44:55
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/vlan-id
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/end-vlan-id
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/vlan-id-2
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/end-vlan-id-2
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/vlan-id-3
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/end-vlan-id-3
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/vlan-id-4
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/end-vlan-id-4
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/vlan-id-5
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/end-vlan-id-5
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/vlan-id-6
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/end-vlan-id-6
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/vlan-id-7
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/end-vlan-id-7
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/vlan-id-8
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/end-vlan-id-8
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/vlan-id-9
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/end-vlan-id-9
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/dot1q
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/dot1q-end-vlan-id
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/exact
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/ingress/source-mac
+    optional: true
+    example: 00:11:22:33:44:55
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q/vlan-id
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q/end-vlan-id
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q/vlan-id-2
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q/end-vlan-id-2
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q/vlan-id-3
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q/end-vlan-id-3
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q/vlan-id-4
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q/end-vlan-id-4
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q/vlan-id-5
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q/end-vlan-id-5
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q/vlan-id-6
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q/end-vlan-id-6
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q/vlan-id-7
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q/end-vlan-id-7
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q/vlan-id-8
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q/end-vlan-id-8
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q/vlan-id-9
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/dot1q/end-vlan-id-9
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/exact
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1ad/priority-tagged/ingress/source-mac
+    optional: true
+    example: 00:11:22:33:44:55
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q/vlan-id
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q/end-vlan-id
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q/vlan-id-2
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q/end-vlan-id-2
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q/vlan-id-3
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q/end-vlan-id-3
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q/vlan-id-4
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q/end-vlan-id-4
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q/vlan-id-5
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q/end-vlan-id-5
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q/vlan-id-6
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q/end-vlan-id-6
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q/vlan-id-7
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q/end-vlan-id-7
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q/vlan-id-8
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q/end-vlan-id-8
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q/vlan-id-9
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/dot1q/end-vlan-id-9
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/untagged/ingress/source-mac
+    optional: true
+    example: 00:11:22:33:44:55
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/default
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/list-extended/dot1q
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/list-extended/dot1q/vlan-ranges
+    optional: true
+    example: "10-20"
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/list-extended/dot1q/outer-cos
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/list-extended/dot1q/second-dot1q
+    optional: true
+    example: "10-20"
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/list-extended/dot1q/inner-cos
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/list-extended/dot1q/exact
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/list-extended/dot1q/payload-ethertype-pppoe
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/list-extended/dot1q/ingress/source-mac
+    optional: true
+    example: 00:11:22:33:44:55
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/list-extended/dot1q/ingress/destination-mac
+    optional: true
+    example: 00:11:22:33:44:55
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/list-extended/dot1ad
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/list-extended/dot1ad/vlan-ranges
+    optional: true
+    example: "10-20"
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/list-extended/dot1ad/outer-cos
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/list-extended/dot1ad/dot1q
+    optional: true
+    example: "10-20"
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/list-extended/dot1ad/inner-cos
+    optional: true
+    example: 10
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/list-extended/dot1ad/exact
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/list-extended/dot1ad/payload-ethertype-pppoe
+    optional: true
+    example: true
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/list-extended/dot1ad/ingress/source-mac
+    optional: true
+    example: 00:11:22:33:44:55
+    exclude_test: true
+    exclude_example: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/list-extended/dot1ad/ingress/destination-mac
+    optional: true
+    example: 00:11:22:33:44:55
+    exclude_test: true
+    exclude_example: true
   - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite/ingress/tag/pop/one
     example: true
     exclude_test: true

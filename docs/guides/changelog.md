@@ -23,6 +23,7 @@ description: |-
 - Fix: Make `auto_cost_reference_bandwidth` optional in `iosxr_router_isis` resource and data source
 - Fix: preserve resource state when a gNMI read returns an empty response so keys-only resources are no longer perpetually recreated
 - Add NETCONF protocol support (`protocol = "netconf"`) as an alternative to gNMI, with support for NETCONF 1.0/1.1, candidate and running datastore workflows, connection reuse, and automatic capability detection
+- Add full `l2transport-encapsulation` support (`dot1q` and `dot1ad` VLAN lists, `exact`, `ingress_source_mac`, `priority_tagged`; `untagged`; `default`; `list_extended`) to `iosxr_interface_ethernet_subinterface`, `iosxr_interface_bundle_ether_subinterface` resource and data source
 - BREAKING CHANGE: Rename resource and data source `iosxr_gnmi` to `iosxr_yang`. Update all HCL references and run `terraform state mv` to migrate existing state.
 - Fix: preserve newlines in multi-line `iosxr_cli` commands by JSON-encoding the gNMI `json_ietf` value and XML-escaping the NETCONF payload, so multi-line CLI submode configuration applies correctly instead of being sent as invalid single-line content
 

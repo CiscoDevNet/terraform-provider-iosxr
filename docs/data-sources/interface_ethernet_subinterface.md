@@ -126,8 +126,136 @@ data "iosxr_interface_ethernet_subinterface" "example" {
 - `ipv6_verify_unicast_source_reachable_via_allow_self_ping` (Boolean) Allow router to ping itself (opens vulnerability in verification)
 - `ipv6_verify_unicast_source_reachable_via_type` (String) Source reachable type
 - `l2transport` (Boolean) l2transport sub-interface
+- `l2transport_encapsulation_default` (Boolean) Packets unmatched by other service instances
+- `l2transport_encapsulation_dot1ad` (Boolean) IEEE 802.1ad VLAN-tagged packets
+- `l2transport_encapsulation_dot1ad_dot1q` (String) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1ad_dot1q_end_vlan_id` (String) End of VLAN range
+- `l2transport_encapsulation_dot1ad_end_vlan_id` (String) End of VLAN range
+- `l2transport_encapsulation_dot1ad_end_vlan_id_2` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1ad_end_vlan_id_3` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1ad_end_vlan_id_4` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1ad_end_vlan_id_5` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1ad_end_vlan_id_6` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1ad_end_vlan_id_7` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1ad_end_vlan_id_8` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1ad_end_vlan_id_9` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1ad_exact` (Boolean) Do not allow further inner tags
+- `l2transport_encapsulation_dot1ad_ingress_source_mac` (String) Perform source MAC-based matching
+- `l2transport_encapsulation_dot1ad_priority_tagged` (Boolean) IEEE 802.1ad priority-tagged packets
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q` (Boolean) IEEE 802.1Q VLAN-tagged packets
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_2` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_3` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_4` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_5` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_6` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_7` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_8` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_9` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id` (String) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_2` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_3` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_4` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_5` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_6` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_7` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_8` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_9` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1ad_priority_tagged_exact` (Boolean) Do not allow further inner tags
+- `l2transport_encapsulation_dot1ad_priority_tagged_ingress_source_mac` (String) Perform source MAC-based matching
+- `l2transport_encapsulation_dot1ad_vlan_id` (String) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1ad_vlan_id_2` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1ad_vlan_id_3` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1ad_vlan_id_4` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1ad_vlan_id_5` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1ad_vlan_id_6` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1ad_vlan_id_7` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1ad_vlan_id_8` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1ad_vlan_id_9` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q` (Boolean) IEEE 802.1Q VLAN-tagged packets
+- `l2transport_encapsulation_dot1q_end_vlan_id` (String) End of VLAN range
+- `l2transport_encapsulation_dot1q_end_vlan_id_2` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1q_end_vlan_id_3` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1q_end_vlan_id_4` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1q_end_vlan_id_5` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1q_end_vlan_id_6` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1q_end_vlan_id_7` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1q_end_vlan_id_8` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1q_end_vlan_id_9` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1q_exact` (Boolean) Do not allow further inner tags
+- `l2transport_encapsulation_dot1q_ingress_source_mac` (String) Perform source MAC-based matching
+- `l2transport_encapsulation_dot1q_priority_tagged` (Boolean) IEEE 802.1ad priority-tagged packets
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q` (Boolean) IEEE 802.1Q VLAN-tagged packets
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_2` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_3` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_4` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_5` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_6` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_7` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_8` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_9` (Number) End of VLAN range
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id` (String) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_2` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_3` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_4` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_5` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_6` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_7` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_8` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_9` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q_priority_tagged_exact` (Boolean) Do not allow further inner tags
+- `l2transport_encapsulation_dot1q_priority_tagged_ingress_source_mac` (String) Perform source MAC-based matching
 - `l2transport_encapsulation_dot1q_second_dot1q` (String) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q_second_dot1q_end_vlan_id` (String) End of VLAN range
 - `l2transport_encapsulation_dot1q_vlan_id` (String) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q_vlan_id_2` (String) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q_vlan_id_3` (String) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q_vlan_id_4` (String) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q_vlan_id_5` (String) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q_vlan_id_6` (String) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q_vlan_id_7` (String) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q_vlan_id_8` (String) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_dot1q_vlan_id_9` (String) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_list_extended_dot1ad` (Boolean) IEEE 802.1ad VLAN-tagged packets
+- `l2transport_encapsulation_list_extended_dot1ad_dot1q` (String) IEEE 802.1Q VLAN-tagged packets
+- `l2transport_encapsulation_list_extended_dot1ad_exact` (Boolean) Do exact match of the given tags and do not allow further inner tags
+- `l2transport_encapsulation_list_extended_dot1ad_ingress_destination_mac` (String) Perform destination MAC-based matching
+- `l2transport_encapsulation_list_extended_dot1ad_ingress_source_mac` (String) Perform source MAC-based matching
+- `l2transport_encapsulation_list_extended_dot1ad_inner_cos` (Number) Specify inner PCP bits
+- `l2transport_encapsulation_list_extended_dot1ad_outer_cos` (Number) Specify outer PCP bits
+- `l2transport_encapsulation_list_extended_dot1ad_payload_ethertype_pppoe` (Boolean) Ethertype: PPP over Ethernet
+- `l2transport_encapsulation_list_extended_dot1ad_vlan_ranges` (String) List of VLAN Ranges in the form a-b,c,d,e-f,g
+- `l2transport_encapsulation_list_extended_dot1q` (Boolean) IEEE 802.1Q VLAN-tagged packets
+- `l2transport_encapsulation_list_extended_dot1q_exact` (Boolean) Do exact match of the given tags and do not allow further inner tags
+- `l2transport_encapsulation_list_extended_dot1q_ingress_destination_mac` (String) Perform destination MAC-based matching
+- `l2transport_encapsulation_list_extended_dot1q_ingress_source_mac` (String) Perform source MAC-based matching
+- `l2transport_encapsulation_list_extended_dot1q_inner_cos` (Number) Specify inner PCP bits
+- `l2transport_encapsulation_list_extended_dot1q_outer_cos` (Number) Specify outer PCP bits
+- `l2transport_encapsulation_list_extended_dot1q_payload_ethertype_pppoe` (Boolean) Ethertype: PPP over Ethernet
+- `l2transport_encapsulation_list_extended_dot1q_second_dot1q` (String) IEEE 802.1Q VLAN-tagged packets
+- `l2transport_encapsulation_list_extended_dot1q_vlan_ranges` (String) List of VLAN Ranges in the form a-b,c,d,e-f,g
+- `l2transport_encapsulation_untagged` (Boolean) Packets with no explicit VLAN tag
+- `l2transport_encapsulation_untagged_dot1q` (Boolean) IEEE 802.1Q VLAN-tagged packets
+- `l2transport_encapsulation_untagged_dot1q_end_vlan_id` (Number) End of VLAN range
+- `l2transport_encapsulation_untagged_dot1q_end_vlan_id_2` (Number) End of VLAN range
+- `l2transport_encapsulation_untagged_dot1q_end_vlan_id_3` (Number) End of VLAN range
+- `l2transport_encapsulation_untagged_dot1q_end_vlan_id_4` (Number) End of VLAN range
+- `l2transport_encapsulation_untagged_dot1q_end_vlan_id_5` (Number) End of VLAN range
+- `l2transport_encapsulation_untagged_dot1q_end_vlan_id_6` (Number) End of VLAN range
+- `l2transport_encapsulation_untagged_dot1q_end_vlan_id_7` (Number) End of VLAN range
+- `l2transport_encapsulation_untagged_dot1q_end_vlan_id_8` (Number) End of VLAN range
+- `l2transport_encapsulation_untagged_dot1q_end_vlan_id_9` (Number) End of VLAN range
+- `l2transport_encapsulation_untagged_dot1q_vlan_id` (String) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_untagged_dot1q_vlan_id_2` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_untagged_dot1q_vlan_id_3` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_untagged_dot1q_vlan_id_4` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_untagged_dot1q_vlan_id_5` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_untagged_dot1q_vlan_id_6` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_untagged_dot1q_vlan_id_7` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_untagged_dot1q_vlan_id_8` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_untagged_dot1q_vlan_id_9` (Number) Single VLAN id or start of VLAN range
+- `l2transport_encapsulation_untagged_ingress_source_mac` (String) Perform source MAC-based matching
 - `lldp` (Boolean) LLDP interface configuration commands
 - `lldp_receive_disable` (Boolean) Disable LLDP RX on an interface
 - `lldp_tagged` (Boolean) Enable VLAN tagging on LLDP PDU on an interface

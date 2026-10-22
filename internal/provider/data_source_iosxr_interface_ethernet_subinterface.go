@@ -142,12 +142,524 @@ func (d *InterfaceEthernetSubinterfaceDataSource) Schema(ctx context.Context, re
 				MarkdownDescription: "Configure second (inner 802.1Q) VLAN ID on the subinterface",
 				Computed:            true,
 			},
+			"l2transport_encapsulation_dot1q": schema.BoolAttribute{
+				MarkdownDescription: "IEEE 802.1Q VLAN-tagged packets",
+				Computed:            true,
+			},
 			"l2transport_encapsulation_dot1q_vlan_id": schema.StringAttribute{
 				MarkdownDescription: "Single VLAN id or start of VLAN range",
 				Computed:            true,
 			},
+			"l2transport_encapsulation_dot1q_end_vlan_id": schema.StringAttribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_vlan_id_2": schema.StringAttribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_end_vlan_id_2": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_vlan_id_3": schema.StringAttribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_end_vlan_id_3": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_vlan_id_4": schema.StringAttribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_end_vlan_id_4": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_vlan_id_5": schema.StringAttribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_end_vlan_id_5": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_vlan_id_6": schema.StringAttribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_end_vlan_id_6": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_vlan_id_7": schema.StringAttribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_end_vlan_id_7": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_vlan_id_8": schema.StringAttribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_end_vlan_id_8": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_vlan_id_9": schema.StringAttribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_end_vlan_id_9": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
 			"l2transport_encapsulation_dot1q_second_dot1q": schema.StringAttribute{
 				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_second_dot1q_end_vlan_id": schema.StringAttribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_exact": schema.BoolAttribute{
+				MarkdownDescription: "Do not allow further inner tags",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_ingress_source_mac": schema.StringAttribute{
+				MarkdownDescription: "Perform source MAC-based matching",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged": schema.BoolAttribute{
+				MarkdownDescription: "IEEE 802.1ad priority-tagged packets",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q": schema.BoolAttribute{
+				MarkdownDescription: "IEEE 802.1Q VLAN-tagged packets",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id": schema.StringAttribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_2": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_2": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_3": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_3": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_4": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_4": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_5": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_5": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_6": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_6": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_7": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_7": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_8": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_8": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_vlan_id_9": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_dot1q_end_vlan_id_9": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_exact": schema.BoolAttribute{
+				MarkdownDescription: "Do not allow further inner tags",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_priority_tagged_ingress_source_mac": schema.StringAttribute{
+				MarkdownDescription: "Perform source MAC-based matching",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad": schema.BoolAttribute{
+				MarkdownDescription: "IEEE 802.1ad VLAN-tagged packets",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_vlan_id": schema.StringAttribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_end_vlan_id": schema.StringAttribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_vlan_id_2": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_end_vlan_id_2": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_vlan_id_3": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_end_vlan_id_3": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_vlan_id_4": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_end_vlan_id_4": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_vlan_id_5": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_end_vlan_id_5": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_vlan_id_6": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_end_vlan_id_6": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_vlan_id_7": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_end_vlan_id_7": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_vlan_id_8": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_end_vlan_id_8": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_vlan_id_9": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_end_vlan_id_9": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_dot1q": schema.StringAttribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_dot1q_end_vlan_id": schema.StringAttribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_exact": schema.BoolAttribute{
+				MarkdownDescription: "Do not allow further inner tags",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_ingress_source_mac": schema.StringAttribute{
+				MarkdownDescription: "Perform source MAC-based matching",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged": schema.BoolAttribute{
+				MarkdownDescription: "IEEE 802.1ad priority-tagged packets",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q": schema.BoolAttribute{
+				MarkdownDescription: "IEEE 802.1Q VLAN-tagged packets",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id": schema.StringAttribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_2": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_2": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_3": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_3": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_4": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_4": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_5": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_5": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_6": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_6": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_7": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_7": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_8": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_8": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_vlan_id_9": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_dot1q_end_vlan_id_9": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_exact": schema.BoolAttribute{
+				MarkdownDescription: "Do not allow further inner tags",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1ad_priority_tagged_ingress_source_mac": schema.StringAttribute{
+				MarkdownDescription: "Perform source MAC-based matching",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged": schema.BoolAttribute{
+				MarkdownDescription: "Packets with no explicit VLAN tag",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q": schema.BoolAttribute{
+				MarkdownDescription: "IEEE 802.1Q VLAN-tagged packets",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_vlan_id": schema.StringAttribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_end_vlan_id": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_vlan_id_2": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_end_vlan_id_2": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_vlan_id_3": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_end_vlan_id_3": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_vlan_id_4": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_end_vlan_id_4": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_vlan_id_5": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_end_vlan_id_5": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_vlan_id_6": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_end_vlan_id_6": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_vlan_id_7": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_end_vlan_id_7": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_vlan_id_8": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_end_vlan_id_8": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_vlan_id_9": schema.Int64Attribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_dot1q_end_vlan_id_9": schema.Int64Attribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_untagged_ingress_source_mac": schema.StringAttribute{
+				MarkdownDescription: "Perform source MAC-based matching",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_default": schema.BoolAttribute{
+				MarkdownDescription: "Packets unmatched by other service instances",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1q": schema.BoolAttribute{
+				MarkdownDescription: "IEEE 802.1Q VLAN-tagged packets",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1q_vlan_ranges": schema.StringAttribute{
+				MarkdownDescription: "List of VLAN Ranges in the form a-b,c,d,e-f,g",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1q_outer_cos": schema.Int64Attribute{
+				MarkdownDescription: "Specify outer PCP bits",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1q_second_dot1q": schema.StringAttribute{
+				MarkdownDescription: "IEEE 802.1Q VLAN-tagged packets",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1q_inner_cos": schema.Int64Attribute{
+				MarkdownDescription: "Specify inner PCP bits",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1q_exact": schema.BoolAttribute{
+				MarkdownDescription: "Do exact match of the given tags and do not allow further inner tags",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1q_payload_ethertype_pppoe": schema.BoolAttribute{
+				MarkdownDescription: "Ethertype: PPP over Ethernet",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1q_ingress_source_mac": schema.StringAttribute{
+				MarkdownDescription: "Perform source MAC-based matching",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1q_ingress_destination_mac": schema.StringAttribute{
+				MarkdownDescription: "Perform destination MAC-based matching",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1ad": schema.BoolAttribute{
+				MarkdownDescription: "IEEE 802.1ad VLAN-tagged packets",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1ad_vlan_ranges": schema.StringAttribute{
+				MarkdownDescription: "List of VLAN Ranges in the form a-b,c,d,e-f,g",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1ad_outer_cos": schema.Int64Attribute{
+				MarkdownDescription: "Specify outer PCP bits",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1ad_dot1q": schema.StringAttribute{
+				MarkdownDescription: "IEEE 802.1Q VLAN-tagged packets",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1ad_inner_cos": schema.Int64Attribute{
+				MarkdownDescription: "Specify inner PCP bits",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1ad_exact": schema.BoolAttribute{
+				MarkdownDescription: "Do exact match of the given tags and do not allow further inner tags",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1ad_payload_ethertype_pppoe": schema.BoolAttribute{
+				MarkdownDescription: "Ethertype: PPP over Ethernet",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1ad_ingress_source_mac": schema.StringAttribute{
+				MarkdownDescription: "Perform source MAC-based matching",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_list_extended_dot1ad_ingress_destination_mac": schema.StringAttribute{
+				MarkdownDescription: "Perform destination MAC-based matching",
 				Computed:            true,
 			},
 			"rewrite_ingress_tag_pop_one": schema.BoolAttribute{
